@@ -24,8 +24,11 @@ class Bill extends \hipanel\base\Model
             [[ 'client', 'seller', 'bill' ],        'safe' ],
             [[ 'domain', 'server'       ],          'safe' ],
             [[ 'time' ],                            'date' ],
-            [[ 'sum', 'balance' ],                  'number' ],
-            [[ 'currency' ],                        'safe' ],
+            [[ 'sum', 'balance', 'quantity' ],      'number' ],
+            [[ 'currency', 'label', 'type' ],       'safe' ],
+            [[ 'gtype', 'descr','type_label' ],     'safe'],
+            [[ 'object', 'domains', 'tariff' ],     'safe'],
+
         ];
     }
 
@@ -35,6 +38,7 @@ class Bill extends \hipanel\base\Model
     public function attributeLabels ()
     {
         return $this->mergeAttributeLabels([
+            'gtype'             => Yii::t('app', 'Type'),
         ]);
     }
 }

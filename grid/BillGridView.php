@@ -9,6 +9,9 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\MainColumn;
 use hipanel\grid\CurrencyColumn;
+use hipanel\widgets\Description;
+use Yii;
+use yii\helpers\Html;
 
 class BillGridView extends \hipanel\grid\BoxedGridView
 {
@@ -30,6 +33,23 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             ],
             'balance'   => [
                 'class'                 => CurrencyColumn::className(),
+            ],
+            'gtype'     => [
+                'attribute'             => 'gtype',
+            ],
+            'description'=> [
+                'class'                 => Description,
+                'attribute'             => 'descr',
+                'filter'                => false,
+                'fields'                => [
+                    'domain'                => "{object} {type} {quantity} domains {descr}",
+                    'feature'               => "{type_label} {label} {object}: {descr}",
+                    'premium_package'       => "{type_label} {label} {object}",
+                    'intercept'             => "{object} {type_label} {descr}",
+                    'deposit'               => "{type_label} {label} {object}: {descr|txn}",
+                    'default'               => "{type_label} {label} {object}: {descr|tariff}"
+
+                ],
             ],
         ];
     }
