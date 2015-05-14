@@ -9,9 +9,10 @@ use hipanel\modules\finance\grid\TariffGridView;
 use hipanel\widgets\Pjax;
 use yii\helpers\Html;
 
-$this->title                   = Html::encode($model->domain);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Domains'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title         = Html::encode($model->tariff);
+$this->subtitle      = 'tariff detailed information';
+$this->breadcrumbs[] = ['label' => Yii::t('app', 'Tariffs'), 'url' => ['index']];
+$this->breadcrumbs[] = $this->title;
 
 ?>
 
