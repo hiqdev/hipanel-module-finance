@@ -1,0 +1,12 @@
+package:
+    name:           hipanel-module-finance
+    namespace:      hipanel\modules\finance
+    label:          HiPanel FinanceModule
+    title:          Finance Plugin for HiPanel
+    type:           yii2-extension
+    keywords:       finance, hipanel, plugin
+    description:    Finance: bill, tariffs and so on
+    year:           2014
+
+require:
+    hiqdev/hidev-config-php:    "*@dev"
