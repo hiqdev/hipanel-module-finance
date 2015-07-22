@@ -1,20 +1,23 @@
 <?php
-/**
- * @link    http://hiqdev.com/hipanel-module-finance
- * @license http://hiqdev.com/hipanel-module-finance/license
- * @copyright Copyright (c) 2015 HiQDev
+
+/*
+ * Finance Plugin for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2014-2015, HiQDev (https://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance;
 
 class SidebarMenu extends \hipanel\base\Menu implements \yii\base\BootstrapInterface
 {
-
     protected $_addTo = 'sidebar';
 
     protected $_where = [
-        'after'     => ['clients', 'dashboard', 'header'],
-        'before'    => ['tickets', 'domains', 'servers', 'hosting'],
+        'after'  => ['clients', 'dashboard', 'header'],
+        'before' => ['tickets', 'domains', 'servers', 'hosting'],
     ];
 
     protected $_items = [
@@ -41,5 +44,4 @@ class SidebarMenu extends \hipanel\base\Menu implements \yii\base\BootstrapInter
             ],
         ],
     ];
-
 }

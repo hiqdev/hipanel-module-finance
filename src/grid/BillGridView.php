@@ -1,41 +1,43 @@
 <?php
-/**
- * @link    http://hiqdev.com/hipanel-module-finance
- * @license http://hiqdev.com/hipanel-module-finance/license
- * @copyright Copyright (c) 2015 HiQDev
+
+/*
+ * Finance Plugin for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2014-2015, HiQDev (https://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\grid;
 
-use hipanel\grid\MainColumn;
 use hipanel\grid\CurrencyColumn;
+use hipanel\grid\MainColumn;
 use hipanel\widgets\ArraySpoiler;
-use Yii;
-use yii\helpers\Html;
 
 class BillGridView extends \hipanel\grid\BoxedGridView
 {
-    static public function defaultColumns()
+    public static function defaultColumns()
     {
         return [
             'bill' => [
-                'class'                 => MainColumn::className(),
-                'attribute'             => 'bill',
-                'filterAttribute'       => 'bill_like',
+                'class'           => MainColumn::className(),
+                'attribute'       => 'bill',
+                'filterAttribute' => 'bill_like',
             ],
             'time' => [
-                'format'                => 'date',
+                'format' => 'date',
             ],
             'sum' => [
-                'class'                 => CurrencyColumn::className(),
-                'attribute'             => 'sum',
-                'nameAttribute'         => 'sum'
+                'class'         => CurrencyColumn::className(),
+                'attribute'     => 'sum',
+                'nameAttribute' => 'sum',
             ],
             'balance' => [
-                'class'                 => CurrencyColumn::className(),
+                'class' => CurrencyColumn::className(),
             ],
             'gtype' => [
-                'attribute'             => 'gtype',
+                'attribute' => 'gtype',
             ],
 /* XXX didn't find Description column or widget
             'descriptionOld' => [
@@ -53,9 +55,9 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             ],
 */
             'description' => [
-                'attribute'             => 'descr',
-                'format'                => 'raw',
-                'value'                 => function ($model) {
+                'attribute' => 'descr',
+                'format'    => 'raw',
+                'value'     => function ($model) {
                     return ArraySpoiler::widget(['data' => $model->descr]);
                 },
             ],

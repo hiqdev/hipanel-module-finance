@@ -1,9 +1,4 @@
 <?php
-/**
- * @link    http://hiqdev.com/hipanel-module-finance
- * @license http://hiqdev.com/hipanel-module-finance/license
- * @copyright Copyright (c) 2015 HiQDev
- */
 
 use hipanel\modules\finance\grid\BillGridView;
 use hipanel\widgets\Pjax;
@@ -15,14 +10,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<? Pjax::begin(Yii::$app->params['pjax']) ?>
+<?php Pjax::begin(Yii::$app->params['pjax']) ?>
 <div class="row">
 
 <div class="col-md-4">
     <?= BillGridView::detailView([
         'model'   => $model,
         'columns' => [
-            'seller_id','client_id',
+            'seller_id', 'client_id',
             ['attribute' => 'bill'],
         ],
     ]) ?>
