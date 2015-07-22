@@ -9,7 +9,7 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\MainColumn;
 use hipanel\grid\CurrencyColumn;
-use hipanel\widgets\Description;
+use hipanel\widgets\ArraySpoiler;
 use Yii;
 use yii\helpers\Html;
 
@@ -18,27 +18,28 @@ class BillGridView extends \hipanel\grid\BoxedGridView
     static public function defaultColumns()
     {
         return [
-            'bill'      => [
+            'bill' => [
                 'class'                 => MainColumn::className(),
                 'attribute'             => 'bill',
                 'filterAttribute'       => 'bill_like',
             ],
-            'time'      => [
+            'time' => [
                 'format'                => 'date',
             ],
-            'sum'       => [
+            'sum' => [
                 'class'                 => CurrencyColumn::className(),
                 'attribute'             => 'sum',
                 'nameAttribute'         => 'sum'
             ],
-            'balance'   => [
+            'balance' => [
                 'class'                 => CurrencyColumn::className(),
             ],
-            'gtype'     => [
+            'gtype' => [
                 'attribute'             => 'gtype',
             ],
-            'description'=> [
-                'class'                 => Description,
+/* XXX didn't find Description column or widget
+            'descriptionOld' => [
+                'class'                 => Description::className(),
                 'attribute'             => 'descr',
                 'filter'                => false,
                 'fields'                => [
@@ -47,9 +48,16 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     'premium_package'       => "{type_label} {label} {object}",
                     'intercept'             => "{object} {type_label} {descr}",
                     'deposit'               => "{type_label} {label} {object}: {descr|txn}",
-                    'default'               => "{type_label} {label} {object}: {descr|tariff}"
-
+                    'default'               => "{type_label} {label} {object}: {descr|tariff}",
                 ],
+            ],
+*/
+            'description' => [
+                'attribute'             => 'descr',
+                'format'                => 'raw',
+                'value'                 => function ($model) {
+                    return ArraySpoiler::widget(['data' => $model->descr]);
+                },
             ],
         ];
     }
