@@ -21,13 +21,14 @@ class Tariff extends \hipanel\base\Model
     public function rules()
     {
         return [
-            [['client_id', 'seller_id', 'id'],    'integer'],
-            [['client', 'seller', 'bill'],        'safe'],
-            [['domain', 'server'],          'safe'],
-            [['tariff'],                          'safe'],
-            [['type_id', 'state_id'],             'integer'],
-            [['type', 'state'],                   'safe'],
-            [['used'],                            'integer'],
+            [['client_id', 'seller_id', 'id'],      'integer'],
+            [['client', 'seller', 'bill'],          'safe'],
+            [['domain', 'server'],                  'safe'],
+            [['tariff'],                            'safe'],
+            [['type_id', 'state_id'],               'integer'],
+            [['type', 'state'],                     'safe'],
+            [['used'],                              'integer'],
+            [['note'],                              'safe'],
         ];
     }
 

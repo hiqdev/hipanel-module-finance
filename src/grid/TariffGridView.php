@@ -11,16 +11,20 @@
 
 namespace hipanel\modules\finance\grid;
 
-use hipanel\grid\MainColumn;
-
 class TariffGridView extends \hipanel\grid\BoxedGridView
 {
     public static function defaultColumns()
     {
         return [
             'tariff' => [
-                'class'           => MainColumn::className(),
+                'class'           => 'hipanel\grid\MainColumn',
                 'filterAttribute' => 'tariff_like',
+            ],
+            'used' => [
+                'filter' => false,
+            ],
+            'note' => [
+                'class' => 'hiqdev\xeditable\grid\XEditableColumn',
             ],
         ];
     }

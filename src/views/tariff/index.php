@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'filterModel'  => $searchModel,
     'columns'      => [
         'checkbox',
-        'seller_id', 'client_id',
-        'tariff',
+        'tariff', 'note', 'used',
+        'client_id', 'seller_id',
     ],
 ]) ?>
