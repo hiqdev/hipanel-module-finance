@@ -11,6 +11,9 @@
 
 namespace hipanel\modules\finance\controllers;
 
+use hipanel\models\Ref;
+use Yii;
+
 class BillController extends \hipanel\base\CrudController
 {
     public function actions()
@@ -18,6 +21,11 @@ class BillController extends \hipanel\base\CrudController
         return [
             'index' => [
                 'class'     => 'hipanel\actions\IndexAction',
+                'data'      => function ($action) {
+                    return [
+                        'paymentType' => $action->controller->getPaymentType(),
+                    ];
+                }
             ],
             'view' => [
                 'class'     => 'hipanel\actions\ViewAction',
@@ -38,6 +46,11 @@ class BillController extends \hipanel\base\CrudController
                 'success'   => Yii::t('app', 'Bill deleted'),
             ],
         ];
+    }
+
+    public function getPaymentType()
+    {
+        return Ref::getList('type,bill,deposit');
     }
 
 }

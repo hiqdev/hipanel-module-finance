@@ -17,6 +17,9 @@ class Bill extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
 
+    public $time_from;
+    public $time_till;
+
     /**
      * @inheritdoc
      */
