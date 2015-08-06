@@ -11,6 +11,8 @@
 
 namespace hipanel\modules\finance\controllers;
 
+use Yii;
+
 class TariffController extends \hipanel\base\CrudController
 {
     public function actions()
