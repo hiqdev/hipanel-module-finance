@@ -42,7 +42,7 @@ class BillController extends \hipanel\base\CrudController
                 'success'   => Yii::t('app', 'Bill updated'),
             ],
             'delete' => [
-                'class'     => 'hipanel\actions\SmartDeleteAction',
+                'class'     => 'hipanel\actions\SmartPerformAction',
                 'success'   => Yii::t('app', 'Bill deleted'),
             ],
         ];
