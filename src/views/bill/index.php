@@ -9,7 +9,7 @@ $this->params['subtitle']      = Yii::$app->request->queryParams ? 'filtered lis
 
 ?>
 
-<?php $box = ActionBox::begin(['model' => $model, 'bulk' => Yii::$app->user->can('own'), 'options' => ['class' => 'box-info']]) ?>
+<?php $box = ActionBox::begin(['model' => $model, 'dataProvider' => $dataProvider, 'bulk' => Yii::$app->user->can('own')]) ?>
     <?php $box->beginActions() ?>
         <?php
             if (Yii::$app->user->can('support')) {
@@ -22,6 +22,17 @@ $this->params['subtitle']      = Yii::$app->request->queryParams ? 'filtered lis
             print $box->renderCreateButton(Yii::t('app', 'Recharge account'));
         ?>
         <?= $box->renderSearchButton() ?>
+        <?= $box->renderSorter([
+            'attributes' => [
+                'seller',
+                'client',
+                'sum',
+                'balance',
+                'type',
+                'descr'
+            ],
+        ]) ?>
+        <?= $box->renderPerPage(); ?>
     <?php $box->endActions() ?>
 
     <?php

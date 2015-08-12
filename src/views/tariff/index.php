@@ -9,7 +9,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<?php $box = ActionBox::begin(['model' => $model, 'options' => ['class' => 'box-info']]) ?>
+<?php $box = ActionBox::begin(['model' => $model, 'dataProvider' => $dataProvider, 'options' => ['class' => 'box-info']]) ?>
     <?php $box->beginActions() ?>
     <div class="dropdown">
         <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -17,7 +17,14 @@ $this->params['breadcrumbs'][] = $this->title;
             <span class="caret"></span>
         </button>
         <?= $box->renderSearchButton(); ?>
-
+        <?= $box->renderSorter([
+            'attributes' => [
+                'seller',
+                'client',
+                'tariff',
+            ],
+        ]) ?>
+        <?= $box->renderPerPage() ?>
         <?= \yii\bootstrap\Dropdown::widget([
             'items' => [
                 ['label' => Yii::t('app', 'Create tariff for domain(s)'), 'url' => '#'],
@@ -35,6 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]); ?>
     <?= $box->renderSearchForm(compact('paymentType')) ?>
+
 <?php $box::end() ?>
 
 <?php $box->beginBulkForm() ?>
