@@ -9,4 +9,5 @@ package:
     year:           2014
 
 require:
-    hiqdev/hidev-config-php:    "*@dev"
+    hiqdev/hidev-config:        "*"
+    hiqdev/hidev-config-php:    "*"
