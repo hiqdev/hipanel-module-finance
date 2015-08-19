@@ -3,6 +3,8 @@ hiqdev/hipanel-module-finance commits history
 
 ## Under development
 
+- Added bill/deposit redirect
+    - d3dc841 2015-08-19 + bill/deposit redirect (sol@hiqdev.com)
 - Added @bill, @tariff aliases
     - 59020bb 2015-08-19 + @bill, @tariff aliases (sol@hiqdev.com)
 - Fixed with all new features: SmartPerformAction, ActionBox
