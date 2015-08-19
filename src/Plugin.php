@@ -14,6 +14,10 @@ namespace hipanel\modules\finance;
 class Plugin extends \hiqdev\pluginmanager\Plugin
 {
     protected $_items = [
+        'aliases' => [
+            '@bill'   => '/finance/bill',
+            '@tariff' => '/finance/tariff',
+        ],
         'menus' => [
             [
                 'class' => 'hipanel\modules\finance\SidebarMenu',
