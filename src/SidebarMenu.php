@@ -29,17 +29,14 @@ class SidebarMenu extends \hipanel\base\Menu implements \yii\base\BootstrapInter
                 'payments' => [
                     'label' => 'Payments',
                     'url'   => ['/finance/bill/index'],
-                    'icon'  => 'fa-money',
                 ],
                 'deposit' => [
                     'label' => 'Recharge account',
                     'url'   => ['/finance/bill/deposit'],
-                    'icon'  => 'fa-credit-card',
                 ],
                 'tariffs' => [
                     'label' => 'Tariffs',
                     'url'   => ['/finance/tariff/index'],
-                    'icon'  => 'fa-circle-o',
                 ],
             ],
         ],
