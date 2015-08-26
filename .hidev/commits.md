@@ -3,6 +3,11 @@ hiqdev/hipanel-module-finance commits history
 
 ## Under development
 
+- Fixed access control
+    - 0347d17 2015-08-26 fixed access control (sol@hiqdev.com)
+- Fixed bill description column
+    - 5145a10 2015-08-26 fixed bill description column (sol@hiqdev.com)
+    - e1b936f 2015-08-25 Fix icons (andreyklochok@gmail.com)
 - Added bill/deposit redirect
     - d3dc841 2015-08-19 + bill/deposit redirect (sol@hiqdev.com)
 - Added @bill, @tariff aliases

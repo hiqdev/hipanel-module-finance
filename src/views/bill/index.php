@@ -9,15 +9,11 @@ $this->params['subtitle']      = Yii::$app->request->queryParams ? 'filtered lis
 
 ?>
 
-<?php $box = ActionBox::begin(['model' => $model, 'dataProvider' => $dataProvider, 'bulk' => Yii::$app->user->can('own')]) ?>
+<?php $box = ActionBox::begin(['model' => $model, 'dataProvider' => $dataProvider, 'bulk' => Yii::$app->user->can('manage')]) ?>
     <?php $box->beginActions() ?>
         <?php
-            if (Yii::$app->user->can('support')) {
+            if (Yii::$app->user->can('manage')) {
                 print $box->renderCreateButton(Yii::t('app', 'Add payment')) . '&nbsp;';
-            }
-            if (Yii::$app->user->can('own')) {
-                print $box->renderCreateButton(Yii::t('app', 'Edit')) . '&nbsp;';
-                print $box->renderCreateButton(Yii::t('app', 'Delete')) . '&nbsp;';
             }
             print $box->renderCreateButton(Yii::t('app', 'Recharge account'));
         ?>
@@ -35,22 +31,21 @@ $this->params['subtitle']      = Yii::$app->request->queryParams ? 'filtered lis
         <?= $box->renderPerPage(); ?>
     <?php $box->endActions() ?>
 
-    <?php
-    if (Yii::$app->user->can('own')) {
-        print $box->renderBulkActions([
+    <?php if (Yii::$app->user->can('manage')) { ?>
+        <?= $box->renderBulkActions([
             'items' => [
-                $box->renderBulkButton(Yii::t('app', 'Delete'), 'delete'),
+                $box->renderBulkButton(Yii::t('app', 'Edit'), 'edit'),
+                $box->renderDeleteButton(),
             ],
-        ]);
-    }
-    ?>
+        ]) ?>
+    <?php } ?>
     <?= $box->renderSearchForm(compact('paymentType')) ?>
 <?php $box::end() ?>
 
 <?php $box->beginBulkForm() ?>
     <?= billGridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel'  => $searchModel,
+        'filterModel'  => $model,
         'columns'      => [
             'checkbox',
             'seller_id', 'client_id',

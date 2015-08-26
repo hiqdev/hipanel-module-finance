@@ -27,6 +27,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             ],
             'time' => [
                 'format' => 'date',
+                'filter' => false,
             ],
             'sum' => [
                 'class'         => CurrencyColumn::className(),
@@ -58,7 +59,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'descr',
                 'format'    => 'raw',
                 'value'     => function ($model) {
-                    return ArraySpoiler::widget(['data' => $model->descr]);
+                    return strpos($model->descr, ',')===false ? $model->descr : ArraySpoiler::widget(['data' => $model->descr]);
                 },
             ],
         ];

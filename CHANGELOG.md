@@ -3,6 +3,8 @@ hiqdev/hipanel-module-finance changelog
 
 ## Under development
 
+- Fixed access control
+- Fixed bill description column
 - Added bill/deposit redirect
 - Added @bill, @tariff aliases
 - Fixed with all new features: SmartPerformAction, ActionBox
