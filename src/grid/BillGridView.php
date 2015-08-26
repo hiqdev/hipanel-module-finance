@@ -27,6 +27,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             ],
             'time' => [
                 'format' => 'date',
+                'filter' => false,
             ],
             'sum' => [
                 'class'         => CurrencyColumn::className(),

@@ -7,7 +7,6 @@ use hiqdev\combo\StaticCombo;
 ?>
 
 <div class="col-md-6">
-    <?= $search->field('descr') ?>
     <?= $search->field('type')->widget(StaticCombo::classname(), [
         'data' => $paymentType,
         'hasId' => true,
@@ -17,9 +16,14 @@ use hiqdev\combo\StaticCombo;
             ]
         ],
     ]) ?>
+<?php if (Yii::$app->user->can('support')) { ?>
+    <?= $search->field('client_id')->widget(ClientCombo::classname()) ?>
+<?php } ?>
 </div>
 
 <div class="col-md-6">
-    <?= $search->field('client_id')->widget(ClientCombo::classname()) ?>
+    <?= $search->field('descr') ?>
+<?php if (Yii::$app->user->can('support')) { ?>
     <?= $search->field('seller_id')->widget(SellerCombo::classname()) ?>
+<?php } ?>
 </div>
