@@ -22,7 +22,7 @@ class Tariff extends \hipanel\base\Model
     {
         return [
             [['client_id', 'seller_id', 'id'],      'integer'],
-            [['client', 'seller', 'bill'],          'safe'],
+            [['client', 'seller', 'bill', 'name'],  'safe'],
             [['domain', 'server'],                  'safe'],
             [['tariff'],                            'safe'],
             [['type_id', 'state_id'],               'integer'],
