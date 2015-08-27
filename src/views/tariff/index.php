@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ]); ?>
     <?= $box->renderSearchForm(compact('paymentType')) ?>
 
-<?php $box::end() ?>
+<?php $box->end() ?>
 
 <?php $box->beginBulkForm() ?>
     <?= tariffGridView::widget([
@@ -55,4 +55,4 @@ $this->params['breadcrumbs'][] = $this->title;
             'client_id', 'seller_id',
         ],
     ]) ?>
-<?php $box::endBulkForm() ?>
+<?php $box->endBulkForm() ?>

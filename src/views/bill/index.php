@@ -40,7 +40,7 @@ $this->params['subtitle']      = Yii::$app->request->queryParams ? 'filtered lis
         ]) ?>
     <?php } ?>
     <?= $box->renderSearchForm(compact('paymentType')) ?>
-<?php $box::end() ?>
+<?php $box->end() ?>
 
 <?php $box->beginBulkForm() ?>
     <?= billGridView::widget([
@@ -52,4 +52,4 @@ $this->params['subtitle']      = Yii::$app->request->queryParams ? 'filtered lis
             'time', 'sum', 'balance', 'gtype', 'description',
         ],
     ]) ?>
-<?php $box::endBulkForm() ?>
+<?php $box->endBulkForm() ?>
