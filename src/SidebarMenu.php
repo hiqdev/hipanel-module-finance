@@ -11,6 +11,8 @@
 
 namespace hipanel\modules\finance;
 
+use Yii;
+
 class SidebarMenu extends \hipanel\base\Menu implements \yii\base\BootstrapInterface
 {
     protected $_addTo = 'sidebar';
@@ -20,25 +22,29 @@ class SidebarMenu extends \hipanel\base\Menu implements \yii\base\BootstrapInter
         'before' => ['tickets', 'domains', 'servers', 'hosting'],
     ];
 
-    protected $_items = [
-        'finance' => [
-            'label' => 'Finance',
-            'url'   => ['/finance/bill/index'],
-            'icon'  => 'fa-dollar',
-            'items' => [
-                'payments' => [
-                    'label' => 'Payments',
-                    'url'   => ['/finance/bill/index'],
-                ],
-                'deposit' => [
-                    'label' => 'Recharge account',
-                    'url'   => ['/finance/bill/deposit'],
-                ],
-                'tariffs' => [
-                    'label' => 'Tariffs',
-                    'url'   => ['/finance/tariff/index'],
+    public function items()
+    {
+        return [
+            'finance' => [
+                'label' => Yii::t('app', 'Finance'),
+                'url'   => ['/finance/bill/index'],
+                'icon'  => 'fa-dollar',
+                'items' => [
+                    'payments' => [
+                        'label' => Yii::t('app', 'Payments'),
+                        'url'   => ['/finance/bill/index'],
+                    ],
+                    'deposit' => [
+                        'label' => Yii::t('app', 'Recharge account'),
+                        'url'   => ['/finance/bill/deposit'],
+                    ],
+                    'tariffs' => [
+                        'label'   => Yii::t('app', 'Tariffs'),
+                        'url'     => ['/finance/tariff/index'],
+                        'visible' => function () { return Yii::$app->user->can('support') ?: false; },
+                    ],
                 ],
             ],
-        ],
-    ];
+        ];
+    }
 }

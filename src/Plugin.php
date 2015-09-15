@@ -19,9 +19,7 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
             '@tariff' => '/finance/tariff',
         ],
         'menus' => [
-            [
-                'class' => 'hipanel\modules\finance\SidebarMenu',
-            ],
+            'hipanel\modules\finance\SidebarMenu',
         ],
         'modules' => [
             'finance' => [
