@@ -3,6 +3,7 @@ hiqdev/hipanel-module-finance changelog
 
 ## Under development
 
+- Fixed minor issues
 - Fixed access control
 - Fixed bill description column
 - Added bill/deposit redirect

@@ -3,6 +3,12 @@ hiqdev/hipanel-module-finance commits history
 
 ## Under development
 
+- Fixed minor issues
+    - 8c5f851 2015-09-15 localized menu (sol@hiqdev.com)
+    - bd8967c 2015-08-28 Added dependencies on related projects (d.naumenko.a@gmail.com)
+    - 204868a 2015-08-27 Fixed breadcrumbs subtitle (d.naumenko.a@gmail.com)
+    - ecac786 2015-08-27 Fixed deprecated method calling syntax (d.naumenko.a@gmail.com)
+    - 84dfe87 2015-08-26 Redisign view (andreyklochok@gmail.com)
 - Fixed access control
     - 0347d17 2015-08-26 fixed access control (sol@hiqdev.com)
 - Fixed bill description column

@@ -5,6 +5,7 @@ Finance: bill, tariffs and so on
 
 [![Latest Stable Version](https://poser.pugx.org/hiqdev/hipanel-module-finance/v/stable.png)](https://packagist.org/packages/hiqdev/hipanel-module-finance)
 [![Total Downloads](https://poser.pugx.org/hiqdev/hipanel-module-finance/downloads.png)](https://packagist.org/packages/hiqdev/hipanel-module-finance)
+[![Dependency Status](https://www.versioneye.com/php/hiqdev:hipanel-module-finance/dev-master/badge.svg)](https://www.versioneye.com/php/hiqdev:hipanel-module-finance/dev-master)
 
 ## Installation
 
