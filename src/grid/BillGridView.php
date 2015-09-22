@@ -11,8 +11,6 @@
 
 namespace hipanel\modules\finance\grid;
 
-use hipanel\grid\CurrencyColumn;
-use hipanel\grid\MainColumn;
 use hipanel\widgets\ArraySpoiler;
 
 class BillGridView extends \hipanel\grid\BoxedGridView
@@ -21,7 +19,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
     {
         return [
             'bill' => [
-                'class'           => MainColumn::className(),
+                'class'           => 'hipanel\grid\MainColumn',
                 'attribute'       => 'bill',
                 'filterAttribute' => 'bill_like',
             ],
@@ -30,12 +28,12 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'filter' => false,
             ],
             'sum' => [
-                'class'         => CurrencyColumn::className(),
+                'class'         => 'hipanel\grid\CurrencyColumn',
                 'attribute'     => 'sum',
                 'nameAttribute' => 'sum',
             ],
             'balance' => [
-                'class' => CurrencyColumn::className(),
+                'class' => 'hipanel\grid\CurrencyColumn',
             ],
             'gtype' => [
                 'attribute' => 'gtype',
