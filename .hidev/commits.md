@@ -3,6 +3,10 @@ hiqdev/hipanel-module-finance commits history
 
 ## Under development
 
+- Fixed Bill index page: greatly improved looking
+    - d0b12d1 2015-09-23 greatly improved Bill index page (sol@hiqdev.com)
+    - 5145a10 2015-08-26 fixed bill description column (sol@hiqdev.com)
+    - e1b936f 2015-08-25 Fix icons (andreyklochok@gmail.com)
 - Fixed minor issues
     - 8c5f851 2015-09-15 localized menu (sol@hiqdev.com)
     - bd8967c 2015-08-28 Added dependencies on related projects (d.naumenko.a@gmail.com)
@@ -11,9 +15,6 @@ hiqdev/hipanel-module-finance commits history
     - 84dfe87 2015-08-26 Redisign view (andreyklochok@gmail.com)
 - Fixed access control
     - 0347d17 2015-08-26 fixed access control (sol@hiqdev.com)
-- Fixed bill description column
-    - 5145a10 2015-08-26 fixed bill description column (sol@hiqdev.com)
-    - e1b936f 2015-08-25 Fix icons (andreyklochok@gmail.com)
 - Added bill/deposit redirect
     - d3dc841 2015-08-19 + bill/deposit redirect (sol@hiqdev.com)
 - Added @bill, @tariff aliases
