@@ -47,9 +47,8 @@ $this->params['subtitle']      = array_filter(Yii::$app->request->get($model->fo
         'dataProvider' => $dataProvider,
         'filterModel'  => $model,
         'columns'      => [
-            'checkbox',
-            'seller_id', 'client_id',
-            'time', 'sum', 'balance', 'gtype', 'description',
+            'checkbox', 'client_id', 'time', 'sum', 'balance',
+            'type_label', 'description',
         ],
     ]) ?>
 <?php $box->endBulkForm() ?>
