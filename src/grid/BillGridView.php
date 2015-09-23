@@ -11,6 +11,7 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\grid\RefColumn;
 use hipanel\widgets\ArraySpoiler;
 use Yii;
 use yii\helpers\Html;
@@ -55,10 +56,13 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'gtype',
             ],
             'type_label' => [
-                'attribute' => 'type_label',
-                'headerOptions'  => ['class' => 'text-right'],
-                'filterOptions'  => ['class' => 'text-right'],
-                'contentOptions' => function ($model) {
+                'class'           => 'hipanel\grid\RefColumn',
+                'format'          => 'raw',
+                'gtype'           => 'type,bill',
+                'filterAttribute' => 'gtype',
+                'headerOptions'   => ['class' => 'text-right'],
+                'filterOptions'   => ['class' => 'text-right'],
+                'contentOptions'  => function ($model) {
                     static $colors = [
                         'correction' => 'normal',
                         'exchange'   => 'warning',
