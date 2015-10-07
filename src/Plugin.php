@@ -16,6 +16,7 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
     protected $_items = [
         'aliases' => [
             '@bill'   => '/finance/bill',
+            '@purse'  => '/finance/purse',
             '@tariff' => '/finance/tariff',
         ],
         'menus' => [
