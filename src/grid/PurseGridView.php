@@ -29,7 +29,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                 'value'  => function ($model) {
                     $curr = date('Y-m-1');
                     $prev = date('Y-m-1', strtotime($curr) - 1000);
-                    return Html::a(FontIcon::i('fa-history fa-2x') . ' ' .Yii::t('app', 'Archive'), ['@purse/invoice-archive', 'id' => $model->id], ['class' => 'pull-right']).
+                    return Html::a(FontIcon::i('fa-history fa-2x') . ' ' .Yii::t('app', 'Archive'), ['@purse/invoice-archive', 'id' => $model->id], ['class' => 'pull-right text-nowrap']).
                         self::pdfLink($model, $curr) . ' &nbsp; ' . self::pdfLink($model, $prev);
                 }
             ],
@@ -39,6 +39,6 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
     public static function pdfLink($model, $month = 'now')
     {
         $date = strtotime($month);
-        return Html::a(FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', $date), ['@purse/pdf-invoice', 'id' => $model->id, 'month' => date('Y-m-01', $date)], ['target' => '_blank', 'class' => 'text-info']);
+        return Html::a(FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', $date), ['@purse/pdf-invoice', 'id' => $model->id, 'month' => date('Y-m-01', $date)], ['target' => '_blank', 'class' => 'text-info text-nowrap']);
     }
 }
