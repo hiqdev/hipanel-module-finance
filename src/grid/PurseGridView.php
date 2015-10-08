@@ -39,6 +39,6 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
     public static function pdfLink($model, $month = 'now')
     {
         $date = strtotime($month);
-        return Html::a(FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', $date), ['@purse/pdf-invoice', 'id' => $model->id, 'month' => date('Y-m-01', $date)]);
+        return Html::a(FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', $date), ['@purse/pdf-invoice', 'id' => $model->id, 'month' => date('Y-m-01', $date)], ['target' => '_blank']);
     }
 }
