@@ -22,7 +22,7 @@ use kartik\widgets\DatePicker;
     <?= $search->field('time_from')->widget(DatePicker::className(), [
         'type' => DatePicker::TYPE_RANGE,
         'attribute2' => 'time_till',
-        'separator' => Yii::t('app', '&larr; between &rarr;'),
+//        'separator' => Yii::t('app', '&larr; between &rarr;'),
         'pluginOptions' => [
             'autoclose' => true,
             'format' => 'dd.mm.yyyy',
@@ -42,7 +42,7 @@ use kartik\widgets\DatePicker;
         'attribute1' => 'sum_gt',
         'attribute2' => 'sum_lt',
         'label' => Yii::t('app', 'Sum'),
-        'separator' => Yii::t('app', '&larr; between &rarr;'),
+//        'separator' => Yii::t('app', '&larr; between &rarr;'),
     ]) ?>
 
     <?php if (Yii::$app->user->can('support')) { ?>
