@@ -27,7 +27,7 @@ use kartik\widgets\DatePicker;
             'autoclose' => true,
             'format' => 'dd.mm.yyyy',
         ],
-    ])->label(Yii::t('app', 'Date range')) ?>
+    ])->label(Yii::t('app', 'Date')) ?>
 
     <?php if (Yii::$app->user->can('support')) { ?>
         <?= $search->field('client_id')->widget(ClientCombo::classname()) ?>
