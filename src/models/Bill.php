@@ -46,6 +46,7 @@ class Bill extends \hipanel\base\Model
         return $this->mergeAttributeLabels([
             'gtype'       => Yii::t('app', 'Type'),
             'gtype_label' => Yii::t('app', 'Type'),
+            'sum'         => Yii::t('app', 'Sum'),
         ]);
     }
 }

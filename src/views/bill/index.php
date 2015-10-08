@@ -39,11 +39,11 @@ $this->params['subtitle']      = array_filter(Yii::$app->request->get($model->fo
             ],
         ]) ?>
     <?php } ?>
-    <?= $box->renderSearchForm(compact('paymentType')) ?>
+    <?= $box->renderSearchForm(compact('type')) ?>
 <?php $box->end() ?>
 
 <?php $box->beginBulkForm() ?>
-    <?= billGridView::widget([
+    <?= BillGridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel'  => $model,
         'columns'      => [

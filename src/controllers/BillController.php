@@ -23,7 +23,7 @@ class BillController extends \hipanel\base\CrudController
                 'class'     => 'hipanel\actions\IndexAction',
                 'data'      => function ($action) {
                     return [
-                        'paymentType' => $action->controller->getPaymentType(),
+                        'type' => $action->controller->getPaymentType(),
                     ];
                 }
             ],
@@ -54,7 +54,7 @@ class BillController extends \hipanel\base\CrudController
 
     public function getPaymentType()
     {
-        return Ref::getList('type,bill,deposit');
+        return Ref::getList('type,bill,deposit', ['with_hierarchy' => true]);
     }
 
 }

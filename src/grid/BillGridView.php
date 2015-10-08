@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\RefColumn;
 use hipanel\widgets\ArraySpoiler;
+use kartik\widgets\DatePicker;
 use Yii;
 use yii\helpers\Html;
 
@@ -39,7 +40,6 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'class'          => 'hipanel\grid\CurrencyColumn',
                 'attribute'      => 'sum',
                 'colors'         => ['danger' => 'warning'],
-                'nameAttribute'  => 'sum',
                 'headerOptions'  => ['class' => 'text-right'],
                 'contentOptions' => function ($model) {
                     return ['class' => 'text-right' . ($model->sum>0 ? ' text-bold' : '')];

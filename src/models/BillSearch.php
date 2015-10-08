@@ -11,7 +11,27 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\base\SearchModelTrait;
+use hipanel\helpers\ArrayHelper;
+
 class BillSearch extends Bill
 {
-    use \hipanel\base\SearchModelTrait;
+    use SearchModelTrait {
+        searchAttributes as defaultSearchAttributes;
+        rules as defaultRules;
+    }
+
+    public function rules() {
+        return ArrayHelper::merge($this->defaultRules(), [
+            [['time_from', 'time_till'], 'date']
+        ]);
+    }
+
+    public function searchAttributes()
+    {
+        return ArrayHelper::merge($this->defaultSearchAttributes(), [
+            'time_from',
+            'time_till',
+        ]);
+    }
 }
