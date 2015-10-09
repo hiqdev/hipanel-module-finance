@@ -16,6 +16,11 @@ class Tariff extends \hipanel\base\Model
     use \hipanel\base\ModelTrait;
 
     /**
+     * @var array resources. Filled on search query with option `with_resources`
+     */
+    public $resources = [];
+
+    /**
      * @inheritdoc
      */
     public function rules()
