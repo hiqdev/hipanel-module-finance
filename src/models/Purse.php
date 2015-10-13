@@ -26,7 +26,7 @@ class Purse extends \hipanel\base\Model
             [['id', 'client_id', 'seller_id'],      'integer'],
             [['client', 'seller'],                  'safe'],
             [['provided_services'],                 'safe'],
-            [['contact'],                           'safe'],
+            [['contact', 'files'],                  'safe'],
             [['contact_id', 'requisite_id'],        'integer'],
             [['currency_id'],                       'integer'],
             [['currency'],                          'safe'],

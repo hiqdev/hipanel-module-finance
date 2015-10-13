@@ -12,6 +12,7 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\helpers\FontIcon;
+use hipanel\widgets\ArraySpoiler;
 use Yii;
 use yii\helpers\Html;
 
@@ -27,18 +28,22 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
             'invoices' => [
                 'format' => 'raw',
                 'value'  => function ($model) {
-                    $curr = date('Y-m-1');
-                    $prev = date('Y-m-1', strtotime($curr) - 1000);
                     return Html::a(FontIcon::i('fa-history fa-2x') . ' ' .Yii::t('app', 'Archive'), ['@purse/invoice-archive', 'id' => $model->id], ['class' => 'pull-right text-nowrap']).
-                        self::pdfLink($model, $curr) . ' &nbsp; ' . self::pdfLink($model, $prev);
+                     ArraySpoiler::widget([
+                        'data'              => $model->files,
+                        'formatter'         => function ($file) {
+                            return self::pdfLink($file, $file['month']);
+                        },
+                        'visibleCount'      => 2,
+                        'popoverOptions'    => ['html' => true],
+                    ]);
                 }
             ],
         ];
     }
 
-    public static function pdfLink($model, $month = 'now')
+    public static function pdfLink($file, $month = 'now')
     {
-        $date = strtotime($month);
-        return Html::a(FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', $date), ['@purse/pdf-invoice', 'id' => $model->id, 'month' => date('Y-m-01', $date)], ['target' => '_blank', 'class' => 'text-info text-nowrap']);
+        return Html::a(FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', strtotime($month)), "/file/$file[id]/$file[filename]", ['target' => '_blank', 'class' => 'text-info text-nowrap']);
     }
 }
