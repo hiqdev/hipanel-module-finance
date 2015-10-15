@@ -36,7 +36,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                         },
                         'visibleCount'      => 2,
                         'button'    => [
-                            'clientOptions' => ['html' => true],
+                            'popoverOptions' => ['html' => true],
                         ]
                     ]);
                 }
