@@ -35,7 +35,9 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                             return self::pdfLink($file, $file['month']);
                         },
                         'visibleCount'      => 2,
-                        'popoverOptions'    => ['html' => true],
+                        'button'    => [
+                            'clientOptions' => ['html' => true],
+                        ]
                     ]);
                 }
             ],
