@@ -28,26 +28,21 @@ class PurseController extends \hipanel\base\CrudController
             'validate-form' => [
                 'class' => 'hipanel\actions\ValidateFormAction',
             ],
-            'generate-invoice' => [
-                'class'   => 'hipanel\actions\RedirectAction',
-                'success' => Yii::t('app', 'Invoice generated'),
-            ],
             'invoice-archive' => [
                 'class' => 'hipanel\actions\RedirectAction',
                 'error' => Yii::t('app', 'Under construction'),
             ],
-            'pdf-invoice2' => [
-                'class'   => 'hipanel\actions\SmartUpdateAction',
-                'success' => Yii::t('app', 'Tariff updated'),
+            'update-monthly-invoice' => [
+                'class'   => 'hipanel\actions\SmartPerformAction',
+                'success' => Yii::t('app', 'Invoice updated'),
             ],
         ];
     }
 
-    public function actionPdfInvoice($id, $month)
+    public function actionGenerateInvoice($id, $month = null)
     {
-        //https://hiapi.advancedhosters.com/purseGenerateMonthlyInvoice?auth_login=sol&auth_password=xfgrfnhzv&month=2015-09-01&id=310256944
         $content_type = 'application/pdf';
-        $data = Purse::perform('GenerateMonthlyInvoice', ['id' => $id, 'month' => $month]);
+        $data = Purse::perform('GenerateMonthlyInvoice', compact('id', 'month'));
         $response = Yii::$app->getResponse();
         $response->format = $response::FORMAT_RAW;
         $response->getHeaders()->add('content-type', $content_type);
