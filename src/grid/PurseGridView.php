@@ -28,15 +28,18 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
             'invoices' => [
                 'format' => 'raw',
                 'value'  => function ($model) {
-                    return Html::a(FontIcon::i('fa-history fa-2x') . ' ' .Yii::t('app', 'Archive'), ['@purse/invoice-archive', 'id' => $model->id], ['class' => 'pull-right text-nowrap']).
-                     ArraySpoiler::widget([
+                    return ArraySpoiler::widget([
+                        'mode'              => ArraySpoiler::MODE_SPOILER,
                         'data'              => $model->files,
-                        'formatter'         => function ($file) {
+                        'delimiter'         => ' ',
+                        'formatter'         => function ($file, $index) {
                             return self::pdfLink($file, $file['month']);
                         },
+                        'template'          => '{button}{visible}{hidden}',
                         'visibleCount'      => 2,
-                        'button'    => [
-                            'popoverOptions' => ['html' => true],
+                        'button'            => [
+                            'label' => FontIcon::i('fa-history fa-2x') . ' ' .Yii::t('app', 'Archive'),
+                            'class' => 'pull-right text-nowrap'
                         ]
                     ]);
                 }
@@ -46,6 +49,6 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
 
     public static function pdfLink($file, $month = 'now')
     {
-        return Html::a(FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', strtotime($month)), "/file/$file[id]/$file[filename]", ['target' => '_blank', 'class' => 'text-info text-nowrap']);
+        return Html::a(FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', strtotime($month)), "/file/$file[id]/$file[filename]", ['target' => '_blank', 'class' => 'text-info text-nowrap col-xs-6 col-sm-6 col-md-6 col-lg-3']);
     }
 }
