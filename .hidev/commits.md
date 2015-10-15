@@ -3,7 +3,17 @@ hiqdev/hipanel-module-finance commits history
 
 ## Under development
 
+- Added monthly invoices
+    - 3628150 2015-10-15 + purse update monthly invoice action (sol@hiqdev.com)
+    - d56ff71 2015-10-13 fixed purse invoices displaying (sol@hiqdev.com)
+    - ef409ea 2015-10-13 x hide actions for clients and admins (bladeroot@gmail.com)
+    - d193959 2015-10-09 Model Tariff - added $resurces attribute (d.naumenko.a@gmail.com)
+    - bd18338 2015-10-08 Bills: added time_from/till, sum_gt/lt filter for addvanced serach, other minor (d.naumenko.a@gmail.com)
+    - 5f0a2a4 2015-10-08 improved pdf invoices archive link (sol@hiqdev.com)
+    - 604808a 2015-10-07 + Purse model, controller, grid, alias (sol@hiqdev.com)
 - Fixed Bill index page: greatly improved looking
+    - 8b8bbfe 2015-10-07 + CreditColumn (sol@hiqdev.com)
+    - 57baa40 2015-10-07 + BalanceColumn (sol@hiqdev.com)
     - 08216ec 2015-09-23 improved type column at Bill, RefColumn used (sol@hiqdev.com)
     - d0b12d1 2015-09-23 greatly improved Bill index page (sol@hiqdev.com)
     - 5145a10 2015-08-26 fixed bill description column (sol@hiqdev.com)

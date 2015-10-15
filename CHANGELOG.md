@@ -3,6 +3,7 @@ hiqdev/hipanel-module-finance changelog
 
 ## Under development
 
+- Added monthly invoices
 - Fixed Bill index page: greatly improved looking
 - Fixed minor issues
 - Fixed access control
