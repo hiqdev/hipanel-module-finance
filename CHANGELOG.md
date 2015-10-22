@@ -3,9 +3,10 @@ hiqdev/hipanel-module-finance changelog
 
 ## Under development
 
+- Added bills deleting
+- Fixed minor issues
 - Added monthly invoices
 - Fixed Bill index page: greatly improved looking
-- Fixed minor issues
 - Fixed access control
 - Added bill/deposit redirect
 - Added @bill, @tariff aliases
