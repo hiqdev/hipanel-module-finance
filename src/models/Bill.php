@@ -35,6 +35,8 @@ class Bill extends \hipanel\base\Model
             [['object', 'domains', 'tariff'],     'safe'],
             [['type', 'gtype'],                   'safe'],
             [['type_label', 'gtype_label'],       'safe'],
+
+            [['id'],                              'integer', 'on' => 'delete'],
         ];
     }
 

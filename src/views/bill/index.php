@@ -9,7 +9,7 @@ $this->params['subtitle']      = array_filter(Yii::$app->request->get($model->fo
 
 ?>
 
-<?php $box = ActionBox::begin(['model' => $model, 'dataProvider' => $dataProvider, 'bulk' => Yii::$app->user->can('manage')]) ?>
+<?php $box = ActionBox::begin(['model' => $model, 'dataProvider' => $dataProvider, 'bulk' => true]) ?>
     <?php $box->beginActions() ?>
         <?php
             if (Yii::$app->user->can('manage')) {
@@ -30,15 +30,12 @@ $this->params['subtitle']      = array_filter(Yii::$app->request->get($model->fo
         ]) ?>
         <?= $box->renderPerPage(); ?>
     <?php $box->endActions() ?>
-
-    <?php if (Yii::$app->user->can('manage')) { ?>
-        <?= $box->renderBulkActions([
-            'items' => [
-                $box->renderBulkButton(Yii::t('app', 'Edit'), 'edit'),
-                $box->renderDeleteButton(),
-            ],
-        ]) ?>
-    <?php } ?>
+    <?= $box->renderBulkActions([
+        'items' => [
+            Yii::$app->user->can('manage')       ? $box->renderBulkButton(Yii::t('app', 'Edit'), 'edit') : null,
+            Yii::$app->user->can('delete-bills') ? $box->renderDeleteButton() : null,
+        ],
+    ]) ?>
     <?= $box->renderSearchForm(compact('type')) ?>
 <?php $box->end() ?>
 
