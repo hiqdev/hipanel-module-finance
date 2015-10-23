@@ -4,6 +4,7 @@ hiqdev/hipanel-module-finance commits history
 ## Under development
 
 - Fixed Bill index page: greatly improved looking
+    - 1929274 2015-10-23 improved Bill index: + object link (sol@hiqdev.com)
     - 9c032a6 2015-10-23 improved Bill index: + object (sol@hiqdev.com)
     - 8b8bbfe 2015-10-07 + CreditColumn (sol@hiqdev.com)
     - 57baa40 2015-10-07 + BalanceColumn (sol@hiqdev.com)
