@@ -27,14 +27,14 @@ class Bill extends \hipanel\base\Model
     {
         return [
             [['client_id', 'seller_id', 'id'],    'integer'],
-            [['tariff_id'],                       'integer'],
+            [['object_id', 'tariff_id'],          'integer'],
             [['client', 'seller', 'bill'],        'safe'],
             [['domain', 'server'],                'safe'],
             [['time'],                            'date'],
             [['sum', 'balance', 'quantity'],      'number'],
             [['currency', 'label', 'descr'],      'safe'],
             [['object', 'domains', 'tariff'],     'safe'],
-            [['type', 'gtype'],                   'safe'],
+            [['type', 'gtype', 'class'],          'safe'],
             [['class_label'],                     'safe'],
             [['type_label', 'gtype_label'],       'safe'],
 

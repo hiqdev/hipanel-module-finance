@@ -85,7 +85,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     $descr  = $model->descr ?: $model->label;
                     $text   = mb_strlen($descr)>70 ? ArraySpoiler::widget(['data' => $descr]) : $descr;
                     $tariff = $model->tariff ? Html::tag('span', Yii::t('app', 'Tariff') . ': ' . Html::a($model->tariff, ['@tariff/view', 'id' => $model->tariff_id]), ['class' => 'pull-right']) : '';
-                    $object = $model->object ? implode(': ', array_filter([$model->class_label, Html::tag('b', $model->object)])) : '';
+                    $object = $model->object ? implode(': ', array_filter([$model->class_label, static::objectLink($model)])) : '';
                     return $tariff . implode('<br>', array_filter([$object, $text]));
                 },
             ],
@@ -93,5 +93,13 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'tariff',
             ],
         ];
+    }
+
+    public static function objectLink($model)
+    {
+        return $model->class == 'device'
+            ? Html::a($model->object, ['@server/view', 'id' => $model->object_id])
+            : Html::tag('b', $model->object)
+        ;
     }
 }
