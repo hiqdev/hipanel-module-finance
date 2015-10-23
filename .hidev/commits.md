@@ -3,6 +3,14 @@ hiqdev/hipanel-module-finance commits history
 
 ## Under development
 
+- Fixed Bill index page: greatly improved looking
+    - 9c032a6 2015-10-23 improved Bill index: + object (sol@hiqdev.com)
+    - 8b8bbfe 2015-10-07 + CreditColumn (sol@hiqdev.com)
+    - 57baa40 2015-10-07 + BalanceColumn (sol@hiqdev.com)
+    - 08216ec 2015-09-23 improved type column at Bill, RefColumn used (sol@hiqdev.com)
+    - d0b12d1 2015-09-23 greatly improved Bill index page (sol@hiqdev.com)
+    - 5145a10 2015-08-26 fixed bill description column (sol@hiqdev.com)
+    - e1b936f 2015-08-25 Fix icons (andreyklochok@gmail.com)
 - Added bills deleting
     - 7b423b5 2015-10-22 + delete bills with check for delete-bills permission (sol@hiqdev.com)
 - Fixed minor issues
@@ -22,13 +30,6 @@ hiqdev/hipanel-module-finance commits history
     - bd18338 2015-10-08 Bills: added time_from/till, sum_gt/lt filter for addvanced serach, other minor (d.naumenko.a@gmail.com)
     - 5f0a2a4 2015-10-08 improved pdf invoices archive link (sol@hiqdev.com)
     - 604808a 2015-10-07 + Purse model, controller, grid, alias (sol@hiqdev.com)
-- Fixed Bill index page: greatly improved looking
-    - 8b8bbfe 2015-10-07 + CreditColumn (sol@hiqdev.com)
-    - 57baa40 2015-10-07 + BalanceColumn (sol@hiqdev.com)
-    - 08216ec 2015-09-23 improved type column at Bill, RefColumn used (sol@hiqdev.com)
-    - d0b12d1 2015-09-23 greatly improved Bill index page (sol@hiqdev.com)
-    - 5145a10 2015-08-26 fixed bill description column (sol@hiqdev.com)
-    - e1b936f 2015-08-25 Fix icons (andreyklochok@gmail.com)
 - Fixed access control
     - 0347d17 2015-08-26 fixed access control (sol@hiqdev.com)
 - Added bill/deposit redirect
@@ -51,7 +52,6 @@ hiqdev/hipanel-module-finance commits history
     - d48a7f0 2015-05-14 + Menu.php and changed breadcrumbing (sol@hiqdev.com)
     - 746e4b5 2015-04-28 bill module changes (bladeroot@gmail.com)
     - 934bf1d 2015-04-23 * changes in finance (bladeroot@gmail.com)
-- Inited
     - c61d2bb 2015-04-21 removed excessive files (sol@hiqdev.com)
     - 41497e0 2015-04-21 inited (sol@hiqdev.com)
 
