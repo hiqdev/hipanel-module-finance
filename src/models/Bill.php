@@ -27,6 +27,7 @@ class Bill extends \hipanel\base\Model
     {
         return [
             [['client_id', 'seller_id', 'id'],    'integer'],
+            [['tariff_id'],                       'integer'],
             [['client', 'seller', 'bill'],        'safe'],
             [['domain', 'server'],                'safe'],
             [['time'],                            'date'],
@@ -34,6 +35,7 @@ class Bill extends \hipanel\base\Model
             [['currency', 'label', 'descr'],      'safe'],
             [['object', 'domains', 'tariff'],     'safe'],
             [['type', 'gtype'],                   'safe'],
+            [['class_label'],                     'safe'],
             [['type_label', 'gtype_label'],       'safe'],
 
             [['id'],                              'integer', 'on' => 'delete'],

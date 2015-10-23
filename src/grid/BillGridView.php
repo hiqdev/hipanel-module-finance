@@ -63,41 +63,30 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'headerOptions'   => ['class' => 'text-right'],
                 'filterOptions'   => ['class' => 'text-right'],
                 'contentOptions'  => function ($model) {
+                    return ['class' => "text-right"];
+                },
+                'value'           => function ($model) {
                     static $colors = [
                         'correction' => 'normal',
                         'exchange'   => 'warning',
                         'deposit'    => 'success',
                     ];
                     $color = $colors[$model->gtype] ?: 'muted';
-                    return ['class' => "text-right text-bold text-$color"];
+                    $qty   = $model->type=='support_time' ? Yii::t('app', '{0, time, HH:mm}', ceil($model->quantity * 3600)) :
+                           ( $model->type=='ip_num' ? $model->quantity : '');
+                    $qty   = $qty ? ' - ' . Html::tag('b', $qty, ['class' => 'text-primary']) : '';
+                    return Html::tag('b', $model->type_label, ['class' => "text-$color"]) . $qty;
                 },
             ],
-/* XXX didn't find Description column or widget
-            'descriptionOld' => [
-                'class'                 => Description::className(),
-                'attribute'             => 'descr',
-                'filter'                => false,
-                'fields'                => [
-                    'domain'                => "{object} {type} {quantity} domains {descr}",
-                    'feature'               => "{type_label} {label} {object}: {descr}",
-                    'premium_package'       => "{type_label} {label} {object}",
-                    'intercept'             => "{object} {type_label} {descr}",
-                    'deposit'               => "{type_label} {label} {object}: {descr|txn}",
-                    'default'               => "{type_label} {label} {object}: {descr|tariff}",
-                ],
-            ],
-*/
             'description' => [
                 'attribute' => 'descr',
                 'format'    => 'raw',
                 'value'     => function ($model) {
-                    $qty    = $model->type=='support_time' ? Yii::t('app', '{0, time, HH:mm}', ceil($model->quantity * 3600)) :
-                            ( $model->type=='ip_num' ? $model->quantity : '');
-                    $qty    = $qty ? Html::tag('b', $qty . ' - ', ['class' => 'text-primary']) : '';
                     $descr  = $model->descr ?: $model->label;
                     $text   = mb_strlen($descr)>70 ? ArraySpoiler::widget(['data' => $descr]) : $descr;
-                    $tariff = $model->tariff ? Html::tag('b', Yii::t('app', 'Tariff')) . ': ' . $model->tariff : '';
-                    return $qty . $text . ($text && $tariff ? '<br>' : '') . $tariff;
+                    $tariff = $model->tariff ? Html::tag('span', Yii::t('app', 'Tariff') . ': ' . Html::a($model->tariff, ['@tariff/view', 'id' => $model->tariff_id]), ['class' => 'pull-right']) : '';
+                    $object = $model->object ? implode(': ', array_filter([$model->class_label, Html::tag('b', $model->object)])) : '';
+                    return $tariff . implode('<br>', array_filter([$object, $text]));
                 },
             ],
             'tariff' => [
