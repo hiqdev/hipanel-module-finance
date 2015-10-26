@@ -45,10 +45,6 @@ class BillController extends \hipanel\base\CrudController
                 'class'     => 'hipanel\actions\SmartPerformAction',
                 'success'   => Yii::t('app', 'Bill deleted'),
             ],
-            'deposit' => [
-                'class' => 'hipanel\actions\RedirectAction',
-                'url'   => Yii::$app->params['orgUrl'],
-            ],
         ];
     }
 
@@ -56,5 +52,4 @@ class BillController extends \hipanel\base\CrudController
     {
         return Ref::getList('type,bill,deposit', ['with_hierarchy' => true]);
     }
-
 }
