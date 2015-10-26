@@ -18,6 +18,7 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
             '@bill'   => '/finance/bill',
             '@purse'  => '/finance/purse',
             '@tariff' => '/finance/tariff',
+            '@pay'    => '/merchant/pay',
         ],
         'menus' => [
             'hipanel\modules\finance\SidebarMenu',
@@ -25,6 +26,17 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
         'modules' => [
             'finance' => [
                 'class' => 'hipanel\modules\finance\Module',
+            ],
+            'merchant' => [
+                'class' => 'hiqdev\yii2\merchant\Module',
+                'merchants' => [
+                    'paypal' => [
+                        'purse' => 'asdfsd',
+                    ],
+                    'webmoney' => [
+                        'purse' => 'asdfsd',
+                    ],
+                ],
             ],
         ],
     ];
