@@ -3,6 +3,7 @@ hiqdev/hipanel-module-finance changelog
 
 ## Under development
 
+- Added merchant
 - Fixed Bill index page: greatly improved looking
 - Added bills deleting
 - Fixed minor issues
