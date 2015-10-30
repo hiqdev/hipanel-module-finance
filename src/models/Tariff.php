@@ -37,6 +37,10 @@ class Tariff extends \hipanel\base\Model
         ];
     }
 
+    public function getResources() {
+        return $this->hasMany(Recources::className, ['id' => 'tariff_id']);
+    }
+
     /**
      * @inheritdoc
      */
