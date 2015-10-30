@@ -4,6 +4,7 @@ hiqdev/hipanel-module-finance changelog
 ## Under development
 
 - Added merchant
+- Added resources relation at Tariff model
 - Fixed Bill index page: greatly improved looking
 - Added bills deleting
 - Fixed minor issues
