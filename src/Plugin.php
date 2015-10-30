@@ -11,33 +11,47 @@
 
 namespace hipanel\modules\finance;
 
+use hipanel\modules\finance\models\Merchant;
+
+use Yii;
+
 class Plugin extends \hiqdev\pluginmanager\Plugin
 {
-    protected $_items = [
-        'aliases' => [
-            '@bill'   => '/finance/bill',
-            '@purse'  => '/finance/purse',
-            '@tariff' => '/finance/tariff',
-            '@pay'    => '/merchant/pay',
-        ],
-        'menus' => [
-            'hipanel\modules\finance\SidebarMenu',
-        ],
-        'modules' => [
-            'finance' => [
-                'class' => 'hipanel\modules\finance\Module',
+    public function items()
+    {
+        return [
+            'aliases' => [
+                '@bill'   => '/finance/bill',
+                '@purse'  => '/finance/purse',
+                '@tariff' => '/finance/tariff',
+                '@pay'    => '/merchant/pay',
             ],
-            'merchant' => [
-                'class' => 'hiqdev\yii2\merchant\Module',
-                'merchants' => [
-                    'paypal' => [
-                        'purse' => 'asdfsd',
-                    ],
-                    'webmoney' => [
-                        'purse' => 'asdfsd',
-                    ],
+            'menus' => [
+                'hipanel\modules\finance\SidebarMenu',
+            ],
+            'modules' => [
+                'finance' => [
+                    'class' => 'hipanel\modules\finance\Module',
+                ],
+                'merchant' => [
+                    'class' => 'hiqdev\yii2\merchant\Module',
+                    'merchants' => function ($params) {
+                        $params = array_merge([
+                            'site'     => Yii::$app->request->getHostInfo(),
+                            'username' => Yii::$app->user->identity->username,
+                        ], (array)$params);
+                        $ms = Merchant::findAll($params, ['scenario' => 'prepare-info']);
+                        foreach ($ms as $m) {
+                            if ($m->system == 'wmdirect') {
+                                continue;
+                            }
+                            $merchants[$m->name] = $m->getAttributes();
+                        }
+
+                        return $merchants;
+                    },
                 ],
             ],
-        ],
-    ];
+        ];
+    }
 }

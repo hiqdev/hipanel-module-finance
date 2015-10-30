@@ -4,8 +4,12 @@ hiqdev/hipanel-module-finance commits history
 ## Under development
 
 - Added merchant
+    - eb8d63e 2015-10-30 + Merchant module (sol@hiqdev.com)
+    - 685eb2c 2015-10-30 + Merchant module (sol@hiqdev.com)
     - c14a036 2015-10-26 - use of local MerchantModule (sol@hiqdev.com)
     - 29a6c16 2015-10-26 - bill deposit action (sol@hiqdev.com)
+- Added resources relation at Tariff model
+    - 588bf23 2015-10-29 Add relation (andreyklochok@gmail.com)
 - Fixed Bill index page: greatly improved looking
     - 1929274 2015-10-23 improved Bill index: + object link (sol@hiqdev.com)
     - 9c032a6 2015-10-23 improved Bill index: + object (sol@hiqdev.com)
