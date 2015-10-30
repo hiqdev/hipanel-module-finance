@@ -16,11 +16,6 @@ class Tariff extends \hipanel\base\Model
     use \hipanel\base\ModelTrait;
 
     /**
-     * @var array resources. Filled on search query with option `with_resources`
-     */
-    public $resources = [];
-
-    /**
      * @inheritdoc
      */
     public function rules()
@@ -29,7 +24,7 @@ class Tariff extends \hipanel\base\Model
             [['client_id', 'seller_id', 'id'],      'integer'],
             [['client', 'seller', 'bill', 'name'],  'safe'],
             [['domain', 'server'],                  'safe'],
-            [['tariff'],                            'safe'],
+            [['tariff', 'tariff_id'],               'safe'],
             [['type_id', 'state_id'],               'integer'],
             [['type', 'state'],                     'safe'],
             [['used'],                              'integer'],
@@ -38,7 +33,7 @@ class Tariff extends \hipanel\base\Model
     }
 
     public function getResources() {
-        return $this->hasMany(Recources::className, ['id' => 'tariff_id']);
+        return $this->hasMany(Resource::className(), ['id' => 'tariff_id']);
     }
 
     /**
