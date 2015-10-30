@@ -4,6 +4,8 @@ hiqdev/hipanel-module-finance commits history
 ## Under development
 
 - Added merchant
+    - eb8d63e 2015-10-30 + Merchant module (sol@hiqdev.com)
+    - 685eb2c 2015-10-30 + Merchant module (sol@hiqdev.com)
     - c14a036 2015-10-26 - use of local MerchantModule (sol@hiqdev.com)
     - 29a6c16 2015-10-26 - bill deposit action (sol@hiqdev.com)
 - Fixed Bill index page: greatly improved looking

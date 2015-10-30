@@ -1,5 +1,5 @@
 Finance Plugin for HiPanel
---------------------------
+==========================
 
 Finance: bill, tariffs and so on
 
