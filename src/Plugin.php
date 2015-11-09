@@ -35,6 +35,9 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
                 ],
                 'merchant' => [
                     'class' => 'hiqdev\yii2\merchant\Module',
+                    'defaults' => [
+                        'confirmPage' => '/finance/pay/confirm',
+                    ],
                     'merchants' => function ($params) {
                         $params = array_merge([
                             'site'     => Yii::$app->request->getHostInfo(),

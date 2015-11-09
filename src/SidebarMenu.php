@@ -36,7 +36,7 @@ class SidebarMenu extends \hipanel\base\Menu implements \yii\base\BootstrapInter
                     ],
                     'deposit' => [
                         'label' => Yii::t('app', 'Recharge account'),
-                        'url'   => ['/finance/bill/deposit'],
+                        'url'   => ['/merchant/pay/deposit'],
                     ],
                     'tariffs' => [
                         'label'   => Yii::t('app', 'Tariffs'),
