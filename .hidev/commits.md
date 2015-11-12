@@ -3,6 +3,9 @@ hiqdev/hipanel-module-finance commits history
 
 ## Under development
 
+    - 2f6b600 2015-11-12 still adding integration with yii2-merchant (sol@hiqdev.com)
+    - 83095c9 2015-11-09 + PayController (sol@hiqdev.com)
+    - 6e5c4fd 2015-10-30 Add Resource model (andreyklochok@gmail.com)
 - Added merchant
     - eb8d63e 2015-10-30 + Merchant module (sol@hiqdev.com)
     - 685eb2c 2015-10-30 + Merchant module (sol@hiqdev.com)

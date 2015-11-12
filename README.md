@@ -1,11 +1,16 @@
-Finance Plugin for HiPanel
-==========================
+HiPanel Finance Module
+======================
 
-Finance: bill, tariffs and so on
+**Finance Plugin for HiPanel**
 
 [![Latest Stable Version](https://poser.pugx.org/hiqdev/hipanel-module-finance/v/stable)](//packagist.org/packages/hiqdev/hipanel-module-finance)
 [![Total Downloads](https://poser.pugx.org/hiqdev/hipanel-module-finance/downloads)](//packagist.org/packages/hiqdev/hipanel-module-finance)
 [![Dependency Status](https://www.versioneye.com/php/hiqdev:hipanel-module-finance/dev-master/badge.svg)](https://www.versioneye.com/php/hiqdev:hipanel-module-finance/dev-master)
+
+Provides financial functions:
+    * bills, invoices, tariffs and so on
+    * payment systems integration with [yii2-merchant](https://github.com/hiqdev/yii2-merchant)
+    * shopping cart with [yii2-cart](https://github.vom/hiqdev/yii2-cart)
 
 ## Installation
 

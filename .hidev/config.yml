@@ -1,12 +1,16 @@
 package:
     name:           hipanel-module-finance
     namespace:      hipanel\modules\finance
-    label:          HiPanel FinanceModule
+    headline:       HiPanel Finance Module
     title:          Finance Plugin for HiPanel
     type:           yii2-extension
     keywords:       finance, hipanel, plugin
-    description:    Finance: bill, tariffs and so on
     year:           2014
+    description:    |
+        Provides financial functions:
+            * bills, invoices, tariffs and so on
+            * payment systems integration with [yii2-merchant](https://github.com/hiqdev/yii2-merchant)
+            * shopping cart with [yii2-cart](https://github.vom/hiqdev/yii2-cart)
 
 require:
     hiqdev/hidev-config:        "*"
