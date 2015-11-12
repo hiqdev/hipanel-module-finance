@@ -25,7 +25,7 @@ $this->params['subtitle']      = array_filter(Yii::$app->request->get($model->fo
                 'sum',
                 'balance',
                 'type',
-                'descr'
+                'descr',
             ],
         ]) ?>
         <?= $box->renderPerPage(); ?>

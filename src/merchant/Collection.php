@@ -1,9 +1,18 @@
 <?php
 
+/*
+ * Finance Plugin for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2014-2015, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hipanel\modules\finance\merchant;
 
-use Yii;
 use hipanel\modules\finance\models\Merchant;
+use Yii;
 
 class Collection extends \hiqdev\yii2\merchant\Collection
 {
@@ -24,11 +33,11 @@ class Collection extends \hiqdev\yii2\merchant\Collection
             'sum'      => $params['amount'] ?: 1,
             'site'     => Yii::$app->request->getHostInfo(),
             'username' => Yii::$app->user->identity->username,
-        ], (array)$params);
+        ], (array) $params);
         $ms = Merchant::perform('sPrepareInfo', $params);
         $merchants = [];
         foreach ($ms as $name => $m) {
-            if ($m['system'] == 'wmdirect') {
+            if ($m['system'] === 'wmdirect') {
                 continue;
             }
             $merchants[$name] = $this->convertMerchant($m);

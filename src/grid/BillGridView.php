@@ -6,14 +6,12 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2014-2015, HiQDev (https://hiqdev.com/)
+ * @copyright Copyright (c) 2014-2015, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\grid;
 
-use hipanel\grid\RefColumn;
 use hipanel\widgets\ArraySpoiler;
-use kartik\widgets\DatePicker;
 use Yii;
 use yii\helpers\Html;
 
@@ -32,8 +30,9 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'filter'         => false,
                 'contentOptions' => ['class' => 'text-nowrap'],
                 'value'          => function ($model) {
-                    list($date, $time) = explode(' ',$model->time,2);
-                    return $time=='00:00:00' ? Yii::$app->formatter->asDate($date) : Yii::$app->formatter->asDateTime($model->time);
+                    list($date, $time) = explode(' ', $model->time, 2);
+
+                    return $time === '00:00:00' ? Yii::$app->formatter->asDate($date) : Yii::$app->formatter->asDateTime($model->time);
                 },
             ],
             'sum' => [
@@ -42,15 +41,15 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'colors'         => ['danger' => 'warning'],
                 'headerOptions'  => ['class' => 'text-right'],
                 'contentOptions' => function ($model) {
-                    return ['class' => 'text-right' . ($model->sum>0 ? ' text-bold' : '')];
-                }
+                    return ['class' => 'text-right' . ($model->sum > 0 ? ' text-bold' : '')];
+                },
             ],
             'balance' => [
                 'class'          => 'hipanel\grid\CurrencyColumn',
                 'headerOptions'  => ['class' => 'text-right'],
                 'contentOptions' => function ($model, $key, $index) {
                     return ['class' => 'text-right' . ($index ? '' : ' text-bold')];
-                }
+                },
             ],
             'gtype' => [
                 'attribute' => 'gtype',
@@ -63,7 +62,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'headerOptions'   => ['class' => 'text-right'],
                 'filterOptions'   => ['class' => 'text-right'],
                 'contentOptions'  => function ($model) {
-                    return ['class' => "text-right"];
+                    return ['class' => 'text-right'];
                 },
                 'value'           => function ($model) {
                     static $colors = [
@@ -72,9 +71,10 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                         'deposit'    => 'success',
                     ];
                     $color = $colors[$model->gtype] ?: 'muted';
-                    $qty   = $model->type=='support_time' ? Yii::t('app', '{0, time, HH:mm}', ceil($model->quantity * 3600)) :
-                           ( $model->type=='ip_num' ? $model->quantity : '');
+                    $qty   = $model->type === 'support_time' ? Yii::t('app', '{0, time, HH:mm}', ceil($model->quantity * 3600)) :
+                           ($model->type === 'ip_num' ? $model->quantity : '');
                     $qty   = $qty ? ' - ' . Html::tag('b', $qty, ['class' => 'text-primary']) : '';
+
                     return Html::tag('b', $model->type_label, ['class' => "text-$color"]) . $qty;
                 },
             ],
@@ -83,9 +83,10 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'format'    => 'raw',
                 'value'     => function ($model) {
                     $descr  = $model->descr ?: $model->label;
-                    $text   = mb_strlen($descr)>70 ? ArraySpoiler::widget(['data' => $descr]) : $descr;
+                    $text   = mb_strlen($descr) > 70 ? ArraySpoiler::widget(['data' => $descr]) : $descr;
                     $tariff = $model->tariff ? Html::tag('span', Yii::t('app', 'Tariff') . ': ' . Html::a($model->tariff, ['@tariff/view', 'id' => $model->tariff_id]), ['class' => 'pull-right']) : '';
                     $object = $model->object ? implode(': ', array_filter([$model->class_label, static::objectLink($model)])) : '';
+
                     return $tariff . implode('<br>', array_filter([$object, $text]));
                 },
             ],
@@ -97,9 +98,8 @@ class BillGridView extends \hipanel\grid\BoxedGridView
 
     public static function objectLink($model)
     {
-        return $model->class == 'device'
+        return $model->class === 'device'
             ? Html::a($model->object, ['@server/view', 'id' => $model->object_id])
-            : Html::tag('b', $model->object)
-        ;
+            : Html::tag('b', $model->object);
     }
 }

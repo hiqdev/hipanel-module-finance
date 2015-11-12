@@ -6,7 +6,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2014-2015, HiQDev (https://hiqdev.com/)
+ * @copyright Copyright (c) 2014-2015, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\models;
@@ -16,7 +16,7 @@ class Tariff extends \hipanel\base\Model
     use \hipanel\base\ModelTrait;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -32,12 +32,13 @@ class Tariff extends \hipanel\base\Model
         ];
     }
 
-    public function getResources() {
+    public function getResources()
+    {
         return $this->hasMany(Resource::className(), ['id' => 'tariff_id']);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {

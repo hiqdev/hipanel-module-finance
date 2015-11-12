@@ -6,13 +6,13 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2014-2015, HiQDev (https://hiqdev.com/)
+ * @copyright Copyright (c) 2014-2015, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\controllers;
 
-use Yii;
 use hipanel\modules\finance\models\Purse;
+use Yii;
 
 class PurseController extends \hipanel\base\CrudController
 {
@@ -46,7 +46,7 @@ class PurseController extends \hipanel\base\CrudController
         $response = Yii::$app->getResponse();
         $response->format = $response::FORMAT_RAW;
         $response->getHeaders()->add('content-type', $content_type);
+
         return $data;
     }
-
 }

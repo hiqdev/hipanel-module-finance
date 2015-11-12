@@ -6,7 +6,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2014-2015, HiQDev (https://hiqdev.com/)
+ * @copyright Copyright (c) 2014-2015, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\models;
@@ -21,9 +21,10 @@ class BillSearch extends Bill
         rules as defaultRules;
     }
 
-    public function rules() {
+    public function rules()
+    {
         return ArrayHelper::merge($this->defaultRules(), [
-            [['time_from', 'time_till'], 'date']
+            [['time_from', 'time_till'], 'date'],
         ]);
     }
 

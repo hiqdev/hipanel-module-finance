@@ -6,7 +6,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2014-2015, HiQDev (https://hiqdev.com/)
+ * @copyright Copyright (c) 2014-2015, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\grid;
@@ -38,11 +38,11 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                         'template'          => '{button}{visible}{hidden}',
                         'visibleCount'      => 2,
                         'button'            => [
-                            'label' => FontIcon::i('fa-history fa-2x') . ' ' .Yii::t('app', 'Archive'),
-                            'class' => 'pull-right text-nowrap'
-                        ]
+                            'label' => FontIcon::i('fa-history fa-2x') . ' ' . Yii::t('app', 'Archive'),
+                            'class' => 'pull-right text-nowrap',
+                        ],
                     ]);
-                }
+                },
             ],
         ];
     }

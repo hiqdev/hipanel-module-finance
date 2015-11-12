@@ -20,8 +20,8 @@ $this->breadcrumbs[] = $this->title;
                 'class' => 'box-solid',
             ],
             'bodyOptions' => [
-                'class' => 'no-padding'
-            ]
+                'class' => 'no-padding',
+            ],
         ]); ?>
         <div class="profile-user-img text-center">
             <i class="fa fa-dollar fa-5x"></i>

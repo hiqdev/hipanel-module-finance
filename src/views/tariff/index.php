@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['label' => Yii::t('app', 'Create ovds tariff'), 'url' => '#'],
                     ['label' => Yii::t('app', 'Create server tariff'), 'url' => '#'],
                     ['label' => Yii::t('app', 'Create resources tariff'), 'url' => '#'],
-                ]
+                ],
             ]) . '&nbsp;'; ?>
         <?php endif; ?>
     </div>

@@ -1,11 +1,18 @@
 <?php
 
+/*
+ * Finance Plugin for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2014-2015, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hipanel\modules\finance\grid;
 
-use hipanel\modules\finance\controllers\BillController;
-
-use Yii;
 use hipanel\helpers\Url;
+use Yii;
 
 class CreditColumn
 {
@@ -30,9 +37,9 @@ class CreditColumn
                     return Yii::$app->formatter->format(array_shift($column->pluginOptions['value']), ['currency', 'USD']);
                 },
                 'ajaxDataOptions' => [
-                    'currency' => 'currency'
+                    'currency' => 'currency',
                 ],
-            ]
+            ],
         ] : [
             'class'          => 'hipanel\grid\CurrencyColumn',
             'contentOptions' => ['class' => 'text-right'],
