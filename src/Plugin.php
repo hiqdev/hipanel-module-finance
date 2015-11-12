@@ -31,12 +31,14 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
                 'finance' => [
                     'class' => 'hipanel\modules\finance\Module',
                 ],
+                'cart' => [
+                    'class' => 'hiqdev\yii2\cart\Module',
+                ],
                 'merchant' => [
                     'class'           => 'hiqdev\yii2\merchant\Module',
                     'notifyPage'      => '/finance/pay/notify',
                     'depositClass'    => 'hipanel\modules\finance\merchant\Deposit',
                     'collectionClass' => 'hipanel\modules\finance\merchant\Collection',
-                //  'merchantClass'   => 'hipanel\modules\finance\merchant\OmnipayMerchant',
                 ],
             ],
         ];
