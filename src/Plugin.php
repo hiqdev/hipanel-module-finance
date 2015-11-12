@@ -34,25 +34,11 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
                     'class' => 'hipanel\modules\finance\Module',
                 ],
                 'merchant' => [
-                    'class' => 'hiqdev\yii2\merchant\Module',
-                    'defaults' => [
-                        'confirmPage' => '/finance/pay/confirm',
-                    ],
-                    'merchants' => function ($params) {
-                        $params = array_merge([
-                            'site'     => Yii::$app->request->getHostInfo(),
-                            'username' => Yii::$app->user->identity->username,
-                        ], (array)$params);
-                        $ms = Merchant::findAll($params, ['scenario' => 'prepare-info']);
-                        foreach ($ms as $m) {
-                            if ($m->system == 'wmdirect') {
-                                continue;
-                            }
-                            $merchants[$m->name] = $m->getAttributes();
-                        }
-
-                        return $merchants;
-                    },
+                    'class'           => 'hiqdev\yii2\merchant\Module',
+                    'notifyPage'      => '/finance/pay/notify',
+                    'depositClass'    => 'hipanel\modules\finance\merchant\Deposit',
+                    'collectionClass' => 'hipanel\modules\finance\merchant\Collection',
+                //  'merchantClass'   => 'hipanel\modules\finance\merchant\OmnipayMerchant',
                 ],
             ],
         ];
