@@ -43,10 +43,11 @@
         }
     ],
     "require": {
-        "yiisoft/yii2": "2.*",
+        "yiisoft/yii2": "^2.0",
+        "hiqdev/yii2-cart": "*",
+        "hiqdev/yii2-merchant": "*",
         "hiqdev/hipanel-core": "*",
-        "hiqdev/hipanel-module-client": "*",
-        "hiqdev/yii2-merchant": "*"
+        "hiqdev/hipanel-module-client": "*"
     },
     "autoload": {
         "psr-4": {
