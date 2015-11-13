@@ -12,6 +12,7 @@
 namespace hipanel\modules\finance;
 
 use hipanel\modules\finance\models\Merchant;
+use Yii;
 
 class Plugin extends \hiqdev\pluginmanager\Plugin
 {
@@ -32,7 +33,8 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
                     'class' => 'hipanel\modules\finance\Module',
                 ],
                 'cart' => [
-                    'class' => 'hiqdev\yii2\cart\Module',
+                    'class'     => 'hiqdev\yii2\cart\Module',
+                    'termsPage' => Yii::$app->params['orgUrl'] . 'rules',
                 ],
                 'merchant' => [
                     'class'           => 'hiqdev\yii2\merchant\Module',
