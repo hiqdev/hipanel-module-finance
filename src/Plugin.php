@@ -33,8 +33,13 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
                     'class' => 'hipanel\modules\finance\Module',
                 ],
                 'cart' => [
-                    'class'     => 'hiqdev\yii2\cart\Module',
-                    'termsPage' => Yii::$app->params['orgUrl'] . 'rules',
+                    'class'          => 'hiqdev\yii2\cart\Module',
+                    'termsPage'      => Yii::$app->params['orgUrl'] . 'rules',
+                    'paymentMethods' => function () {
+                        return Yii::$app->getView()->render('@hipanel/modules/finance/views/payment-methods', [
+                            'merchants' => [],
+                        ]);
+                    },
                 ],
                 'merchant' => [
                     'class'           => 'hiqdev\yii2\merchant\Module',
