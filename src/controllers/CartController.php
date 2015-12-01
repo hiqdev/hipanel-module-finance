@@ -31,7 +31,7 @@ class CartController extends \yii\web\Controller
         $total  = $cart->getTotal();
         $rest   = $client->balance + $client->credit;
 
-        if ($rest<=0 && $total>0) {
+        if ($rest <= 0 && $total > 0) {
             return $this->renderDeposit($total);
         }
 
@@ -51,6 +51,7 @@ class CartController extends \yii\web\Controller
     {
         $client = Client::findOne(['id' => Yii::$app->user->identity->id]);
         $cart   = $this->module->getCart();
+
         return $this->renderDeposit($cart->total - $client->balance - $client->credit);
     }
 
@@ -58,5 +59,4 @@ class CartController extends \yii\web\Controller
     {
         d('finish');
     }
-
 }

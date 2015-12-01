@@ -1,12 +1,11 @@
 <?php
 
-use yii\helpers\Html;
 
 ?>
 
 <h1><?= Yii::t('app', 'On your credit') ?>:
     <?= $cart->formatCurrency($client->balance) ?> &nbsp; 
-    <?= ($client->credit > 0) ? ' ( + '. $cart->formatCurrency($client->credit) . ' )' : '' ?>
+    <?= ($client->credit > 0) ? ' ( + ' . $cart->formatCurrency($client->credit) . ' )' : '' ?>
 </h1>
 
 <?php if ($rest >= $cart->total) : ?>
