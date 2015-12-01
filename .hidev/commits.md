@@ -4,6 +4,8 @@ hiqdev/hipanel-module-finance commits history
 ## Under development
 
 - Added yii2-cart integration
+    - ac5a8e5 2015-12-01 php-cs-fixed (sol@hiqdev.com)
+    - 96d7fc3 2015-12-01 + Cart controller (sol@hiqdev.com)
     - 9f7b81c 2015-11-30 + local payment methods block (sol@hiqdev.com)
     - 6c6aebd 2015-11-30 + local payment methods block (sol@hiqdev.com)
     - 486e058 2015-11-16 php-cs-fixed (sol@hiqdev.com)
