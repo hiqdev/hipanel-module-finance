@@ -24,6 +24,7 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
                 '@purse'  => '/finance/purse',
                 '@tariff' => '/finance/tariff',
                 '@pay'    => '/merchant/pay',
+                '@cart'   => '/cart/cart',
             ],
             'menus' => [
                 'hipanel\modules\finance\SidebarMenu',
@@ -35,8 +36,15 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
                 'cart' => [
                     'class'          => 'hiqdev\yii2\cart\Module',
                     'termsPage'      => Yii::$app->params['orgUrl'] . 'rules',
-                    'paymentMethods' => function () {
-                        return Yii::$app->getView()->render('@hipanel/modules/finance/views/payment-methods', [
+                    'orderPage'      => '/finance/cart/select',
+                    /*'orderButton'    => function ($module) {
+                        return Yii::$app->getView()->render('@hipanel/modules/finance/views/cart/order-button', [
+                            'module' => $module,
+                        ]);
+                    },*/
+                    'paymentMethods' => function ($module) {
+                        return Yii::$app->getView()->render('@hipanel/modules/finance/views/cart/payment-methods', [
+                            'module'    => $module,
                             'merchants' => [],
                         ]);
                     },
