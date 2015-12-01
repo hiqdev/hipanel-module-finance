@@ -42,10 +42,9 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
                             'module' => $module,
                         ]);
                     },*/
-                    'paymentMethods' => function ($module) {
+                    'paymentMethods' => function () {
                         return Yii::$app->getView()->render('@hipanel/modules/finance/views/cart/payment-methods', [
-                            'module'    => $module,
-                            'merchants' => [],
+                            'merchants' => Yii::$app->getModule('merchant')->getCollection([])->getItems(),
                         ]);
                     },
                 ],
