@@ -4,6 +4,7 @@ hiqdev/hipanel-module-finance commits history
 ## Under development
 
 - Added yii2-cart integration
+    - 960f744 2015-12-03 improved Payment Merchants list: + provided methods visa and maestro (sol@hiqdev.com)
     - c0bc083 2015-12-01 fixed Payment Methods icons (sol@hiqdev.com)
     - ac5a8e5 2015-12-01 php-cs-fixed (sol@hiqdev.com)
     - 96d7fc3 2015-12-01 + Cart controller (sol@hiqdev.com)
