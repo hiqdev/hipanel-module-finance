@@ -57,6 +57,13 @@ class CartController extends \yii\web\Controller
 
     public function actionFinish()
     {
-        d('finish');
+        $cart = $this->module->getCart();
+        $done = $cart->getPositions();
+        $client = Client::findOne(['id' => Yii::$app->user->identity->id]);
+
+        return $this->render('finish', [
+            'done'    => $done,
+            'balance' => $client->balance,
+        ]);
     }
 }
