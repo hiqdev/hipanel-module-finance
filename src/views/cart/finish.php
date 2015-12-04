@@ -8,7 +8,7 @@ use yii\helpers\Html;
         <div class="col-xs-12">
             <h2 class="page-header">
                 <i class="fa fa-shopping-cart"></i> &nbsp;
-                <?= Yii::t('cart', 'Operations performed') ?>: &nbsp; <?= count($done) ?> <?= Yii::t('cart', 'postitions') ?>
+                <?= Yii::t('cart', 'Operations performed') ?>: &nbsp; <?= count($done) ?> <?= Yii::t('cart', 'positions') ?>
             </h2>
         </div>
     </div>
@@ -33,7 +33,9 @@ use yii\helpers\Html;
             </table>
         </div>
     </div>
+</section>
 
+<section class="invoice">
     <h2 class="page-header">
         <?= Yii::t('app', 'Your balance after all operations') ?>:
         <b><?= Yii::$app->formatter->format($balance, ['currency', 'currency' => 'usd']) ?></b>
@@ -47,5 +49,4 @@ use yii\helpers\Html;
             <?= Html::a(Yii::t('app', 'create a ticket'), '@ticket/create') ?>.
         <?php endif ?>
     </p>
-
 </section>
