@@ -4,6 +4,8 @@ hiqdev/hipanel-module-finance commits history
 ## Under development
 
 - Added yii2-cart integration
+    - 4649c23 2015-12-04 added cart/finish not finished (sol@hiqdev.com)
+    - 2220972 2015-12-04 Classes notation changed from pathtoClassName to PHP 5.6 ClassName::class (d.naumenko.a@gmail.com)
     - 960f744 2015-12-03 improved Payment Merchants list: + provided methods visa and maestro (sol@hiqdev.com)
     - c0bc083 2015-12-01 fixed Payment Methods icons (sol@hiqdev.com)
     - ac5a8e5 2015-12-01 php-cs-fixed (sol@hiqdev.com)
