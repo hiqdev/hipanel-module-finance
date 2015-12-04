@@ -11,6 +11,11 @@
 
 namespace hipanel\modules\finance\controllers;
 
+use hipanel\actions\IndexAction;
+use hipanel\actions\RedirectAction;
+use hipanel\actions\SmartPerformAction;
+use hipanel\actions\ValidateFormAction;
+use hipanel\actions\ViewAction;
 use hipanel\modules\finance\models\Purse;
 use Yii;
 
@@ -20,20 +25,20 @@ class PurseController extends \hipanel\base\CrudController
     {
         return [
             'index' => [
-                'class' => 'hipanel\actions\IndexAction',
+                'class' => IndexAction::class,
             ],
             'view' => [
-                'class' => 'hipanel\actions\ViewAction',
+                'class' => ViewAction::class,
             ],
             'validate-form' => [
-                'class' => 'hipanel\actions\ValidateFormAction',
+                'class' => ValidateFormAction::class,
             ],
             'invoice-archive' => [
-                'class' => 'hipanel\actions\RedirectAction',
+                'class' => RedirectAction::class,
                 'error' => Yii::t('app', 'Under construction'),
             ],
             'update-monthly-invoice' => [
-                'class'   => 'hipanel\actions\SmartPerformAction',
+                'class'   => SmartPerformAction::class,
                 'success' => Yii::t('app', 'Invoice updated'),
             ],
         ];
