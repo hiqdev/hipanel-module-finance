@@ -3,8 +3,8 @@ HiPanel Finance Module
 
 **Finance Plugin for HiPanel**
 
-[![Latest Stable Version](https://poser.pugx.org/hiqdev/hipanel-module-finance/v/stable)](//packagist.org/packages/hiqdev/hipanel-module-finance)
-[![Total Downloads](https://poser.pugx.org/hiqdev/hipanel-module-finance/downloads)](//packagist.org/packages/hiqdev/hipanel-module-finance)
+[![Latest Stable Version](https://poser.pugx.org/hiqdev/hipanel-module-finance/v/stable)](https://packagist.org/packages/hiqdev/hipanel-module-finance)
+[![Total Downloads](https://poser.pugx.org/hiqdev/hipanel-module-finance/downloads)](https://packagist.org/packages/hiqdev/hipanel-module-finance)
 [![Dependency Status](https://www.versioneye.com/php/hiqdev:hipanel-module-finance/dev-master/badge.svg)](https://www.versioneye.com/php/hiqdev:hipanel-module-finance/dev-master)
 
 [![Logo](https://raw.githubusercontent.com/hiqdev/hipanel-core/master/docs/logo.png)](https://hipanel.com/)

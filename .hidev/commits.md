@@ -3,6 +3,7 @@ hiqdev/hipanel-module-finance commits history
 
 ## Under development
 
+    - c818fbb 2015-12-07 fixed translations (sol@hiqdev.com)
 - Added yii2-cart integration
     - 4649c23 2015-12-04 added cart/finish not finished (sol@hiqdev.com)
     - 2220972 2015-12-04 Classes notation changed from pathtoClassName to PHP 5.6 ClassName::class (d.naumenko.a@gmail.com)
