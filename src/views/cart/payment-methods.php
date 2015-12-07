@@ -18,7 +18,7 @@ foreach ($merchants as $merchant) {
 $methods = array_unique($methods);
 
 ?>
-<p class="lead"><?= Yii::t('cart', 'Payment Methods') ?>:</p>
+<p class="lead"><?= Yii::t('cart', 'Payment methods') ?>:</p>
 
 <?php foreach ($methods as $name) : ?>
     <i class="pi pi-<?= strtolower($name) ?>"></i>

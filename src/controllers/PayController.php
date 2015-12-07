@@ -20,9 +20,10 @@ class PayController extends \yii\web\Controller
 
     public function actionConfirm()
     {
+        Yii::info('started ' . __METHOD__, 'merchant');
         Yii::$app->get('hiresource')->setAuth([]);
         $res = Merchant::perform('Pay', $_REQUEST);
-        Yii::$app->getResponse()->headers->set('Content-Tupe', 'text/plain');
+        Yii::$app->getResponse()->headers->set('Content-Type', 'text/plain');
         if (!$res) {
             $res = 'OK';
         }
