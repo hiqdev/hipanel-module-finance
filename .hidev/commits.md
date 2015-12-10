@@ -4,6 +4,7 @@ hiqdev/hipanel-module-finance commits history
 ## Under development
 
 - Added yii2-merchant integration
+    - b8f4e02 2015-12-10 used Merchant module renderNotify() (sol@hiqdev.com)
     - 8330653 2015-12-10 finishing pay/notify action (sol@hiqdev.com)
     - c818fbb 2015-12-07 fixed translations (sol@hiqdev.com)
     - 210a741 2015-11-12 php-cs-fixed (sol@hiqdev.com)
