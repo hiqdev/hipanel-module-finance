@@ -11,6 +11,7 @@
 
 namespace hipanel\modules\finance\controllers;
 
+use hipanel\base\Err;
 use hipanel\modules\finance\models\Merchant;
 use Yii;
 
@@ -23,12 +24,11 @@ class PayController extends \yii\web\Controller
         Yii::info(http_build_query($_REQUEST), 'merchant');
         Yii::$app->get('hiresource')->setAuth([]);
         try {
-            $error = Merchant::perform('Pay', $_REQUEST);
+            $res = Merchant::perform('Pay', $_REQUEST);
         } catch (\Exception $e) {
-            $error = $e->getMessage();
+            $res = Err::set($_REQUEST, $e->getMessage());
         }
-        Yii::$app->getResponse()->headers->set('Content-Type', 'text/plain');
 
-        return $error ?: 'OK';
+        return $this->module->getMerchant()->renderNotify($res);
     }
 }
