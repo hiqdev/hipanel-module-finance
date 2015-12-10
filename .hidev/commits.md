@@ -3,7 +3,18 @@ hiqdev/hipanel-module-finance commits history
 
 ## Under development
 
+- Added yii2-merchant integration
+    - 8330653 2015-12-10 finishing pay/notify action (sol@hiqdev.com)
     - c818fbb 2015-12-07 fixed translations (sol@hiqdev.com)
+    - 210a741 2015-11-12 php-cs-fixed (sol@hiqdev.com)
+    - 0391a44 2015-11-12 improved package description (sol@hiqdev.com)
+    - 2f6b600 2015-11-12 still adding integration with yii2-merchant (sol@hiqdev.com)
+    - 83095c9 2015-11-09 + PayController (sol@hiqdev.com)
+    - 6e5c4fd 2015-10-30 Add Resource model (andreyklochok@gmail.com)
+    - eb8d63e 2015-10-30 + Merchant module (sol@hiqdev.com)
+    - 685eb2c 2015-10-30 + Merchant module (sol@hiqdev.com)
+    - c14a036 2015-10-26 - use of local MerchantModule (sol@hiqdev.com)
+    - 29a6c16 2015-10-26 - bill deposit action (sol@hiqdev.com)
 - Added yii2-cart integration
     - 4649c23 2015-12-04 added cart/finish not finished (sol@hiqdev.com)
     - 2220972 2015-12-04 Classes notation changed from pathtoClassName to PHP 5.6 ClassName::class (d.naumenko.a@gmail.com)
@@ -19,16 +30,6 @@ hiqdev/hipanel-module-finance commits history
     - 15aaab0 2015-11-12 + require yii2-cart (sol@hiqdev.com)
     - bf855b5 2015-11-12 improved package description (sol@hiqdev.com)
     - 7dfe5af 2015-11-12 added yii2-cart integration (sol@hiqdev.com)
-- Added yii2-merchant integration
-    - 210a741 2015-11-12 php-cs-fixed (sol@hiqdev.com)
-    - 0391a44 2015-11-12 improved package description (sol@hiqdev.com)
-    - 2f6b600 2015-11-12 still adding integration with yii2-merchant (sol@hiqdev.com)
-    - 83095c9 2015-11-09 + PayController (sol@hiqdev.com)
-    - 6e5c4fd 2015-10-30 Add Resource model (andreyklochok@gmail.com)
-    - eb8d63e 2015-10-30 + Merchant module (sol@hiqdev.com)
-    - 685eb2c 2015-10-30 + Merchant module (sol@hiqdev.com)
-    - c14a036 2015-10-26 - use of local MerchantModule (sol@hiqdev.com)
-    - 29a6c16 2015-10-26 - bill deposit action (sol@hiqdev.com)
 - Added resources relation at Tariff model
     - 588bf23 2015-10-29 Add relation (andreyklochok@gmail.com)
 - Fixed Bill index page: greatly improved looking

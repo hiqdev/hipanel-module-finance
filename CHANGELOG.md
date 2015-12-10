@@ -3,8 +3,8 @@ hiqdev/hipanel-module-finance changelog
 
 ## Under development
 
-- Added yii2-cart integration
 - Added yii2-merchant integration
+- Added yii2-cart integration
 - Added resources relation at Tariff model
 - Fixed Bill index page: greatly improved looking
 - Added bills deleting
