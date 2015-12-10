@@ -18,16 +18,17 @@ class PayController extends \yii\web\Controller
 {
     public $enableCsrfValidation = false;
 
-    public function actionConfirm()
+    public function actionNotify()
     {
-        Yii::info('started ' . __METHOD__, 'merchant');
+        Yii::info(http_build_query($_REQUEST), 'merchant');
         Yii::$app->get('hiresource')->setAuth([]);
-        $res = Merchant::perform('Pay', $_REQUEST);
-        Yii::$app->getResponse()->headers->set('Content-Type', 'text/plain');
-        if (!$res) {
-            $res = 'OK';
+        try {
+            $error = Merchant::perform('Pay', $_REQUEST);
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
         }
+        Yii::$app->getResponse()->headers->set('Content-Type', 'text/plain');
 
-        return $res;
+        return $error ?: 'OK';
     }
 }
