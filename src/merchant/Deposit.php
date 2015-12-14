@@ -24,6 +24,8 @@ class Deposit extends \yii\base\Model
     {
         return [
             [['sum'], 'number'],
+            [['sum'], 'required'],
+            [['sum'], 'compare', 'operator' => '>', 'compareValue' => 0],
         ];
     }
 
