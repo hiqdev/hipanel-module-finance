@@ -29,18 +29,18 @@ class Collection extends \hiqdev\yii2\merchant\Collection
 
     public function fetchMerchants(array $params = [])
     {
+        $merchants = [];
         $params = array_merge([
             'sum'      => $params['amount'] ?: 1,
             'site'     => Yii::$app->request->getHostInfo(),
             'username' => Yii::$app->user->identity->username,
         ], (array) $params);
-        $ms = Merchant::perform('sPrepareInfo', $params);
-        $merchants = [];
-        foreach ($ms as $name => $m) {
-            if ($m['system'] === 'wmdirect') {
-                continue;
+
+        foreach (Merchant::perform('PrepareInfo', $params, true) as $name => $merchant) {
+            if ($merchant['system'] === 'wmdirect') {
+                continue; // WebMoney Direct is not a merchant indeed
             }
-            $merchants[$name] = $this->convertMerchant($m);
+            $merchants[$name] = $this->convertMerchant($merchant);
         }
 
         return $merchants;
