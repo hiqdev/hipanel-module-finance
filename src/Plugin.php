@@ -51,6 +51,7 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
                 'merchant' => [
                     'class'           => 'hiqdev\yii2\merchant\Module',
                     'notifyPage'      => '/finance/pay/notify',
+                    'finishPage'      => '/finance/bill',
                     'depositClass'    => 'hipanel\modules\finance\merchant\Deposit',
                     'collectionClass' => 'hipanel\modules\finance\merchant\Collection',
                 ],

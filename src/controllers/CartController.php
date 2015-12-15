@@ -19,8 +19,8 @@ class CartController extends \yii\web\Controller
     public function renderDeposit($sum)
     {
         return $this->module->getMerchant()->renderDeposit([
-            'sum'   => $sum,
-            'back'  => '/finance/cart/finish',
+            'sum' => $sum,
+            'returnUrl' => '/finance/cart/finish',
         ]);
     }
 
