@@ -13,18 +13,26 @@ namespace hipanel\modules\finance;
 
 use Yii;
 
+/**
+ * Class Module
+ * @package hipanel\modules\finance
+ */
 class Module extends \hipanel\base\Module
 {
     /**
-     * Returns Cart component from Cart module.
+     * Returns Cart component from Cart module
+     * @return \hiqdev\yii2\cart\ShoppingCart
      */
     public function getCart()
     {
-        return Yii::$app->getModule('cart')->getCart();
+        /** @var \hiqdev\yii2\cart\Module $module */
+        $module = Yii::$app->getModule('cart');
+        return $module->getCart();
     }
 
     /**
      * Returns Merchant module.
+     * @return \hiqdev\yii2\merchant\Module
      */
     public function getMerchant()
     {
