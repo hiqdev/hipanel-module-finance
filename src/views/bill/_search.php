@@ -9,16 +9,6 @@ use kartik\widgets\DatePicker;
 ?>
 
 <div class="col-md-4">
-    <?= $search->field('type')->widget(StaticCombo::classname(), [
-        'data' => $type,
-        'hasId' => true,
-        'pluginOptions' => [
-            'select2Options' => [
-                'multiple' => false,
-            ],
-        ],
-    ]) ?>
-
     <?= $search->field('time_from')->widget(DatePicker::className(), [
         'type' => DatePicker::TYPE_RANGE,
         'attribute2' => 'time_till',
@@ -28,14 +18,22 @@ use kartik\widgets\DatePicker;
         ],
     ])->label(Yii::t('app', 'Date')) ?>
 
+    <?= $search->field('type')->widget(StaticCombo::classname(), [
+        'data' => $type,
+        'hasId' => true,
+        'pluginOptions' => [
+            'select2Options' => [
+                'multiple' => true,
+            ],
+        ],
+    ]) ?>
+
     <?php if (Yii::$app->user->can('support')) : ?>
         <?= $search->field('client_id')->widget(ClientCombo::classname()) ?>
     <?php endif ?>
 </div>
 
 <div class="col-md-4">
-    <?= $search->field('descr') ?>
-
     <?= FieldRange::widget([
         'model' => $search->model,
         'attribute1' => 'sum_gt',
@@ -43,7 +41,21 @@ use kartik\widgets\DatePicker;
         'label' => Yii::t('app', 'Sum'),
     ]) ?>
 
+    <?= $search->field('descr') ?>
+
     <?php if (Yii::$app->user->can('support')) : ?>
         <?= $search->field('seller_id')->widget(SellerCombo::classname()) ?>
     <?php endif ?>
+</div>
+
+<div class="col-md-4">
+    <?= $search->field('currency')->widget(StaticCombo::classname(), [
+        'data' => ['usd' => 'USD', 'eur' => 'EUR'],
+        'hasId' => true,
+        'pluginOptions' => [
+            'select2Options' => [
+                'multiple' => false,
+            ],
+        ],
+    ]) ?>
 </div>
