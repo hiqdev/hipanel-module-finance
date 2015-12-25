@@ -40,14 +40,24 @@ class PayController extends \yii\web\Controller
      * @return mixed
      * @throws \yii\base\InvalidConfigException
      */
-    public function actionNotify()
+    public function actionNotify($transactionId = null)
     {
-        Yii::info(http_build_query($_REQUEST), 'merchant');
+        if (!$transactionId) {
+            $transactionId = Yii::$app->request->post('transactionId');
+        }
+        $history = $this->module->getMerchant()->readHistory($transactionId);
+        $data = array_merge([
+            'username'      => $history['username'],
+            'merchant'      => $history['merchant'],
+            'transactionId' => $transactionId,
+        ], $_REQUEST);
+        #$data = array_merge($history, $_REQUEST);
+        Yii::info(http_build_query($data), 'merchant');
         Yii::$app->get('hiresource')->setAuth([]);
         try {
-            $result = Merchant::perform('Pay', $_REQUEST);
+            $result = Merchant::perform('Pay', $data);
         } catch (HiArtException $e) {
-            $result = Err::set($_REQUEST, $e->getMessage());
+            $result = Err::set($data, $e->getMessage());
         }
 
         return $this->module->getMerchant()->renderNotify($result);
