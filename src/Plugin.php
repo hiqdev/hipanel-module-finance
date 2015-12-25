@@ -47,6 +47,9 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
                             'merchants' => Yii::$app->getModule('merchant')->getCollection([])->getItems(),
                         ]);
                     },
+                    'shoppingCartOptions' => [
+                        'on cartChange' => ['hipanel\modules\finance\cart\CartCalculation', 'execute']
+                    ],
                 ],
                 'merchant' => [
                     'class'           => 'hiqdev\yii2\merchant\Module',
