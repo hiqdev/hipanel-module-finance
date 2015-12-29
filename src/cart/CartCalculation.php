@@ -3,7 +3,6 @@
 namespace hipanel\modules\finance\cart;
 
 use hipanel\modules\finance\models\Calculation;
-use hiqdev\hiart\Collection;
 use hiqdev\hiart\ErrorResponseException;
 use hiqdev\yii2\cart\ShoppingCart;
 use Yii;
@@ -66,9 +65,13 @@ class CartCalculation extends Object
      */
     protected function calculateValue($models)
     {
-        $collection = new Collection();
+        $data = [];
 
-        $response = $this->sendRequest($collection->set($models)->collectData());
+        foreach ($models as $model) {
+            $data[$model->getPrimaryKey()] = $model->getAttributes();
+        }
+
+        $response = $this->sendRequest($data);
         $this->updatePositions($response);
     }
 
