@@ -54,6 +54,9 @@ class BillController extends \hipanel\base\CrudController
         ];
     }
 
+    /**
+     * @return array
+     */
     public function getPaymentType()
     {
         return Ref::getList('type,bill,deposit', ['with_hierarchy' => true]);
