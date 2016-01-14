@@ -11,11 +11,13 @@
 
 namespace hipanel\modules\finance\cart;
 
+use hipanel\modules\finance\models\AbstractPurchase;
 use hipanel\modules\finance\models\Calculation;
 use hiqdev\hiart\ActiveRecord;
 use hiqdev\yii2\cart\CartPositionInterface;
 use hiqdev\yii2\cart\CartPositionTrait;
 use Yii;
+use yii\base\InvalidConfigException;
 
 /**
  * Class AbstractCartPosition
@@ -29,9 +31,16 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
      * @var string|array|Calculation
      *  - string: the action calculation model class name
      *  - array: array of options for [[Yii::createObject()]] call
-     *  - object: the object that extends [[ActionCalc]] class and represents calculation of the specified object type
+     *  - object: the object that extends [[Calculation]] class and represents calculation of the specified object type
      */
     protected $_calculationModel;
+
+    /**
+     * @var string|array
+     *  - string: the position purchase model class name
+     *  - array: array of options for [[Yii::createObject()]] call
+     */
+    protected $_purchaseModel;
 
     /**
      * @var double the price of the 1 piece of the position
@@ -42,6 +51,16 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
      * @var double the full value of position
      */
     protected $_value;
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        if ($this->_purchaseModel === null) {
+            throw new InvalidConfigException('Purchase model is not defined. The position can not be ordered');
+        }
+    }
 
     /**
      * @return double
@@ -95,20 +114,34 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
     public function getCalculationModel($options = [])
     {
         if (!($this->_calculationModel instanceof Calculation)) {
-            $config = [
-                'cart_position_id' => $this->getId(),
-            ];
+            $config = ['position' => $this];
 
             if (is_string($this->_calculationModel)) {
                 $config['class'] = $this->_calculationModel;
             }
 
             $this->_calculationModel = Yii::createObject(array_merge($config, $options));
+        } else {
+            $this->_calculationModel->synchronize();
         }
 
-        $this->_calculationModel->amount = $this->getQuantity();
-
         return $this->_calculationModel;
+    }
+
+    /**
+     * @param array $options Options that override defaults on [[Yii::createObject()]]
+     * @return AbstractPurchase
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getPurchaseModel($options = [])
+    {
+        $config = ['position' => $this];
+
+        if (is_string($this->_purchaseModel)) {
+            $config['class'] = $this->_purchaseModel;
+        }
+
+        return Yii::createObject(array_merge($config, $options));
     }
 
     /**
