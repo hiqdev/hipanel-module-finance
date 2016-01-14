@@ -48,7 +48,7 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
                         ]);
                     },
                     'shoppingCartOptions' => [
-                        'on cartChange' => ['hipanel\modules\finance\cart\CartCalculation', 'execute']
+                        'on cartChange' => ['hipanel\modules\finance\cart\CartCalculator', 'execute']
                     ],
                 ],
                 'merchant' => [
