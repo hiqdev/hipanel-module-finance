@@ -20,33 +20,32 @@ class CartFinisher extends Object
 
     /**
      * Runs the purchase.
-     * Normally, the method should call [[finish]]
-     * @void
+     * Purchases the positions in the [[cart]]
+     * @return array
+     *  - 0 AbstractCartPosition[]: successfully purchased positions
+     *  - 1 ErrorPurchaseException[]: errors in positions
      */
     public function run()
     {
-        $this->finish();
-    }
+        $success = [];
+        $error = [];
 
-    /**
-     * Finishes the positions in the [[cart]]
-     *
-     * @throws UnprocessableEntityHttpException
-     */
-    protected function finish()
-    {
-        foreach ($this->cart->positions as $position) {
-            $purchase = $position->getPurchaseModel();
-            try {
-                $result = $purchase->execute();
-                if ($result === true) {
+        if (!$this->cart->isEmpty) {
+            foreach ($this->cart->positions as $position) {
+                $purchase = $position->getPurchaseModel();
+                try {
+                    $purchase->execute();
+
+                    $success[] = clone $position;
                     $this->cart->remove($position);
+                } catch (ErrorResponseException $e) {
+                    $error[] = new ErrorPurchaseException($e->getMessage(), $position, $e);
+                } catch (HiArtException $e) {
+                    $error[] = new ErrorPurchaseException($e->getMessage(), $position, $e);
                 }
-            } catch (ErrorResponseException $e) {
-                throw new ErrorPurchaseException($e->getMessage(), $this->position, $e);
-            } catch (HiArtException $e) {
-                throw new ErrorPurchaseException($e->getMessage(), $this->position, $e);
             }
         }
+
+        return [$success, $error];
     }
 }
