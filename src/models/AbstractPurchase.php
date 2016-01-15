@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\modules\finance\cart\AbstractCartPosition;
+use hipanel\modules\finance\cart\ErrorPurchaseException;
 use Yii;
 use yii\base\InvalidConfigException;
 
@@ -17,7 +18,7 @@ abstract class AbstractPurchase extends \hipanel\base\Model
     /**
      * @var AbstractCartPosition
      */
-    protected $position;
+    public $position;
 
     /** @inheritdoc */
     public static function index()
@@ -43,17 +44,6 @@ abstract class AbstractPurchase extends \hipanel\base\Model
     {
         parent::init();
 
-        $this->synchronize();
-    }
-
-    /**
-     * Synchronises the model to represent actual state of [[position]]
-     * The method must update values, that affects the calculation and
-     * can be changed in cart without position re-adding.
-     * For example: quantity
-     */
-    public function synchronize()
-    {
         $this->cart_position_id = $this->position->getId();
         $this->amount = $this->position->getQuantity();
     }
@@ -61,7 +51,8 @@ abstract class AbstractPurchase extends \hipanel\base\Model
     /**
      * Executes the purchase.
      * Calls proper API commands to purchase the product.
-     * @return boolean whether the item was purchased
+     * @return true if the item was purchased successfully
+     * @throws ErrorPurchaseException in case of failed purchase
      */
     abstract public function execute();
 
