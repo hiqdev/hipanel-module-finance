@@ -12,10 +12,18 @@
 namespace hipanel\modules\finance\controllers;
 
 use hipanel\modules\client\models\Client;
+use hipanel\modules\finance\cart\CartFinisher;
+use hipanel\modules\finance\Module;
+use hiqdev\hiart\Collection;
 use Yii;
 
 class CartController extends \yii\web\Controller
 {
+    /**
+     * @var Module $module
+     */
+    public $module;
+
     public function renderDeposit($sum)
     {
         return $this->module->getMerchant()->renderDeposit([
@@ -58,11 +66,15 @@ class CartController extends \yii\web\Controller
     public function actionFinish()
     {
         $cart = $this->module->getCart();
-        $done = $cart->getPositions();
+
+        $finisher = new CartFinisher(['cart' => $cart]);
+        list($success, $error) = $finisher->run();
+
         $client = Client::findOne(['id' => Yii::$app->user->identity->id]);
 
         return $this->render('finish', [
-            'done'    => $done,
+            'success' => $success,
+            'error' => $error,
             'balance' => $client->balance,
         ]);
     }
