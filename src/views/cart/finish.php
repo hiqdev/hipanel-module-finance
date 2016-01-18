@@ -1,11 +1,15 @@
 <?php
 
+use hipanel\base\View;
 use yii\helpers\Html;
 
 /**
  * @var \hipanel\modules\finance\cart\AbstractCartPosition[] $success
  * @var \hipanel\modules\finance\cart\ErrorPurchaseException[] $error
+ * @var View $this
  */
+
+$this->title = Yii::t('hipanel/finance', 'Cart finishing');
 
 if (!empty($error)) { ?>
     <section class="invoice">
@@ -52,6 +56,7 @@ if (!empty($error)) { ?>
     </section>
 <?php } ?>
 
+<?php if (count($success)) { ?>
 <section class="invoice">
     <div class="row">
         <div class="col-xs-12">
@@ -88,6 +93,7 @@ if (!empty($error)) { ?>
         </div>
     </div>
 </section>
+<?php } ?>
 
 <section class="invoice">
     <h2 class="page-header">
