@@ -9,7 +9,7 @@ use yii\helpers\Html;
  * @var View $this
  */
 
-$this->title = Yii::t('hipanel/finance', 'Cart finishing');
+$this->title = Yii::t('cart', 'Order execution');
 ?>
 
 <?php if (!empty($error)) : ?>
