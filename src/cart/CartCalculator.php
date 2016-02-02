@@ -106,13 +106,14 @@ class CartCalculator extends Object
      */
     private function updatePositions($data)
     {
-        foreach ($this->cart->positions as $id => $position) {
+        foreach ($this->cart->positions as $position) {
+            $id = $position->id;
             if (isset($data[$id])) {
                 $value = reset($data[$id]['value']); // data is wrapped with currency. todo: dynamic currencies
                 $position->setPrice($value['price']);
                 $position->setValue($value['value']);
             } else {
-                Yii::warning('Cart position was removed from the cart because of failed value calculation', 'hipanel.cart');
+                Yii::error('Cart position was removed from the cart because of failed value calculation. Normally this should never happen.', 'hipanel.cart');
                 $this->cart->removeById($position->id);
                 break;
             }
