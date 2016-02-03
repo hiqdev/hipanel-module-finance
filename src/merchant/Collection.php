@@ -12,6 +12,7 @@
 namespace hipanel\modules\finance\merchant;
 
 use hipanel\modules\finance\models\Merchant;
+use hiqdev\hiart\ErrorResponseException;
 use Yii;
 
 class Collection extends \hiqdev\yii2\merchant\Collection
@@ -36,9 +37,20 @@ class Collection extends \hiqdev\yii2\merchant\Collection
             'username' => Yii::$app->user->identity->username,
         ], (array) $params);
 
-        foreach (Merchant::perform('PrepareInfo', $params, true) as $name => $merchant) {
+        try {
+            $merchants = Merchant::perform('PrepareInfo', $params, true);
+        } catch (ErrorResponseException $e) {
+            if ($e->response === null) {
+                Yii::info('No available payment methods found', 'hipanel/finance');
+                $merchants = [];
+            } else {
+                throw $e;
+            }
+        }
+
+        foreach ($merchants as $name => $merchant) {
             if ($merchant['system'] === 'wmdirect') {
-                continue; // WebMoney Direct is not a merchant indeed
+                continue; // WebMoney Direct is not a merchant indeed. TODO: remove
             }
             $merchants[$name] = $this->convertMerchant($merchant);
         }
