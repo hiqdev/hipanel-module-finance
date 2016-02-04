@@ -6,7 +6,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2014-2015, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance;
@@ -48,7 +48,7 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
                         ]);
                     },
                     'shoppingCartOptions' => [
-                        'on cartChange' => ['hipanel\modules\finance\cart\CartCalculator', 'execute']
+                        'on cartChange' => ['hipanel\modules\finance\cart\CartCalculator', 'execute'],
                     ],
                 ],
                 'merchant' => [

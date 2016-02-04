@@ -6,7 +6,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2014-2015, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\controllers;
@@ -14,13 +14,12 @@ namespace hipanel\modules\finance\controllers;
 use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\cart\CartFinisher;
 use hipanel\modules\finance\Module;
-use hiqdev\hiart\Collection;
 use Yii;
 
 class CartController extends \yii\web\Controller
 {
     /**
-     * @var Module $module
+     * @var Module
      */
     public $module;
 

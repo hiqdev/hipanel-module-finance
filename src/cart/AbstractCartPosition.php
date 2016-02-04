@@ -6,7 +6,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2014-2015, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\cart;
@@ -20,7 +20,7 @@ use Yii;
 use yii\base\InvalidConfigException;
 
 /**
- * Class AbstractCartPosition
+ * Class AbstractCartPosition.
  * @property Calculation $actionCalcModel
  */
 abstract class AbstractCartPosition extends ActiveRecord implements CartPositionInterface
@@ -53,7 +53,7 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
     protected $_value;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function init()
     {
@@ -79,11 +79,11 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
      */
     public function setPrice($price)
     {
-        $this->_price = (double)$price;
+        $this->_price = (double) $price;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCost($withDiscount = true)
     {
@@ -96,7 +96,7 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
 
     /**
      * The method returns the `crc32b` hash of a distinct condition
-     * Example:
+     * Example:.
      *
      * ```php
      *    return hash('crc32b', implode('_', ['domain', 'registration', $this->name]));
@@ -108,8 +108,8 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
 
     /**
      * @param array $options Options that override defaults on [[Yii::createObject()]]
-     * @return Calculation
      * @throws \yii\base\InvalidConfigException
+     * @return Calculation
      */
     public function getCalculationModel($options = [])
     {
@@ -130,8 +130,8 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
 
     /**
      * @param array $options Options that override defaults on [[Yii::createObject()]]
-     * @return AbstractPurchase
      * @throws \yii\base\InvalidConfigException
+     * @return AbstractPurchase
      */
     public function getPurchaseModel($options = [])
     {
@@ -145,7 +145,7 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
     }
 
     /**
-     * Returns the value of the domain
+     * Returns the value of the domain.
      * @return double
      */
     public function getValue()
@@ -162,6 +162,6 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
      */
     public function setValue($value)
     {
-        $this->_value = (double)$value;
+        $this->_value = (double) $value;
     }
 }

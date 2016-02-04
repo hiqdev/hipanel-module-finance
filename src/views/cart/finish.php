@@ -3,7 +3,7 @@
 use hipanel\base\View;
 use yii\helpers\Html;
 
-/**
+/*
  * @var \hipanel\modules\finance\cart\AbstractCartPosition[] $success
  * @var \hipanel\modules\finance\cart\ErrorPurchaseException[] $error
  * @var View $this
@@ -15,7 +15,7 @@ $this->title = Yii::t('cart', 'Order execution');
 <?php if (!empty($error)) : ?>
     <div class="box box-danger box-solid">
         <div class="box-header with-border">
-            <?= Html::tag('h3', '<i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;' . Yii::t('cart', 'Operations failed') . ': ' . Yii::t('cart', '{0, plural, one{# position} other{# positions}}', count($error)) ); ?>
+            <?= Html::tag('h3', '<i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;' . Yii::t('cart', 'Operations failed') . ': ' . Yii::t('cart', '{0, plural, one{# position} other{# positions}}', count($error))); ?>
         </div>
         <div class="box-body">
             <table class="table table-striped">

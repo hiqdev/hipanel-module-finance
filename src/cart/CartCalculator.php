@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * Finance Plugin for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hipanel\modules\finance\cart;
 
 use hipanel\modules\finance\models\Calculation;
@@ -28,7 +37,7 @@ class CartCalculator extends Object
     public $position;
 
     /**
-     * Creates the instance of the object and runs the calculation
+     * Creates the instance of the object and runs the calculation.
      *
      * @param CartActionEvent $event The event
      * @void
@@ -39,7 +48,7 @@ class CartCalculator extends Object
         $calculator->run();
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function init()
     {
         $this->cart = $this->event->sender;
@@ -48,7 +57,7 @@ class CartCalculator extends Object
 
     /**
      * Runs the calculation.
-     * Normally, the method should call [[calculateValue]]
+     * Normally, the method should call [[calculateValue]].
      * @void
      */
     public function run()
@@ -57,7 +66,7 @@ class CartCalculator extends Object
     }
 
     /**
-     * The method sends the request to the billing and update positions
+     * The method sends the request to the billing and update positions.
      *
      * @param Calculation[] $models
      * @see updatePositions
@@ -76,11 +85,11 @@ class CartCalculator extends Object
     }
 
     /**
-     * Sends request to the billing API
+     * Sends request to the billing API.
      *
      * @param array $data cart items structured properly for the billing API
-     * @return array
      * @throws UnprocessableEntityHttpException
+     * @return array
      */
     private function sendRequest($data)
     {
@@ -100,7 +109,7 @@ class CartCalculator extends Object
     }
 
     /**
-     * Updates positions with the value from $data
+     * Updates positions with the value from $data.
      *
      * @param array $data
      */
@@ -121,7 +130,7 @@ class CartCalculator extends Object
     }
 
     /**
-     * Collects the calculation models form the cart positions
+     * Collects the calculation models form the cart positions.
      *
      * @return Calculation[]
      */

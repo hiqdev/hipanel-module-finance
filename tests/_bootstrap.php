@@ -1,10 +1,10 @@
 <?php
 
 /*
- * Yii2 extension for payment processing with Omnipay, Payum and more later
+ * Finance Plugin for HiPanel
  *
- * @link      https://github.com/hiqdev/yii2-merchant
- * @package   yii2-merchant
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
  */

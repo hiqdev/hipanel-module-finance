@@ -1,15 +1,20 @@
 <?php
 
+/*
+ * Finance Plugin for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hipanel\modules\finance\cart;
 
-use hipanel\modules\finance\models\Calculation;
 use hiqdev\hiart\ErrorResponseException;
 use hiqdev\hiart\HiArtException;
 use hiqdev\yii2\cart\ShoppingCart;
-use Yii;
 use yii\base\Object;
-use yii\web\UnprocessableEntityHttpException;
-use yz\shoppingcart\CartActionEvent;
 
 class CartFinisher extends Object
 {
@@ -20,7 +25,7 @@ class CartFinisher extends Object
 
     /**
      * Runs the purchase.
-     * Purchases the positions in the [[cart]]
+     * Purchases the positions in the [[cart]].
      * @return array
      *  - 0 AbstractCartPosition[]: successfully purchased positions
      *  - 1 ErrorPurchaseException[]: errors in positions

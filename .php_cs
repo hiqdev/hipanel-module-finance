@@ -6,7 +6,7 @@ Finance Plugin for HiPanel
 @link      https://github.com/hiqdev/hipanel-module-finance
 @package   hipanel-module-finance
 @license   BSD-3-Clause
-@copyright Copyright (c) 2014-2015, HiQDev (http://hiqdev.com/)
+@copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
 EOF;
 
 Symfony\CS\Fixer\Contrib\HeaderCommentFixer::setHeader($header);
@@ -23,6 +23,12 @@ return Symfony\CS\Config\Config::create()
         '-align_equals',                         /// Align equals symbols in consecutive lines.
         '-unalign_equals',                       /// Unalign equals symbols in consecutive lines.
         '-blankline_after_open_tag',             /// Ensure there is no code on the same line as the PHP open tag and it is followed by a blankline.
+        '-phpdoc_no_empty_return',               /// @return void and @return null annotations should be omitted from phpdocs.
+        '-empty_return',                         /// A return statement wishing to return nothing should be simply "return".
+        '-return',                               /// An empty line feed should precede a return statement.
+        '-phpdoc_params',                        /// All items of the @param, @throws, @return, @var, and @type phpdoc tags must be aligned vertically.
+        '-phpdoc_scalar',                        /// Scalar types should always be written in the same form. "int", not "integer"; "bool", not "boolean".
+        '-phpdoc_separation',                    /// Annotations of a different type are separated by a single blank line.
         'header_comment',                        /// Add, replace or remove header comment.
         'concat_with_spaces',                    /// Concatenation should be used with at least one whitespace around.
         'ereg_to_preg',                          /// Replace deprecated ereg regular expression functions with preg. Warning! This could change code behavior.

@@ -1,13 +1,21 @@
 <?php
 
+/*
+ * Finance Plugin for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hipanel\modules\finance\models;
 
 use hipanel\modules\finance\cart\AbstractCartPosition;
 use Yii;
 
 /**
- * Class Calculation
- * @package hipanel\modules\finance\models
+ * Class Calculation.
  */
 class Calculation extends \hipanel\base\Model
 {
@@ -18,25 +26,25 @@ class Calculation extends \hipanel\base\Model
      */
     public $position;
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public static function index()
     {
         return 'actions';
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public static function type()
     {
         return 'action';
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public static function primaryKey()
     {
         return ['cart_position_id'];
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function init()
     {
         if (Yii::$app->user->isGuest) {
@@ -52,7 +60,7 @@ class Calculation extends \hipanel\base\Model
      * Synchronises the model to represent actual state of [[position]]
      * The method must update values, that affects the calculation and
      * can be changed in cart without position re-adding.
-     * For example: quantity
+     * For example: quantity.
      */
     public function synchronize()
     {
@@ -60,7 +68,7 @@ class Calculation extends \hipanel\base\Model
         $this->amount = $this->position->getQuantity();
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function rules()
     {
         return [

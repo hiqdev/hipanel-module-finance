@@ -13,9 +13,9 @@ $this->params['subtitle']      = array_filter(Yii::$app->request->get($model->fo
     <?php $box->beginActions() ?>
         <?php
             if (Yii::$app->user->can('manage')) {
-                print $box->renderCreateButton(Yii::t('app', 'Add payment')) . '&nbsp;';
+                echo $box->renderCreateButton(Yii::t('app', 'Add payment')) . '&nbsp;';
             }
-            print $box->renderCreateButton(Yii::t('app', 'Recharge account'));
+            echo $box->renderCreateButton(Yii::t('app', 'Recharge account'));
         ?>
         <?= $box->renderSearchButton() ?>
         <?= $box->renderSorter([

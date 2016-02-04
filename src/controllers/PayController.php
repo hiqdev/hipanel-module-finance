@@ -6,7 +6,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2014-2015, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\controllers;
@@ -17,8 +17,7 @@ use hiqdev\hiart\HiArtException;
 use Yii;
 
 /**
- * Class PayController
- * @package hipanel\modules\finance\controllers
+ * Class PayController.
  */
 class PayController extends \yii\web\Controller
 {
@@ -37,8 +36,8 @@ class PayController extends \yii\web\Controller
      * Action is designed to get the system notification from payment system,
      * process it and report success or error for the payment system.
      *
-     * @return mixed
      * @throws \yii\base\InvalidConfigException
+     * @return mixed
      */
     public function actionNotify($transactionId = null)
     {

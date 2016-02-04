@@ -1,15 +1,22 @@
 <?php
 
+/*
+ * Finance Plugin for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hipanel\modules\finance\models;
 
 use hipanel\modules\finance\cart\AbstractCartPosition;
 use hipanel\modules\finance\cart\ErrorPurchaseException;
-use Yii;
 use yii\base\InvalidConfigException;
 
 /**
- * Class Purchase
- * @package hipanel\modules\finance\models
+ * Class Purchase.
  */
 abstract class AbstractPurchase extends \hipanel\base\Model
 {
@@ -20,26 +27,25 @@ abstract class AbstractPurchase extends \hipanel\base\Model
      */
     public $position;
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public static function index()
     {
         throw new InvalidConfigException('Method "index" must be declared');
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public static function type()
     {
         throw new InvalidConfigException('Method "index" must be declared');
-
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public static function primaryKey()
     {
         return ['cart_position_id'];
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function init()
     {
         parent::init();
@@ -51,12 +57,12 @@ abstract class AbstractPurchase extends \hipanel\base\Model
     /**
      * Executes the purchase.
      * Calls proper API commands to purchase the product.
-     * @return true if the item was purchased successfully
      * @throws ErrorPurchaseException in case of failed purchase
+     * @return true if the item was purchased successfully
      */
     abstract public function execute();
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function rules()
     {
         return [
