@@ -1,11 +1,10 @@
 package:
+    type:           yii2-extension
     name:           hipanel-module-finance
     namespace:      hipanel\modules\finance
     headline:       HiPanel Finance Module
     title:          Finance Plugin for HiPanel
-    type:           yii2-extension
     keywords:       finance, hipanel, plugin
-    year:           2014
     description:    |
         [![Logo](https://raw.githubusercontent.com/hiqdev/hipanel-core/master/docs/logo.png)](https://hipanel.com/)
 
@@ -17,5 +16,5 @@ package:
             * shopping cart with [yii2-cart](https://github.vom/hiqdev/yii2-cart)
 
 require:
-    hiqdev/hidev-config:        "*"
-    hiqdev/hidev-config-php:    "*"
+    hiqdev/hidev-php:    "*"
+    hiqdev/hidev-vendor: "*"

@@ -49,6 +49,14 @@
         "hiqdev/hipanel-core": "*",
         "hiqdev/hipanel-module-client": "*"
     },
+    "require-dev": {
+        "minii/web": "*@dev",
+        "minii/core": "*@dev",
+        "hiqdev/yii2-cart": "*@dev",
+        "hiqdev/yii2-merchant": "*@dev",
+        "hiqdev/hipanel-core": "*@dev",
+        "hiqdev/hipanel-module-client": "*@dev"
+    },
     "autoload": {
         "psr-4": {
             "hipanel\\modules\\finance\\": "src"
