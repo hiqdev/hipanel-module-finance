@@ -50,6 +50,7 @@ class Collection extends \hiqdev\yii2\merchant\Collection
 
         foreach ($merchants as $name => $merchant) {
             if ($merchant['system'] === 'wmdirect') {
+                unset($merchants[$name]);
                 continue; // WebMoney Direct is not a merchant indeed. TODO: remove
             }
             $merchants[$name] = $this->convertMerchant($merchant);
