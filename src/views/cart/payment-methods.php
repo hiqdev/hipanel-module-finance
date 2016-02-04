@@ -24,7 +24,8 @@ $methods = array_unique($methods);
     <i class="pi pi-<?= strtolower($name) ?>"></i>
 <?php endforeach ?>
 
+<?php /*
 <p class="text-muted well well-sm no-shadow" style="margin-top: 10px">
-    Hello, etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg
-    dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+    <?= Yii::t('hipanel/finance', 'Direct payments') ?>
 </p>
+*/ ?>
