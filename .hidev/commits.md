@@ -4,6 +4,8 @@ hiqdev/hipanel-module-finance commits history
 ## Under development
 
 - Added yii2-merchant integration
+    - 12b5726 2016-02-04 phpcsfixed (sol@hiqdev.com)
+    - 2c10dab 2016-02-04 rehideved (sol@hiqdev.com)
     - 5ff8bc4 2016-02-04 fixed hiding wmdirect (sol@hiqdev.com)
     - 57b333f 2016-02-04 commented out additional payment instructions (sol@hiqdev.com)
     - 3060c8b 2016-02-03 Collection::fetchMerchants() - added a check for a case, when no available payment methods found (d.naumenko.a@gmail.com)
@@ -85,7 +87,7 @@ hiqdev/hipanel-module-finance commits history
     - d56ff71 2015-10-13 fixed purse invoices displaying (sol@hiqdev.com)
     - ef409ea 2015-10-13 x hide actions for clients and admins (bladeroot@gmail.com)
     - d193959 2015-10-09 Model Tariff - added $resurces attribute (d.naumenko.a@gmail.com)
-    - bd18338 2015-10-08 Bills: added time_from/till, sum_gt/lt filter for addvanced serach, other minor (d.naumenko.a@gmail.com)
+    - bd18338 2015-10-08 Bills: added `time_from/till`, `sum_gt/lt` filter for addvanced serach, other minor (d.naumenko.a@gmail.com)
     - 5f0a2a4 2015-10-08 improved pdf invoices archive link (sol@hiqdev.com)
     - 604808a 2015-10-07 + Purse model, controller, grid, alias (sol@hiqdev.com)
 - Fixed access control
