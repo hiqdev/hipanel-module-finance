@@ -3,6 +3,15 @@ hiqdev/hipanel-module-finance commits history
 
 ## Under development
 
+- Added monthly invoices
+    - 981b5c2 2016-02-05 + nocache invoice file (sol@hiqdev.com)
+    - 3628150 2015-10-15 + purse update monthly invoice action (sol@hiqdev.com)
+    - d56ff71 2015-10-13 fixed purse invoices displaying (sol@hiqdev.com)
+    - ef409ea 2015-10-13 x hide actions for clients and admins (bladeroot@gmail.com)
+    - d193959 2015-10-09 Model Tariff - added $resurces attribute (d.naumenko.a@gmail.com)
+    - bd18338 2015-10-08 Bills: added `time_from/till`, `sum_gt/lt` filter for addvanced serach, other minor (d.naumenko.a@gmail.com)
+    - 5f0a2a4 2015-10-08 improved pdf invoices archive link (sol@hiqdev.com)
+    - 604808a 2015-10-07 + Purse model, controller, grid, alias (sol@hiqdev.com)
 - Added yii2-merchant integration
     - 12b5726 2016-02-04 phpcsfixed (sol@hiqdev.com)
     - 2c10dab 2016-02-04 rehideved (sol@hiqdev.com)
@@ -82,14 +91,6 @@ hiqdev/hipanel-module-finance commits history
     - 204868a 2015-08-27 Fixed breadcrumbs subtitle (d.naumenko.a@gmail.com)
     - ecac786 2015-08-27 Fixed deprecated method calling syntax (d.naumenko.a@gmail.com)
     - 84dfe87 2015-08-26 Redisign view (andreyklochok@gmail.com)
-- Added monthly invoices
-    - 3628150 2015-10-15 + purse update monthly invoice action (sol@hiqdev.com)
-    - d56ff71 2015-10-13 fixed purse invoices displaying (sol@hiqdev.com)
-    - ef409ea 2015-10-13 x hide actions for clients and admins (bladeroot@gmail.com)
-    - d193959 2015-10-09 Model Tariff - added $resurces attribute (d.naumenko.a@gmail.com)
-    - bd18338 2015-10-08 Bills: added `time_from/till`, `sum_gt/lt` filter for addvanced serach, other minor (d.naumenko.a@gmail.com)
-    - 5f0a2a4 2015-10-08 improved pdf invoices archive link (sol@hiqdev.com)
-    - 604808a 2015-10-07 + Purse model, controller, grid, alias (sol@hiqdev.com)
 - Fixed access control
     - 0347d17 2015-08-26 fixed access control (sol@hiqdev.com)
 - Added bill/deposit redirect
