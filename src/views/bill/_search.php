@@ -5,19 +5,25 @@ use hipanel\modules\client\widgets\combo\SellerCombo;
 use hiqdev\combo\StaticCombo;
 use kartik\field\FieldRange;
 use kartik\widgets\DatePicker;
+use kartik\widgets\DateTimePicker;
+use yii\helpers\Html;
 
 ?>
 
 <div class="col-md-4">
-    <?= $search->field('time_from')->widget(DatePicker::className(), [
-        'type' => DatePicker::TYPE_RANGE,
-        'attribute2' => 'time_till',
-        'pluginOptions' => [
-            'autoclose' => true,
-            'format' => 'dd.mm.yyyy',
-        ],
-    ])->label(Yii::t('app', 'Date')) ?>
-
+    <div class="form-group md-mb-5">
+        <?= Html::label(Yii::t('app', 'Date')) ?>
+        <?= DatePicker::widget([
+            'model' => $search->model,
+            'attribute' => 'time_from',
+            'attribute2' => 'time_till',
+            'type' => DatePicker::TYPE_RANGE,
+            'pluginOptions' => [
+                'autoclose' => true,
+                'format' => 'dd.mm.yyyy',
+            ],
+        ]) ?>
+    </div>
     <?= $search->field('type')->widget(StaticCombo::classname(), [
         'data' => $type,
         'hasId' => true,
