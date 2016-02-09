@@ -11,7 +11,7 @@ use yii\helpers\Html;
 ?>
 
 <div class="col-md-4">
-    <div class="form-group md-mb-5">
+    <div class="form-group">
         <?= Html::label(Yii::t('app', 'Date')) ?>
         <?= DatePicker::widget([
             'model' => $search->model,
