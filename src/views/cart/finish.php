@@ -84,11 +84,11 @@ $this->title = Yii::t('cart', 'Order execution');
 <?php endif; ?>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
         <div class="box box-solid">
             <div class="box-header with-border">
                 <h3 class="box-title">
-                    <?= Yii::t('app', 'Your balance after all operations') ?>:
+                    <?= Yii::t('app', 'Your balance after all operations') ?>: &nbsp;
                     <b><?= Yii::$app->formatter->format($balance, ['currency', 'currency' => 'usd']) ?></b>
                 </h3>
             </div>
