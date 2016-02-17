@@ -3,6 +3,7 @@ hiqdev/hipanel-module-finance changelog
 
 ## Under development
 
+- Fixed minor issues
 - Added monthly invoices
 - Added yii2-merchant integration
 - Added cart price calculation and finishing (order performing)
@@ -10,7 +11,6 @@ hiqdev/hipanel-module-finance changelog
 - Added resources relation at Tariff model
 - Fixed Bill index page: greatly improved looking
 - Added bills deleting
-- Fixed minor issues
 - Fixed access control
 - Added bill/deposit redirect
 - Added @bill, @tariff aliases

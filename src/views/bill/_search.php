@@ -5,7 +5,6 @@ use hipanel\modules\client\widgets\combo\SellerCombo;
 use hiqdev\combo\StaticCombo;
 use kartik\field\FieldRange;
 use kartik\widgets\DatePicker;
-use kartik\widgets\DateTimePicker;
 use yii\helpers\Html;
 
 ?>

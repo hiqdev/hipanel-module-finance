@@ -3,6 +3,18 @@ hiqdev/hipanel-module-finance commits history
 
 ## Under development
 
+- Fixed minor issues
+    - 8c9e191 2016-02-17 + hide finance menu from admins and supports (sol@hiqdev.com)
+    - f8a83ed 2016-02-09 Fix margin in search form (andreyklochok@gmail.com)
+    - 379431c 2016-02-09 Fix date range field view (andreyklochok@gmail.com)
+    - 2f96dc8 2015-10-15 PurseGridView - ArraySpoiler call options changed (d.naumenko.a@gmail.com)
+    - 205653c 2015-10-15 PurseGridView changed call of ArraySpoiler (d.naumenko.a@gmail.com)
+    - c5781ae 2015-10-15 PurseGridView changed call of ArraySpoiler (d.naumenko.a@gmail.com)
+    - 8c5f851 2015-09-15 localized menu (sol@hiqdev.com)
+    - bd8967c 2015-08-28 Added dependencies on related projects (d.naumenko.a@gmail.com)
+    - 204868a 2015-08-27 Fixed breadcrumbs subtitle (d.naumenko.a@gmail.com)
+    - ecac786 2015-08-27 Fixed deprecated method calling syntax (d.naumenko.a@gmail.com)
+    - 84dfe87 2015-08-26 Redisign view (andreyklochok@gmail.com)
 - Added monthly invoices
     - 981b5c2 2016-02-05 + nocache invoice file (sol@hiqdev.com)
     - 3628150 2015-10-15 + purse update monthly invoice action (sol@hiqdev.com)
@@ -82,15 +94,6 @@ hiqdev/hipanel-module-finance commits history
     - e1b936f 2015-08-25 Fix icons (andreyklochok@gmail.com)
 - Added bills deleting
     - 7b423b5 2015-10-22 + delete bills with check for delete-bills permission (sol@hiqdev.com)
-- Fixed minor issues
-    - 2f96dc8 2015-10-15 PurseGridView - ArraySpoiler call options changed (d.naumenko.a@gmail.com)
-    - 205653c 2015-10-15 PurseGridView changed call of ArraySpoiler (d.naumenko.a@gmail.com)
-    - c5781ae 2015-10-15 PurseGridView changed call of ArraySpoiler (d.naumenko.a@gmail.com)
-    - 8c5f851 2015-09-15 localized menu (sol@hiqdev.com)
-    - bd8967c 2015-08-28 Added dependencies on related projects (d.naumenko.a@gmail.com)
-    - 204868a 2015-08-27 Fixed breadcrumbs subtitle (d.naumenko.a@gmail.com)
-    - ecac786 2015-08-27 Fixed deprecated method calling syntax (d.naumenko.a@gmail.com)
-    - 84dfe87 2015-08-26 Redisign view (andreyklochok@gmail.com)
 - Fixed access control
     - 0347d17 2015-08-26 fixed access control (sol@hiqdev.com)
 - Added bill/deposit redirect
