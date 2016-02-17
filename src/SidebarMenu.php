@@ -24,7 +24,7 @@ class SidebarMenu extends \hipanel\base\Menu implements \yii\base\BootstrapInter
 
     public function items()
     {
-        return [
+        return Yii::$app->user->can('support') && !Yii::$app->user->can('manage') ? [] : [
             'finance' => [
                 'label' => Yii::t('app', 'Finance'),
                 'url'   => ['/finance/bill/index'],
