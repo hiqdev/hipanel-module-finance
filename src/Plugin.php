@@ -59,6 +59,19 @@ class Plugin extends \hiqdev\pluginmanager\Plugin
                     'collectionClass' => 'hipanel\modules\finance\merchant\Collection',
                 ],
             ],
+            'components' => [
+                'i18n' => [
+                    'translations' => [
+                        'hipanel/finance' => [
+                            'class' => 'yii\i18n\PhpMessageSource',
+                            'basePath' => '@hipanel/modules/finance/messages',
+                            'fileMap' => [
+                                'hipanel/finance' => 'finance.php',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 }
