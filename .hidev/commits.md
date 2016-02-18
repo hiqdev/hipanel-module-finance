@@ -4,6 +4,8 @@ hiqdev/hipanel-module-finance commits history
 ## Under development
 
 - Fixed minor issues
+    - ca50518 2016-02-18 + purse block view (sol@hiqdev.com)
+    - ba1f273 2016-02-18 Added module-scope translations (sol@hiqdev.com)
     - 8c9e191 2016-02-17 + hide finance menu from admins and supports (sol@hiqdev.com)
     - f8a83ed 2016-02-09 Fix margin in search form (andreyklochok@gmail.com)
     - 379431c 2016-02-09 Fix date range field view (andreyklochok@gmail.com)
