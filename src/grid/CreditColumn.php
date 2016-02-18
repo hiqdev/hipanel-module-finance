@@ -11,6 +11,7 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\grid\XEditableColumn;
 use hipanel\helpers\Url;
 use Yii;
 
@@ -19,7 +20,7 @@ class CreditColumn
     public static function resolveConfig()
     {
         return Yii::$app->user->can('manage') ? [
-            'class'          => 'hiqdev\xeditable\grid\XEditableColumn',
+            'class'          => XEditableColumn::class,
             'filter'         => false,
             'contentOptions' => ['class' => 'text-right'],
             'widgetOptions'  => [

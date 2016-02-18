@@ -11,6 +11,8 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\grid\XEditableColumn;
+
 class TariffGridView extends \hipanel\grid\BoxedGridView
 {
     public static function defaultColumns()
@@ -24,7 +26,7 @@ class TariffGridView extends \hipanel\grid\BoxedGridView
                 'filter' => false,
             ],
             'note' => [
-                'class' => 'hiqdev\xeditable\grid\XEditableColumn',
+                'class' => XEditableColumn::class,
             ],
         ];
     }
