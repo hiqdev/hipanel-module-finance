@@ -26,13 +26,14 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
             ],
             'credit' => CreditColumn::resolveConfig(),
             'invoices' => [
+                'label'  => Yii::t('hipanel/finance', 'Invoices'),
                 'format' => 'raw',
                 'value'  => function ($model) {
                     return ArraySpoiler::widget([
                         'mode'              => ArraySpoiler::MODE_SPOILER,
                         'data'              => $model->files,
                         'delimiter'         => ' ',
-                        'formatter'         => function ($file, $index) {
+                        'formatter'         => function ($file) {
                             return self::pdfLink($file, $file['month']);
                         },
                         'template'          => '{button}{visible}{hidden}',
