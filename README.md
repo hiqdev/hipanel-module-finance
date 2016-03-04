@@ -17,7 +17,7 @@ HiPanel Finance Module
 This package provides financial functions for HiPanel:
     * bills, invoices, tariffs and so on
     * payment systems integration with [yii2-merchant](https://github.com/hiqdev/yii2-merchant)
-    * shopping cart with [yii2-cart](https://github.vom/hiqdev/yii2-cart)
+    * shopping cart with [yii2-cart](https://github.com/hiqdev/yii2-cart)
 
 ## Installation
 

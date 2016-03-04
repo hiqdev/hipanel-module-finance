@@ -3,10 +3,11 @@ hiqdev/hipanel-module-finance changelog
 
 ## Under development
 
+- Added resource usage
+- Added cart price calculation and finishing (order performing)
 - Fixed minor issues
 - Added monthly invoices
 - Added yii2-merchant integration
-- Added cart price calculation and finishing (order performing)
 - Added yii2-cart integration
 - Added resources relation at Tariff model
 - Fixed Bill index page: greatly improved looking
