@@ -63,6 +63,7 @@ class CartFinisher extends Object
                 try {
                     $purchase->execute();
                     $this->_success[] = $purchase;
+                    $this->cart->remove($position);
                 } catch (ErrorResponseException $e) {
                     $this->_error[] = new ErrorPurchaseException($e->getMessage(), $position, $e);
                 } catch (HiArtException $e) {
