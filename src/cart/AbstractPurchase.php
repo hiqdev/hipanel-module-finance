@@ -11,8 +11,6 @@
 
 namespace hipanel\modules\finance\cart;
 
-use hipanel\modules\finance\cart\AbstractCartPosition;
-use hipanel\modules\finance\cart\ErrorPurchaseException;
 use yii\base\InvalidConfigException;
 
 /**

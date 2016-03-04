@@ -14,8 +14,7 @@ namespace hipanel\modules\finance\models;
 use Yii;
 
 /**
- * Class RUse. Used to represent Resources Usage
- * @package hipanel\modules\finance\models
+ * Class RUse. Used to represent Resources Usage.
  */
 class RUse extends \hipanel\base\Model
 {
@@ -28,12 +27,12 @@ class RUse extends \hipanel\base\Model
 
     public static function index()
     {
-       return 'Uses';
+        return 'Uses';
     }
 
     public static function type()
     {
-       return 'Use';
+        return 'Use';
     }
 
     /**
