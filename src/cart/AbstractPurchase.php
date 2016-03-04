@@ -9,7 +9,7 @@
  * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
  */
 
-namespace hipanel\modules\finance\models;
+namespace hipanel\modules\finance\cart;
 
 use hipanel\modules\finance\cart\AbstractCartPosition;
 use hipanel\modules\finance\cart\ErrorPurchaseException;
@@ -27,16 +27,34 @@ abstract class AbstractPurchase extends \hipanel\base\Model
      */
     public $position;
 
+    /**
+     * @var array result of purchase execution
+     */
+    protected $_result;
+
+    public function getResult()
+    {
+        return $this->_result;
+    }
+
     /** {@inheritdoc} */
     public static function index()
     {
-        throw new InvalidConfigException('Method "index" must be declared');
+        return static::type() . 's';
     }
 
     /** {@inheritdoc} */
     public static function type()
     {
-        throw new InvalidConfigException('Method "index" must be declared');
+        throw new InvalidConfigException('Method "type" must be declared');
+    }
+
+    /**
+     * @var string operation to be performed, e.g.: Renew, Transfer, Registration
+     */
+    public static function operation()
+    {
+        throw new InvalidConfigException('Method "operation" must be declared');
     }
 
     /** {@inheritdoc} */
@@ -60,7 +78,15 @@ abstract class AbstractPurchase extends \hipanel\base\Model
      * @throws ErrorPurchaseException in case of failed purchase
      * @return true if the item was purchased successfully
      */
-    abstract public function execute();
+    public function execute()
+    {
+        if ($this->validate()) {
+            $this->_result = static::perform(static::operation(), $this->getAttributes());
+            return true;
+        }
+
+        return false;
+    }
 
     /** {@inheritdoc} */
     public function rules()

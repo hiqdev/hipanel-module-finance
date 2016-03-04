@@ -24,33 +24,51 @@ class CartFinisher extends Object
     public $cart;
 
     /**
+     * @var AbstractPurchase[] array of successfull purchases
+     */
+    protected $_success = [];
+
+    /**
+     * @var ErrorPurchaseException[] array of failed purchases
+     */
+    protected $_error = [];
+
+    /**
+     * Getter for array of successfull purchases.
+     * @return AbstractPurchase[]
+     */
+    public function getSuccess()
+    {
+        return $this->_success;
+    }
+
+    /**
+     * Getter for array of failed purchases.
+     * @return ErrorPurchaseException[]
+     */
+    public function getError()
+    {
+        return $this->_error;
+    }
+
+    /**
      * Runs the purchase.
      * Purchases the positions in the [[cart]].
-     * @return array
-     *  - 0 AbstractCartPosition[]: successfully purchased positions
-     *  - 1 ErrorPurchaseException[]: errors in positions
      */
     public function run()
     {
-        $success = [];
-        $error = [];
-
         if (!$this->cart->isEmpty) {
             foreach ($this->cart->positions as $position) {
                 $purchase = $position->getPurchaseModel();
                 try {
                     $purchase->execute();
-
-                    $success[] = clone $position;
-                    $this->cart->remove($position);
+                    $this->_success[] = $purchase;
                 } catch (ErrorResponseException $e) {
-                    $error[] = new ErrorPurchaseException($e->getMessage(), $position, $e);
+                    $this->_error[] = new ErrorPurchaseException($e->getMessage(), $position, $e);
                 } catch (HiArtException $e) {
-                    $error[] = new ErrorPurchaseException($e->getMessage(), $position, $e);
+                    $this->_error[] = new ErrorPurchaseException($e->getMessage(), $position, $e);
                 }
             }
         }
-
-        return [$success, $error];
     }
 }

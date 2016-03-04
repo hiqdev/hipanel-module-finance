@@ -67,14 +67,14 @@ class CartController extends \yii\web\Controller
         $cart = $this->module->getCart();
 
         $finisher = new CartFinisher(['cart' => $cart]);
-        list($success, $error) = $finisher->run();
+        $finisher->run();
 
         $client = Client::findOne(['id' => Yii::$app->user->identity->id]);
 
         return $this->render('finish', [
-            'success' => $success,
-            'error' => $error,
             'balance' => $client->balance,
+            'success' => $finisher->getSuccess(),
+            'error'   => $finisher->getError(),
         ]);
     }
 }

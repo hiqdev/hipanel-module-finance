@@ -11,7 +11,6 @@
 
 namespace hipanel\modules\finance\cart;
 
-use hipanel\modules\finance\models\AbstractPurchase;
 use hipanel\modules\finance\models\Calculation;
 use hiqdev\hiart\ActiveRecord;
 use hiqdev\yii2\cart\CartPositionInterface;

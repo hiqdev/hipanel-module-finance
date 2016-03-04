@@ -21,18 +21,18 @@ class ErrorPurchaseException extends Exception
     /**
      * @var AbstractCartPosition
      */
-    public $position;
+    public $purchase;
 
     /**
      * ErrorPurchaseException constructor.
      *
      * @param string $message
-     * @param AbstractCartPosition $position
+     * @param AbstractPurchase $purchase
      * @param Exception $previous
      */
-    public function __construct($message, $position, Exception $previous)
+    public function __construct($message, $purchase, Exception $previous)
     {
-        $this->position = $position;
+        $this->purchase = $purchase;
         parent::__construct($message, null, $previous);
     }
 
@@ -41,6 +41,6 @@ class ErrorPurchaseException extends Exception
      */
     public function getName()
     {
-        return 'Error occurred during item "' . $this->position->getName() . '"" purchase';
+        return 'Error occurred during item "' . $this->purchase->position->getName() . '"" purchase';
     }
 }
