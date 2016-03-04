@@ -88,6 +88,11 @@ abstract class AbstractPurchase extends \hipanel\base\Model
         return false;
     }
 
+    public function renderNotes()
+    {
+        return '';
+    }
+
     /** {@inheritdoc} */
     public function rules()
     {

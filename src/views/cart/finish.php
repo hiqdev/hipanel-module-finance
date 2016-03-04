@@ -48,13 +48,13 @@ $this->title = Yii::t('cart', 'Order execution');
         </div>
     </div>
 <?php endif; ?>
+
 <?php if (count($success)) : ?>
 <div class="box box-success">
     <div class="box-header with-border">
         <h3 class="box-title">
             <?= Yii::t('cart', 'Operations performed') ?>: <?= Yii::t('cart', '{0, plural, one{# position} other{# positions}}', count($success)) ?>
         </h3>
-
     </div>
     <div class="box-body">
         <table class="table table-striped">
@@ -62,16 +62,19 @@ $this->title = Yii::t('cart', 'Order execution');
             <tr>
                 <th class="text-center">#</th>
                 <th><?= Yii::t('cart', 'Description') ?></th>
+                <th><?= Yii::t('cart', 'Notes') ?></th>
                 <th class="text-right"><?= Yii::t('cart', 'Price') ?></th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            <?php $no = 1;
-            foreach ($success as $item) : ?>
+            <?php $no = 1 ?>
+            <?php foreach ($success as $purchase) : ?>
+                <?php $item = $purchase->position ?>
                 <tr>
                     <td class="text-center text-bold"><?= $no++ ?></td>
                     <td><?= $item->icon . ' ' . $item->name . ' ' . Html::tag('span', $item->description, ['class' => 'text-muted']) ?>
+                    <td><?= $purchase->renderNotes() ?></td>
                     <td align="right" class="text-bold"><?= Yii::$app->formatter->format($item->cost, ['currency', 'currency' => 'usd']) ?></td>
                     <td></td>
                 </tr>
@@ -81,7 +84,13 @@ $this->title = Yii::t('cart', 'Order execution');
 
     </div>
 </div>
-<?php endif; ?>
+<?php endif ?>
+
+<?php if (count($remarks)) : ?>
+    <?php foreach ($remarks as $remark) : ?>
+        <?= $remark ?>
+    <?php endforeach ?>
+<?php endif ?>
 
 <div class="row">
     <div class="col-md-5">
@@ -97,7 +106,7 @@ $this->title = Yii::t('cart', 'Order execution');
                 <p class="text-muted well well-sm no-shadow">
                     <?= Yii::t('app', 'If you have any further questions') ?>, <?= Yii::t('app', 'please') ?>,
                     <?php if (Yii::$app->user->isGuest) : ?>
-                        <?= Yii::t('app', 'contact us') . Html::a(Yii::$app->params['supportEmail'], 'mailto:' . Yii::$app->params['supportEmail']) ?>.
+                        <?= Yii::t('app', 'contact us') . ' ' . Html::a(Yii::$app->params['supportEmail'], 'mailto:' . Yii::$app->params['supportEmail']) ?>.
                     <?php else : ?>
                         <?= Html::a(Yii::t('app', 'create a ticket'), '@ticket/create') ?>.
                     <?php endif ?>

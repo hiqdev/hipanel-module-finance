@@ -75,6 +75,17 @@ class CartController extends \yii\web\Controller
             'balance' => $client->balance,
             'success' => $finisher->getSuccess(),
             'error'   => $finisher->getError(),
+            'remarks' => Yii::$app->getView()->params['remarks'],
+        ]);
+    }
+
+    public function actionTest()
+    {
+        $cart = $this->module->getCart();
+        return $this->render('finish', [
+            'remarks' => [
+                'tr' => Yii::$app->view->render('@hipanel/modules/domain/views/domain/_transferAttention'),
+            ],
         ]);
     }
 }
