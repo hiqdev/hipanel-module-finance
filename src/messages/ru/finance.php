@@ -18,4 +18,5 @@ return [
     'Confirm invoice updating' => 'Подтвердите обновление инвойса',
     'Invoice' => 'Инвойс',
     'Invoices' => 'Инвойсы',
+    'Recharge account' => 'Пополнить счёт',
 ];

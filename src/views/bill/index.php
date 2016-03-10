@@ -2,6 +2,7 @@
 
 use hipanel\modules\finance\grid\BillGridView;
 use hipanel\widgets\ActionBox;
+use yii\helpers\Html;
 
 $this->title                   = Yii::t('app', 'Bills');
 $this->params['breadcrumbs'][] = $this->title;
@@ -15,7 +16,7 @@ $this->params['subtitle']      = array_filter(Yii::$app->request->get($model->fo
             if (Yii::$app->user->can('manage')) {
                 echo $box->renderCreateButton(Yii::t('app', 'Add payment')) . '&nbsp;';
             }
-            echo $box->renderCreateButton(Yii::t('app', 'Recharge account'));
+            echo Html::a(Yii::t('hipanel/finance', 'Recharge account'), ['@pay/deposit'], ['class' => 'btn btn-success']);
         ?>
         <?= $box->renderSearchButton() ?>
         <?= $box->renderSorter([
