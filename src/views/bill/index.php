@@ -33,7 +33,8 @@ $this->params['subtitle']      = array_filter(Yii::$app->request->get($model->fo
     <?php $box->endActions() ?>
     <?= $box->renderBulkActions([
         'items' => [
-            Yii::$app->user->can('manage')       ? $box->renderBulkButton(Yii::t('app', 'Edit'), 'edit') : null,
+//            TODO: implement bills edit
+//            Yii::$app->user->can('manage')       ? $box->renderBulkButton(Yii::t('app', 'Edit'), 'edit') : null,
             Yii::$app->user->can('delete-bills') ? $box->renderDeleteButton() : null,
         ],
     ]) ?>
