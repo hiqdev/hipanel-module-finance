@@ -19,32 +19,22 @@ use Yii;
 /**
  * Class PayController.
  */
-class PayController extends \yii\web\Controller
+class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 {
-    /**
-     * {@inheritdoc}
-     * @var \hipanel\modules\finance\Module
-     */
-    public $module;
-
-    /**
-     * {@inheritdoc}
-     */
-    public $enableCsrfValidation = false;
-
-    /**
-     * Action is designed to get the system notification from payment system,
-     * process it and report success or error for the payment system.
-     *
-     * @throws \yii\base\InvalidConfigException
-     * @return mixed
-     */
-    public function actionNotify($transactionId = null)
+    public function getMerchantModule()
     {
-        if (!$transactionId) {
-            $transactionId = Yii::$app->request->post('transactionId');
-        }
-        $history = $this->module->getMerchant()->readHistory($transactionId);
+        return $this->module->getMerchant();
+    }
+
+    public function render($view, $params = [])
+    {
+        return $this->getMerchantModule()->getPayController()->render($view, $params);
+    }
+
+    public function checkNotify()
+    {
+        $transactionId = Yii::$app->request->get('transactionId') ?: Yii::$app->request->post('transactionId');
+        $history = $this->getMerchantModule()->readHistory($transactionId);
         $data = array_merge([
             'username'      => $history['username'],
             'merchant'      => $history['merchant'],
@@ -52,13 +42,14 @@ class PayController extends \yii\web\Controller
         ], $_REQUEST);
         #$data = array_merge($history, $_REQUEST);
         Yii::info(http_build_query($data), 'merchant');
-        Yii::$app->get('hiresource')->setAuth([]);
+        Yii::$app->get('hiresource')->disableAuth();
         try {
             $result = Merchant::perform('Pay', $data);
         } catch (HiArtException $e) {
             $result = Err::set($data, $e->getMessage());
         }
+        Yii::$app->get('hiresource')->enableAuth();
 
-        return $this->module->getMerchant()->renderNotify($result);
+        return $this->getMerchantModule()->completeHistory($result);
     }
 }
