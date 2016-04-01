@@ -19,4 +19,9 @@ return [
     'Invoice' => 'Инвойс',
     'Invoices' => 'Инвойсы',
     'Recharge account' => 'Пополнить счёт',
+    'Sum' => 'Сума',
+    'Date' => 'Дата',
+    'Label' => 'Описание',
+    'Create payment' => 'Создать платеж',
+    'Payments' => 'Платежи',
 ];

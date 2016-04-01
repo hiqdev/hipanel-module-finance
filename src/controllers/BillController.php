@@ -17,6 +17,7 @@ use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
+use hipanel\helpers\ArrayHelper;
 use hipanel\models\Ref;
 use Yii;
 
@@ -41,15 +42,39 @@ class BillController extends \hipanel\base\CrudController
             ],
             'create' => [
                 'class'     => SmartCreateAction::class,
-                'success'   => Yii::t('app', 'Bill created'),
+                'data' => function ($action) {
+                    $types = Ref::getList('type,bill', ['with_hierarchy' => 1, 'orderby' => 'name_asc']);
+                    $billTypes = [];
+                    $billGroupLabels = [];
+
+                    foreach ($types as $key => $title) {
+                        list($type, $name) = explode(',', $key);
+
+                        if (!isset($billTypes[$type])) {
+                            $billTypes[$type] = [];
+                            $billGroupLabels[$type] = ['label' => $title];
+                        }
+
+                        if (isset($name)) {
+                            foreach ($types as $k => $t) {
+                                if (strpos($k, $type . ',') === 0) {
+                                    $billTypes[$type][$k] = $t;
+                                }
+                            }
+                        }
+                    }
+
+                    return ['billTypes' => $billTypes, 'billGroupLabels' => $billGroupLabels];
+                },
+                'success'   => Yii::t('hipanel/finance', 'Bill was created successfully'),
             ],
             'update' => [
                 'class'     => SmartUpdateAction::class,
-                'success'   => Yii::t('app', 'Bill updated'),
+                'success'   => Yii::t('hipanel/finance', 'Bill was updated successfully'),
             ],
             'delete' => [
                 'class'     => SmartPerformAction::class,
-                'success'   => Yii::t('app', 'Bill deleted'),
+                'success'   => Yii::t('hipanel/finance', 'Bill was deleted successfully'),
             ],
         ];
     }

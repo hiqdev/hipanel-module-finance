@@ -20,6 +20,8 @@ class Bill extends \hipanel\base\Model
     public $time_from;
     public $time_till;
 
+    public static $i18nDictionary = 'hipanel/finance';
+
     /**
      * {@inheritdoc}
      */
@@ -29,8 +31,7 @@ class Bill extends \hipanel\base\Model
             [['client_id', 'seller_id', 'id'],    'integer'],
             [['object_id', 'tariff_id'],          'integer'],
             [['client', 'seller', 'bill'],        'safe'],
-            [['domain', 'server'],                'safe'],
-            [['time'],                            'date'],
+            [['domain', 'server', 'time'],        'safe'],
             [['sum', 'balance', 'quantity'],      'number'],
             [['currency', 'label', 'descr'],      'safe'],
             [['object', 'domains', 'tariff'],     'safe'],
@@ -39,6 +40,12 @@ class Bill extends \hipanel\base\Model
             [['type_label', 'gtype_label'],       'safe'],
 
             [['id'],                              'integer', 'on' => 'delete'],
+
+            [['client_id'], 'integer', 'on' => 'create'],
+            [['type', 'label'], 'safe', 'on' => 'create'],
+            [['time'], 'date', 'format' => 'php:d.m.Y H:i:s', 'on' => 'create'],
+            [['sum'], 'number', 'on' => 'create'],
+            [['client_id', 'type', 'label', 'sum'], 'required', 'on' => 'create'],
         ];
     }
 
@@ -48,9 +55,13 @@ class Bill extends \hipanel\base\Model
     public function attributeLabels()
     {
         return $this->mergeAttributeLabels([
+            'client'      => Yii::t('hipanel', 'Client'),
+            'time'        => Yii::t('hipanel', 'Time'),
+            'currency'    => Yii::t('hipanel', 'Currency'),
+            'balance'     => Yii::t('hipanel', 'Balance'),
             'gtype'       => Yii::t('app', 'Type'),
             'gtype_label' => Yii::t('app', 'Type'),
-            'sum'         => Yii::t('app', 'Sum'),
+            'sum'         => Yii::t('hipanel/finance', 'Sum'),
         ]);
     }
 }
