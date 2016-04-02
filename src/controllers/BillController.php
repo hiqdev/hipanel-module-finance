@@ -17,7 +17,6 @@ use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
-use hipanel\helpers\ArrayHelper;
 use hipanel\models\Ref;
 use Yii;
 
