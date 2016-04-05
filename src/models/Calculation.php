@@ -48,7 +48,7 @@ class Calculation extends \hipanel\base\Model
     public function init()
     {
         if (Yii::$app->user->isGuest) {
-            $this->seller = Yii::$app->user->seller;
+            $this->seller = Yii::$app->user->identity->seller;
         } else {
             $this->client = Yii::$app->user->identity->username;
         }
