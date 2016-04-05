@@ -28,6 +28,13 @@ class Collection extends \hiqdev\yii2\merchant\Collection
         $this->addItems($this->fetchMerchants($params));
     }
 
+    static public $supportedSystems = [
+        'webmoney'  => 1,
+        'paypal'    => 1,
+        'paxum'     => 1,
+        'ecoin'     => 1,
+    ];
+
     public function fetchMerchants(array $params = [])
     {
         $merchants = [];
@@ -49,9 +56,9 @@ class Collection extends \hiqdev\yii2\merchant\Collection
         }
 
         foreach ($merchants as $name => $merchant) {
-            if ($merchant['system'] === 'wmdirect') {
+            if (!static::$supportedSystems[$merchant['system']]) {
                 unset($merchants[$name]);
-                continue; // WebMoney Direct is not a merchant indeed. TODO: remove
+                continue;
             }
             $merchants[$name] = $this->convertMerchant($merchant);
         }
