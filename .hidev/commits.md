@@ -4,8 +4,8 @@ hiqdev/hipanel-module-finance commits history
 ## Under development
 
 - Fixed build with asset-packagist
-    - 4ee19f6 2016-04-06 fixed build with asset-packagist (sol@hiqdev.com)
-    - a418a33 2016-04-06 inited tests (sol@hiqdev.com)
+    - b596356 2016-04-06 fixed build with asset-packagist (sol@hiqdev.com)
+    - 6c8b9c9 2016-04-06 inited tests (sol@hiqdev.com)
 - Added bills creating and updating
     - 3141710 2016-04-01 Added bills creating (d.naumenko.a@gmail.com)
     - 04f8df2 2016-03-17 Cart payment methods do not throw warning when no methods available (d.naumenko.a@gmail.com)
@@ -36,6 +36,7 @@ hiqdev/hipanel-module-finance commits history
 - Added resource usage
     - 0f40b67 2016-02-23 Added RUse model (d.naumenko.a@gmail.com)
 - Added cart price calculation and finishing (order performing)
+    - 0111b05 2016-04-05 Calculation model - fixed `seller` propery filling when user is guest (d.naumenko.a@gmail.com)
     - 3e6a3f4 2016-03-04 phpcsfixed (sol@hiqdev.com)
     - 93a3b00 2016-03-04 fixed removing purchases item from cart (sol@hiqdev.com)
     - 77975da 2016-03-04 + purchase notes and remarks (sol@hiqdev.com)
