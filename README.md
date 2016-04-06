@@ -1,13 +1,13 @@
 HiPanel Finance Module
 ======================
 
-**Finance Plugin for HiPanel**
+**Finance module for HiPanel**
 
 [![Latest Stable Version](https://poser.pugx.org/hiqdev/hipanel-module-finance/v/stable)](https://packagist.org/packages/hiqdev/hipanel-module-finance)
 [![Total Downloads](https://poser.pugx.org/hiqdev/hipanel-module-finance/downloads)](https://packagist.org/packages/hiqdev/hipanel-module-finance)
 [![Build Status](https://img.shields.io/travis/hiqdev/hipanel-module-finance.svg)](https://travis-ci.org/hiqdev/hipanel-module-finance)
-[![Code Coverage](https://scrutinizer-ci.com/g/hiqdev/hipanel-module-finance/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/hiqdev/hipanel-module-finance/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/hiqdev/hipanel-module-finance/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/hiqdev/hipanel-module-finance/?branch=master)
+[![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/hiqdev/hipanel-module-finance.svg)](https://scrutinizer-ci.com/g/hiqdev/hipanel-module-finance/)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/hiqdev/hipanel-module-finance.svg)](https://scrutinizer-ci.com/g/hiqdev/hipanel-module-finance/)
 [![Dependency Status](https://www.versioneye.com/php/hiqdev:hipanel-module-finance/dev-master/badge.svg)](https://www.versioneye.com/php/hiqdev:hipanel-module-finance/dev-master)
 
 [![Logo](https://raw.githubusercontent.com/hiqdev/hipanel-core/master/docs/logo.png)](https://hipanel.com/)
@@ -15,6 +15,7 @@ HiPanel Finance Module
 [HiPanel](http://hipanel.com) is the next generation control panel for hosting, domains and more.
 
 This package provides financial functions for HiPanel:
+
     * bills, invoices, tariffs and so on
     * payment systems integration with [yii2-merchant](https://github.com/hiqdev/yii2-merchant)
     * shopping cart with [yii2-cart](https://github.com/hiqdev/yii2-cart)

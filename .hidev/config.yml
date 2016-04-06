@@ -1,7 +1,7 @@
 package:
     type:           yii2-extension
     name:           hipanel-module-finance
-    title:          Finance Plugin for HiPanel
+    title:          Finance module for HiPanel
     headline:       HiPanel Finance Module
     keywords:       finance, hipanel, plugin
     namespace:      hipanel\modules\finance
@@ -11,6 +11,7 @@ package:
         [HiPanel](http://hipanel.com) is the next generation control panel for hosting, domains and more.
 
         This package provides financial functions for HiPanel:
+
             * bills, invoices, tariffs and so on
             * payment systems integration with [yii2-merchant](https://github.com/hiqdev/yii2-merchant)
             * shopping cart with [yii2-cart](https://github.com/hiqdev/yii2-cart)
