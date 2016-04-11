@@ -28,7 +28,7 @@ class Tariff extends \hipanel\base\Model
             [['type_id', 'state_id'],               'integer'],
             [['type', 'state'],                     'safe'],
             [['used'],                              'integer'],
-            [['note'],                              'safe'],
+            [['note', 'label'],                     'safe'],
         ];
     }
 
