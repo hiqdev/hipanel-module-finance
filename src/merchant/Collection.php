@@ -37,6 +37,10 @@ class Collection extends \hiqdev\yii2\merchant\Collection
 
     public function fetchMerchants(array $params = [])
     {
+        if (Yii::$app->user->getIsGuest()) {
+            return []; // todo show merchants for logged out users
+        }
+
         $merchants = [];
         $params = array_merge([
             'sum'      => $params['amount'] ?: 1,
