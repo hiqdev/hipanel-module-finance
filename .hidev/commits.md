@@ -3,6 +3,8 @@ hiqdev/hipanel-module-finance commits history
 
 ## Under development
 
+    - 5393501 2016-04-11 Added `label` attribute to the Tariff model (d.naumenko.a@gmail.com)
+    - 34d1496 2016-04-06 Added CalculableModelInterface (d.naumenko.a@gmail.com)
 - Fixed build with asset-packagist
     - b596356 2016-04-06 fixed build with asset-packagist (sol@hiqdev.com)
     - 6c8b9c9 2016-04-06 inited tests (sol@hiqdev.com)
@@ -12,6 +14,7 @@ hiqdev/hipanel-module-finance commits history
     - e2913ad 2016-03-16 Added missing translation (d.naumenko.a@gmail.com)
     - 10bbc4b 2016-03-10 Removed bill update page link (d.naumenko.a@gmail.com)
 - Added yii2-merchant integration
+    - 162755a 2016-04-12 marchant/Collection::fetchMerchants() - works for loggged out users. Todo: add merchants for logged out clients (d.naumenko.a@gmail.com)
     - 31a7709 2016-04-05 + supported systems list (sol@hiqdev.com)
     - e2bc574 2016-03-25 fixed eCoin to work, it sends on notify only return (sol@hiqdev.com)
     - e9615f8 2016-03-10 Fixed recharge account link on bill/index (d.naumenko.a@gmail.com)
@@ -34,6 +37,7 @@ hiqdev/hipanel-module-finance commits history
     - c14a036 2015-10-26 - use of local MerchantModule (sol@hiqdev.com)
     - 29a6c16 2015-10-26 - bill deposit action (sol@hiqdev.com)
 - Added resource usage
+    - 588bf23 2015-10-29 Add relation (andreyklochok@gmail.com)
     - 0f40b67 2016-02-23 Added RUse model (d.naumenko.a@gmail.com)
 - Added cart price calculation and finishing (order performing)
     - 0111b05 2016-04-05 Calculation model - fixed `seller` propery filling when user is guest (d.naumenko.a@gmail.com)
@@ -102,8 +106,6 @@ hiqdev/hipanel-module-finance commits history
     - 15aaab0 2015-11-12 + require yii2-cart (sol@hiqdev.com)
     - bf855b5 2015-11-12 improved package description (sol@hiqdev.com)
     - 7dfe5af 2015-11-12 added yii2-cart integration (sol@hiqdev.com)
-- Added resources relation at Tariff model
-    - 588bf23 2015-10-29 Add relation (andreyklochok@gmail.com)
 - Fixed Bill index page: greatly improved looking
     - 1929274 2015-10-23 improved Bill index: + object link (sol@hiqdev.com)
     - 9c032a6 2015-10-23 improved Bill index: + object (sol@hiqdev.com)

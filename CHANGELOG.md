@@ -11,7 +11,6 @@ hiqdev/hipanel-module-finance changelog
 - Fixed minor issues
 - Added monthly invoices
 - Added yii2-cart integration
-- Added resources relation at Tariff model
 - Fixed Bill index page: greatly improved looking
 - Added bills deleting
 - Fixed access control
