@@ -50,6 +50,6 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
         }
         Yii::$app->get('hiresource')->enableAuth();
 
-        return $this->getMerchantModule()->completeHistory($result);
+        return $this->getMerchantModule()->completeHistory(array_merge(compact('transactionId'), $result));
     }
 }
