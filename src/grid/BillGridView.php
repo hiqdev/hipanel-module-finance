@@ -57,7 +57,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             'type_label' => [
                 'class'           => 'hipanel\grid\RefColumn',
                 'format'          => 'raw',
-                'gtype'           => 'type,bill',
+                'gtype'           => Yii::$app->user->can('support') ? 'type,bill' : 'type,bill,deposit',
                 'filterAttribute' => 'gtype',
                 'headerOptions'   => ['class' => 'text-right'],
                 'filterOptions'   => ['class' => 'text-right'],

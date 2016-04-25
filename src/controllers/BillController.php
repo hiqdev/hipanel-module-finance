@@ -83,6 +83,6 @@ class BillController extends \hipanel\base\CrudController
      */
     public function getPaymentType()
     {
-        return Ref::getList('type,bill,deposit', ['with_hierarchy' => true]);
+        return Ref::getList('type,bill', Yii::$app->user->can('support') ? ['with_hierarchy' => true] : []);
     }
 }

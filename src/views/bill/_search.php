@@ -26,11 +26,6 @@ use yii\helpers\Html;
     <?= $search->field('type')->widget(StaticCombo::classname(), [
         'data' => $type,
         'hasId' => true,
-        'pluginOptions' => [
-            'select2Options' => [
-                'multiple' => true,
-            ],
-        ],
     ]) ?>
 
     <?php if (Yii::$app->user->can('support')) : ?>
