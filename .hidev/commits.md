@@ -3,12 +3,36 @@ hiqdev/hipanel-module-finance commits history
 
 ## Under development
 
+- Added initial tests
+    - 7abb971 2016-04-27 phpcsfixed (sol@hiqdev.com)
+    - 98ee7ba 2016-04-27 rehideved (sol@hiqdev.com)
+    - 8275736 2016-04-27 added tests (sol@hiqdev.com)
+- Fixed minor issues
+    - a652515 2016-04-27 open new invoices in separate tab (sol@hiqdev.com)
+    - 3095e2c 2016-04-21 CreditColumn - Fixed URL to set-credit action (d.naumenko.a@gmail.com)
+    - 42358b1 2016-04-18 fixed completing history (sol@hiqdev.com)
     - 5393501 2016-04-11 Added `label` attribute to the Tariff model (d.naumenko.a@gmail.com)
+    - 57a347b 2016-02-18 Changed XEditableColumn import namespace (d.naumenko.a@gmail.com)
+    - ca50518 2016-02-18 + purse block view (sol@hiqdev.com)
+    - ba1f273 2016-02-18 Added module-scope translations (sol@hiqdev.com)
+    - 8c9e191 2016-02-17 + hide finance menu from admins and supports (sol@hiqdev.com)
+    - f8a83ed 2016-02-09 Fix margin in search form (andreyklochok@gmail.com)
+    - 379431c 2016-02-09 Fix date range field view (andreyklochok@gmail.com)
+    - 2f96dc8 2015-10-15 PurseGridView - ArraySpoiler call options changed (d.naumenko.a@gmail.com)
+    - 205653c 2015-10-15 PurseGridView changed call of ArraySpoiler (d.naumenko.a@gmail.com)
+    - c5781ae 2015-10-15 PurseGridView changed call of ArraySpoiler (d.naumenko.a@gmail.com)
+    - 8c5f851 2015-09-15 localized menu (sol@hiqdev.com)
+    - bd8967c 2015-08-28 Added dependencies on related projects (d.naumenko.a@gmail.com)
+    - 204868a 2015-08-27 Fixed breadcrumbs subtitle (d.naumenko.a@gmail.com)
+    - ecac786 2015-08-27 Fixed deprecated method calling syntax (d.naumenko.a@gmail.com)
+    - 84dfe87 2015-08-26 Redisign view (andreyklochok@gmail.com)
+- Added `CalculableModelInterface`
     - 34d1496 2016-04-06 Added CalculableModelInterface (d.naumenko.a@gmail.com)
 - Fixed build with asset-packagist
     - b596356 2016-04-06 fixed build with asset-packagist (sol@hiqdev.com)
     - 6c8b9c9 2016-04-06 inited tests (sol@hiqdev.com)
 - Added bills creating and updating
+    - b8b18bc 2016-04-25 Bills - added extended types filter (d.naumenko.a@gmail.com)
     - 3141710 2016-04-01 Added bills creating (d.naumenko.a@gmail.com)
     - 04f8df2 2016-03-17 Cart payment methods do not throw warning when no methods available (d.naumenko.a@gmail.com)
     - e2913ad 2016-03-16 Added missing translation (d.naumenko.a@gmail.com)
@@ -62,21 +86,6 @@ hiqdev/hipanel-module-finance commits history
     - f34524c 2015-12-30 Added PHPDoc (d.naumenko.a@gmail.com)
     - 5968e9b 2015-12-29 CartCalculation - get rid of hiart/collection using (d.naumenko.a@gmail.com)
     - c95729a 2015-12-25 Added cart price calculation (d.naumenko.a@gmail.com)
-- Fixed minor issues
-    - 57a347b 2016-02-18 Changed XEditableColumn import namespace (d.naumenko.a@gmail.com)
-    - ca50518 2016-02-18 + purse block view (sol@hiqdev.com)
-    - ba1f273 2016-02-18 Added module-scope translations (sol@hiqdev.com)
-    - 8c9e191 2016-02-17 + hide finance menu from admins and supports (sol@hiqdev.com)
-    - f8a83ed 2016-02-09 Fix margin in search form (andreyklochok@gmail.com)
-    - 379431c 2016-02-09 Fix date range field view (andreyklochok@gmail.com)
-    - 2f96dc8 2015-10-15 PurseGridView - ArraySpoiler call options changed (d.naumenko.a@gmail.com)
-    - 205653c 2015-10-15 PurseGridView changed call of ArraySpoiler (d.naumenko.a@gmail.com)
-    - c5781ae 2015-10-15 PurseGridView changed call of ArraySpoiler (d.naumenko.a@gmail.com)
-    - 8c5f851 2015-09-15 localized menu (sol@hiqdev.com)
-    - bd8967c 2015-08-28 Added dependencies on related projects (d.naumenko.a@gmail.com)
-    - 204868a 2015-08-27 Fixed breadcrumbs subtitle (d.naumenko.a@gmail.com)
-    - ecac786 2015-08-27 Fixed deprecated method calling syntax (d.naumenko.a@gmail.com)
-    - 84dfe87 2015-08-26 Redisign view (andreyklochok@gmail.com)
 - Added monthly invoices
     - 981b5c2 2016-02-05 + nocache invoice file (sol@hiqdev.com)
     - 3628150 2015-10-15 + purse update monthly invoice action (sol@hiqdev.com)

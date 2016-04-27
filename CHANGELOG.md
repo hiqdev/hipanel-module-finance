@@ -3,12 +3,14 @@ hiqdev/hipanel-module-finance changelog
 
 ## Under development
 
+- Added initial tests
+- Fixed minor issues
+- Added `CalculableModelInterface`
 - Fixed build with asset-packagist
 - Added bills creating and updating
 - Added yii2-merchant integration
 - Added resource usage
 - Added cart price calculation and finishing (order performing)
-- Fixed minor issues
 - Added monthly invoices
 - Added yii2-cart integration
 - Fixed Bill index page: greatly improved looking
