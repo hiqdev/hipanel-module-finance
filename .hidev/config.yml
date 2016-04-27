@@ -12,10 +12,7 @@ package:
 
         This package provides financial functions for HiPanel:
 
-            * bills, invoices, tariffs and so on
-            * payment systems integration with [yii2-merchant](https://github.com/hiqdev/yii2-merchant)
-            * shopping cart with [yii2-cart](https://github.com/hiqdev/yii2-cart)
+            - bills, invoices, tariffs and so on
+            - payment systems integration with [yii2-merchant](https://github.com/hiqdev/yii2-merchant)
+            - shopping cart with [yii2-cart](https://github.com/hiqdev/yii2-cart)
 
-require:
-    hiqdev/hidev-php:    "*"
-    hiqdev/hidev-vendor: "*"
