@@ -14,7 +14,7 @@ use yii\helpers\Html;
         <?= $box->renderTitle(Yii::t('hipanel/finance', '<b>{currency}</b> account', ['currency' => strtoupper($purse->currency)]), '&nbsp;') ?>
         <?php $box->beginTools() ?>
             <?php if (Yii::$app->user->can('manage')) : ?>
-                <?= Html::a(Yii::t('hipanel/finance', 'See new invoice'), ['@purse/generate-invoice', 'id' => $purse->id], ['class' => 'btn btn-default btn-xs']) ?>
+                <?= Html::a(Yii::t('hipanel/finance', 'See new invoice'), ['@purse/generate-invoice', 'id' => $purse->id], ['class' => 'btn btn-default btn-xs', 'target' => 'new-invoice']) ?>
                 <?= ModalButton::widget([
                     'model'    => $purse,
                     'form'     => ['action' => ['@purse/update-monthly-invoice']],
