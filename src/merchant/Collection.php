@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Finance Plugin for HiPanel
+ * Finance module for HiPanel
  *
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
@@ -28,7 +28,7 @@ class Collection extends \hiqdev\yii2\merchant\Collection
         $this->addItems($this->fetchMerchants($params));
     }
 
-    static public $supportedSystems = [
+    public static $supportedSystems = [
         'webmoney'  => 1,
         'paypal'    => 1,
         'paxum'     => 1,

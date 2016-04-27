@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Finance Plugin for HiPanel
+ * Finance module for HiPanel
  *
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance

@@ -12,6 +12,6 @@ $this->breadcrumbs->setItems([$this->title]);
     <?= $this->render('_form', [
         'models' => $models,
         'billTypes' => $billTypes,
-        'billGroupLabels' => $billGroupLabels
+        'billGroupLabels' => $billGroupLabels,
     ]) ?>
 </div>
