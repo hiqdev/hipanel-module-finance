@@ -40,15 +40,15 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
             'merchant'      => $history['merchant'],
             'transactionId' => $transactionId,
         ], $_REQUEST);
-        #$data = array_merge($history, $_REQUEST);
         Yii::info(http_build_query($data), 'merchant');
-        Yii::$app->get('hiresource')->disableAuth();
+
+        Yii::$app->get('hiart')->disableAuth();
         try {
             $result = Merchant::perform('Pay', $data);
         } catch (HiArtException $e) {
             $result = Err::set($data, $e->getMessage());
         }
-        Yii::$app->get('hiresource')->enableAuth();
+        Yii::$app->get('hiart')->enableAuth();
 
         return $this->getMerchantModule()->completeHistory(array_merge(compact('transactionId'), $result));
     }
