@@ -18,6 +18,7 @@ use Yii;
 
 /**
  * Class PayController.
+ * @property \hipanel\modules\finance\Module $module
  */
 class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 {
