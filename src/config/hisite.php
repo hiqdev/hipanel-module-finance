@@ -10,9 +10,6 @@ return [
         '@pay'    => '/merchant/pay',
         '@cart'   => '/cart/cart',
     ],
-    'menus' => [
-        'hipanel\modules\finance\SidebarMenu',
-    ],
     'modules' => [
         'finance' => [
             'class' => 'hipanel\modules\finance\Module',
@@ -56,6 +53,10 @@ return [
                 ],
             ],
         ],
+        'menuManager' => [
+            'menus' => [
+                'finance' => 'hipanel\modules\finance\SidebarMenu',
+            ],
+        ],
     ],
 ];
-}
