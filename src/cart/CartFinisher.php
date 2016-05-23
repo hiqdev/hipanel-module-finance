@@ -61,9 +61,12 @@ class CartFinisher extends Object
             foreach ($this->cart->positions as $position) {
                 $purchase = $position->getPurchaseModel();
                 try {
-                    $purchase->execute();
-                    $this->_success[] = $purchase;
-                    $this->cart->remove($position);
+                    if ($purchase->execute()) {
+                        $this->_success[] = $purchase;
+                        $this->cart->remove($position);
+                    } else {
+                        $this->_error[] = new ErrorPurchaseException(reset(reset($purchase->getErrors())), $position);
+                    }
                 } catch (ErrorResponseException $e) {
                     $this->_error[] = new ErrorPurchaseException($e->getMessage(), $position, $e);
                 } catch (HiArtException $e) {
