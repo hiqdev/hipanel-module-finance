@@ -3,10 +3,13 @@
 use hipanel\base\View;
 use yii\helpers\Html;
 
-/*
+/**
  * @var \hipanel\modules\finance\cart\AbstractCartPosition[] $success
  * @var \hipanel\modules\finance\cart\ErrorPurchaseException[] $error
+ * @var \hipanel\modules\finance\cart\PendingPurchaseException[] $pending
+ * @var array $remarks
  * @var View $this
+ * @var float $balance
  */
 
 $this->title = Yii::t('cart', 'Order execution');
@@ -36,7 +39,45 @@ $this->title = Yii::t('cart', 'Order execution');
                     <tr>
                         <td class="text-center text-bold"><?= $no++ ?></td>
                         <td>
-                            <?= $item->icon . ' ' . $item->name . ' ' . Html::tag('span', $item->description, ['class' => 'text-muted']) ?><br>
+                            <?= $item->renderDescription() ?><br>
+                            <?= $exception->getMessage() ?>
+                        </td>
+                        <td align="right" class="text-bold"><?= Yii::$app->formatter->format($item->cost, ['currency', 'currency' => 'usd']) ?></td>
+                        <td></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php endif; ?>
+
+
+<?php if (!empty($pending)) : ?>
+    <div class="box box-warning box-solid">
+        <div class="box-header with-border">
+            <?= Html::tag('h3', '<i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;' . Yii::t('cart', 'Pending operations') . ': ' . Yii::t('cart', '{0, plural, one{# position} other{# positions}}', count($pending))); ?>
+        </div>
+        <div class="box-body">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th class="text-center">#</th>
+                    <th><?= Yii::t('cart', 'Description') ?></th>
+                    <th class="text-right"><?= Yii::t('cart', 'Price') ?></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $no = 1;
+                foreach ($pending as $exception) :
+                    $item = $exception->position;
+                    ?>
+                    <tr>
+                        <td class="text-center text-bold"><?= $no++ ?></td>
+                        <td>
+                            <?= $item->renderDescription() ?><br>
                             <?= $exception->getMessage() ?>
                         </td>
                         <td align="right" class="text-bold"><?= Yii::$app->formatter->format($item->cost, ['currency', 'currency' => 'usd']) ?></td>
@@ -73,7 +114,7 @@ $this->title = Yii::t('cart', 'Order execution');
                 <?php $item = $purchase->position ?>
                 <tr>
                     <td class="text-center text-bold"><?= $no++ ?></td>
-                    <td><?= $item->icon . ' ' . $item->name . ' ' . Html::tag('span', $item->description, ['class' => 'text-muted']) ?>
+                    <td><?= $item->renderDescription() ?></td>
                     <td><?= $purchase->renderNotes() ?></td>
                     <td align="right" class="text-bold"><?= Yii::$app->formatter->format($item->cost, ['currency', 'currency' => 'usd']) ?></td>
                     <td></td>
