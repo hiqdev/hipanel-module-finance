@@ -26,7 +26,7 @@ class CartController extends \yii\web\Controller
     public function renderDeposit($sum)
     {
         return $this->module->getMerchant()->renderDeposit([
-            'sum'       => $sum,
+            'sum' => $sum,
             'finishUrl' => '/finance/cart/finish',
         ]);
     }
@@ -34,9 +34,9 @@ class CartController extends \yii\web\Controller
     public function actionSelect()
     {
         $client = Client::findOne(['id' => Yii::$app->user->identity->id]);
-        $cart   = $this->module->getCart();
-        $total  = $cart->getTotal();
-        $rest   = $client->balance + $client->credit;
+        $cart = $this->module->getCart();
+        $total = $cart->getTotal();
+        $rest = $client->balance + $client->credit;
 
         if ($rest <= 0 && $total > 0) {
             return $this->renderDeposit($total);
@@ -44,8 +44,8 @@ class CartController extends \yii\web\Controller
 
         return $this->render('select', [
             'client' => $client,
-            'cart'   => $cart,
-            'rest'   => $rest,
+            'cart' => $cart,
+            'rest' => $rest,
         ]);
     }
 
@@ -57,7 +57,7 @@ class CartController extends \yii\web\Controller
     public function actionPartial()
     {
         $client = Client::findOne(['id' => Yii::$app->user->identity->id]);
-        $cart   = $this->module->getCart();
+        $cart = $this->module->getCart();
 
         return $this->renderDeposit($cart->total - $client->balance - $client->credit);
     }
@@ -74,8 +74,9 @@ class CartController extends \yii\web\Controller
         return $this->render('finish', [
             'balance' => $client->balance,
             'success' => $finisher->getSuccess(),
-            'error'   => $finisher->getError(),
-            'remarks' => Yii::$app->getView()->params['remarks'],
+            'error' => $finisher->getError(),
+            'pending' => $finisher->getPending(),
+            'remarks' => (array)Yii::$app->getView()->params['remarks'],
         ]);
     }
 
