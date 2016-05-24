@@ -19,20 +19,27 @@ use yii\base\Exception;
 class ErrorPurchaseException extends Exception
 {
     /**
+     * @var AbstractPurchase
+     */
+    public $purchase;
+
+    /**
      * @var AbstractCartPosition
      */
     public $position;
 
     /**
-     * ErrorPurchaseException constructor.
+     * ErrorPurchaseException constructor
      *
      * @param string $message
-     * @param AbstractCartPosition $position
+     * @param AbstractPurchase $purchase
      * @param Exception $previous
      */
-    public function __construct($message, $position, Exception $previous = null)
+    public function __construct($message, $purchase, Exception $previous = null)
     {
-        $this->position = $position;
+        $this->purchase = $purchase;
+        $this->position = $purchase->position;
+
         parent::__construct($message, 0, $previous);
     }
 
@@ -41,6 +48,6 @@ class ErrorPurchaseException extends Exception
      */
     public function getName()
     {
-        return 'Error occurred during item "' . $this->position->getName() . '"" purchase';
+        return 'Error occurred during item "' . $this->purchase->position->getName() . '"" purchase';
     }
 }
