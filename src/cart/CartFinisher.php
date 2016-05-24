@@ -24,7 +24,7 @@ class CartFinisher extends Object
     public $cart;
 
     /**
-     * @var AbstractPurchase[] array of successfull purchases
+     * @var AbstractPurchase[] array of successful purchases
      */
     protected $_success = [];
 
@@ -34,7 +34,12 @@ class CartFinisher extends Object
     protected $_error = [];
 
     /**
-     * Getter for array of successfull purchases.
+     * @var PendingPurchaseException[] array of purchases that are pending
+     */
+    protected $_pending = [];
+
+    /**
+     * Getter for array of successful purchases.
      * @return AbstractPurchase[]
      */
     public function getSuccess()
@@ -52,6 +57,15 @@ class CartFinisher extends Object
     }
 
     /**
+     * Getter for array of failed purchases.
+     * @return PendingPurchaseException[]
+     */
+    public function getPending()
+    {
+        return $this->_pending;
+    }
+
+    /**
      * Runs the purchase.
      * Purchases the positions in the [[cart]].
      */
@@ -62,15 +76,18 @@ class CartFinisher extends Object
                 $purchase = $position->getPurchaseModel();
                 try {
                     if ($purchase->execute()) {
-                        $this->_success[] = $purchase;
+                        $this->_success[] = $position;
                         $this->cart->remove($position);
                     } else {
-                        $this->_error[] = new ErrorPurchaseException(reset(reset($purchase->getErrors())), $position);
+                        $this->_error[] = new ErrorPurchaseException(reset(reset($purchase->getErrors())), $purchase);
                     }
+                } catch (PendingPurchaseException $e) {
+                    $this->_pending[] = $e;
+                    $this->cart->remove($position);
                 } catch (ErrorResponseException $e) {
-                    $this->_error[] = new ErrorPurchaseException($e->getMessage(), $position, $e);
+                    $this->_error[] = new ErrorPurchaseException($e->getMessage(), $purchase, $e);
                 } catch (HiArtException $e) {
-                    $this->_error[] = new ErrorPurchaseException($e->getMessage(), $position, $e);
+                    $this->_error[] = new ErrorPurchaseException($e->getMessage(), $purchase, $e);
                 }
             }
         }
