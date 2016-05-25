@@ -16,7 +16,7 @@ use yii\base\Exception;
 /**
  * Exception represents an exception occurred during cart position purchase.
  */
-class ErrorPurchaseException extends Exception
+class ErrorPurchaseException extends Exception implements PositionFinishExceptionInterface
 {
     /**
      * @var AbstractPurchase

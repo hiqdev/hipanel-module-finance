@@ -16,23 +16,30 @@ use yii\base\Exception;
 /**
  * Exception represents an pending state of position occurred during cart purchase.
  */
-class PendingPurchaseException extends Exception
+class PendingPurchaseException extends Exception implements PositionFinishExceptionInterface
 {
+    /**
+     * @var AbstractPurchase
+     */
+    public $purchase;
+
     /**
      * @var AbstractCartPosition
      */
     public $position;
 
     /**
-     * PendingPurchaseException constructor.
+     * PendingPurchaseException constructor
      *
      * @param string $message
-     * @param AbstractCartPosition $position
+     * @param AbstractPurchase $purchase
      * @param Exception $previous
      */
-    public function __construct($message, $position, Exception $previous = null)
+    public function __construct($message, $purchase, Exception $previous = null)
     {
-        $this->position = $position;
+        $this->purchase = $purchase;
+        $this->position = $purchase->position;
+
         parent::__construct($message, 0, $previous);
     }
 
