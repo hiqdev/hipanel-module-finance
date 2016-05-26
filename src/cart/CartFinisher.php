@@ -76,7 +76,7 @@ class CartFinisher extends Object
                 $purchase = $position->getPurchaseModel();
                 try {
                     if ($purchase->execute()) {
-                        $this->_success[] = $position;
+                        $this->_success[] = $purchase;
                         $this->cart->remove($position);
                     } else {
                         $this->_error[] = new ErrorPurchaseException(reset(reset($purchase->getErrors())), $purchase);
