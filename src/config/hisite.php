@@ -9,6 +9,7 @@ return [
         '@tariff' => '/finance/tariff',
         '@pay'    => '/merchant/pay',
         '@cart'   => '/cart/cart',
+        '@finance'=> '/finance',
     ],
     'modules' => [
         'finance' => [
