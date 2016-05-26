@@ -1,28 +1,44 @@
 <?php
 
+/**
+ * @var float $rest client's balance + credit
+ * @var \hipanel\modules\client\models\Client $client
+ * @var \hiqdev\yii2\cart\ShoppingCart $cart
+ */
+use yii\helpers\Html;
 
 ?>
 
-<h1><?= Yii::t('app', 'On your credit') ?>:
-    <?= $cart->formatCurrency($client->balance) ?> &nbsp;
-    <?= ($client->credit > 0) ? ' ( + ' . $cart->formatCurrency($client->credit) . ' )' : '' ?>
+<h1><?= Yii::t('hipanel/finance', 'You balance: {balance} {formattedCredit}', [
+        'balance' => $cart->formatCurrency($client->balance),
+        'formattedCredit' => $client->credit > 0 ? Yii::t('hipanel/finance', '(+{amount} of credit)', ['amount' => $cart->formatCurrency($client->credit)]) : ''
+    ]) ?>:
 </h1>
 
 <?php if ($rest >= $cart->total) : ?>
-    <h3><?= Yii::t('app', 'it\'s enough to pay your cart') ?>:</h3>
+    <h3><?= Yii::t('hipanel/finance', 'It\'s enough to pay your cart') ?></h3>
     <br>
-    <p><a href="/finance/cart/finish" class="btn btn-lg btn-primary" style="width:37em">
-        <?= Yii::t('app', 'Use credit funds without depositing') ?>
-    </a></p>
+    <p>
+        <?= Html::a(Yii::t('hipanel/finance', 'Use credit funds without depositing'), '@finance/cart/finish', [
+            'class' => 'btn btn-lg btn-primary',
+            'style' => 'width:37em'
+        ]) ?>
+    </p>
 <?php else : ?>
-    <h3><?= Yii::t('app', 'You can pay your cart partially') ?>:</h3>
+    <h3><?= Yii::t('hipanel/finance', 'You can pay your cart partially') ?>:</h3>
     <br>
-    <p><a href="/finance/cart/partial" class="btn btn-lg btn-primary" style="width:37em">
-        <?= Yii::t('app', 'Use credit funds and pay the difference') ?>: <?= $cart->formatCurrency($cart->total - $rest) ?>
-    </a></p>
+    <p>
+        <?php $text = Yii::t('hipanel/finance', 'Use credit funds and pay the difference {amount}', [
+            'amount' => $cart->formatCurrency($cart->total - $rest)
+        ]);
+        echo Html::a($text, '@finance/cart/partial', ['class' => 'btn btn-lg btn-primary', 'style' => 'width:37em']) ?>
+    </p>
 <?php endif ?>
 <?php if ($cart->total > 0) : ?>
-    <p><a href="/finance/cart/full" class="btn btn-lg btn-info" style="width:37em">
-        <?= Yii::t('app', 'Do not use credit funds, pay the whole cart') ?>: <?= $cart->formatCurrency($cart->total) ?>
-    </a></p>
+    <p>
+        <?php $text = Yii::t('hipanel/finance', 'Do not use credit funds, pay the whole cart: {amount}', [
+            'amount' => $cart->formatCurrency($cart->total)
+        ]);
+        echo Html::a($text, '@finance/cart/full', ['class' => 'btn btn-lg btn-primary', 'style' => 'width:37em']) ?>
+    </p>
 <?php endif ?>

@@ -42,7 +42,7 @@ $this->title = Yii::t('cart', 'Order execution');
                             <?= $item->renderDescription() ?><br>
                             <?= $exception->getMessage() ?>
                         </td>
-                        <td align="right" class="text-bold"><?= Yii::$app->formatter->format($item->cost, ['currency', 'currency' => 'usd']) ?></td>
+                        <td align="right" class="text-bold"><?= Yii::$app->formatter->asCurrency($item->cost, Yii::$app->params['currency']) ?></td>
                         <td></td>
                     </tr>
                 <?php endforeach; ?>
@@ -80,7 +80,7 @@ $this->title = Yii::t('cart', 'Order execution');
                             <?= $item->renderDescription() ?><br>
                             <?= $exception->getMessage() ?>
                         </td>
-                        <td align="right" class="text-bold"><?= Yii::$app->formatter->format($item->cost, ['currency', 'currency' => 'usd']) ?></td>
+                        <td align="right" class="text-bold"><?= Yii::$app->formatter->asCurrency($item->cost, Yii::$app->params['currency']) ?></td>
                         <td></td>
                     </tr>
                 <?php endforeach; ?>
@@ -116,13 +116,12 @@ $this->title = Yii::t('cart', 'Order execution');
                     <td class="text-center text-bold"><?= $no++ ?></td>
                     <td><?= $item->renderDescription() ?></td>
                     <td><?= $purchase->renderNotes() ?></td>
-                    <td align="right" class="text-bold"><?= Yii::$app->formatter->format($item->cost, ['currency', 'currency' => 'usd']) ?></td>
+                    <td align="right" class="text-bold"><?= Yii::$app->formatter->asCurrency($item->cost, Yii::$app->params['currency']) ?></td>
                     <td></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
         </table>
-
     </div>
 </div>
 <?php endif ?>
@@ -138,19 +137,24 @@ $this->title = Yii::t('cart', 'Order execution');
         <div class="box box-solid">
             <div class="box-header with-border">
                 <h3 class="box-title">
-                    <?= Yii::t('app', 'Your balance after all operations') ?>: &nbsp;
-                    <b><?= Yii::$app->formatter->format($balance, ['currency', 'currency' => 'usd']) ?></b>
+                    <?= Yii::t('hipanel/finance', 'Your balance after all operations: {amount}', [
+                        'amount' => Yii::$app->formatter->asCurrency($balance, Yii::$app->params['currency'])
+                    ]) ?>
                 </h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body text-center">
                 <p class="text-muted well well-sm no-shadow">
-                    <?= Yii::t('app', 'If you have any further questions') ?>, <?= Yii::t('app', 'please') ?>,
-                    <?php if (Yii::$app->user->isGuest) : ?>
-                        <?= Yii::t('app', 'contact us') . ' ' . Html::a(Yii::$app->params['supportEmail'], 'mailto:' . Yii::$app->params['supportEmail']) ?>.
-                    <?php else : ?>
-                        <?= Html::a(Yii::t('app', 'create a ticket'), '@ticket/create') ?>.
-                    <?php endif ?>
+                    <?php
+                    if (Yii::$app->user->isGuest) {
+                        echo Yii::t('hipanel/finance', 'If you have any further questions, please, contact us {emailLink}', [
+                            'emailLink' => Html::a(Yii::$app->params['supportEmail'], 'mailto:' . Yii::$app->params['supportEmail'])
+                        ]);
+                    } else {
+                        echo Yii::t('hipanel/finance', 'If you have any further questions, please, {ticketCreationLink}.', [
+                            'ticketCreationLink' => Html::a(Yii::t('hipanel/finance', 'create a ticket'), '@ticket/create')
+                        ]);
+                    } ?>
                 </p>
             </div>
             <!-- /.box-body -->
