@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
 use hipanel\actions\OrientationAction;
+use hipanel\actions\SearchAction;
 use hipanel\actions\SmartCreateAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
@@ -32,29 +33,32 @@ class TariffController extends \hipanel\base\CrudController
                 ]
             ],
             'index' => [
-                'class'     => IndexAction::class,
+                'class' => IndexAction::class,
+            ],
+            'search' => [
+                'class' => SearchAction::class,
             ],
             'view' => [
-                'class'     => ViewAction::class,
+                'class' => ViewAction::class,
             ],
             'validate-form' => [
-                'class'     => ValidateFormAction::class,
+                'class' => ValidateFormAction::class,
             ],
             'create' => [
-                'class'     => SmartCreateAction::class,
-                'success'   => Yii::t('app', 'Tariff created'),
+                'class'   => SmartCreateAction::class,
+                'success' => Yii::t('app', 'Tariff created'),
             ],
             'set-note' => [
-                'class'     => SmartUpdateAction::class,
-                'success'   => Yii::t('app', 'Note updated'),
+                'class'   => SmartUpdateAction::class,
+                'success' => Yii::t('app', 'Note updated'),
             ],
             'update' => [
-                'class'     => SmartUpdateAction::class,
-                'success'   => Yii::t('app', 'Tariff updated'),
+                'class'   => SmartUpdateAction::class,
+                'success' => Yii::t('app', 'Tariff updated'),
             ],
             'delete' => [
-                'class'     => SmartPerformAction::class,
-                'success'   => Yii::t('app', 'Tariff deleted'),
+                'class'   => SmartPerformAction::class,
+                'success' => Yii::t('app', 'Tariff deleted'),
             ],
         ];
     }
