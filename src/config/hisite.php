@@ -52,6 +52,13 @@ return [
                         'hipanel/finance' => 'finance.php',
                     ],
                 ],
+                'hipanel/finance/change' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@hipanel/modules/finance/messages',
+                    'fileMap' => [
+                        'hipanel/finance/change' => 'change.php',
+                    ],
+                ],
             ],
         ],
         'menuManager' => [
