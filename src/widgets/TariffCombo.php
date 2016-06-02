@@ -33,8 +33,6 @@ class TariffCombo extends Combo
 
     /**
      * @var string the type of tariff
-     *             Used by [[getFilter]] to generate filter
-     *
      * @see getFilter()
      */
     public $tariffType;
@@ -44,8 +42,6 @@ class TariffCombo extends Combo
     {
         return ArrayHelper::merge(parent::getFilter(), [
             'type_in' => ['format' => $this->tariffType],
-            'order'   => ['format' => ['tarifflike' => 'desc']],
-            'limit'   => ['format' => '50'],
         ]);
     }
 }
