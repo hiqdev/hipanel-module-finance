@@ -44,6 +44,7 @@
     ],
     "require": {
         "yiisoft/yii2": "^2.0",
+        "2amigos/yii2-date-time-picker-widget": "^1.0",
         "hiqdev/yii2-cart": "<2.0 || dev-master",
         "hiqdev/yii2-merchant": "<2.0 || dev-master",
         "hiqdev/hipanel-core": "<2.0 || dev-master",
