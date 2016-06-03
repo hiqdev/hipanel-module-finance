@@ -3,6 +3,7 @@
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use kartik\date\DatePicker;
+use kartik\widgets\DateTimePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -32,7 +33,7 @@ $form = ActiveForm::begin([
                             <?= $form->field($model, "[$i]sum") ?>
                             <div class="form-group">
                                 <?= Html::label(Yii::t('hipanel/finance', 'Date')) ?>
-                                <?= \kartik\widgets\DateTimePicker::widget([
+                                <?= DateTimePicker::widget([
                                     'model' => $model,
                                     'attribute' => "[$i]time",
                                     'type' => DatePicker::TYPE_COMPONENT_APPEND,
