@@ -32,6 +32,7 @@ class Change extends \hipanel\base\Model
             [['state', 'class', 'time'], 'safe'],
             [['client', 'seller', 'type'], 'safe'],
             [['user_comment', 'tech_comment', 'finish_time'], 'safe'],
+            [['id', 'comment'], 'required', 'on' => ['approve', 'reject']],
         ];
     }
 
@@ -49,7 +50,7 @@ class Change extends \hipanel\base\Model
     {
         return $this->mergeAttributeLabels([
             'client' => Yii::t('hipanel', 'Client'),
-            'client_id' => Yii::t('hipanel', 'Client Id'),
+            'client_id' => Yii::t('hipanel', 'Client'),
             'time' => Yii::t('hipanel', 'Time'),
             'state' => Yii::t('hipanel', 'State'),
         ]);
