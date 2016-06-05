@@ -10,6 +10,16 @@
  */
 
 return [
+    'Finance' => 'Финансы',
+    'Payments' => 'Платежи',
+    'Recharge' => 'Пополнить',
+    'Recharge Account' => 'Пополнить счет',
+    'Recharge account' => 'Пополнить счет',
+    'Bill' => 'Платёж',
+    'Bills' => 'Платежи',
+    'Tariff' => 'Тариф',
+    'Tariffs' => 'Тарифы',
+
     '<b>{currency}</b> account' => '<b>{currency}</b> счёт',
     'See new invoice' => 'Посмотреть новый инвойс',
     'Update invoice' => 'Обновить инвойс',

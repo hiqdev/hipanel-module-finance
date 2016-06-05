@@ -40,7 +40,7 @@ class Deposit extends \yii\base\Model
     public function attributeLabels()
     {
         return [
-            'sum' => Yii::t('app', 'Sum'),
+            'sum' => Yii::t('hipanel', 'Sum'),
         ];
     }
 }

@@ -7,7 +7,7 @@ use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 use yii\helpers\Html;
 
-$this->title                   = Yii::t('app', 'Bills');
+$this->title                   = Yii::t('hipanel/finance', 'Bills');
 $this->params['breadcrumbs'][] = $this->title;
 $this->subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list'); ?>
 
@@ -41,7 +41,7 @@ $this->subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) 
         <?php $page->beginContent('bulk-actions') ?>
             <?php
             // TODO: implement bills edit
-//            if (Yii::$app->user->can('manage')) print $page->renderBulkButton(Yii::t('app', 'Edit'), 'edit');
+//            if (Yii::$app->user->can('manage')) print $page->renderBulkButton(Yii::t('hipanel', 'Edit'), 'edit');
             ?>
             <?php if (Yii::$app->user->can('delete-bills')) print $page->renderBulkButton(Yii::t('hipanel', 'Delete'), 'delete', 'danger'); ?>
         <?php $page->endContent() ?>

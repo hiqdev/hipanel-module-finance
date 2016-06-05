@@ -13,7 +13,7 @@ use yii\helpers\Html;
 
 <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="form-group">
-        <?= Html::label(Yii::t('app', 'Date')) ?>
+        <?= Html::label(Yii::t('hipanel', 'Date')) ?>
         <?= DatePicker::widget([
             'model' => $search->model,
             'attribute' => 'time_from',
@@ -42,7 +42,7 @@ use yii\helpers\Html;
         'model' => $search->model,
         'attribute1' => 'sum_gt',
         'attribute2' => 'sum_lt',
-        'label' => Yii::t('app', 'Sum'),
+        'label' => Yii::t('hipanel', 'Sum'),
     ]) ?>
 </div>
 <div class="col-md-4 col-sm-6 col-xs-12">

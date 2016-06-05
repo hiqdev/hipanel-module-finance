@@ -26,20 +26,20 @@ class SidebarMenu extends \hipanel\base\Menu implements \yii\base\BootstrapInter
     {
         return Yii::$app->user->can('support') && !Yii::$app->user->can('manage') ? [] : [
             'finance' => [
-                'label' => Yii::t('app', 'Finance'),
+                'label' => Yii::t('hipanel/finance', 'Finance'),
                 'url'   => ['/finance/bill/index'],
                 'icon'  => 'fa-dollar',
                 'items' => [
                     'payments' => [
-                        'label' => Yii::t('app', 'Payments'),
+                        'label' => Yii::t('hipanel/finance', 'Payments'),
                         'url'   => ['/finance/bill/index'],
                     ],
                     'deposit' => [
-                        'label' => Yii::t('app', 'Recharge account'),
+                        'label' => Yii::t('hipanel/finance', 'Recharge account'),
                         'url'   => ['/merchant/pay/deposit'],
                     ],
                     'tariffs' => [
-                        'label'   => Yii::t('app', 'Tariffs'),
+                        'label'   => Yii::t('hipanel/finance', 'Tariffs'),
                         'url'     => ['/finance/tariff/index'],
                         'visible' => function () { return Yii::$app->user->can('support') ?: false; },
                     ],
