@@ -30,6 +30,12 @@ class ChangeGridView extends \hipanel\grid\BoxedGridView
                     return Yii::$app->formatter->asDatetime($model->time);
                 }
             ],
+            'tech_details' => [
+                'label' => Yii::t('hipanel/finance/change', 'Operation details'),
+                'value' => function ($model) {
+                    return null;
+                }
+            ],
             'actions' => [
                 'class' => ActionColumn::class,
                 'template' => '{view}',

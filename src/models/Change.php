@@ -15,11 +15,13 @@ use Yii;
 
 class Change extends \hipanel\base\Model
 {
+    const STATE_NEW = 'new';
+    const STATE_APPROVED = 'approved';
+    const STATE_REJECTED = 'rejected';
+
     use \hipanel\base\ModelTrait;
 
     public static $i18nDictionary = 'hipanel/finance/change';
-
-    public $params;
 
     /**
      * {@inheritdoc}
@@ -32,6 +34,7 @@ class Change extends \hipanel\base\Model
             [['state', 'class', 'time'], 'safe'],
             [['client', 'seller', 'type'], 'safe'],
             [['user_comment', 'tech_comment', 'finish_time'], 'safe'],
+            [['params'], 'safe'],
             [['id', 'comment'], 'required', 'on' => ['approve', 'reject']],
         ];
     }
@@ -50,6 +53,7 @@ class Change extends \hipanel\base\Model
     {
         return $this->mergeAttributeLabels([
             'client' => Yii::t('hipanel', 'Client'),
+            'comment' => Yii::t('hipanel', 'Comment'),
             'client_id' => Yii::t('hipanel', 'Client'),
             'time' => Yii::t('hipanel', 'Time'),
             'state' => Yii::t('hipanel', 'State'),
