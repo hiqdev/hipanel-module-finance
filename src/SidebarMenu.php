@@ -43,6 +43,11 @@ class SidebarMenu extends \hipanel\base\Menu implements \yii\base\BootstrapInter
                         'url'     => ['/finance/tariff/index'],
                         'visible' => function () { return Yii::$app->user->can('support') ?: false; },
                     ],
+                    'holds' => [
+                        'label'   => Yii::t('hipanel/finance', 'Held payments'),
+                        'url'     => ['/finance/held-payments/index'],
+                        'visible' => function () { return Yii::$app->user->can('resell') ?: false; },
+                    ],
                 ],
             ],
         ];
