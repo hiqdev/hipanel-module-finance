@@ -11,6 +11,7 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\models\Ref;
 use Yii;
 
 class Change extends \hipanel\base\Model
@@ -58,5 +59,10 @@ class Change extends \hipanel\base\Model
             'time' => Yii::t('hipanel', 'Time'),
             'state' => Yii::t('hipanel', 'State'),
         ]);
+    }
+
+    public static function getStates()
+    {
+        return Ref::getList('state,change', [], 'hipanel/finance/change');
     }
 }
