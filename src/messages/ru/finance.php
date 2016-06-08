@@ -28,7 +28,8 @@ return [
     'Confirm invoice updating' => 'Подтвердите обновление инвойса',
     'Invoice' => 'Инвойс',
     'Invoices' => 'Инвойсы',
-    'Sum' => 'Сума',
+    'Sum' => 'Сумма',
+    'Amount' => 'Сумма',
     'Date' => 'Дата',
     'Label' => 'Описание',
     'Create payment' => 'Создать платеж',
@@ -43,4 +44,6 @@ return [
     'If you have any further questions, please, {ticketCreationLink}.' => 'Если у вас есть вопросы, пожалуйста, {ticketCreationLink}.',
     'create a ticket' => 'создайте тикет',
     'If you have any further questions, please, contact us {emailLink}' => 'Если у вас есть вопросы, пожалуйста, напишите нам на {emailLink}',
+    'Payment system' => 'Платёжная система',
+    'TXN' => 'Транзакция',
 ];
