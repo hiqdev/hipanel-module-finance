@@ -46,4 +46,5 @@ return [
     'If you have any further questions, please, contact us {emailLink}' => 'Если у вас есть вопросы, пожалуйста, напишите нам на {emailLink}',
     'Payment system' => 'Платёжная система',
     'TXN' => 'Транзакция',
+    'Add payment' => 'Создать платёж',
 ];
