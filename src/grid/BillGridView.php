@@ -85,7 +85,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     $descr  = $model->descr ?: $model->label;
                     $text   = mb_strlen($descr) > 70 ? ArraySpoiler::widget(['data' => $descr]) : $descr;
                     $tariff = $model->tariff ? Html::tag('span', Yii::t('app', 'Tariff') . ': ' . Html::a($model->tariff, ['@tariff/view', 'id' => $model->tariff_id]), ['class' => 'pull-right']) : '';
-                    $object = $model->object ? implode(': ', array_filter([$model->class_label, static::objectLink($model)])) : '';
+                    $object = $model->object ? implode(': ', array_filter([static::billQuantity($model), $model->class_label, static::objectLink($model)])) : '';
 
                     return $tariff . implode('<br>', array_filter([$object, $text]));
                 },
@@ -101,5 +101,29 @@ class BillGridView extends \hipanel\grid\BoxedGridView
         return $model->class === 'device'
             ? Html::a($model->object, ['@server/view', 'id' => $model->object_id])
             : Html::tag('b', $model->object);
+    }
+
+    /**
+     * @param $model
+     * @return null|string
+     */
+    public static function billQuantity($model)
+    {
+        switch ($model->type) {
+            case 'support_time':
+                $text = Yii::t('hipanel/finance', '{quantity, plural, one{minute} other{minutes}}', ['amount' => $model->quantity]);
+                break;
+            case 'server_traf_max':
+            case 'backup_du':
+                $text = Yii::$app->formatter->asShortSize($model->quantity * 1024 * 1024 * 1024);
+                break;
+            case 'ip_num':
+                $text = Yii::t('hipanel/finance', '{quantity} IP', $model->quantity);
+                break;
+            default:
+                return null;
+        }
+
+        return Html::tag('b', $text);
     }
 }
