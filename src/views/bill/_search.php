@@ -2,10 +2,11 @@
 
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
+use hipanel\widgets\FieldRange;
+use hipanel\widgets\DatePicker;
 use hiqdev\combo\StaticCombo;
-use kartik\field\FieldRange;
-use kartik\widgets\DatePicker;
 use yii\helpers\Html;
+
 /**
  * @var \hipanel\widgets\AdvancedSearch $search
  */
@@ -21,20 +22,20 @@ use yii\helpers\Html;
             'type' => DatePicker::TYPE_RANGE,
             'pluginOptions' => [
                 'autoclose' => true,
-                'format' => 'dd.mm.yyyy',
+                'format' => 'yyyy-mm-dd',
             ],
         ]) ?>
     </div>
 </div>
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('type')->widget(StaticCombo::classname(), [
+    <?= $search->field('type')->widget(StaticCombo::class, [
         'data' => $type,
         'hasId' => true,
     ]) ?>
 </div>
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?php if (Yii::$app->user->can('support')) : ?>
-        <?= $search->field('client_id')->widget(ClientCombo::classname()) ?>
+        <?= $search->field('client_id')->widget(ClientCombo::class) ?>
     <?php endif ?>
 </div>
 <div class="col-md-4 col-sm-6 col-xs-12">
@@ -50,11 +51,11 @@ use yii\helpers\Html;
 </div>
 <?php if (Yii::$app->user->can('support')) : ?>
     <div class="col-md-4 col-sm-6 col-xs-12">
-        <?= $search->field('seller_id')->widget(SellerCombo::classname()) ?>
+        <?= $search->field('seller_id')->widget(SellerCombo::class) ?>
     </div>
 <?php endif ?>
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('currency')->widget(StaticCombo::classname(), [
+    <?= $search->field('currency')->widget(StaticCombo::class, [
         'data' => ['usd' => 'USD', 'eur' => 'EUR'],
         'hasId' => true,
         'pluginOptions' => [

@@ -2,10 +2,10 @@
 
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
-use kartik\date\DatePicker;
-use kartik\widgets\DateTimePicker;
+use hipanel\widgets\DatePicker;
+use hipanel\widgets\DateTimePicker;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var hipanel\modules\finance\models\Bill $model */
@@ -28,7 +28,7 @@ $form = ActiveForm::begin([
                     <div class="box-body">
                         <div class="form-instance" xmlns="http://www.w3.org/1999/html"
                              xmlns="http://www.w3.org/1999/html">
-                            <?= $form->field($model, "[$i]client_id")->widget(ClientCombo::className(), ['formElementSelector' => '.form-instance']) ?>
+                            <?= $form->field($model, "[$i]client_id")->widget(ClientCombo::class, ['formElementSelector' => '.form-instance']) ?>
                             <?= $form->field($model, "[$i]type")->dropDownList($billTypes, ['groups' => $billGroupLabels]) ?>
                             <?= $form->field($model, "[$i]sum") ?>
                             <div class="form-group">
