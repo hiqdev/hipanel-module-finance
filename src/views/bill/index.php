@@ -43,7 +43,9 @@ $this->subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) 
             // TODO: implement bills edit
 //            if (Yii::$app->user->can('manage')) print $page->renderBulkButton(Yii::t('hipanel', 'Edit'), 'edit');
             ?>
-            <?php if (Yii::$app->user->can('delete-bills')) print $page->renderBulkButton(Yii::t('hipanel', 'Delete'), 'delete', 'danger'); ?>
+            <?php if (Yii::$app->user->can('delete-bills')) : ?>
+                <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), 'delete', 'danger') ?>
+            <?php endif ?>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('table') ?>

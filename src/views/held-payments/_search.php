@@ -6,6 +6,7 @@
  */
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hiqdev\combo\StaticCombo;
+
 ?>
 
 <div class="col-md-4 col-sm-6 col-xs-12">

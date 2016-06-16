@@ -6,6 +6,7 @@
  * @var \hiqdev\yii2\cart\ShoppingCart $cart
  */
 use yii\helpers\Html;
+
 $this->title = Yii::t('hipanel/finance', 'Select');
 ?>
 

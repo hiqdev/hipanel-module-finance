@@ -43,8 +43,8 @@ $this->breadcrumbs->setItems([$this->title]); ?>
 
         <?= $page->renderPerPage() ?>
     <?php $page->endContent() ?>
-    <?php $page->beginContent('bulk-actions'); ?>
-        <?php if ($model->state === $model::STATE_NEW) { ?>
+    <?php $page->beginContent('bulk-actions') ?>
+        <?php if ($model->state === $model::STATE_NEW) : ?>
             <div>
                 <?= AjaxModal::widget([
                     'id' => 'bulk-approve-modal',
@@ -73,9 +73,8 @@ $this->breadcrumbs->setItems([$this->title]); ?>
                     ],
                 ]) ?>
             </div>
-        <?php } ?>
+        <?php endif ?>
     <?php $page->endContent() ?>
-
 
     <?php $page->beginContent('table') ?>
         <?php $page->beginBulkForm(); ?>
@@ -93,8 +92,8 @@ $this->breadcrumbs->setItems([$this->title]); ?>
                     'time',
                 ]
             ]); ?>
-        <?php $page->endBulkForm(); ?>
+        <?php $page->endBulkForm() ?>
     <?php $page->endContent() ?>
 <?php $page->end() ?>
 
-<?php Pjax::end(); ?>
+<?php Pjax::end() ?>
