@@ -49,4 +49,17 @@ return [
     'Add payment' => 'Создать платёж',
     '{quantity, plural, one{minute} other{minutes}}' => '{quantity, plural, one{минута} few{минуты} other{минут}}',
     '{quantity} IP' => '{quantity} IP',
+
+    // Типы платежей
+    'Negative balance correction' => 'Отрицательная корректировка',
+    'Positive balance correction' => 'Корректировка',
+    'Registration' => 'Регистрация',
+    'Periodic fee' => 'Абонплата',
+    'Renewal' => 'Продление',
+    'PayPal transaction fee' => 'Комиссия PayPal',
+    'Premium renewal' => 'Продление премиум-пакета',
+    'Transfer' => 'Трансфер',
+    'Premium purchase' => 'Покупка премиум-пакета',
+    'Unsale' => 'Распродажа',
+
 ];
