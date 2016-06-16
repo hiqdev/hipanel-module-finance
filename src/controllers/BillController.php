@@ -18,7 +18,6 @@ use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
-use hipanel\models\Ref;
 use Yii;
 
 class BillController extends \hipanel\base\CrudController
@@ -49,7 +48,7 @@ class BillController extends \hipanel\base\CrudController
             'create' => [
                 'class'     => SmartCreateAction::class,
                 'data' => function ($action) {
-                    $types = Ref::getList('type,bill', ['with_hierarchy' => 1, 'orderby' => 'name_asc']);
+                    $types = $this->getRefs('type,bill', 'hipanel/finance', ['with_hierarchy' => 1, 'orderby' => 'name_asc']);
                     $billTypes = [];
                     $billGroupLabels = [];
 
@@ -90,6 +89,6 @@ class BillController extends \hipanel\base\CrudController
      */
     public function getPaymentType()
     {
-        return Ref::getList('type,bill', Yii::$app->user->can('support') ? ['with_hierarchy' => true] : []);
+        return $this->getRefs('type,bill', 'hipanel/finance', Yii::$app->user->can('support') ? ['with_hierarchy' => true] : []);
     }
 }

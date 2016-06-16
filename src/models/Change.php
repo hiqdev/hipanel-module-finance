@@ -63,6 +63,6 @@ class Change extends \hipanel\base\Model
 
     public static function getStates()
     {
-        return Ref::getList('state,change', [], 'hipanel/finance/change');
+        return Ref::getList('state,change', 'hipanel/finance/change');
     }
 }
