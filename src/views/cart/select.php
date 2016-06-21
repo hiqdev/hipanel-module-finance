@@ -11,7 +11,7 @@ $this->title = Yii::t('hipanel/finance', 'Select');
 ?>
 
 <div class="row">
-    <div class="col-md-offset-4 col-md-4">
+    <div class="col-md-offset-3 col-md-6">
 
         <div class="box box-solid">
             <div class="box-header with-border text-center">
