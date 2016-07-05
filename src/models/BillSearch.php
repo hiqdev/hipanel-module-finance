@@ -24,7 +24,7 @@ class BillSearch extends Bill
     public function rules()
     {
         return ArrayHelper::merge($this->defaultRules(), [
-            [['time_from', 'time_till'], 'date'],
+            [['time_from', 'time_till'], 'date', 'format' => 'php:Y-m-d'],
         ]);
     }
 
