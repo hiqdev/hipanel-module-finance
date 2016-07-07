@@ -73,11 +73,8 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                         'deposit'    => 'success',
                     ];
                     $color = $colors[$model->gtype] ?: 'muted';
-                    $qty   = $model->type === 'support_time' ? Yii::t('app', '{0, time, HH:mm}', ceil($model->quantity * 3600)) :
-                           ($model->type === 'ip_num' ? $model->quantity : '');
-                    $qty   = $qty ? ' - ' . Html::tag('b', $qty, ['class' => 'text-primary']) : '';
 
-                    return Html::tag('b', Yii::t('hipanel/finance', $model->type_label), ['class' => "text-$color"]) . $qty;
+                    return Html::tag('b', Yii::t('hipanel/finance', $model->type_label), ['class' => "text-$color"]);
                 },
             ],
             'description' => [
@@ -87,9 +84,10 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     $descr  = $model->descr ?: $model->label;
                     $text   = mb_strlen($descr) > 70 ? ArraySpoiler::widget(['data' => $descr]) : $descr;
                     $tariff = $model->tariff ? Html::tag('span', Yii::t('app', 'Tariff') . ': ' . Html::a($model->tariff, ['@tariff/view', 'id' => $model->tariff_id]), ['class' => 'pull-right']) : '';
-                    $object = $model->object ? implode(':&nbsp;', array_filter([static::billQuantity($model), $model->class_label, static::objectLink($model)])) : '';
+                    $amount = static::billQuantity($model);
+                    $object = $model->object ? implode(':&nbsp;', [$model->class_label, static::objectLink($model)]) : '';
 
-                    return $tariff . implode('<br>', array_filter([$object, $text]));
+                    return $tariff . $amount . ' ' . implode('<br>', array_filter([$object, $text]));
                 },
             ],
             'tariff' => [
@@ -113,14 +111,14 @@ class BillGridView extends \hipanel\grid\BoxedGridView
     {
         switch ($model->type) {
             case 'support_time':
-                $text = Yii::t('hipanel/finance', '{quantity, plural, one{minute} other{minutes}}', ['amount' => $model->quantity]);
+                $text = Yii::t('hipanel/finance', '{quantity, time, HH:mm} hour(s)', ['quantity' => ceil($model->quantity*3600)]);
                 break;
             case 'server_traf_max':
             case 'backup_du':
                 $text = Yii::$app->formatter->asShortSize($model->quantity * 1024 * 1024 * 1024);
                 break;
             case 'ip_num':
-                $text = Yii::t('hipanel/finance', '{quantity} IP', $model->quantity);
+                $text = Yii::t('hipanel/finance', '{quantity} IP', ['quantity' => $model->quantity]);
                 break;
             default:
                 return null;

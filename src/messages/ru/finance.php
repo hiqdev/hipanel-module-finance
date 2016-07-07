@@ -47,7 +47,8 @@ return [
     'Payment system' => 'Платёжная система',
     'TXN' => 'Транзакция',
     'Add payment' => 'Создать платёж',
-    '{quantity, plural, one{minute} other{minutes}}' => '{quantity, plural, one{минута} few{минуты} other{минут}}',
+    '{quantity, plural, one{# minute} other{# minutes}}' => '{quantity, plural, one{# минута} few{# минуты} other{# минут}}',
+    '{quantity, time, HH:mm} hour(s)' => '{quantity, time, HH:mm} час(ов)',
     '{quantity} IP' => '{quantity} IP',
 
     // Типы платежей
