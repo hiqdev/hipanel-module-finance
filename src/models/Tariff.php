@@ -34,7 +34,7 @@ class Tariff extends \hipanel\base\Model
 
     public function getResources()
     {
-        return $this->hasMany(Resource::className(), ['id' => 'tariff_id']);
+        return $this->hasMany(Resource::class, ['id' => 'tariff_id']);
     }
 
     /**

@@ -47,7 +47,7 @@ class Resource extends \hipanel\base\Model
 
     public function getTariff()
     {
-        return $this->hasOne(Tariff::className(), ['tariff_id' => 'id']);
+        return $this->hasOne(Tariff::class, ['tariff_id' => 'id']);
     }
 
     /**
