@@ -11,8 +11,10 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\grid\CurrencyColumn;
 use hipanel\grid\XEditableColumn;
 use hipanel\helpers\Url;
+use hiqdev\xeditable\widgets\RemoteFormatXEditable;
 use Yii;
 
 class CreditColumn
@@ -24,7 +26,7 @@ class CreditColumn
             'filter'         => false,
             'contentOptions' => ['class' => 'text-right'],
             'widgetOptions'  => [
-                'class' => 'hiqdev\xeditable\widgets\RemoteFormatXEditable',
+                'class' => RemoteFormatXEditable::class,
                 'linkOptions' => [
                     'data-currency' => 'usd',
                 ],
@@ -42,7 +44,7 @@ class CreditColumn
                 ],
             ],
         ] : [
-            'class'          => 'hipanel\grid\CurrencyColumn',
+            'class'          => CurrencyColumn::class,
             'contentOptions' => ['class' => 'text-right'],
         ];
     }
