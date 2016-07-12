@@ -45,7 +45,7 @@ class Bill extends \hipanel\base\Model
             [['type', 'label'], 'safe', 'on' => 'create'],
             [['time'], 'date', 'format' => 'php:d.m.Y H:i:s', 'on' => 'create'],
             [['sum'], 'number', 'on' => 'create'],
-            [['client_id', 'type', 'label', 'sum'], 'required', 'on' => 'create'],
+            [['client_id', 'type', 'label', 'sum', 'time'], 'required', 'on' => 'create'],
         ];
     }
 
