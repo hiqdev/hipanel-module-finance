@@ -3,7 +3,7 @@
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\widgets\Box;
-use hipanel\widgets\AmountWithCurrencyWidget;
+use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\DatePicker;
 use hipanel\widgets\DateTimePicker;
 use hipanel\widgets\DynamicFormWidget;
@@ -65,7 +65,7 @@ $form = ActiveForm::begin([
                         <?= $form->field($model, "[$i]type")->dropDownList($billTypes, ['groups' => $billGroupLabels]) ?>
                     </div>
                     <div class="col-md-2">
-                        <?= $form->field($model, "[$i]sum")->widget(AmountWithCurrencyWidget::class, [
+                        <?= $form->field($model, "[$i]sum")->widget(AmountWithCurrency::class, [
                             'inputOptions' => ['placeholder' => '0.00'],
                             'selectAttribute' => "[$i]currency",
                             'selectAttributeOptions' => [
