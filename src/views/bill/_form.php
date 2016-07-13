@@ -43,50 +43,52 @@ $form = ActiveForm::begin([
 
 <div class="container-items">
     <?php foreach ($models as $i => $model) : ?>
-        <div class="row item">
-            <div class="box box-default">
+        <div class="item">
+            <?php Box::begin() ?>
+            <div class="row input-row margin-bottom">
                 <div class="col-lg-offset-10 col-sm-2 text-right">
                     <?php if ($model->isNewRecord) : ?>
                         <div class="btn-group">
-                            <button type="button" class="add-item btn btn-default btn-sm"><i class="glyphicon glyphicon-plus"></i></button>
-                            <button type="button" class="remove-item btn btn-default btn-sm"><i class="glyphicon glyphicon-minus"></i></button>
+                            <button type="button" class="add-item btn btn-success btn-sm"><i
+                                    class="glyphicon glyphicon-plus"></i></button>
+                            <button type="button" class="remove-item btn btn-danger btn-sm"><i
+                                    class="glyphicon glyphicon-minus"></i></button>
                         </div>
                         <!-- /.btn-group -->
                     <?php endif ?>
                 </div>
-                <div class="box-body">
-                    <div class="form-instance" xmlns="http://www.w3.org/1999/html">
-                        <div class="col-md-2">
-                            <?= $form->field($model, "[$i]client_id")->widget(ClientCombo::class, ['formElementSelector' => '.form-instance']) ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $form->field($model, "[$i]type")->dropDownList($billTypes, ['groups' => $billGroupLabels]) ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $form->field($model, "[$i]sum")->widget(AmountWithCurrencyWidget::class, [
-                                'inputOptions' => ['placeholder' => '0.00'],
-                                'selectAttribute' => "[$i]currency",
-                                'selectAttributeOptions' => [
-                                    'items' => $this->context->getCurrencyTypes(),
-                                ],
-                            ]) ?>
-                        </div>
-                        <div class="col-md-3">
-                            <?= $form->field($model, "[$i]time")->widget(DateTimePicker::class, [
-                                'model' => $model,
-                                'type' => DatePicker::TYPE_COMPONENT_APPEND,
-                                'pluginOptions' => [
-                                    'autoclose' => true,
-                                    'format' => 'dd.mm.yyyy HH:ii:ss',
-                                ],
-                            ]) ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $form->field($model, "[$i]label") ?>
-                        </div>
+                <div class="form-instance">
+                    <div class="col-md-2">
+                        <?= $form->field($model, "[$i]client_id")->widget(ClientCombo::class, ['formElementSelector' => '.form-instance']) ?>
+                    </div>
+                    <div class="col-md-2">
+                        <?= $form->field($model, "[$i]type")->dropDownList($billTypes, ['groups' => $billGroupLabels]) ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?= $form->field($model, "[$i]sum")->widget(AmountWithCurrencyWidget::class, [
+                            'inputOptions' => ['placeholder' => '0.00'],
+                            'selectAttribute' => "[$i]currency",
+                            'selectAttributeOptions' => [
+                                'items' => $this->context->getCurrencyTypes(),
+                            ],
+                        ]) ?>
+                    </div>
+                    <div class="col-md-2">
+                        <?= $form->field($model, "[$i]time")->widget(DateTimePicker::class, [
+                            'model' => $model,
+                            'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                            'pluginOptions' => [
+                                'autoclose' => true,
+                                'format' => 'dd.mm.yyyy HH:ii:ss',
+                            ],
+                        ]) ?>
+                    </div>
+                    <div class="col-md-2">
+                        <?= $form->field($model, "[$i]label") ?>
                     </div>
                 </div>
             </div>
+            <?php Box::end() ?>
         </div>
     <?php endforeach ?>
 </div>
