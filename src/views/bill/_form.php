@@ -64,7 +64,7 @@ $form = ActiveForm::begin([
                     <div class="col-md-2">
                         <?= $form->field($model, "[$i]type")->dropDownList($billTypes, ['groups' => $billGroupLabels]) ?>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <?= $form->field($model, "[$i]sum")->widget(AmountWithCurrencyWidget::class, [
                             'inputOptions' => ['placeholder' => '0.00'],
                             'selectAttribute' => "[$i]currency",
@@ -73,7 +73,7 @@ $form = ActiveForm::begin([
                             ],
                         ]) ?>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <?= $form->field($model, "[$i]time")->widget(DateTimePicker::class, [
                             'model' => $model,
                             'type' => DatePicker::TYPE_COMPONENT_APPEND,
@@ -83,7 +83,7 @@ $form = ActiveForm::begin([
                             ],
                         ]) ?>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <?= $form->field($model, "[$i]label") ?>
                     </div>
                 </div>
