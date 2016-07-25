@@ -22,10 +22,10 @@ return [
     ],
     'modules' => [
         'finance' => [
-            'class' => 'hipanel\modules\finance\Module',
+            'class' => \hipanel\modules\finance\Module::class,
         ],
         'cart' => [
-            'class'          => 'hiqdev\yii2\cart\Module',
+            'class'          => hiqdev\yii2\cart\Module::class,
             'termsPage'      => $params['orgUrl'] . 'rules',
             'orderPage'      => '/finance/cart/select',
             /*'orderButton'    => function ($module) {
@@ -39,40 +39,41 @@ return [
                 ]);
             },
             'shoppingCartOptions' => [
-                'on cartChange' => ['hipanel\modules\finance\cart\CartCalculator', 'execute'],
+                'on cartChange' => [\hipanel\modules\finance\cart\CartCalculator::class, 'execute'],
             ],
         ],
         'merchant' => [
-            'class'           => 'hiqdev\yii2\merchant\Module',
+            'class'           => hiqdev\yii2\merchant\Module::class,
             'returnPage'      => '/finance/pay/return',
             'notifyPage'      => '/finance/pay/notify',
             'finishPage'      => '/finance/bill',
-            'depositClass'    => 'hipanel\modules\finance\merchant\Deposit',
-            'collectionClass' => 'hipanel\modules\finance\merchant\Collection',
+            'depositClass'    => hipanel\modules\finance\merchant\Deposit::class,
+            'collectionClass' => hipanel\modules\finance\merchant\Collection::class,
         ],
     ],
     'components' => [
         'i18n' => [
             'translations' => [
                 'hipanel/finance' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
+                    'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/finance/messages',
                     'fileMap' => [
                         'hipanel/finance' => 'finance.php',
                     ],
                 ],
-                'hipanel/finance/change' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
+                'hipanel/finance/*' => [
+                    'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/finance/messages',
                     'fileMap' => [
                         'hipanel/finance/change' => 'change.php',
+                        'hipanel/finance/tariff' => 'tariff.php',
                     ],
                 ],
             ],
         ],
         'menuManager' => [
             'menus' => [
-                'finance' => 'hipanel\modules\finance\SidebarMenu',
+                'finance' => \hipanel\modules\finance\SidebarMenu::class,
             ],
         ],
     ],
