@@ -32,7 +32,6 @@ class CreditColumn
                 ],
             ],
             'pluginOptions'  => [
-                'type'               => 'remoteformat',
                 'url'                => '@client/set-credit',
                 'title'              => Yii::t('app', 'Set credit'),
                 'ajaxUrl'            => Url::to('/format/currency'),
