@@ -28,8 +28,10 @@ return [
     'Confirm invoice updating' => 'Подтвердите обновление инвойса',
     'Invoice' => 'Инвойс',
     'Invoices' => 'Инвойсы',
+    'Invoice updated' => 'Инвойс обновлён',
     'Sum' => 'Сумма',
     'Amount' => 'Сумма',
+    'Currency' => 'Валюта',
     'Date' => 'Дата',
     'Label' => 'Описание',
     'Create payment' => 'Создать платеж',
@@ -51,6 +53,8 @@ return [
     '{quantity, time, HH:mm} hour(s)' => '{quantity, time, HH:mm} час(ов)',
     '{quantity} IP' => '{quantity} IP',
     'Held payments' => 'Заблокированные платежи',
+    'Provided services' => 'Предоставленные услуги',
+    'Set credit' => 'Назначить кредит',
 
     // Типы платежей
     'Negative balance correction' => 'Отрицательная корректировка',

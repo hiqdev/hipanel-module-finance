@@ -25,14 +25,14 @@ use yii\helpers\Html;
                         'header'        => Html::tag('h4', Yii::t('hipanel/finance', 'Confirm invoice updating')),
                         'headerOptions' => ['class' => 'label-warning'],
                         'footer'        => [
-                            'label' => Yii::t('app', 'Update'),
+                            'label' => Yii::t('hipanel', 'Update'),
                             'class' => 'btn btn-warning',
-                            'data-loading-text' => Yii::t('app', 'Updating...'),
+                            'data-loading-text' => Yii::t('hipanel', 'Updating...'),
                         ],
                     ],
                 ]) ?>
             <?php else : ?>
-                <?= Html::a(Yii::t('app', 'Recharge account'), '#', ['class' => 'btn btn-default btn-xs']) ?>
+                <?= Html::a(Yii::t('hipanel', 'Recharge account'), '#', ['class' => 'btn btn-default btn-xs']) ?>
             <?php endif ?>
         <?php $box->endTools() ?>
     <?php $box->endHeader() ?>

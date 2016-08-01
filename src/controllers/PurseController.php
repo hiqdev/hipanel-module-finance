@@ -35,11 +35,11 @@ class PurseController extends \hipanel\base\CrudController
             ],
             'invoice-archive' => [
                 'class' => RedirectAction::class,
-                'error' => Yii::t('app', 'Under construction'),
+                'error' => Yii::t('hipanel', 'Under construction'),
             ],
             'update-monthly-invoice' => [
                 'class'   => SmartPerformAction::class,
-                'success' => Yii::t('app', 'Invoice updated'),
+                'success' => Yii::t('hipanel/finance', 'Invoice updated'),
             ],
         ];
     }

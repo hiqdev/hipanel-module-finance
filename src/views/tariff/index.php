@@ -6,7 +6,7 @@ use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 use yii\bootstrap\Dropdown;
 
-$this->title = Yii::t('app', 'Tariffs');
+$this->title = Yii::t('hipanel', 'Tariffs');
 $this->subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -28,11 +28,11 @@ $this->params['breadcrumbs'][] = $this->title;
         </a>
         <?= Dropdown::widget([
             'items' => [
-                ['label' => Yii::t('app', 'Create tariff for domain(s)'), 'url' => '#'],
-                ['label' => Yii::t('app', 'Create svds tariff'), 'url' => '#'],
-                ['label' => Yii::t('app', 'Create ovds tariff'), 'url' => '#'],
-                ['label' => Yii::t('app', 'Create server tariff'), 'url' => '#'],
-                ['label' => Yii::t('app', 'Create resources tariff'), 'url' => '#'],
+                ['label' => Yii::t('hipanel/finance/tariff', 'Create domain tariff'), 'url' => '#'],
+                ['label' => Yii::t('hipanel/finance/tariff', 'Create svds tariff'), 'url' => '#'],
+                ['label' => Yii::t('hipanel/finance/tariff', 'Create ovds tariff'), 'url' => '#'],
+                ['label' => Yii::t('hipanel/finance/tariff', 'Create server tariff'), 'url' => '#'],
+                ['label' => Yii::t('hipanel/finance/tariff', 'Create resources tariff'), 'url' => '#'],
             ],
         ]); ?>
     </div>
@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php $page->beginContent('bulk-actions') ?>
 <?php if (Yii::$app->user->can('manage')) : ?>
-    <?= $page->renderBulkButton(Yii::t('app', 'Delete'), 'delete', 'danger'); ?>
+    <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), 'delete', 'danger'); ?>
 <?php endif; ?>
 <?php $page->endContent() ?>
 

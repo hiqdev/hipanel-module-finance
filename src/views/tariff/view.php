@@ -7,7 +7,7 @@ use yii\helpers\Html;
 
 $this->title         = Html::encode($model->tariff);
 $this->subtitle      = 'tariff detailed information';
-$this->breadcrumbs[] = ['label' => Yii::t('app', 'Tariffs'), 'url' => ['index']];
+$this->breadcrumbs[] = ['label' => Yii::t('hipanel', 'Tariffs'), 'url' => ['index']];
 $this->breadcrumbs[] = $this->title;
 //\yii\helpers\VarDumper::dump($model, 10, true);
 ?>
@@ -35,10 +35,10 @@ $this->breadcrumbs[] = $this->title;
         <div class="profile-usermenu">
             <ul class="nav">
                 <li>
-                    <?= Html::a('<i class="ion-edit"></i>' . Yii::t('app', 'Update'), '#'); ?>
+                    <?= Html::a('<i class="ion-edit"></i>' . Yii::t('hipanel', 'Update'), '#'); ?>
                 </li>
                 <li>
-                    <?= Html::a('<i class="ion-trash-a"></i>' . Yii::t('app', 'Delete'), '#'); ?>
+                    <?= Html::a('<i class="ion-trash-a"></i>' . Yii::t('hipanel', 'Delete'), '#'); ?>
                 </li>
             </ul>
         </div>

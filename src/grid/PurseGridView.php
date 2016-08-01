@@ -39,7 +39,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                         'template'          => '{button}{visible}{hidden}',
                         'visibleCount'      => 2,
                         'button'            => [
-                            'label' => FontIcon::i('fa-history fa-2x') . ' ' . Yii::t('app', 'Archive'),
+                            'label' => FontIcon::i('fa-history fa-2x') . ' ' . Yii::t('hipanel', 'History'),
                             'class' => 'pull-right text-nowrap',
                         ],
                     ]);

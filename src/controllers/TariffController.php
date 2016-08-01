@@ -46,19 +46,19 @@ class TariffController extends \hipanel\base\CrudController
             ],
             'create' => [
                 'class'   => SmartCreateAction::class,
-                'success' => Yii::t('app', 'Tariff created'),
+                'success' => Yii::t('hipanel/finance/tariff', 'Tariff created'),
             ],
             'set-note' => [
                 'class'   => SmartUpdateAction::class,
-                'success' => Yii::t('app', 'Note updated'),
+                'success' => Yii::t('hipanel', 'Note updated'),
             ],
             'update' => [
                 'class'   => SmartUpdateAction::class,
-                'success' => Yii::t('app', 'Tariff updated'),
+                'success' => Yii::t('hipanel/finance/tariff', 'Tariff updated'),
             ],
             'delete' => [
                 'class'   => SmartPerformAction::class,
-                'success' => Yii::t('app', 'Tariff deleted'),
+                'success' => Yii::t('hipanel/finance/tariff', 'Tariff deleted'),
             ],
         ];
     }

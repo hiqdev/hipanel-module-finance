@@ -43,9 +43,9 @@ class Purse extends \hipanel\base\Model
     public function attributeLabels()
     {
         return $this->mergeAttributeLabels([
-            'provided_services' => Yii::t('app', 'Provided services'),
-            'currency'          => Yii::t('app', 'Currency'),
-            'invoices'          => Yii::t('app', 'Invoices'),
+            'provided_services' => Yii::t('hipanel/finance', 'Provided services'),
+            'currency'          => Yii::t('hipanel/finance', 'Currency'),
+            'invoices'          => Yii::t('hipanel/finance', 'Invoices'),
         ]);
     }
 }
