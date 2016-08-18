@@ -11,9 +11,18 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\modules\finance\models\query\TariffQuery;
+
+/**
+ * Class Tariff
+ * @package hipanel\modules\finance\models
+ * @property Resource[]|DomainResource[] $resources
+ */
 class Tariff extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
+
+    const TYPE_DOMAIN = 'domain';
 
     /**
      * {@inheritdoc}
@@ -34,7 +43,11 @@ class Tariff extends \hipanel\base\Model
 
     public function getResources()
     {
-        return $this->hasMany(Resource::class, ['id' => 'tariff_id']);
+        if ($this->type === self::TYPE_DOMAIN) {
+            return $this->hasMany(DomainResource::class, ['tariff_id' => 'id']);
+        }
+
+        return $this->hasMany(Resource::class, ['tariff_id' => 'id']);
     }
 
     /**
@@ -43,6 +56,17 @@ class Tariff extends \hipanel\base\Model
     public function attributeLabels()
     {
         return $this->mergeAttributeLabels([
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return TariffQuery
+     */
+    public static function find($options = [])
+    {
+        return new TariffQuery(get_called_class(), [
+            'options' => $options,
         ]);
     }
 }

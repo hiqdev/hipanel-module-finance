@@ -15,33 +15,20 @@ class Resource extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
 
-    const TYPE_DOMAIN_REGISTRATION = 'dregistration';
-
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [[
-                'id',
-                'tariff_id',
-                'object_id',
-                'type_id',
-                'unit_id',
-                'currency_id',
-                'type',
-                'ftype',
-                'unit',
-                'unit_factor',
-                'currency',
-                'price',
-                'fee',
-                'quantity',
-                'hardlim',
-                'discount',
-                'zone',
-            ], 'safe'],
+            [['id', 'tariff_id', 'object_id', 'type_id', 'unit_id', 'currency_id', 'hardlim'], 'integer'],
+            [['type', 'ftype', 'unit', 'unit_factor', 'currency'], 'safe'],
+            [['price', 'fee', 'quantity', 'discount'], 'number'],
+
+            [['object_id', 'type_id'], 'integer', 'on' => 'create'],
+            [['type'], 'safe', 'on' => 'create'],
+            [['price'], 'number', 'on' => 'create'],
+            [['object_id', 'price'], 'required', 'on' => 'create'],
         ];
     }
 

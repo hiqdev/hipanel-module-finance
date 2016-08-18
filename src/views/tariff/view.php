@@ -9,7 +9,6 @@ $this->title         = Html::encode($model->tariff);
 $this->subtitle      = 'tariff detailed information';
 $this->breadcrumbs[] = ['label' => Yii::t('hipanel', 'Tariffs'), 'url' => ['index']];
 $this->breadcrumbs[] = $this->title;
-//\yii\helpers\VarDumper::dump($model, 10, true);
 ?>
 
 <?php Pjax::begin(Yii::$app->params['pjax']) ?>
@@ -35,10 +34,10 @@ $this->breadcrumbs[] = $this->title;
         <div class="profile-usermenu">
             <ul class="nav">
                 <li>
-                    <?= Html::a('<i class="ion-edit"></i>' . Yii::t('hipanel', 'Update'), '#'); ?>
+                    <?= Html::a('<i class="ion-edit"></i>' . Yii::t('hipanel', 'Update'), ['update', 'id' => $model->id]); ?>
                 </li>
                 <li>
-                    <?= Html::a('<i class="ion-trash-a"></i>' . Yii::t('hipanel', 'Delete'), '#'); ?>
+                    <?= Html::a('<i class="ion-trash-a"></i>' . Yii::t('hipanel', 'Delete'), ['delete', 'id' => $model->id]); ?>
                 </li>
             </ul>
         </div>
