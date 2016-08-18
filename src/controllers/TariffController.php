@@ -18,9 +18,7 @@ use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
-use hipanel\modules\finance\logic\DomainTariffManager;
 use hipanel\modules\finance\logic\TariffManagerFactory;
-use hipanel\modules\finance\models\Tariff;
 use Yii;
 
 class TariffController extends \hipanel\base\CrudController
@@ -40,18 +38,15 @@ class TariffController extends \hipanel\base\CrudController
             'search' => [
                 'class' => SearchAction::class,
             ],
-            'view' => [
-                'class' => ViewAction::class,
-            ],
             'validate-form' => [
                 'class' => ValidateFormAction::class,
             ],
             'set-note' => [
-                'class'   => SmartUpdateAction::class,
+                'class' => SmartUpdateAction::class,
                 'success' => Yii::t('hipanel', 'Note updated'),
             ],
             'delete' => [
-                'class'   => SmartPerformAction::class,
+                'class' => SmartPerformAction::class,
                 'success' => Yii::t('hipanel/finance/tariff', 'Tariff deleted'),
             ],
         ];
@@ -79,5 +74,12 @@ class TariffController extends \hipanel\base\CrudController
         }
 
         return $this->render($manager->getType() . '/update', ['model' => $manager->model]);
+    }
+
+    public function actionView($id)
+    {
+        $manager = TariffManagerFactory::createById($id);
+
+        return $this->render('view', ['manager' => $manager]);
     }
 }
