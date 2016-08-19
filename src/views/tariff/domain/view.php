@@ -1,5 +1,6 @@
 <?php
 
+use hipanel\modules\finance\widgets\PriceDifferenceWidget;
 use hipanel\widgets\Box;
 use yii\helpers\Html;
 
@@ -34,16 +35,10 @@ Box::begin() ?>
                                     <?= Yii::$app->formatter->asCurrency($resource->price, $resource->currency) ?>
                                 </div>
                                 <div class="col-md-6">
-                                    <?php
-                                    $diff = $resource->price - $baseResources[$type]->price;
-                                    if ($diff != 0) {
-                                        echo Html::tag(
-                                            'span',
-                                            ($diff > 0 ? '+' : '') . Yii::$app->formatter->asDecimal($diff, 2),
-                                            ['class' => $diff > 0 ? 'text-success' : 'text-danger']
-                                        );
-                                    }
-                                    ?>
+                                    <?= PriceDifferenceWidget::widget([
+                                        'new' => $resource->price,
+                                        'old' => $baseResources[$type]->price,
+                                    ]) ?>
                                 </div>
                             </div>
                         </td>
@@ -56,3 +51,45 @@ Box::begin() ?>
     </div>
 </div>
 <?php Box::end() ?>
+
+<div class="row">
+    <?php
+    $services = $model->getServices();
+    $baseServices = $model->getBaseServices();
+    foreach ($services as $service) { ?>
+        <div class="col-md-3">
+            <?php Box::begin([
+                'title' => $service->name
+            ]) ?>
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <?php foreach ($service->getOperations() as $operation => $title) {
+                        print Html::tag('td', $title);
+                    } ?>
+                </tr>
+                <tbody>
+                <tr>
+                    <?php foreach ($service->getOperations() as $operation => $title) {
+                        $resource = $service->getResource($operation); ?>
+                        <td>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <?= Yii::$app->formatter->asCurrency($resource->price, $resource->currency) ?>
+                                </div>
+                                <div class="col-md-6">
+                                    <?= PriceDifferenceWidget::widget([
+                                        'new' => $resource->price,
+                                        'old' => $baseServices[$service->type]->getResource($operation)->price,
+                                    ]) ?>
+                                </div>
+                            </div>
+                        </td>
+                    <?php } ?>
+                </tr>
+                </tbody>
+                </thead></table>
+            <?php Box::end(); ?>
+        </div>
+    <?php } ?>
+</div>

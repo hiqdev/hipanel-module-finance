@@ -36,6 +36,8 @@ class DomainResource extends Resource
     const TYPE_DOMAIN_RESTORE_EXPIRED = 'drestore_expired';
     const TYPE_DOMAIN_RESTORE_DELETED = 'drestore_deleted';
 
+    const TYPE_PREMIUM_DNS = 'premium_dns';
+
     /**
      * @return array
      */
@@ -50,6 +52,14 @@ class DomainResource extends Resource
             static::TYPE_DOMAIN_RESTORE_DELETED => Yii::t('hipanel/finance/tariff', 'Restoring deleted'),
         ];
     }
+
+    public function getServiceTypes()
+    {
+        return [
+            static::TYPE_PREMIUM_DNS => Yii::t('hipanel/finance/tariff', 'Premium DNS')
+        ];
+    }
+
 
     public function isTypeCorrect()
     {

@@ -45,7 +45,7 @@ abstract class AbstractTariffManager
     {
         $availableTariffs = Tariff::perform('GetAvailableInfo', ['type' => $this->type], true);
         if (empty($availableTariffs)) {
-            throw new ForbiddenHttpException('No available domain tariffs found');
+            throw new ForbiddenHttpException('No available tariffs found');
         }
 
         $query = Tariff::find()->joinWith('resources')->prepare();

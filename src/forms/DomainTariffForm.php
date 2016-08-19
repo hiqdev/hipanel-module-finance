@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\forms;
 
 use hipanel\modules\finance\models\DomainResource;
+use hipanel\modules\finance\models\DomainService;
 use hipanel\modules\finance\models\Tariff;
 use yii\web\UnprocessableEntityHttpException;
 
@@ -44,6 +45,49 @@ class DomainTariffForm extends AbstractTariffForm
         $this->setResources($data[(new DomainResource())->formName()]);
 
         return true;
+    }
+
+    /**
+     * @return DomainService[]
+     */
+    public function getServices()
+    {
+        return $this->createServices($this->tariff->resources);
+    }
+
+    /**
+     * @return DomainService[]
+     */
+    public function getBaseServices()
+    {
+        return $this->createServices($this->baseTariff->resources);
+    }
+
+    /**
+     * @param $resources
+     * @return DomainService[]
+     *
+     */
+    protected function createServices($resources)
+    {
+        $result = [];
+        $resource = reset($resources);
+
+        foreach ($resource->getServiceTypes() as $type => $name) {
+            $service = new DomainService([
+                'name' => $name,
+                'type' => $type,
+            ]);
+
+            foreach ($resources as $resource) {
+                if ($service->tryResourceAssignation($resource) && $service->isFulfilled()) {
+                    $result[$type] = $service;
+                    break;
+                }
+            }
+        }
+
+        return $result;
     }
 
     public function setResources($resources)
