@@ -2,36 +2,43 @@
 
 namespace hipanel\modules\finance\logic;
 
+use hipanel\modules\finance\forms\AbstractTariffForm;
 use hipanel\modules\finance\models\Tariff;
 use yii\base\InvalidConfigException;
 use yii\web\ForbiddenHttpException;
 
-abstract class TariffManager
+abstract class AbstractTariffManager
 {
+    /**
+     * @var Tariff
+     */
+    public $baseTariff;
+
+    /**
+     * @var AbstractTariffForm
+     */
+    public $form;
+
     /**
      * @var string The type used to find base tariff
      */
     protected $type;
 
-    /**
-     * @var Tariff
-     */
-    public $baseModel;
-
-    /**
-     * @var Tariff
-     */
-    public $model;
-
-    public function __construct($model = null)
+    public function __construct($tariff = null)
     {
         $this->findBaseModel();
-        $this->setModel($model);
+        $this->createForm($tariff);
     }
 
-    protected function setModel($model = null)
+    /**
+     * Fills [[form]] property with a proper
+     *
+     * @param Tariff $tariff
+     * @throws InvalidConfigException
+     */
+    protected function createForm($tariff = null)
     {
-        throw new InvalidConfigException("Method findModel must be implemented");
+        throw new InvalidConfigException("Method createForm must be implemented");
     }
 
     protected function findBaseModel()
@@ -42,7 +49,7 @@ abstract class TariffManager
         }
 
         $query = Tariff::find()->joinWith('resources')->prepare();
-        $this->baseModel = reset($query->populate($availableTariffs));
+        $this->baseTariff = reset($query->populate($availableTariffs));
     }
 
     public function getType()

@@ -5,44 +5,39 @@ namespace hipanel\modules\finance\logic;
 use hipanel\modules\finance\forms\DomainTariffForm;
 use hipanel\modules\finance\models\Tariff;
 use hiqdev\hiart\ErrorResponseException;
-use Yii;
 use yii\web\NotFoundHttpException;
 use yii\web\UnprocessableEntityHttpException;
+use Yii;
 
-class DomainTariffManager extends TariffManager
+class DomainTariffManager extends AbstractTariffManager
 {
     /**
      * @var DomainTariffForm
      */
-    public $model;
+    public $form;
 
     /**
      * @inheritdoc
      */
     protected $type = 'domain';
 
-    public function __construct($model = null)
+    public function __construct($tariff = null)
     {
         if (!Yii::getAlias('@domain', true)) {
             throw new NotFoundHttpException('Domain module is missing');
         }
 
-        parent::__construct($model);
+        parent::__construct($tariff);
     }
 
-    protected function setModel($model = null)
+    protected function createForm($tariff = null)
     {
-        $this->model = (new DomainTariffForm())->fill($this->getZones(), $this->baseModel, $model);
-    }
-
-    protected function buildData()
-    {
-
+        $this->form = (new DomainTariffForm())->fill($this->getZones(), $this->baseTariff, $tariff);
     }
 
     public function insert()
     {
-        $data = $this->model->toArray();
+        $data = $this->form->toArray();
 
         try {
             $result = Tariff::perform('Create', $data);
@@ -50,14 +45,14 @@ class DomainTariffManager extends TariffManager
             throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
         }
 
-        $this->model->id = $result['id'];
+        $this->form->id = $result['id'];
 
         return true;
     }
 
     public function update()
     {
-        $data = $this->model->toArray();
+        $data = $this->form->toArray();
 
         try {
             $result = Tariff::perform('Update', $data);

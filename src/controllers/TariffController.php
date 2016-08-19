@@ -17,7 +17,8 @@ use hipanel\actions\SearchAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
-use hipanel\actions\ViewAction;
+use hipanel\modules\finance\forms\DomainTariffForm;
+use hipanel\modules\finance\logic\DomainTariffManager;
 use hipanel\modules\finance\logic\TariffManagerFactory;
 use Yii;
 
@@ -54,26 +55,29 @@ class TariffController extends \hipanel\base\CrudController
 
     public function actionCreateDomain()
     {
+        /** @var DomainTariffManager $manager */
         $manager = TariffManagerFactory::createByType('domain');
+        $form = $manager->form;
 
-        if (Yii::$app->request->isPost && $manager->model->load(Yii::$app->request->post())) {
+        if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
             $manager->insert();
-            return $this->redirect(['view', 'id' => $manager->model->id]);
+            return $this->redirect(['view', 'id' => $form->id]);
         }
 
-        return $this->render('domain/create', ['model' => $manager->model]);
+        return $this->render('domain/create', ['model' => $form]);
     }
 
     public function actionUpdate($id)
     {
         $manager = TariffManagerFactory::createById($id);
+        $form = $manager->form;
 
-        if (Yii::$app->request->isPost && $manager->model->load(Yii::$app->request->post())) {
+        if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
             $manager->update();
-            return $this->redirect(['view', 'id' => $manager->model->id]);
+            return $this->redirect(['view', 'id' => $form->id]);
         }
 
-        return $this->render($manager->getType() . '/update', ['model' => $manager->model]);
+        return $this->render($manager->getType() . '/update', ['model' => $form]);
     }
 
     public function actionView($id)

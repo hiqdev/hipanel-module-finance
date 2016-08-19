@@ -2,69 +2,38 @@
 
 namespace hipanel\modules\finance\forms;
 
-use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\models\DomainResource;
 use hipanel\modules\finance\models\Tariff;
-use Yii;
+use yii\web\UnprocessableEntityHttpException;
 
-class DomainTariffForm extends \yii\base\Model
+class DomainTariffForm extends AbstractTariffForm
 {
-    public $id;
-    public $name;
-    public $parent_id;
-
-    /** @var Tariff */
-    public $model;
-
-    /** @var Tariff */
-    public $baseModel;
-
+    /**
+     * @var array Domain zones
+     * Key - zone name (com, net, ...)
+     * Value - zone id
+     * @see getZones
+     */
     protected $zones;
-
-    protected $_resources;
-
-    public function attributes()
-    {
-        return [
-            'id',
-            'parent_id',
-            'name',
-        ];
-    }
-
-    public function rules()
-    {
-        return [
-            [['name'], 'safe'],
-            [['parent_id', 'id'], 'integer']
-        ];
-    }
-
-    public function fields()
-    {
-        return ArrayHelper::merge(parent::fields(), [
-            'resources' => '_resources'
-        ]);
-    }
 
     /**
      * @param array $zones
-     * @param Tariff $baseModel
-     * @param Tariff $model
+     * @param Tariff $baseTariff
+     * @param Tariff $tariff
      * @return $this
      */
-    public function fill($zones, Tariff $baseModel, Tariff $model = null)
+    public function fill($zones, Tariff $baseTariff, Tariff $tariff = null)
     {
-        $this->model = isset($model) ? $model : $baseModel;
-        $this->baseModel = $baseModel;
+        $this->tariff = isset($tariff) ? $tariff : $baseTariff;
+        $this->baseTariff = $baseTariff;
         $this->zones = array_flip($zones);
 
-        if (isset($model)) {
-            $this->id = $this->model->id ?: null;
-            $this->name = $this->model->name;
+        if (isset($tariff)) {
+            $this->id = $this->tariff->id ?: null;
+            $this->name = $this->tariff->name;
         }
 
-        $this->parent_id = $this->baseModel->id;
+        $this->parent_id = $this->baseTariff->id;
 
         return $this;
     }
@@ -75,11 +44,6 @@ class DomainTariffForm extends \yii\base\Model
         $this->setResources($data[(new DomainResource())->formName()]);
 
         return true;
-    }
-
-    public function getResources()
-    {
-        return $this->_resources;
     }
 
     public function setResources($resources)
@@ -96,7 +60,7 @@ class DomainTariffForm extends \yii\base\Model
             if ($model->load($resource, '') && $model->validate()) {
                 $result[] = $model;
             } else {
-                throw new \yii\web\UnprocessableEntityHttpException('Failed to load resource model');
+                throw new UnprocessableEntityHttpException('Failed to load resource model');
             }
         }
 
@@ -111,7 +75,7 @@ class DomainTariffForm extends \yii\base\Model
 
         $result = [];
 
-        foreach ($this->model->resources as $resource) {
+        foreach ($this->tariff->resources as $resource) {
             if ($resource->object_id == $id && $resource->isTypeCorrect()) {
                 $result[$resource->type] = $resource;
             }
@@ -129,7 +93,7 @@ class DomainTariffForm extends \yii\base\Model
 
         $result = [];
 
-        foreach ($this->baseModel->resources as $resource) {
+        foreach ($this->baseTariff->resources as $resource) {
             if ($resource->object_id == $id && $resource->isTypeCorrect()) {
                 $result[$resource->type] = $resource;
             }
@@ -144,17 +108,5 @@ class DomainTariffForm extends \yii\base\Model
     public function getZones()
     {
         return $this->zones;
-    }
-
-    public function getResourceTypes()
-    {
-        return reset($this->baseModel->resources)->getAvailableTypes();
-    }
-
-    public function attributeLabels()
-    {
-        return [
-            'name' => Yii::t('hipanel/finance/tariff', 'Название'),
-        ];
     }
 }

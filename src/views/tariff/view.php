@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var $manager \hipanel\modules\finance\logic\TariffManager
+ * @var $manager \hipanel\modules\finance\logic\AbstractTariffManager
  * @var $this \yii\web\View
  */
 
@@ -10,10 +10,10 @@ use hipanel\widgets\ClientSellerLink;
 use hipanel\widgets\Pjax;
 use yii\helpers\Html;
 
-$tariffForm = $manager->model;
+$model = $manager->form;
 $type = $manager->getType();
 
-$this->title = Html::encode($tariffForm->name);
+$this->title = Html::encode($model->name);
 $this->subtitle = Yii::t('hipanel/finance/tariff', 'tariff detailed information');
 $this->breadcrumbs[] = ['label' => Yii::t('hipanel', 'Tariffs'), 'url' => ['index']];
 $this->breadcrumbs[] = $this->title;
@@ -39,9 +39,9 @@ Pjax::begin(Yii::$app->params['pjax']);
         </div>
         <p class="text-center">
             <span class="profile-user-name">
-                <?= Html::encode($tariffForm->name) ?>
+                <?= Html::encode($model->name) ?>
                 <br/>
-                <?= ClientSellerLink::widget(['model' => $tariffForm->model]) ?>
+                <?= ClientSellerLink::widget(['model' => $model->tariff]) ?>
             </span>
             <br>
             <span class="profile-user-role"></span>
@@ -50,10 +50,10 @@ Pjax::begin(Yii::$app->params['pjax']);
             <div class="profile-usermenu">
                 <ul class="nav">
                     <li>
-                        <?= Html::a('<i class="ion-edit"></i>' . Yii::t('hipanel', 'Update'), '#'); ?>
+                        <?= Html::a('<i class="ion-edit"></i>' . Yii::t('hipanel', 'Update'), ['update', 'id' => $model->id]); ?>
                     </li>
                     <li>
-                        <?= Html::a('<i class="ion-trash-a"></i>' . Yii::t('hipanel', 'Delete'), '#'); ?>
+                        <?= Html::a('<i class="ion-trash-a"></i>' . Yii::t('hipanel', 'Delete'), ['delete', 'id' => $model->id]); ?>
                     </li>
                 </ul>
             </div>
@@ -61,7 +61,7 @@ Pjax::begin(Yii::$app->params['pjax']);
         <?php Box::end(); ?>
     </div>
     <div class="col-md-9">
-        <?= $this->render($type . '/view', ['tariffForm' => $tariffForm]) ?>
+        <?= $this->render($type . '/view', ['model' => $model]) ?>
     </div>
 </div>
 <?php Pjax::end() ?>

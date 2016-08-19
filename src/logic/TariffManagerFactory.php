@@ -10,7 +10,7 @@ class TariffManagerFactory
 {
     /**
      * @param integer $id Tariff ID
-     * @return TariffManager|object
+     * @return AbstractTariffManager|object
      * @throws NotFoundHttpException
      */
     public static function createById($id)
@@ -26,7 +26,7 @@ class TariffManagerFactory
 
     /**
      * @param string $type Tariff type
-     * @return \hipanel\modules\finance\logic\TariffManager|object
+     * @return AbstractTariffManager|object
      */
     public static function createByType($type)
     {

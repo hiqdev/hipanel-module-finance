@@ -5,7 +5,7 @@ use yii\helpers\Html;
 
 /**
  * @var $this \yii\web\View
- * @var $tariffForm \hipanel\modules\finance\forms\DomainTariffForm
+ * @var $model \hipanel\modules\finance\forms\DomainTariffForm
  */
 
 Box::begin() ?>
@@ -15,7 +15,7 @@ Box::begin() ?>
             <thead>
             <tr>
                 <th></th>
-                <?php foreach ($tariffForm->getResourceTypes() as $type) {
+                <?php foreach ($model->getResourceTypes() as $type) {
                     echo Html::tag('th', $type);
                 } ?>
             </tr>
@@ -23,11 +23,11 @@ Box::begin() ?>
             <tbody>
             <?php
             $i = 0;
-            foreach ($tariffForm->getZones() as $zone => $id) { ?>
+            foreach ($model->getZones() as $zone => $id) { ?>
                 <tr>
                     <td><strong><?= $zone ?></strong></td>
-                    <?php foreach ($tariffForm->getZoneResources($zone) as $type => $resource) {
-                        $baseResources = $tariffForm->getZoneBaseResources($zone); ?>
+                    <?php foreach ($model->getZoneResources($zone) as $type => $resource) {
+                        $baseResources = $model->getZoneBaseResources($zone); ?>
                         <td>
                             <div class="row">
                                 <div class="col-md-6">
@@ -35,19 +35,18 @@ Box::begin() ?>
                                 </div>
                                 <div class="col-md-6">
                                     <?php
-                                        $diff = $resource->price - $baseResources[$type]->price;
-                                        if ($diff != 0) {
-                                            echo Html::tag(
-                                                'span',
-                                                ($diff > 0 ? '+' : '') . Yii::$app->formatter->asDecimal($diff, 2),
-                                                ['class' => $diff > 0 ? 'text-success' : 'text-danger']
-                                            );
-                                        }
+                                    $diff = $resource->price - $baseResources[$type]->price;
+                                    if ($diff != 0) {
+                                        echo Html::tag(
+                                            'span',
+                                            ($diff > 0 ? '+' : '') . Yii::$app->formatter->asDecimal($diff, 2),
+                                            ['class' => $diff > 0 ? 'text-success' : 'text-danger']
+                                        );
+                                    }
                                     ?>
                                 </div>
                             </div>
                         </td>
-
                         <?php $i++;
                     } ?>
                 </tr>
