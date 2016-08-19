@@ -19,6 +19,8 @@ return [
     'Registration' => 'Регистрация',
     'Transfer' => 'Трансфер',
     'Renewal' => 'Продление',
+    'Purchase' => 'Покупка',
+    'Premium DNS' => 'Премиум DNS',
     'Delete in AGP' => 'Удаление в AGP',
     'Restoring expired' => 'Восстановление после экспаера',
     'Restoring deleted' => 'Восстановление удалённого',
