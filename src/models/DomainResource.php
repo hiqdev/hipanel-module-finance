@@ -38,6 +38,22 @@ class DomainResource extends Resource
 
     const TYPE_PREMIUM_DNS = 'premium_dns';
 
+    public function rules()
+    {
+        $rules = parent::rules();
+        $rules['create-required'] = [
+            ['object_id'],
+            'required',
+            'on' => ['create', 'update'],
+            'when' => function ($model) {
+                return $model->isTypeCorrect();
+            }
+        ];
+        $rules['create-required-price'] = [['price'], 'required', 'on' => ['create', 'update']];
+
+        return $rules;
+    }
+
     /**
      * @return array
      */
@@ -59,7 +75,6 @@ class DomainResource extends Resource
             static::TYPE_PREMIUM_DNS => Yii::t('hipanel/finance/tariff', 'Premium DNS')
         ];
     }
-
 
     public function isTypeCorrect()
     {

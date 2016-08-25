@@ -36,6 +36,10 @@ class DomainTariffForm extends AbstractTariffForm
 
         $this->parent_id = $this->baseTariff->id;
 
+        foreach ($this->tariff->resources as $resource) {
+            $resource->scenario = $this->scenario;
+        }
+
         return $this;
     }
 
@@ -99,12 +103,12 @@ class DomainTariffForm extends AbstractTariffForm
                 continue;
             }
 
-            $model = new DomainResource(['scenario' => 'create']);
+            $model = new DomainResource(['scenario' => $this->scenario]);
 
             if ($model->load($resource, '') && $model->validate()) {
                 $result[] = $model;
             } else {
-                throw new UnprocessableEntityHttpException('Failed to load resource model');
+                throw new UnprocessableEntityHttpException('Failed to load resource model: ' . reset($model->getFirstErrors()));
             }
         }
 

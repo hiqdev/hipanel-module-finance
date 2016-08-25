@@ -5,9 +5,9 @@ namespace hipanel\modules\finance\logic;
 use hipanel\modules\finance\forms\DomainTariffForm;
 use hipanel\modules\finance\models\Tariff;
 use hiqdev\hiart\ErrorResponseException;
+use Yii;
 use yii\web\NotFoundHttpException;
 use yii\web\UnprocessableEntityHttpException;
-use Yii;
 
 class DomainTariffManager extends AbstractTariffManager
 {
@@ -21,18 +21,19 @@ class DomainTariffManager extends AbstractTariffManager
      */
     protected $type = 'domain';
 
-    public function __construct($tariff = null)
+    public function init()
     {
+        parent::init();
+
         if (!Yii::getAlias('@domain', true)) {
             throw new NotFoundHttpException('Domain module is missing');
         }
-
-        parent::__construct($tariff);
     }
 
     protected function createForm($tariff = null)
     {
-        $this->form = (new DomainTariffForm())->fill($this->getZones(), $this->baseTariff, $tariff);
+        $this->form = (new DomainTariffForm(['scenario' => $this->scenario]))
+            ->fill($this->getZones(), $this->baseTariff, $tariff);
     }
 
     public function insert()

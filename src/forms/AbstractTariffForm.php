@@ -2,13 +2,12 @@
 
 namespace hipanel\modules\finance\forms;
 
-use hipanel\base\Model;
 use hipanel\modules\finance\models\Tariff;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 
-abstract class AbstractTariffForm extends Model
+abstract class AbstractTariffForm extends \yii\base\Model
 {
     /**
      * @var int Tariff ID
@@ -48,8 +47,10 @@ abstract class AbstractTariffForm extends Model
     public function rules()
     {
         return [
-            [['name'], 'safe'],
-            [['parent_id', 'id'], 'integer']
+            [['name'], 'required', 'on' => ['create', 'update']],
+            [['parent_id', 'id'], 'integer', 'on' => ['create', 'update']],
+            [['parent_id'], 'required', 'on' => ['create']],
+            [['id'], 'required', 'on' => ['update']],
         ];
     }
 
@@ -66,7 +67,6 @@ abstract class AbstractTariffForm extends Model
         return $this->_resources;
     }
 
-
     public function getResourceTypes()
     {
         return reset($this->baseTariff->resources)->getAvailableTypes();
@@ -80,7 +80,6 @@ abstract class AbstractTariffForm extends Model
     }
 
     /**
-     *
      * @param array $data to be loaded
      * @return bool
      * @throws InvalidConfigException when not implemented

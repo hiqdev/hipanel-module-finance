@@ -25,10 +25,10 @@ class Resource extends \hipanel\base\Model
             [['type', 'ftype', 'unit', 'unit_factor', 'currency'], 'safe'],
             [['price', 'fee', 'quantity', 'discount'], 'number'],
 
-            [['object_id', 'type_id'], 'integer', 'on' => 'create'],
-            [['type'], 'safe', 'on' => 'create'],
-            [['price'], 'number', 'on' => 'create'],
-            'create-required' => [['object_id', 'price'], 'required', 'on' => 'create'],
+            [['object_id', 'type_id'], 'integer', 'on' => ['create', 'update']],
+            [['type'], 'safe', 'on' => ['create', 'update']],
+            [['price'], 'number', 'on' => ['create', 'update']],
+            'create-required' => [['object_id', 'price'], 'required', 'on' => ['create', 'update']],
         ];
     }
 
@@ -44,5 +44,15 @@ class Resource extends \hipanel\base\Model
     {
         return $this->mergeAttributeLabels([
         ]);
+    }
+
+    public function isTypeCorrect()
+    {
+        return isset($this->getAvailableTypes()[$this->type]);
+    }
+
+    public function getAvailableTypes()
+    {
+        return [];
     }
 }

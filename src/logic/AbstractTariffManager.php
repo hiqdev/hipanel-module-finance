@@ -5,9 +5,11 @@ namespace hipanel\modules\finance\logic;
 use hipanel\modules\finance\forms\AbstractTariffForm;
 use hipanel\modules\finance\models\Tariff;
 use yii\base\InvalidConfigException;
+use yii\base\Object;
+use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
 
-abstract class AbstractTariffManager
+abstract class AbstractTariffManager extends Object
 {
     /**
      * @var Tariff
@@ -20,12 +22,21 @@ abstract class AbstractTariffManager
     public $form;
 
     /**
+     * @var string
+     */
+    public $scenario;
+
+    /**
      * @var string The type used to find base tariff
      */
     protected $type;
-
-    public function __construct($tariff = null)
+    
+    public function __construct($options = [])
     {
+        $tariff = ArrayHelper::remove($options, 'tariff');
+
+        parent::__construct($options);
+
         $this->findBaseModel();
         $this->createForm($tariff);
     }

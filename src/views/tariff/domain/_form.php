@@ -13,7 +13,6 @@ use yii\helpers\Html;
 
 <?php $form = ActiveForm::begin([
     'id' => 'tariff-create-form',
-    'enableClientValidation' => true
 ]) ?>
 
 <?php Box::begin() ?>
@@ -50,16 +49,13 @@ use yii\helpers\Html;
                             <div class="row">
                                 <div class="col-md-6">
                                     <?php
-
                                     $activeField = $form->field($resource, "[$i]price");
                                     Html::addCssClass($activeField->options, 'form-group-sm');
                                     echo $activeField->input('number', [
                                         'class' => 'form-control price-input',
                                         'autocomplete' => false,
-                                        'step' => 0.1
-                                    ])->label(false)
-
-                                    ?>
+                                        'step' => 'any'
+                                    ])->label(false); ?>
                                 </div>
                                 <div class="col-md-6">
                                     <?= Html::tag('span', '', [
@@ -70,7 +66,7 @@ use yii\helpers\Html;
                             </div>
                         </td>
 
-                    <?php $i++;
+                        <?php $i++;
                     } ?>
                 </tr>
             <?php } ?>
@@ -79,6 +75,66 @@ use yii\helpers\Html;
     </div>
 </div>
 <?php Box::end() ?>
+
+<div class="row">
+    <?php
+    $services = $model->getServices();
+    $baseServices = $model->getBaseServices();
+    foreach ($services as $service) { ?>
+        <div class="col-md-3">
+            <?php Box::begin([
+                'title' => $service->name
+            ]) ?>
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <?php foreach ($service->getOperations() as $operation => $title) {
+                        print Html::tag('td', $title);
+                    } ?>
+                </tr>
+                <tbody>
+                <tr>
+                    <?php foreach ($service->getOperations() as $operation => $title) {
+                        $resource = $service->getResource($operation);
+                        ?>
+                        <td>
+                            <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
+                            <?= Html::activeHiddenInput($resource, "[$i]type") ?>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <?php
+
+                                    $activeField = $form->field($resource, "[$i]price");
+                                    Html::addCssClass($activeField->options, 'form-group-sm');
+                                    echo $activeField->input('number', [
+                                        'class' => 'form-control price-input',
+                                        'autocomplete' => false,
+                                        'step' => 'any'
+                                    ])->label(false)
+
+                                    ?>
+                                </div>
+                                <div class="col-md-6">
+                                    <?= Html::tag('span', '', [
+                                        'class' => 'base-price text-bold',
+                                        'data-original-price' => $baseServices[$service->type]->getResource($operation)->price
+                                    ]); ?>
+                                </div>
+                            </div>
+                        </td>
+                        <?php
+                        $i++;
+                    } ?>
+                </tr>
+                </tbody>
+                </thead></table>
+            <?php Box::end(); ?>
+        </div>
+    <?php } ?>
+</div>
+
+
 <?php Box::begin(['options' => ['class' => 'box-solid']]) ?>
 <div class="row">
     <div class="col-md-12 no">
@@ -94,7 +150,7 @@ use yii\helpers\Html;
 $this->registerJs(<<<JS
     $('.price-input').on('change mouseup', function () {
         var price = parseFloat($(this).val());
-        if (price === NaN) return false;
+        if (isNaN(price)) return false;
         
         var base = $(this).closest('td').find('.base-price');
         var basePrice = parseFloat(base.attr('data-original-price'));

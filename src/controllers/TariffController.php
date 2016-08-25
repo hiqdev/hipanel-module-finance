@@ -56,7 +56,7 @@ class TariffController extends \hipanel\base\CrudController
     public function actionCreateDomain()
     {
         /** @var DomainTariffManager $manager */
-        $manager = TariffManagerFactory::createByType('domain');
+        $manager = TariffManagerFactory::createByType('domain', ['scenario' => 'create']);
         $form = $manager->form;
 
         if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
@@ -69,7 +69,7 @@ class TariffController extends \hipanel\base\CrudController
 
     public function actionUpdate($id)
     {
-        $manager = TariffManagerFactory::createById($id);
+        $manager = TariffManagerFactory::createById($id, ['scenario' => 'update']);
         $form = $manager->form;
 
         if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
