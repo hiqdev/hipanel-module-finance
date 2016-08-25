@@ -5,7 +5,6 @@ use hipanel\modules\finance\grid\ChangeGridView;
 use hipanel\modules\finance\grid\HeldPaymentsGridView;
 use hipanel\modules\finance\models\Change;
 use hipanel\widgets\AjaxModal;
-use hipanel\widgets\IndexLayoutSwitcher;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 use hiqdev\hiart\ActiveDataProvider;
@@ -20,7 +19,7 @@ use yii\helpers\Html;
  */
 
 $this->title = Yii::t('hipanel/finance/change', 'Pending confirmation payments');
-$this->subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
+$this->params['subtitle'] = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -34,17 +33,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $page->beginContent('main-actions') ?>
         <?php // TODO: add actions ?>
     <?php $page->endContent() ?>
+
     <?php $page->beginContent('show-actions') ?>
-        <?= IndexLayoutSwitcher::widget() ?>
+        <?= $page->renderLayoutSwitcher() ?>
         <?= $page->renderSorter([
             'attributes' => [
                 'client',
                 'time'
             ],
         ]) ?>
-
         <?= $page->renderPerPage() ?>
     <?php $page->endContent() ?>
+
     <?php $page->beginContent('bulk-actions') ?>
         <?php if ($model->state === $model::STATE_NEW) : ?>
             <div>

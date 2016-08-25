@@ -1,15 +1,15 @@
 <?php
 
 use hipanel\modules\finance\grid\BillGridView;
-use hipanel\widgets\ActionBox;
-use hipanel\widgets\IndexLayoutSwitcher;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 use yii\helpers\Html;
 
-$this->title                   = Yii::t('hipanel/finance', 'Bills');
+$this->title = Yii::t('hipanel/finance', 'Bills');
+$this->params['subtitle'] = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
 $this->params['breadcrumbs'][] = $this->title;
-$this->subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list'); ?>
+
+?>
 
 <?php Pjax::begin(array_merge(Yii::$app->params['pjax'], ['enablePushState' => true])) ?>
     <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
@@ -24,7 +24,7 @@ $this->subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) 
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('show-actions') ?>
-            <?= IndexLayoutSwitcher::widget() ?>
+            <?= $page->renderLayoutSwitcher() ?>
             <?= $page->renderSorter([
                 'attributes' => [
                     'seller',

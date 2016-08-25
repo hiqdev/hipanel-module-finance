@@ -14,16 +14,13 @@ $model = $manager->form;
 $type = $manager->getType();
 
 $this->title = Html::encode($model->name);
-$this->subtitle = Yii::t('hipanel/finance/tariff', 'tariff detailed information');
-$this->breadcrumbs[] = ['label' => Yii::t('hipanel', 'Tariffs'), 'url' => ['index']];
-$this->breadcrumbs[] = $this->title;
+$this->params['subtitle'] = Yii::t('hipanel/finance/tariff', 'tariff detailed information');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel', 'Tariffs'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
-<?php
-
-
-Pjax::begin(Yii::$app->params['pjax']);
-?>
+<?php Pjax::begin(Yii::$app->params['pjax']) ?>
 <div class="row">
     <div class="col-md-3">
         <?php Box::begin([
@@ -33,7 +30,7 @@ Pjax::begin(Yii::$app->params['pjax']);
             'bodyOptions' => [
                 'class' => 'no-padding',
             ],
-        ]); ?>
+        ]) ?>
         <div class="profile-user-img text-center">
             <i class="fa fa-dollar fa-5x"></i>
         </div>
@@ -50,15 +47,15 @@ Pjax::begin(Yii::$app->params['pjax']);
             <div class="profile-usermenu">
                 <ul class="nav">
                     <li>
-                        <?= Html::a('<i class="ion-edit"></i>' . Yii::t('hipanel', 'Update'), ['update', 'id' => $model->id]); ?>
+                        <?= Html::a('<i class="ion-edit"></i>' . Yii::t('hipanel', 'Update'), ['update', 'id' => $model->id]) ?>
                     </li>
                     <li>
-                        <?= Html::a('<i class="ion-trash-a"></i>' . Yii::t('hipanel', 'Delete'), ['delete', 'id' => $model->id]); ?>
+                        <?= Html::a('<i class="ion-trash-a"></i>' . Yii::t('hipanel', 'Delete'), ['delete', 'id' => $model->id]) ?>
                     </li>
                 </ul>
             </div>
-        <?php endif; ?>
-        <?php Box::end(); ?>
+        <?php endif ?>
+        <?php Box::end() ?>
     </div>
     <div class="col-md-9">
         <?= $this->render($type . '/view', ['model' => $model]) ?>
