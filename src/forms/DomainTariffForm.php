@@ -17,36 +17,12 @@ class DomainTariffForm extends AbstractTariffForm
      */
     protected $zones;
 
-    /**
-     * @param array $zones
-     * @param Tariff $baseTariff
-     * @param Tariff $tariff
-     * @return $this
-     */
-    public function fill($zones, Tariff $baseTariff, Tariff $tariff = null)
-    {
-        $this->tariff = isset($tariff) ? $tariff : $baseTariff;
-        $this->baseTariff = $baseTariff;
-        $this->zones = array_flip($zones);
-
-        if (isset($tariff)) {
-            $this->id = $this->tariff->id ?: null;
-            $this->name = $this->tariff->name;
-        }
-
-        $this->parent_id = $this->baseTariff->id;
-
-        foreach ($this->tariff->resources as $resource) {
-            $resource->scenario = $this->scenario;
-        }
-
-        return $this;
-    }
-
     public function load($data)
     {
         $this->setAttributes($data[$this->formName()]);
         $this->setResources($data[(new DomainResource())->formName()]);
+
+        $this->initTariff();
 
         return true;
     }
@@ -156,5 +132,10 @@ class DomainTariffForm extends AbstractTariffForm
     public function getZones()
     {
         return $this->zones;
+    }
+
+    public function setZones(array $zones)
+    {
+        $this->zones = array_flip($zones);
     }
 }

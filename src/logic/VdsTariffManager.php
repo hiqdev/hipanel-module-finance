@@ -9,23 +9,23 @@ use Yii;
 use yii\web\NotFoundHttpException;
 use yii\web\UnprocessableEntityHttpException;
 
-class DomainTariffManager extends AbstractTariffManager
+class VdsTariffManager extends AbstractTariffManager
 {
     /**
-     * @var DomainTariffForm
+     * @var VdsTariffForm
      */
     public $form;
 
     /**
      * @inheritdoc
      */
-    protected $type = 'domain';
+    protected $type = 'server';
 
     public function init()
     {
         parent::init();
 
-        if (!Yii::getAlias('@domain', true)) {
+        if (!Yii::getAlias('@server', true)) {
             throw new NotFoundHttpException('Domain module is missing');
         }
     }

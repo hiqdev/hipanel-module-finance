@@ -67,6 +67,20 @@ class TariffController extends \hipanel\base\CrudController
         return $this->render('domain/create', ['model' => $form]);
     }
 
+    public function actionCreateSvds()
+    {
+        /** @var DomainTariffManager $manager */
+        $manager = TariffManagerFactory::createByType('svds', ['scenario' => 'create']);
+        $form = $manager->form;
+
+        if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
+            $manager->insert();
+            return $this->redirect(['view', 'id' => $form->id]);
+        }
+
+        return $this->render('vds/create', ['model' => $form]);
+    }
+
     public function actionUpdate($id)
     {
         $manager = TariffManagerFactory::createById($id, ['scenario' => 'update']);

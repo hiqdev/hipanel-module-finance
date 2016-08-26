@@ -16,13 +16,15 @@ use hipanel\modules\finance\models\query\TariffQuery;
 /**
  * Class Tariff
  * @package hipanel\modules\finance\models
- * @property Resource[]|DomainResource[] $resources
+ * @property Resource[]|DomainResource[]|ServerResource[] $resources
  */
 class Tariff extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
 
     const TYPE_DOMAIN = 'domain';
+    const TYPE_SVDS = 'svds';
+    const TYPE_OVDS = 'ovds';
 
     /**
      * {@inheritdoc}
@@ -45,6 +47,8 @@ class Tariff extends \hipanel\base\Model
     {
         if ($this->type === self::TYPE_DOMAIN) {
             return $this->hasMany(DomainResource::class, ['tariff_id' => 'id']);
+        } elseif ($this->type === self::TYPE_SVDS || $this->type === self::TYPE_OVDS) {
+            return $this->hasMany(ServerResource::class, ['tariff_id' => 'id']);
         }
 
         return $this->hasMany(Resource::class, ['tariff_id' => 'id']);

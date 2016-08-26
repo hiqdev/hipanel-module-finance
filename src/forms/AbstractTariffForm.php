@@ -23,24 +23,48 @@ abstract class AbstractTariffForm extends \yii\base\Model
      * @var int Parent tariff ID
      */
     public $parent_id;
-
-    /** @var Tariff */
-    public $tariff;
-
     /** @var Tariff */
     public $baseTariff;
-
+    /** @var Tariff[] */
+    public $baseTariffs;
+    /** @var Tariff */
+    protected $tariff;
     /** @var Resource[] */
     protected $_resources;
 
-    /** @inheritdoc */
-    public function attributes()
+    public function init()
     {
-        return [
-            'id',
-            'parent_id',
-            'name',
-        ];
+        $this->initTariff();
+    }
+
+    protected function initTariff()
+    {
+        $this->selectBaseTariff();
+        $this->ensureTariff();
+        $this->ensureScenario();
+    }
+
+    protected function ensureTariff()
+    {
+        if ($this->getTariff() instanceof Tariff) {
+            return true;
+        }
+
+        return $this->setDefaultTariff();
+    }
+
+    protected function ensureScenario()
+    {
+        foreach ($this->tariff->resources as $resource) {
+            $resource->scenario = $this->scenario;
+        }
+    }
+
+    protected function setDefaultTariff()
+    {
+        $this->setTariff($this->baseTariff);
+
+        return true;
     }
 
     /** @inheritdoc */
@@ -62,9 +86,28 @@ abstract class AbstractTariffForm extends \yii\base\Model
         ]);
     }
 
+    /** @inheritdoc */
+    public function attributes()
+    {
+        return [
+            'id',
+            'parent_id',
+            'name',
+        ];
+    }
+
     public function getResources()
     {
         return $this->_resources;
+    }
+
+    /**
+     * @param array $resources
+     * @throws InvalidConfigException when not implemented
+     */
+    public function setResources($resources)
+    {
+        throw new InvalidConfigException("Method load must be implemented");
     }
 
     public function getResourceTypes()
@@ -89,22 +132,25 @@ abstract class AbstractTariffForm extends \yii\base\Model
         throw new InvalidConfigException("Method load must be implemented");
     }
 
-    /**
-     * @param array $data
-     * @throws InvalidConfigException when not implemented
-     */
-    public function fill($data)
+    public function selectBaseTariff()
     {
-        throw new InvalidConfigException("Method load must be implemented");
-    }
+        if (!isset($this->parent_id)) {
+            $this->parent_id = ArrayHelper::getValue(reset($this->baseTariffs), 'id');
+        }
 
-    /**
-     * @param array $resources
-     * @throws InvalidConfigException when not implemented
-     */
-    public function setResources($resources)
-    {
-        throw new InvalidConfigException("Method load must be implemented");
+        $filtered = array_filter($this->baseTariffs, function ($model) {
+            return $model->id == $this->parent_id;
+        });
+
+        if (count($filtered) !== 1) {
+            Yii::error('Found ' . count($filtered) . ' base tariffs. Must be exactly one');
+            return false;
+        }
+
+        $this->baseTariff = reset($filtered);
+        $this->parent_id = $this->baseTariff->id;
+
+        return true;
     }
 
     public function insert($runValidation = true, $attributes = null, $options = [])
@@ -115,5 +161,27 @@ abstract class AbstractTariffForm extends \yii\base\Model
     public function update($runValidation = true, $attributes = null, $options = [])
     {
         throw new InvalidConfigException("Method load must be implemented");
+    }
+
+    /**
+     * @return Tariff
+     */
+    public function getTariff()
+    {
+        return $this->tariff;
+    }
+
+    public function setTariff($tariff)
+    {
+        if ($tariff === null) {
+            return false;
+        }
+
+        $this->tariff = $tariff;
+
+        $this->id = $tariff->id;
+        $this->name = $tariff->name;
+
+        return true;
     }
 }

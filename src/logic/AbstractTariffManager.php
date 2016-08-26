@@ -12,9 +12,9 @@ use yii\web\ForbiddenHttpException;
 abstract class AbstractTariffManager extends Object
 {
     /**
-     * @var Tariff
+     * @var Tariff[] array of all available base tariffs
      */
-    public $baseTariff;
+    protected $baseTariffs;
 
     /**
      * @var AbstractTariffForm
@@ -27,44 +27,51 @@ abstract class AbstractTariffManager extends Object
     public $scenario;
 
     /**
+     * @var Tariff The actual tariff
+     */
+    protected $tariff;
+
+    /**
      * @var string The type used to find base tariff
      */
     protected $type;
     
-    public function __construct($options = [])
+    public function init()
     {
-        $tariff = ArrayHelper::remove($options, 'tariff');
-
-        parent::__construct($options);
-
-        $this->findBaseModel();
-        $this->createForm($tariff);
+        $this->findBaseTariffs();
+        $this->buildForm();
     }
 
     /**
-     * Fills [[form]] property with a proper
-     *
-     * @param Tariff $tariff
-     * @throws InvalidConfigException
+     * Fills [[form]] property with a proper [[AbstractTariffForm]] object
      */
-    protected function createForm($tariff = null)
+    protected function buildForm()
     {
-        throw new InvalidConfigException("Method createForm must be implemented");
+        throw new InvalidConfigException('Method "createForm" must be implemented');
     }
 
-    protected function findBaseModel()
+    protected function findBaseTariffs()
     {
         $availableTariffs = Tariff::perform('GetAvailableInfo', ['type' => $this->type], true);
+
         if (empty($availableTariffs)) {
             throw new ForbiddenHttpException('No available tariffs found');
         }
 
         $query = Tariff::find()->joinWith('resources')->prepare();
-        $this->baseTariff = reset($query->populate($availableTariffs));
+        $this->baseTariffs = $query->populate($availableTariffs);
     }
 
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @param Tariff $tariff
+     */
+    public function setTariff($tariff)
+    {
+        $this->tariff = $tariff;
     }
 }
