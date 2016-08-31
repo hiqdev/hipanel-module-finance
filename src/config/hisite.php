@@ -9,8 +9,6 @@
  * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
  */
 
-$params = require COMPOSER_CONFIG_PLUGIN_DIR . '/params.php';
-
 return [
     'aliases' => [
         '@bill'   => '/finance/bill',
