@@ -11,6 +11,7 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\base\ModelTrait;
 use Yii;
 
 /**
@@ -19,6 +20,8 @@ use Yii;
  */
 class ServerResource extends Resource
 {
+    use ModelTrait;
+
     public static function index()
     {
         return 'resources';
@@ -29,39 +32,34 @@ class ServerResource extends Resource
         return 'resource';
     }
 
-    const TYPE_DOMAIN_REGISTRATION = 'dregistration';
-    const TYPE_DOMAIN_TRANSFER = 'dtransfer';
-    const TYPE_DOMAIN_RENEWAL = 'drenewal';
-    const TYPE_DOMAIN_DELETE_AGP = 'ddelete_agp';
-    const TYPE_DOMAIN_RESTORE_EXPIRED = 'drestore_expired';
-    const TYPE_DOMAIN_RESTORE_DELETED = 'drestore_deleted';
+    const MODEL_TYPE_CPU = 'cpu';
+    const MODEL_TYPE_RAM = 'ram';
+    const MODEL_TYPE_HDD = 'hdd';
+    const MODEL_TYPE_CHASSIS = 'chassis';
 
-    const TYPE_PREMIUM_DNS = 'premium_dns';
+    public function rules()
+    {
+        $rules = parent::rules();
+        $rules[] = [['model_type', 'partno'], 'safe'];
+
+        return $rules;
+    }
 
     /**
      * @return array
      */
-    public function getAvailableTypes()
+    public function getModelTypes()
     {
         return [
-            static::TYPE_DOMAIN_REGISTRATION => Yii::t('hipanel/finance/tariff', 'Registration'),
-            static::TYPE_DOMAIN_TRANSFER => Yii::t('hipanel/finance/tariff', 'Transfer'),
-            static::TYPE_DOMAIN_RENEWAL => Yii::t('hipanel/finance/tariff', 'Renewal'),
-            static::TYPE_DOMAIN_DELETE_AGP => Yii::t('hipanel/finance/tariff', 'Delete in AGP'),
-            static::TYPE_DOMAIN_RESTORE_EXPIRED => Yii::t('hipanel/finance/tariff', 'Restoring expired'),
-            static::TYPE_DOMAIN_RESTORE_DELETED => Yii::t('hipanel/finance/tariff', 'Restoring deleted'),
+            static::MODEL_TYPE_CPU => Yii::t('hipanel/finance/tariff', 'CPU'),
+            static::MODEL_TYPE_RAM => Yii::t('hipanel/finance/tariff', 'RAM'),
+            static::MODEL_TYPE_HDD => Yii::t('hipanel/finance/tariff', 'HDD'),
+            static::MODEL_TYPE_CHASSIS => Yii::t('hipanel/finance/tariff', 'Chassis'),
         ];
     }
 
-    public function getServiceTypes()
+    public function isModelTypeCorrect()
     {
-        return [
-            static::TYPE_PREMIUM_DNS => Yii::t('hipanel/finance/tariff', 'Premium DNS')
-        ];
-    }
-
-    public function isTypeCorrect()
-    {
-        return isset($this->getAvailableTypes()[$this->type]);
+        return isset($this->getModelTypes()[$this->model_type]);
     }
 }

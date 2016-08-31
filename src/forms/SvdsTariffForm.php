@@ -2,9 +2,8 @@
 
 namespace hipanel\modules\finance\forms;
 
-use hipanel\modules\finance\logic\VdsTariffManager;
 
-class SvdsTariffManager extends VdsTariffManager
+class SvdsTariffForm extends VdsTariffForm
 {
 
 }

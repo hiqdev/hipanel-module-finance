@@ -10,9 +10,12 @@ class TariffQuery extends \hiqdev\hiart\ActiveQuery
             'show_final' => true,
             'show_deleted' => true,
             'with_resources' => true,
+            'with_parts' => true,
         ]);
 
-        $this->joinWith('resources');
+        $this->joinWith(['resources' => function ($query) {
+            return $query->joinWith('part');
+        }]);
 
         return $this;
     }

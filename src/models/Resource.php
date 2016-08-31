@@ -11,6 +11,10 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\modules\stock\models\Part;
+use Yii;
+use yii\base\InvalidConfigException;
+
 class Resource extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
@@ -35,6 +39,15 @@ class Resource extends \hipanel\base\Model
     public function getTariff()
     {
         return $this->hasOne(Tariff::class, ['tariff_id' => 'id']);
+    }
+
+    public function getPart()
+    {
+        if (!Yii::getAlias('@part', false)) {
+            throw new InvalidConfigException('Stock module is a must to retrieve resource parts');
+        }
+
+        return $this->hasOne(Part::class, ['object_id' => 'id']);
     }
 
     /**

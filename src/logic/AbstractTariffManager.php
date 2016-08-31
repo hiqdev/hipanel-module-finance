@@ -58,8 +58,10 @@ abstract class AbstractTariffManager extends Object
             throw new ForbiddenHttpException('No available tariffs found');
         }
 
-        $query = Tariff::find()->joinWith('resources')->prepare();
-        $this->baseTariffs = $query->populate($availableTariffs);
+        $this->baseTariffs = Tariff::find()
+            ->where(['id' => array_keys($availableTariffs)])
+            ->details()
+            ->all();
     }
 
     public function getType()

@@ -2,15 +2,22 @@
 
 namespace hipanel\modules\finance\logic;
 
-use hipanel\modules\finance\forms\VdsTariffForm;
-use hipanel\modules\finance\models\Tariff;
-use hiqdev\hiart\ErrorResponseException;
-use Yii;
-use yii\web\NotFoundHttpException;
-use yii\web\UnprocessableEntityHttpException;
+use hipanel\modules\finance\forms\SvdsTariffForm;
 
 class SvdsTariffManager extends VdsTariffManager
 {
-
+    /** @inheritdoc */
     public $type = 'svds';
+
+    /**
+     * @inheritdoc
+     */
+    protected function buildForm()
+    {
+        $this->form = new SvdsTariffForm([
+            'scenario' => $this->scenario,
+            'baseTariffs' => $this->baseTariffs,
+            'tariff' => $this->tariff
+        ]);
+    }
 }

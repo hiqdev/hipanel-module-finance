@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\logic;
 
 use hipanel\modules\finance\forms\DomainTariffForm;
+use hipanel\modules\finance\forms\VdsTariffForm;
 use hipanel\modules\finance\models\Tariff;
 use hiqdev\hiart\ErrorResponseException;
 use Yii;
@@ -32,9 +33,8 @@ class VdsTariffManager extends AbstractTariffManager
 
     protected function buildForm()
     {
-        $this->form = new DomainTariffForm([
+        $this->form = new VdsTariffForm([
             'scenario' => $this->scenario,
-            'zones' => $this->getZones(),
             'baseTariffs' => $this->baseTariffs,
             'tariff' => $this->tariff
         ]);
@@ -66,13 +66,5 @@ class VdsTariffManager extends AbstractTariffManager
         }
 
         return true;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getZones()
-    {
-        return Yii::$app->hiart->get('getZones');
     }
 }

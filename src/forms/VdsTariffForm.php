@@ -3,17 +3,62 @@
 namespace hipanel\modules\finance\forms;
 
 use hipanel\modules\finance\models\DomainResource;
-use hipanel\modules\finance\models\DomainService;
-use hipanel\modules\finance\models\Tariff;
-use yii\web\UnprocessableEntityHttpException;
+use hipanel\modules\finance\models\ServerResource;
+use hipanel\modules\server\models\Package;
 
 class VdsTariffForm extends AbstractTariffForm
 {
+    public $note;
+    public $label;
+
+    protected $package;
+
     public function load($data)
     {
         $this->setAttributes($data[$this->formName()]);
         $this->setResources($data[(new DomainResource())->formName()]);
 
         return true;
+    }
+
+    public function rules()
+    {
+        $rules = parent::rules();
+        $rules[] = [['note', 'label'], 'safe', 'on' => ['create', 'update']];
+
+        return $rules;
+    }
+
+    /**
+     * @return \hipanel\modules\finance\models\ServerResource[]
+     */
+    public function getHardwareResources()
+    {
+        return array_filter($this->tariff->resources, function ($model) {
+            /** @var ServerResource $model */
+            return $model->isModelTypeCorrect();
+        });
+    }
+
+    /**
+     * @return \hipanel\modules\finance\models\ServerResource[]
+     */
+    public function getBaseHardwareResource($object_id)
+    {
+        return array_filter($this->baseTariff->resources, function ($resource) use ($object_id) {
+            /** @var ServerResource $model */
+            return $resource->object_id == $object_id && $resource->isModelTypeCorrect();
+        });
+    }
+
+    public function getPackage()
+    {
+        if (!$this->package instanceof Package) {
+            $this->package = new Package([
+                'tariff' => $this->tariff,
+            ]);
+        }
+
+        return $this->package;
     }
 }
