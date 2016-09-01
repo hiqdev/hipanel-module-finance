@@ -25,9 +25,11 @@ use yii\helpers\Html;
         <?= $form->field($model, 'label') ?>
     </div>
 </div>
+<?php Box::end() ?>
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6">
+        <?php Box::begin(['title' => Yii::t('hipanel/finance/tariff', 'Hardware')]) ?>
         <table class="table table-condensed">
             <thead>
             <tr>
@@ -47,6 +49,75 @@ use yii\helpers\Html;
                     <td>
                         <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
                         <?= Html::activeHiddenInput($resource, "[$i]type") ?>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <?php
+                                $activeField = $form->field($resource, "[$i]fee");
+                                Html::addCssClass($activeField->options, 'form-group-sm');
+                                echo $activeField->input('number', [
+                                    'class' => 'form-control price-input',
+                                    'autocomplete' => false,
+                                    'step' => 'any'
+                                ])->label(false); ?>
+                            </div>
+                            <div class="col-md-6">
+                                <?= Html::tag('span', '', [
+                                    'class' => 'base-price text-bold',
+                                    'data-original-price' => $baseResource->fee
+                                ]); ?>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            <?php } ?>
+            </tbody>
+        </table>
+        <?php Box::end() ?>
+    </div>
+    <div class="col-md-6">
+        <?php Box::begin(['title' => Yii::t('hipanel/finance/tariff', 'Overuses')]) ?>
+        <table class="table table-condensed">
+            <thead>
+            <tr>
+                <th><?= Yii::t('hipanel/finance/tariff', 'Resource') ?></th>
+                <th><?= Yii::t('hipanel/finance/tariff', 'Price') ?></th>
+                <th><?= Yii::t('hipanel/finance/tariff', 'Prepaid amount') ?></th>
+                <th><?= Yii::t('hipanel/finance/tariff', 'Overuse price') ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            $package = $model->getPackage();
+            foreach ($model->getOveruseResources() as $resource) {
+                $baseResource = $model->getBaseResource($resource->object_id); ?>
+                <tr>
+                    <td><?= $package->getResourceTitle($resource->type) ?></td>
+                    <td>
+                        <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
+                        <?= Html::activeHiddenInput($resource, "[$i]type") ?>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <?php
+                                $activeField = $form->field($resource, "[$i]fee");
+                                Html::addCssClass($activeField->options, 'form-group-sm');
+                                echo $activeField->input('number', [
+                                    'class' => 'form-control price-input',
+                                    'autocomplete' => false,
+                                    'step' => 'any'
+                                ])->label(false); ?>
+                            </div>
+                            <div class="col-md-6">
+                                <?= Html::tag('span', '', [
+                                    'class' => 'base-price text-bold',
+                                    'data-original-price' => $baseResource->fee
+                                ]); ?>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <?= $package->getResourceByType($resource->type)->quantity ?>
+                    </td>
+                    <td>
                         <div class="row">
                             <div class="col-md-6">
                                 <?php
@@ -70,9 +141,12 @@ use yii\helpers\Html;
             <?php } ?>
             </tbody>
         </table>
+
+        <?php Box::end() ?>
+    </div>
+    <div class="col-md-12">
     </div>
 </div>
-<?php Box::end() ?>
 
 <?php Box::begin(['options' => ['class' => 'box-solid']]) ?>
 <div class="row">

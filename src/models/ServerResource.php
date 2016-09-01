@@ -37,6 +37,14 @@ class ServerResource extends Resource
     const MODEL_TYPE_HDD = 'hdd';
     const MODEL_TYPE_CHASSIS = 'chassis';
 
+    const TYPE_ISP5 = 'isp5';
+    const TYPE_ISP = 'isp';
+    const TYPE_SUPPORT_TIME = 'support_time';
+    const TYPE_IP_NUMBER = 'ip_num';
+    const TYPE_SERVER_TRAF_MAX = 'server_traf_max';
+    const TYPE_SERVER_TRAF95_MAX = 'server_traf95_max';
+    const TYPE_BACKUP_DU = 'backup_du';
+
     public function rules()
     {
         $rules = parent::rules();
@@ -61,5 +69,19 @@ class ServerResource extends Resource
     public function isModelTypeCorrect()
     {
         return isset($this->getModelTypes()[$this->model_type]);
+    }
+
+
+    public function getAvailableTypes()
+    {
+        return [
+            static::TYPE_ISP5 => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
+            static::TYPE_ISP => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
+            static::TYPE_SUPPORT_TIME => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
+            static::TYPE_IP_NUMBER => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
+            static::TYPE_SERVER_TRAF_MAX => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
+            static::TYPE_SERVER_TRAF95_MAX => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
+            static::TYPE_BACKUP_DU => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
+        ];
     }
 }
