@@ -4,7 +4,7 @@ namespace hipanel\modules\finance\models\decorators\server;
 
 use Yii;
 
-class IpNumResourceDecorator extends AbstractServerResourceDecorator
+class IpResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
@@ -18,7 +18,7 @@ class IpNumResourceDecorator extends AbstractServerResourceDecorator
 
     public function displayUnit()
     {
-        return Yii::t('yii', '{n} IP', ['n' => 1]);
+        return Yii::t('hipanel', 'IP');
     }
 
     public function displayValue()

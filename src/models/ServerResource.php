@@ -12,6 +12,10 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\base\ModelTrait;
+use hipanel\modules\finance\models\decorators\AbstractResourceDecorator;
+use hipanel\modules\finance\models\decorators\server\AbstractServerResourceDecorator;
+use hipanel\modules\finance\models\decorators\server\BackupResourceDecorator;
+use hipanel\modules\finance\models\decorators\server\ServerResourceDecoratorFactory;
 use Yii;
 
 /**
@@ -83,5 +87,17 @@ class ServerResource extends Resource
             static::TYPE_SERVER_TRAF95_MAX => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
             static::TYPE_BACKUP_DU => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
         ];
+    }
+
+    /**
+     * @return AbstractResourceDecorator
+     */
+    public function decorator()
+    {
+        if (empty($this->decorator)) {
+            $this->decorator = ServerResourceDecoratorFactory::createFromResource($this);
+        }
+
+        return $this->decorator;
     }
 }

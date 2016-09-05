@@ -11,8 +11,13 @@ class BackupResourceDecorator extends AbstractServerResourceDecorator
         return Yii::t('hipanel/server/order', 'Backup usage');
     }
 
+    public function displayUnit()
+    {
+        return Yii::t('hipanel', 'GB');
+    }
+
     public function displayValue()
     {
-        return $this->resource->quantity;
+        return Yii::t('yii', '{nFormatted} GB', ['nFormatted' => $this->getPrepaidQuantity()]);
     }
 }

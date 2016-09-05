@@ -11,12 +11,16 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\modules\finance\models\decorators\AbstractResourceDecorator;
 use hipanel\modules\stock\models\Part;
 use Yii;
 use yii\base\InvalidConfigException;
 
 class Resource extends \hipanel\base\Model
 {
+    /** @var  AbstractResourceDecorator */
+    protected $decorator;
+
     use \hipanel\base\ModelTrait;
 
     /**
@@ -67,5 +71,10 @@ class Resource extends \hipanel\base\Model
     public function getAvailableTypes()
     {
         return [];
+    }
+
+    public function decorator()
+    {
+        throw new InvalidConfigException('Method "decorator" is not available for class Resource');
     }
 }

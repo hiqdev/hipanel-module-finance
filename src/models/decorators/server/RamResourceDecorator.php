@@ -11,11 +11,11 @@ class RamResourceDecorator extends AbstractServerResourceDecorator
         return Yii::t('hipanel/server/order', 'RAM');
     }
 
-    public function displayValue()
+    public function getPrepaidQuantity()
     {
         $part = $this->resource->part;
         preg_match('/((\d{1,5}) MB)$/i', $part->partno, $matches);
-        return Yii::t('yii', '{nFormatted} GB', ['nFormatted' => (int) $matches[2] / 1024]); // Gb
+        return $matches[2] / 1024;
     }
 
     public function getOverusePrice()
@@ -25,6 +25,6 @@ class RamResourceDecorator extends AbstractServerResourceDecorator
 
     public function displayUnit()
     {
-        return Yii::t('yii', '{nFormatted} GB', ['nFormatted' => 1]);
+        return Yii::t('hipanel', 'GB');
     }
 }

@@ -26,7 +26,7 @@ class SpeedResourceDecorator extends AbstractServerResourceDecorator
         return Yii::t('hipanel/server/order', '{n} Gbit/s', ['n' => 1]);
     }
 
-    public function getPrepaidAmount()
+    public function getPrepaidQuantity()
     {
         return 1;
     }

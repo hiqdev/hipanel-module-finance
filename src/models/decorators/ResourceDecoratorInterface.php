@@ -2,9 +2,11 @@
 
 namespace hipanel\modules\finance\models\decorators;
 
+
+
 interface ResourceDecoratorInterface
 {
-    public function getPrepaidAmount();
+    public function getPrepaidQuantity();
 
     public function getOverusePrice();
 
@@ -12,9 +14,9 @@ interface ResourceDecoratorInterface
 
     public function displayUnit();
 
-    public function displayValue();
-
     public function displayOverusePrice();
 
     public function displayPrepaidAmount();
+
+    public function prepaidAmountType();
 }

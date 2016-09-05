@@ -11,7 +11,7 @@ class ChassisResourceDecorator extends AbstractServerResourceDecorator
         return Yii::t('hipanel/server/order', 'Chassis');
     }
 
-    public function displayValue()
+    public function displayPrepaidAmount()
     {
         return $this->resource->part->partno;
     }

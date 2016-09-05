@@ -13,11 +13,11 @@ class TrafficResourceDecorator extends AbstractServerResourceDecorator
 
     public function displayValue()
     {
-        return Yii::t('yii', '{nFormatted} GB', ['nFormatted' => $this->resource->quantity]);
+        return Yii::t('yii', '{nFormatted} GB', ['nFormatted' => $this->getPrepaidQuantity()]);
     }
 
     public function displayUnit()
     {
-        return Yii::t('yii', '{nFormatted} GB', ['nFormatted' => 1]);
+        return Yii::t('hipanel', 'GB');
     }
 }

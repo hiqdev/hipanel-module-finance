@@ -11,11 +11,9 @@ class HddResourceDecorator extends AbstractServerResourceDecorator
         return Yii::t('hipanel/server/order', 'SSD');
     }
 
-    public function displayValue()
+    public function displayPrepaidAmount()
     {
-        $part = $this->resource->part;
-        preg_match('/((\d{1,5}) GB)$/i', $part->partno, $matches);
-        return Yii::t('yii', '{nFormatted} GB', ['nFormatted' => (int) $matches[2]]); // Gb
+        return Yii::t('yii', '{nFormatted} GB', ['nFormatted' => $this->getPrepaidQuantity()]); // Gb
     }
 
     public function getOverusePrice()
@@ -23,8 +21,15 @@ class HddResourceDecorator extends AbstractServerResourceDecorator
         return 0.2; // TODO: move to config
     }
 
+    public function getPrepaidQuantity()
+    {
+        $part = $this->resource->part;
+        preg_match('/((\d{1,5}) GB)$/i', $part->partno, $matches);
+        return (int) $matches[2];
+    }
+
     public function displayUnit()
     {
-        return Yii::t('yii', '{nFormatted} GB', ['nFormatted' => 1]);
+        return Yii::t('hipanel', 'GB');
     }
 }

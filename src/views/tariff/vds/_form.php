@@ -11,7 +11,15 @@ use yii\helpers\Html;
 
 ?>
 
-<?php $form = ActiveForm::begin([
+
+<?php
+\hipanel\widgets\Pjax::begin();
+
+Box::begin(['title' => Yii::t('hipanel/finance/tariff', 'Base tariff')]);
+
+Box::end();
+
+$form = ActiveForm::begin([
     'id' => 'tariff-create-form',
 ]) ?>
 
@@ -28,7 +36,7 @@ use yii\helpers\Html;
 <?php Box::end() ?>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <?php Box::begin(['title' => Yii::t('hipanel/finance/tariff', 'Hardware')]) ?>
         <table class="table table-condensed">
             <thead>
@@ -40,12 +48,11 @@ use yii\helpers\Html;
             </thead>
             <tbody>
             <?php
-            $package = $model->getPackage();
             foreach ($model->getHardwareResources() as $resource) {
                 $baseResource = $model->getBaseHardwareResource($resource->object_id); ?>
                 <tr>
-                    <td><?= $package->getResourceTitle($resource->model_type) ?></td>
-                    <td><?= $package->getResourceValue($resource->model_type) ?></td>
+                    <td><?= $resource->decorator()->displayTitle() ?></td>
+                    <td><?= $resource->decorator()->displayPrepaidAmount() ?></td>
                     <td>
                         <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
                         <?= Html::activeHiddenInput($resource, "[$i]type") ?>
@@ -61,7 +68,8 @@ use yii\helpers\Html;
                                 ])->label(false); ?>
                             </div>
                             <div class="col-md-6">
-                                <?= Html::tag('span', '', [
+                                <?php
+                                echo Html::tag('span', '', [
                                     'class' => 'base-price text-bold',
                                     'data-original-price' => $baseResource->fee
                                 ]); ?>
@@ -74,7 +82,7 @@ use yii\helpers\Html;
         </table>
         <?php Box::end() ?>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-8">
         <?php Box::begin(['title' => Yii::t('hipanel/finance/tariff', 'Overuses')]) ?>
         <table class="table table-condensed">
             <thead>
@@ -87,12 +95,11 @@ use yii\helpers\Html;
             </thead>
             <tbody>
             <?php
-            $package = $model->getPackage();
             foreach ($model->getOveruseResources() as $resource) {
-                $baseResource = $model->getBaseResource($resource->object_id); ?>
+                $baseResource = $model->getBaseOveruseResource($resource->type_id); ?>
                 <tr>
-                    <td><?= $package->getResourceTitle($resource->type) ?></td>
-                    <td>
+                    <td><?= $resource->decorator()->displayTitle() ?></td>
+                    <td style="width: 20%">
                         <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
                         <?= Html::activeHiddenInput($resource, "[$i]type") ?>
                         <div class="row">
@@ -115,7 +122,26 @@ use yii\helpers\Html;
                         </div>
                     </td>
                     <td>
-                        <?= $package->getResourceByType($resource->type)->quantity ?>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <?php
+                                $activeField = $form->field($resource, "[$i]price")->label(false);
+
+                                echo \hipanel\modules\finance\widgets\PrepaidAmountWidget::widget([
+                                    'activeField' => $activeField,
+                                    'resource' => $resource
+                                ]);
+                                ?>
+                            </div>
+                            <div class="col-md-6">
+                                <?= Html::tag('span', '', [
+                                    'class' => 'base-price text-bold',
+                                    'data-original-price' => $baseResource->decorator()->getPrepaidQuantity()
+                                ]); ?>
+                            </div>
+                        </div>
+                        <?php
+                        ?>
                     </td>
                     <td>
                         <div class="row">
@@ -160,17 +186,22 @@ use yii\helpers\Html;
 
 <?php
 
+\hipanel\widgets\Pjax::end();
+
 $this->registerJs(<<<JS
     $('.price-input').on('change mouseup', function () {
-        var price = parseFloat($(this).val());
-        if (isNaN(price)) return false;
-        
         var base = $(this).closest('td').find('.base-price');
+        
+        var price = parseFloat($(this).val());
         var basePrice = parseFloat(base.attr('data-original-price'));
+        
+        if (isNaN(price)) return false;
+        if (isNaN(basePrice)) basePrice = 0;
+       
         var delta = price - basePrice;
         
-        if (delta <= -basePrice) {
-            $(this).val('0.01').trigger('change');
+        if (delta < -basePrice) {
+            $(this).val('0').trigger('change');
             return false;
         }
         

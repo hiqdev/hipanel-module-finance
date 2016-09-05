@@ -51,7 +51,14 @@ class VdsTariffForm extends AbstractTariffForm
         });
     }
 
-    public function getBaseResource($type_id)
+    public function getBaseResource($object_id)
+    {
+        return reset(array_filter($this->baseTariff->resources, function ($resource) use ($object_id) {
+            return $resource->object_id == $object_id && $resource->isModelTypeCorrect();
+        }));
+    }
+
+    public function getBaseOveruseResource($type_id)
     {
         return reset(array_filter($this->baseTariff->resources, function ($resource) use ($type_id) {
             return $resource->type_id == $type_id && $resource->isTypeCorrect();
