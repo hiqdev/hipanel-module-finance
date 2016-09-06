@@ -23,7 +23,7 @@ abstract class AbstractServerResourceDecorator extends AbstractResourceDecorator
 
     public function displayTitle()
     {
-        return $this->resource->getAvailableTypes()[$this->resource->type];
+        return $this->resource->getTypes()[$this->resource->type];
     }
 
     public function getPrepaidQuantity()

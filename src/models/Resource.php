@@ -18,10 +18,13 @@ use yii\base\InvalidConfigException;
 
 class Resource extends \hipanel\base\Model
 {
+    use \hipanel\base\ModelTrait;
+
     /** @var  AbstractResourceDecorator */
     protected $decorator;
 
-    use \hipanel\base\ModelTrait;
+    /** @inheritdoc */
+    public static $i18nDictionary = 'hipanel/finance/tariff';
 
     /**
      * {@inheritdoc}
@@ -60,15 +63,16 @@ class Resource extends \hipanel\base\Model
     public function attributeLabels()
     {
         return $this->mergeAttributeLabels([
+            'price' => Yii::t('hipanel/finance/tariff', 'Price per period')
         ]);
     }
 
     public function isTypeCorrect()
     {
-        return isset($this->getAvailableTypes()[$this->type]);
+        return isset($this->getTypes()[$this->type]);
     }
 
-    public function getAvailableTypes()
+    public function getTypes()
     {
         return [];
     }

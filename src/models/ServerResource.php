@@ -53,6 +53,16 @@ class ServerResource extends Resource
     {
         $rules = parent::rules();
         $rules[] = [['model_type', 'partno'], 'safe'];
+        $rules['create-required'] = [
+            ['object_id'],
+            'required',
+            'on' => ['create', 'update'],
+            'when' => function ($model) {
+                return $model->isHardwareTypeCorrect();
+            }
+        ];
+        unset($rules['create-required-price']);
+
 
         return $rules;
     }
@@ -60,32 +70,32 @@ class ServerResource extends Resource
     /**
      * @return array
      */
-    public function getModelTypes()
+    public function getHardwareTypes()
     {
         return [
+            static::MODEL_TYPE_CHASSIS => Yii::t('hipanel/finance/tariff', 'Chassis'),
             static::MODEL_TYPE_CPU => Yii::t('hipanel/finance/tariff', 'CPU'),
             static::MODEL_TYPE_RAM => Yii::t('hipanel/finance/tariff', 'RAM'),
             static::MODEL_TYPE_HDD => Yii::t('hipanel/finance/tariff', 'HDD'),
-            static::MODEL_TYPE_CHASSIS => Yii::t('hipanel/finance/tariff', 'Chassis'),
         ];
     }
 
-    public function isModelTypeCorrect()
+    public function isHardwareTypeCorrect()
     {
-        return isset($this->getModelTypes()[$this->model_type]);
+        return isset($this->getHardwareTypes()[$this->model_type]);
     }
 
 
-    public function getAvailableTypes()
+    public function getTypes()
     {
         return [
-            static::TYPE_ISP5 => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
+            static::TYPE_ISP5 => Yii::t('hipanel/finance/tariff', 'ISP Manager 5'),
             static::TYPE_ISP => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
-            static::TYPE_SUPPORT_TIME => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
-            static::TYPE_IP_NUMBER => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
-            static::TYPE_SERVER_TRAF_MAX => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
-            static::TYPE_SERVER_TRAF95_MAX => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
-            static::TYPE_BACKUP_DU => Yii::t('hipanel/finance/tariff', 'ISP Manager'),
+            static::TYPE_SUPPORT_TIME => Yii::t('hipanel/finance/tariff', 'Support time'),
+            static::TYPE_IP_NUMBER => Yii::t('hipanel/finance/tariff', 'IP addresses count'),
+            static::TYPE_SERVER_TRAF_MAX => Yii::t('hipanel/finance/tariff', 'Server traffic'),
+            static::TYPE_SERVER_TRAF95_MAX => Yii::t('hipanel/finance/tariff', '95 percentile traffic'),
+            static::TYPE_BACKUP_DU => Yii::t('hipanel/finance/tariff', 'Backup disk usage'),
         ];
     }
 

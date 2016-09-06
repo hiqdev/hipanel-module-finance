@@ -5,29 +5,34 @@
  * @var $model \hipanel\modules\finance\forms\VdsTariffForm
  */
 
+use hipanel\helpers\Url;
 use hipanel\widgets\Box;
+use hipanel\widgets\Pjax;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
-
 ?>
 
-
 <?php
-\hipanel\widgets\Pjax::begin();
+Pjax::begin(['id' => 'tariff-pjax-container']);
+$form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
 
-Box::begin(['title' => Yii::t('hipanel/finance/tariff', 'Base tariff')]);
-
-Box::end();
-
-$form = ActiveForm::begin([
-    'id' => 'tariff-create-form',
-]) ?>
+<?php Box::begin(['options' => ['class' => 'box-solid']]) ?>
+<div class="row">
+    <div class="col-md-12 no">
+        <?= Html::submitButton(Yii::t('hipanel', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::button(Yii::t('hipanel', 'Cancel'), ['class' => 'btn btn-default', 'onclick' => 'history.go(-1)']) ?>
+    </div>
+</div>
+<?php Box::end() ?>
 
 <?php Box::begin() ?>
 <div class="row">
     <div class="col-md-12">
         <?= Html::activeHiddenInput($model, 'id') ?>
         <?= Html::activeHiddenInput($model, 'parent_id') ?>
+        <?= $form->field($model, 'parent_id')->dropDownList(
+            $model->getBaseTariffsList(), ['id' => 'tariff-parent_id', 'data-url' => Url::current(['parent_id' => null])]
+        ); ?>
         <?= $form->field($model, 'name') ?>
         <?= $form->field($model, 'note') ?>
         <?= $form->field($model, 'label') ?>
@@ -43,11 +48,12 @@ $form = ActiveForm::begin([
             <tr>
                 <th><?= Yii::t('hipanel/finance/tariff', 'Resource') ?></th>
                 <th><?= Yii::t('hipanel/finance/tariff', 'Model') ?></th>
-                <th><?= Yii::t('hipanel/finance/tariff', 'Price') ?></th>
+                <th><?= Yii::t('hipanel/finance/tariff', 'Price per period') ?></th>
             </tr>
             </thead>
             <tbody>
             <?php
+            $i = 0;
             foreach ($model->getHardwareResources() as $resource) {
                 $baseResource = $model->getBaseHardwareResource($resource->object_id); ?>
                 <tr>
@@ -77,18 +83,19 @@ $form = ActiveForm::begin([
                         </div>
                     </td>
                 </tr>
-            <?php } ?>
+            <?php $i++;
+            } ?>
             </tbody>
         </table>
         <?php Box::end() ?>
     </div>
     <div class="col-md-8">
-        <?php Box::begin(['title' => Yii::t('hipanel/finance/tariff', 'Overuses')]) ?>
+        <?php Box::begin(['title' => Yii::t('hipanel/finance/tariff', 'Resources')]) ?>
         <table class="table table-condensed">
             <thead>
             <tr>
                 <th><?= Yii::t('hipanel/finance/tariff', 'Resource') ?></th>
-                <th><?= Yii::t('hipanel/finance/tariff', 'Price') ?></th>
+                <th><?= Yii::t('hipanel/finance/tariff', 'Price per period') ?></th>
                 <th><?= Yii::t('hipanel/finance/tariff', 'Prepaid amount') ?></th>
                 <th><?= Yii::t('hipanel/finance/tariff', 'Overuse price') ?></th>
             </tr>
@@ -125,7 +132,7 @@ $form = ActiveForm::begin([
                         <div class="row">
                             <div class="col-md-6">
                                 <?php
-                                $activeField = $form->field($resource, "[$i]price")->label(false);
+                                $activeField = $form->field($resource, "[$i]quantity")->label(false);
 
                                 echo \hipanel\modules\finance\widgets\PrepaidAmountWidget::widget([
                                     'activeField' => $activeField,
@@ -164,34 +171,30 @@ $form = ActiveForm::begin([
                         </div>
                     </td>
                 </tr>
-            <?php } ?>
+            <?php $i++;
+            } ?>
             </tbody>
         </table>
 
         <?php Box::end() ?>
     </div>
-    <div class="col-md-12">
-    </div>
 </div>
 
-<?php Box::begin(['options' => ['class' => 'box-solid']]) ?>
-<div class="row">
-    <div class="col-md-12 no">
-        <?= Html::submitButton(Yii::t('hipanel', 'Save'), ['class' => 'btn btn-success']) ?>
-        <?= Html::button(Yii::t('hipanel', 'Cancel'), ['class' => 'btn btn-default', 'onclick' => 'history.go(-1)']) ?>
-    </div>
-</div>
-<?php Box::end() ?>
 <?php ActiveForm::end(); ?>
 
 <?php
-
-\hipanel\widgets\Pjax::end();
-
 $this->registerJs(<<<JS
+    $('#tariff-parent_id').on('change', function () {
+        var fakeInput = $('<input>').attr({'name': 'parent_id', 'value': $(this).val()});
+        var formAction = $(this).closest('select').attr('data-url');
+        var fakeForm = $('<form>').attr({'method': 'get', 'action': formAction}).html(fakeInput).on('submit', function(event) {
+            $.pjax.submit(event, '#tariff-pjax-container');
+            event.preventDefault();
+        }).trigger('submit');     
+    });
+
     $('.price-input').on('change mouseup', function () {
         var base = $(this).closest('td').find('.base-price');
-        
         var price = parseFloat($(this).val());
         var basePrice = parseFloat(base.attr('data-original-price'));
         
@@ -199,20 +202,21 @@ $this->registerJs(<<<JS
         if (isNaN(basePrice)) basePrice = 0;
        
         var delta = price - basePrice;
-        
         if (delta < -basePrice) {
             $(this).val('0').trigger('change');
             return false;
         }
         
-        base.removeClass('text-success text-danger');
-        
-        base.text(delta.toFixed(2)).addClass(delta >= 0 ? 'text-success' : 'text-danger');
+        base.removeClass('text-success text-danger')
+            .text(delta.toFixed(2))
+            .addClass(delta >= 0 ? 'text-success' : 'text-danger');
     });
 
     $('.price-input').trigger('change');
 JS
 );
+
+Pjax::end();
 
 $this->registerCss('
 .base-price { font-weight: bold; }

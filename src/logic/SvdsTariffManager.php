@@ -9,15 +9,10 @@ class SvdsTariffManager extends VdsTariffManager
     /** @inheritdoc */
     public $type = 'svds';
 
-    /**
-     * @inheritdoc
-     */
-    protected function buildForm()
+    protected function getFormOptions()
     {
-        $this->form = new SvdsTariffForm([
-            'scenario' => $this->scenario,
-            'baseTariffs' => $this->baseTariffs,
-            'tariff' => $this->tariff
-        ]);
+        return array_merge([
+            'class' => SvdsTariffForm::class
+        ], parent::getFormOptions());
     }
 }

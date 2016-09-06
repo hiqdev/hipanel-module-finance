@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\logic;
 
 use hipanel\modules\finance\forms\AbstractTariffForm;
 use hipanel\modules\finance\models\Tariff;
+use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Object;
 use yii\helpers\ArrayHelper;
@@ -22,11 +23,17 @@ abstract class AbstractTariffManager extends Object
     public $form;
 
     /**
+     * @var array options used to build [[form]]
+     * @see buildForm()
+     */
+    public $formOptions = [];
+
+    /**
      * @var string
      */
     public $scenario;
 
-    /**
+    /**protected
      * @var Tariff The actual tariff
      */
     protected $tariff;
@@ -47,7 +54,16 @@ abstract class AbstractTariffManager extends Object
      */
     protected function buildForm()
     {
-        throw new InvalidConfigException('Method "createForm" must be implemented');
+        $this->form = Yii::createObject(array_merge([
+            'scenario' => $this->scenario,
+            'baseTariffs' => $this->baseTariffs,
+            'tariff' => $this->tariff
+        ], $this->getFormOptions()));
+    }
+
+    protected function getFormOptions()
+    {
+        return $this->formOptions;
     }
 
     protected function findBaseTariffs()

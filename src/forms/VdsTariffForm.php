@@ -2,21 +2,19 @@
 
 namespace hipanel\modules\finance\forms;
 
-use hipanel\modules\finance\models\DomainResource;
+use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\models\ServerResource;
-use hipanel\modules\server\models\Package;
+use yii\web\UnprocessableEntityHttpException;
 
 class VdsTariffForm extends AbstractTariffForm
 {
     public $note;
     public $label;
 
-    protected $package;
-
     public function load($data)
     {
         $this->setAttributes($data[$this->formName()]);
-        $this->setResources($data[(new DomainResource())->formName()]);
+        $this->setResources($data[(new ServerResource())->formName()]);
 
         return true;
     }
@@ -34,33 +32,58 @@ class VdsTariffForm extends AbstractTariffForm
      */
     public function getHardwareResources()
     {
-        return array_filter($this->tariff->resources, function ($model) {
+        /** @var ServerResource[] $resources */
+        $resources = array_filter($this->tariff->resources, function ($model) {
             /** @var ServerResource $model */
-            return $model->isModelTypeCorrect();
+            return $model->isHardwareTypeCorrect();
         });
+        $order = array_keys(reset($resources)->getHardwareTypes());
+
+        return $this->sortResourcesByDefinedOrder($resources, $order, 'model_type');
     }
+
+    /**
+     * @param ServerResource[] $resources
+     * @param array $order array of ordered values. $resources array will be re-ordered according this order
+     * @param string $key the key that will be used to re-order
+     * @return array
+     */
+    private function sortResourcesByDefinedOrder($resources, $order, $key)
+    {
+        $result = [];
+        $resources = ArrayHelper::index($resources, $key);
+
+        foreach ($order as $type) {
+            if (isset($resources[$type])) {
+                $result[] = $resources[$type];
+            }
+        }
+
+        return $result;
+    }
+
+
 
     /**
      * @return \hipanel\modules\finance\models\ServerResource[]
      */
     public function getOveruseResources()
     {
-        return array_filter($this->tariff->resources, function ($model) {
+        /** @var ServerResource[] $resources */
+        $resources = array_filter($this->tariff->resources, function ($model) {
             /** @var ServerResource $model */
             return $model->isTypeCorrect();
         });
-    }
+        $order = array_keys(reset($resources)->getTypes());
 
-    public function getBaseResource($object_id)
-    {
-        return reset(array_filter($this->baseTariff->resources, function ($resource) use ($object_id) {
-            return $resource->object_id == $object_id && $resource->isModelTypeCorrect();
-        }));
+        return $this->sortResourcesByDefinedOrder($resources, $order, 'type');
+
     }
 
     public function getBaseOveruseResource($type_id)
     {
         return reset(array_filter($this->baseTariff->resources, function ($resource) use ($type_id) {
+            /** @var ServerResource $resource */
             return $resource->type_id == $type_id && $resource->isTypeCorrect();
         }));
     }
@@ -71,19 +94,32 @@ class VdsTariffForm extends AbstractTariffForm
     public function getBaseHardwareResource($object_id)
     {
         return reset(array_filter($this->baseTariff->resources, function ($resource) use ($object_id) {
-            /** @var ServerResource $model */
-            return $resource->object_id == $object_id && $resource->isModelTypeCorrect();
+            /** @var ServerResource $resource */
+            return $resource->object_id == $object_id && $resource->isHardwareTypeCorrect();
         }));
     }
 
-    public function getPackage()
+    /** @inheritdoc */
+    public function setResources($resources)
     {
-        if (!$this->package instanceof Package) {
-            $this->package = new Package([
-                'tariff' => $this->tariff,
-            ]);
+        $result = [];
+        foreach ((array) $resources as $resource) {
+            if ($resource instanceof ServerResource) {
+                $result[] = $resource;
+                continue;
+            }
+
+            $model = new ServerResource(['scenario' => $this->scenario]);
+
+            if ($model->load($resource, '') && $model->validate()) {
+                $result[] = $model;
+            } else {
+                throw new UnprocessableEntityHttpException('Failed to load resource model: ' . reset($model->getFirstErrors()));
+            }
         }
 
-        return $this->package;
+        $this->_resources = $result;
+
+        return $this;
     }
 }

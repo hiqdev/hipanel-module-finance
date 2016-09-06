@@ -24,20 +24,11 @@ class VdsTariffManager extends AbstractTariffManager
 
     public function init()
     {
-        parent::init();
-
         if (!Yii::getAlias('@server', true)) {
             throw new NotFoundHttpException('Domain module is missing');
         }
-    }
 
-    protected function buildForm()
-    {
-        $this->form = new VdsTariffForm([
-            'scenario' => $this->scenario,
-            'baseTariffs' => $this->baseTariffs,
-            'tariff' => $this->tariff
-        ]);
+        parent::init();
     }
 
     public function insert()

@@ -57,7 +57,7 @@ class DomainResource extends Resource
     /**
      * @return array
      */
-    public function getAvailableTypes()
+    public function getTypes()
     {
         return [
             static::TYPE_DOMAIN_REGISTRATION => Yii::t('hipanel/finance/tariff', 'Registration'),
@@ -78,6 +78,6 @@ class DomainResource extends Resource
 
     public function isTypeCorrect()
     {
-        return isset($this->getAvailableTypes()[$this->type]);
+        return isset($this->getTypes()[$this->type]);
     }
 }

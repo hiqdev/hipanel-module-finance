@@ -28,16 +28,8 @@ class DomainTariffManager extends AbstractTariffManager
         if (!Yii::getAlias('@domain', true)) {
             throw new NotFoundHttpException('Domain module is missing');
         }
-    }
 
-    protected function buildForm()
-    {
-        $this->form = new DomainTariffForm([
-            'scenario' => $this->scenario,
-            'zones' => $this->getZones(),
-            'baseTariffs' => $this->baseTariffs,
-            'tariff' => $this->tariff
-        ]);
+        $this->formOptions['zones'] = $this->getZones();
     }
 
     public function insert()
@@ -66,6 +58,14 @@ class DomainTariffManager extends AbstractTariffManager
         }
 
         return true;
+    }
+
+    protected function getFormOptions()
+    {
+        return array_merge([
+            'class' => DomainTariffForm::class,
+            'zones' => $this->getZones(),
+        ], parent::getFormOptions());
     }
 
     /**

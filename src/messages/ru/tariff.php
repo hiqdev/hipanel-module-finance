@@ -14,6 +14,7 @@ return [
     'Create OVDS tariff' => 'Создать тариф для OVDS',
     'Create server tariff' => 'Создать тариф для серверов',
     'Create resources tariff' => 'Создать тариф для ресурсов',
+    'Create VDS tariff' => 'Создать тариф для VDS',
 
     'Name' => 'Название',
     'Registration' => 'Регистрация',
@@ -24,4 +25,16 @@ return [
     'Delete in AGP' => 'Удаление в AGP',
     'Restoring expired' => 'Восстановление после экспаера',
     'Restoring deleted' => 'Восстановление удалённого',
+
+    'Parent tariff' => 'Родительский тариф',
+    'Note' => 'Заметка',
+    'Label' => 'Описание',
+    'Hardware' => 'Железо',
+    'Resources' => 'Ресурсы',
+    'Resource' => 'Ресурс',
+    'Price per period' => 'Стоимость за период',
+    'Prepaid amount' => 'Включено в тариф',
+    'Overuse price' => 'Стоимость за перебор',
+
+    'Model' => 'Модель',
 ];

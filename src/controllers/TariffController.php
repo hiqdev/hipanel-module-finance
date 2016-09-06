@@ -17,7 +17,6 @@ use hipanel\actions\SearchAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
-use hipanel\modules\finance\forms\DomainTariffForm;
 use hipanel\modules\finance\logic\DomainTariffManager;
 use hipanel\modules\finance\logic\TariffManagerFactory;
 use Yii;
@@ -56,7 +55,7 @@ class TariffController extends \hipanel\base\CrudController
     public function actionCreateDomain()
     {
         /** @var DomainTariffManager $manager */
-        $manager = TariffManagerFactory::createByType('domain', ['scenario' => 'create']);
+        $manager = TariffManagerFactory::createByType('domain', ['formOptions' => ['scenario' => 'create']]);
         $form = $manager->form;
 
         if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
@@ -67,10 +66,15 @@ class TariffController extends \hipanel\base\CrudController
         return $this->render('domain/create', ['model' => $form]);
     }
 
-    public function actionCreateSvds()
+    public function actionCreateSvds($parent_id = null)
     {
         /** @var DomainTariffManager $manager */
-        $manager = TariffManagerFactory::createByType('svds', ['scenario' => 'create']);
+        $manager = TariffManagerFactory::createByType('svds', [
+            'formOptions' => [
+                'scenario' => 'create',
+                'parent_id' => $parent_id
+            ]
+        ]);
         $form = $manager->form;
 
         if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {

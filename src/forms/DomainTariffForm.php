@@ -105,8 +105,8 @@ class DomainTariffForm extends AbstractTariffForm
             }
         }
 
-        // sorts $result by order of $resource->getAvailableTypes()
-        $result = array_merge($resource->getAvailableTypes(), $result);
+        // sorts $result by order of $resource->getTypes()
+        $result = array_merge($resource->getTypes(), $result);
 
         return $result;
     }
@@ -123,8 +123,8 @@ class DomainTariffForm extends AbstractTariffForm
             }
         }
 
-        // sorts $result by order of $resource->getAvailableTypes()
-        $result = array_merge($resource->getAvailableTypes(), $result);
+        // sorts $result by order of $resource->getTypes()
+        $result = array_merge($resource->getTypes(), $result);
 
         return $result;
     }

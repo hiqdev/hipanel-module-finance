@@ -107,18 +107,21 @@ abstract class AbstractTariffForm extends \yii\base\Model
      */
     public function setResources($resources)
     {
-        throw new InvalidConfigException("Method load must be implemented");
+        throw new InvalidConfigException('Method "setResources" must be implemented');
     }
 
     public function getResourceTypes()
     {
-        return reset($this->baseTariff->resources)->getAvailableTypes();
+        return reset($this->baseTariff->resources)->getTypes();
     }
 
     public function attributeLabels()
     {
         return [
+            'parent_id' => Yii::t('hipanel/finance/tariff', 'Parent tariff'),
             'name' => Yii::t('hipanel/finance/tariff', 'Name'),
+            'label' => Yii::t('hipanel/finance/tariff', 'Label'),
+            'note' => Yii::t('hipanel', 'Note'),
         ];
     }
 
@@ -135,7 +138,11 @@ abstract class AbstractTariffForm extends \yii\base\Model
     public function selectBaseTariff()
     {
         if (!isset($this->parent_id)) {
-            $this->parent_id = ArrayHelper::getValue(reset($this->baseTariffs), 'id');
+            if (isset($this->tariff)) {
+                $this->parent_id = $this->tariff->parent_id;
+            } else {
+                $this->parent_id = ArrayHelper::getValue(reset($this->baseTariffs), 'id');
+            }
         }
 
         $filtered = array_filter($this->baseTariffs, function ($model) {
@@ -151,6 +158,14 @@ abstract class AbstractTariffForm extends \yii\base\Model
         $this->parent_id = $this->baseTariff->id;
 
         return true;
+    }
+
+    public function getBaseTariffsList()
+    {
+        return array_combine(
+            ArrayHelper::getColumn($this->baseTariffs, 'id'),
+            ArrayHelper::getColumn($this->baseTariffs, 'name')
+        );
     }
 
     public function insert($runValidation = true, $attributes = null, $options = [])
