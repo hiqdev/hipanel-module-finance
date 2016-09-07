@@ -16,6 +16,9 @@ use hipanel\modules\stock\models\Part;
 use Yii;
 use yii\base\InvalidConfigException;
 
+/**
+ * @property Tariff $tariff
+ */
 class Resource extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
@@ -45,7 +48,7 @@ class Resource extends \hipanel\base\Model
 
     public function getTariff()
     {
-        return $this->hasOne(Tariff::class, ['tariff_id' => 'id']);
+        return $this->hasOne(Tariff::class, ['id' => 'tariff_id'])->inverseOf('resources');
     }
 
     public function getPart()
@@ -75,6 +78,11 @@ class Resource extends \hipanel\base\Model
     public function getTypes()
     {
         return [];
+    }
+
+    public function isPeriodic()
+    {
+        return $this->type === 'periodic';
     }
 
     public function decorator()

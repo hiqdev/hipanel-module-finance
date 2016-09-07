@@ -40,18 +40,19 @@ class Tariff extends \hipanel\base\Model
             [['type', 'state'], 'safe'],
             [['used'], 'integer'],
             [['note', 'label'], 'safe'],
+            [['is_personal'], 'boolean']
         ];
     }
 
     public function getResources()
     {
         if ($this->type === self::TYPE_DOMAIN) {
-            return $this->hasMany(DomainResource::class, ['tariff_id' => 'id']);
+            return $this->hasMany(DomainResource::class, ['tariff_id' => 'id'])->inverseOf('tariff');
         } elseif ($this->type === self::TYPE_SVDS || $this->type === self::TYPE_OVDS) {
-            return $this->hasMany(ServerResource::class, ['tariff_id' => 'id']);
+            return $this->hasMany(ServerResource::class, ['tariff_id' => 'id'])->inverseOf('tariff');
         }
 
-        return $this->hasMany(Resource::class, ['tariff_id' => 'id']);
+        return $this->hasMany(Resource::class, ['tariff_id' => 'id'])->inverseOf('tariff');
     }
 
     /**

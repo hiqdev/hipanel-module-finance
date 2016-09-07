@@ -60,7 +60,9 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
                     <td><?= $resource->decorator()->displayTitle() ?></td>
                     <td><?= $resource->decorator()->displayPrepaidAmount() ?></td>
                     <td>
-                        <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
+                        <?= Html::activeHiddenInput($resource, "[$i]object_id", [
+                            'value' => $resource->decorator()->realObjectId()
+                        ]) ?>
                         <?= Html::activeHiddenInput($resource, "[$i]type") ?>
                         <div class="row">
                             <div class="col-md-6">

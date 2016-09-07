@@ -52,7 +52,7 @@ class ServerResource extends Resource
     public function rules()
     {
         $rules = parent::rules();
-        $rules[] = [['model_type', 'partno'], 'safe'];
+        $rules[] = [['model_type', 'partno', 'r_object_id'], 'safe'];
         $rules['create-required'] = [
             ['object_id'],
             'required',
@@ -100,7 +100,7 @@ class ServerResource extends Resource
     }
 
     /**
-     * @return AbstractResourceDecorator
+     * @return AbstractServerResourceDecorator
      */
     public function decorator()
     {
