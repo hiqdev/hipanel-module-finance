@@ -6,24 +6,19 @@ use Yii;
 
 class SpeedResourceDecorator extends AbstractServerResourceDecorator
 {
-    public function __construct()
-    {
-        return;
-    }
-
     public function displayTitle()
     {
-        return Yii::t('hipanel/server/order', 'Traffic');
+        return Yii::t('hipanel/finance/tariff', 'Port speed');
     }
 
     public function displayValue()
     {
-        return Yii::t('yii', '{nFormatted} GB', ['nFormatted' => $this->resource->quantity]);
+        return Yii::t('yii', '{nFormatted} GB', ['nFormatted' => $this->getPrepaidQuantity()]);
     }
 
     public function displayUnit()
     {
-        return Yii::t('hipanel/server/order', '{n} Gbit/s', ['n' => 1]);
+        return Yii::t('hipanel/finance/tariff', 'Gbit/s');
     }
 
     public function getPrepaidQuantity()

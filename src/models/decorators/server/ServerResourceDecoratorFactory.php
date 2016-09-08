@@ -19,6 +19,7 @@ class ServerResourceDecoratorFactory
             'isp' => IspResourceDecorator::class,
             'ram' => RamResourceDecorator::class,
             'speed' => SpeedResourceDecorator::class,
+            'panel' => PanelResourceDecorator::class,
             'support_time' => SupportResourceDecorator::class,
             'server_traf95_max' => Traffic95ResourceDecorator::class,
             'server_traf_max' => TrafficResourceDecorator::class,

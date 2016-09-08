@@ -8,23 +8,24 @@ class SupportResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel/server/order', '24/7 support');
+        return Yii::t('hipanel/finance/tariff', '24/7 support');
     }
 
-    public function displayValue()
+    public function displayPrepaidAmount()
     {
-        $quantity = $this->resource->quantity;
+        $quantity = $this->getPrepaidQuantity();
 
-        if ($quantity === 1) {
-            return Yii::t('hipanel/server/order', 'Bronze');
-        } elseif ($quantity === 1.5) {
-            return Yii::t('hipanel/server/order', 'Silver');
-        } elseif ($quantity === 2) {
-            return Yii::t('hipanel/server/order', 'Gold');
-        } elseif ($quantity === 3) {
-            return Yii::t('hipanel/server/order', 'Platinum');
-        }
+        // todo: uncomment after adding commerce pages
+//        if ($quantity == 1) {
+//            return Yii::t('hipanel/finance/tariff', 'Bronze');
+//        } elseif ($quantity == 1.5) {
+//            return Yii::t('hipanel/finance/tariff', 'Silver');
+//        } elseif ($quantity == 2) {
+//            return Yii::t('hipanel/finance/tariff', 'Gold');
+//        } elseif ($quantity == 3) {
+//            return Yii::t('hipanel/finance/tariff', 'Platinum');
+//        }
 
-        return Yii::t('hipanel/server/order', '{n, plural, one{# hour} other{# hours}}', ['n' => $quantity]);
+        return Yii::t('hipanel/finance/tariff', '{n, plural, one{# hour} other{# hours}}', ['n' => $quantity]);
     }
 }
