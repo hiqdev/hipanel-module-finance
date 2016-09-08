@@ -15,6 +15,8 @@ return [
     'Create server tariff' => 'Создать тариф для серверов',
     'Create resources tariff' => 'Создать тариф для ресурсов',
     'Create VDS tariff' => 'Создать тариф для VDS',
+    'Create SSD VDS tariff' => 'Создать SSD VDS тариф',
+    'Create OpenVZ tariff' => 'Создать OpenVZ тариф',
 
     'Name' => 'Название',
     'Registration' => 'Регистрация',
@@ -37,4 +39,17 @@ return [
     'Overuse price' => 'Стоимость за перебор',
 
     'Model' => 'Модель',
+
+    'Tariff must be unlinked form all objects before. Are you sure you want to delete tariff {name}?' => 'Тариф доожен быть отвязан от всех объектов перед удалением. Вы уверены, что хотите удалить тариф {name}?',
+    'Confirm tariff deleting' => 'Подтвердите удаление тарифа',
+    'Delete tariff' => 'Удалить тариф',
+    'Deleting tariff...' => 'Удаление тарифа...',
+
+    'Port speed' => 'Скорость порта',
+    '{n, plural, one{# hour} other{# hours}}' => '{n, plural, one{# час} few{# часа} other{# часов}}',
+    'Gbit/s' => 'Гбит/с',
+    'Control panel' => 'Панель управления',
+    '24/7 support' => 'Поддержка 24/7',
+    'No panel / {hipanelLink}' => 'Без панели / {hipanelLink}',
+    'ISP manager' => 'ISP manager',
 ];
