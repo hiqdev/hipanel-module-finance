@@ -7,6 +7,7 @@
 
 use hipanel\widgets\Box;
 use hipanel\widgets\ClientSellerLink;
+use hipanel\widgets\ModalButton;
 use hipanel\widgets\Pjax;
 use yii\helpers\Html;
 
@@ -20,7 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<?php Pjax::begin(Yii::$app->params['pjax']) ?>
 <div class="row">
     <div class="col-md-3">
         <?php Box::begin([
@@ -50,7 +50,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= Html::a('<i class="ion-edit"></i>' . Yii::t('hipanel', 'Update'), ['update', 'id' => $model->id]) ?>
                     </li>
                     <li>
-                        <?= Html::a('<i class="ion-trash-a"></i>' . Yii::t('hipanel', 'Delete'), ['delete', 'id' => $model->id]) ?>
+                        <?= ModalButton::widget([
+                            'model'    => $model->getTariff(),
+                            'scenario' => 'delete',
+                            'button'   => ['label' => '<i class="fa fa-fw fa-trash-o"></i>' . Yii::t('hipanel', 'Delete')],
+                            'body'     => Yii::t('hipanel/finance/tariff', 'Tariff must be unlinked form all objects before. Are you sure you want to delete tariff {name}?', ['name' => $model->name]),
+                            'modal'    => [
+                                'header'        => Html::tag('h4', Yii::t('hipanel/finance/tariff', 'Confirm tariff deleting')),
+                                'headerOptions' => ['class' => 'label-danger'],
+                                'footer'        => [
+                                    'label'             => Yii::t('hipanel/finance/tariff', 'Delete tariff'),
+                                    'data-loading-text' => Yii::t('hipanel/finance/tariff', 'Deleting tariff...'),
+                                    'class'             => 'btn btn-danger',
+                                ]
+                            ]
+                        ]);
+
+                        ?>
                     </li>
                 </ul>
             </div>
@@ -61,4 +77,3 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $this->render($type . '/view', ['model' => $model]) ?>
     </div>
 </div>
-<?php Pjax::end() ?>

@@ -33,11 +33,19 @@ class TariffManagerFactory
 
     /**
      * @param string $type Tariff type
+     * @param integer $parent_id the parent tariff id
      * @param array $options that will be passed to the object as configuration
      * @return AbstractTariffManager|object
      */
-    public static function createByType($type, $options = [])
+    public static function createByType($type, $parent_id = null, $options = [])
     {
+        $options = array_merge([
+            'formOptions' => [
+                'scenario' => 'create',
+                'parent_id' => $parent_id
+            ]
+        ], $options);
+
         return Yii::createObject(array_merge(['class' => static::buildClassName($type)], $options));
     }
 

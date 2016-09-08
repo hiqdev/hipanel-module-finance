@@ -16,7 +16,7 @@ abstract class AbstractServerResourceDecorator extends AbstractResourceDecorator
      */
     public $resource;
 
-    public function __construct(ServerResource $resource)
+    public function __construct($resource)
     {
         parent::__construct($resource);
     }

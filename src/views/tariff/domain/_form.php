@@ -19,6 +19,7 @@ use yii\helpers\Html;
 <div class="row">
     <div class="col-md-12">
         <?= Html::activeHiddenInput($model, 'id') ?>
+        <?= $form->field($model, '') ?>
         <?= $form->field($model, 'name') ?>
         <?= Html::activeHiddenInput($model, 'parent_id') ?>
     </div>

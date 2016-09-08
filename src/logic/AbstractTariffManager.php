@@ -13,7 +13,8 @@ use yii\web\ForbiddenHttpException;
 abstract class AbstractTariffManager extends Object
 {
     /**
-     * @var Tariff[] array of all available base tariffs
+     * @var Tariff[] they array of all available base tariffs
+     * @see findBaseTariffs()
      */
     protected $baseTariffs;
 
@@ -33,7 +34,7 @@ abstract class AbstractTariffManager extends Object
      */
     public $scenario;
 
-    /**protected
+    /**
      * @var Tariff The actual tariff
      */
     protected $tariff;

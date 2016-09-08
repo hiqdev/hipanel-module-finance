@@ -14,6 +14,7 @@ namespace hipanel\modules\finance\controllers;
 use hipanel\actions\IndexAction;
 use hipanel\actions\OrientationAction;
 use hipanel\actions\SearchAction;
+use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
@@ -46,7 +47,7 @@ class TariffController extends \hipanel\base\CrudController
                 'success' => Yii::t('hipanel', 'Note updated'),
             ],
             'delete' => [
-                'class' => SmartPerformAction::class,
+                'class' => SmartDeleteAction::class,
                 'success' => Yii::t('hipanel/finance/tariff', 'Tariff deleted'),
             ],
         ];
@@ -55,7 +56,7 @@ class TariffController extends \hipanel\base\CrudController
     public function actionCreateDomain()
     {
         /** @var DomainTariffManager $manager */
-        $manager = TariffManagerFactory::createByType('domain', ['formOptions' => ['scenario' => 'create']]);
+        $manager = TariffManagerFactory::createByType('domain');
         $form = $manager->form;
 
         if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
@@ -69,12 +70,22 @@ class TariffController extends \hipanel\base\CrudController
     public function actionCreateSvds($parent_id = null)
     {
         /** @var DomainTariffManager $manager */
-        $manager = TariffManagerFactory::createByType('svds', [
-            'formOptions' => [
-                'scenario' => 'create',
-                'parent_id' => $parent_id
-            ]
-        ]);
+        $manager = TariffManagerFactory::createByType('svds', $parent_id);
+
+        $form = $manager->form;
+
+        if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
+            $manager->insert();
+            return $this->redirect(['view', 'id' => $form->id]);
+        }
+
+        return $this->render('vds/create', ['model' => $form]);
+    }
+
+    public function actionCreateOvds($parent_id = null)
+    {
+        /** @var DomainTariffManager $manager */
+        $manager = TariffManagerFactory::createByType('ovds', $parent_id);
         $form = $manager->form;
 
         if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {

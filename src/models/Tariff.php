@@ -40,7 +40,8 @@ class Tariff extends \hipanel\base\Model
             [['type', 'state'], 'safe'],
             [['used'], 'integer'],
             [['note', 'label'], 'safe'],
-            [['is_personal'], 'boolean']
+            [['is_personal'], 'boolean'],
+            [['id'], 'required', 'on' => ['delete']],
         ];
     }
 
@@ -53,6 +54,21 @@ class Tariff extends \hipanel\base\Model
         }
 
         return $this->hasMany(Resource::class, ['tariff_id' => 'id'])->inverseOf('tariff');
+    }
+
+    /**
+     * @param $type
+     * @return DomainResource|ServerResource|Resource
+     */
+    public function getResourceByType($type)
+    {
+        foreach ($this->resources as $resource) {
+            if ($resource->type === $type) {
+                return $resource;
+            }
+        }
+
+        return null;
     }
 
     /**

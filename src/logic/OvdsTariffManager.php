@@ -2,16 +2,16 @@
 
 namespace hipanel\modules\finance\logic;
 
-use hipanel\modules\finance\forms\VdsTariffForm;
-use hipanel\modules\finance\models\Tariff;
-use hiqdev\hiart\ErrorResponseException;
-use Yii;
-use yii\web\NotFoundHttpException;
-use yii\web\UnprocessableEntityHttpException;
+use hipanel\modules\finance\forms\OvdsTariffForm;
 
 class OvdsTariffManager extends VdsTariffManager
 {
     public $type = 'ovds';
 
-
+    protected function getFormOptions()
+    {
+        return array_merge([
+            'class' => OvdsTariffForm::class
+        ], parent::getFormOptions());
+    }
 }

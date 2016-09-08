@@ -23,20 +23,43 @@ abstract class AbstractTariffForm extends \yii\base\Model
      * @var int Parent tariff ID
      */
     public $parent_id;
-    /** @var Tariff */
-    public $baseTariff;
-    /** @var Tariff[] */
+
+    /**
+     * @var Tariff[] array of available base tariffs
+     */
     public $baseTariffs;
-    /** @var Tariff */
+
+    /**
+     * @var Tariff the selected base tariff
+     */
+    public $baseTariff;
+
+    /**
+     * @var Tariff
+     */
     protected $tariff;
-    /** @var Resource[] */
+
+    /**
+     * @var \hipanel\modules\finance\models\Resource[]
+     */
     protected $_resources;
 
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
+        if (!isset($this->baseTariffs)) {
+            throw new InvalidConfigException('Property "baseTariffs" must be filled');
+        }
+
         $this->initTariff();
     }
 
+    /**
+     * Initializes tariff
+     * @void
+     */
     protected function initTariff()
     {
         $this->selectBaseTariff();
@@ -44,6 +67,11 @@ abstract class AbstractTariffForm extends \yii\base\Model
         $this->ensureScenario();
     }
 
+    /**
+     * Ensures that [[tariff]] is set.
+     * Otherwise calls [[setDefaultTariff()]]
+     * @return bool
+     */
     protected function ensureTariff()
     {
         if ($this->getTariff() instanceof Tariff) {
@@ -60,9 +88,18 @@ abstract class AbstractTariffForm extends \yii\base\Model
         }
     }
 
+    /**
+     * Sets default tariff
+     *
+     * @return bool
+     */
     protected function setDefaultTariff()
     {
         $this->setTariff($this->baseTariff);
+
+        // Default tariff's id and name are useless on create
+        $this->id = null;
+        $this->name = null;
 
         return true;
     }
@@ -96,13 +133,16 @@ abstract class AbstractTariffForm extends \yii\base\Model
         ];
     }
 
+    /**
+     * @return \hipanel\modules\finance\models\Resource[]
+     */
     public function getResources()
     {
         return $this->_resources;
     }
 
     /**
-     * @param array $resources
+     * @param \hipanel\modules\finance\models\Resource[] $resources
      * @throws InvalidConfigException when not implemented
      */
     public function setResources($resources)
@@ -110,11 +150,17 @@ abstract class AbstractTariffForm extends \yii\base\Model
         throw new InvalidConfigException('Method "setResources" must be implemented');
     }
 
+    /**
+     * @return array
+     */
     public function getResourceTypes()
     {
         return reset($this->baseTariff->resources)->getTypes();
     }
 
+    /**
+     * @return array
+     */
     public function attributeLabels()
     {
         return [
@@ -135,6 +181,11 @@ abstract class AbstractTariffForm extends \yii\base\Model
         throw new InvalidConfigException("Method load must be implemented");
     }
 
+    /**
+     * Selects one of [[baseTariffs]] and puts it to [[baseTariff]]
+     *
+     * @return bool
+     */
     public function selectBaseTariff()
     {
         if (!isset($this->parent_id)) {
@@ -160,6 +211,13 @@ abstract class AbstractTariffForm extends \yii\base\Model
         return true;
     }
 
+    /**
+     * Builds key-value array of [[baseTariffs]]
+     *  - key: tariff id
+     *  - value: tariff name
+     *
+     * @return array
+     */
     public function getBaseTariffsList()
     {
         return array_combine(
@@ -168,14 +226,14 @@ abstract class AbstractTariffForm extends \yii\base\Model
         );
     }
 
-    public function insert($runValidation = true, $attributes = null, $options = [])
+    public function insert($runValidation = true)
     {
-        throw new InvalidConfigException("Method load must be implemented");
+        throw new InvalidConfigException("Method insert must be implemented");
     }
 
-    public function update($runValidation = true, $attributes = null, $options = [])
+    public function update($runValidation = true)
     {
-        throw new InvalidConfigException("Method load must be implemented");
+        throw new InvalidConfigException("Method update must be implemented");
     }
 
     /**
@@ -186,6 +244,12 @@ abstract class AbstractTariffForm extends \yii\base\Model
         return $this->tariff;
     }
 
+    /**
+     * Sets [[tariff]]
+     *
+     * @param Tariff $tariff
+     * @return bool
+     */
     public function setTariff($tariff)
     {
         if ($tariff === null) {
@@ -198,5 +262,10 @@ abstract class AbstractTariffForm extends \yii\base\Model
         $this->name = $tariff->name;
 
         return true;
+    }
+
+    public function getPrimaryKey()
+    {
+        return ['id'];
     }
 }
