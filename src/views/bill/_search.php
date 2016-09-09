@@ -4,7 +4,6 @@ use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\server\widgets\combo\ServerCombo;
 use hipanel\modules\finance\widgets\TariffCombo;
-use hipanel\widgets\FieldRange;
 use hipanel\widgets\DatePicker;
 use hiqdev\combo\StaticCombo;
 use yii\helpers\Html;
@@ -29,15 +28,6 @@ use yii\helpers\Html;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= FieldRange::widget([
-        'model' => $search->model,
-        'attribute1' => 'sum_gt',
-        'attribute2' => 'sum_lt',
-        'label' => Yii::t('hipanel', 'Sum'),
-    ]) ?>
-</div>
-
-<div class="col-md-4 col-sm-6 col-xs-12">
     <div class="form-group">
         <?= Html::label(Yii::t('hipanel', 'Date')) ?>
         <?= DatePicker::widget([
@@ -47,7 +37,7 @@ use yii\helpers\Html;
             'type' => DatePicker::TYPE_RANGE,
             'pluginOptions' => [
                 'autoclose' => true,
-                'format' => 'yyyy-mm-dd',
+                'format' => 'dd-mm-yyyy',
             ],
         ]) ?>
     </div>
