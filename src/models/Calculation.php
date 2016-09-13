@@ -11,8 +11,9 @@
 
 namespace hipanel\modules\finance\models;
 
-use hipanel\modules\finance\cart\AbstractCartPosition;
+use Guzzle\Plugin\ErrorResponse\Exception\ErrorResponseException;
 use Yii;
+use yii\base\InvalidParamException;
 
 /**
  * Class Calculation.
@@ -20,11 +21,6 @@ use Yii;
 class Calculation extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
-
-    /**
-     * @var AbstractCartPosition
-     */
-    public $position;
 
     /** {@inheritdoc} */
     public static function index()
@@ -41,7 +37,7 @@ class Calculation extends \hipanel\base\Model
     /** {@inheritdoc} */
     public static function primaryKey()
     {
-        return ['cart_position_id'];
+        return ['tariff_id'];
     }
 
     /** {@inheritdoc} */
@@ -56,6 +52,29 @@ class Calculation extends \hipanel\base\Model
         $this->synchronize();
     }
 
+    public function getValue()
+    {
+        return $this->hasMany(Value::class, ['tariff_id' => 'currency'])->indexBy('currency');
+    }
+
+    public function forCurrency($currency)
+    {
+        if (!isset($this->value[$currency])) {
+            throw new InvalidParamException("Calculation for currency \"$currency\" does not exist");
+        }
+
+        return $this->value[$currency];
+    }
+
+    /** {@inheritdoc} */
+    public function rules()
+    {
+        return [
+            [['tariff_id', 'object', 'seller', 'client', 'type', 'currency', 'item'], 'safe'],
+            [['amount'], 'number'],
+        ];
+    }
+
     /**
      * Synchronises the model to represent actual state of [[position]]
      * The method must update values, that affects the calculation and
@@ -64,16 +83,6 @@ class Calculation extends \hipanel\base\Model
      */
     public function synchronize()
     {
-        $this->cart_position_id = $this->position->getId();
-        $this->amount = $this->position->getQuantity();
-    }
-
-    /** {@inheritdoc} */
-    public function rules()
-    {
-        return [
-            [['cart_position_id', 'object', 'seller', 'client', 'type', 'currency', 'item'], 'safe'],
-            [['amount'], 'number'],
-        ];
+        return true;
     }
 }

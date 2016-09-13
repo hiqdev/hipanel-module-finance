@@ -17,7 +17,7 @@ class DomainTariffForm extends AbstractTariffForm
      */
     protected $zones;
 
-    public function load($data)
+    public function load($data, $formName = null)
     {
         $this->setAttributes($data[$this->formName()]);
         $this->setResources($data[(new DomainResource())->formName()]);

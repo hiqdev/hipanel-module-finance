@@ -10,22 +10,17 @@ use Yii;
 use yii\web\NotFoundHttpException;
 use yii\web\UnprocessableEntityHttpException;
 
-class VdsTariffManager extends AbstractTariffManager
+abstract class VdsTariffManager extends AbstractTariffManager
 {
     /**
      * @var VdsTariffForm
      */
     public $form;
 
-    /**
-     * @inheritdoc
-     */
-    protected $type = 'server';
-
     public function init()
     {
         if (!Yii::getAlias('@server', true)) {
-            throw new NotFoundHttpException('Domain module is missing');
+            throw new NotFoundHttpException('Server module is missing');
         }
 
         parent::init();

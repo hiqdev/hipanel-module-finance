@@ -10,6 +10,13 @@ use hipanel\widgets\Box;
 ?>
 <div class="row">
     <div class="col-md-12">
+        <p class="text-center">
+            <?= Yii::t('hipanel/finance/tariff', 'Price: {amount}', [
+                'amount' => Yii::$app->formatter->asCurrency($manager->calculation()->price, $manager->calculation()->currency)
+            ]); // TODO: beatify ?>
+        </p>
+    </div>
+    <div class="col-md-12">
         <?php Box::begin(['title' => Yii::t('hipanel/finance/tariff', 'Hardware')]) ?>
         <table class="table table-condensed">
             <thead>

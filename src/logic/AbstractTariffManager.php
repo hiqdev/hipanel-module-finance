@@ -69,14 +69,16 @@ abstract class AbstractTariffManager extends Object
 
     protected function findBaseTariffs()
     {
-        $availableTariffs = Tariff::perform('GetAvailableInfo', ['type' => $this->type], true);
+        $availableTariffs = Tariff::find(['scenario' => 'get-available-info'])
+            ->andFilterWhere(['type' => $this->type])
+            ->all();
 
         if (empty($availableTariffs)) {
             throw new ForbiddenHttpException('No available tariffs found');
         }
 
         $this->baseTariffs = Tariff::find()
-            ->where(['id' => array_keys($availableTariffs)])
+            ->where(['id' => ArrayHelper::getColumn($availableTariffs, 'id')])
             ->details()
             ->all();
     }
@@ -84,6 +86,30 @@ abstract class AbstractTariffManager extends Object
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @var TariffCalculator
+     */
+    protected $_calculator;
+
+    /**
+     * @return TariffCalculator
+     */
+    protected function calculator()
+    {
+        if (isset($this->_calculator)) {
+            return $this->_calculator;
+        }
+
+        $this->_calculator = new TariffCalculator($this->tariff);
+
+        return $this->_calculator;
+    }
+
+    public function calculation()
+    {
+        return $this->calculator()->getCalculation($this->tariff->id)->forCurrency($this->tariff->currency);
     }
 
     /**

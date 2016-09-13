@@ -19,7 +19,7 @@ class DomainTariffManager extends AbstractTariffManager
     /**
      * @inheritdoc
      */
-    protected $type = 'domain';
+    protected $type = Tariff::TYPE_DOMAIN;
 
     public function init()
     {

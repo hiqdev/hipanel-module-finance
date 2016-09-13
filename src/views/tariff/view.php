@@ -8,7 +8,6 @@
 use hipanel\widgets\Box;
 use hipanel\widgets\ClientSellerLink;
 use hipanel\widgets\ModalButton;
-use hipanel\widgets\Pjax;
 use yii\helpers\Html;
 
 $model = $manager->form;
@@ -74,6 +73,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php Box::end() ?>
     </div>
     <div class="col-md-9">
-        <?= $this->render($type . '/view', ['model' => $model]) ?>
+        <?= $this->render($type . '/view', ['model' => $model, 'manager' => $manager]) ?>
     </div>
 </div>

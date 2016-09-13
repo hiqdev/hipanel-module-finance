@@ -18,13 +18,13 @@ use hipanel\modules\finance\models\query\TariffQuery;
  * @package hipanel\modules\finance\models
  * @property Resource[]|DomainResource[]|ServerResource[] $resources
  */
-class Tariff extends \hipanel\base\Model
+class Tariff extends \hipanel\base\Model implements CalculableModelInterface
 {
     use \hipanel\base\ModelTrait;
 
     const TYPE_DOMAIN = 'domain';
-    const TYPE_SVDS = 'svds';
-    const TYPE_OVDS = 'ovds';
+    const TYPE_XEN = 'svds';
+    const TYPE_OPENVZ = 'ovds';
 
     /**
      * {@inheritdoc}
@@ -37,7 +37,7 @@ class Tariff extends \hipanel\base\Model
             [['domain', 'server'], 'safe'],
             [['tariff', 'tariff_id'], 'safe'],
             [['type_id', 'state_id'], 'integer'],
-            [['type', 'state'], 'safe'],
+            [['type', 'state', 'currency'], 'safe'],
             [['used'], 'integer'],
             [['note', 'label'], 'safe'],
             [['is_personal'], 'boolean'],
@@ -49,7 +49,7 @@ class Tariff extends \hipanel\base\Model
     {
         if ($this->type === self::TYPE_DOMAIN) {
             return $this->hasMany(DomainResource::class, ['tariff_id' => 'id'])->inverseOf('tariff');
-        } elseif ($this->type === self::TYPE_SVDS || $this->type === self::TYPE_OVDS) {
+        } elseif (in_array($this->type, [self::TYPE_XEN, self::TYPE_OPENVZ])) {
             return $this->hasMany(ServerResource::class, ['tariff_id' => 'id'])->inverseOf('tariff');
         }
 
@@ -88,6 +88,30 @@ class Tariff extends \hipanel\base\Model
     {
         return new TariffQuery(get_called_class(), [
             'options' => $options,
+        ]);
+    }
+
+    public function getGeneralType()
+    {
+        if ($this->type === static::TYPE_DOMAIN) {
+            return 'domain';
+        } elseif (in_array($this->type, [static::TYPE_OPENVZ, static::TYPE_XEN])) {
+            return 'server';
+        }
+
+        return null;
+    }
+
+    /**
+     * Method creates and returns corresponding Calculation model.
+     *
+     * @return Calculation
+     */
+    public function getCalculationModel()
+    {
+        return new Calculation([
+            'tariff_id' => $this->id,
+            'object' => $this->getGeneralType()
         ]);
     }
 }

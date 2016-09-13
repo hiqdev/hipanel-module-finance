@@ -173,10 +173,11 @@ abstract class AbstractTariffForm extends \yii\base\Model
 
     /**
      * @param array $data to be loaded
+     * @param null $formName
      * @return bool
      * @throws InvalidConfigException when not implemented
      */
-    public function load($data)
+    public function load($data, $formName = null)
     {
         throw new InvalidConfigException("Method load must be implemented");
     }

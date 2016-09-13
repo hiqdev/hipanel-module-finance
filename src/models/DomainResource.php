@@ -11,6 +11,7 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\base\ModelTrait;
 use Yii;
 
 /**
@@ -19,6 +20,8 @@ use Yii;
  */
 class DomainResource extends Resource
 {
+    use ModelTrait;
+
     public static function index()
     {
         return 'resources';
@@ -50,6 +53,7 @@ class DomainResource extends Resource
             }
         ];
         $rules['create-required-price'] = [['price'], 'required', 'on' => ['create', 'update']];
+        $rules[] = [['zone'], 'safe'];
 
         return $rules;
     }

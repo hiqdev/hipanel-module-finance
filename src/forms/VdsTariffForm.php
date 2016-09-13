@@ -11,7 +11,7 @@ class VdsTariffForm extends AbstractTariffForm
     public $note;
     public $label;
 
-    public function load($data)
+    public function load($data, $formName = null)
     {
         $this->setAttributes($data[$this->formName()]);
         $this->setResources($data[(new ServerResource())->formName()]);
