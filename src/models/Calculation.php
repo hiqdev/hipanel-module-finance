@@ -57,6 +57,12 @@ class Calculation extends \hipanel\base\Model
         return $this->hasMany(Value::class, ['tariff_id' => 'currency'])->indexBy('currency');
     }
 
+    /**
+     * @param string $currency
+     *
+     * @return Value
+     * @throws InvalidParamException when the $currency is not calculated
+     */
     public function forCurrency($currency)
     {
         if (!isset($this->value[$currency])) {

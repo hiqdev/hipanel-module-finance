@@ -95,7 +95,6 @@ class TariffCalculator
      */
     private function createCalculations($rows)
     {
-        $query = Calculation::find()->joinWith(['value'])->indexBy('tariff_id')->prepare();
-        return $query->populate($rows);
+        return Calculation::find()->joinWith(['value'])->indexBy('tariff_id')->prepare()->populate($rows);
     }
 }

@@ -277,6 +277,8 @@ abstract class AbstractTariffForm extends \yii\base\Model
     protected $_calculator;
 
     /**
+     * Creates [[TariffCalculator]] object for the [[tariff]]
+     *
      * @return TariffCalculator
      */
     protected function calculator()
@@ -290,6 +292,9 @@ abstract class AbstractTariffForm extends \yii\base\Model
         return $this->_calculator;
     }
 
+    /**
+     * @return \hipanel\modules\finance\models\Value
+     */
     public function calculation()
     {
         return $this->calculator()->getCalculation($this->tariff->id)->forCurrency($this->tariff->currency);
@@ -301,6 +306,8 @@ abstract class AbstractTariffForm extends \yii\base\Model
     protected $_baseCalculator;
 
     /**
+     * Creates [[TariffCalculator]] object for the [[baseTariff]]
+     *
      * @return TariffCalculator
      */
     protected function baseCalculator()
@@ -314,6 +321,9 @@ abstract class AbstractTariffForm extends \yii\base\Model
         return $this->_baseCalculator;
     }
 
+    /**
+     * @return \hipanel\modules\finance\models\Value
+     */
     public function baseCalculation()
     {
         return $this->baseCalculator()->getCalculation($this->baseTariff->id)->forCurrency($this->baseTariff->currency);
