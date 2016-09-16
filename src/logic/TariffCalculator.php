@@ -5,7 +5,6 @@ namespace hipanel\modules\finance\logic;
 use hipanel\base\Model;
 use hipanel\modules\finance\models\Calculation;
 use hipanel\modules\finance\models\CalculableModelInterface;
-use hiqdev\hiart\ErrorResponseException;
 use yii\web\UnprocessableEntityHttpException;
 
 class TariffCalculator

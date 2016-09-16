@@ -89,30 +89,6 @@ abstract class AbstractTariffManager extends Object
     }
 
     /**
-     * @var TariffCalculator
-     */
-    protected $_calculator;
-
-    /**
-     * @return TariffCalculator
-     */
-    protected function calculator()
-    {
-        if (isset($this->_calculator)) {
-            return $this->_calculator;
-        }
-
-        $this->_calculator = new TariffCalculator($this->tariff);
-
-        return $this->_calculator;
-    }
-
-    public function calculation()
-    {
-        return $this->calculator()->getCalculation($this->tariff->id)->forCurrency($this->tariff->currency);
-    }
-
-    /**
      * @param Tariff $tariff
      */
     public function setTariff($tariff)

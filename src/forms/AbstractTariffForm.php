@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\forms;
 
+use hipanel\modules\finance\logic\TariffCalculator;
 use hipanel\modules\finance\models\Tariff;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -268,5 +269,53 @@ abstract class AbstractTariffForm extends \yii\base\Model
     public function getPrimaryKey()
     {
         return ['id'];
+    }
+
+    /**
+     * @var TariffCalculator
+     */
+    protected $_calculator;
+
+    /**
+     * @return TariffCalculator
+     */
+    protected function calculator()
+    {
+        if (isset($this->_calculator)) {
+            return $this->_calculator;
+        }
+
+        $this->_calculator = new TariffCalculator($this->tariff);
+
+        return $this->_calculator;
+    }
+
+    public function calculation()
+    {
+        return $this->calculator()->getCalculation($this->tariff->id)->forCurrency($this->tariff->currency);
+    }
+
+    /**
+     * @var TariffCalculator
+     */
+    protected $_baseCalculator;
+
+    /**
+     * @return TariffCalculator
+     */
+    protected function baseCalculator()
+    {
+        if (isset($this->_baseCalculator)) {
+            return $this->_baseCalculator;
+        }
+
+        $this->_baseCalculator = new TariffCalculator($this->baseTariff);
+
+        return $this->_baseCalculator;
+    }
+
+    public function baseCalculation()
+    {
+        return $this->baseCalculator()->getCalculation($this->baseTariff->id)->forCurrency($this->baseTariff->currency);
     }
 }

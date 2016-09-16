@@ -40,10 +40,14 @@ return [
 
     'Model' => 'Модель',
 
-    'Tariff must be unlinked form all objects before. Are you sure you want to delete tariff {name}?' => 'Тариф доожен быть отвязан от всех объектов перед удалением. Вы уверены, что хотите удалить тариф {name}?',
+    'Tariff must be unlinked form all objects before. Are you sure you want to delete tariff {name}?' => 'Тариф должен быть отвязан от всех объектов перед удалением. Вы уверены, что хотите удалить тариф {name}?',
     'Confirm tariff deleting' => 'Подтвердите удаление тарифа',
     'Delete tariff' => 'Удалить тариф',
     'Deleting tariff...' => 'Удаление тарифа...',
+
+    'Price' => 'Стоимость',
+    'Parent tariff price' => 'Стоимость родительского тарифа',
+    'Profit' => 'Прибыль',
 
     'Port speed' => 'Скорость порта',
     '{n, plural, one{# hour} other{# hours}}' => '{n, plural, one{# час} few{# часа} other{# часов}}',

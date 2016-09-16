@@ -6,15 +6,39 @@ use hipanel\widgets\Box;
 /**
  * @var $this \yii\web\View
  * @var $model \hipanel\modules\finance\forms\SvdsTariffForm
+ * @var $manager \hipanel\modules\finance\logic\AbstractTariffManager
  */
 ?>
+
 <div class="row">
     <div class="col-md-12">
-        <p class="text-center">
-            <?= Yii::t('hipanel/finance/tariff', 'Price: {amount}', [
-                'amount' => Yii::$app->formatter->asCurrency($manager->calculation()->price, $manager->calculation()->currency)
-            ]); // TODO: beatify ?>
-        </p>
+        <?php Box::begin(['title' => Yii::t('hipanel/finance/tariff', 'Hardware')]) ?>
+        <table class="table table-condensed">
+            <thead>
+            <tr>
+                <td><?= Yii::t('hipanel/finance/tariff', 'Price') ?></td>
+                <td><?= Yii::t('hipanel/finance/tariff', 'Parent tariff price') ?></td>
+                <td><?= Yii::t('hipanel/finance/tariff', 'Profit') ?></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <?php
+                $price = $model->calculation()->price;
+                $basePrice = $model->baseCalculation()->price;
+                ?>
+                <td><?= Yii::$app->formatter->asCurrency($price, $model->calculation()->currency) ?></td>
+                <td><?= Yii::$app->formatter->asCurrency($basePrice, $model->baseCalculation()->currency) ?></td>
+                <td>
+                    <?= PriceDifferenceWidget::widget([
+                        'new' => $price,
+                        'old' => $basePrice
+                    ]) ?>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <?php Box::end() ?>
     </div>
     <div class="col-md-12">
         <?php Box::begin(['title' => Yii::t('hipanel/finance/tariff', 'Hardware')]) ?>
