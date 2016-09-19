@@ -13,12 +13,12 @@ class PanelResourceDecorator extends AbstractServerResourceDecorator
 
     public function displayValue()
     {
-        return Yii::t('yii', '{nFormatted} GB', ['nFormatted' => $this->getPrepaidQuantity()]);
+        return null;
     }
 
     public function displayUnit()
     {
-        return Yii::t('hipanel/finance/tariff', '{n} Gbit/s', ['n' => 1]);
+        return null;
     }
 
     public function displayPrepaidAmount()
