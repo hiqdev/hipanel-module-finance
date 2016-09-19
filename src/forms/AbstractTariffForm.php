@@ -287,7 +287,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
             return $this->_calculator;
         }
 
-        $this->_calculator = new TariffCalculator($this->tariff);
+        $this->_calculator = new TariffCalculator([$this->tariff]);
 
         return $this->_calculator;
     }
@@ -316,7 +316,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
             return $this->_baseCalculator;
         }
 
-        $this->_baseCalculator = new TariffCalculator($this->baseTariff);
+        $this->_baseCalculator = new TariffCalculator([$this->baseTariff]);
 
         return $this->_baseCalculator;
     }

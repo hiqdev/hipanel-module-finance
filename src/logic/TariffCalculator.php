@@ -21,14 +21,10 @@ class TariffCalculator
 
     /**
      * TariffCalculator constructor.
-     * @param Model[]|Model $tariffs
+     * @param Model[] $tariffs
      */
     public function __construct($tariffs)
     {
-        if ($tariffs instanceof Model) {
-            $tariffs = [$tariffs];
-        }
-
         $this->tariffs = $tariffs;
     }
 
@@ -86,6 +82,7 @@ class TariffCalculator
             $calculation = $tariff->getCalculationModel();
             $data[$tariff->getPrimaryKey()] = $calculation->getAttributes();
         }
+
         return $data;
     }
 
@@ -95,6 +92,9 @@ class TariffCalculator
      */
     private function createCalculations($rows)
     {
-        return Calculation::find()->joinWith(['value'])->indexBy('tariff_id')->prepare()->populate($rows);
+        $query = Calculation::find()->joinWith(['value'])->indexBy('tariff_id');
+        $query->prepare();
+
+        return $query->populate($rows);
     }
 }
