@@ -23,7 +23,7 @@ return [
             'class' => \hipanel\modules\finance\Module::class,
         ],
         'cart' => [
-            'class'          => hiqdev\yii2\cart\Module::class,
+            'class'          => \hiqdev\yii2\cart\Module::class,
             'termsPage'      => $params['orgUrl'] . 'rules',
             'orderPage'      => '/finance/cart/select',
             /*'orderButton'    => function ($module) {
@@ -41,12 +41,12 @@ return [
             ],
         ],
         'merchant' => [
-            'class'           => hiqdev\yii2\merchant\Module::class,
+            'class'           => \hiqdev\yii2\merchant\Module::class,
             'returnPage'      => '/finance/pay/return',
             'notifyPage'      => '/finance/pay/notify',
             'finishPage'      => '/finance/bill',
-            'depositClass'    => hipanel\modules\finance\merchant\Deposit::class,
-            'collectionClass' => hipanel\modules\finance\merchant\Collection::class,
+            'depositClass'    => \hipanel\modules\finance\merchant\Deposit::class,
+            'collectionClass' => \hipanel\modules\finance\merchant\Collection::class,
         ],
     ],
     'components' => [
