@@ -4,6 +4,8 @@ namespace hipanel\modules\finance\cart;
 
 class Calculation extends \hipanel\modules\finance\models\Calculation
 {
+    use \hipanel\base\ModelTrait;
+
     /**
      * @var AbstractCartPosition
      */

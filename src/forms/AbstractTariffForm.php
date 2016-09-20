@@ -26,14 +26,14 @@ abstract class AbstractTariffForm extends \yii\base\Model
     public $parent_id;
 
     /**
-     * @var Tariff[] array of available base tariffs
+     * @var Tariff[] array of available parent tariffs
      */
-    public $baseTariffs;
+    public $parentTariffs;
 
     /**
-     * @var Tariff the selected base tariff
+     * @var Tariff the selected parent tariff
      */
-    public $baseTariff;
+    public $parentTariff;
 
     /**
      * @var Tariff
@@ -50,8 +50,8 @@ abstract class AbstractTariffForm extends \yii\base\Model
      */
     public function init()
     {
-        if (!isset($this->baseTariffs)) {
-            throw new InvalidConfigException('Property "baseTariffs" must be filled');
+        if (!isset($this->parentTariffs)) {
+            throw new InvalidConfigException('Property "parentTariffs" must be filled');
         }
 
         $this->initTariff();
@@ -63,7 +63,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
      */
     protected function initTariff()
     {
-        $this->selectBaseTariff();
+        $this->selectParentTariff();
         $this->ensureTariff();
         $this->ensureScenario();
     }
@@ -96,7 +96,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
      */
     protected function setDefaultTariff()
     {
-        $this->setTariff($this->baseTariff);
+        $this->setTariff($this->parentTariff);
 
         // Default tariff's id and name are useless on create
         $this->id = null;
@@ -156,7 +156,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
      */
     public function getResourceTypes()
     {
-        return reset($this->baseTariff->resources)->getTypes();
+        return reset($this->parentTariff->resources)->getTypes();
     }
 
     /**
@@ -184,47 +184,47 @@ abstract class AbstractTariffForm extends \yii\base\Model
     }
 
     /**
-     * Selects one of [[baseTariffs]] and puts it to [[baseTariff]]
+     * Selects one of [[parentTariffs]] and puts it to [[parentTariff]]
      *
      * @return bool
      */
-    public function selectBaseTariff()
+    public function selectParentTariff()
     {
         if (!isset($this->parent_id)) {
             if (isset($this->tariff)) {
                 $this->parent_id = $this->tariff->parent_id;
             } else {
-                $this->parent_id = ArrayHelper::getValue(reset($this->baseTariffs), 'id');
+                $this->parent_id = ArrayHelper::getValue(reset($this->parentTariffs), 'id');
             }
         }
 
-        $filtered = array_filter($this->baseTariffs, function ($model) {
+        $filtered = array_filter($this->parentTariffs, function ($model) {
             return $model->id == $this->parent_id;
         });
 
         if (count($filtered) !== 1) {
-            Yii::error('Found ' . count($filtered) . ' base tariffs. Must be exactly one');
+            Yii::error('Found ' . count($filtered) . ' parent tariffs. Must be exactly one');
             return false;
         }
 
-        $this->baseTariff = reset($filtered);
-        $this->parent_id = $this->baseTariff->id;
+        $this->parentTariff = reset($filtered);
+        $this->parent_id = $this->parentTariff->id;
 
         return true;
     }
 
     /**
-     * Builds key-value array of [[baseTariffs]]
+     * Builds key-value array of [[parentTariffs]]
      *  - key: tariff id
      *  - value: tariff name
      *
      * @return array
      */
-    public function getBaseTariffsList()
+    public function getParentTariffsList()
     {
         return array_combine(
-            ArrayHelper::getColumn($this->baseTariffs, 'id'),
-            ArrayHelper::getColumn($this->baseTariffs, 'name')
+            ArrayHelper::getColumn($this->parentTariffs, 'id'),
+            ArrayHelper::getColumn($this->parentTariffs, 'name')
         );
     }
 
@@ -303,29 +303,29 @@ abstract class AbstractTariffForm extends \yii\base\Model
     /**
      * @var TariffCalculator
      */
-    protected $_baseCalculator;
+    protected $_parentCalculator;
 
     /**
-     * Creates [[TariffCalculator]] object for the [[baseTariff]]
+     * Creates [[TariffCalculator]] object for the [[parentTariff]]
      *
      * @return TariffCalculator
      */
-    protected function baseCalculator()
+    protected function parentCalculator()
     {
-        if (isset($this->_baseCalculator)) {
-            return $this->_baseCalculator;
+        if (isset($this->_parentCalculator)) {
+            return $this->_parentCalculator;
         }
 
-        $this->_baseCalculator = new TariffCalculator([$this->baseTariff]);
+        $this->_parentCalculator = new TariffCalculator([$this->parentTariff]);
 
-        return $this->_baseCalculator;
+        return $this->_parentCalculator;
     }
 
     /**
      * @return \hipanel\modules\finance\models\Value
      */
-    public function baseCalculation()
+    public function parentCalculation()
     {
-        return $this->baseCalculator()->getCalculation($this->baseTariff->id)->forCurrency($this->baseTariff->currency);
+        return $this->parentCalculator()->getCalculation($this->parentTariff->id)->forCurrency($this->parentTariff->currency);
     }
 }

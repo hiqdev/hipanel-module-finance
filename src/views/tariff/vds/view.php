@@ -25,10 +25,10 @@ use hipanel\widgets\Box;
             <tr>
                 <?php
                 $price = $model->calculation()->price;
-                $basePrice = $model->baseCalculation()->price;
+                $basePrice = $model->parentCalculation()->price;
                 ?>
                 <td><?= Yii::$app->formatter->asCurrency($price, $model->calculation()->currency) ?></td>
-                <td><?= Yii::$app->formatter->asCurrency($basePrice, $model->baseCalculation()->currency) ?></td>
+                <td><?= Yii::$app->formatter->asCurrency($basePrice, $model->parentCalculation()->currency) ?></td>
                 <td>
                     <?= PriceDifferenceWidget::widget([
                         'new' => $price,
@@ -53,7 +53,7 @@ use hipanel\widgets\Box;
             <tbody>
             <?php
             foreach ($model->getHardwareResources() as $resource) {
-            $baseResource = $model->getBaseHardwareResource($resource->object_id); ?>
+            $baseResource = $model->getParentHardwareResource($resource->object_id); ?>
             <tr>
                 <td><?= $resource->decorator()->displayTitle() ?></td>
                 <td><?= $resource->decorator()->displayPrepaidAmount() ?></td>
@@ -86,7 +86,7 @@ use hipanel\widgets\Box;
             <tbody>
             <?php
             foreach ($model->getOveruseResources() as $resource) {
-                $baseResource = $model->getBaseOveruseResource($resource->type_id); ?>
+                $baseResource = $model->getParentOveruseResource($resource->type_id); ?>
                 <tr>
                     <td><?= $resource->decorator()->displayTitle() ?></td>
                     <td>

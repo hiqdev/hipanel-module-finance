@@ -5,7 +5,6 @@ namespace hipanel\modules\finance\logic;
 use hipanel\modules\finance\forms\AbstractTariffForm;
 use hipanel\modules\finance\models\Tariff;
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\base\Object;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
@@ -13,10 +12,10 @@ use yii\web\ForbiddenHttpException;
 abstract class AbstractTariffManager extends Object
 {
     /**
-     * @var Tariff[] they array of all available base tariffs
-     * @see findBaseTariffs()
+     * @var Tariff[] they array of all available parent tariffs
+     * @see findParentTariffs()
      */
-    protected $baseTariffs;
+    protected $parentTariffs;
 
     /**
      * @var AbstractTariffForm
@@ -40,13 +39,13 @@ abstract class AbstractTariffManager extends Object
     protected $tariff;
 
     /**
-     * @var string The type used to find base tariff
+     * @var string The type used to find parent tariffs
      */
     protected $type;
     
     public function init()
     {
-        $this->findBaseTariffs();
+        $this->findParentTariffs();
         $this->buildForm();
     }
 
@@ -57,7 +56,7 @@ abstract class AbstractTariffManager extends Object
     {
         $this->form = Yii::createObject(array_merge([
             'scenario' => $this->scenario,
-            'baseTariffs' => $this->baseTariffs,
+            'parentTariffs' => $this->parentTariffs,
             'tariff' => $this->tariff
         ], $this->getFormOptions()));
     }
@@ -67,7 +66,7 @@ abstract class AbstractTariffManager extends Object
         return $this->formOptions;
     }
 
-    protected function findBaseTariffs()
+    protected function findParentTariffs()
     {
         $availableTariffs = Tariff::find(['scenario' => 'get-available-info'])
             ->andFilterWhere(['type' => $this->type])
@@ -77,7 +76,7 @@ abstract class AbstractTariffManager extends Object
             throw new ForbiddenHttpException('No available tariffs found');
         }
 
-        $this->baseTariffs = Tariff::find()
+        $this->parentTariffs = Tariff::find()
             ->where(['id' => ArrayHelper::getColumn($availableTariffs, 'id')])
             ->details()
             ->all();

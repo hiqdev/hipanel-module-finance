@@ -30,9 +30,11 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
     <div class="col-md-12">
         <?= Html::activeHiddenInput($model, 'id') ?>
         <?= Html::activeHiddenInput($model, 'parent_id') ?>
-        <?= $form->field($model, 'parent_id')->dropDownList(
-            $model->getBaseTariffsList(), ['id' => 'tariff-parent_id', 'data-url' => Url::current(['parent_id' => null])]
-        ); ?>
+        <?= $form->field($model, 'parent_id')->dropDownList($model->getParentTariffsList(), [
+            'id' => 'tariff-parent_id',
+            'data-url' => Url::current(['parent_id' => null]),
+            'readonly' => isset($model->id)
+        ]); ?>
         <?= $form->field($model, 'name') ?>
         <?= $form->field($model, 'note') ?>
         <?= $form->field($model, 'label') ?>
@@ -55,13 +57,13 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
             <?php
             $i = 0;
             foreach ($model->getHardwareResources() as $resource) {
-                $baseResource = $model->getBaseHardwareResource($resource->object_id); ?>
+                $baseResource = $model->getParentHardwareResource($resource->object_id); ?>
                 <tr>
                     <td><?= $resource->decorator()->displayTitle() ?></td>
                     <td><?= $resource->decorator()->displayPrepaidAmount() ?></td>
                     <td>
                         <?= Html::activeHiddenInput($resource, "[$i]object_id", [
-                            'value' => $resource->decorator()->realObjectId()
+                            'value' => $resource->realObjectId()
                         ]) ?>
                         <?= Html::activeHiddenInput($resource, "[$i]type") ?>
                         <div class="row">
@@ -105,7 +107,7 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
             <tbody>
             <?php
             foreach ($model->getOveruseResources() as $resource) {
-                $baseResource = $model->getBaseOveruseResource($resource->type_id); ?>
+                $baseResource = $model->getParentOveruseResource($resource->type_id); ?>
                 <tr>
                     <td><?= $resource->decorator()->displayTitle() ?></td>
                     <td style="width: 20%">

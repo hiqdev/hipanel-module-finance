@@ -42,7 +42,7 @@ use yii\helpers\Html;
                 <tr>
                     <td><?= $zone ?></td>
                     <?php foreach ($model->getZoneResources($zone) as $type => $resource) {
-                        $baseResources = $model->getZoneBaseResources($zone); ?>
+                        $baseResources = $model->getZoneParentResources($zone); ?>
                         <td>
                             <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
                             <?= Html::activeHiddenInput($resource, "[$i]type") ?>
@@ -79,7 +79,7 @@ use yii\helpers\Html;
 <div class="row">
     <?php
     $services = $model->getServices();
-    $baseServices = $model->getBaseServices();
+    $baseServices = $model->getParentServices();
     foreach ($services as $service) { ?>
         <div class="col-md-3">
             <?php Box::begin([

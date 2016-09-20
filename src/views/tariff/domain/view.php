@@ -28,7 +28,7 @@ Box::begin() ?>
                 <tr>
                     <td><strong><?= $zone ?></strong></td>
                     <?php foreach ($model->getZoneResources($zone) as $type => $resource) {
-                        $baseResources = $model->getZoneBaseResources($zone); ?>
+                        $baseResources = $model->getZoneParentResources($zone); ?>
                         <td>
                             <div class="row">
                                 <div class="col-md-6">
@@ -55,7 +55,7 @@ Box::begin() ?>
 <div class="row">
     <?php
     $services = $model->getServices();
-    $baseServices = $model->getBaseServices();
+    $baseServices = $model->getParentServices();
     foreach ($services as $service) { ?>
         <div class="col-md-3">
             <?php Box::begin([

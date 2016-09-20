@@ -62,8 +62,6 @@ class VdsTariffForm extends AbstractTariffForm
         return $result;
     }
 
-
-
     /**
      * @return \hipanel\modules\finance\models\ServerResource[]
      */
@@ -80,9 +78,9 @@ class VdsTariffForm extends AbstractTariffForm
 
     }
 
-    public function getBaseOveruseResource($type_id)
+    public function getParentOveruseResource($type_id)
     {
-        return reset(array_filter($this->baseTariff->resources, function ($resource) use ($type_id) {
+        return reset(array_filter($this->parentTariff->resources, function ($resource) use ($type_id) {
             /** @var ServerResource $resource */
             return $resource->type_id == $type_id && $resource->isTypeCorrect();
         }));
@@ -91,9 +89,9 @@ class VdsTariffForm extends AbstractTariffForm
     /**
      * @return \hipanel\modules\finance\models\ServerResource[]
      */
-    public function getBaseHardwareResource($object_id)
+    public function getParentHardwareResource($object_id)
     {
-        return reset(array_filter($this->baseTariff->resources, function ($resource) use ($object_id) {
+        return reset(array_filter($this->parentTariff->resources, function ($resource) use ($object_id) {
             /** @var ServerResource $resource */
             return $resource->object_id == $object_id && $resource->isHardwareTypeCorrect();
         }));

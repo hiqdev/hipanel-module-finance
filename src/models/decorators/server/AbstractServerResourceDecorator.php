@@ -58,19 +58,4 @@ abstract class AbstractServerResourceDecorator extends AbstractResourceDecorator
     {
         return new TextInput();
     }
-
-    public function realObjectId()
-    {
-        $resource = $this->resource;
-
-        if (!$resource->isPeriodic()) {
-            return $resource->object_id;
-        }
-
-        if (!$resource->tariff->is_personal && isset($resource->r_object_id)) {
-            return $resource->r_object_id;
-        }
-
-        return $resource->object_id;
-    }
 }

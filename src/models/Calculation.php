@@ -43,9 +43,10 @@ class Calculation extends \hipanel\base\Model
     /** {@inheritdoc} */
     public function init()
     {
-        if (Yii::$app->user->isGuest) {
+        if (Yii::$app->user->getIsGuest()) {
             $this->seller = Yii::$app->params['seller'];
         } else {
+            $this->seller = Yii::$app->user->identity->seller;
             $this->client = Yii::$app->user->identity->username;
         }
 
@@ -54,6 +55,7 @@ class Calculation extends \hipanel\base\Model
 
     public function getValue()
     {
+        // ['tariff_id' => 'currency'] is a dumb relation condition and does not make any sense
         return $this->hasMany(Value::class, ['tariff_id' => 'currency'])->indexBy('currency');
     }
 
@@ -76,8 +78,9 @@ class Calculation extends \hipanel\base\Model
     public function rules()
     {
         return [
-            [['tariff_id', 'object', 'seller', 'client', 'type', 'currency', 'item'], 'safe'],
+            [['object', 'seller', 'client', 'type', 'currency', 'item'], 'safe'],
             [['amount'], 'number'],
+            [['tariff_id'], 'integer'],
         ];
     }
 

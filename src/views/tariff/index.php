@@ -26,9 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 </a>
                 <?= Dropdown::widget([
                     'items' => [
-                        ['label' => Yii::t('hipanel/finance/tariff', 'Create domain tariff'), 'url' => 'tariff/create-domain'],
-                        ['label' => Yii::t('hipanel/finance/tariff', 'Create SSD VDS tariff'), 'url' => 'tariff/create-svds'],
-                        ['label' => Yii::t('hipanel/finance/tariff', 'Create OpenVZ tariff'), 'url' => 'tariff/create-ovds'],
+                        ['label' => Yii::t('hipanel/finance/tariff', 'Create domain tariff'), 'url' => 'create-domain'],
+                        ['label' => Yii::t('hipanel/finance/tariff', 'Create SSD VDS tariff'), 'url' => 'create-svds'],
+                        ['label' => Yii::t('hipanel/finance/tariff', 'Create OpenVZ tariff'), 'url' => 'create-ovds'],
                     ],
                 ]) ?>
             </div>

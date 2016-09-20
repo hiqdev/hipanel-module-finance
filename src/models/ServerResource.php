@@ -110,4 +110,17 @@ class ServerResource extends Resource
 
         return $this->decorator;
     }
+
+    public function realObjectId()
+    {
+        if (!$this->isPeriodic()) {
+            return $this->object_id;
+        }
+
+        if (!$this->tariff->is_personal && isset($this->r_object_id)) {
+            return $this->r_object_id;
+        }
+
+        return $this->object_id;
+    }
 }

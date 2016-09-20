@@ -38,9 +38,9 @@ class DomainTariffForm extends AbstractTariffForm
     /**
      * @return DomainService[]
      */
-    public function getBaseServices()
+    public function getParentServices()
     {
-        return $this->createServices($this->baseTariff->resources);
+        return $this->createServices($this->parentTariff->resources);
     }
 
     /**
@@ -111,13 +111,13 @@ class DomainTariffForm extends AbstractTariffForm
         return $result;
     }
 
-    public function getZoneBaseResources($zone)
+    public function getZoneParentResources($zone)
     {
         $id = $this->zones[$zone];
 
         $result = [];
 
-        foreach ($this->baseTariff->resources as $resource) {
+        foreach ($this->parentTariff->resources as $resource) {
             if ($resource->object_id == $id && $resource->isTypeCorrect()) {
                 $result[$resource->type] = $resource;
             }
