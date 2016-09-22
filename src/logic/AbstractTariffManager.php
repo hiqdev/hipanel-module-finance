@@ -68,16 +68,22 @@ abstract class AbstractTariffManager extends Object
 
     protected function findParentTariffs()
     {
-        $availableTariffs = Tariff::find(['scenario' => 'get-available-info'])
-            ->andFilterWhere(['type' => $this->type])
-            ->all();
+        if (!isset($this->tariff)) {
+            $availableTariffs = Tariff::find(['scenario' => 'get-available-info'])
+                ->andFilterWhere(['type' => $this->type])
+                ->all();
 
-        if (empty($availableTariffs)) {
+            $ids = ArrayHelper::getColumn($availableTariffs, 'id');
+        } else {
+            $ids = [$this->tariff->parent_id];
+        }
+
+        if (empty($ids)) {
             throw new ForbiddenHttpException('No available tariffs found');
         }
 
         $this->parentTariffs = Tariff::find()
-            ->where(['id' => ArrayHelper::getColumn($availableTariffs, 'id')])
+            ->where(['id' => $ids])
             ->details()
             ->all();
     }
