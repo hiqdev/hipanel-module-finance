@@ -70,8 +70,18 @@ return [
             ],
         ],
         'menuManager' => [
-            'menus' => [
-                'finance' => \hipanel\modules\finance\SidebarMenu::class,
+            'items' => [
+                'sidebar' => [
+                    'add' => [
+                        'finance' => [
+                            'menu' => \hipanel\modules\finance\menus\SidebarFinanceMenu::class,
+                            'where' => [
+                                'after'  => ['clients', 'dashboard'],
+                                'before' => ['tickets', 'domains', 'servers', 'hosting'],
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ],
     ],

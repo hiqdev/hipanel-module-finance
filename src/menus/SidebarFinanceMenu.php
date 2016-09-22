@@ -9,22 +9,19 @@
  * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
  */
 
-namespace hipanel\modules\finance;
+namespace hipanel\modules\finance\menus;
 
 use Yii;
 
-class SidebarMenu extends \hipanel\base\Menu implements \yii\base\BootstrapInterface
+class SidebarFinanceMenu extends \hiqdev\menumanager\Menu
 {
-    protected $_addTo = 'sidebar';
-
-    protected $_where = [
-        'after'  => ['clients', 'dashboard', 'header'],
-        'before' => ['tickets', 'domains', 'servers', 'hosting'],
-    ];
-
     public function items()
     {
-        return Yii::$app->user->can('support') && !Yii::$app->user->can('manage') ? [] : [
+        if (Yii::$app->user->can('support') && !Yii::$app->user->can('manage')) {
+            return [];
+        }
+
+        return [
             'finance' => [
                 'label' => Yii::t('hipanel/finance', 'Finance'),
                 'url'   => ['/finance/bill/index'],
@@ -41,12 +38,12 @@ class SidebarMenu extends \hipanel\base\Menu implements \yii\base\BootstrapInter
                     'tariffs' => [
                         'label'   => Yii::t('hipanel/finance', 'Tariffs'),
                         'url'     => ['/finance/tariff/index'],
-                        'visible' => function () { return Yii::$app->user->can('support'); },
+                        'visible' => Yii::$app->user->can('support'),
                     ],
                     'holds' => [
                         'label'   => Yii::t('hipanel/finance', 'Held payments'),
                         'url'     => ['/finance/held-payments/index'],
-                        'visible' => function () { return Yii::$app->user->can('resell'); },
+                        'visible' => Yii::$app->user->can('resell'),
                     ],
                 ],
             ],
