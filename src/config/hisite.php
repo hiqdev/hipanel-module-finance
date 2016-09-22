@@ -74,7 +74,7 @@ return [
                 'sidebar' => [
                     'add' => [
                         'finance' => [
-                            'menu' => \hipanel\modules\finance\menus\SidebarFinanceMenu::class,
+                            'menu' => \hipanel\modules\finance\menus\SidebarMenu::class,
                             'where' => [
                                 'after'  => ['clients', 'dashboard'],
                                 'before' => ['tickets', 'domains', 'servers', 'hosting'],

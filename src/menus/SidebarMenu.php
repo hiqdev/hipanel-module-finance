@@ -13,7 +13,7 @@ namespace hipanel\modules\finance\menus;
 
 use Yii;
 
-class SidebarFinanceMenu extends \hiqdev\menumanager\Menu
+class SidebarMenu extends \hiqdev\menumanager\Menu
 {
     public function items()
     {
