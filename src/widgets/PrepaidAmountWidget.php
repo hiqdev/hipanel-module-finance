@@ -2,7 +2,7 @@
 
 namespace hipanel\modules\finance\widgets;
 
-use hipanel\inputs\BooleanInput;
+use hipanel\inputs\OptionsInput;
 use hipanel\modules\finance\models\ServerResource;
 use yii\base\Widget;
 use yii\helpers\Html;
@@ -30,7 +30,7 @@ final class PrepaidAmountWidget extends Widget
     {
         $type = $this->resource->decorator()->prepaidAmountType();
 
-        if ($type instanceof BooleanInput) {
+        if ($type instanceof OptionsInput) {
             echo $this->renderDropdownInput($type);
         } else {
             echo $this->renderTextInput($type);
@@ -50,7 +50,7 @@ final class PrepaidAmountWidget extends Widget
         ]);
     }
 
-    private function renderDropdownInput(BooleanInput $boolean)
+    private function renderDropdownInput(OptionsInput $boolean)
     {
         return $this->activeField->dropDownList($boolean->getOptions(), [
             'class' => 'form-control',

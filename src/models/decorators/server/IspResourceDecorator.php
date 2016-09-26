@@ -2,7 +2,7 @@
 
 namespace hipanel\modules\finance\models\decorators\server;
 
-use hipanel\inputs\BooleanInput;
+use hipanel\inputs\OptionsInput;
 use Yii;
 
 class IspResourceDecorator extends AbstractServerResourceDecorator
@@ -19,7 +19,7 @@ class IspResourceDecorator extends AbstractServerResourceDecorator
 
     public function prepaidAmountType()
     {
-        return new BooleanInput($this->amountOptions());
+        return new OptionsInput($this->amountOptions());
     }
 
     private function amountOptions()

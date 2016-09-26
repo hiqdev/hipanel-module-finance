@@ -56,4 +56,6 @@ return [
     '24/7 support' => 'Поддержка 24/7',
     'No panel / {hipanelLink}' => 'Без панели / {hipanelLink}',
     'ISP manager' => 'ISP manager',
+
+    'Location' => 'Расположение',
 ];
