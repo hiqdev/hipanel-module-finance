@@ -12,7 +12,7 @@ class TariffCalculator
     /**
      * @var Model[]|CalculableModelInterface[]
      */
-    private $tariffs;
+    private $models;
 
     /**
      * @var Calculation[]
@@ -21,26 +21,26 @@ class TariffCalculator
 
     /**
      * TariffCalculator constructor.
-     * @param Model[] $tariffs
+     * @param Model[] $models
      */
-    public function __construct($tariffs)
+    public function __construct($models)
     {
-        $this->tariffs = $tariffs;
+        $this->models = $models;
     }
 
     /**
-     * Gets [[Calculation]] for the $tariffId
+     * Gets [[Calculation]] for the $id
      *
-     * @param integer $tariffId
+     * @param integer $id
      * @return Calculation
      */
-    public function getCalculation($tariffId)
+    public function getCalculation($id)
     {
         if ($this->calculations === null) {
             $this->execute();
         }
 
-        return $this->calculations[$tariffId];
+        return $this->calculations[$id];
     }
 
     /**
@@ -64,7 +64,7 @@ class TariffCalculator
         try {
             $rows = Calculation::perform('CalcValue', $this->collectData(), true);
         } catch (\Exception $e) {
-            throw new UnprocessableEntityHttpException('Failed to calculate tariffs value', 0, $e);
+            throw new UnprocessableEntityHttpException('Failed to calculate value: ' . $e->getMessage(), 0, $e);
         }
 
         $this->calculations = $this->createCalculations($rows);
@@ -78,9 +78,9 @@ class TariffCalculator
     private function collectData()
     {
         $data = [];
-        foreach ($this->tariffs as $tariff) {
-            $calculation = $tariff->getCalculationModel();
-            $data[$tariff->getPrimaryKey()] = $calculation->getAttributes();
+        foreach ($this->models as $model) {
+            $calculation = $model->getCalculationModel();
+            $data[$calculation->calculation_id] = $calculation->toArray();
         }
 
         return $data;
@@ -92,7 +92,7 @@ class TariffCalculator
      */
     private function createCalculations($rows)
     {
-        $query = Calculation::find()->joinWith(['value'])->indexBy('tariff_id');
+        $query = Calculation::find()->joinWith(['value'])->indexBy('calculation_id');
         $query->prepare();
 
         return $query->populate($rows);
