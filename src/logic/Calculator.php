@@ -2,22 +2,22 @@
 
 namespace hipanel\modules\finance\logic;
 
-use hipanel\base\Model;
 use hipanel\modules\finance\models\Calculation;
 use hipanel\modules\finance\models\CalculableModelInterface;
+use yii\base\Model;
 use yii\web\UnprocessableEntityHttpException;
 
-class TariffCalculator
+class Calculator
 {
     /**
      * @var Model[]|CalculableModelInterface[]
      */
-    private $models;
+    protected $models;
 
     /**
      * @var Calculation[]
      */
-    private $calculations;
+    protected $calculations;
 
     /**
      * TariffCalculator constructor.
@@ -40,7 +40,7 @@ class TariffCalculator
             $this->execute();
         }
 
-        return $this->calculations[$id];
+        return isset($this->calculations[$id]) ? $this->calculations[$id] : null;
     }
 
     /**
@@ -61,8 +61,14 @@ class TariffCalculator
      */
     public function execute()
     {
+        $data = $this->collectData();
+
+        if (empty($data)) {
+            return [];
+        }
+
         try {
-            $rows = Calculation::perform('CalcValue', $this->collectData(), true);
+            $rows = Calculation::perform('CalcValue', $data, true);
         } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException('Failed to calculate value: ' . $e->getMessage(), 0, $e);
         }
@@ -75,7 +81,7 @@ class TariffCalculator
     /**
      * @return array
      */
-    private function collectData()
+    protected function collectData()
     {
         $data = [];
         foreach ($this->models as $model) {

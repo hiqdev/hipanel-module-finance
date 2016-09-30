@@ -2,7 +2,7 @@
 
 namespace hipanel\modules\finance\forms;
 
-use hipanel\modules\finance\logic\TariffCalculator;
+use hipanel\modules\finance\logic\Calculator;
 use hipanel\modules\finance\models\Tariff;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -272,14 +272,14 @@ abstract class AbstractTariffForm extends \yii\base\Model
     }
 
     /**
-     * @var TariffCalculator
+     * @var Calculator
      */
     protected $_calculator;
 
     /**
      * Creates [[TariffCalculator]] object for the [[tariff]]
      *
-     * @return TariffCalculator
+     * @return Calculator
      */
     protected function calculator()
     {
@@ -287,7 +287,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
             return $this->_calculator;
         }
 
-        $this->_calculator = new TariffCalculator([$this->tariff]);
+        $this->_calculator = new Calculator([$this->tariff]);
 
         return $this->_calculator;
     }
@@ -301,14 +301,14 @@ abstract class AbstractTariffForm extends \yii\base\Model
     }
 
     /**
-     * @var TariffCalculator
+     * @var Calculator
      */
     protected $_parentCalculator;
 
     /**
      * Creates [[TariffCalculator]] object for the [[parentTariff]]
      *
-     * @return TariffCalculator
+     * @return Calculator
      */
     protected function parentCalculator()
     {
@@ -316,7 +316,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
             return $this->_parentCalculator;
         }
 
-        $this->_parentCalculator = new TariffCalculator([$this->parentTariff]);
+        $this->_parentCalculator = new Calculator([$this->parentTariff]);
 
         return $this->_parentCalculator;
     }

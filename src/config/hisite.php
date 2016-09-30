@@ -37,7 +37,7 @@ return [
                 ]);
             },
             'shoppingCartOptions' => [
-                'on cartChange' => [\hipanel\modules\finance\cart\CartCalculator::class, 'execute'],
+                'on cartChange' => [\hipanel\modules\finance\cart\CartCalculator::class, 'handle'],
             ],
         ],
         'merchant' => [
