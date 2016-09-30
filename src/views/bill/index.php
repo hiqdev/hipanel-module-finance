@@ -27,22 +27,18 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= $page->renderLayoutSwitcher() ?>
             <?= $page->renderSorter([
                 'attributes' => [
-                    'seller',
-                    'client',
-                    'sum',
-                    'balance',
-                    'type',
-                    'descr',
+                    'seller', 'client',
+                    'sum', 'balance',
+                    'type', 'descr',
                 ],
             ]) ?>
             <?= $page->renderPerPage() ?>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('bulk-actions') ?>
-            <?php
-            // TODO: implement bills edit
-//            if (Yii::$app->user->can('manage')) print $page->renderBulkButton(Yii::t('hipanel', 'Edit'), 'edit');
-            ?>
+            <?php if (Yii::$app->user->can('edit-bills') && defined('NOT_IMPLEMENTED_EDIT_BILLS')) : ?>
+                <?= $page->renderBulkButton(Yii::t('hipanel', 'Edit'), 'edit') ?>
+            <?php endif ?>
             <?php if (Yii::$app->user->can('delete-bills')) : ?>
                 <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), 'delete', 'danger') ?>
             <?php endif ?>
