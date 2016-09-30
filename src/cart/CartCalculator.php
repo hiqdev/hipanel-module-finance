@@ -11,16 +11,41 @@
 
 namespace hipanel\modules\finance\cart;
 
+use hipanel\modules\finance\logic\Calculator;
 use hipanel\modules\finance\models\Calculation;
-use hiqdev\hiart\ErrorResponseException;
+use hipanel\modules\finance\models\Value;
 use hiqdev\yii2\cart\ShoppingCart;
 use Yii;
-use yii\base\Object;
-use yii\web\UnprocessableEntityHttpException;
 use yz\shoppingcart\CartActionEvent;
 
-class CartCalculator extends Object
+/**
+ * Class CartCalculator provides API to calculate [[cart]] positions value
+ *
+ * Usage:
+ *
+ * ```php
+ * $calculator = new CartCalculator([
+ *     'cart' => $this->cart
+ * ]);
+ *
+ * $calculator->run(); // will calculate prices for all cart positions and update them
+ * ```
+ *
+ * Also can be bound to some cart event as handler:
+ *
+ * ```php
+ * $cart->on(Cart::EVENT_UPDATE, [CartCalculator::class, 'handle']);
+ * ```
+ *
+ * @package hipanel\modules\finance\cart
+ */
+class CartCalculator extends Calculator
 {
+    /**
+     * @var AbstractCartPosition[]
+     */
+    protected $models;
+
     /**
      * @var ShoppingCart
      */
@@ -32,116 +57,68 @@ class CartCalculator extends Object
     public $event;
 
     /**
-     * @var AbstractCartPosition
-     */
-    public $position;
-
-    /**
      * Creates the instance of the object and runs the calculation.
      *
      * @param CartActionEvent $event The event
      * @void
      */
-    public static function execute($event)
+    public static function handle($event)
     {
-        $calculator = new static(['event' => $event]);
-        $calculator->run();
-    }
+        /** @var ShoppingCart $cart */
+        $cart = $event->sender;
 
-    /** {@inheritdoc} */
-    public function init()
-    {
-        $this->cart = $this->event->sender;
-        $this->position = $this->event->position;
+        $calculator = new static($cart);
+        return $calculator->execute();
     }
 
     /**
-     * Runs the calculation.
-     * Normally, the method should call [[calculateValue]].
-     * @void
+     * @param ShoppingCart $cart
      */
-    public function run()
+    public function __construct(ShoppingCart $cart)
     {
-        $this->calculateValue($this->getCalculationModels());
+        $this->cart = $cart;
+
+        parent::__construct($this->cart->positions);
     }
 
     /**
-     * The method sends the request to the billing and update positions.
-     *
-     * @param Calculation[] $models
-     * @see updatePositions
-     * @throws UnprocessableEntityHttpException
+     * @inheritdoc
      */
-    protected function calculateValue($models)
+    public function execute()
     {
-        $data = [];
+        parent::execute();
 
-        foreach ($models as $model) {
-            $data[$model->getPrimaryKey()] = $model->getAttributes();
-        }
+        $this->applyCalculations();
 
-        $response = $this->sendRequest($data);
-        $this->updatePositions($response);
+        return $this->calculations;
     }
 
     /**
-     * Sends request to the billing API.
-     *
-     * @param array $data cart items structured properly for the billing API
-     * @throws UnprocessableEntityHttpException
-     * @return array
+     * Updates positions using the calculations provided with [[getCalculation]]
      */
-    private function sendRequest($data)
+    private function applyCalculations()
     {
-        if (empty($data)) {
-            return [];
-        }
+        $currency = Yii::$app->params['currency'];
 
-        try {
-            $result = Calculation::perform('CalcValue', $data, true);
-        } catch (ErrorResponseException $e) {
-            $result = $e->errorInfo['response'];
-        } catch (\Exception $e) {
-            throw new UnprocessableEntityHttpException('Failed to calculate cart value', 0, $e);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Updates positions with the value from $data.
-     *
-     * @param array $data
-     */
-    private function updatePositions($data)
-    {
-        foreach ($this->cart->positions as $position) {
+        foreach ($this->models as $position) {
             $id = $position->id;
-            if (isset($data[$id])) {
-                $value = reset($data[$id]['value']); // data is wrapped with currency. todo: dynamic currencies
-                $position->setPrice($value['price']);
-                $position->setValue($value['value']);
-            } else {
-                Yii::error('Cart position was removed from the cart because of failed value calculation. Normally this should never happen.', 'hipanel.cart');
+
+            $calculation = $this->getCalculation($id);
+            if (!$calculation instanceof Calculation) {
+                Yii::error('Cart position "' . $position->getName() . '" was removed from the cart because of failed value calculation. Normally this should never happen.', 'hipanel.cart');
                 $this->cart->removeById($position->id);
                 break;
             }
+
+            $value = $calculation->forCurrency($currency);
+            if (!$value instanceof Value) {
+                Yii::error('Cart position "' . $position->getName() . '" was removed from the cart because calculation for currency "' . $currency . '" is not available', 'hipanel.cart');
+                $this->cart->removeById($position->id);
+                break;
+            }
+
+            $position->setPrice($value->price);
+            $position->setValue($value->value);
         }
-    }
-
-    /**
-     * Collects the calculation models form the cart positions.
-     *
-     * @return Calculation[]
-     */
-    protected function getCalculationModels()
-    {
-        $models = [];
-
-        foreach ($this->cart->positions as $position) {
-            $models[$position->id] = $position->getCalculationModel();
-        }
-
-        return $models;
     }
 }
