@@ -11,6 +11,7 @@
 
 namespace hipanel\modules\finance\cart;
 
+use hipanel\modules\finance\models\CalculableModelInterface;
 use hipanel\modules\finance\models\Calculation;
 use hiqdev\hiart\ActiveRecord;
 use hiqdev\yii2\cart\CartPositionInterface;
@@ -22,7 +23,7 @@ use yii\base\InvalidConfigException;
  * Class AbstractCartPosition.
  * @property Calculation $actionCalcModel
  */
-abstract class AbstractCartPosition extends ActiveRecord implements CartPositionInterface
+abstract class AbstractCartPosition extends ActiveRecord implements CartPositionInterface, CalculableModelInterface
 {
     use CartPositionTrait;
 
