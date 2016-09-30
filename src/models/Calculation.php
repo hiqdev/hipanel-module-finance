@@ -35,12 +35,6 @@ class Calculation extends \hipanel\base\Model
     }
 
     /** {@inheritdoc} */
-    public static function primaryKey()
-    {
-        return ['tariff_id'];
-    }
-
-    /** {@inheritdoc} */
     public function init()
     {
         if (Yii::$app->user->getIsGuest()) {
@@ -81,7 +75,7 @@ class Calculation extends \hipanel\base\Model
         return [
             [['object', 'seller', 'client', 'type', 'currency', 'item'], 'safe'],
             [['amount'], 'number'],
-            [['tariff_id'], 'integer'],
+            [['tariff_id', 'calculation_id'], 'integer'],
         ];
     }
 

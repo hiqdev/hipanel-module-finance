@@ -110,6 +110,7 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
     public function getCalculationModel()
     {
         return new Calculation([
+            'calculation_id' => $this->id,
             'tariff_id' => $this->id,
             'object' => $this->getGeneralType()
         ]);

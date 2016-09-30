@@ -56,17 +56,11 @@ abstract class AbstractPurchase extends \hipanel\base\Model
     }
 
     /** {@inheritdoc} */
-    public static function primaryKey()
-    {
-        return ['cart_position_id'];
-    }
-
-    /** {@inheritdoc} */
     public function init()
     {
         parent::init();
 
-        $this->cart_position_id = $this->position->getId();
+        $this->calculation_id = $this->position->getId();
         $this->amount = $this->position->getQuantity();
     }
 
@@ -95,7 +89,7 @@ abstract class AbstractPurchase extends \hipanel\base\Model
     public function rules()
     {
         return [
-            [['cart_position_id', 'object', 'client', 'type', 'currency', 'item'], 'safe'],
+            [['calculation_id', 'object', 'client', 'type', 'currency', 'item'], 'safe'],
             [['amount'], 'number'],
         ];
     }
