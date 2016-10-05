@@ -15,6 +15,7 @@ use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\cart\CartFinisher;
 use hipanel\modules\finance\Module;
 use Yii;
+use yii\filters\AccessControl;
 
 class CartController extends \yii\web\Controller
 {
@@ -22,6 +23,22 @@ class CartController extends \yii\web\Controller
      * @var Module
      */
     public $module;
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['deposit', 'select', 'partial', 'full', 'finish'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@']
+                    ]
+                ]
+            ]
+        ];
+    }
 
     public function renderDeposit($sum)
     {
