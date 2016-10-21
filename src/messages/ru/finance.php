@@ -68,4 +68,6 @@ return [
     'Premium purchase' => 'Покупка премиум-пакета',
     'Unsale' => 'Распродажа',
 
+    'Select payment option' => 'Выберите вариант оплаты',
+
 ];

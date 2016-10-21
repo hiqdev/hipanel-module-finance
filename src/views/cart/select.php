@@ -7,7 +7,7 @@
  */
 use yii\helpers\Html;
 
-$this->title = Yii::t('hipanel/finance', 'Select');
+$this->title = Yii::t('hipanel/finance', 'Select payment option');
 ?>
 
 <div class="row">
