@@ -62,6 +62,8 @@ class Bill extends \hipanel\base\Model
             'gtype'       => Yii::t('hipanel', 'Type'),
             'gtype_label' => Yii::t('hipanel', 'Type'),
             'sum'         => Yii::t('hipanel/finance', 'Sum'),
+            'tariff'      => Yii::t('hipanel/finance', 'Tariff'),
+            'tariff_id'   => Yii::t('hipanel/finance', 'Tariff'),
         ]);
     }
 }
