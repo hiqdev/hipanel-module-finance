@@ -12,6 +12,7 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\modules\finance\models\query\TariffQuery;
+use Yii;
 
 /**
  * Class Tariff
@@ -77,6 +78,7 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
     public function attributeLabels()
     {
         return $this->mergeAttributeLabels([
+            'used' => Yii::t('hipanel/finance/tariff', 'Used'),
         ]);
     }
 

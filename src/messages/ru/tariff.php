@@ -58,4 +58,5 @@ return [
     'ISP manager' => 'ISP manager',
 
     'Location' => 'Расположение',
+    'Used' => 'Использован',
 ];
