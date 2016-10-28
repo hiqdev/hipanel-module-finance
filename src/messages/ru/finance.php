@@ -19,6 +19,7 @@ return [
     'Bills' => 'Платежи',
     'Tariff' => 'Тариф',
     'Tariffs' => 'Тарифы',
+    'Servers' => 'Сервера',
 
     '<b>{currency}</b> account' => '<b>{currency}</b> счёт',
     'See new invoice' => 'Посмотреть новый инвойс',

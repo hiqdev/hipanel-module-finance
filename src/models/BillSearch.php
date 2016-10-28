@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\models;
 
 use hipanel\base\SearchModelTrait;
 use hipanel\helpers\ArrayHelper;
+use Yii;
 
 class BillSearch extends Bill
 {
@@ -35,6 +36,13 @@ class BillSearch extends Bill
         return ArrayHelper::merge($this->defaultSearchAttributes(), [
             'time_from', 'time_till',
             'servers', 'server_ids',
+        ]);
+    }
+
+    public function attributeLabels()
+    {
+        return $this->mergeAttributeLabels([
+            'servers' => Yii::t('hipanel/finance', 'Servers'),
         ]);
     }
 }
