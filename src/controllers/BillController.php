@@ -19,9 +19,42 @@ use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use Yii;
+use yii\filters\AccessControl;
 
 class BillController extends \hipanel\base\CrudController
 {
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            'access-bill' => [
+                'class' => AccessControl::class,
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['manage', 'deposit'],
+                        'actions' => ['index', 'view'],
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['create-bills'],
+                        'actions' => ['create'],
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['update-bills'],
+                        'actions' => ['update'],
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['delete-bills'],
+                        'actions' => ['delete'],
+                    ],
+                ],
+            ],
+        ]);
+    }
+
     public function actions()
     {
         return [
@@ -29,7 +62,7 @@ class BillController extends \hipanel\base\CrudController
                 'class' => OrientationAction::class,
                 'allowedRoutes' => [
                     '@bill/index'
-                ]
+                ],
             ],
             'index' => [
                 'class'     => IndexAction::class,

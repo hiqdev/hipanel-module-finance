@@ -17,7 +17,8 @@ class SidebarMenu extends \hiqdev\menumanager\Menu
 {
     public function items()
     {
-        if (Yii::$app->user->can('support') && !Yii::$app->user->can('manage')) {
+        $user = Yii::$app->user;
+        if (!$user->can('manage') && !$user->can('deposit')) {
             return [];
         }
 
@@ -34,11 +35,12 @@ class SidebarMenu extends \hiqdev\menumanager\Menu
                     'deposit' => [
                         'label' => Yii::t('hipanel/finance', 'Recharge account'),
                         'url'   => ['/merchant/pay/deposit'],
+                        'visible' => $user->can('deposit'),
                     ],
                     'tariffs' => [
                         'label'   => Yii::t('hipanel/finance', 'Tariffs'),
                         'url'     => ['/finance/tariff/index'],
-                        'visible' => Yii::$app->user->can('support'),
+                        'visible' => $user->can('manage'),
                     ],
                     'holds' => [
                         'label'   => Yii::t('hipanel/finance', 'Held payments'),

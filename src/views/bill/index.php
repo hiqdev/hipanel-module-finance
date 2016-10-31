@@ -17,10 +17,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $page->setSearchFormData(compact('type')) ?>
 
         <?php $page->beginContent('main-actions') ?>
-            <?php if (Yii::$app->user->can('manage')) : ?>
+            <?php if (Yii::$app->user->can('create-bills')) : ?>
                 <?= Html::a(Yii::t('hipanel/finance', 'Add payment'), 'create', ['class' => 'btn btn-sm btn-success']) ?>
-            <?php endif; ?>
-            <?= Html::a(Yii::t('hipanel/finance', 'Recharge account'), ['@pay/deposit'], ['class' => 'btn btn-sm btn-success']) ?>
+            <?php endif ?>
+            <?php if (Yii::$app->user->can('deposit')) : ?>
+                <?= Html::a(Yii::t('hipanel/finance', 'Recharge account'), ['@pay/deposit'], ['class' => 'btn btn-sm btn-success']) ?>
+            <?php endif ?>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('show-actions') ?>
