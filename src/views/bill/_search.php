@@ -37,7 +37,7 @@ use yii\helpers\Html;
             'type' => DatePicker::TYPE_RANGE,
             'pluginOptions' => [
                 'autoclose' => true,
-                'format' => 'dd-mm-yyyy',
+                'format' => 'yyyy-mm-dd',
             ],
         ]) ?>
     </div>

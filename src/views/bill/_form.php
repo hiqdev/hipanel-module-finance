@@ -79,7 +79,7 @@ $form = ActiveForm::begin([
                             'type' => DatePicker::TYPE_COMPONENT_APPEND,
                             'pluginOptions' => [
                                 'autoclose' => true,
-                                'format' => 'dd.mm.yyyy HH:ii:ss',
+                                'format' => 'yyyy-mm-dd HH:ii:ss',
                             ],
                         ]) ?>
                     </div>
