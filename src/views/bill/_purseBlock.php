@@ -31,7 +31,7 @@ use yii\helpers\Html;
                         ],
                     ],
                 ]) ?>
-            <?php else : ?>
+            <?php elseif (Yii::$app->user->can('deposit')) : ?>
                 <?= Html::a(Yii::t('hipanel', 'Recharge account'), '#', ['class' => 'btn btn-default btn-xs']) ?>
             <?php endif ?>
         <?php $box->endTools() ?>
