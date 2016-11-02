@@ -64,14 +64,14 @@ $form = ActiveForm::begin([
                     <div class="col-md-2">
                         <?= $form->field($model, "[$i]type")->dropDownList($billTypes, ['groups' => $billGroupLabels]) ?>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 <?= AmountWithCurrency::$widgetClass ?>">
                         <?= $form->field($model, "[$i]sum")->widget(AmountWithCurrency::class, [
-                            'inputOptions' => ['placeholder' => '0.00'],
-                            'selectAttribute' => "[$i]currency",
-                            'selectAttributeOptions' => [
+                            'currencyAttributeName' => "[$i]currency",
+                            'currencyAttributeOptions' => [
                                 'items' => $this->context->getCurrencyTypes(),
                             ],
                         ]) ?>
+                        <?= $form->field($model, "[$i]currency", ['template' => '{input}{error}'])->hiddenInput() ?>
                     </div>
                     <div class="col-md-3">
                         <?= $form->field($model, "[$i]time")->widget(DateTimePicker::class, [
