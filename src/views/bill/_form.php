@@ -2,6 +2,7 @@
 
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
+use hipanel\modules\finance\models\Bill;
 use hipanel\widgets\Box;
 use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\DatePicker;
@@ -11,15 +12,19 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var hipanel\modules\finance\models\Bill $model */
+/** @var hipanel\modules\finance\models\Bill[] $models */
 /** @var array $billTypes */
 /** @var array $billGroupLabels */
+
+$model = reset($models);
+
 $form = ActiveForm::begin([
     'id' => 'dynamic-form',
+    'action' => $model->isNewRecord ? Url::to('create') : Url::to('update'),
     'enableClientValidation' => true,
     'validationUrl' => Url::toRoute([
         'validate-form',
-        'scenario' => $model->isNewRecord ? $model->scenario : 'update',
+        'scenario' => $model->isNewRecord ? $model->scenario : Bill::SCENARIO_UPDATE,
     ]),
 ]) ?>
 <?php DynamicFormWidget::begin([
@@ -47,6 +52,7 @@ $form = ActiveForm::begin([
             <?php Box::begin() ?>
             <div class="row input-row margin-bottom">
                 <div class="col-lg-offset-10 col-sm-2 text-right">
+                    <?= Html::activeHiddenInput($model, "[$i]id") ?>
                     <?php if ($model->isNewRecord) : ?>
                         <div class="btn-group">
                             <button type="button" class="add-item btn btn-success btn-sm"><i
@@ -59,10 +65,18 @@ $form = ActiveForm::begin([
                 </div>
                 <div class="form-instance">
                     <div class="col-md-2">
-                        <?= $form->field($model, "[$i]client_id")->widget(ClientCombo::class, ['formElementSelector' => '.form-instance']) ?>
+                        <?= $form->field($model, "[$i]client_id")->widget(ClientCombo::class, [
+                            'formElementSelector' => '.form-instance',
+                            'inputOptions' => [
+                                'readonly' => $model->scenario == Bill::SCENARIO_UPDATE,
+                            ]
+                        ]) ?>
                     </div>
                     <div class="col-md-2">
-                        <?= $form->field($model, "[$i]type")->dropDownList($billTypes, ['groups' => $billGroupLabels]) ?>
+                        <?= $form->field($model, "[$i]type")->dropDownList($billTypes, [
+                            'groups' => $billGroupLabels,
+                            'value' => $model->gtype ? implode(',', [$model->gtype, $model->type]) : null,
+                        ]) ?>
                     </div>
                     <div class="col-md-2 <?= AmountWithCurrency::$widgetClass ?>">
                         <?= $form->field($model, "[$i]sum")->widget(AmountWithCurrency::class, [
@@ -79,8 +93,11 @@ $form = ActiveForm::begin([
                             'type' => DatePicker::TYPE_COMPONENT_APPEND,
                             'pluginOptions' => [
                                 'autoclose' => true,
-                                'format' => 'yyyy-mm-dd HH:ii:ss',
+                                'format' => 'dd.mm.yyyy HH:ii:ss',
                             ],
+                            'options' => [
+                                'value' => Yii::$app->formatter->asDatetime($model->time, 'php:d.m.Y H:i:s')
+                            ]
                         ]) ?>
                     </div>
                     <div class="col-md-3">

@@ -18,6 +18,7 @@ use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
+use hipanel\modules\finance\forms\BillImportForm;
 use Yii;
 use yii\filters\AccessControl;
 
@@ -38,7 +39,7 @@ class BillController extends \hipanel\base\CrudController
                     [
                         'allow' => true,
                         'roles' => ['create-bills'],
-                        'actions' => ['create'],
+                        'actions' => ['create', 'import'],
                     ],
                     [
                         'allow' => true,
@@ -61,60 +62,69 @@ class BillController extends \hipanel\base\CrudController
             'set-orientation' => [
                 'class' => OrientationAction::class,
                 'allowedRoutes' => [
-                    '@bill/index'
+                    '@bill/index',
                 ],
             ],
             'index' => [
-                'class'     => IndexAction::class,
-                'data'      => function ($action) {
+                'class' => IndexAction::class,
+                'data' => function ($action) {
                     return [
                         'types' => $action->controller->getPaymentTypes(),
                     ];
                 },
             ],
             'view' => [
-                'class'     => ViewAction::class,
+                'class' => ViewAction::class,
             ],
             'validate-form' => [
-                'class'     => ValidateFormAction::class,
+                'class' => ValidateFormAction::class,
             ],
             'create' => [
-                'class'     => SmartCreateAction::class,
+                'class' => SmartCreateAction::class,
                 'data' => function ($action) {
-                    $types = $this->getRefs('type,bill', 'hipanel/finance', ['with_hierarchy' => 1, 'orderby' => 'name_asc']);
-                    $billTypes = [];
-                    $billGroupLabels = [];
+                    list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
 
-                    foreach ($types as $key => $title) {
-                        list($type, $name) = explode(',', $key);
-
-                        if (!isset($billTypes[$type])) {
-                            $billTypes[$type] = [];
-                            $billGroupLabels[$type] = ['label' => $title];
-                        }
-
-                        if (isset($name)) {
-                            foreach ($types as $k => $t) {
-                                if (strpos($k, $type . ',') === 0) {
-                                    $billTypes[$type][$k] = $t;
-                                }
-                            }
-                        }
-                    }
-
-                    return ['billTypes' => $billTypes, 'billGroupLabels' => $billGroupLabels];
+                    return compact('billTypes', 'billGroupLabels');
                 },
-                'success'   => Yii::t('hipanel/finance', 'Bill was created successfully'),
+                'success' => Yii::t('hipanel/finance', 'Bill was created successfully'),
             ],
             'update' => [
-                'class'     => SmartUpdateAction::class,
-                'success'   => Yii::t('hipanel/finance', 'Bill was updated successfully'),
+                'class' => SmartUpdateAction::class,
+                'success' => Yii::t('hipanel/finance', 'Bill was updated successfully'),
+                'data' => function ($action) {
+                    list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
+
+                    return compact('billTypes', 'billGroupLabels');
+                },
             ],
             'delete' => [
-                'class'     => SmartPerformAction::class,
-                'success'   => Yii::t('hipanel/finance', 'Bill was deleted successfully'),
+                'class' => SmartPerformAction::class,
+                'success' => Yii::t('hipanel/finance', 'Bill was deleted successfully'),
             ],
         ];
+    }
+
+    public function actionImport()
+    {
+        list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
+
+        $model = new BillImportForm();
+        $model->setTypes($billTypes);
+
+        if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post())) {
+            $models = $model->parse();
+
+            if ($models !== false) {
+                return $this->render('create', [
+                    'models' => $models,
+                    'model' => reset($models),
+                    'billTypes' => $billTypes,
+                    'billGroupLabels' => $billGroupLabels,
+                ]);
+            }
+        }
+
+        return $this->render('import', ['model' => $model]);
     }
 
     /**
@@ -122,6 +132,42 @@ class BillController extends \hipanel\base\CrudController
      */
     public function getPaymentTypes()
     {
-        return $this->getRefs('type,bill', 'hipanel/finance', Yii::$app->user->can('support') ? ['with_hierarchy' => true] : []);
+        $options = ['orderby' => 'name_asc'];
+
+        if (Yii::$app->user->can('support')) {
+            $options['with_hierarchy'] = true;
+        }
+
+        return $this->getRefs('type,bill', 'hipanel/finance', $options);
+    }
+
+    /**
+     * @return array
+     */
+    private function getTypesAndGroups()
+    {
+        $billTypes = [];
+        $billGroupLabels = [];
+
+        $types = $this->getPaymentTypes();
+
+        foreach ($types as $key => $title) {
+            list($type, $name) = explode(',', $key);
+
+            if (!isset($billTypes[$type])) {
+                $billTypes[$type] = [];
+                $billGroupLabels[$type] = ['label' => $title];
+            }
+
+            if (isset($name)) {
+                foreach ($types as $k => $t) {
+                    if (strpos($k, $type . ',') === 0) {
+                        $billTypes[$type][$k] = $t;
+                    }
+                }
+            }
+        }
+
+        return [$billTypes, $billGroupLabels];
     }
 }

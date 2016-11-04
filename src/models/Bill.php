@@ -20,6 +20,11 @@ class Bill extends \hipanel\base\Model
     public $time_from;
     public $time_till;
 
+    const SCENARIO_CREATE = 'create';
+    const SCENARIO_UPDATE = 'update';
+    const SCENARIO_DELETE = 'delete';
+
+
     public static $i18nDictionary = 'hipanel/finance';
 
     /**
@@ -28,24 +33,23 @@ class Bill extends \hipanel\base\Model
     public function rules()
     {
         return [
-            [['client_id', 'seller_id', 'id'],    'integer'],
-            [['object_id', 'tariff_id'],          'integer'],
-            [['client', 'seller', 'bill'],        'safe'],
-            [['domain', 'server', 'time'],        'safe'],
-            [['sum', 'balance', 'quantity'],      'number'],
-            [['currency', 'label', 'descr'],      'safe'],
-            [['object', 'domains', 'tariff'],     'safe'],
-            [['type', 'gtype', 'class'],          'safe'],
-            [['class_label'],                     'safe'],
-            [['type_label', 'gtype_label'],       'safe'],
+            [['client_id', 'seller_id', 'id'], 'integer'],
+            [['object_id', 'tariff_id'], 'integer'],
+            [['client', 'seller', 'bill'], 'safe'],
+            [['domain', 'server'], 'safe'],
+            [['sum', 'balance', 'quantity'], 'number'],
+            [['currency', 'label', 'descr'], 'safe'],
+            [['object', 'domains', 'tariff'], 'safe'],
+            [['type', 'gtype', 'class'], 'safe'],
+            [['class_label'], 'safe'],
+            [['type_label', 'gtype_label'], 'safe'],
+            [['time'], 'date', 'format' => 'php:d.m.Y H:i:s'],
 
-            [['id'],                              'integer', 'on' => 'delete'],
-
-            [['client_id'], 'integer', 'on' => 'create'],
-            [['type', 'label'], 'safe', 'on' => 'create'],
-            [['time'], 'date', 'format' => 'php:d.m.Y H:i:s', 'on' => 'create'],
-            [['sum'], 'number', 'on' => 'create'],
-            [['client_id', 'type', 'label', 'sum', 'currency', 'time'], 'required', 'on' => 'create'],
+            [['id'], 'required', 'on' => [self::SCENARIO_UPDATE, self::SCENARIO_DELETE]],
+            [['client_id'], 'integer', 'on' => [self::SCENARIO_CREATE]],
+            [['currency', 'sum', 'type', 'label'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['client_id', 'sum', 'time'], 'required', 'on' => [self::SCENARIO_CREATE]],
+            [['client'], 'safe', 'on' => [self::SCENARIO_CREATE]]
         ];
     }
 
@@ -55,15 +59,15 @@ class Bill extends \hipanel\base\Model
     public function attributeLabels()
     {
         return $this->mergeAttributeLabels([
-            'client'      => Yii::t('hipanel', 'Client'),
-            'time'        => Yii::t('hipanel', 'Time'),
-            'currency'    => Yii::t('hipanel', 'Currency'),
-            'balance'     => Yii::t('hipanel', 'Balance'),
-            'gtype'       => Yii::t('hipanel', 'Type'),
+            'client' => Yii::t('hipanel', 'Client'),
+            'time' => Yii::t('hipanel', 'Time'),
+            'currency' => Yii::t('hipanel', 'Currency'),
+            'balance' => Yii::t('hipanel', 'Balance'),
+            'gtype' => Yii::t('hipanel', 'Type'),
             'gtype_label' => Yii::t('hipanel', 'Type'),
-            'sum'         => Yii::t('hipanel/finance', 'Sum'),
-            'tariff'      => Yii::t('hipanel/finance', 'Tariff'),
-            'tariff_id'   => Yii::t('hipanel/finance', 'Tariff'),
+            'sum' => Yii::t('hipanel/finance', 'Sum'),
+            'tariff' => Yii::t('hipanel/finance', 'Tariff'),
+            'tariff_id' => Yii::t('hipanel/finance', 'Tariff'),
         ]);
     }
 }

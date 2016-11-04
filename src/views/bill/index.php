@@ -20,6 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php if (Yii::$app->user->can('create-bills')) : ?>
                 <?= Html::a(Yii::t('hipanel/finance', 'Add payment'), 'create', ['class' => 'btn btn-sm btn-success']) ?>
             <?php endif ?>
+            <?php if (Yii::$app->user->can('create-bills')) : ?>
+                <?= Html::a(Yii::t('hipanel/finance', 'Import payments'), 'import', ['class' => 'btn btn-sm btn-default']) ?>
+            <?php endif ?>
             <?php if (Yii::$app->user->can('deposit')) : ?>
                 <?= Html::a(Yii::t('hipanel/finance', 'Recharge account'), ['@pay/deposit'], ['class' => 'btn btn-sm btn-success']) ?>
             <?php endif ?>
@@ -53,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'dataProvider' => $dataProvider,
                 'filterModel'  => $model,
                 'columns'      => [
-                    'checkbox', 'client_id', 'time', 'sum', 'balance',
+                    'checkbox', 'client_id', 'time', 'sum_editable', 'balance',
                     'type_label', 'description',
                 ],
             ]) ?>
