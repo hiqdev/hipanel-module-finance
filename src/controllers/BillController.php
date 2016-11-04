@@ -68,7 +68,7 @@ class BillController extends \hipanel\base\CrudController
                 'class'     => IndexAction::class,
                 'data'      => function ($action) {
                     return [
-                        'type' => $action->controller->getPaymentType(),
+                        'types' => $action->controller->getPaymentTypes(),
                     ];
                 },
             ],
@@ -120,7 +120,7 @@ class BillController extends \hipanel\base\CrudController
     /**
      * @return array
      */
-    public function getPaymentType()
+    public function getPaymentTypes()
     {
         return $this->getRefs('type,bill', 'hipanel/finance', Yii::$app->user->can('support') ? ['with_hierarchy' => true] : []);
     }

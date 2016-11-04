@@ -45,8 +45,9 @@ use yii\helpers\Html;
 
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field('type')->widget(StaticCombo::class, [
-        'data' => $type,
+        'data' => $types,
         'hasId' => true,
+        'multiple' => true,
     ]) ?>
 </div>
 
