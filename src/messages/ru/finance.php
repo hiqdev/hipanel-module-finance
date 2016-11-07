@@ -74,6 +74,10 @@ return [
     'Import' => 'Импортировать',
     'Rows for import' => 'Строки для импорта',
     'Import payments' => 'Импортировать платежи',
+    'Update payments' => 'Редактировать платежи',
+    'Payment was created successfully' => 'Платёж был создан успешно',
+    'Payment was updated successfully' => 'Платёж был успешно отредактирован',
+    'Payment was deleted successfully' => 'Платёж был удалён успешно',
     'How to import payments' => 'Как импортирвать платежи',
     '<p>Use the following format: <pre>Client;Time;Amount;Currency;Type;Description</pre>Each payment must be placed on new line.</p>
 <p><span class="label label-default">Time</span> can be either: <ul><li><code>this</code> (alias <code>thisMonth</code>) &ndash; first day of this month</li><li><code>prev</code> (alias <code>prevMonth</code>) &ndash; first day of previous month</li><li>date or date with time (for example <code>2016-11-01</code>, <code>01.11.2016 10:20:30</code>)</li></ul></p>

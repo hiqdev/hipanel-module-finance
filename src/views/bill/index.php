@@ -41,8 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('bulk-actions') ?>
-            <?php if (Yii::$app->user->can('edit-bills') && defined('NOT_IMPLEMENTED_EDIT_BILLS')) : ?>
-                <?= $page->renderBulkButton(Yii::t('hipanel', 'Edit'), 'edit') ?>
+            <?php if (Yii::$app->user->can('create-bills')) : ?>
+                <?= $page->renderBulkButton(Yii::t('hipanel', 'Copy'), 'copy') ?>
+            <?php endif ?>
+            <?php if (Yii::$app->user->can('update-bills')) : ?>
+                <?= $page->renderBulkButton(Yii::t('hipanel', 'Update'), 'update') ?>
             <?php endif ?>
             <?php if (Yii::$app->user->can('delete-bills')) : ?>
                 <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), 'delete', 'danger') ?>

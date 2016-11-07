@@ -24,7 +24,6 @@ class Bill extends \hipanel\base\Model
     const SCENARIO_UPDATE = 'update';
     const SCENARIO_DELETE = 'delete';
 
-
     public static $i18nDictionary = 'hipanel/finance';
 
     /**
@@ -49,7 +48,7 @@ class Bill extends \hipanel\base\Model
             [['client_id'], 'integer', 'on' => [self::SCENARIO_CREATE]],
             [['currency', 'sum', 'type', 'label'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['client_id', 'sum', 'time'], 'required', 'on' => [self::SCENARIO_CREATE]],
-            [['client'], 'safe', 'on' => [self::SCENARIO_CREATE]]
+            [['client'], 'safe', 'on' => [self::SCENARIO_CREATE]],
         ];
     }
 
@@ -69,5 +68,13 @@ class Bill extends \hipanel\base\Model
             'tariff' => Yii::t('hipanel/finance', 'Tariff'),
             'tariff_id' => Yii::t('hipanel/finance', 'Tariff'),
         ]);
+    }
+
+    public function prepareToCopy()
+    {
+        $this->id = null;
+        $this->setIsNewRecord(true);
+
+        return true;
     }
 }

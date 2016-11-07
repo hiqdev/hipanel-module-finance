@@ -19,6 +19,7 @@ use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\modules\finance\forms\BillImportForm;
+use hipanel\modules\finance\models\Bill;
 use Yii;
 use yii\filters\AccessControl;
 
@@ -39,7 +40,7 @@ class BillController extends \hipanel\base\CrudController
                     [
                         'allow' => true,
                         'roles' => ['create-bills'],
-                        'actions' => ['create', 'import'],
+                        'actions' => ['create', 'import', 'copy'],
                     ],
                     [
                         'allow' => true,
@@ -86,20 +87,34 @@ class BillController extends \hipanel\base\CrudController
 
                     return compact('billTypes', 'billGroupLabels');
                 },
-                'success' => Yii::t('hipanel/finance', 'Bill was created successfully'),
+                'success' => Yii::t('hipanel/finance', 'Payment was created successfully'),
             ],
             'update' => [
                 'class' => SmartUpdateAction::class,
-                'success' => Yii::t('hipanel/finance', 'Bill was updated successfully'),
+                'success' => Yii::t('hipanel/finance', 'Payment was updated successfully'),
                 'data' => function ($action) {
                     list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
 
                     return compact('billTypes', 'billGroupLabels');
                 },
             ],
+            'copy' => [
+                'class' => SmartUpdateAction::class,
+                'scenario' => 'create',
+                'data' => function ($action, $data) {
+                    foreach ($data['models'] as $model) {
+                        /** @var Bill $model */
+                        $model->prepareToCopy();
+                    }
+
+                    list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
+
+                    return compact('billTypes', 'billGroupLabels');
+                }
+            ],
             'delete' => [
                 'class' => SmartPerformAction::class,
-                'success' => Yii::t('hipanel/finance', 'Bill was deleted successfully'),
+                'success' => Yii::t('hipanel/finance', 'Payment was deleted successfully'),
             ],
         ];
     }
