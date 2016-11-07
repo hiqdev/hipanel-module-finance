@@ -71,4 +71,17 @@ return [
 
     'Select payment option' => 'Выберите вариант оплаты',
 
+    'Import' => 'Импортировать',
+    'Rows for import' => 'Строки для импорта',
+    'Import payments' => 'Импортировать платежи',
+    'How to import payments' => 'Как импортирвать платежи',
+    '<p>Use the following format: <pre>Client;Time;Amount;Currency;Type;Description</pre>Each payment must be placed on new line.</p>
+<p><span class="label label-default">Time</span> can be either: <ul><li><code>this</code> (alias <code>thisMonth</code>) &ndash; first day of this month</li><li><code>prev</code> (alias <code>prevMonth</code>) &ndash; first day of previous month</li><li>date or date with time (for example <code>2016-11-01</code>, <code>01.11.2016 10:20:30</code>)</li></ul></p>
+<p><span class="label label-default">Type</span> can be either: <ul><li>a full type notation (<code>deposit,webmoney</code>, <code>deposit,wmdirect</code>)</li><li>short type notation (<code>webmoney</code>, <code>server_traf95_max</code>)</li><li>simply a type name (<code>Partner invoice</code>, <code>WebMoney.Merchant</code>)</li></ul></p>
+<p>After the <span class="label label-success">Import</span> button pressing, you will be redirected to the payments creation page to verify and confirm payments.</p>'
+        =>
+    '<p>Используйте следующий формат: <pre>Клиент;Время;Сумма;Валюта;Тип;Описание</pre>Каждый платёж должен быть на новой строке.</p>
+<p><span class="label label-default">Время</span> может быть: <ul><li><code>this</code> (или <code>thisMonth</code>) &ndash; первый день этого месяца</li><li><code>prev</code> (или <code>prevMonth</code>) &ndash; первый день прошлого месяца</li><li>дата или дата и время (for example <code>2016-11-01</code>, <code>01.11.2016 10:20:30</code>)</li></ul></p>
+<p><span class="label label-default">Тип</span> может быть: <ul><li>полный формат (<code>deposit,webmoney</code>, <code>deposit,wmdirect</code>)</li><li>короткий формат (<code>webmoney</code>, <code>server_traf95_max</code>)</li><li>название типа по-английски (<code>Partner invoice</code>, <code>WebMoney.Merchant</code>)</li></ul></p>
+<p>После нажатия кнопки <span class="label label-success">Импортировать</span>, вы будете передресованы на страницу создания платежей для проверки и подтверждения импорта.</p>'
 ];

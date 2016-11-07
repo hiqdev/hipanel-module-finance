@@ -106,15 +106,19 @@ class BillController extends \hipanel\base\CrudController
 
     public function actionImport()
     {
-        list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
-
-        $model = new BillImportForm();
-        $model->setTypes($billTypes);
+        $model = new BillImportForm([
+            'billTypes' => array_filter($this->getPaymentTypes(), function ($key) {
+                // Kick out items that are categories names, but not real types
+                return (strpos($key, ',') !== false);
+            }, ARRAY_FILTER_USE_KEY)
+        ]);
 
         if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post())) {
             $models = $model->parse();
 
             if ($models !== false) {
+                list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
+
                 return $this->render('create', [
                     'models' => $models,
                     'model' => reset($models),

@@ -4,20 +4,73 @@ namespace hipanel\modules\finance\forms;
 
 use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\models\Bill;
+use Yii;
 use yii\base\InvalidValueException;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Class BillImportForm provides functionality to parse CSV data
+ *
+ * Usage:
+ *
+ * ```php
+ * $model = new BillImportForm([
+ *     'billTypes' => [
+ *         'deposit,webmoney' => 'WebMoney account deposit'
+ *     ]
+ * ]);
+ *
+ * $model->data = 'silverfire;now;10;usd;webmoney;test';
+ * $models = $model->parse();
+ *
+ * foreach ($models as $model) {
+ *     $model->save();
+ * }
+ * ```
+ *
+ * @package hipanel\modules\finance\forms
+ */
 class BillImportForm extends \yii\base\Model
 {
-    protected $_types;
-
+    /**
+     * @var string
+     */
     public $data;
+    /**
+     * @var array Array of possible bill types.
+     * Key - full bill type
+     * Value - bill type title
+     */
+    public $billTypes = [];
+    /**
+     * @var array map to find client id by login.
+     * Key - login
+     * Value - id
+     *
+     */
+    private $clientsMap = [];
 
+    /**
+     * @inheritdoc
+     */
     public function attributes()
     {
         return ['data'];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'data' => Yii::t('hipanel/finance', 'Rows for import'),
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
@@ -25,35 +78,82 @@ class BillImportForm extends \yii\base\Model
         ];
     }
 
+    /**
+     * Parses [[data]] attribute and creates [[Bill]] model from each line.
+     *
+     * @return Bill[]|false Array of [[Bill]] models on success or `false` on parsing error
+     */
     public function parse()
     {
         $bills = [];
         $billTemplate = new Bill(['scenario' => Bill::SCENARIO_CREATE]);
 
         $lines = explode("\n", $this->data);
-        foreach ($lines as $line) {
-            $bills[] = $bill = clone $billTemplate;
 
-            $chunks = explode(';', $line);
-            if (count($chunks) !== 6) {
-                throw new InvalidValueException('Line "' . $line . '" is malformed"');
+        try {
+            foreach ($lines as $line) {
+                $line = trim($line);
+                if ($line === '') {
+                    continue;
+                }
+
+                $bills[] = $bill = clone $billTemplate;
+
+                list($client, $time, $sum, $currency, $type, $label) = $this->splitLine($line);
+                $bill->setAttributes(compact('client', 'time', 'sum', 'currency', 'type', 'label'));
             }
 
-            list($client, $time, $sum, $currency, $type, $label) = array_map('trim', $chunks);
-            $bill->setAttributes(compact('client', 'time', 'sum', 'currency', 'type', 'label'));
-        }
+            $this->resolveClients(ArrayHelper::getColumn($bills, 'client'));
 
-        $this->resolveClients(ArrayHelper::getColumn($bills, 'client'));
+            foreach ($bills as $bill) {
+                $bill->time = \Yii::$app->formatter->asDatetime($this->resolveTime($bill->time), 'php:d.m.Y H:i:s');
+                $bill->type = $this->resolveType($bill->type);
+                $bill->client_id = $this->convertClientToId($bill->client);
+            }
+        } catch (InvalidValueException $e) {
+            $this->addError('data', $e->getMessage());
 
-        foreach ($bills as $bill) {
-            $bill->time = \Yii::$app->formatter->asDatetime($this->resolveTime($bill->time), 'php:d.m.Y H:i:s');
-            $bill->type = $this->resolveType($bill->type);
-            $bill->client_id = $this->convertClientToId($bill->client);
+            return false;
         }
 
         return empty($bills) ? false : $bills;
     }
 
+    /**
+     * Splits $line for chunks by `;` character.
+     * Ensures there are exactly 6 chunks.
+     * Trims each value before return.
+     *
+     * @param string $line to be exploded
+     * @return array
+     */
+    protected function splitLine($line)
+    {
+        $chunks = explode(';', $line);
+        if (count($chunks) !== 6) {
+            throw new InvalidValueException('Line "' . $line . '" is malformed');
+        }
+
+        return array_map('trim', $chunks);
+    }
+
+    /**
+     * @param array $logins all logins used current import session to be pre-fetched
+     * @void
+     */
+    private function resolveClients($logins)
+    {
+        $clients = Client::find()->where(['login' => $logins])->all();
+        $this->clientsMap = array_combine(ArrayHelper::getColumn($clients, 'login'),
+            ArrayHelper::getColumn($clients, 'id'));
+    }
+
+    /**
+     * Resolves $time to a UNIX epoch timestamp.
+     *
+     * @param $time
+     * @return int UNIX epoch timestamp
+     */
     protected function resolveTime($time)
     {
         $timestamp = strtotime($time);
@@ -73,9 +173,16 @@ class BillImportForm extends \yii\base\Model
         return time();
     }
 
+    /**
+     * Resolves payment $type to a normal form
+     *
+     * @param string $type
+     * @return string
+     * @throws InvalidValueException
+     */
     protected function resolveType($type)
     {
-        $types = $this->getTypes();
+        $types = $this->billTypes;
 
         // Type is a normal key
         if (isset($types[$type])) {
@@ -107,6 +214,14 @@ class BillImportForm extends \yii\base\Model
         throw new InvalidValueException('Payment type "' . $type . '" is not recognized');
     }
 
+    /**
+     * Converts client login to ID.
+     * Note: [[resolveClients]]] must be called before calling this method.
+     *
+     * @param string $client
+     * @return string|int
+     * @see clientMap
+     */
     protected function convertClientToId($client)
     {
         if (!isset($this->clientsMap[$client])) {
@@ -114,32 +229,5 @@ class BillImportForm extends \yii\base\Model
         }
 
         return $this->clientsMap[$client];
-    }
-
-    public function setTypes($types)
-    {
-        $result = [];
-
-        foreach ($types as $category) {
-            foreach ($category as $key => $title) {
-                $result[$key] = $title;
-            }
-        }
-
-        $this->_types = $result;
-    }
-
-    private $clientsMap = [];
-
-    private function resolveClients($logins)
-    {
-        $clients = Client::find()->where(['login' => $logins])->all();
-        $this->clientsMap = array_combine(ArrayHelper::getColumn($clients, 'login'),
-            ArrayHelper::getColumn($clients, 'id'));
-    }
-
-    public function getTypes()
-    {
-        return $this->_types;
     }
 }
