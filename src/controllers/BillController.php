@@ -69,9 +69,9 @@ class BillController extends \hipanel\base\CrudController
             'index' => [
                 'class' => IndexAction::class,
                 'data' => function ($action) {
-                    return [
-                        'types' => $action->controller->getPaymentTypes(),
-                    ];
+                    list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
+
+                    return compact('billTypes', 'billGroupLabels');
                 },
             ],
             'view' => [

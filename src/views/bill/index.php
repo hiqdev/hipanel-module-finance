@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php Pjax::begin(array_merge(Yii::$app->params['pjax'], ['enablePushState' => true])) ?>
     <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
 
-        <?= $page->setSearchFormData(compact('types')) ?>
+        <?php $page->setSearchFormData(compact('billTypes', 'billGroupLabels')) ?>
 
         <?php $page->beginContent('main-actions') ?>
             <?php if (Yii::$app->user->can('create-bills')) : ?>
