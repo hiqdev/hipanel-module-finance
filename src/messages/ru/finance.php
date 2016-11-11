@@ -40,6 +40,7 @@ return [
     'Use credit funds and pay the difference {amount}' => 'Использовать доступные средства и оплатить разницу {amount}',
     'Do not use credit funds, pay the whole cart: {amount}' => 'Не использовать доступные средства, оплатить всю корзину: {amount}',
     'It\'s enough to pay your cart' => 'Этого достаточно для оплаты корзины',
+    'Processing your cart...' => 'Обрабатываем корзину...',
     'You balance: {balance} {formattedCredit}' => 'Ваш баланс: {balance} {formattedCredit}',
     '(+{amount} of credit)' => '(+{amount} кредит)',
     'You can pay your cart partially' => 'Вы можете оплатить часть корзины',

@@ -4,6 +4,8 @@
  * @var float $rest client's balance + credit
  * @var \hipanel\modules\client\models\Client $client
  * @var \hiqdev\yii2\cart\ShoppingCart $cart
+ * @var \yii\web\View $this
+ *
  */
 use yii\helpers\Html;
 
@@ -28,7 +30,8 @@ $this->title = Yii::t('hipanel/finance', 'Select payment option');
                     <br>
                     <p>
                         <?= Html::a(Yii::t('hipanel/finance', 'Use credit funds without depositing'), '@finance/cart/finish', [
-                            'class' => 'btn btn-lg btn-primary btn-block'
+                            'class' => 'btn btn-lg btn-primary btn-block lock-on-click',
+                            'data-loading-text' => Yii::t('hipanel/finance', 'Processing your cart...'),
                         ]) ?>
                     </p>
                 <?php else : ?>
@@ -38,7 +41,10 @@ $this->title = Yii::t('hipanel/finance', 'Select payment option');
                         <?php $text = Yii::t('hipanel/finance', 'Use credit funds and pay the difference {amount}', [
                             'amount' => $cart->formatCurrency($cart->total - $rest)
                         ]);
-                        echo Html::a($text, '@finance/cart/partial', ['class' => 'btn btn-lg btn-primary  btn-block']) ?>
+                        echo Html::a($text, '@finance/cart/partial', [
+                            'class' => 'btn btn-lg btn-primary btn-block lock-on-click',
+                            'data-loading-text' => Yii::t('hipanel/finance', 'Processing your cart...'),
+                        ]) ?>
                     </p>
                 <?php endif ?>
                 <?php if ($cart->total > 0) : ?>
@@ -46,7 +52,10 @@ $this->title = Yii::t('hipanel/finance', 'Select payment option');
                         <?php $text = Yii::t('hipanel/finance', 'Do not use credit funds, pay the whole cart: {amount}', [
                             'amount' => $cart->formatCurrency($cart->total)
                         ]);
-                        echo Html::a($text, '@finance/cart/full', ['class' => 'btn btn-lg btn-primary btn-block']) ?>
+                        echo Html::a($text, '@finance/cart/full', [
+                            'class' => 'btn btn-lg btn-primary btn-block lock-on-click',
+                            'data-loading-text' => Yii::t('hipanel/finance', 'Processing your cart...')
+                        ]) ?>
                     </p>
                 <?php endif ?>
             </div>
@@ -54,3 +63,12 @@ $this->title = Yii::t('hipanel/finance', 'Select payment option');
 
     </div>
 </div>
+
+<?php
+
+$this->registerJs(<<<JS
+$('.lock-on-click').on('click', function () {
+    $(this).button('loading');
+});
+JS
+);
