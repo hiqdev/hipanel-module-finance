@@ -37,10 +37,15 @@ class Calculation extends \hipanel\base\Model
     /** {@inheritdoc} */
     public function init()
     {
-        if (Yii::$app->user->getIsGuest()) {
-            $this->seller = Yii::$app->params['user.seller'];
-        } else {
-            $this->seller = Yii::$app->user->identity->seller;
+        if (!isset($this->seller)) {
+            if (Yii::$app->user->getIsGuest()) {
+                $this->seller = Yii::$app->params['user.seller'];
+            } else {
+                $this->seller = Yii::$app->user->identity->seller;
+            }
+        }
+
+        if (!isset($this->client) && !Yii::$app->user->getIsGuest()) {
             $this->client = Yii::$app->user->identity->username;
         }
 
