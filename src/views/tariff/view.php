@@ -14,7 +14,7 @@ $model = $manager->form;
 $type = $manager->getType();
 
 $this->title = Html::encode($model->name);
-$this->params['subtitle'] = Yii::t('hipanel/finance/tariff', 'tariff detailed information');
+$this->params['subtitle'] = Yii::t('hipanel:finance:tariff', 'tariff detailed information');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel', 'Tariffs'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -53,13 +53,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'model'    => $model->getTariff(),
                             'scenario' => 'delete',
                             'button'   => ['label' => '<i class="fa fa-fw fa-trash-o"></i>' . Yii::t('hipanel', 'Delete')],
-                            'body'     => Yii::t('hipanel/finance/tariff', 'Tariff must be unlinked form all objects before. Are you sure you want to delete tariff {name}?', ['name' => $model->name]),
+                            'body'     => Yii::t('hipanel:finance:tariff', 'Tariff must be unlinked form all objects before. Are you sure you want to delete tariff {name}?', ['name' => $model->name]),
                             'modal'    => [
-                                'header'        => Html::tag('h4', Yii::t('hipanel/finance/tariff', 'Confirm tariff deleting')),
+                                'header'        => Html::tag('h4', Yii::t('hipanel:finance:tariff', 'Confirm tariff deleting')),
                                 'headerOptions' => ['class' => 'label-danger'],
                                 'footer'        => [
-                                    'label'             => Yii::t('hipanel/finance/tariff', 'Delete tariff'),
-                                    'data-loading-text' => Yii::t('hipanel/finance/tariff', 'Deleting tariff...'),
+                                    'label'             => Yii::t('hipanel:finance:tariff', 'Delete tariff'),
+                                    'data-loading-text' => Yii::t('hipanel:finance:tariff', 'Deleting tariff...'),
                                     'class'             => 'btn btn-danger',
                                 ]
                             ]

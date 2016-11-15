@@ -6,7 +6,7 @@ use hipanel\widgets\Pjax;
 use yii\helpers\Html;
 
 $this->title = Html::encode($model->domain);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel/finance', 'Payments'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Payments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 Yii::$app->response->redirect(Url::to('@bill/index'))->send();

@@ -72,7 +72,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             ],
             'type_label' => [
                 'class' => RefColumn::class,
-                'i18nDictionary' => 'hipanel/finance',
+                'i18nDictionary' => 'hipanel:finance',
                 'format' => 'raw',
                 'gtype' => Yii::$app->user->can('support') ? 'type,bill' : 'type,bill,deposit',
                 'filterAttribute' => 'gtype',
@@ -89,7 +89,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     ];
                     $color = $colors[$model->gtype] ?: 'muted';
 
-                    return Html::tag('b', Yii::t('hipanel/finance', $model->type_label), ['class' => "text-$color"]);
+                    return Html::tag('b', Yii::t('hipanel:finance', $model->type_label), ['class' => "text-$color"]);
                 },
             ],
             'description' => [
@@ -129,7 +129,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
     {
         switch ($model->type) {
             case 'support_time':
-                $text = Yii::t('hipanel/finance', '{quantity, time, HH:mm} hour(s)',
+                $text = Yii::t('hipanel:finance', '{quantity, time, HH:mm} hour(s)',
                     ['quantity' => ceil($model->quantity * 3600)]);
                 break;
             case 'server_traf_max':
@@ -137,7 +137,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 $text = Yii::$app->formatter->asShortSize($model->quantity * 1024 * 1024 * 1024);
                 break;
             case 'ip_num':
-                $text = Yii::t('hipanel/finance', '{quantity} IP', ['quantity' => $model->quantity]);
+                $text = Yii::t('hipanel:finance', '{quantity} IP', ['quantity' => $model->quantity]);
                 break;
             default:
                 return null;

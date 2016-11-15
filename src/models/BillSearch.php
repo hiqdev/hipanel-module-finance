@@ -42,7 +42,7 @@ class BillSearch extends Bill
     public function attributeLabels()
     {
         return $this->mergeAttributeLabels([
-            'servers' => Yii::t('hipanel/finance', 'Servers'),
+            'servers' => Yii::t('hipanel:finance', 'Servers'),
         ]);
     }
 }

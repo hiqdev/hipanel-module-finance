@@ -17,7 +17,7 @@ use yii\helpers\Html;
 ]) ?>
 
 <div class="panel panel-default">
-    <div class="panel-heading"><?= Yii::t('hipanel/finance/change', 'Affected payments') ?></div>
+    <div class="panel-heading"><?= Yii::t('hipanel:finance:change', 'Affected payments') ?></div>
     <div class="panel-body">
             <?= HeldPaymentsGridView::widget([
                 'dataProvider' => new ArrayDataProvider(['allModels' => $models, 'pagination' => false]),
@@ -48,6 +48,6 @@ use yii\helpers\Html;
 </div>
 
 <hr>
-<?= Html::submitButton(Yii::t('hipanel/finance/change', 'Reject'), ['class' => 'btn btn-danger']) ?>
+<?= Html::submitButton(Yii::t('hipanel:finance:change', 'Reject'), ['class' => 'btn btn-danger']) ?>
 
 <?php ActiveForm::end() ?>

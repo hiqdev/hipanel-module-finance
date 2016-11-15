@@ -73,8 +73,8 @@ class DomainService extends Model
     public static function getOperations()
     {
         return [
-            static::SERVICE_OPERATION_PURCHASE => Yii::t('hipanel/finance/tariff', 'Purchase'),
-            static::SERVICE_OPERATION_RENEW => Yii::t('hipanel/finance/tariff', 'Renewal')
+            static::SERVICE_OPERATION_PURCHASE => Yii::t('hipanel:finance:tariff', 'Purchase'),
+            static::SERVICE_OPERATION_RENEW => Yii::t('hipanel:finance:tariff', 'Renewal')
         ];
     }
 

@@ -8,8 +8,8 @@
  * @var $billGroupLabels array
  */
 
-$this->title = Yii::t('hipanel/finance', 'Update payments');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel/finance', 'Payments'), 'url' => ['index']];
+$this->title = Yii::t('hipanel:finance', 'Update payments');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Payments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

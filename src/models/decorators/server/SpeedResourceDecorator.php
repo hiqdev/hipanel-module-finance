@@ -8,7 +8,7 @@ class SpeedResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel/finance/tariff', 'Port speed');
+        return Yii::t('hipanel:finance:tariff', 'Port speed');
     }
 
     public function displayValue()
@@ -18,7 +18,7 @@ class SpeedResourceDecorator extends AbstractServerResourceDecorator
 
     public function displayUnit()
     {
-        return Yii::t('hipanel/finance/tariff', 'Gbit/s');
+        return Yii::t('hipanel:finance:tariff', 'Gbit/s');
     }
 
     public function getPrepaidQuantity()

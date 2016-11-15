@@ -137,7 +137,7 @@ $this->title = Yii::t('cart', 'Order execution');
         <div class="box box-solid">
             <div class="box-header with-border">
                 <h3 class="box-title">
-                    <?= Yii::t('hipanel/finance', 'Your balance after all operations: {amount}', [
+                    <?= Yii::t('hipanel:finance', 'Your balance after all operations: {amount}', [
                         'amount' => Yii::$app->formatter->asCurrency($balance, Yii::$app->params['currency'])
                     ]) ?>
                 </h3>
@@ -147,12 +147,12 @@ $this->title = Yii::t('cart', 'Order execution');
                 <p class="text-muted well well-sm no-shadow">
                     <?php
                     if (Yii::$app->user->isGuest) {
-                        echo Yii::t('hipanel/finance', 'If you have any further questions, please, contact us {emailLink}', [
+                        echo Yii::t('hipanel:finance', 'If you have any further questions, please, contact us {emailLink}', [
                             'emailLink' => Html::a(Yii::$app->params['supportEmail'], 'mailto:' . Yii::$app->params['supportEmail'])
                         ]);
                     } else {
-                        echo Yii::t('hipanel/finance', 'If you have any further questions, please, {ticketCreationLink}.', [
-                            'ticketCreationLink' => Html::a(Yii::t('hipanel/finance', 'create a ticket'), '@ticket/create')
+                        echo Yii::t('hipanel:finance', 'If you have any further questions, please, {ticketCreationLink}.', [
+                            'ticketCreationLink' => Html::a(Yii::t('hipanel:finance', 'create a ticket'), '@ticket/create')
                         ]);
                     } ?>
                 </p>

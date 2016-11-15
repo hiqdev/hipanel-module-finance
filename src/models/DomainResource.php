@@ -64,19 +64,19 @@ class DomainResource extends Resource
     public function getTypes()
     {
         return [
-            static::TYPE_DOMAIN_REGISTRATION => Yii::t('hipanel/finance/tariff', 'Registration'),
-            static::TYPE_DOMAIN_TRANSFER => Yii::t('hipanel/finance/tariff', 'Transfer'),
-            static::TYPE_DOMAIN_RENEWAL => Yii::t('hipanel/finance/tariff', 'Renewal'),
-            static::TYPE_DOMAIN_DELETE_AGP => Yii::t('hipanel/finance/tariff', 'Delete in AGP'),
-            static::TYPE_DOMAIN_RESTORE_EXPIRED => Yii::t('hipanel/finance/tariff', 'Restoring expired'),
-            static::TYPE_DOMAIN_RESTORE_DELETED => Yii::t('hipanel/finance/tariff', 'Restoring deleted'),
+            static::TYPE_DOMAIN_REGISTRATION => Yii::t('hipanel:finance:tariff', 'Registration'),
+            static::TYPE_DOMAIN_TRANSFER => Yii::t('hipanel:finance:tariff', 'Transfer'),
+            static::TYPE_DOMAIN_RENEWAL => Yii::t('hipanel:finance:tariff', 'Renewal'),
+            static::TYPE_DOMAIN_DELETE_AGP => Yii::t('hipanel:finance:tariff', 'Delete in AGP'),
+            static::TYPE_DOMAIN_RESTORE_EXPIRED => Yii::t('hipanel:finance:tariff', 'Restoring expired'),
+            static::TYPE_DOMAIN_RESTORE_DELETED => Yii::t('hipanel:finance:tariff', 'Restoring deleted'),
         ];
     }
 
     public function getServiceTypes()
     {
         return [
-            static::TYPE_PREMIUM_DNS => Yii::t('hipanel/finance/tariff', 'Premium DNS')
+            static::TYPE_PREMIUM_DNS => Yii::t('hipanel:finance:tariff', 'Premium DNS')
         ];
     }
 

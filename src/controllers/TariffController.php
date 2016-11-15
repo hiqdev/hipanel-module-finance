@@ -48,7 +48,7 @@ class TariffController extends \hipanel\base\CrudController
             ],
             'delete' => [
                 'class' => SmartDeleteAction::class,
-                'success' => Yii::t('hipanel/finance/tariff', 'Tariff deleted'),
+                'success' => Yii::t('hipanel:finance:tariff', 'Tariff deleted'),
             ],
         ];
     }

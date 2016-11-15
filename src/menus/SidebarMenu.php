@@ -24,26 +24,26 @@ class SidebarMenu extends \hiqdev\menumanager\Menu
 
         return [
             'finance' => [
-                'label' => Yii::t('hipanel/finance', 'Finance'),
+                'label' => Yii::t('hipanel:finance', 'Finance'),
                 'url'   => ['/finance/bill/index'],
                 'icon'  => 'fa-dollar',
                 'items' => [
                     'payments' => [
-                        'label' => Yii::t('hipanel/finance', 'Payments'),
+                        'label' => Yii::t('hipanel:finance', 'Payments'),
                         'url'   => ['/finance/bill/index'],
                     ],
                     'deposit' => [
-                        'label' => Yii::t('hipanel/finance', 'Recharge account'),
+                        'label' => Yii::t('hipanel:finance', 'Recharge account'),
                         'url'   => ['/merchant/pay/deposit'],
                         'visible' => $user->can('deposit'),
                     ],
                     'tariffs' => [
-                        'label'   => Yii::t('hipanel/finance', 'Tariffs'),
+                        'label'   => Yii::t('hipanel:finance', 'Tariffs'),
                         'url'     => ['/finance/tariff/index'],
                         'visible' => $user->can('manage'),
                     ],
                     'holds' => [
-                        'label'   => Yii::t('hipanel/finance', 'Held payments'),
+                        'label'   => Yii::t('hipanel:finance', 'Held payments'),
                         'url'     => ['/finance/held-payments/index'],
                         'visible' => Yii::$app->user->can('resell'),
                     ],

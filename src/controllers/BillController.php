@@ -87,11 +87,11 @@ class BillController extends \hipanel\base\CrudController
 
                     return compact('billTypes', 'billGroupLabels');
                 },
-                'success' => Yii::t('hipanel/finance', 'Payment was created successfully'),
+                'success' => Yii::t('hipanel:finance', 'Payment was created successfully'),
             ],
             'update' => [
                 'class' => SmartUpdateAction::class,
-                'success' => Yii::t('hipanel/finance', 'Payment was updated successfully'),
+                'success' => Yii::t('hipanel:finance', 'Payment was updated successfully'),
                 'data' => function ($action) {
                     list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
 
@@ -114,7 +114,7 @@ class BillController extends \hipanel\base\CrudController
             ],
             'delete' => [
                 'class' => SmartPerformAction::class,
-                'success' => Yii::t('hipanel/finance', 'Payment was deleted successfully'),
+                'success' => Yii::t('hipanel:finance', 'Payment was deleted successfully'),
             ],
         ];
     }
@@ -157,7 +157,7 @@ class BillController extends \hipanel\base\CrudController
             $options['with_hierarchy'] = true;
         }
 
-        return $this->getRefs('type,bill', 'hipanel/finance', $options);
+        return $this->getRefs('type,bill', 'hipanel:finance', $options);
     }
 
     /**

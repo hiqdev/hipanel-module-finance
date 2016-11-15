@@ -52,20 +52,17 @@ return [
     'components' => [
         'i18n' => [
             'translations' => [
-                'hipanel/finance' => [
+                'hipanel:finance' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/finance/messages',
-                    'fileMap' => [
-                        'hipanel/finance' => 'finance.php',
-                    ],
                 ],
-                'hipanel/finance/*' => [
+                'hipanel:finance:change' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/finance/messages',
-                    'fileMap' => [
-                        'hipanel/finance/change' => 'change.php',
-                        'hipanel/finance/tariff' => 'tariff.php',
-                    ],
+                ],
+                'hipanel:finance:tariff' => [
+                    'class' => \yii\i18n\PhpMessageSource::class,
+                    'basePath' => '@hipanel/modules/finance/messages',
                 ],
             ],
         ],

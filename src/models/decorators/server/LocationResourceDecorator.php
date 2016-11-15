@@ -10,7 +10,7 @@ class LocationResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel/finance/tariff', 'Location');
+        return Yii::t('hipanel:finance:tariff', 'Location');
     }
 
     public function displayValue()
@@ -64,12 +64,12 @@ class LocationResourceDecorator extends AbstractServerResourceDecorator
     {
         $data = [
             Tariff::TYPE_XEN => [
-                1 => Yii::t('hipanel/finance/tariff', 'Netherlands, Amsterdam'),
-                2 => Yii::t('hipanel/finance/tariff', 'USA, Ashburn'),
+                1 => Yii::t('hipanel:finance:tariff', 'Netherlands, Amsterdam'),
+                2 => Yii::t('hipanel:finance:tariff', 'USA, Ashburn'),
             ],
             Tariff::TYPE_OPENVZ => [
-                2 => Yii::t('hipanel/finance/tariff', 'USA, Ashburn'),
-                3 => Yii::t('hipanel/finance/tariff', 'Netherlands, Amsterdam'),
+                2 => Yii::t('hipanel:finance:tariff', 'USA, Ashburn'),
+                3 => Yii::t('hipanel:finance:tariff', 'Netherlands, Amsterdam'),
             ],
         ];
 

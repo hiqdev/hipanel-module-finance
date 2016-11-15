@@ -5,7 +5,7 @@ use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 use yii\helpers\Html;
 
-$this->title = Yii::t('hipanel/finance', 'Bills');
+$this->title = Yii::t('hipanel:finance', 'Bills');
 $this->params['subtitle'] = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -18,13 +18,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php $page->beginContent('main-actions') ?>
             <?php if (Yii::$app->user->can('create-bills')) : ?>
-                <?= Html::a(Yii::t('hipanel/finance', 'Add payment'), 'create', ['class' => 'btn btn-sm btn-success']) ?>
+                <?= Html::a(Yii::t('hipanel:finance', 'Add payment'), 'create', ['class' => 'btn btn-sm btn-success']) ?>
             <?php endif ?>
             <?php if (Yii::$app->user->can('create-bills')) : ?>
-                <?= Html::a(Yii::t('hipanel/finance', 'Import payments'), 'import', ['class' => 'btn btn-sm btn-default']) ?>
+                <?= Html::a(Yii::t('hipanel:finance', 'Import payments'), 'import', ['class' => 'btn btn-sm btn-default']) ?>
             <?php endif ?>
             <?php if (Yii::$app->user->can('deposit')) : ?>
-                <?= Html::a(Yii::t('hipanel/finance', 'Recharge account'), ['@pay/deposit'], ['class' => 'btn btn-sm btn-success']) ?>
+                <?= Html::a(Yii::t('hipanel:finance', 'Recharge account'), ['@pay/deposit'], ['class' => 'btn btn-sm btn-success']) ?>
             <?php endif ?>
         <?php $page->endContent() ?>
 

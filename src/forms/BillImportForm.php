@@ -64,7 +64,7 @@ class BillImportForm extends \yii\base\Model
     public function attributeLabels()
     {
         return [
-            'data' => Yii::t('hipanel/finance', 'Rows for import'),
+            'data' => Yii::t('hipanel:finance', 'Rows for import'),
         ];
     }
 

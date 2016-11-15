@@ -48,7 +48,7 @@ abstract class AbstractServerResourceDecorator extends AbstractResourceDecorator
 
     public function displayPrepaidAmount()
     {
-        return \Yii::t('hipanel/finance/tariff', '{amount} {unit}', [
+        return \Yii::t('hipanel:finance:tariff', '{amount} {unit}', [
             'amount' => $this->getPrepaidQuantity(),
             'unit' => $this->displayUnit()
         ]);

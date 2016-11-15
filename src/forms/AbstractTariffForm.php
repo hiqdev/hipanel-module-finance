@@ -165,9 +165,9 @@ abstract class AbstractTariffForm extends \yii\base\Model
     public function attributeLabels()
     {
         return [
-            'parent_id' => Yii::t('hipanel/finance/tariff', 'Parent tariff'),
-            'name' => Yii::t('hipanel/finance/tariff', 'Name'),
-            'label' => Yii::t('hipanel/finance/tariff', 'Label'),
+            'parent_id' => Yii::t('hipanel:finance:tariff', 'Parent tariff'),
+            'name' => Yii::t('hipanel:finance:tariff', 'Name'),
+            'label' => Yii::t('hipanel:finance:tariff', 'Label'),
             'note' => Yii::t('hipanel', 'Note'),
         ];
     }

@@ -24,7 +24,7 @@ class Bill extends \hipanel\base\Model
     const SCENARIO_UPDATE = 'update';
     const SCENARIO_DELETE = 'delete';
 
-    public static $i18nDictionary = 'hipanel/finance';
+    public static $i18nDictionary = 'hipanel:finance';
 
     /**
      * {@inheritdoc}
@@ -64,9 +64,9 @@ class Bill extends \hipanel\base\Model
             'balance' => Yii::t('hipanel', 'Balance'),
             'gtype' => Yii::t('hipanel', 'Type'),
             'gtype_label' => Yii::t('hipanel', 'Type'),
-            'sum' => Yii::t('hipanel/finance', 'Sum'),
-            'tariff' => Yii::t('hipanel/finance', 'Tariff'),
-            'tariff_id' => Yii::t('hipanel/finance', 'Tariff'),
+            'sum' => Yii::t('hipanel:finance', 'Sum'),
+            'tariff' => Yii::t('hipanel:finance', 'Tariff'),
+            'tariff_id' => Yii::t('hipanel:finance', 'Tariff'),
         ]);
     }
 

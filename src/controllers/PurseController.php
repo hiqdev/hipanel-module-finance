@@ -39,7 +39,7 @@ class PurseController extends \hipanel\base\CrudController
             ],
             'update-monthly-invoice' => [
                 'class'   => SmartPerformAction::class,
-                'success' => Yii::t('hipanel/finance', 'Invoice updated'),
+                'success' => Yii::t('hipanel:finance', 'Invoice updated'),
             ],
         ];
     }

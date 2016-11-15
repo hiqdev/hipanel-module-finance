@@ -58,8 +58,8 @@ class HeldPaymentsController extends CrudController
             'bulk-approve' => [
                 'class' => SmartUpdateAction::class,
                 'scenario' => 'approve',
-                'success' => Yii::t('hipanel/finance/change', 'Held payments were approved successfully'),
-                'error' => Yii::t('hipanel/finance/change', 'Error occurred during held payments approving'),
+                'success' => Yii::t('hipanel:finance:change', 'Held payments were approved successfully'),
+                'error' => Yii::t('hipanel:finance:change', 'Error occurred during held payments approving'),
                 'POST html' => [
                     'save'    => true,
                     'success' => [
@@ -86,8 +86,8 @@ class HeldPaymentsController extends CrudController
             'bulk-reject' => [
                 'class' => SmartUpdateAction::class,
                 'scenario' => 'reject',
-                'success' => Yii::t('hipanel/finance/change', 'Held payments were rejected successfully'),
-                'error' => Yii::t('hipanel/finance/change', 'Error occurred during held payments rejecting'),
+                'success' => Yii::t('hipanel:finance:change', 'Held payments were rejected successfully'),
+                'error' => Yii::t('hipanel:finance:change', 'Error occurred during held payments rejecting'),
                 'POST html' => [
                     'save'    => true,
                     'success' => [

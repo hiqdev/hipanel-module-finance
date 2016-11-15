@@ -28,13 +28,13 @@ class HeldPaymentsGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'tech_comment',
             ],
             'payment_system' => [
-                'header' => Yii::t('hipanel/finance', 'Payment system'),
+                'header' => Yii::t('hipanel:finance', 'Payment system'),
                 'value' => function ($model) {
                     return Inflector::titleize($model->params['system']);
                 }
             ],
             'txn' => [
-                'header' => Yii::t('hipanel/finance', 'TXN'),
+                'header' => Yii::t('hipanel:finance', 'TXN'),
                 'value' => function ($model) {
                     return $model->params['txn'];
                 }
@@ -46,12 +46,12 @@ class HeldPaymentsGridView extends \hipanel\grid\BoxedGridView
                 }
             ],
             'amount' => [
-                'header' => Yii::t('hipanel/finance', 'Amount'),
+                'header' => Yii::t('hipanel:finance', 'Amount'),
                 'format' => 'html',
                 'value' => function ($model) {
-                    $html = Yii::t('hipanel/finance/change', 'Full:') . "&nbsp;" . Yii::$app->formatter->asCurrency($model->params['sum'], $model->params['purse_currency']) . "<br />";
-                    $html .= Yii::t('hipanel/finance/change', 'Fee:') . "&nbsp;" . Yii::$app->formatter->asCurrency($model->params['fee'], $model->params['purse_currency']) . "<br />";
-                    $html .= Yii::t('hipanel/finance/change', 'Sum:') . "&nbsp;" . Yii::$app->formatter->asCurrency($model->params['sum'] - $model->params['fee'], $model->params['purse_currency']);
+                    $html = Yii::t('hipanel:finance:change', 'Full:') . "&nbsp;" . Yii::$app->formatter->asCurrency($model->params['sum'], $model->params['purse_currency']) . "<br />";
+                    $html .= Yii::t('hipanel:finance:change', 'Fee:') . "&nbsp;" . Yii::$app->formatter->asCurrency($model->params['fee'], $model->params['purse_currency']) . "<br />";
+                    $html .= Yii::t('hipanel:finance:change', 'Sum:') . "&nbsp;" . Yii::$app->formatter->asCurrency($model->params['sum'] - $model->params['fee'], $model->params['purse_currency']);
                     return $html;
                 }
             ],

@@ -27,7 +27,7 @@ class Resource extends \hipanel\base\Model
     protected $decorator;
 
     /** @inheritdoc */
-    public static $i18nDictionary = 'hipanel/finance/tariff';
+    public static $i18nDictionary = 'hipanel:finance:tariff';
 
     /**
      * {@inheritdoc}
@@ -66,7 +66,7 @@ class Resource extends \hipanel\base\Model
     public function attributeLabels()
     {
         return $this->mergeAttributeLabels([
-            'price' => Yii::t('hipanel/finance/tariff', 'Price per period')
+            'price' => Yii::t('hipanel:finance:tariff', 'Price per period')
         ]);
     }
 

@@ -22,7 +22,7 @@ class Change extends \hipanel\base\Model
 
     use \hipanel\base\ModelTrait;
 
-    public static $i18nDictionary = 'hipanel/finance/change';
+    public static $i18nDictionary = 'hipanel:finance:change';
 
     /**
      * {@inheritdoc}
@@ -63,6 +63,6 @@ class Change extends \hipanel\base\Model
 
     public static function getStates()
     {
-        return Ref::getList('state,change', 'hipanel/finance/change');
+        return Ref::getList('state,change', 'hipanel:finance:change');
     }
 }

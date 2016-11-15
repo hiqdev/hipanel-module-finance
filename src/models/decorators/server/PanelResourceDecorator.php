@@ -8,7 +8,7 @@ class PanelResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel/finance/tariff', 'Control panel');
+        return Yii::t('hipanel:finance:tariff', 'Control panel');
     }
 
     public function displayValue()
@@ -23,9 +23,9 @@ class PanelResourceDecorator extends AbstractServerResourceDecorator
 
     public function displayPrepaidAmount()
     {
-        $result = Yii::t('hipanel/finance/tariff', 'No panel / {hipanelLink}', ['hipanelLink' => 'HiPanel']); // todo: add faq link
+        $result = Yii::t('hipanel:finance:tariff', 'No panel / {hipanelLink}', ['hipanelLink' => 'HiPanel']); // todo: add faq link
         if ($this->resource->tariff->getResourceByType('isp5')->quantity > 0) {
-            $result .= ' / ' . Yii::t('hipanel/finance/tariff', 'ISP manager');
+            $result .= ' / ' . Yii::t('hipanel:finance:tariff', 'ISP manager');
         }
 
         return $result;

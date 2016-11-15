@@ -26,7 +26,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
             ],
             'credit' => CreditColumn::resolveConfig(),
             'invoices' => [
-                'label'  => Yii::t('hipanel/finance', 'Invoices'),
+                'label'  => Yii::t('hipanel:finance', 'Invoices'),
                 'format' => 'raw',
                 'value'  => function ($model) {
                     return ArraySpoiler::widget([

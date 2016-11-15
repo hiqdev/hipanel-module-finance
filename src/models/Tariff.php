@@ -78,7 +78,7 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
     public function attributeLabels()
     {
         return $this->mergeAttributeLabels([
-            'used' => Yii::t('hipanel/finance/tariff', 'Used'),
+            'used' => Yii::t('hipanel:finance:tariff', 'Used'),
         ]);
     }
 

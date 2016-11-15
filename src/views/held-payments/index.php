@@ -18,7 +18,7 @@ use yii\helpers\Html;
  * @var ActiveDataProvider $dataProvider
  */
 
-$this->title = Yii::t('hipanel/finance/change', 'Pending confirmation payments');
+$this->title = Yii::t('hipanel:finance:change', 'Pending confirmation payments');
 $this->params['subtitle'] = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -51,27 +51,27 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= AjaxModal::widget([
                     'id' => 'bulk-approve-modal',
                     'bulkPage' => true,
-                    'header'=> Html::tag('h4', Yii::t('hipanel/finance/change', 'Approve'), ['class' => 'modal-title']),
+                    'header'=> Html::tag('h4', Yii::t('hipanel:finance:change', 'Approve'), ['class' => 'modal-title']),
                     'scenario' => 'bulk-approve',
                     'actionUrl' => ['bulk-approve-modal'],
                     'size' => Modal::SIZE_LARGE,
                     'handleSubmit' => false,
                     'toggleButton' => [
                         'class' => 'btn btn-success btn-sm',
-                        'label' => Yii::t('hipanel/finance/change', 'Approve')
+                        'label' => Yii::t('hipanel:finance:change', 'Approve')
                     ],
                 ]) ?>
                 <?= AjaxModal::widget([
                     'id' => 'bulk-reject-modal',
                     'bulkPage' => true,
-                    'header'=> Html::tag('h4', Yii::t('hipanel/finance/change', 'Reject'), ['class' => 'modal-title ']),
+                    'header'=> Html::tag('h4', Yii::t('hipanel:finance:change', 'Reject'), ['class' => 'modal-title ']),
                     'scenario' => 'bulk-reject',
                     'actionUrl' => ['bulk-reject-modal'],
                     'size' => Modal::SIZE_LARGE,
                     'handleSubmit' => false,
                     'toggleButton' => [
                         'class' => 'btn btn-danger btn-sm',
-                        'label' => Yii::t('hipanel/finance/change', 'Reject')
+                        'label' => Yii::t('hipanel:finance:change', 'Reject')
                     ],
                 ]) ?>
             </div>
