@@ -8,7 +8,7 @@ class HddResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel/server/order', 'SSD');
+        return Yii::t('hipanel:server:order', 'SSD');
     }
 
     public function displayPrepaidAmount()

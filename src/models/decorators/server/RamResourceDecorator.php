@@ -8,7 +8,7 @@ class RamResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel/server/order', 'RAM');
+        return Yii::t('hipanel:server:order', 'RAM');
     }
 
     public function getPrepaidQuantity()

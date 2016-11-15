@@ -8,7 +8,7 @@ class Isp5ResourceDecorator extends IspResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel/server/order', 'ISP Manager 5');
+        return Yii::t('hipanel:server:order', 'ISP Manager 5');
     }
 
     public function displayPrepaidAmount()

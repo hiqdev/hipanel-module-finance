@@ -11,17 +11,17 @@ class CpuResourceDecorator extends AbstractServerResourceDecorator
 
     public function displayTitle()
     {
-        return Yii::t('hipanel/server/order', 'CPU');
+        return Yii::t('hipanel:server:order', 'CPU');
     }
 
     public function displayPrepaidAmount()
     {
         if ($this->getCpuUnit() === self::UNIT_CORE) {
-            return Yii::t('hipanel/server/order', '{0, plural, one{# core} other{# cores}}',
+            return Yii::t('hipanel:server:order', '{0, plural, one{# core} other{# cores}}',
                 $this->getPrepaidQuantity());
         }
 
-        return Yii::t('hipanel/server/order', '{0} MHz', Yii::$app->formatter->asInteger($this->getPrepaidQuantity()));
+        return Yii::t('hipanel:server:order', '{0} MHz', Yii::$app->formatter->asInteger($this->getPrepaidQuantity()));
     }
 
     public function getPrepaidQuantity()

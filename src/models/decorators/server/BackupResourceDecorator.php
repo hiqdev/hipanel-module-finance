@@ -8,7 +8,7 @@ class BackupResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel/server/order', 'Backup usage');
+        return Yii::t('hipanel:server:order', 'Backup usage');
     }
 
     public function displayUnit()
