@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'Tariff' => 'Тариф',
     'Tariff note' => 'Примечание тарифа',
     'Tariff created' => 'Тариф создан',
     'Tariff deleted' => 'Тариф удален',

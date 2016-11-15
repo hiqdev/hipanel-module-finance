@@ -12,13 +12,15 @@ use hipanel\widgets\Box;
 
 <div class="row">
     <div class="col-md-12">
-        <?php Box::begin(['title' => Yii::t('hipanel:finance:tariff', 'Hardware')]) ?>
+        <?php Box::begin(['title' => Yii::t('hipanel:finance:tariff', 'Tariff')]) ?>
         <table class="table table-condensed">
             <thead>
             <tr>
                 <td><?= Yii::t('hipanel:finance:tariff', 'Price') ?></td>
-                <td><?= Yii::t('hipanel:finance:tariff', 'Parent tariff price') ?></td>
-                <td><?= Yii::t('hipanel:finance:tariff', 'Profit') ?></td>
+                <?php if (Yii::$app->user->can('manage')) : ?>
+                    <td><?= Yii::t('hipanel:finance:tariff', 'Parent tariff price') ?></td>
+                    <td><?= Yii::t('hipanel:finance:tariff', 'Profit') ?></td>
+                <?php endif; ?>
             </tr>
             </thead>
             <tbody>
@@ -28,13 +30,15 @@ use hipanel\widgets\Box;
                 $basePrice = $model->parentCalculation()->price;
                 ?>
                 <td><?= Yii::$app->formatter->asCurrency($price, $model->calculation()->currency) ?></td>
-                <td><?= Yii::$app->formatter->asCurrency($basePrice, $model->parentCalculation()->currency) ?></td>
-                <td>
-                    <?= PriceDifferenceWidget::widget([
-                        'new' => $price,
-                        'old' => $basePrice
-                    ]) ?>
-                </td>
+                <?php if (Yii::$app->user->can('manage')) : ?>
+                    <td><?= Yii::$app->formatter->asCurrency($basePrice, $model->parentCalculation()->currency) ?></td>
+                    <td>
+                        <?= PriceDifferenceWidget::widget([
+                            'new' => $price,
+                            'old' => $basePrice,
+                        ]) ?>
+                    </td>
+                <?php endif; ?>
             </tr>
             </tbody>
         </table>
@@ -53,18 +57,20 @@ use hipanel\widgets\Box;
             <tbody>
             <?php
             foreach ($model->getHardwareResources() as $resource) {
-            $baseResource = $model->getParentHardwareResource($resource->object_id); ?>
-            <tr>
-                <td><?= $resource->decorator()->displayTitle() ?></td>
-                <td><?= $resource->decorator()->displayPrepaidAmount() ?></td>
-                <td>
-                    <?= Yii::$app->formatter->asCurrency($resource->fee, $resource->currency) ?>
-                    <?= PriceDifferenceWidget::widget([
-                        'new' => $resource->fee,
-                        'old' => $baseResource->fee,
-                    ]) ?>
-                </td>
-            </tr>
+                $baseResource = $model->getParentHardwareResource($resource->object_id); ?>
+                <tr>
+                    <td><?= $resource->decorator()->displayTitle() ?></td>
+                    <td><?= $resource->decorator()->displayPrepaidAmount() ?></td>
+                    <td>
+                        <?= Yii::$app->formatter->asCurrency($resource->fee, $resource->currency) ?>
+                        <?php if (Yii::$app->user->can('manage')) : ?>
+                            <?= PriceDifferenceWidget::widget([
+                                'new' => $resource->fee,
+                                'old' => $baseResource->fee,
+                            ]) ?>
+                        <?php endif; ?>
+                    </td>
+                </tr>
             <?php } ?>
             </tbody>
         </table>
@@ -91,22 +97,24 @@ use hipanel\widgets\Box;
                     <td><?= $resource->decorator()->displayTitle() ?></td>
                     <td>
                         <?= Yii::$app->formatter->asCurrency($resource->fee, $resource->currency) ?>
-
-                        <?= PriceDifferenceWidget::widget([
-                            'new' => $resource->fee,
-                            'old' => $baseResource->fee,
-                        ]) ?>
+                        <?php if (Yii::$app->user->can('manage')) : ?>
+                            <?= PriceDifferenceWidget::widget([
+                                'new' => $resource->fee,
+                                'old' => $baseResource->fee,
+                            ]) ?>
+                        <?php endif; ?>
                     </td>
                     <td>
                         <?= $resource->decorator()->displayPrepaidAmount() ?>
                     </td>
                     <td>
                         <?= Yii::$app->formatter->asCurrency($resource->price, $resource->currency) ?>
-
-                        <?= PriceDifferenceWidget::widget([
-                            'new' => $resource->price,
-                            'old' => $baseResource->price,
-                        ]) ?>
+                        <?php if (Yii::$app->user->can('manage')) : ?>
+                            <?= PriceDifferenceWidget::widget([
+                                'new' => $resource->price,
+                                'old' => $baseResource->price,
+                            ]) ?>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php } ?>
