@@ -39,17 +39,17 @@ class BillController extends \hipanel\base\CrudController
                     ],
                     [
                         'allow' => true,
-                        'roles' => ['create-bills'],
+                        'roles' => ['bill.create'],
                         'actions' => ['create', 'import', 'copy'],
                     ],
                     [
                         'allow' => true,
-                        'roles' => ['update-bills'],
+                        'roles' => ['bill.update'],
                         'actions' => ['update'],
                     ],
                     [
                         'allow' => true,
-                        'roles' => ['delete-bills'],
+                        'roles' => ['bill.delete'],
                         'actions' => ['delete'],
                     ],
                 ],

@@ -17,10 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $page->setSearchFormData(compact('billTypes', 'billGroupLabels')) ?>
 
         <?php $page->beginContent('main-actions') ?>
-            <?php if (Yii::$app->user->can('create-bills')) : ?>
+            <?php if (Yii::$app->user->can('bill.create')) : ?>
                 <?= Html::a(Yii::t('hipanel:finance', 'Add payment'), 'create', ['class' => 'btn btn-sm btn-success']) ?>
-            <?php endif ?>
-            <?php if (Yii::$app->user->can('create-bills')) : ?>
                 <?= Html::a(Yii::t('hipanel:finance', 'Import payments'), 'import', ['class' => 'btn btn-sm btn-default']) ?>
             <?php endif ?>
             <?php if (Yii::$app->user->can('deposit')) : ?>
@@ -41,13 +39,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('bulk-actions') ?>
-            <?php if (Yii::$app->user->can('create-bills')) : ?>
+            <?php if (Yii::$app->user->can('bill.create')) : ?>
                 <?= $page->renderBulkButton(Yii::t('hipanel', 'Copy'), 'copy') ?>
             <?php endif ?>
-            <?php if (Yii::$app->user->can('update-bills')) : ?>
+            <?php if (Yii::$app->user->can('bill.update')) : ?>
                 <?= $page->renderBulkButton(Yii::t('hipanel', 'Update'), 'update') ?>
             <?php endif ?>
-            <?php if (Yii::$app->user->can('delete-bills')) : ?>
+            <?php if (Yii::$app->user->can('bill.delete')) : ?>
                 <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), 'delete', 'danger') ?>
             <?php endif ?>
         <?php $page->endContent() ?>
