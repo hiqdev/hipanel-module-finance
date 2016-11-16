@@ -67,8 +67,14 @@ $this->title = Yii::t('hipanel:finance', 'Select payment option');
 <?php
 
 $this->registerJs(<<<JS
-$('.lock-on-click').on('click', function () {
+$('.lock-on-click').one('click', function (e) {
+    if ($(this).hasClass('disabled')) {
+        e.preventDefault();
+        return;
+    }
+
     $(this).button('loading');
+    $('.lock-on-click').not(this).fadeOut();
 });
 JS
 );
