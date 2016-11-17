@@ -11,6 +11,7 @@
 
 namespace hipanel\modules\finance\controllers;
 
+use hipanel\actions\OrientationAction;
 use Yii;
 use yii\base\Event;
 use yii\filters\AccessControl;
@@ -54,6 +55,12 @@ class HeldPaymentsController extends CrudController
                         'states' => Change::getStates(),
                     ];
                 },
+            ],
+            'set-orientation' => [
+                'class' => OrientationAction::class,
+                'allowedRoutes' => [
+                    '@finance/held-payments/index',
+                ],
             ],
             'bulk-approve' => [
                 'class' => SmartUpdateAction::class,
