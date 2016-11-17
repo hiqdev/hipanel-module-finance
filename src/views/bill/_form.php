@@ -96,8 +96,8 @@ $form = ActiveForm::begin([
                                 'format' => 'dd.mm.yyyy HH:ii:ss',
                             ],
                             'options' => [
-                                'value' => Yii::$app->formatter->asDatetime($model->time, 'php:d.m.Y H:i:s')
-                            ]
+                                'value' => Yii::$app->formatter->asDatetime(($model->isNewRecord ? new DateTime() : $model->time), 'php:d.m.Y H:i:s'),
+                            ],
                         ]) ?>
                     </div>
                     <div class="col-md-3">
