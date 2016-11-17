@@ -54,7 +54,7 @@ return [
     '{quantity, plural, one{# minute} other{# minutes}}' => '{quantity, plural, one{# минута} few{# минуты} other{# минут}}',
     '{quantity, time, HH:mm} hour(s)' => '{quantity, time, HH:mm} час(ов)',
     '{quantity} IP' => '{quantity} IP',
-    'Held payments' => 'Заблокированные платежи',
+    'Held payments' => 'Ожидающие платежи',
     'Provided services' => 'Предоставленные услуги',
     'Set credit' => 'Назначить кредит',
 
