@@ -34,7 +34,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                         'data'              => $model->files,
                         'delimiter'         => ' ',
                         'formatter'         => function ($file) {
-                            return self::pdfLink($file, $file['month']);
+                            return self::pdfLink($file, $file->month);
                         },
                         'template'          => '{button}{visible}{hidden}',
                         'visibleCount'      => 2,
@@ -45,11 +45,23 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                     ]);
                 },
             ],
+            'taxes' => [
+            ],
+            'contact' => [
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $org = $model->contact->organization;
+                    return $org . ($org ? ' / ' : '') . $model->contact->name;
+                },
+            ],
+            'requisite' => [
+                'attribute' => 'requisite_id',
+            ],
         ];
     }
 
     public static function pdfLink($file, $month = 'now')
     {
-        return Html::a(FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', strtotime($month)), ["/file/$file[id]/$file[filename]", 'nocache' => 1], ['target' => '_blank', 'class' => 'text-info text-nowrap col-xs-6 col-sm-6 col-md-6 col-lg-3']);
+        return Html::a(FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', strtotime($month)), ["/file/{$file->id}/{$file->filename}", 'nocache' => 1], ['target' => '_blank', 'class' => 'text-info text-nowrap col-xs-6 col-sm-6 col-md-6 col-lg-3']);
     }
 }

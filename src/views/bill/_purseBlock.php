@@ -8,15 +8,14 @@ use yii\helpers\Html;
 
 ?>
 
-<?php $purse = new Purse($purse) ?>
 <?php $box = Box::begin(['renderBody' => false]) ?>
     <?php $box->beginHeader() ?>
-        <?= $box->renderTitle(Yii::t('hipanel:finance', '<b>{currency}</b> account', ['currency' => strtoupper($purse->currency)]), '&nbsp;') ?>
+        <?= $box->renderTitle(Yii::t('hipanel:finance', '<b>{currency}</b> account', ['currency' => strtoupper($model->currency)]), '&nbsp;') ?>
         <?php $box->beginTools() ?>
             <?php if (Yii::$app->user->can('manage')) : ?>
-                <?= Html::a(Yii::t('hipanel:finance', 'See new invoice'), ['@purse/generate-invoice', 'id' => $purse->id], ['class' => 'btn btn-default btn-xs', 'target' => 'new-invoice']) ?>
+                <?= Html::a(Yii::t('hipanel:finance', 'See new invoice'), ['@purse/generate-invoice', 'id' => $model->id], ['class' => 'btn btn-default btn-xs', 'target' => 'new-invoice']) ?>
                 <?= ModalButton::widget([
-                    'model'    => $purse,
+                    'model'    => $model,
                     'form'     => ['action' => ['@purse/update-monthly-invoice']],
                     'button'   => ['label' => Yii::t('hipanel:finance', 'Update invoice'), 'class' => 'btn btn-default btn-xs'],
                     'body'     => Yii::t('hipanel:finance', 'Are you sure you want to update invoice?') . '<br>' .
@@ -39,10 +38,13 @@ use yii\helpers\Html;
     <?php $box->beginBody() ?>
         <?= PurseGridView::detailView([
             'boxed' => false,
-            'model' => $purse,
-            'columns' => $purse->currency === 'usd'
-                ? ['balance', 'credit', 'invoices']
-                : ['balance', 'invoices'],
+            'model' => $model,
+            'columns' => array_filter([
+                'balance',
+                $model->currency === 'usd' ? 'credit' : null,
+                'contact', 'requisite',
+                'invoices',
+            ]),
         ]) ?>
     <?php $box->endBody() ?>
 <?php $box->end() ?>

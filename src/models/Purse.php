@@ -11,6 +11,8 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\models\File;
+use hipanel\modules\client\models\Contact;
 use Yii;
 
 class Purse extends \hipanel\base\Model
@@ -26,15 +28,29 @@ class Purse extends \hipanel\base\Model
             [['id', 'client_id', 'seller_id'],      'integer'],
             [['client', 'seller'],                  'safe'],
             [['provided_services'],                 'safe'],
-            [['contact', 'files'],                  'safe'],
             [['contact_id', 'requisite_id'],        'integer'],
             [['currency_id'],                       'integer'],
             [['currency'],                          'safe'],
             [['no'],                                'integer'],
-            [['credit', 'balance'],                  'number'],
+            [['credit', 'balance'],                 'number'],
 
             [['month'],                             'date', 'on' => 'update-monthly-invoice'],
         ];
+    }
+
+    public function getFiles()
+    {
+        return $this->hasMany(File::class, ['object_id' => 'id']);
+    }
+
+    public function getContact()
+    {
+        return $this->hasOne(Contact::class, ['id' => 'contact_id']);
+    }
+
+    public function getRequisite()
+    {
+        return $this->hasOne(Contact::class, ['id' => 'requisite_id']);
     }
 
     /**
