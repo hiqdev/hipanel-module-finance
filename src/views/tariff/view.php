@@ -8,7 +8,6 @@
 use hipanel\modules\finance\menus\TariffDetailMenu;
 use hipanel\widgets\Box;
 use hipanel\widgets\ClientSellerLink;
-use hipanel\widgets\ModalButton;
 use hiqdev\menumanager\widgets\DetailMenu;
 use yii\helpers\Html;
 
