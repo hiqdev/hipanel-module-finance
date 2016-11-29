@@ -5,9 +5,11 @@
  * @var $this \yii\web\View
  */
 
+use hipanel\modules\finance\menus\TariffDetailMenu;
 use hipanel\widgets\Box;
 use hipanel\widgets\ClientSellerLink;
 use hipanel\widgets\ModalButton;
+use hiqdev\menumanager\widgets\DetailMenu;
 use yii\helpers\Html;
 
 $model = $manager->form;
@@ -44,30 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
         <?php if (Yii::$app->user->can('manage')) : ?>
             <div class="profile-usermenu">
-                <ul class="nav">
-                    <li>
-                        <?= Html::a('<i class="ion-edit"></i>' . Yii::t('hipanel', 'Update'), ['update', 'id' => $model->id]) ?>
-                    </li>
-                    <li>
-                        <?= ModalButton::widget([
-                            'model'    => $model->getTariff(),
-                            'scenario' => 'delete',
-                            'button'   => ['label' => '<i class="fa fa-fw fa-trash-o"></i>' . Yii::t('hipanel', 'Delete')],
-                            'body'     => Yii::t('hipanel:finance:tariff', 'Tariff must be unlinked form all objects before. Are you sure you want to delete tariff {name}?', ['name' => $model->name]),
-                            'modal'    => [
-                                'header'        => Html::tag('h4', Yii::t('hipanel:finance:tariff', 'Confirm tariff deleting')),
-                                'headerOptions' => ['class' => 'label-danger'],
-                                'footer'        => [
-                                    'label'             => Yii::t('hipanel:finance:tariff', 'Delete tariff'),
-                                    'data-loading-text' => Yii::t('hipanel:finance:tariff', 'Deleting tariff...'),
-                                    'class'             => 'btn btn-danger',
-                                ]
-                            ]
-                        ]);
-
-                        ?>
-                    </li>
-                </ul>
+                <?= TariffDetailMenu::create(['model' => $model])->render(DetailMenu::class) ?>
             </div>
         <?php endif ?>
         <?php Box::end() ?>
