@@ -15,7 +15,7 @@ class TariffActionsMenu extends \hiqdev\menumanager\Menu
         return [
             [
                 'label' => Yii::t('hipanel', 'Update'),
-                'icon' => 'fa fa-pencil',
+                'icon' => 'fa-pencil',
                 'url' => ['@tariff/update', 'id' => $this->model->id],
             ],
             [
