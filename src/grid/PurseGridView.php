@@ -55,7 +55,11 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                 },
             ],
             'requisite' => [
-                'attribute' => 'requisite_id',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $org = $model->requisite->organization;
+                    return $org . ($org ? ' / ' : '') . $model->requisite->name;
+                },
             ],
         ];
     }
