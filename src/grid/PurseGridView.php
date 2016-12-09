@@ -11,8 +11,10 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\modules\client\widgets\combo\ContactCombo;
 use hipanel\helpers\FontIcon;
 use hipanel\widgets\ArraySpoiler;
+use hiqdev\xeditable\widgets\ComboXEditable;
 use Yii;
 use yii\helpers\Html;
 
@@ -57,8 +59,23 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
             'requisite' => [
                 'format' => 'raw',
                 'value' => function ($model) {
-                    $org = $model->requisite->organization;
-                    return $org . ($org ? ' / ' : '') . $model->requisite->name;
+                    if (!Yii::$app->user->can('manage')) {
+                        $org = $model->requisite->organization;
+                        return $org . ($org ? ' / ' : '') . $model->requisite->name;
+                    }
+                    return  ComboXEditable::widget([
+                        'model' => $model,
+                        'attribute' => 'requisite_id',
+                        'combo' => [
+                            'class' => ContactCombo::class,
+                            'client_id' => $model->seller_id,
+                            'pluginOptions' => [
+                                'select2Options' => [
+                                    'width' => '40rem',
+                                ],
+                            ],
+                        ],
+                    ]);
                 },
             ],
         ];
