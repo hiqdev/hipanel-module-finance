@@ -18,8 +18,12 @@ use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
+use hipanel\components\ApiConnectionInterface;
+use hipanel\helpers\ArrayHelper;
+use hipanel\models\Ref;
 use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\providers\BillTypesProvider;
 use Yii;
 use yii\filters\AccessControl;
 
@@ -151,13 +155,10 @@ class BillController extends \hipanel\base\CrudController
      */
     public function getPaymentTypes()
     {
-        $options = ['orderby' => 'name_asc'];
+        /** @var BillTypesProvider $provider */
+        $provider = Yii::createObject(BillTypesProvider::class);
 
-        if (Yii::$app->user->can('support')) {
-            $options['with_hierarchy'] = true;
-        }
-
-        return $this->getRefs('type,bill', 'hipanel:finance', $options);
+        return $provider->getTypesList();
     }
 
     /**
@@ -165,28 +166,9 @@ class BillController extends \hipanel\base\CrudController
      */
     private function getTypesAndGroups()
     {
-        $billTypes = [];
-        $billGroupLabels = [];
+        /** @var BillTypesProvider $provider */
+        $provider = Yii::createObject(BillTypesProvider::class);
 
-        $types = $this->getPaymentTypes();
-
-        foreach ($types as $key => $title) {
-            list($type, $name) = explode(',', $key);
-
-            if (!isset($billTypes[$type])) {
-                $billTypes[$type] = [];
-                $billGroupLabels[$type] = ['label' => $title];
-            }
-
-            if (isset($name)) {
-                foreach ($types as $k => $t) {
-                    if (strpos($k, $type . ',') === 0) {
-                        $billTypes[$type][$k] = $t;
-                    }
-                }
-            }
-        }
-
-        return [$billTypes, $billGroupLabels];
+        return $provider->getGroupedList();
     }
 }

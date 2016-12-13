@@ -15,7 +15,9 @@ use hipanel\grid\CurrencyColumn;
 use hipanel\grid\MainColumn;
 use hipanel\grid\RefColumn;
 use hipanel\helpers\Url;
+use hipanel\modules\finance\widgets\BillTypeFilter;
 use hipanel\widgets\ArraySpoiler;
+use hiqdev\higrid\DataColumn;
 use Yii;
 use yii\helpers\Html;
 
@@ -71,13 +73,16 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'gtype',
             ],
             'type_label' => [
-                'class' => RefColumn::class,
-                'i18nDictionary' => 'hipanel:finance',
+                'class' => \hipanel\grid\DataColumn::class,
+                'filter' => function ($column, $filterModel) {
+                    return BillTypeFilter::widget([
+                        'options' => ['class' => 'form-control text-right'],
+                        'attribute' => 'gtype',
+                        'model' => $filterModel,
+                    ]);
+                },
                 'format' => 'raw',
-                'gtype' => Yii::$app->user->can('support') ? 'type,bill' : 'type,bill,deposit',
-                'filterAttribute' => 'gtype',
                 'headerOptions' => ['class' => 'text-right'],
-                'filterOptions' => ['class' => 'text-right'],
                 'contentOptions' => function ($model) {
                     return ['class' => 'text-right'];
                 },
