@@ -53,6 +53,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'raw',
                 'value' => function ($model) {
                     $org = $model->contact->organization;
+
                     return $org . ($org ? ' / ' : '') . $model->contact->name;
                 },
             ],
@@ -61,14 +62,18 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                 'value' => function ($model) {
                     if (!Yii::$app->user->can('manage')) {
                         $org = $model->requisite->organization;
+
                         return $org . ($org ? ' / ' : '') . $model->requisite->name;
                     }
-                    return  ComboXEditable::widget([
+
+                    return ComboXEditable::widget([
                         'model' => $model,
                         'attribute' => 'requisite_id',
                         'combo' => [
                             'class' => ContactCombo::class,
-                            'client_id' => $model->seller_id,
+                            'filter' => [
+                                'client_id' => ['format' => $model->seller_id],
+                            ],
                             'pluginOptions' => [
                                 'select2Options' => [
                                     'width' => '40rem',
@@ -83,6 +88,10 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
 
     public static function pdfLink($file, $month = 'now')
     {
-        return Html::a(FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', strtotime($month)), ["/file/{$file->id}/{$file->filename}", 'nocache' => 1], ['target' => '_blank', 'class' => 'text-info text-nowrap col-xs-6 col-sm-6 col-md-6 col-lg-3']);
+        return Html::a(
+            FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', strtotime($month)),
+            ["/file/{$file->id}/{$file->filename}", 'nocache' => 1],
+            ['target' => '_blank', 'class' => 'text-info text-nowrap col-xs-6 col-sm-6 col-md-6 col-lg-3']
+        );
     }
 }
