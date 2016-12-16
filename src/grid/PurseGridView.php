@@ -52,27 +52,61 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
             'contact' => [
                 'format' => 'raw',
                 'value' => function ($model) {
-                    $org = $model->contact->organization;
+                    $organization = $model->contact->organization;
+                    $result = $organization . ($organization ? ' / ' : '') . $model->contact->name;
 
-                    return $org . ($org ? ' / ' : '') . $model->contact->name;
+                    if (!Yii::$app->user->can('manage')) {
+                        return $result;
+                    }
+
+                    return ComboXEditable::widget([
+                        'model' => $model,
+                        'attribute' => 'contact_id',
+                        'value' => $result,
+                        'pluginOptions' => [
+                            'url' => ['@purse/update-contact', 'id' => $model->id]
+                        ],
+                        'combo' => [
+                            'class' => ContactCombo::class,
+                            'filter' => [
+                                'client_id' => ['format' => $model->id],
+                            ],
+                            'inputOptions' => [
+                                'data-init-text' => $result
+                            ],
+                            'pluginOptions' => [
+                                'select2Options' => [
+                                    'width' => '40rem',
+                                ],
+                            ],
+                        ],
+                    ]);
                 },
             ],
             'requisite' => [
                 'format' => 'raw',
                 'value' => function ($model) {
-                    if (!Yii::$app->user->can('manage')) {
-                        $org = $model->requisite->organization;
+                    $organization = $model->requisite->organization;
+                    $result = $organization . ($organization ? ' / ' : '') . $model->requisite->name;
 
-                        return $org . ($org ? ' / ' : '') . $model->requisite->name;
+                    if (!Yii::$app->user->can('manage')) {
+                        return $result;
                     }
 
                     return ComboXEditable::widget([
                         'model' => $model,
                         'attribute' => 'requisite_id',
+                        'value' => $result,
+                        'pluginOptions' => [
+                            'url' => ['@purse/update-requisite', 'id' => $model->id]
+                        ],
                         'combo' => [
                             'class' => ContactCombo::class,
                             'filter' => [
                                 'client_id' => ['format' => $model->seller_id],
+                            ],
+                            'inputOptions' => [
+                                'data-init-text' => $result
                             ],
                             'pluginOptions' => [
                                 'select2Options' => [

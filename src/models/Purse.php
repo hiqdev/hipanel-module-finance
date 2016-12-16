@@ -35,6 +35,8 @@ class Purse extends \hipanel\base\Model
             [['credit', 'balance'],                 'number'],
 
             [['month'],                             'date', 'on' => 'update-monthly-invoice'],
+            [['id', 'contact_id'],                  'required', 'on' => ['update-contact']],
+            [['id', 'requisite_id'],                'required', 'on' => ['update-requisite']],
         ];
     }
 
@@ -63,5 +65,13 @@ class Purse extends \hipanel\base\Model
             'currency'          => Yii::t('hipanel:finance', 'Currency'),
             'invoices'          => Yii::t('hipanel:finance', 'Invoices'),
         ]);
+    }
+
+    public function scenarioCommands()
+    {
+        return [
+            'update-contact' => 'update',
+            'update-requisite' => 'update',
+        ];
     }
 }

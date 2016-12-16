@@ -14,6 +14,7 @@ namespace hipanel\modules\finance\controllers;
 use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartPerformAction;
+use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\modules\finance\models\Purse;
@@ -29,6 +30,15 @@ class PurseController extends \hipanel\base\CrudController
             ],
             'view' => [
                 'class' => ViewAction::class,
+            ],
+            'update' => [
+                'class' => SmartUpdateAction::class,
+            ],
+            'update-contact' => [
+                'class' => SmartUpdateAction::class,
+            ],
+            'update-requisite' => [
+                'class' => SmartUpdateAction::class,
             ],
             'validate-form' => [
                 'class' => ValidateFormAction::class,
