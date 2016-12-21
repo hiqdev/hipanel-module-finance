@@ -8,7 +8,6 @@
 use hipanel\modules\finance\menus\TariffDetailMenu;
 use hipanel\widgets\Box;
 use hipanel\widgets\ClientSellerLink;
-use hiqdev\menumanager\widgets\DetailMenu;
 use yii\helpers\Html;
 
 $model = $manager->form;
@@ -45,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
         <?php if (Yii::$app->user->can('manage')) : ?>
             <div class="profile-usermenu">
-                <?= TariffDetailMenu::create(['model' => $model])->render(DetailMenu::class) ?>
+                <?= TariffDetailMenu::widget(['model' => $model]) ?>
             </div>
         <?php endif ?>
         <?php Box::end() ?>

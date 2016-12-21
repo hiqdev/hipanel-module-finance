@@ -2,7 +2,7 @@
 
 namespace hipanel\modules\finance\menus;
 
-class TariffDetailMenu extends \hiqdev\menumanager\Menu
+class TariffDetailMenu extends \hipanel\menus\AbstractDetailMenu
 {
     public $model;
 
