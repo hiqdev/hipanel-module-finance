@@ -66,16 +66,16 @@ return [
                 ],
             ],
         ],
-        'menuManager' => [
-            'items' => [
-                'sidebar' => [
-                    'add' => [
-                        'finance' => [
-                            'menu' => \hipanel\modules\finance\menus\SidebarMenu::class,
-                            'where' => [
-                                'after'  => ['clients', 'dashboard'],
-                                'before' => ['tickets', 'domains', 'servers', 'hosting'],
-                            ],
+    ],
+    'container' => [
+        'definitions' => [
+            \hiqdev\thememanager\menus\AbstractSidebarMenu::class => [
+                'add' => [
+                    'finance' => [
+                        'menu' => \hipanel\modules\finance\menus\SidebarMenu::class,
+                        'where' => [
+                            'after'  => ['clients', 'dashboard'],
+                            'before' => ['tickets', 'domains', 'servers', 'hosting'],
                         ],
                     ],
                 ],
