@@ -27,6 +27,15 @@ class Bill extends \hipanel\base\Model
 
     public static $i18nDictionary = 'hipanel:finance';
 
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => BillNegation::class,
+                'negativeTypes' => static::negativeTypes(),
+            ],
+        ];
+    }
 
     /**
      * {@inheritdoc}
