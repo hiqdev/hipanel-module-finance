@@ -11,6 +11,7 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\modules\finance\behaviors\BillNegation;
 use Yii;
 
 class Bill extends \hipanel\base\Model
@@ -25,6 +26,16 @@ class Bill extends \hipanel\base\Model
     const SCENARIO_DELETE = 'delete';
 
     public static $i18nDictionary = 'hipanel:finance';
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => BillNegation::class,
+                'negativeTypes' => static::negativeTypes(),
+            ],
+        ];
+    }
 
     /**
      * {@inheritdoc}
@@ -47,6 +58,11 @@ class Bill extends \hipanel\base\Model
             [['id'], 'required', 'on' => [self::SCENARIO_UPDATE, self::SCENARIO_DELETE]],
             [['client_id'], 'integer', 'on' => [self::SCENARIO_CREATE]],
             [['currency', 'sum', 'type', 'label'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            ['sum', function ($attribute, $params, $validator) {
+                if ($this->{$attribute} < 0 && in_array($this->type, static::negativeTypes())) {
+                    $this->addError($attribute, Yii::t('hipanel:finance', 'For the selected payment type entered value can not be negative.'));
+                }
+            }, 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['client_id', 'sum', 'time'], 'required', 'on' => [self::SCENARIO_CREATE]],
             [['client'], 'safe', 'on' => [self::SCENARIO_CREATE]],
         ];
@@ -76,5 +92,24 @@ class Bill extends \hipanel\base\Model
         $this->setIsNewRecord(true);
 
         return true;
+    }
+
+    public static function negativeTypes()
+    {
+        return [
+            'correction,negative',
+            'overuse,backup_du',
+            'overuse,backup_traf',
+            'overuse,domain_num',
+            'overuse,ip_num',
+            'overuse,isp5',
+            'overuse,server_traf',
+            'overuse,server_traf95',
+            'overuse,server_traf95_in',
+            'overuse,server_traf95_max',
+            'overuse,server_traf_in',
+            'overuse,server_traf_max',
+            'overuse,support_time',
+        ];
     }
 }

@@ -70,6 +70,8 @@ return [
     'Premium purchase' => 'Покупка премиум-пакета',
     'Unsale' => 'Распродажа',
 
+    'For the selected payment type entered value can not be negative.' => 'Для выбранного типа платежа введенное значение не может быть отрицательным числом.',
+
     'Select payment option' => 'Выберите вариант оплаты',
 
     'Import' => 'Импортировать',
