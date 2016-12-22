@@ -13,7 +13,7 @@ namespace hipanel\modules\finance\menus;
 
 use Yii;
 
-class SidebarMenu extends \hiqdev\menumanager\Menu
+class SidebarMenu extends \hiqdev\yii2\menus\Menu
 {
     public function items()
     {
@@ -45,7 +45,7 @@ class SidebarMenu extends \hiqdev\menumanager\Menu
                     'holds' => [
                         'label'   => Yii::t('hipanel:finance', 'Held payments'),
                         'url'     => ['/finance/held-payments/index'],
-                        'visible' => Yii::$app->user->can('resell'),
+                        'visible' => $user->can('resell'),
                     ],
                 ],
             ],

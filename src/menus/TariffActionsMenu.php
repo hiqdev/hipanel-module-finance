@@ -6,7 +6,7 @@ use hipanel\widgets\ModalButton;
 use Yii;
 use yii\helpers\Html;
 
-class TariffActionsMenu extends \hiqdev\menumanager\Menu
+class TariffActionsMenu extends \hiqdev\yii2\menus\Menu
 {
     public $model;
 
