@@ -60,7 +60,7 @@ class Bill extends \hipanel\base\Model
             [['currency', 'sum', 'type', 'label'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             ['sum', function ($attribute, $params, $validator) {
                 if ($this->{$attribute} < 0 && in_array($this->type, static::negativeTypes())) {
-                    $this->addError($attribute, Yii::t('hipanel:finance', 'For the selected payment type entered value can not be negative.'));
+                    $this->addError($attribute, Yii::t('hipanel:finance', 'The entered value for the selected payment type can not be negative.'));
                 }
             }, 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['client_id', 'sum', 'time'], 'required', 'on' => [self::SCENARIO_CREATE]],
