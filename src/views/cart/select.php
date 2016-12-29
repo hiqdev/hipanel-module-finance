@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var float $rest client's balance + credit
+ * @var float $budget client's balance + credit
  * @var \hipanel\modules\client\models\Client $client
  * @var \hiqdev\yii2\cart\ShoppingCart $cart
  * @var \yii\web\View $this
@@ -25,7 +25,7 @@ $this->title = Yii::t('hipanel:finance', 'Select payment option');
                 </h3>
             </div>
             <div class="box-body">
-                <?php if ($rest >= $cart->total) : ?>
+                <?php if (round($budget*100) >= round($cart->total*100)) : ?>
                     <h3><?= Yii::t('hipanel:finance', 'It\'s enough to pay your cart') ?></h3>
                     <br>
                     <p>
@@ -39,7 +39,7 @@ $this->title = Yii::t('hipanel:finance', 'Select payment option');
                     <br>
                     <p>
                         <?php $text = Yii::t('hipanel:finance', 'Use credit funds and pay the difference {amount}', [
-                            'amount' => $cart->formatCurrency($cart->total - $rest)
+                            'amount' => $cart->formatCurrency($cart->total - $budget)
                         ]) ?>
                         <?= Html::a($text, '@finance/cart/partial', [
                             'class' => 'btn btn-lg btn-primary btn-block lock-on-click',

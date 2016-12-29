@@ -53,16 +53,16 @@ class CartController extends \yii\web\Controller
         $client = Client::findOne(['id' => Yii::$app->user->identity->id]);
         $cart = $this->module->getCart();
         $total = $cart->getTotal();
-        $rest = $client->balance + $client->credit;
+        $budget = $client->balance + $client->credit;
 
-        if ($rest <= 0 && $total > 0) {
+        if ($budget <= 0 && $total > 0) {
             return $this->renderDeposit($total);
         }
 
         return $this->render('select', [
+            'cart'   => $cart,
             'client' => $client,
-            'cart' => $cart,
-            'rest' => $rest,
+            'budget' => $budget,
         ]);
     }
 
