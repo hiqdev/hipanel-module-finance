@@ -1,14 +1,13 @@
 <?php
 
-use hipanel\base\View;
 use yii\helpers\Html;
 
 /**
+ * @var \yii\web\View
  * @var \hipanel\modules\finance\cart\AbstractCartPosition[] $success
  * @var \hipanel\modules\finance\cart\ErrorPurchaseException[] $error
  * @var \hipanel\modules\finance\cart\PendingPurchaseException[] $pending
  * @var array $remarks
- * @var View $this
  * @var float $balance
  */
 
