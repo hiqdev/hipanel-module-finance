@@ -77,7 +77,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'filter' => function ($column, $filterModel) {
                     return BillTypeFilter::widget([
                         'options' => ['class' => 'form-control text-right'],
-                        'attribute' => 'gtype',
+                        'attribute' => 'ftype',
                         'model' => $filterModel,
                     ]);
                 },

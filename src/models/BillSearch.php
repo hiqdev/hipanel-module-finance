@@ -26,8 +26,8 @@ class BillSearch extends Bill
     {
         return ArrayHelper::merge($this->defaultRules(), [
             [['time_from', 'time_till'], 'date', 'format' => 'php:Y-m-d'],
-            ['servers', 'safe'],
-            ['server_ids', 'safe'],
+            [['servers', 'server_ids'], 'safe'],
+            [['ftype'], 'safe'],
         ]);
     }
 
@@ -36,6 +36,7 @@ class BillSearch extends Bill
         return ArrayHelper::merge($this->defaultSearchAttributes(), [
             'time_from', 'time_till',
             'servers', 'server_ids',
+            'ftype'
         ]);
     }
 
