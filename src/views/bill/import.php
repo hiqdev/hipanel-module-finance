@@ -1,10 +1,9 @@
 <?php
 
 /**
- * @var \yii\web\View $this
+ * @var \yii\web\View
  * @var \hipanel\modules\finance\forms\BillImportForm $model
  */
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 

@@ -7,7 +7,7 @@ use yii\data\ArrayDataProvider;
 use yii\helpers\Html;
 
 /**
- * @var Change[] $models
+ * @var Change[]
  */
 ?>
 <?php $form = ActiveForm::begin([
@@ -30,7 +30,7 @@ use yii\helpers\Html;
                     'amount',
                     'time',
                 ],
-                'layout' => '{items}'
+                'layout' => '{items}',
             ]) ?>
     </div>
 </div>
@@ -43,7 +43,7 @@ use yii\helpers\Html;
     <div class="col-sm-6">
         <?= $form->field($model, 'comment')->textInput([
             'id' => 'change-approve-comment',
-            'name' => 'comment'
+            'name' => 'comment',
         ]); ?>
     </div>
 </div>

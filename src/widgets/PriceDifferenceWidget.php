@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\widgets;
 
@@ -15,8 +23,8 @@ class PriceDifferenceWidget extends Widget
     public function run()
     {
         $diff = $this->new - $this->old;
-        if ($diff != 0) {
-            print Html::tag(
+        if ($diff !== 0) {
+            echo Html::tag(
                 'span',
                 ($diff > 0 ? '+' : '') . Yii::$app->formatter->asDecimal($diff, 2),
                 ['class' => $diff > 0 ? 'text-success' : 'text-danger']

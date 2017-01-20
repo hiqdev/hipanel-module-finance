@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\models;
 
@@ -24,7 +32,7 @@ class DomainService extends Model
     public $resources;
 
     /**
-     * Returns resource for $operation
+     * Returns resource for $operation.
      *
      * @param string $operation
      * @return DomainResource
@@ -35,7 +43,7 @@ class DomainService extends Model
     }
 
     /**
-     * Tries to assign a resource in this service, if the type is correct
+     * Tries to assign a resource in this service, if the type is correct.
      *
      * @param DomainResource $resource
      * @return bool
@@ -51,7 +59,7 @@ class DomainService extends Model
     }
 
     /**
-     * Check whether $resource belongs to this service type
+     * Check whether $resource belongs to this service type.
      *
      * @param DomainResource $resource
      * @return false|string operation type or false, if resource does not match this service
@@ -74,7 +82,7 @@ class DomainService extends Model
     {
         return [
             static::SERVICE_OPERATION_PURCHASE => Yii::t('hipanel:finance:tariff', 'Purchase'),
-            static::SERVICE_OPERATION_RENEW => Yii::t('hipanel:finance:tariff', 'Renewal')
+            static::SERVICE_OPERATION_RENEW => Yii::t('hipanel:finance:tariff', 'Renewal'),
         ];
     }
 
@@ -85,5 +93,4 @@ class DomainService extends Model
     {
         return count($this->resources) === count($this->getOperations());
     }
-
 }

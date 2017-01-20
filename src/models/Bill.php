@@ -1,12 +1,11 @@
 <?php
-
-/*
+/**
  * Finance module for HiPanel
  *
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\models;
@@ -59,7 +58,7 @@ class Bill extends \hipanel\base\Model
             [['client_id'], 'integer', 'on' => [self::SCENARIO_CREATE]],
             [['currency', 'sum', 'type', 'label'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             ['sum', function ($attribute, $params, $validator) {
-                if ($this->{$attribute} < 0 && in_array($this->type, static::negativeTypes())) {
+                if ($this->{$attribute} < 0 && in_array($this->type, static::negativeTypes(), true)) {
                     $this->addError($attribute, Yii::t('hipanel:finance', 'The entered value for the selected payment type can not be negative.'));
                 }
             }, 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],

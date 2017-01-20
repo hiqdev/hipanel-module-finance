@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\models\decorators\server;
 
@@ -7,7 +15,6 @@ use hipanel\modules\finance\models\decorators\AbstractResourceDecorator;
 use hipanel\modules\finance\models\decorators\ResourceDecoratorInterface;
 use hipanel\modules\finance\models\ServerResource;
 use Yii;
-use yii\helpers\Inflector;
 
 abstract class AbstractServerResourceDecorator extends AbstractResourceDecorator implements ResourceDecoratorInterface
 {
@@ -50,7 +57,7 @@ abstract class AbstractServerResourceDecorator extends AbstractResourceDecorator
     {
         return \Yii::t('hipanel:finance:tariff', '{amount} {unit}', [
             'amount' => $this->getPrepaidQuantity(),
-            'unit' => $this->displayUnit()
+            'unit' => $this->displayUnit(),
         ]);
     }
 

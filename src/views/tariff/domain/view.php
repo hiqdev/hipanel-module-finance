@@ -5,10 +5,9 @@ use hipanel\widgets\Box;
 use yii\helpers\Html;
 
 /**
- * @var $this \yii\web\View
+ * @var \yii\web\View
  * @var $model \hipanel\modules\finance\forms\DomainTariffForm
  */
-
 Box::begin() ?>
 <div class="row">
     <div class="col-md-12">
@@ -17,18 +16,19 @@ Box::begin() ?>
             <tr>
                 <th></th>
                 <?php foreach ($model->getResourceTypes() as $type) {
-                    echo Html::tag('th', $type);
-                } ?>
+    echo Html::tag('th', $type);
+} ?>
             </tr>
             </thead>
             <tbody>
             <?php
             $i = 0;
-            foreach ($model->getZones() as $zone => $id) { ?>
+            foreach ($model->getZones() as $zone => $id) {
+                ?>
                 <tr>
                     <td><strong><?= $zone ?></strong></td>
                     <?php foreach ($model->getZoneResources($zone) as $type => $resource) {
-                        $baseResources = $model->getZoneParentResources($zone); ?>
+                    $baseResources = $model->getZoneParentResources($zone); ?>
                         <td>
                             <div class="row">
                                 <div class="col-md-6">
@@ -42,10 +42,11 @@ Box::begin() ?>
                                 </div>
                             </div>
                         </td>
-                        <?php $i++;
-                    } ?>
+                        <?php ++$i;
+                } ?>
                 </tr>
-            <?php } ?>
+            <?php 
+            } ?>
             </tbody>
         </table>
     </div>
@@ -56,22 +57,23 @@ Box::begin() ?>
     <?php
     $services = $model->getServices();
     $baseServices = $model->getParentServices();
-    foreach ($services as $service) { ?>
+    foreach ($services as $service) {
+        ?>
         <div class="col-md-3">
             <?php Box::begin([
-                'title' => $service->name
+                'title' => $service->name,
             ]) ?>
             <table class="table table-condensed">
                 <thead>
                 <tr>
                     <?php foreach ($service->getOperations() as $operation => $title) {
-                        print Html::tag('td', $title);
-                    } ?>
+                echo Html::tag('td', $title);
+            } ?>
                 </tr>
                 <tbody>
                 <tr>
                     <?php foreach ($service->getOperations() as $operation => $title) {
-                        $resource = $service->getResource($operation); ?>
+                $resource = $service->getResource($operation); ?>
                         <td>
                             <div class="row">
                                 <div class="col-md-6">
@@ -85,11 +87,13 @@ Box::begin() ?>
                                 </div>
                             </div>
                         </td>
-                    <?php } ?>
+                    <?php 
+            } ?>
                 </tr>
                 </tbody>
                 </thead></table>
             <?php Box::end(); ?>
         </div>
-    <?php } ?>
+    <?php 
+    } ?>
 </div>

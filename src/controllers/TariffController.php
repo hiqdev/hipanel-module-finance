@@ -1,12 +1,11 @@
 <?php
-
-/*
+/**
  * Finance module for HiPanel
  *
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\controllers;
@@ -15,7 +14,6 @@ use hipanel\actions\IndexAction;
 use hipanel\actions\OrientationAction;
 use hipanel\actions\SearchAction;
 use hipanel\actions\SmartDeleteAction;
-use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\modules\finance\logic\DomainTariffManager;
@@ -30,8 +28,8 @@ class TariffController extends \hipanel\base\CrudController
             'set-orientation' => [
                 'class' => OrientationAction::class,
                 'allowedRoutes' => [
-                    '@tariff/index'
-                ]
+                    '@tariff/index',
+                ],
             ],
             'index' => [
                 'class' => IndexAction::class,

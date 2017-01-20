@@ -1,12 +1,17 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\models\stubs;
 
-use hipanel\modules\finance\models\decorators\AbstractResourceDecorator;
 use hipanel\modules\finance\models\decorators\server\AbstractServerResourceDecorator;
 use hipanel\modules\finance\models\decorators\server\ServerResourceDecoratorFactory;
-use yii\base\InvalidConfigException;
-use yii\base\Model;
 
 class ServerResourceStub extends AbstractResourceStub
 {

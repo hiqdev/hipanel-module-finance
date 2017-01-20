@@ -1,12 +1,11 @@
 <?php
-
-/*
+/**
  * Finance module for HiPanel
  *
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\models;
@@ -23,10 +22,10 @@ class Resource extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
 
-    /** @var  AbstractResourceDecorator */
+    /** @var AbstractResourceDecorator */
     protected $decorator;
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public static $i18nDictionary = 'hipanel:finance:tariff';
 
     /**
@@ -66,7 +65,7 @@ class Resource extends \hipanel\base\Model
     public function attributeLabels()
     {
         return $this->mergeAttributeLabels([
-            'price' => Yii::t('hipanel:finance:tariff', 'Price per period')
+            'price' => Yii::t('hipanel:finance:tariff', 'Price per period'),
         ]);
     }
 

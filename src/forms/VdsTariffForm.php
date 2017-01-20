@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\forms;
 
@@ -75,14 +83,13 @@ class VdsTariffForm extends AbstractTariffForm
         $order = array_keys(reset($resources)->getTypes());
 
         return $this->sortResourcesByDefinedOrder($resources, $order, 'type');
-
     }
 
     public function getParentOveruseResource($type_id)
     {
         return reset(array_filter($this->parentTariff->resources, function ($resource) use ($type_id) {
             /** @var ServerResource $resource */
-            return $resource->type_id == $type_id && $resource->isTypeCorrect();
+            return strcmp($resource->type_id, $type_id) === 0 && $resource->isTypeCorrect();
         }));
     }
 
@@ -93,11 +100,11 @@ class VdsTariffForm extends AbstractTariffForm
     {
         return reset(array_filter($this->parentTariff->resources, function ($resource) use ($object_id) {
             /** @var ServerResource $resource */
-            return $resource->object_id == $object_id && $resource->isHardwareTypeCorrect();
+            return strcmp($resource->object_id, $object_id) === 0 && $resource->isHardwareTypeCorrect();
         }));
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function setResources($resources)
     {
         $result = [];

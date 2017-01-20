@@ -1,9 +1,17 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\logic;
 
-use hipanel\modules\finance\models\Calculation;
 use hipanel\modules\finance\models\CalculableModelInterface;
+use hipanel\modules\finance\models\Calculation;
 use yii\base\Model;
 use yii\web\UnprocessableEntityHttpException;
 
@@ -29,7 +37,7 @@ class Calculator
     }
 
     /**
-     * Gets [[Calculation]] for the $id
+     * Gets [[Calculation]] for the $id.
      *
      * @param integer $id
      * @return Calculation
@@ -56,8 +64,8 @@ class Calculator
     }
 
     /**
-     * @return \hipanel\modules\finance\models\Calculation[]
      * @throws UnprocessableEntityHttpException
+     * @return \hipanel\modules\finance\models\Calculation[]
      */
     public function execute()
     {

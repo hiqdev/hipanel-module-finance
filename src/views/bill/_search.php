@@ -3,14 +3,14 @@
 use hipanel\helpers\StringHelper;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
-use hipanel\modules\server\widgets\combo\ServerCombo;
 use hipanel\modules\finance\widgets\TariffCombo;
+use hipanel\modules\server\widgets\combo\ServerCombo;
 use hipanel\widgets\DatePicker;
 use hiqdev\combo\MultipleStaticCombo;
 use yii\helpers\Html;
 
 /**
- * @var \hipanel\widgets\AdvancedSearch $search
+ * @var \hipanel\widgets\AdvancedSearch
  * @var array $billTypes
  * @var array $billGroupLabels
  */
@@ -33,8 +33,8 @@ use yii\helpers\Html;
         'data' => $currencies,
         'hasId' => true,
         'inputOptions' => [
-            'multiple' => true
-        ]
+            'multiple' => true,
+        ],
     ]) ?>
 </div>
 
@@ -60,7 +60,7 @@ use yii\helpers\Html;
     foreach ($billTypes as $gtype => $category) {
         $item = [];
         foreach ($category as $key => $label) {
-            $item[substr($key, strpos($key, ',')+1)] = $label;
+            $item[substr($key, strpos($key, ',') + 1)] = $label;
         }
         $types[$gtype] = $item;
     }
@@ -70,8 +70,8 @@ use yii\helpers\Html;
         'hasId' => true,
         'inputOptions' => [
             'groups' => $billGroupLabels,
-            'multiple' => true
-        ]
+            'multiple' => true,
+        ],
     ]) ?>
 </div>
 

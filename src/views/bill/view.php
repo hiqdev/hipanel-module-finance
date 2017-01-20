@@ -20,7 +20,6 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
             'columns' => [
                 'seller_id',
                 'client_id',
-
             ],
         ]) ?>
     </div>

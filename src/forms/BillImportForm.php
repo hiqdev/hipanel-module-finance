@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\forms;
 
@@ -9,7 +17,7 @@ use yii\base\InvalidValueException;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class BillImportForm provides functionality to parse CSV data
+ * Class BillImportForm provides functionality to parse CSV data.
  *
  * Usage:
  *
@@ -27,8 +35,6 @@ use yii\helpers\ArrayHelper;
  *     $model->save();
  * }
  * ```
- *
- * @package hipanel\modules\finance\forms
  */
 class BillImportForm extends \yii\base\Model
 {
@@ -46,12 +52,11 @@ class BillImportForm extends \yii\base\Model
      * @var array map to find client id by login.
      * Key - login
      * Value - id
-     *
      */
     private $clientsMap = [];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributes()
     {
@@ -59,7 +64,7 @@ class BillImportForm extends \yii\base\Model
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -69,7 +74,7 @@ class BillImportForm extends \yii\base\Model
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -174,11 +179,11 @@ class BillImportForm extends \yii\base\Model
     }
 
     /**
-     * Resolves payment $type to a normal form
+     * Resolves payment $type to a normal form.
      *
      * @param string $type
-     * @return string
      * @throws InvalidValueException
+     * @return string
      */
     protected function resolveType($type)
     {
@@ -190,8 +195,8 @@ class BillImportForm extends \yii\base\Model
         }
 
         // Type is a title of type instead of its key
-        if (in_array($type, $types)) {
-            return array_search($type, $types);
+        if (in_array($type, $types, true)) {
+            return array_search($type, $types, true);
         }
 
         // Assuming only second part is passed. Match from the end

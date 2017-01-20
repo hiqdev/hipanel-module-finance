@@ -1,12 +1,11 @@
 <?php
-
-/*
+/**
  * Finance module for HiPanel
  *
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\cart;
@@ -29,7 +28,7 @@ class PendingPurchaseException extends Exception implements PositionFinishExcept
     public $position;
 
     /**
-     * PendingPurchaseException constructor
+     * PendingPurchaseException constructor.
      *
      * @param string $message
      * @param AbstractPurchase $purchase

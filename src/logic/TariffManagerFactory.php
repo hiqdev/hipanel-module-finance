@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\logic;
 
@@ -12,8 +20,8 @@ class TariffManagerFactory
     /**
      * @param integer $id Tariff ID
      * @param array $options that will be passed to the object as configuration
-     * @return AbstractTariffManager|object
      * @throws NotFoundHttpException
+     * @return AbstractTariffManager|object
      */
     public static function createById($id, $options = [])
     {
@@ -27,7 +35,7 @@ class TariffManagerFactory
 
         return Yii::createObject(array_merge([
             'class' => static::buildClassName($model->type),
-            'tariff' => $model
+            'tariff' => $model,
         ], $options));
     }
 
@@ -42,8 +50,8 @@ class TariffManagerFactory
         $options = array_merge([
             'formOptions' => [
                 'scenario' => 'create',
-                'parent_id' => $parent_id
-            ]
+                'parent_id' => $parent_id,
+            ],
         ], $options);
 
         return Yii::createObject(array_merge(['class' => static::buildClassName($type)], $options));

@@ -3,19 +3,18 @@
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\models\Bill;
-use hipanel\widgets\Box;
 use hipanel\widgets\AmountWithCurrency;
+use hipanel\widgets\Box;
 use hipanel\widgets\DatePicker;
 use hipanel\widgets\DateTimePicker;
 use hipanel\widgets\DynamicFormWidget;
-use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var hipanel\modules\finance\models\Bill[] $models */
 /** @var array $billTypes */
 /** @var array $billGroupLabels */
-
 $model = reset($models);
 
 $form = ActiveForm::begin([
@@ -68,8 +67,8 @@ $form = ActiveForm::begin([
                         <?= $form->field($model, "[$i]client_id")->widget(ClientCombo::class, [
                             'formElementSelector' => '.form-instance',
                             'inputOptions' => [
-                                'readonly' => $model->scenario == Bill::SCENARIO_UPDATE,
-                            ]
+                                'readonly' => $model->scenario === Bill::SCENARIO_UPDATE,
+                            ],
                         ]) ?>
                     </div>
                     <div class="col-md-2">

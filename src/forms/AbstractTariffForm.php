@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\forms;
 
@@ -46,7 +54,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
     protected $_resources;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function init()
     {
@@ -58,7 +66,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
     }
 
     /**
-     * Initializes tariff
+     * Initializes tariff.
      * @void
      */
     protected function initTariff()
@@ -70,7 +78,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
 
     /**
      * Ensures that [[tariff]] is set.
-     * Otherwise calls [[setDefaultTariff()]]
+     * Otherwise calls [[setDefaultTariff()]].
      * @return bool
      */
     protected function ensureTariff()
@@ -90,7 +98,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
     }
 
     /**
-     * Sets default tariff
+     * Sets default tariff.
      *
      * @return bool
      */
@@ -105,7 +113,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
         return true;
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function rules()
     {
         return [
@@ -116,15 +124,15 @@ abstract class AbstractTariffForm extends \yii\base\Model
         ];
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function fields()
     {
         return ArrayHelper::merge(array_combine($this->attributes(), $this->attributes()), [
-            'resources' => '_resources'
+            'resources' => '_resources',
         ]);
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function attributes()
     {
         return [
@@ -175,16 +183,16 @@ abstract class AbstractTariffForm extends \yii\base\Model
     /**
      * @param array $data to be loaded
      * @param null $formName
-     * @return bool
      * @throws InvalidConfigException when not implemented
+     * @return bool
      */
     public function load($data, $formName = null)
     {
-        throw new InvalidConfigException("Method load must be implemented");
+        throw new InvalidConfigException('Method load must be implemented');
     }
 
     /**
-     * Selects one of [[parentTariffs]] and puts it to [[parentTariff]]
+     * Selects one of [[parentTariffs]] and puts it to [[parentTariff]].
      *
      * @return bool
      */
@@ -199,7 +207,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
         }
 
         $filtered = array_filter($this->parentTariffs, function ($model) {
-            return $model->id == $this->parent_id;
+            return $model->id === $this->parent_id;
         });
 
         if (count($filtered) !== 1) {
@@ -216,7 +224,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
     /**
      * Builds key-value array of [[parentTariffs]]
      *  - key: tariff id
-     *  - value: tariff name
+     *  - value: tariff name.
      *
      * @return array
      */
@@ -230,12 +238,12 @@ abstract class AbstractTariffForm extends \yii\base\Model
 
     public function insert($runValidation = true)
     {
-        throw new InvalidConfigException("Method insert must be implemented");
+        throw new InvalidConfigException('Method insert must be implemented');
     }
 
     public function update($runValidation = true)
     {
-        throw new InvalidConfigException("Method update must be implemented");
+        throw new InvalidConfigException('Method update must be implemented');
     }
 
     /**
@@ -247,7 +255,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
     }
 
     /**
-     * Sets [[tariff]]
+     * Sets [[tariff]].
      *
      * @param Tariff $tariff
      * @return bool
@@ -277,7 +285,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
     protected $_calculator;
 
     /**
-     * Creates [[TariffCalculator]] object for the [[tariff]]
+     * Creates [[TariffCalculator]] object for the [[tariff]].
      *
      * @return Calculator
      */
@@ -306,7 +314,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
     protected $_parentCalculator;
 
     /**
-     * Creates [[TariffCalculator]] object for the [[parentTariff]]
+     * Creates [[TariffCalculator]] object for the [[parentTariff]].
      *
      * @return Calculator
      */

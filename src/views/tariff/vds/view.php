@@ -4,7 +4,7 @@ use hipanel\modules\finance\widgets\PriceDifferenceWidget;
 use hipanel\widgets\Box;
 
 /**
- * @var $this \yii\web\View
+ * @var \yii\web\View
  * @var $model \hipanel\modules\finance\forms\SvdsTariffForm
  * @var $manager \hipanel\modules\finance\logic\AbstractTariffManager
  */
@@ -25,10 +25,8 @@ use hipanel\widgets\Box;
             </thead>
             <tbody>
             <tr>
-                <?php
-                $price = $model->calculation()->price;
-                $basePrice = $model->parentCalculation()->price;
-                ?>
+                <?php $price = $model->calculation()->price; ?>
+                <?php $basePrice = $model->parentCalculation()->price; ?>
                 <td><?= Yii::$app->formatter->asCurrency($price, $model->calculation()->currency) ?></td>
                 <?php if (Yii::$app->user->can('manage')) : ?>
                     <td><?= Yii::$app->formatter->asCurrency($basePrice, $model->parentCalculation()->currency) ?></td>
@@ -55,9 +53,8 @@ use hipanel\widgets\Box;
             </tr>
             </thead>
             <tbody>
-            <?php
-            foreach ($model->getHardwareResources() as $resource) {
-                $baseResource = $model->getParentHardwareResource($resource->object_id); ?>
+            <?php foreach ($model->getHardwareResources() as $resource) : ?>
+                <?php $baseResource = $model->getParentHardwareResource($resource->object_id); ?>
                 <tr>
                     <td><?= $resource->decorator()->displayTitle() ?></td>
                     <td><?= $resource->decorator()->displayPrepaidAmount() ?></td>
@@ -71,7 +68,7 @@ use hipanel\widgets\Box;
                         <?php endif; ?>
                     </td>
                 </tr>
-            <?php } ?>
+            <?php endforeach ?>
             </tbody>
         </table>
         <?php Box::end() ?>
@@ -90,9 +87,8 @@ use hipanel\widgets\Box;
             </tr>
             </thead>
             <tbody>
-            <?php
-            foreach ($model->getOveruseResources() as $resource) {
-                $baseResource = $model->getParentOveruseResource($resource->type_id); ?>
+            <?php foreach ($model->getOveruseResources() as $resource) : ?>
+                <?php $baseResource = $model->getParentOveruseResource($resource->type_id); ?>
                 <tr>
                     <td><?= $resource->decorator()->displayTitle() ?></td>
                     <td>
@@ -117,7 +113,7 @@ use hipanel\widgets\Box;
                         <?php endif; ?>
                     </td>
                 </tr>
-            <?php } ?>
+            <?php endforeach ?>
             </tbody>
         </table>
         <?php Box::end() ?>

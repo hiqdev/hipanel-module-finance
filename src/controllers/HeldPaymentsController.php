@@ -1,26 +1,25 @@
 <?php
-
-/*
+/**
  * Finance module for HiPanel
  *
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\controllers;
 
-use hipanel\actions\OrientationAction;
-use Yii;
-use yii\base\Event;
-use yii\filters\AccessControl;
 use hipanel\actions\IndexAction;
+use hipanel\actions\OrientationAction;
 use hipanel\actions\PrepareBulkAction;
 use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\base\CrudController;
 use hipanel\modules\server\models\Change;
+use Yii;
+use yii\base\Event;
+use yii\filters\AccessControl;
 
 class HeldPaymentsController extends CrudController
 {
@@ -87,8 +86,8 @@ class HeldPaymentsController extends CrudController
                 'scenario' => 'approve',
                 'view' => '_bulkApprove',
                 'findOptions' => [
-                    'state' => Change::STATE_NEW
-                ]
+                    'state' => Change::STATE_NEW,
+                ],
             ],
             'bulk-reject' => [
                 'class' => SmartUpdateAction::class,
@@ -115,8 +114,8 @@ class HeldPaymentsController extends CrudController
                 'scenario' => 'reject',
                 'view' => '_bulkReject',
                 'findOptions' => [
-                    'state' => Change::STATE_NEW
-                ]
+                    'state' => Change::STATE_NEW,
+                ],
             ],
         ];
     }

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\logic;
 
@@ -42,7 +50,7 @@ abstract class AbstractTariffManager extends Object
      * @var string The type used to find parent tariffs
      */
     protected $type;
-    
+
     public function init()
     {
         $this->findParentTariffs();
@@ -50,14 +58,14 @@ abstract class AbstractTariffManager extends Object
     }
 
     /**
-     * Fills [[form]] property with a proper [[AbstractTariffForm]] object
+     * Fills [[form]] property with a proper [[AbstractTariffForm]] object.
      */
     protected function buildForm()
     {
         $this->form = Yii::createObject(array_merge([
             'scenario' => $this->scenario,
             'parentTariffs' => $this->parentTariffs,
-            'tariff' => $this->tariff
+            'tariff' => $this->tariff,
         ], $this->getFormOptions()));
     }
 

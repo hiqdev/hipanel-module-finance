@@ -1,18 +1,17 @@
 <?php
-
-/*
+/**
  * Finance module for HiPanel
  *
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\grid;
 
-use Yii;
 use hipanel\grid\ActionColumn;
+use Yii;
 use yii\helpers\Inflector;
 
 class HeldPaymentsGridView extends \hipanel\grid\BoxedGridView
@@ -31,34 +30,34 @@ class HeldPaymentsGridView extends \hipanel\grid\BoxedGridView
                 'header' => Yii::t('hipanel:finance', 'Payment system'),
                 'value' => function ($model) {
                     return Inflector::titleize($model->params['system']);
-                }
+                },
             ],
             'txn' => [
                 'header' => Yii::t('hipanel:finance', 'TXN'),
                 'value' => function ($model) {
                     return $model->params['txn'];
-                }
+                },
             ],
             'label' => [
                 'header' => Yii::t('hipanel', 'Description'),
                 'value' => function ($model) {
                     return $model->params['label'];
-                }
+                },
             ],
             'amount' => [
                 'header' => Yii::t('hipanel:finance', 'Amount'),
                 'format' => 'html',
                 'value' => function ($model) {
-                    $html = Yii::t('hipanel:finance:change', 'Full:') . "&nbsp;" . Yii::$app->formatter->asCurrency($model->params['sum'], $model->params['purse_currency']) . "<br />";
-                    $html .= Yii::t('hipanel:finance:change', 'Fee:') . "&nbsp;" . Yii::$app->formatter->asCurrency($model->params['fee'], $model->params['purse_currency']) . "<br />";
-                    $html .= Yii::t('hipanel:finance:change', 'Sum:') . "&nbsp;" . Yii::$app->formatter->asCurrency($model->params['sum'] - $model->params['fee'], $model->params['purse_currency']);
+                    $html = Yii::t('hipanel:finance:change', 'Full:') . '&nbsp;' . Yii::$app->formatter->asCurrency($model->params['sum'], $model->params['purse_currency']) . '<br />';
+                    $html .= Yii::t('hipanel:finance:change', 'Fee:') . '&nbsp;' . Yii::$app->formatter->asCurrency($model->params['fee'], $model->params['purse_currency']) . '<br />';
+                    $html .= Yii::t('hipanel:finance:change', 'Sum:') . '&nbsp;' . Yii::$app->formatter->asCurrency($model->params['sum'] - $model->params['fee'], $model->params['purse_currency']);
                     return $html;
-                }
+                },
             ],
             'time' => [
                 'value' => function ($model) {
                     return Yii::$app->formatter->asDatetime($model->time);
-                }
+                },
             ],
             'actions' => [
                 'class' => ActionColumn::class,

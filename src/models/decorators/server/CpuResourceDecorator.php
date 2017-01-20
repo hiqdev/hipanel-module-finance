@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\models\decorators\server;
 
@@ -30,7 +38,6 @@ class CpuResourceDecorator extends AbstractServerResourceDecorator
             preg_match('/((\d+) cores?)$/i', $this->resource->part->partno, $matches);
         } else {
             preg_match('/((\d+) MHz)$/i', $this->resource->part->partno, $matches);
-
         }
 
         return $matches[2] === null ? 0 : $matches[2];

@@ -1,15 +1,15 @@
 <?php
 
 /**
- * @var $this \yii\web\View
+ * @var \yii\web\View
  * @var $model \hipanel\modules\finance\forms\VdsTariffForm
  */
-
 use hipanel\helpers\Url;
 use hipanel\widgets\Box;
 use hipanel\widgets\Pjax;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+
 ?>
 
 <?php
@@ -33,7 +33,7 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
         <?= $form->field($model, 'parent_id')->dropDownList($model->getParentTariffsList(), [
             'id' => 'tariff-parent_id',
             'data-url' => Url::current(['parent_id' => null]),
-            'readonly' => isset($model->id)
+            'readonly' => isset($model->id),
         ]); ?>
         <?= $form->field($model, 'name') ?>
         <?= $form->field($model, 'note') ?>
@@ -54,41 +54,38 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
             </tr>
             </thead>
             <tbody>
-            <?php
-            $i = 0;
-            foreach ($model->getHardwareResources() as $resource) {
-                $baseResource = $model->getParentHardwareResource($resource->object_id); ?>
+            <?php $i = 0; ?>
+            <?php foreach ($model->getHardwareResources() as $resource) : ?>
+                <?php $baseResource = $model->getParentHardwareResource($resource->object_id); ?>
                 <tr>
                     <td><?= $resource->decorator()->displayTitle() ?></td>
                     <td><?= $resource->decorator()->displayPrepaidAmount() ?></td>
                     <td>
                         <?= Html::activeHiddenInput($resource, "[$i]object_id", [
-                            'value' => $resource->realObjectId()
+                            'value' => $resource->realObjectId(),
                         ]) ?>
                         <?= Html::activeHiddenInput($resource, "[$i]type") ?>
                         <div class="row">
                             <div class="col-md-6">
-                                <?php
-                                $activeField = $form->field($resource, "[$i]fee");
-                                Html::addCssClass($activeField->options, 'form-group-sm');
-                                echo $activeField->input('number', [
+                                <?php $activeField = $form->field($resource, "[$i]fee"); ?>
+                                <?php Html::addCssClass($activeField->options, 'form-group-sm'); ?>
+                                <?= $activeField->input('number', [
                                     'class' => 'form-control price-input',
                                     'autocomplete' => false,
-                                    'step' => 'any'
+                                    'step' => 'any',
                                 ])->label(false); ?>
                             </div>
                             <div class="col-md-6">
-                                <?php
-                                echo Html::tag('span', '', [
+                                <?= Html::tag('span', '', [
                                     'class' => 'base-price text-bold',
-                                    'data-original-price' => $baseResource->fee
+                                    'data-original-price' => $baseResource->fee,
                                 ]); ?>
                             </div>
                         </div>
                     </td>
                 </tr>
-            <?php $i++;
-            } ?>
+                <?php ++$i; ?>
+            <?php endforeach ?>
             </tbody>
         </table>
         <?php Box::end() ?>
@@ -105,9 +102,8 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
             </tr>
             </thead>
             <tbody>
-            <?php
-            foreach ($model->getOveruseResources() as $resource) {
-                $baseResource = $model->getParentOveruseResource($resource->type_id); ?>
+            <?php foreach ($model->getOveruseResources() as $resource) : ?>
+                <?php $baseResource = $model->getParentOveruseResource($resource->type_id); ?>
                 <tr>
                     <td><?= $resource->decorator()->displayTitle() ?></td>
                     <td style="width: 20%">
@@ -121,13 +117,13 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
                                 echo $activeField->input('number', [
                                     'class' => 'form-control price-input',
                                     'autocomplete' => false,
-                                    'step' => 'any'
+                                    'step' => 'any',
                                 ])->label(false); ?>
                             </div>
                             <div class="col-md-6">
                                 <?= Html::tag('span', '', [
                                     'class' => 'base-price text-bold',
-                                    'data-original-price' => $baseResource->fee
+                                    'data-original-price' => $baseResource->fee,
                                 ]); ?>
                             </div>
                         </div>
@@ -140,14 +136,13 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
 
                                 echo \hipanel\modules\finance\widgets\PrepaidAmountWidget::widget([
                                     'activeField' => $activeField,
-                                    'resource' => $resource
-                                ]);
-                                ?>
+                                    'resource' => $resource,
+                                ]); ?>
                             </div>
                             <div class="col-md-6">
                                 <?= Html::tag('span', '', [
                                     'class' => 'base-price text-bold',
-                                    'data-original-price' => $baseResource->decorator()->getPrepaidQuantity()
+                                    'data-original-price' => $baseResource->decorator()->getPrepaidQuantity(),
                                 ]); ?>
                             </div>
                         </div>
@@ -157,26 +152,25 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
                     <td>
                         <div class="row">
                             <div class="col-md-6">
-                                <?php
-                                $activeField = $form->field($resource, "[$i]price");
-                                Html::addCssClass($activeField->options, 'form-group-sm');
-                                echo $activeField->input('number', [
+                                <?php $activeField = $form->field($resource, "[$i]price"); ?>
+                                <?php Html::addCssClass($activeField->options, 'form-group-sm'); ?>
+                                <?= $activeField->input('number', [
                                     'class' => 'form-control price-input',
                                     'autocomplete' => false,
-                                    'step' => 'any'
+                                    'step' => 'any',
                                 ])->label(false); ?>
                             </div>
                             <div class="col-md-6">
                                 <?= Html::tag('span', '', [
                                     'class' => 'base-price text-bold',
-                                    'data-original-price' => $baseResource->price
+                                    'data-original-price' => $baseResource->price,
                                 ]); ?>
                             </div>
                         </div>
                     </td>
                 </tr>
-            <?php $i++;
-            } ?>
+                <?php ++$i; ?>
+            <?php endforeach; ?>
             </tbody>
         </table>
 
@@ -187,7 +181,7 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
 <?php ActiveForm::end(); ?>
 
 <?php
-$this->registerJs(<<<JS
+$this->registerJs(<<<'JS'
     $('#tariff-parent_id').on('change', function () {
         var fakeInput = $('<input>').attr({'name': 'parent_id', 'value': $(this).val()});
         var formAction = $(this).closest('select').attr('data-url');

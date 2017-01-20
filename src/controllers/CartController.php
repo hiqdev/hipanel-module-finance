@@ -1,12 +1,11 @@
 <?php
-
-/*
+/**
  * Finance module for HiPanel
  *
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\controllers;
@@ -33,10 +32,10 @@ class CartController extends \yii\web\Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@']
-                    ]
-                ]
-            ]
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -93,7 +92,7 @@ class CartController extends \yii\web\Controller
             'success' => $finisher->getSuccess(),
             'error' => $finisher->getError(),
             'pending' => $finisher->getPending(),
-            'remarks' => (array)Yii::$app->getView()->params['remarks'],
+            'remarks' => (array) Yii::$app->getView()->params['remarks'],
         ]);
     }
 

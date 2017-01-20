@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\forms;
 
@@ -46,7 +54,6 @@ class DomainTariffForm extends AbstractTariffForm
     /**
      * @param $resources
      * @return DomainService[]
-     *
      */
     protected function createServices($resources)
     {
@@ -100,7 +107,7 @@ class DomainTariffForm extends AbstractTariffForm
         $result = [];
 
         foreach ($this->tariff->resources as $resource) {
-            if ($resource->object_id == $id && $resource->isTypeCorrect()) {
+            if (strcmp($resource->object_id, $id) === 0 && $resource->isTypeCorrect()) {
                 $result[$resource->type] = $resource;
             }
         }
@@ -118,7 +125,7 @@ class DomainTariffForm extends AbstractTariffForm
         $result = [];
 
         foreach ($this->parentTariff->resources as $resource) {
-            if ($resource->object_id == $id && $resource->isTypeCorrect()) {
+            if (strcmp($resource->object_id, $id) === 0 && $resource->isTypeCorrect()) {
                 $result[$resource->type] = $resource;
             }
         }

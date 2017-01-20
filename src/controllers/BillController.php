@@ -1,12 +1,11 @@
 <?php
-
-/*
+/**
  * Finance module for HiPanel
  *
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\controllers;
@@ -18,9 +17,6 @@ use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
-use hipanel\components\ApiConnectionInterface;
-use hipanel\helpers\ArrayHelper;
-use hipanel\models\Ref;
 use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\providers\BillTypesProvider;
@@ -114,7 +110,7 @@ class BillController extends \hipanel\base\CrudController
                     list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
 
                     return compact('billTypes', 'billGroupLabels');
-                }
+                },
             ],
             'delete' => [
                 'class' => SmartPerformAction::class,
@@ -128,8 +124,8 @@ class BillController extends \hipanel\base\CrudController
         $model = new BillImportForm([
             'billTypes' => array_filter($this->getPaymentTypes(), function ($key) {
                 // Kick out items that are categories names, but not real types
-                return (strpos($key, ',') !== false);
-            }, ARRAY_FILTER_USE_KEY)
+                return strpos($key, ',') !== false;
+            }, ARRAY_FILTER_USE_KEY),
         ]);
 
         if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post())) {

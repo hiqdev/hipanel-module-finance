@@ -1,18 +1,17 @@
 <?php
-
-/*
+/**
  * Finance module for HiPanel
  *
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\grid;
 
-use hipanel\modules\client\widgets\combo\ContactCombo;
 use hipanel\helpers\FontIcon;
+use hipanel\modules\client\widgets\combo\ContactCombo;
 use hipanel\widgets\ArraySpoiler;
 use hiqdev\xeditable\widgets\ComboXEditable;
 use Yii;
@@ -64,7 +63,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                         'attribute' => 'contact_id',
                         'value' => $result,
                         'pluginOptions' => [
-                            'url' => ['@purse/update-contact', 'id' => $model->id]
+                            'url' => ['@purse/update-contact', 'id' => $model->id],
                         ],
                         'combo' => [
                             'class' => ContactCombo::class,
@@ -72,7 +71,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                                 'client_id' => ['format' => $model->id],
                             ],
                             'inputOptions' => [
-                                'data-init-text' => $result
+                                'data-init-text' => $result,
                             ],
                             'pluginOptions' => [
                                 'select2Options' => [
@@ -98,7 +97,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                         'attribute' => 'requisite_id',
                         'value' => $result,
                         'pluginOptions' => [
-                            'url' => ['@purse/update-requisite', 'id' => $model->id]
+                            'url' => ['@purse/update-requisite', 'id' => $model->id],
                         ],
                         'combo' => [
                             'class' => ContactCombo::class,
@@ -106,7 +105,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                                 'client_id' => ['format' => $model->seller_id],
                             ],
                             'inputOptions' => [
-                                'data-init-text' => $result
+                                'data-init-text' => $result,
                             ],
                             'pluginOptions' => [
                                 'select2Options' => [

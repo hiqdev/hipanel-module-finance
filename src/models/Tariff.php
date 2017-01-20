@@ -1,12 +1,11 @@
 <?php
-
-/*
+/**
  * Finance module for HiPanel
  *
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\models;
@@ -15,9 +14,8 @@ use hipanel\modules\finance\models\query\TariffQuery;
 use Yii;
 
 /**
- * Class Tariff
- * @package hipanel\modules\finance\models
- * @property Resource[]|DomainResource[]|ServerResource[] $resources
+ * Class Tariff.
+ * @property resource[]|DomainResource[]|ServerResource[] $resources
  */
 class Tariff extends \hipanel\base\Model implements CalculableModelInterface
 {
@@ -50,7 +48,7 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
     {
         if ($this->type === self::TYPE_DOMAIN) {
             return $this->hasMany(DomainResource::class, ['tariff_id' => 'id'])->inverseOf('tariff');
-        } elseif (in_array($this->type, [self::TYPE_XEN, self::TYPE_OPENVZ])) {
+        } elseif (in_array($this->type, [self::TYPE_XEN, self::TYPE_OPENVZ], true)) {
             return $this->hasMany(ServerResource::class, ['tariff_id' => 'id'])->inverseOf('tariff');
         }
 
@@ -59,7 +57,7 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
 
     /**
      * @param $type
-     * @return DomainResource|ServerResource|Resource
+     * @return DomainResource|ServerResource|resource
      */
     public function getResourceByType($type)
     {
@@ -97,7 +95,7 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
     {
         if ($this->type === static::TYPE_DOMAIN) {
             return 'domain';
-        } elseif (in_array($this->type, [static::TYPE_OPENVZ, static::TYPE_XEN])) {
+        } elseif (in_array($this->type, [static::TYPE_OPENVZ, static::TYPE_XEN], true)) {
             return 'server';
         }
 
@@ -114,7 +112,7 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
         return new Calculation([
             'calculation_id' => $this->id,
             'tariff_id' => $this->id,
-            'object' => $this->getGeneralType()
+            'object' => $this->getGeneralType(),
         ]);
     }
 }

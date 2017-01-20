@@ -1,7 +1,6 @@
 <?php
 
 use hipanel\base\View;
-use hipanel\modules\finance\grid\ChangeGridView;
 use hipanel\modules\finance\grid\HeldPaymentsGridView;
 use hipanel\modules\finance\models\Change;
 use hipanel\widgets\AjaxModal;
@@ -12,12 +11,11 @@ use yii\bootstrap\Modal;
 use yii\helpers\Html;
 
 /**
- * @var View $this
+ * @var View
  * @var array $states
  * @var Change $model
  * @var ActiveDataProvider $dataProvider
  */
-
 $this->title = Yii::t('hipanel:finance:change', 'Pending confirmation payments');
 $this->params['subtitle'] = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
 $this->params['breadcrumbs'][] = $this->title;
@@ -31,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ]) ?>
     <?= $page->setSearchFormData(compact(['states'])) ?>
     <?php $page->beginContent('main-actions') ?>
-        <?php // TODO: add actions ?>
+        <?php // TODO: add actions?>
     <?php $page->endContent() ?>
 
     <?php $page->beginContent('show-actions') ?>
@@ -39,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $page->renderSorter([
             'attributes' => [
                 'client',
-                'time'
+                'time',
             ],
         ]) ?>
         <?= $page->renderPerPage() ?>
@@ -58,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'handleSubmit' => false,
                     'toggleButton' => [
                         'class' => 'btn btn-success btn-sm',
-                        'label' => Yii::t('hipanel:finance:change', 'Approve')
+                        'label' => Yii::t('hipanel:finance:change', 'Approve'),
                     ],
                 ]) ?>
                 <?= AjaxModal::widget([
@@ -71,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'handleSubmit' => false,
                     'toggleButton' => [
                         'class' => 'btn btn-danger btn-sm',
-                        'label' => Yii::t('hipanel:finance:change', 'Reject')
+                        'label' => Yii::t('hipanel:finance:change', 'Reject'),
                     ],
                 ]) ?>
             </div>
@@ -92,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'label',
                     'amount',
                     'time',
-                ]
+                ],
             ]); ?>
         <?php $page->endBulkForm() ?>
     <?php $page->endContent() ?>

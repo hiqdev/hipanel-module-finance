@@ -1,12 +1,11 @@
 <?php
-
-/*
+/**
  * Finance module for HiPanel
  *
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\cart;
@@ -19,7 +18,7 @@ use Yii;
 use yz\shoppingcart\CartActionEvent;
 
 /**
- * Class CartCalculator provides API to calculate [[cart]] positions value
+ * Class CartCalculator provides API to calculate [[cart]] positions value.
  *
  * Usage:
  *
@@ -36,8 +35,6 @@ use yz\shoppingcart\CartActionEvent;
  * ```php
  * $cart->on(Cart::EVENT_UPDATE, [CartCalculator::class, 'handle']);
  * ```
- *
- * @package hipanel\modules\finance\cart
  */
 class CartCalculator extends Calculator
 {
@@ -82,7 +79,7 @@ class CartCalculator extends Calculator
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function execute()
     {
@@ -94,7 +91,7 @@ class CartCalculator extends Calculator
     }
 
     /**
-     * Updates positions using the calculations provided with [[getCalculation]]
+     * Updates positions using the calculations provided with [[getCalculation]].
      */
     private function applyCalculations()
     {

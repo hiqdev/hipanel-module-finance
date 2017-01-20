@@ -1,10 +1,9 @@
 <?php
 
 /**
+ * @var \yii\web\View
  * @var $manager \hipanel\modules\finance\logic\AbstractTariffManager
- * @var $this \yii\web\View
  */
-
 use hipanel\modules\finance\menus\TariffDetailMenu;
 use hipanel\widgets\Box;
 use hipanel\widgets\ClientSellerLink;

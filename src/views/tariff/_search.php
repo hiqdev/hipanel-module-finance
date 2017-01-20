@@ -8,8 +8,10 @@
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
  */
+
 /**
- * @var \hipanel\widgets\AdvancedSearch $search
+ * @var \yii\web\View
+ * @var $search \hipanel\widgets\AdvancedSearch
  */
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;

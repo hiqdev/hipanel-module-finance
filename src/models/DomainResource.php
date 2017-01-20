@@ -1,12 +1,11 @@
 <?php
-
-/*
+/**
  * Finance module for HiPanel
  *
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\models;
@@ -15,8 +14,7 @@ use hipanel\base\ModelTrait;
 use Yii;
 
 /**
- * Class DomainResource
- * @package hipanel\modules\finance\models
+ * Class DomainResource.
  */
 class DomainResource extends Resource
 {
@@ -50,7 +48,7 @@ class DomainResource extends Resource
             'on' => ['create', 'update'],
             'when' => function ($model) {
                 return $model->isTypeCorrect();
-            }
+            },
         ];
         $rules['create-required-price'] = [['price'], 'required', 'on' => ['create', 'update']];
         $rules[] = [['zone'], 'safe'];
@@ -76,7 +74,7 @@ class DomainResource extends Resource
     public function getServiceTypes()
     {
         return [
-            static::TYPE_PREMIUM_DNS => Yii::t('hipanel:finance:tariff', 'Premium DNS')
+            static::TYPE_PREMIUM_DNS => Yii::t('hipanel:finance:tariff', 'Premium DNS'),
         ];
     }
 
