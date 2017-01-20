@@ -29,10 +29,10 @@ class Collection extends \hiqdev\yii2\merchant\Collection
     }
 
     public static $supportedSystems = [
-        'webmoney'  => 1,
-        'paypal'    => 1,
-        'paxum'     => 1,
-        'ecoin'     => 1,
+        'webmoney' => 1,
+        'paypal' => 1,
+        'paxum' => 1,
+        'ecoin' => 1,
     ];
 
     public function fetchMerchants(array $params = [])
@@ -41,12 +41,11 @@ class Collection extends \hiqdev\yii2\merchant\Collection
             return []; // todo show merchants for logged out users
         }
 
-        $merchants = [];
         $params = array_merge([
-            'sum'      => $params['amount'] ?: 1,
-            'site'     => Yii::$app->request->getHostInfo(),
+            'sum' => $params['amount'] ?: 1,
+            'site' => Yii::$app->request->getHostInfo(),
             'username' => Yii::$app->user->identity->username,
-        ], (array) $params);
+        ], (array)$params);
 
         try {
             $merchants = Merchant::perform('PrepareInfo', $params, true);
@@ -73,12 +72,13 @@ class Collection extends \hiqdev\yii2\merchant\Collection
     public function convertMerchant($data)
     {
         return [
-            'gateway'   => $data['label'],
-            'data'      => [
-                'purse'     => $data['purse'],
-                'amount'    => $data['sum'],
-                'fee'       => $data['fee'],
-                'currency'  => strtoupper($data['currency']),
+            'gateway' => $data['label'],
+            'data' => [
+                'purse' => $data['purse'],
+                'amount' => $data['sum'],
+                'fee' => $data['fee'],
+                'commission_fee' => $data['commission_fee'],
+                'currency' => strtoupper($data['currency']),
             ],
         ];
     }
