@@ -43,7 +43,7 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 
         Yii::$app->get('hiart')->disableAuth();
         try {
-            $result = Merchant::perform('Pay', $data);
+            $result = Merchant::perform('pay', $data);
         } catch (HiArtException $e) {
             $result['_error'] = $e->getMessage();
         }

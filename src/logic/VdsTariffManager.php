@@ -38,7 +38,7 @@ abstract class VdsTariffManager extends AbstractTariffManager
         $data = $this->form->toArray();
 
         try {
-            $result = Tariff::perform('Create', $data);
+            $result = Tariff::perform('create', $data);
         } catch (ErrorResponseException $e) {
             throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
         }
@@ -53,7 +53,7 @@ abstract class VdsTariffManager extends AbstractTariffManager
         $data = $this->form->toArray();
 
         try {
-            $result = Tariff::perform('Update', $data);
+            $result = Tariff::perform('update', $data);
         } catch (ErrorResponseException $e) {
             throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
         }

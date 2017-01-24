@@ -56,7 +56,7 @@ class PurseController extends \hipanel\base\CrudController
     public function actionGenerateInvoice($id, $month = null)
     {
         $content_type = 'application/pdf';
-        $data = Purse::perform('GenerateMonthlyInvoice', compact('id', 'month'));
+        $data = Purse::perform('generate-monthly-invoice', compact('id', 'month'));
         $response = Yii::$app->getResponse();
         $response->format = $response::FORMAT_RAW;
         $response->getHeaders()->add('content-type', $content_type);

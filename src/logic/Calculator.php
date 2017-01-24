@@ -76,7 +76,7 @@ class Calculator
         }
 
         try {
-            $rows = Calculation::perform('CalcValue', $data, true);
+            $rows = Calculation::perform('calc-value', $data, ['batch' => true]);
         } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException('Failed to calculate value: ' . $e->getMessage(), 0, $e);
         }
