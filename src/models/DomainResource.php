@@ -20,7 +20,7 @@ class DomainResource extends Resource
 {
     use ModelTrait;
 
-    public static function from()
+    public static function tableName()
     {
         return 'resource';
     }

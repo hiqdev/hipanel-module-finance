@@ -21,7 +21,7 @@ class Calculation extends \hipanel\base\Model
     use \hipanel\base\ModelTrait;
 
     /** {@inheritdoc} */
-    public static function from()
+    public static function tableName()
     {
         return 'action';
     }

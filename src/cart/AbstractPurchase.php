@@ -35,9 +35,9 @@ abstract class AbstractPurchase extends \hipanel\base\Model
     }
 
     /** {@inheritdoc} */
-    public static function from()
+    public static function tableName()
     {
-        throw new InvalidConfigException('Method "from" must be declared');
+        throw new InvalidConfigException('Method "tableName" must be declared');
     }
 
     /**
