@@ -24,18 +24,18 @@ class Purse extends \hipanel\base\Model
     public function rules()
     {
         return [
-            [['id', 'client_id', 'seller_id'],      'integer'],
-            [['client', 'seller'],                  'safe'],
-            [['provided_services'],                 'safe'],
-            [['contact_id', 'requisite_id'],        'integer'],
-            [['currency_id'],                       'integer'],
-            [['currency'],                          'safe'],
-            [['no'],                                'integer'],
-            [['credit', 'balance'],                 'number'],
+            [['id', 'client_id', 'seller_id'], 'integer'],
+            [['client', 'seller'], 'safe'],
+            [['provided_services'], 'safe'],
+            [['contact_id', 'requisite_id'], 'integer'],
+            [['currency_id'], 'integer'],
+            [['currency'], 'safe'],
+            [['no'], 'integer'],
+            [['credit', 'balance'], 'number'],
 
-            [['month'],                             'date', 'on' => 'update-monthly-invoice'],
-            [['id', 'contact_id'],                  'required', 'on' => ['update-contact']],
-            [['id', 'requisite_id'],                'required', 'on' => ['update-requisite']],
+            [['month'], 'date', 'on' => 'update-monthly-invoice'],
+            [['id', 'contact_id'], 'required', 'on' => ['update-contact']],
+            [['id', 'requisite_id'], 'required', 'on' => ['update-requisite']],
         ];
     }
 
@@ -61,8 +61,10 @@ class Purse extends \hipanel\base\Model
     {
         return $this->mergeAttributeLabels([
             'provided_services' => Yii::t('hipanel:finance', 'Provided services'),
-            'currency'          => Yii::t('hipanel:finance', 'Currency'),
-            'invoices'          => Yii::t('hipanel:finance', 'Invoices'),
+            'currency' => Yii::t('hipanel:finance', 'Currency'),
+            'invoices' => Yii::t('hipanel:finance', 'Invoices'),
+            'contact_id' => Yii::t('hipanel:finance', 'Contact'),
+            'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
         ]);
     }
 

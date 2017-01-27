@@ -56,6 +56,8 @@ return [
     'Held payments' => 'Ожидающие платежи',
     'Provided services' => 'Предоставленные услуги',
     'Set credit' => 'Назначить кредит',
+    'Contact' => 'Контакт',
+    'Requisite' => 'Реквизит',
 
     // Типы платежей
     'Negative balance correction' => 'Отрицательная корректировка',
