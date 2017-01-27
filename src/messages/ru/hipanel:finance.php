@@ -94,7 +94,7 @@ return [
     'Balance correction' => 'Коррекция баланса',
     'Coupon' => 'Купон',
     'Coupon discount' => 'Скидочный купон',
-    'Deposit' => 'Депозит',
+    'Deposit' => 'Пополнение',
     'BitPay' => '',
     'Cash' => 'Наличные',
     'Credit card' => 'Кредитная карта',
