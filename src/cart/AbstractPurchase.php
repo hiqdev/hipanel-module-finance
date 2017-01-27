@@ -35,15 +35,9 @@ abstract class AbstractPurchase extends \hipanel\base\Model
     }
 
     /** {@inheritdoc} */
-    public static function index()
+    public static function from()
     {
-        return static::type() . 's';
-    }
-
-    /** {@inheritdoc} */
-    public static function type()
-    {
-        throw new InvalidConfigException('Method "type" must be declared');
+        throw new InvalidConfigException('Method "from" must be declared');
     }
 
     /**

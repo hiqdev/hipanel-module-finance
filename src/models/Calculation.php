@@ -21,13 +21,7 @@ class Calculation extends \hipanel\base\Model
     use \hipanel\base\ModelTrait;
 
     /** {@inheritdoc} */
-    public static function index()
-    {
-        return 'actions';
-    }
-
-    /** {@inheritdoc} */
-    public static function type()
+    public static function from()
     {
         return 'action';
     }

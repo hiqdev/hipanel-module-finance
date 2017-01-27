@@ -22,12 +22,7 @@ class ServerResource extends Resource
 {
     use ModelTrait;
 
-    public static function index()
-    {
-        return 'resources';
-    }
-
-    public static function type()
+    public static function from()
     {
         return 'resource';
     }

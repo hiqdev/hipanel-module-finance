@@ -24,14 +24,9 @@ class RUse extends \hipanel\base\Model
         return 'Use';
     }
 
-    public static function index()
+    public static function form()
     {
-        return 'Uses';
-    }
-
-    public static function type()
-    {
-        return 'Use';
+        return 'use';
     }
 
     /**
