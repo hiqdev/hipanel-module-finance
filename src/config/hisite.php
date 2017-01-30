@@ -10,21 +10,21 @@
 
 return [
     'aliases' => [
-        '@bill'   => '/finance/bill',
-        '@purse'  => '/finance/purse',
+        '@bill' => '/finance/bill',
+        '@purse' => '/finance/purse',
         '@tariff' => '/finance/tariff',
-        '@pay'    => '/merchant/pay',
-        '@cart'   => '/cart/cart',
-        '@finance'=> '/finance',
+        '@pay' => '/merchant/pay',
+        '@cart' => '/cart/cart',
+        '@finance' => '/finance',
     ],
     'modules' => [
         'finance' => [
             'class' => \hipanel\modules\finance\Module::class,
         ],
         'cart' => [
-            'class'          => \hiqdev\yii2\cart\Module::class,
-            'termsPage'      => (isset($params['organizationUrl']) ? $params['organizationUrl'] : '/') . 'rules',
-            'orderPage'      => '/finance/cart/select',
+            'class' => \hiqdev\yii2\cart\Module::class,
+            'termsPage' => (isset($params['organizationUrl']) ? $params['organizationUrl'] : '/') . 'rules',
+            'orderPage' => '/finance/cart/select',
             /*'orderButton'    => function ($module) {
                 return Yii::$app->getView()->render('@hipanel/modules/finance/views/cart/order-button', [
                     'module' => $module,
@@ -40,11 +40,11 @@ return [
             ],
         ],
         'merchant' => [
-            'class'           => \hiqdev\yii2\merchant\Module::class,
-            'returnPage'      => '/finance/pay/return',
-            'notifyPage'      => '/finance/pay/notify',
-            'finishPage'      => '/finance/bill',
-            'depositClass'    => \hipanel\modules\finance\merchant\Deposit::class,
+            'class' => \hiqdev\yii2\merchant\Module::class,
+            'returnPage' => '/finance/pay/return',
+            'notifyPage' => '/finance/pay/notify',
+            'finishPage' => '/finance/bill',
+            'depositClass' => \hipanel\modules\finance\merchant\Deposit::class,
             'collectionClass' => \hipanel\modules\finance\merchant\Collection::class,
         ],
     ],
@@ -73,12 +73,15 @@ return [
                     'finance' => [
                         'menu' => \hipanel\modules\finance\menus\SidebarMenu::class,
                         'where' => [
-                            'after'  => ['clients', 'dashboard'],
+                            'after' => ['clients', 'dashboard'],
                             'before' => ['tickets', 'domains', 'servers', 'hosting'],
                         ],
                     ],
                 ],
             ],
+        ],
+        'singletons' => [
+            hipanel\modules\finance\providers\BillTypesProvider::class => hipanel\modules\finance\providers\BillTypesProvider::class,
         ],
     ],
 ];

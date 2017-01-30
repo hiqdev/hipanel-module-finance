@@ -21,10 +21,23 @@ use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use Yii;
+use yii\base\Module;
 use yii\filters\AccessControl;
 
 class BillController extends \hipanel\base\CrudController
 {
+    /**
+     * @var BillTypesProvider
+     */
+    private $billTypesProvider;
+
+    public function __construct($id, Module $module, BillTypesProvider $billTypesProvider, array $config = [])
+    {
+        parent::__construct($id, $module, $config);
+
+        $this->billTypesProvider = $billTypesProvider;
+    }
+
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
@@ -146,26 +159,12 @@ class BillController extends \hipanel\base\CrudController
         return $this->render('import', ['model' => $model]);
     }
 
-    protected $_typesProvider;
-
-    /**
-     * @return BillTypesProvider
-     */
-    protected function getTypesProvider()
-    {
-        if ($this->_typesProvider === null) {
-            $this->_typesProvider = Yii::createObject(BillTypesProvider::class);
-        }
-
-        return $this->_typesProvider;
-    }
-
     /**
      * @return array
      */
     public function getPaymentTypes()
     {
-        return $this->getTypesProvider()->getTypesList();
+        return $this->billTypesProvider->getTypesList();
     }
 
     /**
@@ -173,6 +172,6 @@ class BillController extends \hipanel\base\CrudController
      */
     private function getTypesAndGroups()
     {
-        return $this->getTypesProvider()->getGroupedList();
+        return $this->billTypesProvider->getGroupedList();
     }
 }
