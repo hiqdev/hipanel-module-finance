@@ -49,7 +49,7 @@ class Collection extends \hiqdev\yii2\merchant\Collection
         try {
             $merchants = Merchant::perform('prepare-info', $params, ['batch' => true]);
         } catch (ResponseErrorException $e) {
-            if ($e->response === null) {
+            if ($e->getResponse()->getData() === null) {
                 Yii::info('No available payment methods found', 'hipanel:finance');
                 $merchants = [];
             } else {
