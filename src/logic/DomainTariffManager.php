@@ -12,7 +12,7 @@ namespace hipanel\modules\finance\logic;
 
 use hipanel\modules\finance\forms\DomainTariffForm;
 use hipanel\modules\finance\models\Tariff;
-use hiqdev\hiart\ErrorResponseException;
+use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\web\NotFoundHttpException;
 use yii\web\UnprocessableEntityHttpException;
@@ -46,7 +46,7 @@ class DomainTariffManager extends AbstractTariffManager
 
         try {
             $result = Tariff::perform('create', $data);
-        } catch (ErrorResponseException $e) {
+        } catch (ResponseErrorException $e) {
             throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
         }
 
@@ -61,7 +61,7 @@ class DomainTariffManager extends AbstractTariffManager
 
         try {
             $result = Tariff::perform('update', $data);
-        } catch (ErrorResponseException $e) {
+        } catch (ResponseErrorException $e) {
             throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
         }
 

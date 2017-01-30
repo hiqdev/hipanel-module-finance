@@ -12,7 +12,7 @@ namespace hipanel\modules\finance\logic;
 
 use hipanel\modules\finance\forms\VdsTariffForm;
 use hipanel\modules\finance\models\Tariff;
-use hiqdev\hiart\ErrorResponseException;
+use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\web\NotFoundHttpException;
 use yii\web\UnprocessableEntityHttpException;
@@ -39,7 +39,7 @@ abstract class VdsTariffManager extends AbstractTariffManager
 
         try {
             $result = Tariff::perform('create', $data);
-        } catch (ErrorResponseException $e) {
+        } catch (ResponseErrorException $e) {
             throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
         }
 
@@ -54,7 +54,7 @@ abstract class VdsTariffManager extends AbstractTariffManager
 
         try {
             $result = Tariff::perform('update', $data);
-        } catch (ErrorResponseException $e) {
+        } catch (ResponseErrorException $e) {
             throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
         }
 

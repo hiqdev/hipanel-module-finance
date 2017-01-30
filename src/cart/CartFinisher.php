@@ -10,7 +10,7 @@
 
 namespace hipanel\modules\finance\cart;
 
-use hiqdev\hiart\ErrorResponseException;
+use hiqdev\hiart\ResponseErrorException;
 use hiqdev\hiart\HiArtException;
 use hiqdev\yii2\cart\ShoppingCart;
 use yii\base\Object;
@@ -83,7 +83,7 @@ class CartFinisher extends Object
                 } catch (PendingPurchaseException $e) {
                     $this->_pending[] = $e;
                     $this->cart->remove($position);
-                } catch (ErrorResponseException $e) {
+                } catch (ResponseErrorException $e) {
                     $this->_error[] = new ErrorPurchaseException($e->getMessage(), $purchase, $e);
                 } catch (HiArtException $e) {
                     $this->_error[] = new ErrorPurchaseException($e->getMessage(), $purchase, $e);

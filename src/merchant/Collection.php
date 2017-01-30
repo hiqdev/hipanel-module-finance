@@ -11,7 +11,7 @@
 namespace hipanel\modules\finance\merchant;
 
 use hipanel\modules\finance\models\Merchant;
-use hiqdev\hiart\ErrorResponseException;
+use hiqdev\hiart\ResponseErrorException;
 use Yii;
 
 class Collection extends \hiqdev\yii2\merchant\Collection
@@ -48,7 +48,7 @@ class Collection extends \hiqdev\yii2\merchant\Collection
 
         try {
             $merchants = Merchant::perform('prepare-info', $params, ['batch' => true]);
-        } catch (ErrorResponseException $e) {
+        } catch (ResponseErrorException $e) {
             if ($e->response === null) {
                 Yii::info('No available payment methods found', 'hipanel:finance');
                 $merchants = [];
