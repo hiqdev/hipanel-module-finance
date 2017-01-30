@@ -11,7 +11,6 @@
 namespace hipanel\modules\finance\controllers;
 
 use hipanel\modules\finance\models\Merchant;
-use hiqdev\hiart\HiArtException;
 use Yii;
 
 /**
@@ -44,7 +43,7 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
         Yii::$app->get('hiart')->disableAuth();
         try {
             $result = Merchant::perform('pay', $data);
-        } catch (HiArtException $e) {
+        } catch (\hiqdev\hiart\Exception $e) {
             $result['_error'] = $e->getMessage();
         }
         Yii::$app->get('hiart')->enableAuth();
