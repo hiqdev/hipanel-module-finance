@@ -146,15 +146,26 @@ class BillController extends \hipanel\base\CrudController
         return $this->render('import', ['model' => $model]);
     }
 
+    protected $_typesProvider;
+
+    /**
+     * @return BillTypesProvider
+     */
+    protected function getTypesProvider()
+    {
+        if ($this->_typesProvider === null) {
+            $this->_typesProvider = Yii::createObject(BillTypesProvider::class);
+        }
+
+        return $this->_typesProvider;
+    }
+
     /**
      * @return array
      */
     public function getPaymentTypes()
     {
-        /** @var BillTypesProvider $provider */
-        $provider = Yii::createObject(BillTypesProvider::class);
-
-        return $provider->getTypesList();
+        return $this->getTypesProvider()->getTypesList();
     }
 
     /**
@@ -162,9 +173,6 @@ class BillController extends \hipanel\base\CrudController
      */
     private function getTypesAndGroups()
     {
-        /** @var BillTypesProvider $provider */
-        $provider = Yii::createObject(BillTypesProvider::class);
-
-        return $provider->getGroupedList();
+        return $this->getTypesProvider()->getGroupedList();
     }
 }
