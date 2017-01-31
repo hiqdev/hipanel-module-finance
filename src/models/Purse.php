@@ -68,7 +68,7 @@ class Purse extends \hipanel\base\Model
         ]);
     }
 
-    public function scenarioCommands()
+    public function scenarioActions()
     {
         return [
             'update-contact' => 'update',
