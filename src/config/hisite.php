@@ -9,9 +9,6 @@
  */
 
 return [
-    'bootstrap' => [
-        \hipanel\modules\finance\bootstrap\PayButtonCommentsBootstrap::class
-    ],
     'aliases' => [
         '@bill' => '/finance/bill',
         '@purse' => '/finance/purse',
@@ -86,6 +83,12 @@ return [
                     ],
                 ],
             ],
+            \hiqdev\yii2\merchant\widgets\PayButton::class => [
+                'class' => \hiqdev\yii2\merchant\widgets\PayButton::class,
+                'as commentBehavior' => [
+                    'class' => \hipanel\modules\finance\behaviors\PayButtonCommentBehavior::class
+                ]
+            ]
         ],
         'singletons' => [
             hipanel\modules\finance\providers\BillTypesProvider::class => hipanel\modules\finance\providers\BillTypesProvider::class,

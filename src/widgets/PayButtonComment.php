@@ -53,7 +53,9 @@ class PayButtonComment extends Widget
      */
     protected function getDefaultCommentViews()
     {
-        return ['paypal_usd' => 'paypal'];
+        return [
+            'paypal_*' => 'paypal',
+        ];
     }
 
     /**
@@ -64,7 +66,13 @@ class PayButtonComment extends Widget
      */
     public function getCommentView($merchant)
     {
-        return isset($this->commentViews[$merchant]) ? $this->commentViews[$merchant] : null;
+        foreach ($this->commentViews as $pattern => $view) {
+            if (fnmatch($pattern, $merchant)) {
+                return $view;
+            }
+        }
+
+        return null;
     }
 
     /**
