@@ -9,6 +9,9 @@
  */
 
 return [
+    'bootstrap' => [
+        \hipanel\modules\finance\bootstrap\PayButtonCommentsBootstrap::class
+    ],
     'aliases' => [
         '@bill' => '/finance/bill',
         '@purse' => '/finance/purse',
@@ -60,6 +63,10 @@ return [
                     'basePath' => '@hipanel/modules/finance/messages',
                 ],
                 'hipanel:finance:tariff' => [
+                    'class' => \yii\i18n\PhpMessageSource::class,
+                    'basePath' => '@hipanel/modules/finance/messages',
+                ],
+                'hipanel:finance:deposit' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/finance/messages',
                 ],
