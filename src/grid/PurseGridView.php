@@ -71,8 +71,8 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                             'filter' => [
                                 'client_id' => ['format' => $model->id],
                             ],
-                            'inputOptions' => [
-                                'data-init-text' => $result,
+                            'current' => [
+                                $model->contact_id => $result
                             ],
                             'pluginOptions' => [
                                 'select2Options' => [
@@ -106,8 +106,8 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                             'filter' => [
                                 'client_id' => ['format' => $model->seller_id],
                             ],
-                            'inputOptions' => [
-                                'data-init-text' => $result,
+                            'current' => [
+                                $model->requisite_id => $result,
                             ],
                             'pluginOptions' => [
                                 'select2Options' => [

@@ -6,11 +6,11 @@ use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\widgets\TariffCombo;
 use hipanel\modules\server\widgets\combo\ServerCombo;
 use hipanel\widgets\DatePicker;
-use hiqdev\combo\MultipleStaticCombo;
 use yii\helpers\Html;
 
 /**
- * @var \hipanel\widgets\AdvancedSearch
+ * @var \yii\web\View
+ * @var \hipanel\widgets\AdvancedSearch $search
  * @var array $billTypes
  * @var array $billGroupLabels
  */
@@ -29,12 +29,10 @@ use yii\helpers\Html;
         return StringHelper::getCurrencySymbol($k);
     }, array_keys($currencies)));
 
-    echo $search->field('currency_in')->widget(MultipleStaticCombo::class, [
+    echo $search->field('currency_in')->widget(\hiqdev\combo\StaticCombo::class, [
         'data' => $currencies,
         'hasId' => true,
-        'inputOptions' => [
-            'multiple' => true,
-        ],
+        'multiple' => true,
     ]) ?>
 </div>
 
@@ -65,12 +63,12 @@ use yii\helpers\Html;
         $types[$gtype] = $item;
     }
 
-    echo $search->field('type_in')->widget(MultipleStaticCombo::class, [
+    echo $search->field('type_in')->widget(\hiqdev\combo\StaticCombo::class, [
         'data' => $types,
         'hasId' => true,
+        'multiple' => true,
         'inputOptions' => [
             'groups' => $billGroupLabels,
-            'multiple' => true,
         ],
     ]) ?>
 </div>
