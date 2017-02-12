@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\modules\finance\models\query\TariffQuery;
+use hipanel\modules\finance\models\stubs\ServerResourceStub;
 use Yii;
 
 /**
@@ -57,9 +58,11 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
 
     /**
      * @param $type
-     * @return DomainResource|ServerResource|resource
+     * @param bool $stubWhenNotFound whether to return [[ServerResourceStub]] when
+     * the tariff does not have a relevant resource
+     * @return DomainResource|ServerResource|ServerResourceStub|resource
      */
-    public function getResourceByType($type)
+    public function getResourceByType($type, $stubWhenNotFound = true)
     {
         foreach ($this->resources as $resource) {
             if ($resource->type === $type) {
@@ -67,7 +70,19 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
             }
         }
 
-        return null;
+        return $stubWhenNotFound ? $this->getStubResource($type) : null;
+    }
+
+    /**
+     * @param string $type
+     * @return ServerResourceStub
+     */
+    public function getStubResource($type)
+    {
+        return new ServerResourceStub([
+            'tariff' => $this,
+            'type' => $type
+        ]);
     }
 
     /**

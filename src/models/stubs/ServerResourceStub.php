@@ -16,11 +16,6 @@ use hipanel\modules\finance\models\decorators\server\ServerResourceDecoratorFact
 class ServerResourceStub extends AbstractResourceStub
 {
     /**
-     * @var string
-     */
-    public $model_type;
-
-    /**
      * @return AbstractServerResourceDecorator
      */
     public function decorator()
@@ -30,5 +25,10 @@ class ServerResourceStub extends AbstractResourceStub
         }
 
         return $this->decorator;
+    }
+
+    public function __get($value)
+    {
+        return null;
     }
 }
