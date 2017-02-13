@@ -12,9 +12,11 @@
 /**
  * @var \yii\web\View
  * @var $search \hipanel\widgets\AdvancedSearch
+ * @var array $types
  */
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
+use hiqdev\combo\StaticCombo;
 
 ?>
 <div class="col-md-4 col-sm-6 col-xs-12">
@@ -23,6 +25,14 @@ use hipanel\modules\client\widgets\combo\SellerCombo;
 
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field('note') ?>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('type')->widget(StaticCombo::class, [
+        'data' => $types,
+        'hasId' => true,
+        'multiple' => true
+    ]) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">

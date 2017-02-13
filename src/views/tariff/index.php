@@ -5,6 +5,11 @@ use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 use yii\bootstrap\Dropdown;
 
+/**
+ * @var \yii\web\View
+ * @var array $types
+ */
+
 $this->title = Yii::t('hipanel', 'Tariffs');
 $this->params['subtitle'] = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
 $this->params['breadcrumbs'][] = $this->title;
@@ -14,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php Pjax::begin(array_merge(Yii::$app->params['pjax'], ['enablePushState' => true])) ?>
 <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
 
-    <?= $page->setSearchFormData(compact(['paymentType'])) ?>
+    <?= $page->setSearchFormData(compact(['types'])) ?>
 
     <?php $page->beginContent('main-actions') ?>
         <?php if (Yii::$app->user->can('manage')) : ?>
@@ -61,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => Yii::$app->user->can('manage')
                 ? [
                     'checkbox',
-                    'tariff', 'note', 'used',
+                    'tariff', 'note', 'used', 'type',
                     'client_id', 'seller_id',
                 ]
                 : [

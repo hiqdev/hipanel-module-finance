@@ -16,6 +16,7 @@ use hipanel\actions\SearchAction;
 use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
+use hipanel\models\Ref;
 use hipanel\modules\finance\logic\DomainTariffManager;
 use hipanel\modules\finance\logic\TariffManagerFactory;
 use Yii;
@@ -33,6 +34,11 @@ class TariffController extends \hipanel\base\CrudController
             ],
             'index' => [
                 'class' => IndexAction::class,
+                'data' => function () {
+                    return [
+                        'types' => Ref::getList('type,tariff', 'hipanel:finance:tariff:types')
+                    ];
+                }
             ],
             'search' => [
                 'class' => SearchAction::class,

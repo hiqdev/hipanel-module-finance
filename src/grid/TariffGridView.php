@@ -10,7 +10,9 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\grid\RefColumn;
 use hipanel\grid\XEditableColumn;
+use Yii;
 
 class TariffGridView extends \hipanel\grid\BoxedGridView
 {
@@ -27,6 +29,14 @@ class TariffGridView extends \hipanel\grid\BoxedGridView
             'note' => [
                 'class' => XEditableColumn::class,
             ],
+            'type' => [
+                'class' => RefColumn::class,
+                'i18nDictionary' => 'hipanel:finance:tariff:types',
+                'gtype' => 'type,tariff',
+                'value'  => function ($model) {
+                    return Yii::t('hipanel:finance:tariff:types', $model->type);
+                },
+            ]
         ];
     }
 }
