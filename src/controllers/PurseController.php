@@ -46,9 +46,9 @@ class PurseController extends \hipanel\base\CrudController
                 'class' => RedirectAction::class,
                 'error' => Yii::t('hipanel', 'Under construction'),
             ],
-            'update-monthly-invoice' => [
+            'update-monthly-document' => [
                 'class'   => SmartPerformAction::class,
-                'success' => Yii::t('hipanel:finance', 'Invoice updated'),
+                'success' => Yii::t('hipanel:finance', 'Document updated'),
             ],
         ];
     }
@@ -57,6 +57,17 @@ class PurseController extends \hipanel\base\CrudController
     {
         $content_type = 'application/pdf';
         $data = Purse::perform('generate-monthly-invoice', compact('id', 'month'));
+        $response = Yii::$app->getResponse();
+        $response->format = $response::FORMAT_RAW;
+        $response->getHeaders()->add('content-type', $content_type);
+
+        return $data;
+    }
+
+    public function actionGenerateMonthlyDocument($id, $type, $month = null)
+    {
+        $content_type = 'application/pdf';
+        $data = Purse::perform('generate-monthly-document', compact('id', 'type', 'month'));
         $response = Yii::$app->getResponse();
         $response->format = $response::FORMAT_RAW;
         $response->getHeaders()->add('content-type', $content_type);

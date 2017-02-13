@@ -6,6 +6,10 @@ use hipanel\widgets\Box;
 use hipanel\widgets\ModalButton;
 use yii\helpers\Html;
 
+$client = $model->clientModel;
+$isEmployee = $client->type === $client::TYPE_EMPLOYEE;
+$documentType = $isEmployee ? 'acceptance' : 'invoice';
+
 ?>
 
 <?php $box = Box::begin(['renderBody' => false]) ?>
@@ -13,15 +17,22 @@ use yii\helpers\Html;
         <?= $box->renderTitle(Yii::t('hipanel:finance', '<b>{currency}</b> account', ['currency' => strtoupper($model->currency)]), '&nbsp;') ?>
         <?php $box->beginTools() ?>
             <?php if (Yii::$app->user->can('manage')) : ?>
-                <?= Html::a(Yii::t('hipanel:finance', 'See new invoice'), ['@purse/generate-invoice', 'id' => $model->id], ['class' => 'btn btn-default btn-xs', 'target' => 'new-invoice']) ?>
+                <?= Html::a(
+                    Yii::t('hipanel:finance', $isEmployee ? 'See new acceptance report' : 'See new invoice'),
+                    ['@purse/generate-monthly-document', 'id' => $model->id, 'type' => $documentType],
+                    ['class' => 'btn btn-default btn-xs', 'target' => 'new-invoice']
+                ) ?>
                 <?= ModalButton::widget([
                     'model'    => $model,
-                    'form'     => ['action' => ['@purse/update-monthly-invoice']],
-                    'button'   => ['label' => Yii::t('hipanel:finance', 'Update invoice'), 'class' => 'btn btn-default btn-xs'],
-                    'body'     => Yii::t('hipanel:finance', 'Are you sure you want to update invoice?') . '<br>' .
-                                  Yii::t('hipanel:finance', 'Current invoice will be substituted with newer version!'),
+                    'form'     => ['action' => ['@purse/update-monthly-document', 'type' => $documentType]],
+                    'button'   => [
+                        'label' => Yii::t('hipanel:finance', $isEmployee ? 'Update acceptance report' : 'Update invoice'),
+                        'class' => 'btn btn-default btn-xs',
+                    ],
+                    'body'     => Yii::t('hipanel:finance', 'Are you sure you want to update document?') . '<br>' .
+                                  Yii::t('hipanel:finance', 'Current document will be substituted with newer version!'),
                     'modal'    => [
-                        'header'        => Html::tag('h4', Yii::t('hipanel:finance', 'Confirm invoice updating')),
+                        'header'        => Html::tag('h4', Yii::t('hipanel:finance', 'Confirm document updating')),
                         'headerOptions' => ['class' => 'label-warning'],
                         'footer'        => [
                             'label' => Yii::t('hipanel', 'Update'),
