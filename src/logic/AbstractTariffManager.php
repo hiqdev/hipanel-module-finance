@@ -77,7 +77,8 @@ abstract class AbstractTariffManager extends Object
     protected function findParentTariffs()
     {
         if (!isset($this->tariff)) {
-            $availableTariffs = Tariff::find(['scenario' => 'get-available-info'])
+            $availableTariffs = Tariff::find()
+                ->action('get-available-info')
                 ->andFilterWhere(['type' => $this->type])
                 ->all();
 
