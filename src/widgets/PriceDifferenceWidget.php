@@ -16,14 +16,20 @@ use yii\helpers\Html;
 
 class PriceDifferenceWidget extends Widget
 {
+    /**
+     * @var float
+     */
     public $old;
 
+    /**
+     * @var float
+     */
     public $new;
 
     public function run()
     {
-        $diff = $this->new - $this->old;
-        if ($diff !== 0) {
+        $diff = floatval($this->new - $this->old);
+        if ($diff !== (float) 0) {
             echo Html::tag(
                 'span',
                 ($diff > 0 ? '+' : '') . Yii::$app->formatter->asDecimal($diff, 2),
