@@ -41,6 +41,11 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                         'url'     => ['/finance/tariff/index'],
                         'visible' => $user->can('manage'),
                     ],
+                    'requisites' => [
+                        'label'   => Yii::t('hipanel:finance', 'Requisites'),
+                        'url'     => ['/finance/bill/requisites'],
+                        'visible' => $user->can('manage'),
+                    ],
                     'holds' => [
                         'label'   => Yii::t('hipanel:finance', 'Held payments'),
                         'url'     => ['/finance/held-payments/index'],

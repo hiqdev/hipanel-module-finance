@@ -12,11 +12,13 @@ namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
 use hipanel\actions\OrientationAction;
+use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartCreateAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
+use hipanel\modules\client\controllers\ContactController;
 use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\providers\BillTypesProvider;
@@ -128,6 +130,18 @@ class BillController extends \hipanel\base\CrudController
             'delete' => [
                 'class' => SmartPerformAction::class,
                 'success' => Yii::t('hipanel:finance', 'Payment was deleted successfully'),
+            ],
+            'requisites' => [
+                'class' => RedirectAction::class,
+                'url' => function ($action) {
+                    $identity = Yii::$app->user->identity;
+                    $seller = $identity->type === $identity::TYPE_RESELLER ? $identity->username : $identity->seller;
+                    if ($seller === 'bullet') {
+                        $seller = 'dsr';
+                    }
+
+                    return array_merge(ContactController::getSearchUrl(['client' => $seller]), ['representation' => 'requisites']);
+                },
             ],
         ];
     }
