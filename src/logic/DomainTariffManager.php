@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\logic;
 
+use hiqdev\hiart\ConnectionInterface;
 use hipanel\modules\finance\forms\DomainTariffForm;
 use hipanel\modules\finance\models\Tariff;
 use hiqdev\hiart\ResponseErrorException;
@@ -28,6 +29,18 @@ class DomainTariffManager extends AbstractTariffManager
      * {@inheritdoc}
      */
     protected $type = Tariff::TYPE_DOMAIN;
+
+    /**
+     * @var ConnectionInterface
+     */
+    private $connection;
+
+    public function __construct(ConnectionInterface $connection, $config = [])
+    {
+        $this->connection = $connection;
+
+        parent::__construct($config);
+    }
 
     public function init()
     {
@@ -81,6 +94,7 @@ class DomainTariffManager extends AbstractTariffManager
      */
     protected function getZones()
     {
-        return Yii::$app->hiart->get('getZones');
+        $command = $this->connection->createCommand();
+        return $command->perform('getZones', '');
     }
 }
