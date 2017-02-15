@@ -10,9 +10,9 @@
 
 namespace hipanel\modules\finance\controllers;
 
+use hipanel\actions\ComboSearchAction;
 use hipanel\actions\IndexAction;
 use hipanel\actions\OrientationAction;
-use hipanel\actions\SearchAction;
 use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
@@ -41,7 +41,7 @@ class TariffController extends \hipanel\base\CrudController
                 }
             ],
             'search' => [
-                'class' => SearchAction::class,
+                'class' => ComboSearchAction::class,
             ],
             'validate-form' => [
                 'class' => ValidateFormAction::class,
