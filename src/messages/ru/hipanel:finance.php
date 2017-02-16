@@ -181,4 +181,9 @@ return [
     'BitPay transaction fee' => 'BitPay комиссия за перевод',
     'Free-Kassa fee' => 'Free-Kassa комиссия за перевод',
     '2CO transaction fee' => '2CO комиссия за перевод',
+    'Confirm document updating' => 'Подтвердите обновление документа',
+    'Are you sure you want to update document?' => 'Вы уверены, что хотите обновить документ?',
+    'Current document will be substituted with newer version!' => 'Существущий документ будет заменён новым!',
+    'Update acceptance report' => 'Обновить акт выполненных работ',
+    'See new acceptance report' => 'Просмотреть акт выполненных работ',
 ];
