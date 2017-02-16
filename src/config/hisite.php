@@ -49,6 +49,11 @@ return [
         ],
     ],
     'components' => [
+        'themeManager' => [
+            'pathMap' => [
+                '@hipanel/modules/domain/views' => '$themedViewPaths',
+            ],
+        ],
         'i18n' => [
             'translations' => [
                 'hipanel:finance' => [
