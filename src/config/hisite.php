@@ -51,7 +51,7 @@ return [
     'components' => [
         'themeManager' => [
             'pathMap' => [
-                '@hipanel/modules/domain/views' => '$themedViewPaths',
+                '@hipanel/modules/finance/views' => '$themedViewPaths',
             ],
         ],
         'i18n' => [
