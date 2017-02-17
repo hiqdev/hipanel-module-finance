@@ -34,9 +34,11 @@ class Purse extends \hipanel\base\Model
             [['no'], 'integer'],
             [['credit', 'balance'], 'number'],
 
-            [['month'], 'date', 'on' => 'update-monthly-invoice'],
             [['id', 'contact_id'], 'required', 'on' => ['update-contact']],
             [['id', 'requisite_id'], 'required', 'on' => ['update-requisite']],
+
+            [['month'], 'date', 'on' => 'generate-and-save-document'],
+            [['type'], 'string', 'on' => 'generate-and-save-document'],
         ];
     }
 
