@@ -9,7 +9,6 @@ use yii\bootstrap\Dropdown;
  * @var \yii\web\View
  * @var array $types
  */
-
 $this->title = Yii::t('hipanel', 'Tariffs');
 $this->params['subtitle'] = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
 $this->params['breadcrumbs'][] = $this->title;

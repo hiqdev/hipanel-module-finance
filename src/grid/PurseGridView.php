@@ -72,7 +72,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                                 'client_id' => ['format' => $model->id],
                             ],
                             'current' => [
-                                $model->contact_id => $result
+                                $model->contact_id => $result,
                             ],
                             'pluginOptions' => [
                                 'select2Options' => [

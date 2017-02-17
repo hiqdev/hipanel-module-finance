@@ -36,9 +36,9 @@ class TariffController extends \hipanel\base\CrudController
                 'class' => IndexAction::class,
                 'data' => function () {
                     return [
-                        'types' => Ref::getList('type,tariff', 'hipanel:finance:tariff:types')
+                        'types' => Ref::getList('type,tariff', 'hipanel:finance:tariff:types'),
                     ];
-                }
+                },
             ],
             'search' => [
                 'class' => ComboSearchAction::class,

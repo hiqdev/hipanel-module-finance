@@ -36,7 +36,7 @@ class TariffGridView extends \hipanel\grid\BoxedGridView
                 'value'  => function ($model) {
                     return Yii::t('hipanel:finance:tariff:types', $model->type);
                 },
-            ]
+            ],
         ];
     }
 }

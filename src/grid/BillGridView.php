@@ -37,7 +37,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
 
                     if (in_array($model->gtype, [
                         'discount', 'domain', 'monthly', 'overuse', 'premium_package',
-                        'feature', 'intercept', 'periodic'
+                        'feature', 'intercept', 'periodic',
                     ], true)) {
                         return Yii::$app->formatter->asDate($date, 'LLLL y');
                     }

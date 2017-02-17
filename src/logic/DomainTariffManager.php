@@ -10,9 +10,9 @@
 
 namespace hipanel\modules\finance\logic;
 
-use hiqdev\hiart\ConnectionInterface;
 use hipanel\modules\finance\forms\DomainTariffForm;
 use hipanel\modules\finance\models\Tariff;
+use hiqdev\hiart\ConnectionInterface;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\web\NotFoundHttpException;

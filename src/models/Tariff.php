@@ -81,7 +81,7 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
     {
         return new ServerResourceStub([
             'tariff' => $this,
-            'type' => $type
+            'type' => $type,
         ]);
     }
 

@@ -71,7 +71,7 @@ return [
                 'hipanel:finance:tariff:types' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/finance/messages',
-                    'forceTranslation' => true
+                    'forceTranslation' => true,
                 ],
                 'hipanel:finance:deposit' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
@@ -96,9 +96,9 @@ return [
             \hiqdev\yii2\merchant\widgets\PayButton::class => [
                 'class' => \hiqdev\yii2\merchant\widgets\PayButton::class,
                 'as commentBehavior' => [
-                    'class' => \hipanel\modules\finance\behaviors\PayButtonCommentBehavior::class
-                ]
-            ]
+                    'class' => \hipanel\modules\finance\behaviors\PayButtonCommentBehavior::class,
+                ],
+            ],
         ],
         'singletons' => [
             hipanel\modules\finance\providers\BillTypesProvider::class => hipanel\modules\finance\providers\BillTypesProvider::class,

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\widgets;
 
@@ -18,11 +26,11 @@ class PayButtonComment extends Widget
     public $commentViews = [];
 
     /**
-     * PayButtonCommentHandler constructor
+     * PayButtonCommentHandler constructor.
      * @param Event $event The original event, triggered by [[hiqdev\yii2\merchant\widgets\PayButton]]
      * @param array $config
      */
-    function __construct(Event $event, $config = [])
+    public function __construct(Event $event, $config = [])
     {
         parent::__construct($config);
 
@@ -30,7 +38,7 @@ class PayButtonComment extends Widget
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function init()
     {
@@ -40,7 +48,7 @@ class PayButtonComment extends Widget
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function run()
     {
@@ -48,7 +56,7 @@ class PayButtonComment extends Widget
     }
 
     /**
-     * Array of default comment views
+     * Array of default comment views.
      * @return array
      */
     protected function getDefaultCommentViews()
@@ -59,7 +67,7 @@ class PayButtonComment extends Widget
     }
 
     /**
-     * Returns the view name for the specified $merchant
+     * Returns the view name for the specified $merchant.
      * @param string $merchant
      * @return string|null
      * @see commentViews
@@ -76,7 +84,7 @@ class PayButtonComment extends Widget
     }
 
     /**
-     * Method renders comment from the view, specified in
+     * Method renders comment from the view, specified in.
      * @return string
      */
     protected function renderComment()
@@ -95,7 +103,7 @@ class PayButtonComment extends Widget
     }
 
     /**
-     * Method provides the merchant name
+     * Method provides the merchant name.
      * @return string
      */
     protected function getMerchantName()
@@ -104,7 +112,7 @@ class PayButtonComment extends Widget
     }
 
     /**
-     * @return string the view path that may be prefixed to a relative view name.
+     * @return string the view path that may be prefixed to a relative view name
      */
     public function getViewPath()
     {

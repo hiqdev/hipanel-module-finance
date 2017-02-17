@@ -5,7 +5,6 @@ use yii\web\View;
  * @var View
  * @var \hipanel\modules\finance\widgets\PayButtonComment $widget
  */
-
 ?>
 
 <br />
