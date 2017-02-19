@@ -1,6 +1,5 @@
 <?php
 
-use hipanel\base\View;
 use hipanel\modules\finance\grid\HeldPaymentsGridView;
 use hipanel\modules\finance\models\Change;
 use hipanel\widgets\AjaxModal;
@@ -9,6 +8,7 @@ use hipanel\widgets\Pjax;
 use hiqdev\hiart\ActiveDataProvider;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
+use yii\web\View;
 
 /**
  * @var View
