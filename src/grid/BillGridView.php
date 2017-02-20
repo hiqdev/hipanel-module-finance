@@ -60,7 +60,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'colors' => ['danger' => 'warning'],
                 'headerOptions' => ['class' => 'text-right'],
                 'urlCallback' => function ($model, $key) {
-                    return Url::to(['bill/update', 'id' => $model->id]);
+                    return Yii::$app->user->can('bill.update') ? Url::to(['bill/update', 'id' => $model->id]) : null;
                 },
                 'contentOptions' => function ($model) {
                     return ['class' => 'text-right' . ($model->sum > 0 ? ' text-bold' : '')];
