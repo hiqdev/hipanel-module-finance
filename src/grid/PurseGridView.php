@@ -26,16 +26,20 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                 'class' => 'hipanel\modules\finance\grid\BalanceColumn',
             ],
             'credit' => CreditColumn::resolveConfig(),
-            'invoices' => [
-                'label'  => Yii::t('hipanel:finance', 'Invoices'),
+            'documents' => [
+                'label'  => Yii::t('hipanel:finance', 'Documents'),
                 'format' => 'raw',
                 'value'  => function ($model) {
                     return ArraySpoiler::widget([
                         'mode'              => ArraySpoiler::MODE_SPOILER,
-                        'data'              => $model->files,
+                        'data'              => $model->documents,
                         'delimiter'         => ' ',
-                        'formatter'         => function ($file) {
-                            return self::pdfLink($file, $file->month);
+                        'formatter'         => function ($doc) {
+                            return Html::a(
+                                FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', strtotime($doc->validity_start)),
+                                ["/file/{$doc->file_id}/{$doc->filename}", 'nocache' => 1],
+                                ['target' => '_blank', 'class' => 'text-info text-nowrap col-xs-6 col-sm-6 col-md-6 col-lg-3']
+                            );
                         },
                         'template'          => '{button}{visible}{hidden}',
                         'visibleCount'      => 2,
@@ -85,7 +89,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
             ],
             'requisite' => [
                 'format' => 'raw',
-                'label' => Yii::t('hipanel:finance', 'Requisite'),
+                'label' => Yii::t('hipanel:finance', 'Payment details'),
                 'value' => function ($model) {
                     $organization = $model->requisite->organization;
                     $result = $organization . ($organization ? ' / ' : '') . $model->requisite->name;
@@ -123,10 +127,5 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
 
     public static function pdfLink($file, $month = 'now')
     {
-        return Html::a(
-            FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', strtotime($month)),
-            ["/file/{$file->id}/{$file->filename}", 'nocache' => 1],
-            ['target' => '_blank', 'class' => 'text-info text-nowrap col-xs-6 col-sm-6 col-md-6 col-lg-3']
-        );
     }
 }

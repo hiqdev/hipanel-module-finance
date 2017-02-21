@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\models;
 use hipanel\models\File;
 use hipanel\modules\client\models\Client;
 use hipanel\modules\client\models\Contact;
+use hipanel\modules\document\models\Document;
 use Yii;
 
 class Purse extends \hipanel\base\Model
@@ -45,6 +46,11 @@ class Purse extends \hipanel\base\Model
     public function getFiles()
     {
         return $this->hasMany(File::class, ['object_id' => 'id']);
+    }
+
+    public function getDocuments()
+    {
+        return $this->hasMany(Document::class, ['object_id' => 'id']);
     }
 
     public function getClientModel()

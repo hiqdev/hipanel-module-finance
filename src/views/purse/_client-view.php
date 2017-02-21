@@ -59,7 +59,7 @@ $documentType = $isEmployee ? 'acceptance' : 'invoice';
                 'balance',
                 $model->currency === 'usd' ? 'credit' : null,
                 'contact', 'requisite',
-                'invoices',
+                'documents',
             ]),
         ]) ?>
     <?php $box->endBody() ?>

@@ -19,7 +19,6 @@ return [
     'Tariff' => 'Тариф',
     'Tariffs' => 'Тарифы',
     'Servers' => 'Сервера',
-    'Requisites' => 'Реквизиты',
 
     '<b>{currency}</b> account' => '<b>{currency}</b> счёт',
     'See new invoice' => 'Посмотреть новый инвойс',
@@ -29,6 +28,8 @@ return [
     'Confirm invoice updating' => 'Подтвердите обновление инвойса',
     'Invoice' => 'Инвойс',
     'Invoices' => 'Инвойсы',
+    'Document' => 'Документ',
+    'Documents' => 'Документы',
     'Invoice updated' => 'Инвойс обновлён',
     'Sum' => 'Сумма',
     'Amount' => 'Сумма',
@@ -59,6 +60,8 @@ return [
     'Set credit' => 'Назначить кредит',
     'Contact' => 'Контакт',
     'Requisite' => 'Реквизит',
+    'Requisites' => 'Реквизиты',
+    'Payment details' => 'Реквизиты',
 
     // Типы платежей
     'Negative balance correction' => 'Отрицательная корректировка',
