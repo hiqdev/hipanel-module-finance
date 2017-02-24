@@ -50,8 +50,8 @@ use yii\helpers\Html;
                                 <div class="col-md-6">
                                     <?php
                                     $activeField = $form->field($resource, "[$i]price");
-                    Html::addCssClass($activeField->options, 'form-group-sm');
-                    echo $activeField->input('number', [
+                                    Html::addCssClass($activeField->options, 'form-group-sm');
+                                    echo $activeField->input('number', [
                                         'class' => 'form-control price-input',
                                         'autocomplete' => false,
                                         'step' => 'any',
