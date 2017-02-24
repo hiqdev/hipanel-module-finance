@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\forms;
 
+use hipanel\modules\finance\logic\IntegrityException;
 use hipanel\modules\finance\models\DomainResource;
 use hipanel\modules\finance\models\DomainService;
 use hipanel\modules\finance\models\Tariff;
@@ -112,8 +113,13 @@ class DomainTariffForm extends AbstractTariffForm
             }
         }
 
+        $types = $resource->getTypes();
+        if (count($result) !== count($types)) {
+            throw new IntegrityException('Found ' . count($result) . ' resources for zone "' . $zone . '". Must be exactly ' . count($types));
+        }
+
         // sorts $result by order of $resource->getTypes()
-        $result = array_merge($resource->getTypes(), $result);
+        $result = array_merge($types, $result);
 
         return $result;
     }
@@ -130,8 +136,13 @@ class DomainTariffForm extends AbstractTariffForm
             }
         }
 
+        $types = $resource->getTypes();
+        if (count($result) !== count($types)) {
+            throw new IntegrityException('Found ' . count($result) . ' resources for zone "' . $zone . '". Must be exactly ' . count($types));
+        }
+
         // sorts $result by order of $resource->getTypes()
-        $result = array_merge($resource->getTypes(), $result);
+        $result = array_merge($types, $result);
 
         return $result;
     }
