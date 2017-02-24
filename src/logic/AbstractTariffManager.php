@@ -16,6 +16,7 @@ use Yii;
 use yii\base\Object;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
+use yii\web\NotFoundHttpException;
 
 abstract class AbstractTariffManager extends Object
 {
@@ -53,7 +54,7 @@ abstract class AbstractTariffManager extends Object
 
     public function init()
     {
-        $this->findParentTariffs();
+        $this->fillParentTariffs();
         $this->buildForm();
     }
 
@@ -74,7 +75,23 @@ abstract class AbstractTariffManager extends Object
         return $this->formOptions;
     }
 
-    protected function findParentTariffs()
+    protected function fillParentTariffs()
+    {
+        $ids = $this->collectParentTariffIds();
+
+        $this->parentTariffs = Tariff::find()
+            ->where(['id' => $ids])
+            ->details()
+            ->all();
+    }
+
+    /**
+     * Collects parent tariff ids. Used in [[fillParentTariffs]]
+     *
+     * @return array
+     * @throws NotFoundHttpException
+     */
+    protected function collectParentTariffIds()
     {
         if (!isset($this->tariff)) {
             $availableTariffs = Tariff::find()
@@ -82,19 +99,14 @@ abstract class AbstractTariffManager extends Object
                 ->andFilterWhere(['type' => $this->type])
                 ->all();
 
-            $ids = ArrayHelper::getColumn($availableTariffs, 'id');
-        } else {
-            $ids = [$this->tariff->parent_id];
+            return ArrayHelper::getColumn($availableTariffs, 'id');
         }
 
-        if (empty($ids)) {
-            throw new ForbiddenHttpException('No available tariffs found');
+        if (isset($this->tariff->parent_id)) {
+            return [$this->tariff->parent_id];
         }
 
-        $this->parentTariffs = Tariff::find()
-            ->where(['id' => $ids])
-            ->details()
-            ->all();
+        throw new NotFoundHttpException('No available tariffs found');
     }
 
     public function getType()

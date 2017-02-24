@@ -14,7 +14,6 @@ use hipanel\modules\finance\logic\Calculator;
 use hipanel\modules\finance\models\Tariff;
 use Yii;
 use yii\base\InvalidConfigException;
-use yii\base\InvalidParamException;
 use yii\helpers\ArrayHelper;
 
 abstract class AbstractTariffForm extends \yii\base\Model
@@ -194,8 +193,8 @@ abstract class AbstractTariffForm extends \yii\base\Model
 
     /**
      * Selects one of [[parentTariffs]] and puts it to [[parentTariff]].
-     *
      * @return bool
+     * @throws InvalidConfigException
      */
     public function selectParentTariff()
     {
@@ -211,13 +210,12 @@ abstract class AbstractTariffForm extends \yii\base\Model
             return $model->id === $this->parent_id;
         });
 
-        if (count($filtered) === 0) {
-            throw new InvalidParamException('Parent tariff model for tariff_id ' . $this->parent_id . ' was not found');
+        if (count($filtered) > 1) {
+            throw new InvalidConfigException('Found ' . count($filtered) . ' parent tariffs. Must be exactly one');
         }
 
-        if (count($filtered) > 1) {
-            Yii::error('Found ' . count($filtered) . ' parent tariffs. Must be exactly one');
-            return false;
+        if (count($filtered) === 0) {
+            $filtered = [$this->tariff];
         }
 
         $this->parentTariff = reset($filtered);
