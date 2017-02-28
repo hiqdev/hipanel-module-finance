@@ -53,6 +53,28 @@ class Purse extends \hipanel\base\Model
         return $this->hasMany(Document::class, ['object_id' => 'id']);
     }
 
+    public function getInvoices()
+    {
+        return $this->getDocumentsOfType('invoice');
+    }
+
+    public function getAcceptances()
+    {
+        return $this->getDocumentsOfType('acceptance');
+    }
+
+    public function getDocumentsOfType($type)
+    {
+        $res = [];
+        foreach ($this->documents as $id => $doc) {
+            if ($doc->type === $type) {
+                $res[$id] = $doc;
+            }
+        }
+
+        return $res;
+    }
+
     public function getClientModel()
     {
         return $this->hasOne(Client::class, ['id' => 'client_id']);

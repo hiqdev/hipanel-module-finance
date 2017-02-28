@@ -10,12 +10,9 @@
 
 namespace hipanel\modules\finance\grid;
 
-use hipanel\helpers\FontIcon;
 use hipanel\modules\client\widgets\combo\ContactCombo;
-use hipanel\widgets\ArraySpoiler;
 use hiqdev\xeditable\widgets\ComboXEditable;
 use Yii;
-use yii\helpers\Html;
 
 class PurseGridView extends \hipanel\grid\BoxedGridView
 {
@@ -26,29 +23,11 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                 'class' => 'hipanel\modules\finance\grid\BalanceColumn',
             ],
             'credit' => CreditColumn::resolveConfig(),
-            'documents' => [
-                'label'  => Yii::t('hipanel:finance', 'Documents'),
-                'format' => 'raw',
-                'value'  => function ($model) {
-                    return ArraySpoiler::widget([
-                        'mode'              => ArraySpoiler::MODE_SPOILER,
-                        'data'              => $model->documents,
-                        'delimiter'         => ' ',
-                        'formatter'         => function ($doc) {
-                            return Html::a(
-                                FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', strtotime($doc->validity_start)),
-                                ["/file/{$doc->file_id}/{$doc->filename}", 'nocache' => 1],
-                                ['target' => '_blank', 'class' => 'text-info text-nowrap col-xs-6 col-sm-6 col-md-6 col-lg-3']
-                            );
-                        },
-                        'template'          => '{button}{visible}{hidden}',
-                        'visibleCount'      => 2,
-                        'button'            => [
-                            'label' => FontIcon::i('fa-history fa-2x') . ' ' . Yii::t('hipanel', 'History'),
-                            'class' => 'pull-right text-nowrap',
-                        ],
-                    ]);
-                },
+            'invoices' => [
+                'class' => DocumentsColumn::class,
+            ],
+            'acceptances' => [
+                'class' => DocumentsColumn::class,
             ],
             'taxes' => [
             ],
