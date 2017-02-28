@@ -124,8 +124,4 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
             ],
         ];
     }
-
-    public static function pdfLink($file, $month = 'now')
-    {
-    }
 }
