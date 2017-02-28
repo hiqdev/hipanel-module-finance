@@ -45,7 +45,7 @@ abstract class AbstractServerResourceDecorator extends AbstractResourceDecorator
 
     public function displayUnit()
     {
-        return $this->resource->unit;
+        return Yii::t('hipanel', $this->resource->unit);
     }
 
     public function displayOverusePrice()
