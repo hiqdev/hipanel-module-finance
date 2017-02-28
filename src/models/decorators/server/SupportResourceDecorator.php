@@ -19,6 +19,11 @@ class SupportResourceDecorator extends AbstractServerResourceDecorator
         return Yii::t('hipanel:finance:tariff', '24/7 support');
     }
 
+    public function displayUnit()
+    {
+        return Yii::t('hipanel:finance:tariff', 'hour');
+    }
+
     public function displayPrepaidAmount()
     {
         $quantity = $this->getPrepaidQuantity();
