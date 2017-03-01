@@ -28,6 +28,7 @@ return [
     'Confirm invoice updating' => 'Подтвердите обновление инвойса',
     'Invoice' => 'Инвойс',
     'Invoices' => 'Инвойсы',
+    'Acceptance reports' => 'Акты выполненных работ',
     'Document' => 'Документ',
     'Documents' => 'Документы',
     'Invoice updated' => 'Инвойс обновлён',

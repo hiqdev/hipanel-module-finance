@@ -99,6 +99,7 @@ class Purse extends \hipanel\base\Model
             'provided_services' => Yii::t('hipanel:finance', 'Provided services'),
             'currency' => Yii::t('hipanel:finance', 'Currency'),
             'invoices' => Yii::t('hipanel:finance', 'Invoices'),
+            'acceptances' => Yii::t('hipanel:finance', 'Acceptance reports'),
             'contact_id' => Yii::t('hipanel:finance', 'Contact'),
             'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
         ]);
