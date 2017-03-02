@@ -30,6 +30,7 @@ class Collection extends \hiqdev\yii2\merchant\Collection
     public static $supportedSystems = [
         'webmoney' => 1,
         'paypal' => 1,
+        'interkassa' => 1,
         'paxum' => 1,
         'ecoin' => 1,
     ];
@@ -57,15 +58,16 @@ class Collection extends \hiqdev\yii2\merchant\Collection
             }
         }
 
-        foreach ($merchants as $name => $merchant) {
-            if (!static::$supportedSystems[$merchant['system']]) {
-                unset($merchants[$name]);
-                continue;
+        $result = [];
+        foreach (array_keys(static::$supportedSystems) as $system) {
+            foreach ($merchants as $name => $merchant) {
+                if ($merchant['system'] === $system) {
+                    $result[$name] = $this->convertMerchant($merchant);
+                }
             }
-            $merchants[$name] = $this->convertMerchant($merchant);
         }
 
-        return $merchants;
+        return $result;
     }
 
     public function convertMerchant($data)
