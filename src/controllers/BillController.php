@@ -20,8 +20,11 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\modules\client\controllers\ContactController;
 use hipanel\modules\finance\forms\BillImportForm;
+use hipanel\modules\finance\forms\CurrencyExchangeForm;
 use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\providers\BillTypesProvider;
+use hipanel\modules\finance\providers\ExchangeRatesProvider;
 use Yii;
 use yii\base\Module;
 use yii\filters\AccessControl;
@@ -37,6 +40,7 @@ class BillController extends \hipanel\base\CrudController
     {
         parent::__construct($id, $module, $config);
 
+
         $this->billTypesProvider = $billTypesProvider;
     }
 
@@ -45,7 +49,7 @@ class BillController extends \hipanel\base\CrudController
         return array_merge(parent::behaviors(), [
             'access-bill' => [
                 'class' => AccessControl::class,
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'create-exchange'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -55,7 +59,7 @@ class BillController extends \hipanel\base\CrudController
                     [
                         'allow' => true,
                         'roles' => ['bill.create'],
-                        'actions' => ['create', 'import', 'copy'],
+                        'actions' => ['create', 'import', 'copy', 'create-exchange'],
                     ],
                     [
                         'allow' => true,
@@ -85,8 +89,9 @@ class BillController extends \hipanel\base\CrudController
                 'class' => IndexAction::class,
                 'data' => function ($action) {
                     list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
+                    $rates = $this->getExchangeRates();
 
-                    return compact('billTypes', 'billGroupLabels');
+                    return compact('billTypes', 'billGroupLabels', 'rates');
                 },
             ],
             'view' => [
@@ -173,6 +178,23 @@ class BillController extends \hipanel\base\CrudController
         return $this->render('import', ['model' => $model]);
     }
 
+    public function actionCreateExchange()
+    {
+        $model = new CurrencyExchangeForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($id = $model->save()) {
+                Yii::$app->session->addFlash('success', Yii::t('hipanel:finance', 'Currency was exchanged successfully'));
+                return $this->redirect(['@bill']);
+            }
+        }
+
+        return $this->render('create-exchange', [
+            'model' => $model,
+            'rates' => $this->getExchangeRates()
+        ]);
+    }
+
     /**
      * @return array
      */
@@ -187,5 +209,12 @@ class BillController extends \hipanel\base\CrudController
     private function getTypesAndGroups()
     {
         return $this->billTypesProvider->getGroupedList();
+    }
+
+    private function getExchangeRates()
+    {
+        return Yii::$app->cache->getOrSet(['exchange-rates', Yii::$app->user->id], function () {
+            return ExchangeRate::find()->select(['from', 'to', 'rate'])->all();
+        }, 3600);
     }
 }

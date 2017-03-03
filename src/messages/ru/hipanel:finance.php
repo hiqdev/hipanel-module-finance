@@ -190,4 +190,9 @@ return [
     'Current document will be substituted with newer version!' => 'Существущий документ будет заменён новым!',
     'Update acceptance report' => 'Обновить акт выполненных работ',
     'See new acceptance report' => 'Просмотреть акт выполненных работ',
+    'Create currency exchange' => 'Создать обмен валют',
+    'Currency was exchanged successfully' => 'Обмен валют успешно проведён',
+    'From' => 'Из',
+    'To' => 'В',
+    'Rate' => 'Курс',
 ];
