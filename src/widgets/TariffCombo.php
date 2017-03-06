@@ -30,6 +30,8 @@ class TariffCombo extends Combo
     /** {@inheritdoc} */
     public $_return = ['id'];
 
+    public $_primaryFilter = 'tariff_ilike';
+
     /**
      * @var string the type of tariff
      * @see getFilter()
