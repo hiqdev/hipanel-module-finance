@@ -46,6 +46,10 @@ class PurseController extends \hipanel\base\CrudController
                 'class' => RedirectAction::class,
                 'error' => Yii::t('hipanel', 'Under construction'),
             ],
+            'generate-and-save-monthly-document' => [
+                'class'   => SmartPerformAction::class,
+                'success' => Yii::t('hipanel:finance', 'Document updated'),
+            ],
             'generate-and-save-document' => [
                 'class'   => SmartPerformAction::class,
                 'success' => Yii::t('hipanel:finance', 'Document updated'),
@@ -53,14 +57,26 @@ class PurseController extends \hipanel\base\CrudController
         ];
     }
 
-    public function actionGenerateDocument($id, $type, $month = null)
+    public function actionGenerateMonthlyDocument($id, $type, $month = null)
     {
-        $content_type = 'application/pdf';
-        $data = Purse::perform('generate-document', compact('id', 'type', 'month'));
-        $response = Yii::$app->getResponse();
-        $response->format = $response::FORMAT_RAW;
-        $response->getHeaders()->add('content-type', $content_type);
+        $data = Purse::perform('generate-monthly-document', compact('id', 'type', 'month'));
+        $this->asPdf();
 
         return $data;
+    }
+
+    public function actionGenerateDocument($id, $type)
+    {
+        $data = Purse::perform('generate-monthly-document', compact('id', 'type'));
+        $this->asPdf();
+
+        return $data;
+    }
+
+    protected function asPdf()
+    {
+        $response = Yii::$app->getResponse();
+        $response->format = $response::FORMAT_RAW;
+        $response->getHeaders()->add('content-type', 'application/pdf');
     }
 }

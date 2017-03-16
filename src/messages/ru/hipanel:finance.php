@@ -21,8 +21,6 @@ return [
     'Servers' => 'Сервера',
 
     '<b>{currency}</b> account' => '<b>{currency}</b> счёт',
-    'See new invoice' => 'Посмотреть новый инвойс',
-    'Update invoice' => 'Обновить инвойс',
     'Are you sure you want to update invoice?' => 'Вы уверены что хотите обновить инвойс',
     'Current invoice will be substituted with newer version!' => 'Текущий инвойс будет заменён новой версией!',
     'Confirm invoice updating' => 'Подтвердите обновление инвойса',
@@ -188,11 +186,14 @@ return [
     'Confirm document updating' => 'Подтвердите обновление документа',
     'Are you sure you want to update document?' => 'Вы уверены, что хотите обновить документ?',
     'Current document will be substituted with newer version!' => 'Существущий документ будет заменён новым!',
-    'Update acceptance report' => 'Обновить акт выполненных работ',
-    'See new acceptance report' => 'Просмотреть акт выполненных работ',
+    'See new' => 'Предпросмотр',
+    'Update' => 'Обновить',
     'Create currency exchange' => 'Создать обмен валют',
+    'Contracts' => 'Договоры',
     'Currency was exchanged successfully' => 'Обмен валют успешно проведён',
     'From' => 'Из',
     'To' => 'В',
     'Rate' => 'Курс',
+    'Probation' => 'Испытательный',
+    'NDA' => 'Неразглашение'
 ];

@@ -24,10 +24,24 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
             ],
             'credit' => CreditColumn::resolveConfig(),
             'invoices' => [
-                'class' => DocumentsColumn::class,
+                'class' => MonthlyDocumentsColumn::class,
+                'type' => 'invoice',
             ],
             'acceptances' => [
+                'class' => MonthlyDocumentsColumn::class,
+                'type' => 'acceptance',
+            ],
+            'contracts' => [
                 'class' => DocumentsColumn::class,
+                'type' => 'contract',
+            ],
+            'probations' => [
+                'class' => DocumentsColumn::class,
+                'type' => 'probation',
+            ],
+            'ndas' => [
+                'class' => DocumentsColumn::class,
+                'type' => 'nda',
             ],
             'taxes' => [
             ],

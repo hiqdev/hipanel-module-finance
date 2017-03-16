@@ -16,6 +16,16 @@ use hipanel\modules\client\models\Contact;
 use hipanel\modules\document\models\Document;
 use Yii;
 
+/**
+ * Class Purse
+ *
+ * @property Client clientModel
+ * @property Document[] contracts
+ * @property Document[] probations
+ * @property Document[] acceptances
+ * @property Document[] invoices
+ * @property Document[] ndas
+ */
 class Purse extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
@@ -38,8 +48,8 @@ class Purse extends \hipanel\base\Model
             [['id', 'contact_id'], 'required', 'on' => ['update-contact']],
             [['id', 'requisite_id'], 'required', 'on' => ['update-requisite']],
 
-            [['month'], 'date', 'on' => 'generate-and-save-document'],
-            [['type'], 'string', 'on' => 'generate-and-save-document'],
+            [['month'], 'date', 'on' => ['generate-and-save-monthly-document']],
+            [['type'], 'string', 'on' => ['generate-and-save-monthly-document', 'generate-and-save-document']],
         ];
     }
 
@@ -58,6 +68,21 @@ class Purse extends \hipanel\base\Model
         return $this->getDocumentsOfType('invoice');
     }
 
+    public function getContracts()
+    {
+        return $this->getDocumentsOfType('contract');
+    }
+
+    public function getProbations()
+    {
+        return $this->getDocumentsOfType('probation');
+    }
+
+    public function getNdas()
+    {
+        return $this->getDocumentsOfType('nda');
+    }
+
     public function getAcceptances()
     {
         return $this->getDocumentsOfType('acceptance');
@@ -66,6 +91,7 @@ class Purse extends \hipanel\base\Model
     public function getDocumentsOfType($type)
     {
         $res = [];
+
         foreach ($this->documents as $id => $doc) {
             if ($doc->type === $type) {
                 $res[$id] = $doc;
@@ -100,6 +126,9 @@ class Purse extends \hipanel\base\Model
             'currency' => Yii::t('hipanel:finance', 'Currency'),
             'invoices' => Yii::t('hipanel:finance', 'Invoices'),
             'acceptances' => Yii::t('hipanel:finance', 'Acceptance reports'),
+            'contracts' => Yii::t('hipanel:finance', 'Contracts'),
+            'probations' => Yii::t('hipanel:finance', 'Probation'),
+            'ndas' => Yii::t('hipanel:finance', 'NDA'),
             'contact_id' => Yii::t('hipanel:finance', 'Contact'),
             'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
         ]);
