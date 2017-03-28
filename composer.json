@@ -56,7 +56,7 @@
         "hiqdev/omnipay-qiwi": "*@dev",
         "hiqdev/omnipay-paxum": "*@dev",
         "hiqdev/omnipay-paypal": "*@dev",
-        "hiqdev/omnipay-yandexmoney": "*@dev",
+        "yandexmoney/omnipay": "*@dev",
         "dercoder/omnipay-webmoney": "*@dev",
         "hiqdev/hipanel-module-client": "<2.0 || dev-master"
     },

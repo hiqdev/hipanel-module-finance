@@ -75,7 +75,8 @@ class Collection extends \hiqdev\yii2\merchant\Collection
     public function convertMerchant($data)
     {
         return [
-            'gateway' => $data['label'],
+            'gateway' => $data['system'],
+            'label' => $data['label'],
             'data' => [
                 'purse' => $data['purse'],
                 'amount' => $data['sum'],
