@@ -97,7 +97,7 @@ return [
                 'class' => \hiqdev\yii2\merchant\widgets\PayButton::class,
                 'as commentBehavior' => [
                     'class' => \hipanel\modules\finance\behaviors\PayButtonCommentBehavior::class,
-                ],
+                ]
             ],
         ],
         'singletons' => [

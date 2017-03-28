@@ -34,6 +34,7 @@ class Collection extends \hiqdev\yii2\merchant\Collection
         'paxum' => 1,
         'ecoin' => 1,
         'okpay' => 1,
+        'yandex' => 1,
     ];
 
     public function fetchMerchants(array $params = [])
