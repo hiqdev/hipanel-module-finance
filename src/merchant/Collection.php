@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\merchant;
 use hipanel\modules\finance\models\Merchant;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 class Collection extends \hiqdev\yii2\merchant\Collection
 {
@@ -34,7 +35,7 @@ class Collection extends \hiqdev\yii2\merchant\Collection
         'paxum' => 1,
         'ecoin' => 1,
         'okpay' => 1,
-        'yandex' => 1,
+        'robokassa' => 1,
     ];
 
     public function fetchMerchants(array $params = [])
@@ -74,16 +75,13 @@ class Collection extends \hiqdev\yii2\merchant\Collection
 
     public function convertMerchant($data)
     {
+        $data['currency'] = strtoupper($data['currency']);
+        $data['amount']   = $data['sum'];
+
         return [
             'gateway' => $data['system'],
             'label' => $data['label'],
-            'data' => [
-                'purse' => $data['purse'],
-                'amount' => $data['sum'],
-                'fee' => $data['fee'],
-                'commission_fee' => $data['commission_fee'],
-                'currency' => strtoupper($data['currency']),
-            ],
+            'data' => $data,
         ];
     }
 }
