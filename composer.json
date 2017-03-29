@@ -51,6 +51,7 @@
         "hiqdev/omnipay-epayments": "*@dev",
         "hiqdev/omnipay-epayservice": "*@dev",
         "hiqdev/omnipay-interkassa": "*@dev",
+        "hiqdev/omnipay-freekassa": "*@dev",
         "hiqdev/omnipay-robokassa": "*@dev",
         "hiqdev/omnipay-okpay": "*@dev",
         "hiqdev/omnipay-qiwi": "*@dev",
