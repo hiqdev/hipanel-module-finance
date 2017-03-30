@@ -11,6 +11,8 @@
 namespace hipanel\modules\finance\controllers;
 
 use hipanel\modules\finance\models\Merchant;
+use hiqdev\hiart\ResponseErrorException;
+use hiqdev\yii2\merchant\transactions\Transaction;
 use Yii;
 
 /**
@@ -31,23 +33,41 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 
     public function checkNotify()
     {
-        $transactionId = Yii::$app->request->get('transactionId') ?: Yii::$app->request->post('transactionId');
-        $history = $this->getMerchantModule()->readHistory($transactionId);
+        $id = Yii::$app->request->get('transactionId') ?: Yii::$app->request->post('transactionId');
+        $transaction = $this->getMerchantModule()->findTransaction($id);
         $data = array_merge([
-            'username'      => $history['username'],
-            'merchant'      => $history['merchant'],
-            'transactionId' => $transactionId,
+            'transactionId' => $transaction->getId(),
+            'username'      => $transaction->getParameter('username'),
+            'merchant'      => $transaction->getParameter('merchant'),
         ], $_REQUEST);
         Yii::info(http_build_query($data), 'merchant');
 
-        Yii::$app->get('hiart')->disableAuth();
         try {
+            Yii::$app->get('hiart')->disableAuth();
             $result = Merchant::perform('pay', $data);
-        } catch (\hiqdev\hiart\Exception $e) {
-            $result['_error'] = $e->getMessage();
-        }
-        Yii::$app->get('hiart')->enableAuth();
 
-        return $this->getMerchantModule()->completeHistory(array_merge(compact('transactionId'), $result));
+            return $this->completeTransaction($transaction, $result);
+        } catch (ResponseErrorException $e) {
+            return false;
+        } finally {
+            Yii::$app->get('hiart')->enableAuth();
+        }
+    }
+
+    /**
+     * @param Transaction $transaction
+     * @param $response
+     * @return mixed
+     */
+    protected function completeTransaction($transaction, $response)
+    {
+        if ($transaction->isCompleted()) {
+            return $transaction;
+        }
+
+        $transaction->confirm();
+        $transaction->addParameter('bill_id', $response['id']);
+
+        return $transaction;
     }
 }
