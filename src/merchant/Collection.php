@@ -31,6 +31,7 @@ class Collection extends \hiqdev\yii2\merchant\Collection
     public static $supportedSystems = [
         'webmoney' => 1,
         'paypal' => 1,
+        'yandex' => 1,
         'interkassa' => 1,
         'paxum' => 1,
         'ecoin' => 1,
