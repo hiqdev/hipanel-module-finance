@@ -8,6 +8,7 @@ use hiqdev\yii2\merchant\transactions\Transaction;
 use hiqdev\yii2\merchant\transactions\TransactionException;
 use hiqdev\yii2\merchant\transactions\TransactionRepositoryInterface;
 use ReflectionObject;
+use yii\helpers\Json;
 
 class ApiTransactionRepository implements TransactionRepositoryInterface
 {
@@ -72,7 +73,7 @@ class ApiTransactionRepository implements TransactionRepositoryInterface
     {
         try {
             $data = $transaction->toArray();
-            $data['parameters'] = json_encode($data['parameters']);
+            $data['parameters'] = Json::encode($data['parameters']);
 
             $this->connection->createCommand()->perform('merchantTransactionSet', null, $data);
         } catch (ResponseErrorException $e) {
