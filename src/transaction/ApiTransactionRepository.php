@@ -91,11 +91,11 @@ class ApiTransactionRepository implements TransactionRepositoryInterface
     {
         $transaction = $this->create($data['id'], $data['merchant'], $data['parameters']);
 
-        if ($data['status'] !== null) {
-            $statusReflection = (new ReflectionObject($transaction))->getProperty('status');
-            $statusReflection->setAccessible(true);
-            $statusReflection->setValue($transaction, $data['status']);
-            $statusReflection->setAccessible(false);
+        if ($data['success'] !== null) {
+            $successReflection = (new ReflectionObject($transaction))->getProperty('success');
+            $successReflection->setAccessible(true);
+            $successReflection->setValue($transaction, $data['success']);
+            $successReflection->setAccessible(false);
         }
 
         return $transaction;

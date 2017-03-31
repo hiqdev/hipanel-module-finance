@@ -61,12 +61,14 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
      */
     protected function completeTransaction($transaction, $response)
     {
-        if ($transaction->isCompleted()) {
+        if ($transaction->isCompleted() || isset($data['_error'])) {
             return $transaction;
         }
 
-        $transaction->confirm();
+        $transaction->complete();
         $transaction->addParameter('bill_id', $response['id']);
+
+        $this->getMerchantModule()->saveTransaction($transaction);
 
         return $transaction;
     }
