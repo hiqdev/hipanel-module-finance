@@ -46,17 +46,10 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
         ], $_REQUEST);
         Yii::info(http_build_query($data), 'merchant');
 
-        try {
-            Yii::$app->get('hiart')->disableAuth();
+        return Yii::$app->get('hiart')->callWithDisabledAuth(function () use ($transaction, $data) {
             $result = Merchant::perform('pay', $data);
-            $this->completeTransaction($transaction, $result);
-        } catch (ResponseErrorException $e) {
-            // Does not matter.
-        } finally {
-            Yii::$app->get('hiart')->enableAuth();
-        }
-
-        return $transaction;
+            return $this->completeTransaction($transaction, $result);
+        });
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\transaction;
 
+use hiqdev\hiart\AbstractConnection;
 use hiqdev\hiart\ConnectionInterface;
 use hiqdev\hiart\ResponseErrorException;
 use hiqdev\yii2\merchant\transactions\Transaction;
@@ -13,7 +14,7 @@ use yii\helpers\Json;
 class ApiTransactionRepository implements TransactionRepositoryInterface
 {
     /**
-     * @var ConnectionInterface
+     * @var ConnectionInterface|AbstractConnection
      */
     private $connection;
 
@@ -35,7 +36,7 @@ class ApiTransactionRepository implements TransactionRepositoryInterface
     public function findById($id)
     {
         try {
-            $data = $this->callWithoutAuth(function () use ($id) {
+            $data = $this->connection->callWithDisabledAuth(function () use ($id) {
                 return $this->connection->createCommand()->perform('merchantTransactionGet', null, ['id' => $id]);
             });
         } catch (ResponseErrorException $e) {
@@ -77,7 +78,7 @@ class ApiTransactionRepository implements TransactionRepositoryInterface
             $data = $transaction->toArray();
             $data['parameters'] = Json::encode($data['parameters']);
 
-            $this->callWithoutAuth(function () use ($data) {
+            $this->connection->callWithDisabledAuth(function () use ($data) {
                 return $this->connection->createCommand()->perform('merchantTransactionSet', null, $data);
             });
         } catch (ResponseErrorException $e) {
@@ -85,16 +86,6 @@ class ApiTransactionRepository implements TransactionRepositoryInterface
         }
 
         return $transaction;
-    }
-
-    private function callWithoutAuth(\Closure $function)
-    {
-        try {
-            $this->connection->disableAuth();
-            return call_user_func($function);
-        } finally {
-            $this->connection->enableAuth();
-        }
     }
 
     /**
