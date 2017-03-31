@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\controllers;
 
+use Guzzle\Plugin\ErrorResponse\Exception\ErrorResponseException;
 use hipanel\modules\finance\models\Merchant;
 use hiqdev\hiart\ResponseErrorException;
 use hiqdev\yii2\merchant\transactions\Transaction;
@@ -41,15 +42,21 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 
         $data = array_merge([
             'transactionId' => $transaction->getId(),
-            'username'      => $transaction->getParameter('username'),
-            'merchant'      => $transaction->getParameter('merchant'),
+            'username' => $transaction->getParameter('username'),
+            'merchant' => $transaction->getParameter('merchant'),
         ], $_REQUEST);
         Yii::info(http_build_query($data), 'merchant');
 
-        return Yii::$app->get('hiart')->callWithDisabledAuth(function () use ($transaction, $data) {
-            $result = Merchant::perform('pay', $data);
-            return $this->completeTransaction($transaction, $result);
-        });
+        try {
+            return Yii::$app->get('hiart')->callWithDisabledAuth(function () use ($transaction, $data) {
+                $result = Merchant::perform('pay', $data);
+
+                return $this->completeTransaction($transaction, $result);
+            });
+        } catch (ResponseErrorException $e) {
+            // Does not matter
+            return null;
+        }
     }
 
     /**
