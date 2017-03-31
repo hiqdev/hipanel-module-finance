@@ -35,6 +35,10 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
     {
         $id = Yii::$app->request->get('transactionId') ?: Yii::$app->request->post('transactionId');
         $transaction = $this->getMerchantModule()->findTransaction($id);
+        if ($transaction === null) {
+            return null;
+        }
+
         $data = array_merge([
             'transactionId' => $transaction->getId(),
             'username'      => $transaction->getParameter('username'),
@@ -45,13 +49,14 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
         try {
             Yii::$app->get('hiart')->disableAuth();
             $result = Merchant::perform('pay', $data);
-
-            return $this->completeTransaction($transaction, $result);
+            $this->completeTransaction($transaction, $result);
         } catch (ResponseErrorException $e) {
-            return false;
+            // Does not matter.
         } finally {
             Yii::$app->get('hiart')->enableAuth();
         }
+
+        return $transaction;
     }
 
     /**

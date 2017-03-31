@@ -35,7 +35,9 @@ class ApiTransactionRepository implements TransactionRepositoryInterface
     public function findById($id)
     {
         try {
-            $data = $this->connection->createCommand()->perform('merchantTransactionGet', null, ['id' => $id]);
+            $data = $this->callWithoutAuth(function () use ($id) {
+                return $this->connection->createCommand()->perform('merchantTransactionGet', null, ['id' => $id]);
+            });
         } catch (ResponseErrorException $e) {
             throw new TransactionException('Failed to get transaction information');
         }
@@ -75,12 +77,24 @@ class ApiTransactionRepository implements TransactionRepositoryInterface
             $data = $transaction->toArray();
             $data['parameters'] = Json::encode($data['parameters']);
 
-            $this->connection->createCommand()->perform('merchantTransactionSet', null, $data);
+            $this->callWithoutAuth(function () use ($data) {
+                return $this->connection->createCommand()->perform('merchantTransactionSet', null, $data);
+            });
         } catch (ResponseErrorException $e) {
             throw new TransactionException('Failed to save transaction');
         }
 
         return $transaction;
+    }
+
+    private function callWithoutAuth(\Closure $function)
+    {
+        try {
+            $this->connection->disableAuth();
+            return call_user_func($function);
+        } finally {
+            $this->connection->enableAuth();
+        }
     }
 
     /**
