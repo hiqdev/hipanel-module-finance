@@ -121,7 +121,13 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
 
     protected function getSeeNewRoute($model)
     {
-        return ['@purse/generate-document', 'id' => $model->id, 'type' => $this->type];
+        return [
+            '@purse/generate-document',
+            'id' => $model->id,
+            'type' => $this->type,
+            'login' => $model->client,
+            'currency' => $model->currency,
+        ];
     }
 
     protected function getUpdateButtonRoute($model)

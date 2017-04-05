@@ -49,6 +49,18 @@ return [
         ],
     ],
     'components' => [
+        'urlManager' => [
+            'rules' => [
+                [
+                    'pattern' => 'finance/purse/<id:\d+>/generate/monthly/<type:\w+>.<login:[.\@\w\d_]+>.<currency:\w+>.<month:[\d-]+>.pdf',
+                    'route' => 'finance/purse/generate-monthly-document'
+                ],
+                [
+                    'pattern' => 'finance/purse/<id:\d+>/generate/<type:\w+>.<login:[.\@\w\d_]+>.<currency:\w+>.pdf',
+                    'route' => 'finance/purse/generate-document'
+                ]
+            ]
+        ],
         'themeManager' => [
             'pathMap' => [
                 '@hipanel/modules/finance/views' => '$themedViewPaths',
