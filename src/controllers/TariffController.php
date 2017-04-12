@@ -26,12 +26,6 @@ class TariffController extends \hipanel\base\CrudController
     public function actions()
     {
         return [
-            'set-orientation' => [
-                'class' => OrientationAction::class,
-                'allowedRoutes' => [
-                    '@tariff/index',
-                ],
-            ],
             'index' => [
                 'class' => IndexAction::class,
                 'data' => function () {

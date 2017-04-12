@@ -79,12 +79,6 @@ class BillController extends \hipanel\base\CrudController
     public function actions()
     {
         return [
-            'set-orientation' => [
-                'class' => OrientationAction::class,
-                'allowedRoutes' => [
-                    '@bill/index',
-                ],
-            ],
             'index' => [
                 'class' => IndexAction::class,
                 'data' => function ($action) {

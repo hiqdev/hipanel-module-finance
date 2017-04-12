@@ -55,12 +55,6 @@ class HeldPaymentsController extends CrudController
                     ];
                 },
             ],
-            'set-orientation' => [
-                'class' => OrientationAction::class,
-                'allowedRoutes' => [
-                    '@finance/held-payments/index',
-                ],
-            ],
             'bulk-approve' => [
                 'class' => SmartUpdateAction::class,
                 'scenario' => 'approve',
