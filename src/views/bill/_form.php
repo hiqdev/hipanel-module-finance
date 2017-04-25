@@ -86,7 +86,10 @@ $form = ActiveForm::begin([
                         ]) ?>
                         <?= $form->field($model, "[$i]currency", ['template' => '{input}{error}'])->hiddenInput() ?>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-1">
+                        <?= $form->field($model, "[$i]quantity") ?>
+                    </div>
+                    <div class="col-md-2">
                         <?= $form->field($model, "[$i]time")->widget(DateTimePicker::class, [
                             'model' => $model,
                             'type' => DatePicker::TYPE_COMPONENT_APPEND,
