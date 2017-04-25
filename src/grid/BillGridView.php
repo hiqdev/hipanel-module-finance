@@ -147,6 +147,10 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             case 'ip_num':
                 $text = Yii::t('hipanel:finance', '{quantity} IP', ['quantity' => $model->quantity]);
                 break;
+            case 'monthly':
+                $days = ceil($model->quantity * date('t', $model->time));
+                $text = Yii::t('hipanel:finance', '{quantity, plural, one{# day} other{# days}}', ['quantity' => $days]);
+                break;
             default:
                 return null;
         }
