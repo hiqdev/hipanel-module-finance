@@ -122,6 +122,10 @@ class BillGridView extends \hipanel\grid\BoxedGridView
         ];
     }
 
+    /**
+     * Creates link to object details page.
+     * @param Model $model
+     */
     public static function objectLink($model)
     {
         return $model->class === 'device'
@@ -130,7 +134,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
     }
 
     /**
-     * @param $model
+     * @param Model $model
      * @return null|string
      */
     public static function billQuantity($model)
