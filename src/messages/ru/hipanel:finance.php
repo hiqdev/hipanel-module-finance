@@ -147,7 +147,7 @@ return [
     'Internal transfer' => 'Внутренний трансфер',
     'Negative internal transfer' => 'Отрицательный внутренний перевод',
     'Positive internal transfer' => 'Позитивный внутренний перевод',
-    'Monthly fee' => 'Ежемесячная комиссия',
+    'Monthly fee' => 'Абонплата',
     'Other payment' => 'Прочие платежи',
     'Other charge' => 'Прочие списания',
     'Push-In' => '',
