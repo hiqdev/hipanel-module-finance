@@ -30,19 +30,6 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
         }
     }
 
-    protected function getHeaderCellLabel()
-    {
-        $label = parent::getHeaderCellLabel();
-
-        $models = $this->grid->dataProvider->getModels();
-        if (count($models) === 1) {
-            $this->encodeLabel = false;
-            $label .= '<br />' . $this->generateManagementButtons($models[0]);
-        }
-
-        return $label;
-    }
-
     public function getDataCellValue($model, $key, $index)
     {
         return ArraySpoiler::widget([
@@ -51,20 +38,23 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
             'delimiter' => ' ',
             'formatter' => function ($doc) {
                 return Html::a(
-                    FontIcon::i('fa-file-pdf-o fa-2x') . date(' M Y', strtotime($doc->validity_start)),
+                    FontIcon::i('fa-file-pdf-o') . date(' M Y', strtotime($doc->validity_start)),
                     ["/file/{$doc->file_id}/{$doc->filename}", 'nocache' => 1],
                     [
                         'target' => '_blank',
-                        'class' => 'text-info text-nowrap col-xs-6 col-sm-6 col-md-6 col-lg-3',
+                        'class' => 'btn btn-app pull-left',
                         'style' => 'width: 8em;'
                     ]
                 );
             },
-            'template' => '{button}{visible}{hidden}',
-            'visibleCount' => 2,
+            'template' => '<div class="text-right clearfix" style="margin-bottom: 10px;padding-left: 10px;">' . $this->generateManagementButtons($model). '{button}</div><div>{visible}{hidden}</div>',
+            'visibleCount' => 3,
             'button' => [
-                'label' => FontIcon::i('fa-history fa-2x') . ' ' . Yii::t('hipanel', 'History'),
-                'class' => 'pull-right text-nowrap',
+                'label' => FontIcon::i('fa-history') . ' ' . Yii::t('hipanel', 'Show all'),
+                'class' => 'btn btn-xs btn-default',
+                'data' => [
+                    'toggle' => 'button'
+                ],
             ],
         ]);
     }
@@ -78,7 +68,7 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
         $buttons[] = $this->renderSeeNewLink($model);
         $buttons[] = $this->renderUpdateButton($model);
 
-        return Html::tag('div', implode('', $buttons), ['class' => 'btn-group']);
+        return Html::tag('div', implode('', $buttons), ['class' => 'btn-group', 'style' => 'display: block;']);
     }
 
     protected function renderSeeNewLink($model)
