@@ -9,6 +9,7 @@
  */
 
 return [
+    'Period' => 'Период',
     'Finance' => 'Финансы',
     'Payments' => 'Платежи',
     'Recharge' => 'Пополнить',
