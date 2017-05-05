@@ -48,7 +48,8 @@ class Purse extends \hipanel\base\Model
             [['id', 'contact_id'], 'required', 'on' => ['update-contact']],
             [['id', 'requisite_id'], 'required', 'on' => ['update-requisite']],
 
-            [['month'], 'date', 'on' => ['generate-and-save-monthly-document']],
+            [['month'], 'date', 'format' => 'php:Y-m', 'on' => ['generate-and-save-monthly-document']],
+            ['month', 'required'],
             [['type'], 'string', 'on' => ['generate-and-save-monthly-document', 'generate-and-save-document']],
         ];
     }
@@ -131,6 +132,7 @@ class Purse extends \hipanel\base\Model
             'ndas' => Yii::t('hipanel:finance', 'NDA'),
             'contact_id' => Yii::t('hipanel:finance', 'Contact'),
             'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
+            'month' => Yii::t('hipanel:finance', 'Period'),
         ]);
     }
 
