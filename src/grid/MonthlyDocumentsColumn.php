@@ -19,18 +19,6 @@ use yii\helpers\Html;
 
 class MonthlyDocumentsColumn extends DocumentsColumn
 {
-    protected function getSeeNewRoute($model)
-    {
-        return [
-            '@purse/generate-monthly-document',
-            'id' => $model->id,
-            'type' => $this->type,
-            'login' => $model->client,
-            'currency' => $model->currency,
-            'month' => date('Y-m')
-        ];
-    }
-
     protected function getUpdateButtonRoute($model)
     {
         return ['@purse/generate-and-save-monthly-document'];
