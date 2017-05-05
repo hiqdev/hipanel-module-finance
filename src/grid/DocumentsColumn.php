@@ -10,9 +10,9 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\modules\finance\widgets\DocumentByMonthButton;
 use hipanel\widgets\ArraySpoiler;
 use hipanel\helpers\FontIcon;
-use hipanel\widgets\ModalButton;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
@@ -47,7 +47,7 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
                     ]
                 );
             },
-            'template' => '<div class="text-right clearfix" style="margin-bottom: 10px;padding-left: 10px;">' . $this->generateManagementButtons($model). '{button}</div><div>{visible}{hidden}</div>',
+            'template' => '<div class="text-right clearfix" style="margin-bottom: 10px;padding-left: 10px;">' . $this->generateManagementButtons($model) . '{button}</div><div>{visible}{hidden}</div>',
             'visibleCount' => 3,
             'button' => [
                 'label' => FontIcon::i('fa-history') . ' ' . Yii::t('hipanel', 'Show all'),
@@ -65,58 +65,48 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
             return null;
         }
 
-        $buttons[] = $this->renderSeeNewLink($model);
+        $buttons[] = $this->renderSeeNewButton($model);
         $buttons[] = $this->renderUpdateButton($model);
 
         return Html::tag('div', implode('', $buttons), ['class' => 'btn-group', 'style' => 'display: block;']);
     }
 
-    protected function renderSeeNewLink($model)
+    public function renderSeeNewButton($model)
     {
-        return Html::a(
-            Yii::t('hipanel:finance', 'See new'),
-            $this->getSeeNewRoute($model),
-            ['class' => 'btn btn-default btn-xs', 'target' => 'new-invoice']
-        );
+        return DocumentByMonthButton::widget([
+            'modalHeader' => Yii::t('hipanel:finance', 'See new'),
+            'buttonLabel' => Yii::t('hipanel:finance', 'See new'),
+            'model' => $model,
+            'action' => $this->getSeeNewRoute(),
+            'type' => $this->type,
+        ]);
     }
 
     protected function renderUpdateButton($model)
     {
-        return ModalButton::widget([
-            'id' => "modal-{$model->id}-{$this->type}",
+        return DocumentByMonthButton::widget([
             'model' => $model,
-            'form' => [
-                'action' => $this->getUpdateButtonRoute($model),
-            ],
-            'button' => [
-                'label' => Yii::t('hipanel:finance', 'Update'),
-                'class' => 'btn btn-default btn-xs',
-            ],
-            'body' => implode('', [
+            'modalHeader' => Yii::t('hipanel:finance', 'Confirm document updating'),
+            'modalHeaderColor' => 'label-warning',
+            'buttonLabel' => Yii::t('hipanel:finance', 'Update'),
+            'action' => $this->getSeeNewRoute(),
+            'type' => $this->type,
+            'prepend' => implode('', [
                 Html::activeHiddenInput($model, 'type', ['value' => $this->type]),
-                Yii::t('hipanel:finance', 'Are you sure you want to update document?') . '<br>',
+                Html::beginTag('blockquote', ['class' => 'text-warning']),
+                Yii::t('hipanel:finance', 'Are you sure you want to update document?'),
+                '&nbsp;',
                 Yii::t('hipanel:finance', 'Current document will be substituted with newer version!'),
+                Html::endTag('blockquote'),
             ]),
-            'modal' => [
-                'header' => Html::tag('h4', Yii::t('hipanel:finance', 'Confirm document updating')),
-                'headerOptions' => ['class' => 'label-warning'],
-                'footer' => [
-                    'label' => Yii::t('hipanel', 'Update'),
-                    'class' => 'btn btn-warning',
-                    'data-loading-text' => Yii::t('hipanel', 'Updating...'),
-                ],
-            ],
         ]);
     }
 
-    protected function getSeeNewRoute($model)
+    protected function getSeeNewRoute()
     {
         return [
-            '@purse/generate-document',
-            'id' => $model->id,
+            '@purse/pre-generate-document',
             'type' => $this->type,
-            'login' => $model->client,
-            'currency' => $model->currency,
         ];
     }
 
