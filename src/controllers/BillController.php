@@ -11,7 +11,6 @@
 namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
-use hipanel\actions\OrientationAction;
 use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartCreateAction;
 use hipanel\actions\SmartPerformAction;

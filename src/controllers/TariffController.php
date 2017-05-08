@@ -12,7 +12,6 @@ namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\ComboSearchAction;
 use hipanel\actions\IndexAction;
-use hipanel\actions\OrientationAction;
 use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
