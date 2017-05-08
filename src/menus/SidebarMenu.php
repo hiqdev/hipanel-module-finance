@@ -51,6 +51,10 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                         'url'     => ['/finance/held-payments/index'],
                         'visible' => $user->can('resell'),
                     ],
+                    'sale' => [
+                        'label'   => Yii::t('hipanel:finance', 'Sale'),
+                        'url'     => ['/finance/sale/index'],
+                    ],
                 ],
             ],
         ];
