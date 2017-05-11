@@ -36,4 +36,14 @@ class Sale extends \hipanel\base\Model
             'seller' => Yii::t('hipanel:finance', 'Seller'),
         ]);
     }
+
+    public function getTypes()
+    {
+        return [
+            'server' => Yii::t('hipanel:finance', 'Servers'),
+            'ip' => Yii::t('hipanel:finance', 'IP'),
+            'account' => Yii::t('hipanel:finance', 'Accounts'),
+            'client' => Yii::t('hipanel:finance', 'Clients'),
+        ];
+    }
 }

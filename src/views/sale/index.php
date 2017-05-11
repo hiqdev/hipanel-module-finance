@@ -29,11 +29,7 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
 
         <?php $page->beginContent('show-actions') ?>
         <?= $page->renderLayoutSwitcher() ?>
-        <?= $page->renderSorter([
-            'attributes' => [
-                'id'
-            ],
-        ]) ?>
+        <?= $page->renderSorter(['attributes' => ['time', 'buyer', 'object']]) ?>
         <?= $page->renderPerPage() ?>
         <?php $page->endContent() ?>
 
