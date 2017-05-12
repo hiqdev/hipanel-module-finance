@@ -18,12 +18,12 @@ use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\modules\client\controllers\ContactController;
+use hipanel\modules\finance\actions\BillManagementAction;
 use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\forms\CurrencyExchangeForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\providers\BillTypesProvider;
-use hipanel\modules\finance\providers\ExchangeRatesProvider;
 use Yii;
 use yii\base\Module;
 use yii\filters\AccessControl;
@@ -38,7 +38,6 @@ class BillController extends \hipanel\base\CrudController
     public function __construct($id, Module $module, BillTypesProvider $billTypesProvider, array $config = [])
     {
         parent::__construct($id, $module, $config);
-
 
         $this->billTypesProvider = $billTypesProvider;
     }
@@ -71,7 +70,7 @@ class BillController extends \hipanel\base\CrudController
                         'actions' => ['delete'],
                     ],
                 ],
-            ],
+            ]
         ]);
     }
 
@@ -94,22 +93,10 @@ class BillController extends \hipanel\base\CrudController
                 'class' => ValidateFormAction::class,
             ],
             'create' => [
-                'class' => SmartCreateAction::class,
-                'data' => function ($action) {
-                    list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
-
-                    return compact('billTypes', 'billGroupLabels');
-                },
-                'success' => Yii::t('hipanel:finance', 'Payment was created successfully'),
+                'class' => BillManagementAction::class,
             ],
             'update' => [
-                'class' => SmartUpdateAction::class,
-                'success' => Yii::t('hipanel:finance', 'Payment was updated successfully'),
-                'data' => function ($action) {
-                    list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
-
-                    return compact('billTypes', 'billGroupLabels');
-                },
+                'class' => BillManagementAction::class,
             ],
             'copy' => [
                 'class' => SmartUpdateAction::class,

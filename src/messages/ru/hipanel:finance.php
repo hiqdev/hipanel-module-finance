@@ -63,6 +63,10 @@ return [
     'Requisite' => 'Реквизит',
     'Requisites' => 'Реквизиты',
     'Payment details' => 'Реквизиты',
+    'Bill sum must match resources sum' => 'Сумма счёта должна совпадать с сумой его списаний',
+    'Detalization' => 'Детализация',
+    'Bill was created successfully' => 'Счёт был успешно создан',
+    'Bill was updated successfully' => 'Счёт был успешно изменён',
 
     // Типы платежей
     'Negative balance correction' => 'Отрицательная корректировка',

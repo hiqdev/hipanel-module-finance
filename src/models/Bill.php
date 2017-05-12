@@ -93,6 +93,11 @@ class Bill extends \hipanel\base\Model
         return true;
     }
 
+    public function getCharges()
+    {
+        return $this->hasMany(Charge::class, ['bill_id' => 'id']);
+    }
+
     public static function negativeTypes()
     {
         return [
