@@ -38,8 +38,15 @@ class Sale extends \hipanel\base\Model
     public function attributeLabels()
     {
         return array_merge(parent::attributeLabels(), [
-            'buyer' => Yii::t('hipanel:finance', 'Buyer'),
-            'seller' => Yii::t('hipanel:finance', 'Seller'),
+            'time' => Yii::t('hipanel:finance:sale', 'Time'),
+            'object' => Yii::t('hipanel:finance:sale', 'Object'),
+            'object_like' => Yii::t('hipanel:finance:sale', 'Object'),
+            'buyer' => Yii::t('hipanel:finance:sale', 'Buyer'),
+            'buyer_id' => Yii::t('hipanel:finance:sale', 'Buyer'),
+            'seller' => Yii::t('hipanel:finance:sale', 'Seller'),
+            'seller_id' => Yii::t('hipanel:finance:sale', 'Seller'),
+            'tariff_id' => Yii::t('hipanel:finance', 'Tariff'),
+            'tariff_type' => Yii::t('hipanel', 'Type'),
         ]);
     }
 
@@ -47,9 +54,9 @@ class Sale extends \hipanel\base\Model
     {
         return [
             self::SALE_TYPE_SERVER => Yii::t('hipanel:finance', 'Servers'),
-            self::SALE_TYPE_IP => Yii::t('hipanel:finance', 'IP'),
-            self::SALE_TYPE_ACCOUNT => Yii::t('hipanel:finance', 'Accounts'),
-            self::SALE_TYPE_CLIENT => Yii::t('hipanel:finance', 'Clients'),
+            self::SALE_TYPE_IP => 'IP',
+            self::SALE_TYPE_ACCOUNT => Yii::t('hipanel:hosting', 'Accounts'),
+            self::SALE_TYPE_CLIENT => Yii::t('hipanel', 'Clients'),
         ];
     }
 }
