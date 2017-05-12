@@ -28,6 +28,6 @@ class LinkToObjectResolver extends Widget
 
     private function getLink()
     {
-        return [$this->links[$this->model->tariff_type], 'id' => $this->model->id];
+        return [$this->links[$this->model->tariff_type], 'id' => $this->model->object_id];
     }
 }
