@@ -59,11 +59,6 @@ class BillForm extends Model
     public $label;
 
     /**
-     * @var  Bill
-     */
-    protected $bill;
-
-    /**
      * @var Charge[]
      */
     public $charges = [];
@@ -77,10 +72,10 @@ class BillForm extends Model
      */
     public static function createFromBill($bill, $scenario)
     {
-        $attributes = $bill->getAttributes(['id', 'client_id', 'currency', 'type', 'sum', 'time', 'quantity', 'label']);
+        $attributes = $bill->getAttributes(['id', 'client_id', 'currency', 'type', 'gtype', 'sum', 'time', 'quantity', 'label']);
 
         $form = new self(['scenario' => $scenario]);
-        $form->setAttributes($attributes);
+        $form->setAttributes($attributes, false);
 
         $form->charges = array_map(function ($model) use ($scenario) {
             $model->scenario = $scenario;
