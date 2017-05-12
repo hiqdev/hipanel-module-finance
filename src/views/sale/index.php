@@ -8,6 +8,14 @@ use yii\helpers\Html;
 $this->title = Yii::t('hipanel:finance:sale', 'Sale');
 $this->params['breadcrumbs'][] = $this->title;
 $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
+$this->registerCss("
+    .sale-flex-cnt {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+");
 
 ?>
 

@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
+use Yii;
 use yii\helpers\Html;
 
 class SaleGridView extends \hipanel\grid\BoxedGridView
@@ -38,11 +39,16 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'enableSorting' => false,
             ],
             'object' => [
-                'format' => 'html',
+                'format' => 'raw',
                 'filterAttribute' => 'object_like',
                 'enableSorting' => false,
                 'value' => function ($model) {
-                    return LinkToObjectResolver::widget(['model' => $model]);
+                    $html = Html::beginTag('div', ['class' => 'sale-flex-cnt']);
+                    $html .= LinkToObjectResolver::widget(['model' => $model]);
+                    $html .= Html::a(Yii::t('hipanel:finance:sale', 'View'), ['@sale/view', 'id' => $model->id], ['class' => 'btn btn-xs btn-default btn-flat']);
+                    $html .= Html::endTag('div');
+
+                    return $html;
                 }
             ],
         ];

@@ -13,6 +13,7 @@ return [
         '@bill' => '/finance/bill',
         '@purse' => '/finance/purse',
         '@tariff' => '/finance/tariff',
+        '@sale' => '/finance/sale',
         '@pay' => '/merchant/pay',
         '@cart' => '/cart/cart',
         '@finance' => '/finance',

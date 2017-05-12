@@ -9,6 +9,10 @@ class LinkToObjectResolver extends Widget
 {
     public $model;
 
+    public $linkOptions = [
+        'class' => 'text-bold',
+    ];
+
     private $links = [
         'ip' => '@ip/view',
         'client' => '@client/view',
@@ -18,7 +22,7 @@ class LinkToObjectResolver extends Widget
 
     public function run()
     {
-        return Html::a($this->getLabel(), $this->getLink());
+        return Html::a($this->getLabel(), $this->getLink(), $this->linkOptions);
     }
 
     private function getLabel()
