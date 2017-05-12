@@ -77,7 +77,7 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
             'modalHeader' => Yii::t('hipanel:finance', 'See new'),
             'buttonLabel' => Yii::t('hipanel:finance', 'See new'),
             'model' => $model,
-            'action' => $this->getSeeNewRoute(),
+            'action' => $this->getRouteForSeeNew(),
             'type' => $this->type,
         ]);
     }
@@ -89,7 +89,7 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
             'modalHeader' => Yii::t('hipanel:finance', 'Confirm document updating'),
             'modalHeaderColor' => 'label-warning',
             'buttonLabel' => Yii::t('hipanel:finance', 'Update'),
-            'action' => $this->getSeeNewRoute(),
+            'action' => $this->getRouteForUpdate(),
             'type' => $this->type,
             'prepend' => implode('', [
                 Html::activeHiddenInput($model, 'type', ['value' => $this->type]),
@@ -101,7 +101,7 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
         ]);
     }
 
-    protected function getSeeNewRoute()
+    protected function getRouteForSeeNew()
     {
         return [
             '@purse/pre-generate-document',
@@ -109,7 +109,7 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
         ];
     }
 
-    protected function getUpdateButtonRoute($model)
+    protected function getRouteForUpdate()
     {
         return ['@purse/generate-and-save-document'];
     }
