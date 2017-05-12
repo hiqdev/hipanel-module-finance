@@ -94,9 +94,8 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
             'prepend' => implode('', [
                 Html::activeHiddenInput($model, 'type', ['value' => $this->type]),
                 Html::beginTag('blockquote', ['class' => 'text-warning']),
-                Yii::t('hipanel:finance', 'Are you sure you want to update document?'),
-                '&nbsp;',
-                Yii::t('hipanel:finance', 'Current document will be substituted with newer version!'),
+                    Html::tag('h5', Yii::t('hipanel:finance', 'Are you sure you want to update document?')),
+                    Html::tag('h5', Yii::t('hipanel:finance', 'Current document will be substituted with newer version!')),
                 Html::endTag('blockquote'),
             ]),
         ]);
