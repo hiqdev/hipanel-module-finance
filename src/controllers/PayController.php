@@ -10,7 +10,6 @@
 
 namespace hipanel\modules\finance\controllers;
 
-use Guzzle\Plugin\ErrorResponse\Exception\ErrorResponseException;
 use hipanel\modules\finance\models\Merchant;
 use hiqdev\hiart\ResponseErrorException;
 use hiqdev\yii2\merchant\transactions\Transaction;

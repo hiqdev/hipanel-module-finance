@@ -19,7 +19,7 @@ use yii\helpers\Html;
 
 class MonthlyDocumentsColumn extends DocumentsColumn
 {
-    protected function getUpdateButtonRoute($model)
+    protected function getRouteForUpdate()
     {
         return ['@purse/generate-and-save-monthly-document'];
     }
