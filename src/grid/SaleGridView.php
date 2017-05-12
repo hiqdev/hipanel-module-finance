@@ -13,10 +13,10 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
         return [
             'tariff' => [
                 'class' => 'hipanel\grid\MainColumn',
-                'filterAttribute' => 'tariff_like',
                 'value' => function ($model) {
                     return Html::a($model->tariff, ['@tariff/view', 'id' => $model->tariff_id]);
-                }
+                },
+                'enableSorting' => false,
             ],
             'time' => [
                 'format' => ['datetime'],
@@ -28,15 +28,19 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'idAttribute' => 'seller_id',
                 'attribute' => 'seller_id',
                 'nameAttribute' => 'seller',
+                'enableSorting' => false,
             ],
             'buyer' => [
                 'class' => ClientColumn::class,
                 'idAttribute' => 'buyer_id',
                 'attribute' => 'buyer_id',
                 'nameAttribute' => 'buyer',
+                'enableSorting' => false,
             ],
             'object' => [
                 'format' => 'html',
+                'filterAttribute' => 'object_like',
+                'enableSorting' => false,
                 'value' => function ($model) {
                     return LinkToObjectResolver::widget(['model' => $model]);
                 }
