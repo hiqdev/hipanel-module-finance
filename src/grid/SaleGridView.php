@@ -45,7 +45,7 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'value' => function ($model) {
                     $html = Html::beginTag('div', ['class' => 'sale-flex-cnt']);
                     $html .= LinkToObjectResolver::widget(['model' => $model]);
-                    $html .= Html::a(Yii::t('hipanel:finance:sale', 'View'), ['@sale/view', 'id' => $model->id], ['class' => 'btn btn-xs btn-default btn-flat']);
+                    $html .= Html::a(Yii::t('hipanel:finance:sale', 'More'), ['@sale/view', 'id' => $model->id], ['class' => 'btn btn-xs btn-default btn-flat']);
                     $html .= Html::endTag('div');
 
                     return $html;
