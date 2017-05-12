@@ -8,12 +8,18 @@ class Sale extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
 
+    const SALE_TYPE_IP = 'ip';
+    const SALE_TYPE_SERVER = 'server';
+    const SALE_TYPE_ACCOUNT = 'account';
+    const SALE_TYPE_CLIENT = 'client';
+
     public function rules()
     {
         return array_merge(parent::rules(), [
             [['id', 'buyer_id', 'seller_id', 'object_id', 'tariff_id'], 'integer'],
             [[
                 'object',
+                'object_like',
                 'seller',
                 'login',
                 'buyer',
@@ -40,10 +46,10 @@ class Sale extends \hipanel\base\Model
     public function getTypes()
     {
         return [
-            'server' => Yii::t('hipanel:finance', 'Servers'),
-            'ip' => Yii::t('hipanel:finance', 'IP'),
-            'account' => Yii::t('hipanel:finance', 'Accounts'),
-            'client' => Yii::t('hipanel:finance', 'Clients'),
+            self::SALE_TYPE_SERVER => Yii::t('hipanel:finance', 'Servers'),
+            self::SALE_TYPE_IP => Yii::t('hipanel:finance', 'IP'),
+            self::SALE_TYPE_ACCOUNT => Yii::t('hipanel:finance', 'Accounts'),
+            self::SALE_TYPE_CLIENT => Yii::t('hipanel:finance', 'Clients'),
         ];
     }
 }
