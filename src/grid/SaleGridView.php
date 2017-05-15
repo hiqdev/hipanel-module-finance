@@ -38,6 +38,17 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'nameAttribute' => 'buyer',
                 'enableSorting' => false,
             ],
+            'object_v' => [
+                'label' => Yii::t('hipanel:finance:sale', 'Object'),
+                'format' => 'html',
+                'value' => function ($model) {
+                    $html = Html::beginTag('div', ['class' => 'sale-flex-cnt']);
+                    $html .= LinkToObjectResolver::widget(['model' => $model]);
+                    $html .= Html::endTag('div');
+
+                    return $html;
+                }
+            ],
             'object' => [
                 'format' => 'raw',
                 'filterAttribute' => 'object_like',
