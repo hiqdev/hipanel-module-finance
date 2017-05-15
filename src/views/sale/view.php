@@ -5,7 +5,7 @@ use hipanel\modules\finance\grid\TariffGridView;
 use yii\helpers\Html;
 
 $this->title = Html::encode($model->object);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Payments'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance:sale', 'Sale'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerCss("
