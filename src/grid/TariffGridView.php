@@ -12,6 +12,7 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\RefColumn;
 use hipanel\grid\XEditableColumn;
+use hipanel\helpers\Url;
 use Yii;
 
 class TariffGridView extends \hipanel\grid\BoxedGridView
@@ -28,6 +29,9 @@ class TariffGridView extends \hipanel\grid\BoxedGridView
             ],
             'note' => [
                 'class' => XEditableColumn::class,
+                'pluginOptions' => [
+                    'url' => Url::to(['@tariff/set-note']),
+                ],
             ],
             'type' => [
                 'class' => RefColumn::class,
