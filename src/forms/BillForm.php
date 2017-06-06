@@ -142,7 +142,7 @@ class BillForm extends Model
         return [
             [['id'], 'integer', 'on' => [self::SCENARIO_UPDATE]],
             [['sum', 'quantity'], 'number', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
-            [['time'], 'date', 'format' => 'php:d.m.Y H:i:s'],
+            [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
             [['label', 'currency', 'type'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['sum'], BillChargesSumValidator::class],
 

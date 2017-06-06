@@ -99,11 +99,11 @@ $form = ActiveForm::begin([
                             'type' => DatePicker::TYPE_COMPONENT_APPEND,
                             'pluginOptions' => [
                                 'autoclose' => true,
-                                'format' => 'dd.mm.yyyy hh:ii:ss',
+                                'format' => 'yyyy-mm-dd hh:ii:ss',
                             ],
                             'options' => [
                                 'value' => Yii::$app->formatter->asDatetime(($model->isNewRecord ? new DateTime() : $model->time),
-                                    'php:d.m.Y H:i:s'),
+                                    'php:Y-m-d H:i:s'),
                             ],
                         ]) ?>
                     </div>
