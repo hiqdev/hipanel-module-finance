@@ -56,7 +56,7 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
                 <?= $page->renderBulkButton(Yii::t('hipanel', 'Copy'), 'copy') ?>
             <?php endif ?>
             <?php if (Yii::$app->user->can('bill.update')) : ?>
-                <?= $page->renderBulkButton(Yii::t('hipanel', 'Update'), 'update') ?>
+                <?= $page->renderBulkButton(Yii::t('hipanel', 'Update'), '@bill/update') ?>
             <?php endif ?>
             <?php if (Yii::$app->user->can('bill.delete')) : ?>
                 <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), 'delete', 'danger') ?>
