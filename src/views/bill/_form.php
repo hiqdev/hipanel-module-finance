@@ -49,136 +49,143 @@ $form = ActiveForm::begin([
     <?php $i = 0; ?>
     <?php foreach ($models as $model) : ?>
         <div class="bill-item">
-            <?php Box::begin() ?>
-            <div class="row input-row margin-bottom">
-                <div class="col-lg-offset-10 col-sm-2 text-right">
-                    <?= Html::activeHiddenInput($model, "[$i]id") ?>
-                    <?php if ($model->isNewRecord) : ?>
-                        <div class="btn-group">
-                            <button type="button" class="add-item btn btn-success btn-sm"><i
-                                        class="glyphicon glyphicon-plus"></i></button>
-                            <button type="button" class="remove-item btn btn-danger btn-sm"><i
-                                        class="glyphicon glyphicon-minus"></i></button>
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">&nbsp;</h3>
+                    <div class="box-tools">
+                        <?php if ($model->isNewRecord) : ?>
+                            <div class="btn-group">
+                                <button type="button" class="add-item btn btn-box-tool">
+                                    <i class="glyphicon glyphicon-plus text-success"></i>
+                                </button>
+                                <button type="button" class="remove-item btn btn-box-tool">
+                                    <i class="glyphicon glyphicon-minus text-danger"></i>
+                                </button>
+                            </div>
+                        <?php endif ?>
+                    </div>
+                </div>
+                <div class="box-body">
+
+                    <div class="row input-row margin-bottom">
+                        <div class="col-lg-offset-10 col-sm-2 text-right">
+                            <?= Html::activeHiddenInput($model, "[$i]id") ?>
                         </div>
-                        <!-- /.btn-group -->
-                    <?php endif ?>
-                </div>
-                <div class="form-instance">
-                    <div class="col-md-2">
-                        <?= $form->field($model, "[$i]client_id")->widget(ClientCombo::class, [
-                            'formElementSelector' => '.form-instance',
-                            'inputOptions' => [
-                                'readonly' => $model->scenario === Bill::SCENARIO_UPDATE,
-                            ],
-                        ]) ?>
-                    </div>
-                    <div class="col-md-2">
-                        <?= $form->field($model, "[$i]type")->dropDownList($billTypes, [
-                            'groups' => $billGroupLabels,
-                            'value' => $model->gtype ? implode(',', [$model->gtype, $model->type]) : null,
-                        ]) ?>
-                    </div>
-                    <div class="col-md-2 <?= AmountWithCurrency::$widgetClass ?>">
-                        <?= $form->field($model, "[$i]sum")->widget(AmountWithCurrency::class, [
-                            'currencyAttributeName' => "[$i]currency",
-                            'currencyAttributeOptions' => [
-                                'items' => $this->context->getCurrencyTypes(),
-                            ],
-                            'inputOptions' => [
-                                'data-bill-sum' => true,
-                            ],
-                        ]) ?>
-                        <?= $form->field($model, "[$i]currency", ['template' => '{input}{error}'])->hiddenInput() ?>
-                    </div>
-                    <div class="col-md-1">
-                        <?= $form->field($model, "[$i]quantity") ?>
-                    </div>
-                    <div class="col-md-2">
-                        <?= $form->field($model, "[$i]time")->widget(DateTimePicker::class, [
-                            'model' => $model,
-                            'type' => DatePicker::TYPE_COMPONENT_APPEND,
-                            'pluginOptions' => [
-                                'autoclose' => true,
-                                'format' => 'yyyy-mm-dd hh:ii:ss',
-                            ],
-                            'options' => [
-                                'value' => Yii::$app->formatter->asDatetime(($model->isNewRecord ? new DateTime() : $model->time),
-                                    'php:Y-m-d H:i:s'),
-                            ],
-                        ]) ?>
-                    </div>
-                    <div class="col-md-3">
-                        <?= $form->field($model, "[$i]label") ?>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row input-row">
-                <?php DynamicFormWidget::begin([
-                    'widgetContainer' => 'bill_charges',
-                    'widgetBody' => '.bill-charges', // required: css class selector
-                    'widgetItem' => '.charge-item', // required: css class
-                    'limit' => 99, // the maximum times, an element can be cloned (default 999)
-                    'min' => ($model->getIsNewRecord() ? 1 : 0),
-                    'insertButton' => '.add-charge',
-                    'deleteButton' => '.remove-charge',
-                    'model' => reset($model->getCharges()),
-                    'formId' => 'dynamic-form',
-                    'formFields' => [
-                        'id',
-                        'type',
-                        'sum',
-                        'label',
-                    ],
-                ]) ?>
-                <div class="bill-charges">
-                    <div class="col-md-12">
-                        <button type="button" class="add-charge btn btn-success btn-sm">
-                            <i class="glyphicon glyphicon-plus"></i> <?= Yii::t('hipanel:finance', 'Detalization') ?>
-                        </button>
-                    </div>
-                    <?php foreach ($model->getCharges() as $j => $charge) : ?>
-                        <div class="charge-item col-md-12">
-                            <div class="row input-row margin-bottom">
-                                <div class="form-instance">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-3">
-                                        <?= $form->field($charge, "[$i][$j]type")->dropDownList($billTypes, [
-                                            'groups' => $billGroupLabels,
-                                            'value' => $charge->ftype,
-                                        ]) ?>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <?= $form->field($charge, "[$i][$j]sum")->textInput([
-                                            'data-attribute' => 'sum',
-                                        ]) ?>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <?= $form->field($charge, "[$i][$j]quantity") ?>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <?= $form->field($charge, "[$i][$j]label") ?>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-1" style="padding-top: 25px;">
-                                    <label>&nbsp;</label>
-                                    <button type="button" class="remove-charge btn btn-danger btn-sm">
-                                        <i class="glyphicon glyphicon-minus"></i>
-                                    </button>
-                                </div>
+                        <div class="form-instance">
+                            <div class="col-md-2">
+                                <?= $form->field($model, "[$i]client_id")->widget(ClientCombo::class, [
+                                    'formElementSelector' => '.form-instance',
+                                    'inputOptions' => [
+                                        'readonly' => $model->scenario === Bill::SCENARIO_UPDATE,
+                                    ],
+                                ]) ?>
+                            </div>
+                            <div class="col-md-2">
+                                <?= $form->field($model, "[$i]type")->dropDownList($billTypes, [
+                                    'groups' => $billGroupLabels,
+                                    'value' => $model->gtype ? implode(',', [$model->gtype, $model->type]) : null,
+                                ]) ?>
+                            </div>
+                            <div class="col-md-2 <?= AmountWithCurrency::$widgetClass ?>">
+                                <?= $form->field($model, "[$i]sum")->widget(AmountWithCurrency::class, [
+                                    'currencyAttributeName' => "[$i]currency",
+                                    'currencyAttributeOptions' => [
+                                        'items' => $this->context->getCurrencyTypes(),
+                                    ],
+                                    'inputOptions' => [
+                                        'data-bill-sum' => true,
+                                    ],
+                                ]) ?>
+                                <?= $form->field($model, "[$i]currency", ['template' => '{input}{error}'])->hiddenInput() ?>
+                            </div>
+                            <div class="col-md-1">
+                                <?= $form->field($model, "[$i]quantity") ?>
+                            </div>
+                            <div class="col-md-2">
+                                <?= $form->field($model, "[$i]time")->widget(DateTimePicker::class, [
+                                    'model' => $model,
+                                    'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                                    'pluginOptions' => [
+                                        'autoclose' => true,
+                                        'format' => 'yyyy-mm-dd hh:ii:ss',
+                                    ],
+                                    'options' => [
+                                        'value' => Yii::$app->formatter->asDatetime(($model->isNewRecord ? new DateTime() : $model->time),
+                                            'php:Y-m-d H:i:s'),
+                                    ],
+                                ]) ?>
+                            </div>
+                            <div class="col-md-3">
+                                <?= $form->field($model, "[$i]label") ?>
                             </div>
                         </div>
-                    <?php endforeach ?>
+                    </div>
+
+                    <div class="row input-row">
+                        <?php DynamicFormWidget::begin([
+                            'widgetContainer' => 'bill_charges',
+                            'widgetBody' => '.bill-charges', // required: css class selector
+                            'widgetItem' => '.charge-item', // required: css class
+                            'limit' => 99, // the maximum times, an element can be cloned (default 999)
+                            'min' => 0,
+                            'insertButton' => '.add-charge',
+                            'deleteButton' => '.remove-charge',
+                            'model' => reset($model->getCharges()),
+                            'formId' => 'dynamic-form',
+                            'formFields' => [
+                                'id',
+                                'type',
+                                'sum',
+                                'label',
+                            ],
+                        ]) ?>
+                        <div class="bill-charges">
+                            <div class="col-md-12 margin-bottom">
+                                <button type="button" class="add-charge btn btn-sm bg-olive btn-flat">
+                                    <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<?= Yii::t('hipanel:finance', 'Detalization') ?>
+                                </button>
+                            </div>
+                            <?php foreach ($model->getCharges() as $j => $charge) : ?>
+                                <div class="charge-item col-md-12">
+                                    <div class="row input-row margin-bottom">
+                                        <div class="form-instance">
+                                            <div class="col-md-4">
+                                                <?= $form->field($charge, "[$i][$j]type")->dropDownList($billTypes, [
+                                                    'groups' => $billGroupLabels,
+                                                    'value' => $charge->ftype,
+                                                ]) ?>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <?= $form->field($charge, "[$i][$j]sum")->textInput([
+                                                    'data-attribute' => 'sum',
+                                                ]) ?>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <?= $form->field($charge, "[$i][$j]quantity") ?>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <?= $form->field($charge, "[$i][$j]label") ?>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-1" style="padding-top: 25px;">
+                                            <label>&nbsp;</label>
+                                            <button type="button" class="remove-charge btn bg-maroon btn-sm btn-flat">
+                                                <i class="glyphicon glyphicon-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach ?>
+                        </div>
+                        <?php DynamicFormWidget::end() ?>
+                    </div>
                 </div>
-                <?php DynamicFormWidget::end() ?>
             </div>
-            <?php Box::end() ?>
         </div>
         <?php $i++ ?>
     <?php endforeach ?>
 </div>
-
 
 <?php $this->registerJs(<<<JS
     $('#dynamic-form').on('change', '.charge-item input[data-attribute=sum]', function () {
@@ -195,8 +202,6 @@ JS
         <?= Html::button(Yii::t('hipanel', 'Cancel'),
             ['class' => 'btn btn-default', 'onclick' => 'history.go(-1)']) ?>
     </div>
-    <!-- /.col-md-12 -->
 </div>
-<!-- /.row -->
 <?php Box::end() ?>
 <?php ActiveForm::end() ?>
