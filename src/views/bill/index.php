@@ -70,7 +70,7 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
                 'dataProvider' => $dataProvider,
                 'filterModel'  => $model,
                 'columns'      => [
-                    'checkbox', 'client_id', 'time', 'sum_editable', 'balance',
+                    'checkbox', 'actions', 'client_id', 'time', 'sum_editable', 'balance',
                     'type_label', 'description',
                 ],
             ]) ?>

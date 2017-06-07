@@ -13,8 +13,10 @@ namespace hipanel\modules\finance\grid;
 use hipanel\grid\CurrencyColumn;
 use hipanel\grid\MainColumn;
 use hipanel\helpers\Url;
+use hipanel\modules\finance\menus\BillActionsMenu;
 use hipanel\modules\finance\widgets\BillTypeFilter;
 use hipanel\widgets\ArraySpoiler;
+use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\helpers\Html;
 
@@ -118,6 +120,10 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             ],
             'tariff' => [
                 'attribute' => 'tariff',
+            ],
+            'actions' => [
+                'class' => MenuColumn::class,
+                'menuClass' => BillActionsMenu::class,
             ],
         ];
     }
