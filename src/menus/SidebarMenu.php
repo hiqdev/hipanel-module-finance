@@ -54,6 +54,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     'sale' => [
                         'label'   => Yii::t('hipanel:finance:sale', 'Sale'),
                         'url'     => ['/finance/sale/index'],
+                        'visible' => $user->can('manage'),
                     ],
                 ],
             ],
