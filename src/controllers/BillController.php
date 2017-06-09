@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\controllers;
 use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartCreateAction;
+use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
@@ -113,7 +114,7 @@ class BillController extends \hipanel\base\CrudController
                 },
             ],
             'delete' => [
-                'class' => SmartPerformAction::class,
+                'class' => SmartDeleteAction::class,
                 'success' => Yii::t('hipanel:finance', 'Payment was deleted successfully'),
             ],
             'requisites' => [
