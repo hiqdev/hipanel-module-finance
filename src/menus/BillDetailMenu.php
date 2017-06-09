@@ -15,7 +15,7 @@ class BillDetailMenu extends \hipanel\menus\AbstractDetailMenu
             'delete' => [
                 'label' => Yii::t('hipanel', 'Delete'),
                 'icon' => 'fa-trash',
-                'url' => ['@bill/view', 'id' => $this->model->id],
+                'url' => ['@bill/delete', 'id' => $this->model->id],
                 'encode' => false,
                 'linkOptions' => [
                     'data' => [
