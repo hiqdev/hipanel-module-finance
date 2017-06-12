@@ -23,10 +23,16 @@ use hipanel\modules\finance\actions\BillManagementAction;
 use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\forms\CurrencyExchangeForm;
 use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\models\BillSearch;
+use hipanel\modules\finance\models\Charge;
+use hipanel\modules\finance\models\ChargeSearch;
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\providers\BillTypesProvider;
+use hiqdev\hiart\ActiveDataProvider;
 use Yii;
+use yii\base\Event;
 use yii\base\Module;
+use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
 
 class BillController extends \hipanel\base\CrudController
@@ -89,6 +95,14 @@ class BillController extends \hipanel\base\CrudController
             ],
             'view' => [
                 'class' => ViewAction::class,
+                'on beforePerform' => function (Event $event) {
+                    /** @var \hipanel\actions\SearchAction $action */
+                    $action = $event->sender;
+                    $dataProvider = $action->getDataProvider();
+                    $dataProvider->query
+                        ->joinWith('charges')
+                        ->andWhere(['with_charges' => true]);
+                },
             ],
             'validate-form' => [
                 'class' => ValidateFormAction::class,
