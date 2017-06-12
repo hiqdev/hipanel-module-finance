@@ -15,7 +15,7 @@ class Charge extends \hiqdev\hiart\ActiveRecord
     {
         return [
             [['id', 'type_id', 'object_id', 'bill_id'], 'integer'],
-            [['type', 'label', 'ftype'], 'safe'],
+            [['type', 'label', 'ftype', 'time', 'type_label', 'currency'], 'safe'],
             [['sum', 'quantity'], 'number'],
 
             [['sum', 'type', 'label', 'quantity'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
@@ -30,6 +30,7 @@ class Charge extends \hiqdev\hiart\ActiveRecord
             'type' => Yii::t('hipanel', 'Type'),
             'quantity' => Yii::t('hipanel', 'Quantity'),
             'label' => Yii::t('hipanel', 'Description'),
+            'time' => Yii::t('hipanel', 'Time'),
         ]);
     }
 
