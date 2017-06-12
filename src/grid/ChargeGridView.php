@@ -55,6 +55,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             'time' => [
                 'format' => 'html',
                 'filter' => false,
+                'enableSorting' => false,
                 'contentOptions' => ['class' => 'text-nowrap'],
                 'value' => function ($model) {
                     list($date, $time) = explode(' ', $model->time, 2);

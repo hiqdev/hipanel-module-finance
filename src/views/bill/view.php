@@ -1,11 +1,12 @@
 <?php
 
 use hipanel\modules\finance\grid\BillGridView;
+use hipanel\modules\finance\grid\ChargeGridView;
 use hipanel\modules\finance\menus\BillDetailMenu;
 use hipanel\widgets\ClientSellerLink;
+use hipanel\widgets\IndexPage;
 use hipanel\widgets\MainDetails;
 use hipanel\widgets\Pjax;
-use yii\helpers\Html;
 
 $this->title = $model->label;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Payments'), 'url' => ['index']];
@@ -18,17 +19,62 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
         <?= MainDetails::widget([
             'title' => $model->gtype_label,
             'icon' => 'fa-money',
-//            'subTitle' => Html::a($model->client, ['@client/view', 'id' => $model->client_id]),
             'subTitle' => ClientSellerLink::widget(['model' => $model]),
             'menu' => BillDetailMenu::widget(['model' => $model], ['linkTemplate' => '<a href="{url}" {linkOptions}><span class="pull-right">{icon}</span>&nbsp;{label}</a>']),
         ]) ?>
         <?= BillGridView::detailView([
             'model' => $model,
             'columns' => [
-                'seller_id',
-                'client_id',
+                'sum_editable',
+                'balance',
+                'type_label',
             ],
         ]) ?>
+        <?= BillGridView::detailView([
+            'model' => $model,
+            'columns' => [
+                'time', 'client_id', 'description',
+            ],
+        ]) ?>
+    </div>
+
+    <div class="col-md-9">
+        <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
+            <?php $page->beginContent('show-actions') ?>
+                <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Detalization') ?></h4>
+            <?php $page->endContent() ?>
+            <?php $page->beginContent('table') ?>
+                <?php $page->beginBulkForm() ?>
+                    <?= ChargeGridView::widget([
+                        'boxed' => false,
+                        'dataProvider' => new \yii\data\ArrayDataProvider([
+                            'allModels' => $model->charges,
+                            'sort'=> [
+                                'defaultOrder' => [
+                                    'id' => SORT_DESC,
+                                    'time' => SORT_DESC,
+                                ],
+                                'attributes' => ['id', 'time'],
+                            ],
+                            'pagination' => [
+                                'pageSize' => 20,
+                            ],
+                        ]),
+                        'filterModel' => $model->charges,
+                        'tableOptions' => [
+                            'class' => 'table table-striped table-bordered'
+                        ],
+                        'columns' => [
+                            'type_label',
+                            'sum',
+                            'quantity',
+                            'label',
+                            'time',
+                        ],
+                    ]) ?>
+                <?php $page->endBulkForm() ?>
+            <?php $page->endContent() ?>
+        <?php $page->end() ?>
     </div>
 
 </div>
