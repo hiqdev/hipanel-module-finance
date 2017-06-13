@@ -116,20 +116,40 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                         Yii::t('hipanel', 'Tariff') . ': ' . Html::a($model->tariff,
                             ['@tariff/view', 'id' => $model->tariff_id]), ['class' => 'pull-right']) : '';
                     $amount = static::billQuantity($model);
-                    $object = $model->object ? implode(':&nbsp;',
-                        [$model->class_label, static::objectLink($model)]) : '';
+                    $object = static::objectTag($model);
 
                     return $tariff . $amount . ' ' . implode('<br>', array_filter([$object, $text]));
                 },
             ],
-            'tariff' => [
+            'tariff_link' => [
                 'attribute' => 'tariff',
+                'format' => 'html',
+                'value' => function ($model) {
+                    return static::tariffLink($model);
+                },
+            ],
+            'object' => [
+                'attribute' => 'object',
+                'format' => 'html',
+                'value' => function ($model) {
+                    return static::objectTag($model);
+                },
             ],
             'actions' => [
                 'class' => MenuColumn::class,
                 'menuClass' => BillActionsMenu::class,
             ],
         ];
+    }
+
+    public static function tariffLink($model)
+    {
+        return Html::a($model->tariff, ['@tariff/view', 'id' => $model->tariff_id]);
+    }
+
+    public static function objectTag($model)
+    {
+        return $model->object ? implode(':&nbsp;', [$model->class_label, static::objectLink($model)]) : '';
     }
 
     /**

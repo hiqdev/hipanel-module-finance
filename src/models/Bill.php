@@ -73,6 +73,7 @@ class Bill extends \hipanel\base\Model
     public function attributeLabels()
     {
         return $this->mergeAttributeLabels([
+            'object' => Yii::t('hipanel', 'Object'),
             'client' => Yii::t('hipanel', 'Client'),
             'time' => Yii::t('hipanel', 'Time'),
             'currency' => Yii::t('hipanel', 'Currency'),
