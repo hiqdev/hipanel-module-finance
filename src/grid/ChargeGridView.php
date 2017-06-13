@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\grid;
 
 
 use hipanel\grid\CurrencyColumn;
+use hipanel\widgets\ArraySpoiler;
 use Yii;
 use yii\helpers\Html;
 
