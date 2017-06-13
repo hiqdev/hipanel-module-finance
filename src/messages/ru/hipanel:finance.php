@@ -34,6 +34,7 @@ return [
     'Sum' => 'Сумма',
     'Amount' => 'Сумма',
     'Currency' => 'Валюта',
+    'Quantity' => 'Количество',
     'Date' => 'Дата',
     'Label' => 'Описание',
     'Create payment' => 'Создать платеж',

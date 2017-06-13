@@ -68,6 +68,10 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     return ['class' => 'text-right' . ($model->sum > 0 ? ' text-bold' : '')];
                 },
             ],
+            'quantity' => [
+                'headerOptions' => ['class' => 'text-right'],
+                'contentOptions' => ['class' => 'text-right text-bold'],
+            ],
             'balance' => [
                 'class' => CurrencyColumn::class,
                 'headerOptions' => ['class' => 'text-right'],

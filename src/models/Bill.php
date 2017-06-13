@@ -76,6 +76,7 @@ class Bill extends \hipanel\base\Model
             'client' => Yii::t('hipanel', 'Client'),
             'time' => Yii::t('hipanel', 'Time'),
             'currency' => Yii::t('hipanel', 'Currency'),
+            'quantity' => Yii::t('hipanel', 'Quantity'),
             'balance' => Yii::t('hipanel', 'Balance'),
             'gtype' => Yii::t('hipanel', 'Type'),
             'gtype_label' => Yii::t('hipanel', 'Type'),

@@ -25,15 +25,15 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
         <?= BillGridView::detailView([
             'model' => $model,
             'columns' => [
-                'sum_editable',
-                'balance',
-                'type_label',
+                'client_id', 'seller_id',
+                'time', 'description',
             ],
         ]) ?>
         <?= BillGridView::detailView([
             'model' => $model,
             'columns' => [
-                'time', 'client_id', 'description',
+                'type_label', 'quantity',
+                'sum_editable', 'balance',
             ],
         ]) ?>
     </div>
