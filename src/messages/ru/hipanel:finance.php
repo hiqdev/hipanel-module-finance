@@ -68,6 +68,8 @@ return [
     'Bill was created successfully' => 'Счёт был успешно создан',
     'Bill was updated successfully' => 'Счёт был успешно изменён',
 
+    'Failed to generate document! Check requisites!' => 'Не удалось сгенерить документ! Проверьте реквизиты!',
+
     // Типы платежей
     'Negative balance correction' => 'Отрицательная корректировка',
     'Positive balance correction' => 'Корректировка',
