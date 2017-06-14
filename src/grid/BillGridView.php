@@ -14,6 +14,7 @@ use hipanel\grid\CurrencyColumn;
 use hipanel\grid\MainColumn;
 use hipanel\helpers\Url;
 use hipanel\modules\finance\logic\bill\BillQuantityFactory;
+use hipanel\modules\finance\logic\bill\BillQuantityInterface;
 use hipanel\modules\finance\menus\BillActionsMenu;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\widgets\BillTypeFilter;
@@ -171,8 +172,12 @@ class BillGridView extends \hipanel\grid\BoxedGridView
      */
     public static function billQuantity($model)
     {
-        $text = (new BillQuantityFactory())->createByType($model->type, $model)->getText();
+        $billQty = (new BillQuantityFactory())->createByType($model->type, $model);
 
-        return Html::tag('nobr', Html::tag('b', $text));
+        if ($billQty and $billQty instanceof BillQuantityInterface) {
+            return Html::tag('nobr', Html::tag('b', $billQty->getText()));
+        }
+
+        return null;
     }
 }

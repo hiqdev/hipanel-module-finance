@@ -22,16 +22,20 @@ class BillQuantityFactory
     /**
      * @param $type
      * @param $model Model
-     * @return Object
+     * @return Object|null
      */
     public function createByType(string $type, Model $model)
     {
-        $className = static::buildClassName($type);
+        if (in_array($type, array_keys($this->types))) {
+            $className = static::buildClassName($type);
 
-        return Yii::createObject([
-            'class' => $className,
-            'model' => $model,
-        ]);
+            return Yii::createObject([
+                'class' => $className,
+                'model' => $model,
+            ]);
+        }
+
+        return null;
     }
 
     /**
