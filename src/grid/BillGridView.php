@@ -13,7 +13,9 @@ namespace hipanel\modules\finance\grid;
 use hipanel\grid\CurrencyColumn;
 use hipanel\grid\MainColumn;
 use hipanel\helpers\Url;
+use hipanel\modules\finance\logic\bill\BillQuantityFactory;
 use hipanel\modules\finance\menus\BillActionsMenu;
+use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\widgets\BillTypeFilter;
 use hipanel\widgets\ArraySpoiler;
 use hiqdev\yii2\menus\grid\MenuColumn;
@@ -130,7 +132,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
 
     /**
      * Creates link to object details page.
-     * @param Model $model
+     * @param Bill $model
      */
     public static function objectLink($model)
     {
@@ -140,30 +142,12 @@ class BillGridView extends \hipanel\grid\BoxedGridView
     }
 
     /**
-     * @param Model $model
+     * @param Bill $model
      * @return null|string
      */
     public static function billQuantity($model)
     {
-        switch ($model->type) {
-            case 'support_time':
-                $text = Yii::t('hipanel:finance', '{quantity, time, HH:mm} hour(s)',
-                    ['quantity' => ceil($model->quantity * 3600)]);
-                break;
-            case 'server_traf_max':
-            case 'backup_du':
-                $text = Yii::$app->formatter->asShortSize($model->quantity * 1024 * 1024 * 1024);
-                break;
-            case 'ip_num':
-                $text = Yii::t('hipanel:finance', '{quantity} IP', ['quantity' => $model->quantity]);
-                break;
-            case 'monthly':
-                $days = ceil($model->quantity * date('t', strtotime($model->time)));
-                $text = Yii::t('hipanel:finance', '{quantity, plural, one{# day} other{# days}}', ['quantity' => $days]);
-                break;
-            default:
-                return null;
-        }
+        $text = (new BillQuantityFactory())->createByType($model->type, $model)->getText();
 
         return Html::tag('nobr', Html::tag('b', $text));
     }
