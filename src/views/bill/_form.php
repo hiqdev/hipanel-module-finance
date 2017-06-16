@@ -121,65 +121,69 @@ $form = ActiveForm::begin([
                         </div>
                     </div>
 
-                    <div class="row input-row">
-                        <?php DynamicFormWidget::begin([
-                            'widgetContainer' => 'bill_charges',
-                            'widgetBody' => '.bill-charges', // required: css class selector
-                            'widgetItem' => '.charge-item', // required: css class
-                            'limit' => 99, // the maximum times, an element can be cloned (default 999)
-                            'min' => 0,
-                            'insertButton' => '.add-charge',
-                            'deleteButton' => '.remove-charge',
-                            'model' => reset($model->getCharges()),
-                            'formId' => 'dynamic-form',
-                            'formFields' => [
-                                'id',
-                                'type',
-                                'sum',
-                                'label',
-                            ],
-                        ]) ?>
-                        <div class="bill-charges">
-                            <div class="col-md-12 margin-bottom">
-                                <button type="button" class="add-charge btn btn-sm bg-olive btn-flat">
-                                    <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<?= Yii::t('hipanel:finance', 'Detalization') ?>
-                                </button>
-                            </div>
-                            <?php foreach ($model->getCharges() as $j => $charge) : ?>
-                                <div class="charge-item col-md-12">
-                                    <div class="row input-row margin-bottom">
-                                        <div class="form-instance">
-                                            <div class="col-md-4">
-                                                <?= $form->field($charge, "[$i][$j]type")->dropDownList($billTypes, [
-                                                    'groups' => $billGroupLabels,
-                                                    'value' => $charge->ftype,
-                                                ]) ?>
+                    <?php $charges = $model->getCharges(); ?>
+                    <?php $charge = reset($charges); ?>
+                    <?php if ($charge) : ?>
+                        <div class="row input-row">
+                            <?php DynamicFormWidget::begin([
+                                'widgetContainer' => 'bill_charges',
+                                'widgetBody' => '.bill-charges', // required: css class selector
+                                'widgetItem' => '.charge-item', // required: css class
+                                'limit' => 99, // the maximum times, an element can be cloned (default 999)
+                                'min' => 0,
+                                'insertButton' => '.add-charge',
+                                'deleteButton' => '.remove-charge',
+                                'model' => $charge,
+                                'formId' => 'dynamic-form',
+                                'formFields' => [
+                                    'id',
+                                    'type',
+                                    'sum',
+                                    'label',
+                                ],
+                            ]) ?>
+                            <div class="bill-charges">
+                                <div class="col-md-12 margin-bottom">
+                                    <button type="button" class="add-charge btn btn-sm bg-olive btn-flat">
+                                        <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<?= Yii::t('hipanel:finance', 'Detalization') ?>
+                                    </button>
+                                </div>
+                                <?php foreach ($charges as $j => $charge) : ?>
+                                    <div class="charge-item col-md-12">
+                                        <div class="row input-row margin-bottom">
+                                            <div class="form-instance">
+                                                <div class="col-md-4">
+                                                    <?= $form->field($charge, "[$i][$j]type")->dropDownList($billTypes, [
+                                                        'groups' => $billGroupLabels,
+                                                        'value' => $charge->ftype,
+                                                    ]) ?>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <?= $form->field($charge, "[$i][$j]sum")->textInput([
+                                                        'data-attribute' => 'sum',
+                                                    ]) ?>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <?= $form->field($charge, "[$i][$j]quantity") ?>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <?= $form->field($charge, "[$i][$j]label") ?>
+                                                </div>
                                             </div>
-                                            <div class="col-md-1">
-                                                <?= $form->field($charge, "[$i][$j]sum")->textInput([
-                                                    'data-attribute' => 'sum',
-                                                ]) ?>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <?= $form->field($charge, "[$i][$j]quantity") ?>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <?= $form->field($charge, "[$i][$j]label") ?>
-                                            </div>
-                                        </div>
 
-                                        <div class="col-md-1" style="padding-top: 25px;">
-                                            <label>&nbsp;</label>
-                                            <button type="button" class="remove-charge btn bg-maroon btn-sm btn-flat">
-                                                <i class="glyphicon glyphicon-minus"></i>
-                                            </button>
+                                            <div class="col-md-1" style="padding-top: 25px;">
+                                                <label>&nbsp;</label>
+                                                <button type="button" class="remove-charge btn bg-maroon btn-sm btn-flat">
+                                                    <i class="glyphicon glyphicon-minus"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            <?php endforeach ?>
+                                <?php endforeach ?>
+                            </div>
+                            <?php DynamicFormWidget::end() ?>
                         </div>
-                        <?php DynamicFormWidget::end() ?>
-                    </div>
+                    <?php endif ?>
                 </div>
             </div>
         </div>
