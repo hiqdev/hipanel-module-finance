@@ -2,7 +2,6 @@
 
 namespace hipanel\modules\finance\logic\bill;
 
-use yii\base\Model;
 use Yii;
 
 /**
@@ -19,15 +18,18 @@ class BillQuantityFactory
         'monthly' => 'MonthlyQuantity',
     ];
 
+    protected $type;
+
     /**
      * @param $type
-     * @param $model Model
+     * @param $model
      * @return Object|null
      */
-    public function createByType(string $type, Model $model)
+    public function createByType(string $type, $model)
     {
-        if (in_array($type, array_keys($this->types))) {
-            $className = static::buildClassName($type);
+        $this->fixType($type);
+        if (in_array($this->type, array_keys($this->types))) {
+            $className = static::buildClassName($this->type);
 
             return Yii::createObject([
                 'class' => $className,
@@ -42,8 +44,16 @@ class BillQuantityFactory
      * @param string $type Tariff type
      * @return string
      */
-    protected function buildClassName($type)
+    protected function buildClassName()
     {
-        return 'hipanel\modules\finance\logic\bill\\' . $this->types[$type];
+        return 'hipanel\modules\finance\logic\bill\\' . $this->types[$this->type];
+    }
+
+    protected function fixType($type)
+    {
+        if (strpos($type, ',') !== false) {
+            $type = end(explode(',', $type));
+        }
+        $this->type = $type;
     }
 }

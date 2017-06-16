@@ -31,4 +31,9 @@ abstract class AbstractBillQuantity implements BillQuantityInterface
     {
         return $this->model->quantity;
     }
+
+    public function getClientValue()
+    {
+        return $this->getValue();
+    }
 }

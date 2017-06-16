@@ -2,6 +2,9 @@
 
 namespace hipanel\modules\finance\forms;
 
+use hipanel\modules\finance\behaviors\BillQuantity;
+use hipanel\modules\finance\logic\bill\BillQuantityFactory;
+use hipanel\modules\finance\logic\bill\BillQuantityInterface;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\validation\BillChargesSumValidator;
@@ -12,6 +15,8 @@ class BillForm extends Model
 {
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
+
+    const EVENT_SHOW_FORM = 'showForm';
 
     /**
      * @var integer
@@ -54,6 +59,11 @@ class BillForm extends Model
     public $quantity;
 
     /**
+     * @var float
+     */
+    public $userQuantity;
+
+    /**
      * @var string
      */
     public $label;
@@ -62,6 +72,15 @@ class BillForm extends Model
      * @var Charge[]
      */
     public $charges = [];
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => BillQuantity::class,
+            ],
+        ];
+    }
 
     /**
      * Creates [[BillForm]] from [[Bill]]
@@ -268,5 +287,18 @@ class BillForm extends Model
     public function afterSave()
     {
         return true;
+    }
+
+    public function getQuantity()
+    {
+        if (!$this->isNewRecord) {
+            $billQty = (new BillQuantityFactory())->createByType($this->type, $this);
+//            $factory = Yii::$app->container->get(BillQuantityFactoryInterface::class); // todo make this
+//            $billQty = $factory->create($this);
+
+            if ($billQty) {
+                return $billQty->getClientValue();
+            }
+        }
     }
 }

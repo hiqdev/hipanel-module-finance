@@ -7,4 +7,6 @@ interface BillQuantityInterface
     public function getText();
 
     public function getValue();
+
+    public function getClientValue();
 }

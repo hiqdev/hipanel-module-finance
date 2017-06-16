@@ -11,8 +11,7 @@ class MonthlyQuantity extends AbstractBillQuantity
      */
     public function getText()
     {
-        $days = ceil($this->model->quantity * $this->getNumberOfDays());
-        $text = Yii::t('hipanel:finance', '{quantity, plural, one{# day} other{# days}}', ['quantity' => $days]);
+        $text = Yii::t('hipanel:finance', '{quantity, plural, one{# day} other{# days}}', ['quantity' => $this->getClientValue()]);
 
         return $text;
     }
@@ -23,6 +22,11 @@ class MonthlyQuantity extends AbstractBillQuantity
     public function getValue()
     {
         return $this->model->quantity / $this->getNumberOfDays();
+    }
+
+    public function getClientValue()
+    {
+        return ceil($this->model->quantity * $this->getNumberOfDays());
     }
 
     /**
