@@ -12,6 +12,8 @@ namespace hipanel\modules\finance\models;
 
 use hipanel\base\ModelTrait;
 use Yii;
+use yii\base\InvalidConfigException;
+use yii\validators\NumberValidator;
 
 /**
  * Class CertificateResource
@@ -42,10 +44,48 @@ class CertificateResource extends Resource
                 return $model->isTypeCorrect();
             },
         ];
-        $rules['create-required-price'] = [['price'], 'required', 'on' => ['create', 'update']];
         $rules[] = [['certificateType'], 'safe'];
+        $rules[] = [['data'], 'validatePrices', 'on' => ['create', 'update']];
 
         return $rules;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getPeriods()
+    {
+        return [
+            1 => Yii::t('hipanel:finance:tariff', '{n, plural, one{# year} other{# years}}', ['n' => 1]),
+            2 => Yii::t('hipanel:finance:tariff', '{n, plural, one{# year} other{# years}}', ['n' => 2]),
+            3 => Yii::t('hipanel:finance:tariff', '{n, plural, one{# year} other{# years}}', ['n' => 3]),
+        ];
+    }
+
+    public function getPriceForPeriod($period)
+    {
+        if (!isset(self::getPeriods()[$period])) {
+            throw new InvalidConfigException('Period ' . $period . ' is not available');
+        }
+
+        return $this->data['prices'][$period];
+    }
+
+    public function validatePrices()
+    {
+        $periods = $this->getPeriods();
+        $validator = new NumberValidator();
+
+        foreach (array_keys($periods) as $period) {
+            $validation = $validator->validate($this->data['prices'][$period]);
+            if ($validation === false) {
+                unset($this->data['prices'][$period]);
+            }
+        }
+
+        $this->data = ['prices' => $this->data['prices']];
+
+        return true;
     }
 
     /**

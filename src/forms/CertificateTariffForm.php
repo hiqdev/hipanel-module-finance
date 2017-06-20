@@ -12,6 +12,7 @@ namespace hipanel\modules\finance\forms;
 
 use hipanel\modules\finance\logic\IntegrityException;
 use hipanel\modules\finance\models\CertificateResource;
+use Yii;
 use yii\web\UnprocessableEntityHttpException;
 
 /**
@@ -36,6 +37,14 @@ class CertificateTariffForm extends AbstractTariffForm
         $this->initTariff();
 
         return true;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getPeriods()
+    {
+        return CertificateResource::getPeriods();
     }
 
     public function setResources($resources)
@@ -79,6 +88,11 @@ class CertificateTariffForm extends AbstractTariffForm
         return array_search($type, $this->certificateTypes, true);
     }
 
+    /**
+     * @param $type
+     * @return CertificateResource[]
+     * @throws IntegrityException
+     */
     public function getTypeResources($type)
     {
         $id = $this->getCertificateTypeId($type);
@@ -110,6 +124,11 @@ class CertificateTariffForm extends AbstractTariffForm
         $this->certificateTypes = $certificateTypes;
     }
 
+    /**
+     * @param $certificateType
+     * @return CertificateResource[]
+     * @throws IntegrityException
+     */
     public function getTypeParentResources($certificateType)
     {
         $id = $this->getCertificateTypeId($certificateType);
@@ -124,7 +143,7 @@ class CertificateTariffForm extends AbstractTariffForm
 
         $types = $resource->getTypes();
         if (count($result) !== count($types)) {
-            throw new IntegrityException('Found ' . count($result) . ' resources for certificate "' . $type . '". Must be exactly ' . count($types));
+            throw new IntegrityException('Found ' . count($result) . ' resources for certificate "' . $certificateType . '". Must be exactly ' . count($types));
         }
 
         // sorts $result by order of $resource->getTypes()

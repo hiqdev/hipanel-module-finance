@@ -29,9 +29,14 @@ use yii\helpers\Html;
             <thead>
             <tr>
                 <th></th>
-                <?php foreach ($model->getResourceTypes() as $type) {
-                    echo Html::tag('th', $type);
-                } ?>
+                <?php foreach ($model->getResourceTypes() as $type) : ?>
+                    <?php foreach ($model->getPeriods() as $period => $periodLabel) : ?>
+                        <?= Html::tag('th', Yii::t('hipanel:finance:tariff', '{op} for {duration}', [
+                            'op' => $type,
+                            'duration' => $periodLabel,
+                        ])); ?>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
             </tr>
             </thead>
             <tbody>
@@ -41,20 +46,21 @@ use yii\helpers\Html;
                 ?>
                 <tr>
                     <td><?= $certificateType ?></td>
-                    <?php foreach ($model->getTypeResources($certificateType) as $type => $resource) {
-                        $baseResources = $model->getTypeParentResources($certificateType); ?>
-                        <td>
-                            <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
-                            <?= Html::activeHiddenInput($resource, "[$i]type") ?>
-                            <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
-                                'resource' => $resource,
-                                'baseResource' => $baseResources[$type],
-                                'activeField' => $form->field($resource, "[$i]price")
-                            ]) ?>
-                        </td>
-
+                    <?php foreach ($model->getTypeResources($certificateType) as $type => $resource) : ?>
+                        <?php $baseResources = $model->getTypeParentResources($certificateType); ?>
+                        <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
+                        <?= Html::activeHiddenInput($resource, "[$i]type") ?>
+                        <?php foreach ($model->getPeriods() as $period => $periodLabel) : ?>
+                            <td>
+                                <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
+                                    'resource' => $resource,
+                                    'baseResource' => $baseResources[$type],
+                                    'activeField' => $form->field($resource, "[$i]data[prices][$period]"),
+                                ]) ?>
+                            </td>
+                        <?php endforeach; ?>
                         <?php ++$i; ?>
-                    <?php } ?>
+                    <?php endforeach; ?>
                 </tr>
                 <?php
             } ?>
