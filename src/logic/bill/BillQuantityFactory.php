@@ -8,7 +8,7 @@ use Yii;
  * Class BillQuantityFactory
  * @package hipanel\modules\finance\logic\bill
  */
-class BillQuantityFactory
+class BillQuantityFactory implements BillQuantityFactoryInterface
 {
     protected $types = [
         'support_time' => 'SupportTimeQuantity',
@@ -55,5 +55,10 @@ class BillQuantityFactory
             $type = end(explode(',', $type));
         }
         $this->type = $type;
+    }
+
+    public function create($model)
+    {
+        return $this->createByType($model->type, $model);
     }
 }
