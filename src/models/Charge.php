@@ -2,10 +2,13 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\modules\finance\logic\bill\QuantityTrait;
 use Yii;
 
 class Charge extends \hiqdev\hiart\ActiveRecord
 {
+    use QuantityTrait;
+
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
 
