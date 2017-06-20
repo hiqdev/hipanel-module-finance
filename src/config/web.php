@@ -120,6 +120,7 @@ return [
         'singletons' => [
             hipanel\modules\finance\providers\BillTypesProvider::class => hipanel\modules\finance\providers\BillTypesProvider::class,
             hiqdev\yii2\merchant\transactions\TransactionRepositoryInterface::class => hipanel\modules\finance\transaction\ApiTransactionRepository::class,
+            hipanel\modules\finance\logic\bill\BillQuantityFactoryInterface::class => hipanel\modules\finance\logic\bill\BillQuantityFactory::class,
         ],
     ],
 ];
