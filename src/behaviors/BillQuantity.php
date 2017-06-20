@@ -3,7 +3,7 @@
 namespace hipanel\modules\finance\behaviors;
 
 use hipanel\modules\finance\logic\bill\BillQuantityFactory;
-use hipanel\modules\finance\logic\bill\BillQuantityInterface;
+use hipanel\modules\finance\models\Charge;
 use yii\behaviors\AttributeBehavior;
 use yii\db\ActiveRecord;
 
@@ -11,7 +11,16 @@ class BillQuantity extends AttributeBehavior
 {
     public $quantityAttribute = 'quantity';
 
-    public $billTypeAttribute = 'type';
+    /**
+     * @var BillQuantityFactory
+     */
+    private $qtyFactory;
+
+    public function __construct($config = [], BillQuantityFactory $qtyFactory)
+    {
+        parent::__construct($config);
+        $this->qtyFactory = $qtyFactory;
+    }
 
     public function events()
     {
@@ -23,10 +32,24 @@ class BillQuantity extends AttributeBehavior
 
     public function transformQuantity()
     {
-        $billQty = (new BillQuantityFactory())->createByType($this->owner->{$this->billTypeAttribute}, $this->owner);
-
-        if ($billQty and $billQty instanceof BillQuantityInterface) {
+        // For Bills
+        if ($billQty = $this->transform($this->owner)) {
             $this->owner->{$this->quantityAttribute} = $billQty->getValue();
         }
+
+        // For Charges
+        if (isset($this->owner->charges) && !empty($this->owner->charges)) {
+            foreach ($this->owner->charges as $k => $data) {
+                $charge = new Charge($data);
+                if ($chargeQty = $this->transform($charge)) {
+                    $this->owner->charges[$k][$this->quantityAttribute] = $chargeQty->getValue();
+                }
+            }
+        }
+    }
+
+    protected function transform($model)
+    {
+        return $this->qtyFactory->create($model);
     }
 }
