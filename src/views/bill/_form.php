@@ -164,7 +164,7 @@ $form = ActiveForm::begin([
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-1">
-                                                    <?= $form->field($charge, "[$i][$j]quantity") ?>
+                                                    <?= $form->field($charge, "[$i][$j]quantity")->input('text', ['value' => $charge->getQuantity()]) ?>
                                                 </div>
                                                 <div class="col-md-5">
                                                     <?= $form->field($charge, "[$i][$j]label") ?>
