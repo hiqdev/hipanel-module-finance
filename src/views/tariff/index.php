@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php Pjax::begin(array_merge(Yii::$app->params['pjax'], ['enablePushState' => true])) ?>
 <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
 
-    <?= $page->setSearchFormData(compact(['types'])) ?>
+    <?php $page->setSearchFormData(compact(['types'])) ?>
 
     <?php $page->beginContent('main-actions') ?>
         <?php if (Yii::$app->user->can('manage')) : ?>
@@ -30,9 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 </a>
                 <?= Dropdown::widget([
                     'items' => [
-                        ['label' => Yii::t('hipanel:finance:tariff', 'Create domain tariff'), 'url' => 'create-domain'],
-                        ['label' => Yii::t('hipanel:finance:tariff', 'Create SSD VDS tariff'), 'url' => 'create-svds'],
-                        ['label' => Yii::t('hipanel:finance:tariff', 'Create OpenVZ tariff'), 'url' => 'create-ovds'],
+                        ['label' => Yii::t('hipanel:finance:tariff', 'Create domain tariff'), 'url' => ['@tariff/create-domain']],
+                        ['label' => Yii::t('hipanel:finance:tariff', 'Create SSD VDS tariff'), 'url' => ['@tariff/create-svds']],
+                        ['label' => Yii::t('hipanel:finance:tariff', 'Create OpenVZ tariff'), 'url' => ['@tariff/create-ovds']],
+                        ['label' => Yii::t('hipanel:finance:tariff', 'Create certificate tariff'), 'url' => ['@tariff/create-certificate']],
                     ],
                 ]) ?>
             </div>

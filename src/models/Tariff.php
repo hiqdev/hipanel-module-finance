@@ -25,6 +25,7 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
     const TYPE_DOMAIN = 'domain';
     const TYPE_XEN = 'svds';
     const TYPE_OPENVZ = 'ovds';
+    const TYPE_CERT = 'certificate';
 
     /**
      * {@inheritdoc}
@@ -48,10 +49,12 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
 
     public function getResources()
     {
-        if ($this->type === self::TYPE_DOMAIN) {
+        if ($this->getGeneralType() === 'domain') {
             return $this->hasMany(DomainResource::class, ['tariff_id' => 'id'])->inverseOf('tariff');
-        } elseif (in_array($this->type, [self::TYPE_XEN, self::TYPE_OPENVZ], true)) {
+        } elseif ($this->getGeneralType() === 'server') {
             return $this->hasMany(ServerResource::class, ['tariff_id' => 'id'])->inverseOf('tariff');
+        } elseif ($this->getGeneralType() === 'certificate') {
+            return $this->hasMany(CertificateResource::class, ['tariff_id' => 'id'])->inverseOf('tariff');
         }
 
         return $this->hasMany(Resource::class, ['tariff_id' => 'id'])->inverseOf('tariff');
@@ -111,6 +114,8 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
     {
         if ($this->type === static::TYPE_DOMAIN) {
             return 'domain';
+        } else if ($this->type === static::TYPE_CERT) {
+            return 'certificate';
         } elseif (in_array($this->type, [static::TYPE_OPENVZ, static::TYPE_XEN], true)) {
             return 'server';
         }

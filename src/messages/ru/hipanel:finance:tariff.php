@@ -18,7 +18,9 @@ return [
     'tariff detailed information' => 'детальная информация о тарифе',
 
     'Create domain tariff' => 'Создать тариф для доменов',
+    'Create certificate tariff' => 'Создать тариф для сертификатов',
     'Update domain tariff' => 'Редактировать тариф для домена',
+    'Update certificate tariff' => 'Редактировать тариф для сертификата',
     'Create SVDS tariff' => 'Создать тариф для SVDS',
     'Create OVDS tariff' => 'Создать тариф для OVDS',
     'Create server tariff' => 'Создать тариф для серверов',

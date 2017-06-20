@@ -10,6 +10,8 @@
 
 namespace hipanel\modules\finance\logic;
 
+use hipanel\models\Ref;
+use hipanel\modules\finance\forms\CertificateTariffForm;
 use hipanel\modules\finance\forms\DomainTariffForm;
 use hipanel\modules\finance\models\Tariff;
 use hiqdev\hiart\ConnectionInterface;
@@ -18,7 +20,12 @@ use Yii;
 use yii\web\NotFoundHttpException;
 use yii\web\UnprocessableEntityHttpException;
 
-class DomainTariffManager extends AbstractTariffManager
+/**
+ * Class CertificateTariffManager
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
+class CertificateTariffManager extends AbstractTariffManager
 {
     /**
      * @var DomainTariffForm
@@ -28,7 +35,7 @@ class DomainTariffManager extends AbstractTariffManager
     /**
      * {@inheritdoc}
      */
-    protected $type = Tariff::TYPE_DOMAIN;
+    protected $type = Tariff::TYPE_CERT;
 
     /**
      * @var ConnectionInterface
@@ -46,11 +53,9 @@ class DomainTariffManager extends AbstractTariffManager
     {
         parent::init();
 
-        if (!Yii::getAlias('@domain', true)) {
-            throw new NotFoundHttpException('Domain module is missing');
+        if (!Yii::getAlias('@certificate', true)) {
+            throw new NotFoundHttpException('Certificate module is missing');
         }
-
-        $this->formOptions['zones'] = $this->getZones();
     }
 
     public function insert()
@@ -84,17 +89,11 @@ class DomainTariffManager extends AbstractTariffManager
     protected function getFormOptions()
     {
         return array_merge([
-            'class' => DomainTariffForm::class,
-            'zones' => $this->getZones(),
+            'class' => CertificateTariffForm::class,
+            'certificateTypes' => Ref::getList('type,certificate', 'hipanel:certificate', [
+                'select' => 'id_label',
+                'mapOptions' => ['from' => 'id']
+            ]),
         ], parent::getFormOptions());
-    }
-
-    /**
-     * @return array
-     */
-    protected function getZones()
-    {
-        $command = $this->connection->createCommand();
-        return $command->perform('getZones', '')->getData();
     }
 }

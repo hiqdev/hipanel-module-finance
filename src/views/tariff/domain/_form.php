@@ -30,47 +30,30 @@ use yii\helpers\Html;
             <tr>
                 <th></th>
                 <?php foreach ($model->getResourceTypes() as $type) {
-    echo Html::tag('th', $type);
-} ?>
+                    echo Html::tag('th', $type);
+                } ?>
             </tr>
             </thead>
             <tbody>
-            <?php
-            $i = 0;
-            foreach ($model->getZones() as $zone => $id) {
-                ?>
+            <?php $i = 0 ?>
+            <?php foreach ($model->getZones() as $zone => $id) : ?>
                 <tr>
                     <td><?= $zone ?></td>
-                    <?php foreach ($model->getZoneResources($zone) as $type => $resource) {
-                    $baseResources = $model->getZoneParentResources($zone); ?>
-                        <td>
-                            <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
-                            <?= Html::activeHiddenInput($resource, "[$i]type") ?>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <?php
-                                    $activeField = $form->field($resource, "[$i]price");
-                                    Html::addCssClass($activeField->options, 'form-group-sm');
-                                    echo $activeField->input('number', [
-                                        'class' => 'form-control price-input',
-                                        'autocomplete' => false,
-                                        'step' => 'any',
-                                    ])->label(false); ?>
-                                </div>
-                                <div class="col-md-6">
-                                    <?= Html::tag('span', '', [
-                                        'class' => 'base-price text-bold',
-                                        'data-original-price' => $baseResources[$type]->price,
-                                    ]); ?>
-                                </div>
-                            </div>
-                        </td>
+                    <?php $baseResources = $model->getZoneParentResources($zone); ?>
+                    <?php foreach ($model->getZoneResources($zone) as $type => $resource) : ?>
+                    <td>
+                        <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
+                        <?= Html::activeHiddenInput($resource, "[$i]type") ?>
 
-                        <?php ++$i;
-                } ?>
+                        <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
+                            'resource' => $resource,
+                            'baseResource' => $baseResources[$type],
+                            'activeField' => $form->field($resource, "[$i]price"),
+                        ]) ?>
+                        <?php ++$i; ?>
+                        <?php endforeach; ?>
                 </tr>
-            <?php 
-            } ?>
+            <?php endforeach; ?>
             </tbody>
         </table>
     </div>
@@ -78,62 +61,39 @@ use yii\helpers\Html;
 <?php Box::end() ?>
 
 <div class="row">
-    <?php
-    $services = $model->getServices();
-    $baseServices = $model->getParentServices();
-    foreach ($services as $service) {
-        ?>
+    <?php $services = $model->getServices(); ?>
+    <?php $baseServices = $model->getParentServices(); ?>
+    <?php foreach ($services as $service) : ?>
         <div class="col-md-3">
-            <?php Box::begin([
-                'title' => $service->name,
-            ]) ?>
+            <?php Box::begin(['title' => $service->name]) ?>
             <table class="table table-condensed">
                 <thead>
                 <tr>
-                    <?php foreach ($service->getOperations() as $operation => $title) {
-                echo Html::tag('td', $title);
-            } ?>
+                    <?php foreach ($service->getOperations() as $operation => $title) : ?>
+                        <?= Html::tag('td', $title) ?>
+                    <?php endforeach; ?>
                 </tr>
                 <tbody>
                 <tr>
-                    <?php foreach ($service->getOperations() as $operation => $title) {
-                $resource = $service->getResource($operation); ?>
+                    <?php foreach ($service->getOperations() as $operation => $title) : ?>
+                        <?php $resource = $service->getResource($operation); ?>
                         <td>
                             <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
                             <?= Html::activeHiddenInput($resource, "[$i]type") ?>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <?php
-
-                                    $activeField = $form->field($resource, "[$i]price");
-                Html::addCssClass($activeField->options, 'form-group-sm');
-                echo $activeField->input('number', [
-                                        'class' => 'form-control price-input',
-                                        'autocomplete' => false,
-                                        'step' => 'any',
-                                    ])->label(false)
-
-                                    ?>
-                                </div>
-                                <div class="col-md-6">
-                                    <?= Html::tag('span', '', [
-                                        'class' => 'base-price text-bold',
-                                        'data-original-price' => $baseServices[$service->type]->getResource($operation)->price,
-                                    ]); ?>
-                                </div>
-                            </div>
+                            <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
+                                'resource' => $resource,
+                                'baseResource' => $baseServices[$service->type]->getResource($operation),
+                                'activeField' => $form->field($resource, "[$i]price"),
+                            ]) ?>
                         </td>
-                        <?php
-                        ++$i;
-            } ?>
+                        <?php ++$i; ?>
+                    <?php endforeach ?>
                 </tr>
                 </tbody>
                 </thead></table>
             <?php Box::end(); ?>
         </div>
-    <?php 
-    } ?>
+    <?php endforeach; ?>
 </div>
 
 
@@ -146,35 +106,3 @@ use yii\helpers\Html;
 </div>
 <?php Box::end() ?>
 <?php ActiveForm::end(); ?>
-
-<?php
-
-$this->registerJs(<<<'JS'
-    $('.price-input').on('change mouseup', function () {
-        var price = parseFloat($(this).val());
-        if (isNaN(price)) return false;
-        
-        var base = $(this).closest('td').find('.base-price');
-        var basePrice = parseFloat(base.attr('data-original-price'));
-        var delta = price - basePrice;
-        
-        if (delta <= -basePrice) {
-            $(this).val('0.01').trigger('change');
-            return false;
-        }
-        
-        base.removeClass('text-success text-danger');
-        
-        base.text(delta.toFixed(2)).addClass(delta >= 0 ? 'text-success' : 'text-danger');
-    });
-
-    $('.price-input').trigger('change');
-JS
-);
-
-$this->registerCss('
-.base-price { font-weight: bold; }
-.form-group.form-group-sm { margin-bottom: 0; }
-');
-
-?>

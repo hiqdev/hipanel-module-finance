@@ -65,23 +65,11 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
                             'value' => $resource->realObjectId(),
                         ]) ?>
                         <?= Html::activeHiddenInput($resource, "[$i]type") ?>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <?php $activeField = $form->field($resource, "[$i]fee"); ?>
-                                <?php Html::addCssClass($activeField->options, 'form-group-sm'); ?>
-                                <?= $activeField->input('number', [
-                                    'class' => 'form-control price-input',
-                                    'autocomplete' => false,
-                                    'step' => 'any',
-                                ])->label(false); ?>
-                            </div>
-                            <div class="col-md-6">
-                                <?= Html::tag('span', '', [
-                                    'class' => 'base-price text-bold',
-                                    'data-original-price' => $baseResource->fee,
-                                ]); ?>
-                            </div>
-                        </div>
+                        <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
+                            'resource' => $resource,
+                            'baseResource' => $baseResource,
+                            'activeField' => $form->field($resource, "[$i]fee"),
+                        ]) ?>
                     </td>
                 </tr>
                 <?php ++$i; ?>
@@ -109,24 +97,11 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
                     <td style="width: 20%">
                         <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
                         <?= Html::activeHiddenInput($resource, "[$i]type") ?>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <?php
-                                $activeField = $form->field($resource, "[$i]fee");
-                                Html::addCssClass($activeField->options, 'form-group-sm');
-                                echo $activeField->input('number', [
-                                    'class' => 'form-control price-input',
-                                    'autocomplete' => false,
-                                    'step' => 'any',
-                                ])->label(false); ?>
-                            </div>
-                            <div class="col-md-6">
-                                <?= Html::tag('span', '', [
-                                    'class' => 'base-price text-bold',
-                                    'data-original-price' => $baseResource->fee,
-                                ]); ?>
-                            </div>
-                        </div>
+                        <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
+                            'resource' => $resource,
+                            'baseResource' => $baseResource,
+                            'activeField' => $form->field($resource, "[$i]fee"),
+                        ]) ?>
                     </td>
                     <td>
                         <div class="row">
@@ -150,23 +125,11 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
                         ?>
                     </td>
                     <td>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <?php $activeField = $form->field($resource, "[$i]price"); ?>
-                                <?php Html::addCssClass($activeField->options, 'form-group-sm'); ?>
-                                <?= $activeField->input('number', [
-                                    'class' => 'form-control price-input',
-                                    'autocomplete' => false,
-                                    'step' => 'any',
-                                ])->label(false); ?>
-                            </div>
-                            <div class="col-md-6">
-                                <?= Html::tag('span', '', [
-                                    'class' => 'base-price text-bold',
-                                    'data-original-price' => $baseResource->price,
-                                ]); ?>
-                            </div>
-                        </div>
+                        <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
+                            'resource' => $resource,
+                            'baseResource' => $baseResource,
+                            'activeField' => $form->field($resource, "[$i]price"),
+                        ]) ?>
                     </td>
                 </tr>
                 <?php ++$i; ?>
@@ -188,37 +151,10 @@ $this->registerJs(<<<'JS'
         var fakeForm = $('<form>').attr({'method': 'get', 'action': formAction}).html(fakeInput).on('submit', function(event) {
             $.pjax.submit(event, '#tariff-pjax-container');
             event.preventDefault();
-        }).trigger('submit');     
+        }).trigger('submit');
     });
-
-    $('.price-input').on('change mouseup', function () {
-        var base = $(this).closest('td').find('.base-price');
-        var price = parseFloat($(this).val());
-        var basePrice = parseFloat(base.attr('data-original-price'));
-        
-        if (isNaN(price)) return false;
-        if (isNaN(basePrice)) basePrice = 0;
-       
-        var delta = price - basePrice;
-        if (delta < -basePrice) {
-            $(this).val('0').trigger('change');
-            return false;
-        }
-        
-        base.removeClass('text-success text-danger')
-            .text(delta.toFixed(2))
-            .addClass(delta >= 0 ? 'text-success' : 'text-danger');
-    });
-
-    $('.price-input').trigger('change');
 JS
 );
 
 Pjax::end();
-
-$this->registerCss('
-.base-price { font-weight: bold; }
-.form-group.form-group-sm { margin-bottom: 0; }
-');
-
 ?>
