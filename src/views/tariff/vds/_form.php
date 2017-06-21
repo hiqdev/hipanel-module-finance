@@ -56,7 +56,6 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
             <tbody>
             <?php $i = 0; ?>
             <?php foreach ($model->getHardwareResources() as $resource) : ?>
-                <?php $baseResource = $model->getParentHardwareResource($resource->object_id); ?>
                 <tr>
                     <td><?= $resource->decorator()->displayTitle() ?></td>
                     <td><?= $resource->decorator()->displayPrepaidAmount() ?></td>
@@ -66,8 +65,7 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
                         ]) ?>
                         <?= Html::activeHiddenInput($resource, "[$i]type") ?>
                         <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
-                            'resource' => $resource,
-                            'baseResource' => $baseResource,
+                            'basePrice' => $model->getParentHardwareResource($resource->object_id)->fee,
                             'activeField' => $form->field($resource, "[$i]fee"),
                         ]) ?>
                     </td>
@@ -91,15 +89,13 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
             </thead>
             <tbody>
             <?php foreach ($model->getOveruseResources() as $resource) : ?>
-                <?php $baseResource = $model->getParentOveruseResource($resource->type_id); ?>
                 <tr>
                     <td><?= $resource->decorator()->displayTitle() ?></td>
                     <td style="width: 20%">
                         <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
                         <?= Html::activeHiddenInput($resource, "[$i]type") ?>
                         <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
-                            'resource' => $resource,
-                            'baseResource' => $baseResource,
+                            'basePrice' => $model->getParentOveruseResource($resource->type_id)->fee,
                             'activeField' => $form->field($resource, "[$i]fee"),
                         ]) ?>
                     </td>
@@ -126,8 +122,7 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
                     </td>
                     <td>
                         <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
-                            'resource' => $resource,
-                            'baseResource' => $baseResource,
+                            'basePrice' => $baseResource->price,
                             'activeField' => $form->field($resource, "[$i]price"),
                         ]) ?>
                     </td>

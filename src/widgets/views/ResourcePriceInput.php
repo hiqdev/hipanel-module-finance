@@ -5,8 +5,7 @@ use yii\web\View;
 
 /**
  * @var View $this
- * @var \hipanel\modules\finance\models\CertificateResource $resource
- * @var \hipanel\modules\finance\models\CertificateResource $baseResource
+ * @var float $basePrice
  * @var \yii\widgets\ActiveField $activeField
  */
 
@@ -25,7 +24,7 @@ use yii\web\View;
     <div class="col-md-6">
         <?= Html::tag('span', '', [
             'class' => 'base-price text-bold',
-            'data-original-price' => $baseResource->{Html::getAttributeName($activeField->attribute)},
+            'data-original-price' => $basePrice,
         ]); ?>
     </div>
 </div>

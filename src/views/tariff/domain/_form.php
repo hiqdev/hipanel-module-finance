@@ -46,8 +46,7 @@ use yii\helpers\Html;
                         <?= Html::activeHiddenInput($resource, "[$i]type") ?>
 
                         <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
-                            'resource' => $resource,
-                            'baseResource' => $baseResources[$type],
+                            'basePrice' => $baseResources[$type]->price,
                             'activeField' => $form->field($resource, "[$i]price"),
                         ]) ?>
                         <?php ++$i; ?>
@@ -81,8 +80,7 @@ use yii\helpers\Html;
                             <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
                             <?= Html::activeHiddenInput($resource, "[$i]type") ?>
                             <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
-                                'resource' => $resource,
-                                'baseResource' => $baseServices[$service->type]->getResource($operation),
+                                'basePrice' => $baseServices[$service->type]->getResource($operation)->price,
                                 'activeField' => $form->field($resource, "[$i]price"),
                             ]) ?>
                         </td>

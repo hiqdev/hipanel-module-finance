@@ -16,7 +16,11 @@ use hipanel\modules\finance\models\decorators\server\ServerResourceDecoratorFact
 use Yii;
 
 /**
- * Class DomainResource.
+ * Class ServerResource
+ *
+ * @property float fee
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
 class ServerResource extends Resource
 {

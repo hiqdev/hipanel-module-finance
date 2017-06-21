@@ -16,11 +16,14 @@ Box::begin() ?>
             <tr>
                 <th></th>
                 <?php foreach ($model->getResourceTypes() as $type) : ?>
+                    <th style="text-align: center" colspan="<?= count($model->getPeriods()) ?>"><?= $type ?></th>
+                <?php endforeach; ?>
+            </tr>
+            <tr>
+                <th></th>
+                <?php foreach ($model->getResourceTypes() as $type) : ?>
                     <?php foreach ($model->getPeriods() as $period => $periodLabel) : ?>
-                        <?= Html::tag('th', Yii::t('hipanel:finance:tariff', '{op} for {duration}', [
-                            'op' => $type,
-                            'duration' => $periodLabel,
-                        ])); ?>
+                        <?= Html::tag('th', $periodLabel); ?>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
             </tr>

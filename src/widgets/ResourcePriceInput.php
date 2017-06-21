@@ -6,8 +6,7 @@ use yii\base\Widget;
 
 class ResourcePriceInput extends Widget
 {
-    public $resource = [];
-    public $baseResource = [];
+    public $basePrice = 0;
     public $activeField;
 
     public function run()
@@ -15,8 +14,7 @@ class ResourcePriceInput extends Widget
         $this->registerClientScript();
 
         return $this->render('ResourcePriceInput', [
-            'resource' => $this->resource,
-            'baseResource' => $this->baseResource,
+            'basePrice' => $this->basePrice,
             'activeField' => $this->activeField,
         ]);
     }

@@ -30,7 +30,7 @@ class CertificateResource extends Resource
     }
 
     const TYPE_CERT_REGISTRATION = 'certificate_purchase';
-    const TYPE_CERT_RENEW = 'certificate_renew';
+    const TYPE_CERT_RENEWAL = 'certificate_renewal';
 
     public function rules()
     {
@@ -68,7 +68,7 @@ class CertificateResource extends Resource
             throw new InvalidConfigException('Period ' . $period . ' is not available');
         }
 
-        return $this->data['prices'][$period];
+        return (float)$this->data['prices'][$period];
     }
 
     public function validatePrices()
@@ -95,7 +95,7 @@ class CertificateResource extends Resource
     {
         return [
             static::TYPE_CERT_REGISTRATION => Yii::t('hipanel:finance:tariff', 'Registration'),
-            static::TYPE_CERT_RENEW => Yii::t('hipanel:finance:tariff', 'Renewal'),
+            static::TYPE_CERT_RENEWAL => Yii::t('hipanel:finance:tariff', 'Renewal'),
         ];
     }
 }

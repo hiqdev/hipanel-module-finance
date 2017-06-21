@@ -72,4 +72,6 @@ return [
     'Used' => 'Использован',
 
     'hour' => 'час',
+    '{n, plural, one{# year} other{# years}}' => '{n, plural, one{# год} few{# года} many{# лет} other{# лет}}',
+    '{operation} for {duration}' => '{operation} на {duration}',
 ];

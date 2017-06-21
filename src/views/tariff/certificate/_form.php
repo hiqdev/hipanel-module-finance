@@ -31,8 +31,8 @@ use yii\helpers\Html;
                 <th></th>
                 <?php foreach ($model->getResourceTypes() as $type) : ?>
                     <?php foreach ($model->getPeriods() as $period => $periodLabel) : ?>
-                        <?= Html::tag('th', Yii::t('hipanel:finance:tariff', '{op} for {duration}', [
-                            'op' => $type,
+                        <?= Html::tag('th', Yii::t('hipanel:finance:tariff', '{operation} for {duration}', [
+                            'operation' => $type,
                             'duration' => $periodLabel,
                         ])); ?>
                     <?php endforeach; ?>
@@ -53,8 +53,7 @@ use yii\helpers\Html;
                         <?php foreach ($model->getPeriods() as $period => $periodLabel) : ?>
                             <td>
                                 <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
-                                    'resource' => $resource,
-                                    'baseResource' => $baseResources[$type],
+                                    'basePrice' => $baseResources[$type]->getPriceForPeriod($period),
                                     'activeField' => $form->field($resource, "[$i]data[prices][$period]"),
                                 ]) ?>
                             </td>
