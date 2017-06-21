@@ -24,7 +24,7 @@ return [
         ],
         'cart' => [
             'class' => \hiqdev\yii2\cart\Module::class,
-            'termsPage' => (isset($params['organizationUrl']) ? $params['organizationUrl'] : '/') . 'rules',
+            'termsPage' => (isset($params['organizationUrl']) ? $params['organizationUrl'] : ''),
             'orderPage' => '/finance/cart/select',
             /*'orderButton'    => function ($module) {
                 return Yii::$app->getView()->render('@hipanel/modules/finance/views/cart/order-button', [
