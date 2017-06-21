@@ -106,7 +106,7 @@ abstract class AbstractTariffManager extends Object
             return [$this->tariff->parent_id];
         }
 
-        throw new NotFoundHttpException('No available tariffs found');
+        return [$this->tariff->id];
     }
 
     public function getType()
