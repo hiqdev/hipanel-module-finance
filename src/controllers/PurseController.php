@@ -91,13 +91,13 @@ class PurseController extends \hipanel\base\CrudController
 
     public function actionPreGenerateDocument($type)
     {
-        $purse = new Purse();
+        $purse = new Purse(['scenario' => 'generate-and-save-monthly-document']);
         if ($purse->load(Yii::$app->request->post()) && $purse->validate()) {
             return $this->redirect([
                 '@purse/generate-monthly-document',
                 'id' => $purse->id,
                 'type' => $type,
-                'month' => $purse->month
+                'month' => $purse->month,
             ]);
         }
     }
