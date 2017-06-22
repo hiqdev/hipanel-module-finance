@@ -31,7 +31,7 @@ class CertificateResource extends Resource
         return 'resource';
     }
 
-    const TYPE_CERT_REGISTRATION = 'certificate_purchase';
+    const TYPE_CERT_PURCHASE = 'certificate_purchase';
     const TYPE_CERT_RENEWAL = 'certificate_renewal';
 
     public function rules()
@@ -96,7 +96,7 @@ class CertificateResource extends Resource
     public function getTypes()
     {
         return [
-            static::TYPE_CERT_REGISTRATION => Yii::t('hipanel:finance:tariff', 'Registration'),
+            static::TYPE_CERT_PURCHASE => Yii::t('hipanel:finance:tariff', 'Registration'),
             static::TYPE_CERT_RENEWAL => Yii::t('hipanel:finance:tariff', 'Renewal'),
         ];
     }
