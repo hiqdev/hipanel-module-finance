@@ -24,6 +24,8 @@ class CertificateResource extends Resource
 {
     use ModelTrait;
 
+    public $certificateType;
+
     public static function tableName()
     {
         return 'resource';
