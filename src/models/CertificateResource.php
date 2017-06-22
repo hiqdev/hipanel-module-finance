@@ -96,7 +96,7 @@ class CertificateResource extends Resource
     public function getTypes()
     {
         return [
-            static::TYPE_CERT_PURCHASE => Yii::t('hipanel:finance:tariff', 'Registration'),
+            static::TYPE_CERT_PURCHASE => Yii::t('hipanel:finance:tariff', 'Purchase'),
             static::TYPE_CERT_RENEWAL => Yii::t('hipanel:finance:tariff', 'Renewal'),
         ];
     }
