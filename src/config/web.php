@@ -116,6 +116,8 @@ return [
                     'class' => \hipanel\modules\finance\behaviors\PayButtonCommentBehavior::class,
                 ]
             ],
+            \hipanel\modules\finance\logic\ServerTariffCalculatorInterface::class => \hipanel\modules\finance\logic\CalculatorInterface::class,
+            \hipanel\modules\finance\logic\CalculatorInterface::class => \hipanel\modules\finance\logic\Calculator::class
         ],
         'singletons' => [
             hipanel\modules\finance\providers\BillTypesProvider::class => hipanel\modules\finance\providers\BillTypesProvider::class,

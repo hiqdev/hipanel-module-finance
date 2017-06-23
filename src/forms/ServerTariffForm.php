@@ -11,10 +11,12 @@
 namespace hipanel\modules\finance\forms;
 
 use hipanel\helpers\ArrayHelper;
+use hipanel\modules\finance\logic\ServerTariffCalculatorInterface;
 use hipanel\modules\finance\models\ServerResource;
+use Yii;
 use yii\web\UnprocessableEntityHttpException;
 
-class VdsTariffForm extends AbstractTariffForm
+class ServerTariffForm extends AbstractTariffForm
 {
     public $note;
     public $label;
@@ -46,12 +48,11 @@ class VdsTariffForm extends AbstractTariffForm
             return $model->isHardwareTypeCorrect();
         });
 
-        if (empty($resources)) {
+        if (empty($result)) {
             return [];
         }
 
         $order = array_keys(reset($resources)->getHardwareTypes());
-
         return $this->sortResourcesByDefinedOrder($resources, $order, 'model_type');
     }
 
@@ -85,6 +86,7 @@ class VdsTariffForm extends AbstractTariffForm
             /** @var ServerResource $model */
             return $model->isTypeCorrect();
         });
+
         if (empty($resources)) {
             return [];
         }
@@ -135,5 +137,23 @@ class VdsTariffForm extends AbstractTariffForm
         $this->_resources = $result;
 
         return $this;
+    }
+
+    protected function calculator()
+    {
+        if (!isset($this->_calculator)) {
+            $this->_calculator = Yii::createObject(ServerTariffCalculatorInterface::class, [[$this->tariff]]);
+        }
+
+        return $this->_calculator;
+    }
+
+    protected function parentCalculator()
+    {
+        if (!isset($this->_parentCalculator)) {
+            $this->_parentCalculator = Yii::createObject(ServerTariffCalculatorInterface::class, [[$this->parentTariff]]);
+        }
+
+        return $this->_parentCalculator;
     }
 }

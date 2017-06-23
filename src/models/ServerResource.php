@@ -43,6 +43,7 @@ class ServerResource extends Resource
     const TYPE_SERVER_TRAF_MAX = 'server_traf_max';
     const TYPE_SERVER_TRAF95_MAX = 'server_traf95_max';
     const TYPE_BACKUP_DU = 'backup_du';
+    const TYPE_MONTHLY = 'monthly';
 
     public function rules()
     {
@@ -82,6 +83,7 @@ class ServerResource extends Resource
     public function getTypes()
     {
         return [
+            static::TYPE_MONTHLY => Yii::t('hipanel:finance:tariff', 'Monthly fee'),
             static::TYPE_ISP5 => Yii::t('hipanel:finance:tariff', 'ISP Manager 5'),
             static::TYPE_ISP => Yii::t('hipanel:finance:tariff', 'ISP Manager'),
             static::TYPE_SUPPORT_TIME => Yii::t('hipanel:finance:tariff', 'Support time'),
@@ -90,6 +92,15 @@ class ServerResource extends Resource
             static::TYPE_SERVER_TRAF95_MAX => Yii::t('hipanel:finance:tariff', '95 percentile traffic'),
             static::TYPE_BACKUP_DU => Yii::t('hipanel:finance:tariff', 'Backup disk usage'),
         ];
+    }
+
+    public function getMinimumQuantity()
+    {
+        $types = [
+            static::TYPE_MONTHLY => 0,
+        ];
+
+        return isset($types[$this->type]) ? $types[$this->type] : 0.01;
     }
 
     /**

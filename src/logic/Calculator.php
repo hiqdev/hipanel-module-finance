@@ -15,7 +15,12 @@ use hipanel\modules\finance\models\Calculation;
 use yii\base\Model;
 use yii\web\UnprocessableEntityHttpException;
 
-class Calculator
+/**
+ * Class Calculator performs prices calculation for the [[models]]
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
+class Calculator implements CalculatorInterface, ServerTariffCalculatorInterface
 {
     /**
      * @var Model[]|CalculableModelInterface[]

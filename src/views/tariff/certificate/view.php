@@ -40,7 +40,10 @@ Box::begin() ?>
                             <td>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <?= Yii::$app->formatter->asCurrency($resource->getPriceForPeriod($period), $resource->currency) ?>
+                                        <?= \hipanel\modules\finance\widgets\ResourcePriceWidget::widget([
+                                            'price' => $resource->getPriceForPeriod($period),
+                                            'currency' => $resource->currency
+                                        ]) ?>
                                     </div>
                                     <div class="col-md-6">
                                         <?= PriceDifferenceWidget::widget([

@@ -30,7 +30,10 @@ Box::begin() ?>
                         <td>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <?= Yii::$app->formatter->asCurrency($resource->price, $resource->currency) ?>
+                                    <?= \hipanel\modules\finance\widgets\ResourcePriceWidget::widget([
+                                        'price' => $resource->price,
+                                        'currency' => $resource->currency
+                                    ]) ?>
                                 </div>
                                 <div class="col-md-6">
                                     <?= PriceDifferenceWidget::widget([
@@ -71,7 +74,9 @@ Box::begin() ?>
                         <td>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <?= Yii::$app->formatter->asCurrency($resource->price, $resource->currency) ?>
+                                    <?= Yii::$app->formatter->asCurrency($resource->price, $resource->currency, [
+                                        NumberFormatter::MAX_FRACTION_DIGITS => 4
+                                    ]) ?>
                                 </div>
                                 <div class="col-md-6">
                                     <?= PriceDifferenceWidget::widget([

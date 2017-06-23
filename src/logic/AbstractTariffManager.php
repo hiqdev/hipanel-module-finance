@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\logic;
 use hipanel\modules\finance\forms\AbstractTariffForm;
 use hipanel\modules\finance\models\Tariff;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\base\Object;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
@@ -54,6 +55,10 @@ abstract class AbstractTariffManager extends Object
 
     public function init()
     {
+        if (!isset($this->type)) {
+            throw new InvalidConfigException('Property "type" must be set');
+        }
+
         $this->fillParentTariffs();
         $this->buildForm();
     }

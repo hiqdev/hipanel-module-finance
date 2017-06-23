@@ -294,11 +294,9 @@ abstract class AbstractTariffForm extends \yii\base\Model
      */
     protected function calculator()
     {
-        if (isset($this->_calculator)) {
-            return $this->_calculator;
+        if (!isset($this->_calculator)) {
+            $this->_calculator = new Calculator([$this->tariff]);
         }
-
-        $this->_calculator = new Calculator([$this->tariff]);
 
         return $this->_calculator;
     }
@@ -323,11 +321,9 @@ abstract class AbstractTariffForm extends \yii\base\Model
      */
     protected function parentCalculator()
     {
-        if (isset($this->_parentCalculator)) {
-            return $this->_parentCalculator;
+        if (!isset($this->_parentCalculator)) {
+            $this->_parentCalculator = new Calculator([$this->parentTariff]);
         }
-
-        $this->_parentCalculator = new Calculator([$this->parentTariff]);
 
         return $this->_parentCalculator;
     }

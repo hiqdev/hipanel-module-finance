@@ -7,6 +7,7 @@ use yii\web\View;
  * @var View $this
  * @var float $basePrice
  * @var \yii\widgets\ActiveField $activeField
+ * @var float $minPrice
  */
 
 ?>
@@ -19,6 +20,9 @@ use yii\web\View;
             'class' => 'form-control price-input',
             'autocomplete' => false,
             'step' => 'any',
+            'data' => [
+                'min-price' => $minPrice
+            ]
         ])->label(false); ?>
     </div>
     <div class="col-md-6">

@@ -2,7 +2,7 @@
 
 /**
  * @var \yii\web\View
- * @var $model \hipanel\modules\finance\forms\VdsTariffForm
+ * @var $model \hipanel\modules\finance\forms\ServerTariffForm
  */
 use hipanel\helpers\Url;
 use hipanel\widgets\Box;
@@ -14,7 +14,9 @@ use yii\helpers\Html;
 
 <?php
 Pjax::begin(['id' => 'tariff-pjax-container']);
-$form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
+$form = ActiveForm::begin(['id' => 'tariff-create-form']);
+$i = 0;
+?>
 
 <?php Box::begin(['options' => ['class' => 'box-solid']]) ?>
 <div class="row">
@@ -43,39 +45,40 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
 <?php Box::end() ?>
 
 <div class="row">
-    <div class="col-md-4">
-        <?php Box::begin(['title' => Yii::t('hipanel:finance:tariff', 'Hardware')]) ?>
-        <table class="table table-condensed">
-            <thead>
-            <tr>
-                <th><?= Yii::t('hipanel:finance:tariff', 'Resource') ?></th>
-                <th><?= Yii::t('hipanel:finance:tariff', 'Model') ?></th>
-                <th><?= Yii::t('hipanel:finance:tariff', 'Price per period') ?></th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php $i = 0; ?>
-            <?php foreach ($model->getHardwareResources() as $resource) : ?>
+    <?php if (!empty($model->getHardwareResources())) : ?>
+        <div class="col-md-4">
+            <?php Box::begin(['title' => Yii::t('hipanel:finance:tariff', 'Hardware')]) ?>
+            <table class="table table-condensed">
+                <thead>
                 <tr>
-                    <td><?= $resource->decorator()->displayTitle() ?></td>
-                    <td><?= $resource->decorator()->displayPrepaidAmount() ?></td>
-                    <td>
-                        <?= Html::activeHiddenInput($resource, "[$i]object_id", [
-                            'value' => $resource->realObjectId(),
-                        ]) ?>
-                        <?= Html::activeHiddenInput($resource, "[$i]type") ?>
-                        <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
-                            'basePrice' => $model->getParentHardwareResource($resource->object_id)->fee,
-                            'activeField' => $form->field($resource, "[$i]fee"),
-                        ]) ?>
-                    </td>
+                    <th><?= Yii::t('hipanel:finance:tariff', 'Resource') ?></th>
+                    <th><?= Yii::t('hipanel:finance:tariff', 'Model') ?></th>
+                    <th><?= Yii::t('hipanel:finance:tariff', 'Price per period') ?></th>
                 </tr>
-                <?php ++$i; ?>
-            <?php endforeach ?>
-            </tbody>
-        </table>
-        <?php Box::end() ?>
-    </div>
+                </thead>
+                <tbody>
+                <?php foreach ($model->getHardwareResources() as $resource) : ?>
+                    <tr>
+                        <td><?= $resource->decorator()->displayTitle() ?></td>
+                        <td><?= $resource->decorator()->displayPrepaidAmount() ?></td>
+                        <td>
+                            <?= Html::activeHiddenInput($resource, "[$i]object_id", [
+                                'value' => $resource->realObjectId(),
+                            ]) ?>
+                            <?= Html::activeHiddenInput($resource, "[$i]type") ?>
+                            <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
+                                'basePrice' => $model->getParentHardwareResource($resource->object_id)->fee,
+                                'activeField' => $form->field($resource, "[$i]fee"),
+                            ]) ?>
+                        </td>
+                    </tr>
+                    <?php $i++; ?>
+                <?php endforeach ?>
+                </tbody>
+            </table>
+            <?php Box::end() ?>
+        </div>
+    <?php endif ?>
     <div class="col-md-8">
         <?php Box::begin(['title' => Yii::t('hipanel:finance:tariff', 'Resources')]) ?>
         <table class="table table-condensed">
@@ -96,8 +99,8 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
                         <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
                         <?= Html::activeHiddenInput($resource, "[$i]type") ?>
                         <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
-                            'basePrice' => $baseResource->fee,
-                            'activeField' => $form->field($resource, "[$i]fee"),
+                            'basePrice' => floatval($baseResource->fee),
+                            'activeField' => $form->field($resource, "[$i]fee")
                         ]) ?>
                     </td>
                     <td>
@@ -114,7 +117,7 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
                             <div class="col-md-6">
                                 <?= Html::tag('span', '', [
                                     'class' => 'base-price text-bold',
-                                    'data-original-price' => $baseResource->decorator()->getPrepaidQuantity(),
+                                    'data-original-price' => 0//$baseResource->decorator()->getPrepaidQuantity(),
                                 ]); ?>
                             </div>
                         </div>
@@ -128,7 +131,7 @@ $form = ActiveForm::begin(['id' => 'tariff-create-form']) ?>
                         ]) ?>
                     </td>
                 </tr>
-                <?php ++$i; ?>
+                <?php $i++; ?>
             <?php endforeach; ?>
             </tbody>
         </table>

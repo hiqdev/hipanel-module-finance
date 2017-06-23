@@ -8,6 +8,7 @@ class ResourcePriceInput extends Widget
 {
     public $basePrice = 0;
     public $activeField;
+    public $minPrice = 0.01;
 
     public function run()
     {
@@ -16,6 +17,7 @@ class ResourcePriceInput extends Widget
         return $this->render('ResourcePriceInput', [
             'basePrice' => $this->basePrice,
             'activeField' => $this->activeField,
+            'minPrice' => $this->minPrice
         ]);
     }
 
@@ -25,13 +27,13 @@ class ResourcePriceInput extends Widget
             $('.price-input').on('change mouseup', function () {
                 var price = parseFloat($(this).val());
                 if (isNaN(price)) return false;
+                var base = $(this).closest('td').find('.base-price'),
+                    basePrice = parseFloat(base.attr('data-original-price')),
+                    minValue = parseFloat($(this).attr('data-min-price')),
+                    delta = price - basePrice;
                 
-                var base = $(this).closest('td').find('.base-price');
-                var basePrice = parseFloat(base.attr('data-original-price'));
-                var delta = price - basePrice;
-                
-                if (delta <= -basePrice) {
-                    $(this).val('0.01').trigger('change');
+                if (delta <= -basePrice && basePrice > 0) {
+                    $(this).val(minValue).trigger('change');
                     return false;
                 }
                 

@@ -113,7 +113,7 @@ class DomainTariffForm extends AbstractTariffForm
             }
         }
 
-        if (count($result) === 0) {
+        if (empty($result)) {
             return [];
         }
 
@@ -140,7 +140,7 @@ class DomainTariffForm extends AbstractTariffForm
             }
         }
 
-        if (count($result) === 0) {
+        if (empty($result)) {
             return [];
         }
 

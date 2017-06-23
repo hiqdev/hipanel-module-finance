@@ -25,6 +25,7 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
     const TYPE_DOMAIN = 'domain';
     const TYPE_XEN = 'svds';
     const TYPE_OPENVZ = 'ovds';
+    const TYPE_SERVER = 'server';
     const TYPE_CERT = 'certificate';
 
     /**
@@ -116,7 +117,7 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
             return 'domain';
         } else if ($this->type === static::TYPE_CERT) {
             return 'certificate';
-        } elseif (in_array($this->type, [static::TYPE_OPENVZ, static::TYPE_XEN], true)) {
+        } elseif (in_array($this->type, [static::TYPE_OPENVZ, static::TYPE_XEN, static::TYPE_SERVER], true)) {
             return 'server';
         }
 
