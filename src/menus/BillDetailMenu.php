@@ -24,6 +24,7 @@ class BillDetailMenu extends \hipanel\menus\AbstractDetailMenu
                         'pjax' => '0',
                     ],
                 ],
+                'visible' => Yii::$app->user->can('bill.delete'),
             ],
         ]);
         unset($items['view']);
