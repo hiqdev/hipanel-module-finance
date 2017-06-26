@@ -38,7 +38,7 @@ class ApiTransactionRepository implements TransactionRepositoryInterface
         try {
             $data = $this->connection->callWithDisabledAuth(function () use ($id) {
                 return $this->connection->createCommand()->perform('merchantTransactionGet', null, ['id' => $id]);
-            });
+            })->getData();
         } catch (ResponseErrorException $e) {
             throw new TransactionException('Failed to get transaction information');
         }
