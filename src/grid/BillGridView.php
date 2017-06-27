@@ -172,7 +172,8 @@ class BillGridView extends \hipanel\grid\BoxedGridView
      */
     public static function billQuantity($model)
     {
-        $billQty = (new BillQuantityFactory())->createByType($model->type, $model);
+        $factory = Yii::$container->get(BillQuantityFactory::class);
+        $billQty = $factory->createByType($model->type, $model);
 
         if ($billQty and $billQty instanceof BillQuantityInterface) {
             return Html::tag('nobr', Html::tag('b', $billQty->getText()));

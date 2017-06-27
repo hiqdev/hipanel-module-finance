@@ -8,7 +8,7 @@ use hipanel\widgets\IndexPage;
 use hipanel\widgets\MainDetails;
 use hipanel\widgets\Pjax;
 
-$this->title = $model->label;
+$this->title = $model->label ?: '&nbsp;';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Payments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -58,7 +58,7 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
                                 'attributes' => ['id', 'time'],
                             ],
                             'pagination' => [
-                                'pageSize' => 20,
+                                'pageSize' => 50,
                             ],
                         ]),
                         'filterModel' => $model->charges,
@@ -66,11 +66,8 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
                             'class' => 'table table-striped table-bordered'
                         ],
                         'columns' => [
-                            'type_label',
-                            'sum',
-                            'quantity',
-                            'label',
-                            'time',
+                            'type_label', 'label',
+                            'quantity', 'sum', 'time',
                         ],
                     ]) ?>
                 <?php $page->endBulkForm() ?>

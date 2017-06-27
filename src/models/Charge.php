@@ -18,6 +18,7 @@ class Charge extends \hiqdev\hiart\ActiveRecord
     {
         return [
             [['id', 'type_id', 'object_id', 'bill_id'], 'integer'],
+            [['class', 'name'], 'string'],
             [['type', 'label', 'ftype', 'time', 'type_label', 'currency'], 'safe'],
             [['sum', 'quantity'], 'number'],
 
