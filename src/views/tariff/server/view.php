@@ -5,7 +5,7 @@ use hipanel\widgets\Box;
 
 /**
  * @var \yii\web\View
- * @var $model \hipanel\modules\finance\forms\SvdsTariffForm
+ * @var $model \hipanel\modules\finance\forms\ServerTariffForm
  * @var $manager \hipanel\modules\finance\logic\AbstractTariffManager
  */
 ?>

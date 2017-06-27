@@ -108,6 +108,20 @@ class TariffController extends \hipanel\base\CrudController
         return $this->render('certificate/create', ['model' => $form]);
     }
 
+    public function actionCreateServer($parent_id = null)
+    {
+        /** @var CertificateResource $manager */
+        $manager = TariffManagerFactory::createByType('server', $parent_id);
+        $form = $manager->form;
+
+        if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
+            $manager->insert();
+            return $this->redirect(['view', 'id' => $form->id]);
+        }
+
+        return $this->render('server/create', ['model' => $form]);
+    }
+
     public function actionUpdate($id)
     {
         $manager = TariffManagerFactory::createById($id, ['scenario' => 'update']);

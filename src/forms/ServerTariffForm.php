@@ -12,7 +12,9 @@ namespace hipanel\modules\finance\forms;
 
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\logic\ServerTariffCalculatorInterface;
+use hipanel\modules\finance\models\Resource;
 use hipanel\modules\finance\models\ServerResource;
+use hipanel\modules\server\models\Server;
 use Yii;
 use yii\web\UnprocessableEntityHttpException;
 
@@ -33,6 +35,7 @@ class ServerTariffForm extends AbstractTariffForm
     {
         $rules = parent::rules();
         $rules[] = [['note', 'label'], 'safe', 'on' => ['create', 'update']];
+        unset($rules['parent-id-required']);
 
         return $rules;
     }
@@ -71,6 +74,30 @@ class ServerTariffForm extends AbstractTariffForm
             if (isset($resources[$type])) {
                 $result[] = $resources[$type];
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return ServerResource[]
+     */
+    public function getOrFakeOveruseResources()
+    {
+        $types = (new ServerResource())->getTypes();
+        $resources = $this->getOveruseResources();
+
+        $result = [];
+
+        foreach ($types as $type => $name) {
+            foreach ($resources as $resource) {
+                if ($resource->type === $type) {
+                    $result[] = $resource;
+                    continue 2;
+                }
+            }
+
+            $result[] = (new ServerResource(['type' => $type, 'tariff_id' => $this->tariff->id]));
         }
 
         return $result;

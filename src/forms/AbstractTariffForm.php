@@ -119,7 +119,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
         return [
             [['name'], 'required', 'on' => ['create', 'update']],
             [['parent_id', 'id'], 'integer', 'on' => ['create', 'update']],
-            [['parent_id'], 'required', 'on' => ['create']],
+            'parent-id-required' => [['parent_id'], 'required', 'on' => ['create']],
             [['id'], 'required', 'on' => ['update']],
         ];
     }

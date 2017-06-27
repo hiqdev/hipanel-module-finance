@@ -12,6 +12,11 @@ namespace hipanel\modules\finance\models\decorators\server;
 
 use Yii;
 
+/**
+ * Class MonthlyResourceDecorator
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
 class MonthlyResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
