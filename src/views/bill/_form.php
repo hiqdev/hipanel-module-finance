@@ -110,7 +110,7 @@ $form = ActiveForm::begin([
                                         'format' => 'yyyy-mm-dd hh:ii:ss',
                                     ],
                                     'options' => [
-                                        'value' => Yii::$app->formatter->asDatetime(($model->isNewRecord ? new DateTime() : $model->time),
+                                        'value' => Yii::$app->formatter->asDatetime(($model->isNewRecord && empty($model->time) ? new DateTime() : $model->time),
                                             'php:Y-m-d H:i:s'),
                                     ],
                                 ]) ?>

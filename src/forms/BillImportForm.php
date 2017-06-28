@@ -105,7 +105,9 @@ class BillImportForm extends \yii\base\Model
                 $bills[] = $bill = clone $billTemplate;
 
                 list($client, $time, $sum, $currency, $type, $label) = $this->splitLine($line);
-                $bill->setAttributes(compact('client', 'time', 'sum', 'currency', 'type', 'label'));
+                $quantity = 1;
+                $bill->setAttributes(compact('client', 'time', 'sum', 'currency', 'type', 'label', 'quantity'));
+                $bill->populateRelation('charges', []);
             }
 
             $this->resolveClients(ArrayHelper::getColumn($bills, 'client'));
