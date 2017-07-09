@@ -115,7 +115,7 @@ class BillForm extends Model
     {
         $result = [];
         foreach ($bills as $bill) {
-            $result[$bill->id] = self::createFromBill($bill, $scenario);
+            $result[] = self::createFromBill($bill, $scenario);
         }
 
         return $result;
