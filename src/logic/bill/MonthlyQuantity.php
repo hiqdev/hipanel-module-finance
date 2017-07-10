@@ -26,7 +26,7 @@ class MonthlyQuantity extends AbstractBillQuantity
 
     public function getClientValue()
     {
-        return ceil($this->model->quantity * $this->getNumberOfDays());
+        return round($this->model->quantity * $this->getNumberOfDays());
     }
 
     /**
