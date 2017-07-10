@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\models;
 use hipanel\base\ModelTrait;
 use hipanel\modules\finance\models\decorators\server\AbstractServerResourceDecorator;
 use hipanel\modules\finance\models\decorators\server\ServerResourceDecoratorFactory;
+use hipanel\modules\server\models\Server;
 use Yii;
 
 /**
@@ -82,16 +83,10 @@ class ServerResource extends Resource
 
     public function getTypes()
     {
-        return [
-            static::TYPE_MONTHLY => Yii::t('hipanel:finance:tariff', 'Monthly fee'),
-            static::TYPE_ISP5 => Yii::t('hipanel:finance:tariff', 'ISP Manager 5'),
-            static::TYPE_ISP => Yii::t('hipanel:finance:tariff', 'ISP Manager'),
-            static::TYPE_SUPPORT_TIME => Yii::t('hipanel:finance:tariff', 'Support time'),
-            static::TYPE_IP_NUMBER => Yii::t('hipanel:finance:tariff', 'IP addresses count'),
-            static::TYPE_SERVER_TRAF_MAX => Yii::t('hipanel:finance:tariff', 'Server traffic'),
-            static::TYPE_SERVER_TRAF95_MAX => Yii::t('hipanel:finance:tariff', '95 percentile traffic'),
-            static::TYPE_BACKUP_DU => Yii::t('hipanel:finance:tariff', 'Backup disk usage'),
-        ];
+        /** @var ServerResourceTypesProviderInterface $provider */
+        $provider = Yii::createObject(ServerResourceTypesProviderInterface::class);
+
+        return $provider->getTypes();
     }
 
     public function getMinimumQuantity()

@@ -3,7 +3,7 @@
 /* @var $this yii\web\View */
 /* @var $model \hipanel\modules\finance\forms\DomainTariffForm */
 
-$this->title = Yii::t('hipanel:finance:tariff', 'Create VDS tariff');
+$this->title = Yii::t('hipanel:finance:tariff', 'Create server tariff');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariffs'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 

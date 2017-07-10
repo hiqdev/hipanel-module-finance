@@ -7,7 +7,7 @@ use Yii;
 class MonthlyQuantity extends AbstractBillQuantity
 {
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getText()
     {
@@ -17,13 +17,16 @@ class MonthlyQuantity extends AbstractBillQuantity
     }
 
     /**
-     * @return float|int
+     * @inheritdoc
      */
     public function getValue()
     {
         return $this->model->quantity / $this->getNumberOfDays();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getClientValue()
     {
         return round($this->model->quantity * $this->getNumberOfDays());

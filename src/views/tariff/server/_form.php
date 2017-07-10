@@ -91,7 +91,7 @@ $i = 0;
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($model->getOveruseResources() as $resource) : ?>
+            <?php foreach ($model->getOrFakeOveruseResources() as $resource) : ?>
                 <tr>
                     <?php $baseResource = $model->getParentOveruseResource($resource->type_id) ?>
                     <td><?= $resource->decorator()->displayTitle() ?></td>
@@ -145,7 +145,7 @@ $i = 0;
 <?php
 $this->registerJs(<<<'JS'
     $('#tariff-parent_id').on('change', function () {
-        var fakeInput = $('<input>').attr({'name': 'parent_id', 'value': $(this).val()});
+        var fakeInput = $('<input>').attr({'name': 'parent_id', 'value': $(this).val()}); 
         var formAction = $(this).closest('select').attr('data-url');
         var fakeForm = $('<form>').attr({'method': 'get', 'action': formAction}).html(fakeInput).on('submit', function(event) {
             $.pjax.submit(event, '#tariff-pjax-container');

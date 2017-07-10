@@ -23,18 +23,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $page->beginContent('main-actions') ?>
         <?php if (Yii::$app->user->can('manage')) : ?>
             <div class="dropdown">
-                <a class="btn btn-sm btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="true">
+                <a class="btn btn-sm btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     <?= Yii::t('hipanel', 'Create') ?>
                     <span class="caret"></span>
                 </a>
                 <?= Dropdown::widget([
-                    'items' => [
+                    'items' => array_filter([
                         ['label' => Yii::t('hipanel:finance:tariff', 'Create domain tariff'), 'url' => ['@tariff/create-domain']],
                         ['label' => Yii::t('hipanel:finance:tariff', 'Create SSD VDS tariff'), 'url' => ['@tariff/create-svds']],
                         ['label' => Yii::t('hipanel:finance:tariff', 'Create OpenVZ tariff'), 'url' => ['@tariff/create-ovds']],
-                        ['label' => Yii::t('hipanel:finance:tariff', 'Create certificate tariff'), 'url' => ['@tariff/create-certificate']],
-                    ],
+                        ['label' => Yii::t('hipanel:finance:tariff', 'Create server tariff'), 'url' => ['@tariff/create-server']],
+                        Yii::getAlias('@certificate', false)
+                            ? ['label' => Yii::t('hipanel:finance:tariff', 'Create certificate tariff'), 'url' => ['@tariff/create-certificate']]
+                            : null,
+                    ]),
                 ]) ?>
             </div>
         <?php endif ?>

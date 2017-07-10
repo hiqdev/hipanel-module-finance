@@ -20,6 +20,7 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\modules\client\controllers\ContactController;
 use hipanel\modules\finance\actions\BillManagementAction;
+use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\forms\CurrencyExchangeForm;
 use hipanel\modules\finance\models\Bill;
@@ -159,6 +160,7 @@ class BillController extends \hipanel\base\CrudController
             $models = $model->parse();
 
             if ($models !== false) {
+                $models = BillForm::createMultipleFromBills($models, 'create');
                 list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
 
                 return $this->render('create', [

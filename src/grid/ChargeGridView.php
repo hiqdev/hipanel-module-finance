@@ -40,7 +40,11 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'label',
                 'format' => 'raw',
                 'value' => function ($model) {
-                    $descr = $model->label;
+                    if ($model->name) {
+                        $descr = Yii::t('hipanel', ucfirst($model->class)) . ' ' . Html::tag('b', $model->name);
+                    } elseif ($model->label) {
+                        $descr = $model->label;
+                    }
                     $text = mb_strlen($descr) > 70 ? ArraySpoiler::widget(['data' => $descr]) : $descr;
 
                     return $text;
