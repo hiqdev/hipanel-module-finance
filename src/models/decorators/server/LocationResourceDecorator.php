@@ -77,7 +77,8 @@ class LocationResourceDecorator extends AbstractServerResourceDecorator
             ],
             Tariff::TYPE_OPENVZ => [
                 2 => Yii::t('hipanel:finance:tariff', 'USA, Ashburn'),
-                3 => Yii::t('hipanel:finance:tariff', 'Netherlands, Amsterdam'),
+                // Disabled on RED demand
+                // 3 => Yii::t('hipanel:finance:tariff', 'Netherlands, Amsterdam')
             ],
         ];
 
