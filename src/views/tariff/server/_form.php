@@ -32,10 +32,13 @@ $i = 0;
     <div class="col-md-12">
         <?= Html::activeHiddenInput($model, 'id') ?>
         <?= Html::activeHiddenInput($model, 'parent_id') ?>
-        <?= $form->field($model, 'parent_id')->dropDownList($model->getParentTariffsList(), [
-            'id' => 'tariff-parent_id',
-            'data-url' => Url::current(['parent_id' => null]),
-            'readonly' => isset($model->id),
+        <?= $form->field($model, 'parent_id')->widget(\hipanel\modules\finance\widgets\TariffCombo::class, [
+            'tariffType' => $model->getTariff()->type,
+            'inputOptions' => [
+                'id' => 'tariff-parent_id',
+                'data-url' => Url::current(['parent_id' => null]),
+                'readonly' => isset($model->id),
+            ],
         ]); ?>
         <?= $form->field($model, 'name') ?>
         <?= $form->field($model, 'note') ?>
@@ -44,6 +47,7 @@ $i = 0;
 </div>
 <?php Box::end() ?>
 
+<?php if (isset($model->parentTariff)): ?>
 <div class="row">
     <?php if (!empty($model->getHardwareResources())) : ?>
         <div class="col-md-4">
@@ -139,6 +143,7 @@ $i = 0;
         <?php Box::end() ?>
     </div>
 </div>
+<?php endif ?>
 
 <?php ActiveForm::end(); ?>
 

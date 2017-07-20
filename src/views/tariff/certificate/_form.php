@@ -23,6 +23,7 @@ use yii\helpers\Html;
     </div>
 </div>
 
+<?php if (isset($model->parentTariff)): ?>
 <div class="row">
     <div class="col-md-12">
         <table class="table table-condensed">
@@ -67,6 +68,7 @@ use yii\helpers\Html;
         </table>
     </div>
 </div>
+<?php endif ?>
 <?php Box::end() ?>
 
 <?php Box::begin(['options' => ['class' => 'box-solid']]) ?>

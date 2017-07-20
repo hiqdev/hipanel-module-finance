@@ -51,10 +51,10 @@ class TariffController extends \hipanel\base\CrudController
         ];
     }
 
-    public function actionCreateDomain()
+    public function actionCreateDomain($parent_id = null)
     {
         /** @var DomainTariffManager $manager */
-        $manager = TariffManagerFactory::createByType('domain');
+        $manager = TariffManagerFactory::createByType('domain', $parent_id);
         $form = $manager->form;
 
         if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
@@ -133,6 +133,15 @@ class TariffController extends \hipanel\base\CrudController
         }
 
         return $this->render($manager->getType() . '/update', ['model' => $form]);
+    }
+
+    public function actionCopy()
+    {
+        $id = Yii::$app->request->post('selection')[0];
+        $manager = TariffManagerFactory::createById($id, ['scenario' => 'create']);
+        $form = $manager->form;
+
+        return $this->render($manager->getType() . '/copy', ['model' => $form]);
     }
 
     public function actionView($id)

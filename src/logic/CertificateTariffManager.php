@@ -17,6 +17,7 @@ use hipanel\modules\finance\models\Tariff;
 use hiqdev\hiart\ConnectionInterface;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\web\NotFoundHttpException;
 use yii\web\UnprocessableEntityHttpException;
 
@@ -51,11 +52,29 @@ class CertificateTariffManager extends AbstractTariffManager
 
     public function init()
     {
-        parent::init();
-
         if (!Yii::getAlias('@certificate', true)) {
-            throw new NotFoundHttpException('Certificate module is missing');
+            throw new InvalidConfigException('Certificate module is missing');
         }
+
+        parent::init();
+    }
+
+    protected function determineParentTariff()
+    {
+        $id = parent::determineParentTariff();
+
+        if ($id === null) {
+            $tariff = reset(Tariff::find()
+                ->action('get-available-info')
+                ->andFilterWhere(['type' => $this->type])
+                ->all());
+
+            if ($tariff instanceof Tariff) {
+                $id = $tariff->id;
+            }
+        }
+
+        return $id;
     }
 
     public function insert()
@@ -92,7 +111,7 @@ class CertificateTariffManager extends AbstractTariffManager
             'class' => CertificateTariffForm::class,
             'certificateTypes' => Ref::getList('type,certificate', 'hipanel:certificate', [
                 'select' => 'id_label',
-                'mapOptions' => ['from' => 'id']
+                'mapOptions' => ['from' => 'id'],
             ]),
         ], parent::getFormOptions());
     }

@@ -22,10 +22,9 @@ use yii\web\NotFoundHttpException;
 abstract class AbstractTariffManager extends Object
 {
     /**
-     * @var Tariff[] they array of all available parent tariffs
-     * @see findParentTariffs()
+     * @var int Parent tariff ID
      */
-    protected $parentTariffs;
+    public $parent_id;
 
     /**
      * @var AbstractTariffForm
@@ -49,6 +48,11 @@ abstract class AbstractTariffManager extends Object
     protected $tariff;
 
     /**
+     * @var Tariff Parent tariff
+     */
+    protected $parentTariff;
+
+    /**
      * @var string The type used to find parent tariffs
      */
     protected $type;
@@ -59,7 +63,7 @@ abstract class AbstractTariffManager extends Object
             throw new InvalidConfigException('Property "type" must be set');
         }
 
-        $this->fillParentTariffs();
+        $this->initParentTariff();
         $this->buildForm();
     }
 
@@ -70,7 +74,8 @@ abstract class AbstractTariffManager extends Object
     {
         $this->form = Yii::createObject(array_merge([
             'scenario' => $this->scenario,
-            'parentTariffs' => $this->parentTariffs,
+            'parent_id' => $this->parent_id,
+            'parentTariff' => $this->parentTariff,
             'tariff' => $this->tariff,
         ], $this->getFormOptions()));
     }
@@ -80,38 +85,41 @@ abstract class AbstractTariffManager extends Object
         return $this->formOptions;
     }
 
-    protected function fillParentTariffs()
+    protected function initParentTariff()
     {
-        $ids = $this->collectParentTariffIds();
+        $id = $this->determineParentTariff();
 
-        $this->parentTariffs = Tariff::find()
-            ->where(['id' => $ids])
+        if ($id === null) {
+            return;
+        }
+
+        $this->parent_id = $id;
+        $this->parentTariff = Tariff::find()
+            ->where(['id' => $id])
             ->details()
-            ->all();
+            ->one();
     }
 
     /**
-     * Collects parent tariff ids. Used in [[fillParentTariffs]]
+     * Finds parent tariff ID
      *
-     * @return array
-     * @throws NotFoundHttpException
+     * @return int
      */
-    protected function collectParentTariffIds()
+    protected function determineParentTariff()
     {
         if (!isset($this->tariff)) {
-            $availableTariffs = Tariff::find()
-                ->action('get-available-info')
-                ->andFilterWhere(['type' => $this->type])
-                ->all();
+            if (!empty($this->parent_id)) {
+                return $this->parent_id;
+            }
 
-            return ArrayHelper::getColumn($availableTariffs, 'id');
+            return null;
         }
 
         if (isset($this->tariff->parent_id)) {
-            return [$this->tariff->parent_id];
+            return $this->tariff->parent_id;
         }
 
-        return [$this->tariff->id];
+        return $this->tariff->id;
     }
 
     public function getType()

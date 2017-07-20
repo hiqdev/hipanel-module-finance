@@ -55,6 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $page->beginContent('bulk-actions') ?>
         <?php if (Yii::$app->user->can('manage')) : ?>
+            <?= $page->renderBulkButton(Yii::t('hipanel', 'Copy'), 'copy', 'default') ?>
             <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), 'delete', 'danger') ?>
         <?php endif ?>
     <?php $page->endContent() ?>
