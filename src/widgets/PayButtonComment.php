@@ -63,6 +63,7 @@ class PayButtonComment extends Widget
     {
         return [
             'paypal_*' => 'paypal',
+            'bitpay_*' => 'bitpay',
         ];
     }
 
