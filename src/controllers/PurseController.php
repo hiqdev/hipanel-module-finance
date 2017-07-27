@@ -17,6 +17,7 @@ use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\modules\finance\models\Purse;
+use hiqdev\hiart\ResponseErrorException;
 use Yii;
 
 class PurseController extends \hipanel\base\CrudController
@@ -59,15 +60,23 @@ class PurseController extends \hipanel\base\CrudController
 
     public function actionGenerateMonthlyDocument($id, $type, $month = null)
     {
-        $data = Purse::perform('generate-monthly-document', compact('id', 'type', 'month'));
-        $this->asPdf();
-
-        return $data;
+        return $this->generateDocument('generate-monthly-document', compact('id', 'type', 'month'));
     }
 
     public function actionGenerateDocument($id, $type)
     {
-        $data = Purse::perform('generate-monthly-document', compact('id', 'type'));
+        return $this->generateDocument('generate-document', compact('id', 'type'));
+    }
+
+    public function generateDocument($action, $params)
+    {
+        try {
+            $data = Purse::perform($action, $params);
+        } catch (ResponseErrorException $e) {
+            Yii::$app->getSession()->setFlash('error', Yii::t('hipanel:finance', 'Failed to generate document! Check requisites!'));
+
+            return $this->redirect(['@client/view', 'id' => $params['id']]);
+        }
         $this->asPdf();
 
         return $data;
@@ -82,13 +91,13 @@ class PurseController extends \hipanel\base\CrudController
 
     public function actionPreGenerateDocument($type)
     {
-        $purse = new Purse();
+        $purse = new Purse(['scenario' => 'generate-and-save-monthly-document']);
         if ($purse->load(Yii::$app->request->post()) && $purse->validate()) {
             return $this->redirect([
                 '@purse/generate-monthly-document',
                 'id' => $purse->id,
                 'type' => $type,
-                'month' => $purse->month
+                'month' => $purse->month,
             ]);
         }
     }

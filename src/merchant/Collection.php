@@ -42,18 +42,21 @@ class Collection extends \hiqdev\yii2\merchant\Collection
 
     public function fetchMerchants(array $params = [])
     {
-        if (Yii::$app->user->getIsGuest()) {
-            return []; // todo show merchants for logged out users
-        }
-
-        $params = array_merge([
+        $defaults = [
             'sum' => $params['amount'] ?: 1,
             'site' => Yii::$app->request->getHostInfo(),
-            'username' => Yii::$app->user->identity->username,
-        ], (array) $params);
+        ];
+
+        if (Yii::$app->user->getIsGuest()) {
+            $defaults['seller'] = Yii::$app->params['user.seller'];
+        } else {
+            $defaults['username'] = Yii::$app->user->identity->username;
+        }
+
+        $params = array_merge($defaults, (array)$params);
 
         try {
-            $merchants = Merchant::perform('prepare-info', $params, ['batch' => true]);
+            $merchants = $this->requestMerchants($params);
         } catch (ResponseErrorException $e) {
             if ($e->getResponse()->getData() === null) {
                 Yii::info('No available payment methods found', 'hipanel:finance');
@@ -73,6 +76,13 @@ class Collection extends \hiqdev\yii2\merchant\Collection
         }
 
         return $result;
+    }
+
+    public function requestMerchants($params)
+    {
+        return Yii::$app->getCache()->getOrSet([__METHOD__, $params], function () use ($params) {
+            return Merchant::perform('prepare-info', $params, ['batch' => true]);
+        }, 3600*24);
     }
 
     public function convertMerchant($data)

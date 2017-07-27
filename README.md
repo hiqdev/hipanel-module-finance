@@ -1,5 +1,4 @@
-HiPanel Finance Module
-======================
+# HiPanel Finance Module
 
 **Finance module for HiPanel**
 

@@ -54,6 +54,9 @@ final class PrepaidAmountWidget extends Widget
             'class' => 'form-control price-input',
             'autocomplete' => false,
             'step' => 'any',
+            'data' => [
+                'min-price' => $this->resource->getMinimumQuantity()
+            ],
             'value' => $this->resource->decorator()->getPrepaidQuantity(),
         ]);
     }

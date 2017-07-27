@@ -13,10 +13,15 @@ namespace hipanel\modules\finance\models;
 use hipanel\base\ModelTrait;
 use hipanel\modules\finance\models\decorators\server\AbstractServerResourceDecorator;
 use hipanel\modules\finance\models\decorators\server\ServerResourceDecoratorFactory;
+use hipanel\modules\server\models\Server;
 use Yii;
 
 /**
- * Class DomainResource.
+ * Class ServerResource
+ *
+ * @property float fee
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
 class ServerResource extends Resource
 {
@@ -39,6 +44,7 @@ class ServerResource extends Resource
     const TYPE_SERVER_TRAF_MAX = 'server_traf_max';
     const TYPE_SERVER_TRAF95_MAX = 'server_traf95_max';
     const TYPE_BACKUP_DU = 'backup_du';
+    const TYPE_MONTHLY = 'monthly';
 
     public function rules()
     {
@@ -77,15 +83,19 @@ class ServerResource extends Resource
 
     public function getTypes()
     {
-        return [
-            static::TYPE_ISP5 => Yii::t('hipanel:finance:tariff', 'ISP Manager 5'),
-            static::TYPE_ISP => Yii::t('hipanel:finance:tariff', 'ISP Manager'),
-            static::TYPE_SUPPORT_TIME => Yii::t('hipanel:finance:tariff', 'Support time'),
-            static::TYPE_IP_NUMBER => Yii::t('hipanel:finance:tariff', 'IP addresses count'),
-            static::TYPE_SERVER_TRAF_MAX => Yii::t('hipanel:finance:tariff', 'Server traffic'),
-            static::TYPE_SERVER_TRAF95_MAX => Yii::t('hipanel:finance:tariff', '95 percentile traffic'),
-            static::TYPE_BACKUP_DU => Yii::t('hipanel:finance:tariff', 'Backup disk usage'),
+        /** @var ServerResourceTypesProviderInterface $provider */
+        $provider = Yii::createObject(ServerResourceTypesProviderInterface::class);
+
+        return $provider->getTypes();
+    }
+
+    public function getMinimumQuantity()
+    {
+        $types = [
+            static::TYPE_MONTHLY => 0,
         ];
+
+        return isset($types[$this->type]) ? $types[$this->type] : 0.01;
     }
 
     /**

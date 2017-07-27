@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\logic;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\models\Tariff;
 use Yii;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 
 class TariffManagerFactory
@@ -20,11 +21,16 @@ class TariffManagerFactory
     /**
      * @param integer $id Tariff ID
      * @param array $options that will be passed to the object as configuration
-     * @throws NotFoundHttpException
      * @return AbstractTariffManager|object
+     * @throws BadRequestHttpException
+     * @throws NotFoundHttpException
      */
     public static function createById($id, $options = [])
     {
+        if (empty($id)) {
+            throw new BadRequestHttpException('ID is missing');
+        }
+
         $model = Tariff::find()->byId($id)->details()->one();
 
         if ($model === null) {
@@ -48,9 +54,9 @@ class TariffManagerFactory
     public static function createByType($type, $parent_id = null, $options = [])
     {
         $options = array_merge([
+            'parent_id' => $parent_id,
             'formOptions' => [
                 'scenario' => 'create',
-                'parent_id' => $parent_id,
             ],
         ], $options);
 

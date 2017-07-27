@@ -16,23 +16,24 @@ Box::begin() ?>
             <tr>
                 <th></th>
                 <?php foreach ($model->getResourceTypes() as $type) {
-    echo Html::tag('th', $type);
-} ?>
+                    echo Html::tag('th', $type);
+                } ?>
             </tr>
             </thead>
             <tbody>
-            <?php
-            $i = 0;
-            foreach ($model->getZones() as $zone => $id) {
-                ?>
+            <?php $i = 0; ?>
+            <?php foreach ($model->getZones() as $zone => $id) : ?>
                 <tr>
                     <td><strong><?= $zone ?></strong></td>
-                    <?php foreach ($model->getZoneResources($zone) as $type => $resource) {
-                    $baseResources = $model->getZoneParentResources($zone); ?>
+                    <?php $baseResources = $model->getZoneParentResources($zone); ?>
+                    <?php foreach ($model->getZoneResources($zone) as $type => $resource) : ?>
                         <td>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <?= Yii::$app->formatter->asCurrency($resource->price, $resource->currency) ?>
+                                    <?= \hipanel\modules\finance\widgets\ResourcePriceWidget::widget([
+                                        'price' => $resource->price,
+                                        'currency' => $resource->currency
+                                    ]) ?>
                                 </div>
                                 <div class="col-md-6">
                                     <?= PriceDifferenceWidget::widget([
@@ -42,11 +43,10 @@ Box::begin() ?>
                                 </div>
                             </div>
                         </td>
-                        <?php ++$i;
-                } ?>
+                        <?php ++$i; ?>
+                    <?php endforeach ?>
                 </tr>
-            <?php 
-            } ?>
+            <?php endforeach ?>
             </tbody>
         </table>
     </div>
@@ -56,28 +56,27 @@ Box::begin() ?>
 <div class="row">
     <?php
     $services = $model->getServices();
-    $baseServices = $model->getParentServices();
-    foreach ($services as $service) {
-        ?>
+    $baseServices = $model->getParentServices(); ?>
+    <?php foreach ($services as $service) : ?>
         <div class="col-md-3">
-            <?php Box::begin([
-                'title' => $service->name,
-            ]) ?>
+            <?php Box::begin(['title' => $service->name]) ?>
             <table class="table table-condensed">
                 <thead>
                 <tr>
-                    <?php foreach ($service->getOperations() as $operation => $title) {
-                echo Html::tag('td', $title);
-            } ?>
+                    <?php foreach ($service->getOperations() as $operation => $title) : ?>
+                        <?= Html::tag('td', $title); ?>
+                    <?php endforeach; ?>
                 </tr>
                 <tbody>
                 <tr>
-                    <?php foreach ($service->getOperations() as $operation => $title) {
-                $resource = $service->getResource($operation); ?>
+                    <?php foreach ($service->getOperations() as $operation => $title) : ?>
+                        <?php $resource = $service->getResource($operation); ?>
                         <td>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <?= Yii::$app->formatter->asCurrency($resource->price, $resource->currency) ?>
+                                    <?= Yii::$app->formatter->asCurrency($resource->price, $resource->currency, [
+                                        NumberFormatter::MAX_FRACTION_DIGITS => 4
+                                    ]) ?>
                                 </div>
                                 <div class="col-md-6">
                                     <?= PriceDifferenceWidget::widget([
@@ -87,13 +86,11 @@ Box::begin() ?>
                                 </div>
                             </div>
                         </td>
-                    <?php 
-            } ?>
+                    <?php endforeach; ?>
                 </tr>
                 </tbody>
                 </thead></table>
             <?php Box::end(); ?>
         </div>
-    <?php 
-    } ?>
+    <?php endforeach ?>
 </div>

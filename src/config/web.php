@@ -24,7 +24,7 @@ return [
         ],
         'cart' => [
             'class' => \hiqdev\yii2\cart\Module::class,
-            'termsPage' => (isset($params['organizationUrl']) ? $params['organizationUrl'] : '/') . 'rules',
+            'termsPage' => (isset($params['organizationUrl']) ? $params['organizationUrl'] : ''),
             'orderPage' => '/finance/cart/select',
             /*'orderButton'    => function ($module) {
                 return Yii::$app->getView()->render('@hipanel/modules/finance/views/cart/order-button', [
@@ -54,13 +54,13 @@ return [
             'rules' => [
                 [
                     'pattern' => 'finance/purse/<id:\d+>/generate/monthly/<type:\w+>.<login:[.\@\w\d_]+>.<currency:\w+>.<month:[\d-]+>.pdf',
-                    'route' => 'finance/purse/generate-monthly-document'
+                    'route' => 'finance/purse/generate-monthly-document',
                 ],
                 [
                     'pattern' => 'finance/purse/<id:\d+>/generate/<type:\w+>.<login:[.\@\w\d_]+>.<currency:\w+>.pdf',
-                    'route' => 'finance/purse/generate-document'
-                ]
-            ]
+                    'route' => 'finance/purse/generate-document',
+                ],
+            ],
         ],
         'themeManager' => [
             'pathMap' => [
@@ -114,12 +114,16 @@ return [
                 'class' => \hiqdev\yii2\merchant\widgets\PayButton::class,
                 'as commentBehavior' => [
                     'class' => \hipanel\modules\finance\behaviors\PayButtonCommentBehavior::class,
-                ]
+                ],
             ],
+            \hipanel\modules\finance\logic\ServerTariffCalculatorInterface::class => \hipanel\modules\finance\logic\CalculatorInterface::class,
+            \hipanel\modules\finance\logic\CalculatorInterface::class => \hipanel\modules\finance\logic\Calculator::class,
         ],
         'singletons' => [
             hipanel\modules\finance\providers\BillTypesProvider::class => hipanel\modules\finance\providers\BillTypesProvider::class,
             hiqdev\yii2\merchant\transactions\TransactionRepositoryInterface::class => hipanel\modules\finance\transaction\ApiTransactionRepository::class,
+            hipanel\modules\finance\logic\bill\BillQuantityFactoryInterface::class => hipanel\modules\finance\logic\bill\BillQuantityFactory::class,
+            hipanel\modules\finance\models\ServerResourceTypesProviderInterface::class => hipanel\modules\finance\models\ServerResourceTypesProvider::class,
         ],
     ],
 ];

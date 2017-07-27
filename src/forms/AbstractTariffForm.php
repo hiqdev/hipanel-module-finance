@@ -34,11 +34,6 @@ abstract class AbstractTariffForm extends \yii\base\Model
     public $parent_id;
 
     /**
-     * @var Tariff[] array of available parent tariffs
-     */
-    public $parentTariffs;
-
-    /**
      * @var Tariff the selected parent tariff
      */
     public $parentTariff;
@@ -58,10 +53,6 @@ abstract class AbstractTariffForm extends \yii\base\Model
      */
     public function init()
     {
-        if (!isset($this->parentTariffs)) {
-            throw new InvalidConfigException('Property "parentTariffs" must be filled');
-        }
-
         $this->initTariff();
     }
 
@@ -71,9 +62,9 @@ abstract class AbstractTariffForm extends \yii\base\Model
      */
     protected function initTariff()
     {
-        $this->selectParentTariff();
-        $this->ensureTariff();
-        $this->ensureScenario();
+        if ($this->ensureTariff()) {
+            $this->ensureScenario();
+        }
     }
 
     /**
@@ -100,11 +91,13 @@ abstract class AbstractTariffForm extends \yii\base\Model
     /**
      * Sets default tariff.
      *
-     * @return bool
+     * @return bool success
      */
     protected function setDefaultTariff()
     {
-        $this->setTariff($this->parentTariff);
+        if (!$this->setTariff($this->parentTariff)) {
+            return false;
+        }
 
         // Default tariff's id and name are useless on create
         $this->id = null;
@@ -119,7 +112,7 @@ abstract class AbstractTariffForm extends \yii\base\Model
         return [
             [['name'], 'required', 'on' => ['create', 'update']],
             [['parent_id', 'id'], 'integer', 'on' => ['create', 'update']],
-            [['parent_id'], 'required', 'on' => ['create']],
+            'parent-id-required' => [['parent_id'], 'required', 'on' => ['create']],
             [['id'], 'required', 'on' => ['update']],
         ];
     }
@@ -191,54 +184,6 @@ abstract class AbstractTariffForm extends \yii\base\Model
         throw new InvalidConfigException('Method load must be implemented');
     }
 
-    /**
-     * Selects one of [[parentTariffs]] and puts it to [[parentTariff]].
-     * @return bool
-     * @throws InvalidConfigException
-     */
-    public function selectParentTariff()
-    {
-        if (!isset($this->parent_id)) {
-            if (isset($this->tariff)) {
-                $this->parent_id = $this->tariff->parent_id;
-            } else {
-                $this->parent_id = ArrayHelper::getValue(reset($this->parentTariffs), 'id');
-            }
-        }
-
-        $filtered = array_filter($this->parentTariffs, function ($model) {
-            return $model->id === $this->parent_id;
-        });
-
-        if (count($filtered) > 1) {
-            throw new InvalidConfigException('Found ' . count($filtered) . ' parent tariffs. Must be exactly one');
-        }
-
-        if (count($filtered) === 0) {
-            $filtered = [$this->tariff];
-        }
-
-        $this->parentTariff = reset($filtered);
-        $this->parent_id = $this->parentTariff->id;
-
-        return true;
-    }
-
-    /**
-     * Builds key-value array of [[parentTariffs]]
-     *  - key: tariff id
-     *  - value: tariff name.
-     *
-     * @return array
-     */
-    public function getParentTariffsList()
-    {
-        return array_combine(
-            ArrayHelper::getColumn($this->parentTariffs, 'id'),
-            ArrayHelper::getColumn($this->parentTariffs, 'name')
-        );
-    }
-
     public function insert($runValidation = true)
     {
         throw new InvalidConfigException('Method insert must be implemented');
@@ -294,11 +239,9 @@ abstract class AbstractTariffForm extends \yii\base\Model
      */
     protected function calculator()
     {
-        if (isset($this->_calculator)) {
-            return $this->_calculator;
+        if (!isset($this->_calculator)) {
+            $this->_calculator = new Calculator([$this->tariff]);
         }
-
-        $this->_calculator = new Calculator([$this->tariff]);
 
         return $this->_calculator;
     }
@@ -323,11 +266,9 @@ abstract class AbstractTariffForm extends \yii\base\Model
      */
     protected function parentCalculator()
     {
-        if (isset($this->_parentCalculator)) {
-            return $this->_parentCalculator;
+        if (!isset($this->_parentCalculator)) {
+            $this->_parentCalculator = new Calculator([$this->parentTariff]);
         }
-
-        $this->_parentCalculator = new Calculator([$this->parentTariff]);
 
         return $this->_parentCalculator;
     }

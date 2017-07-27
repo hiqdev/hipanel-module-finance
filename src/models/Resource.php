@@ -84,6 +84,11 @@ class Resource extends \hipanel\base\Model
         return $this->type === 'periodic';
     }
 
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
     public function decorator()
     {
         throw new InvalidConfigException('Method "decorator" is not available for class Resource');

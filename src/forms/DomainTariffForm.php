@@ -113,6 +113,10 @@ class DomainTariffForm extends AbstractTariffForm
             }
         }
 
+        if (empty($result)) {
+            return [];
+        }
+
         $types = $resource->getTypes();
         if (count($result) !== count($types)) {
             throw new IntegrityException('Found ' . count($result) . ' resources for zone "' . $zone . '". Must be exactly ' . count($types));
@@ -136,6 +140,10 @@ class DomainTariffForm extends AbstractTariffForm
             }
         }
 
+        if (empty($result)) {
+            return [];
+        }
+
         $types = $resource->getTypes();
         if (count($result) !== count($types)) {
             throw new IntegrityException('Found ' . count($result) . ' resources for zone "' . $zone . '". Must be exactly ' . count($types));
@@ -152,7 +160,7 @@ class DomainTariffForm extends AbstractTariffForm
         return $this->zones;
     }
 
-    public function setZones(array $zones)
+    public function setZones($zones)
     {
         $this->zones = array_flip($zones);
     }

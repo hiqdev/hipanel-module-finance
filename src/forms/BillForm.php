@@ -2,6 +2,8 @@
 
 namespace hipanel\modules\finance\forms;
 
+use hipanel\modules\finance\behaviors\BillQuantity;
+use hipanel\modules\finance\logic\bill\QuantityTrait;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\validation\BillChargesSumValidator;
@@ -10,8 +12,12 @@ use yii\base\Model;
 
 class BillForm extends Model
 {
+    use QuantityTrait;
+
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
+
+    const EVENT_SHOW_FORM = 'showForm';
 
     /**
      * @var integer
@@ -54,6 +60,11 @@ class BillForm extends Model
     public $quantity;
 
     /**
+     * @var float
+     */
+    public $userQuantity;
+
+    /**
      * @var string
      */
     public $label;
@@ -62,6 +73,15 @@ class BillForm extends Model
      * @var Charge[]
      */
     public $charges = [];
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => BillQuantity::class,
+            ],
+        ];
+    }
 
     /**
      * Creates [[BillForm]] from [[Bill]]
@@ -95,7 +115,7 @@ class BillForm extends Model
     {
         $result = [];
         foreach ($bills as $bill) {
-            $result[$bill->id] = self::createFromBill($bill, $scenario);
+            $result[] = self::createFromBill($bill, $scenario);
         }
 
         return $result;
@@ -142,7 +162,7 @@ class BillForm extends Model
         return [
             [['id'], 'integer', 'on' => [self::SCENARIO_UPDATE]],
             [['sum', 'quantity'], 'number', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
-            [['time'], 'date', 'format' => 'php:d.m.Y H:i:s'],
+            [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
             [['label', 'currency', 'type'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['sum'], BillChargesSumValidator::class],
 

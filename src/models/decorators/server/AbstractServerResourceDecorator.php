@@ -14,6 +14,7 @@ use hipanel\inputs\TextInput;
 use hipanel\modules\finance\models\decorators\AbstractResourceDecorator;
 use hipanel\modules\finance\models\decorators\ResourceDecoratorInterface;
 use hipanel\modules\finance\models\ServerResource;
+use NumberFormatter;
 use Yii;
 
 abstract class AbstractServerResourceDecorator extends AbstractResourceDecorator implements ResourceDecoratorInterface

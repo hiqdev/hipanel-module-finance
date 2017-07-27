@@ -19,7 +19,9 @@ class Calculation extends \hipanel\modules\finance\models\Calculation
 
     public function synchronize()
     {
-        $this->calculation_id = $this->position->getId();
-        $this->amount = $this->position->getQuantity();
+        if (isset($this->position)) {
+            $this->calculation_id = $this->position->getId();
+            $this->amount = $this->position->getQuantity();
+        }
     }
 }

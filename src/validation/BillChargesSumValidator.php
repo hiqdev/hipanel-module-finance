@@ -25,7 +25,7 @@ class BillChargesSumValidator extends Validator
     {
         if (count($model->charges) > 0) {
             $chargesSum = array_sum(ArrayHelper::getColumn($model->charges, 'sum'));
-            if (abs($chargesSum) !== abs($model->sum)) {
+            if (floatval(abs($chargesSum)) !== floatval(abs($model->sum))) {
                 $model->addError($attribute, $this->message . ': ' . $chargesSum);
             }
         }

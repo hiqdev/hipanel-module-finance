@@ -52,7 +52,7 @@ class Bill extends \hipanel\base\Model
             [['type', 'gtype', 'class'], 'safe'],
             [['class_label'], 'safe'],
             [['type_label', 'gtype_label'], 'safe'],
-            [['time'], 'date', 'format' => 'php:d.m.Y H:i:s'],
+            [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
 
             [['id'], 'required', 'on' => [self::SCENARIO_UPDATE, self::SCENARIO_DELETE]],
             [['client_id'], 'integer', 'on' => [self::SCENARIO_CREATE]],
@@ -73,9 +73,11 @@ class Bill extends \hipanel\base\Model
     public function attributeLabels()
     {
         return $this->mergeAttributeLabels([
+            'object' => Yii::t('hipanel', 'Object'),
             'client' => Yii::t('hipanel', 'Client'),
             'time' => Yii::t('hipanel', 'Time'),
             'currency' => Yii::t('hipanel', 'Currency'),
+            'quantity' => Yii::t('hipanel', 'Quantity'),
             'balance' => Yii::t('hipanel', 'Balance'),
             'gtype' => Yii::t('hipanel', 'Type'),
             'gtype_label' => Yii::t('hipanel', 'Type'),

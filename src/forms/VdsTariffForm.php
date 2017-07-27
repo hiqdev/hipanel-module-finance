@@ -45,6 +45,11 @@ class VdsTariffForm extends AbstractTariffForm
             /** @var ServerResource $model */
             return $model->isHardwareTypeCorrect();
         });
+
+        if (empty($resources)) {
+            return [];
+        }
+
         $order = array_keys(reset($resources)->getHardwareTypes());
 
         return $this->sortResourcesByDefinedOrder($resources, $order, 'model_type');
@@ -80,6 +85,10 @@ class VdsTariffForm extends AbstractTariffForm
             /** @var ServerResource $model */
             return $model->isTypeCorrect();
         });
+        if (empty($resources)) {
+            return [];
+        }
+
         $order = array_keys(reset($resources)->getTypes());
 
         return $this->sortResourcesByDefinedOrder($resources, $order, 'type');

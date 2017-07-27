@@ -95,6 +95,6 @@ class DomainTariffManager extends AbstractTariffManager
     protected function getZones()
     {
         $command = $this->connection->createCommand();
-        return $command->perform('getZones', '');
+        return $command->perform('getZones', '')->getData();
     }
 }

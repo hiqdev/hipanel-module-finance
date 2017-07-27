@@ -13,8 +13,13 @@ namespace hipanel\modules\finance\grid;
 use hipanel\grid\CurrencyColumn;
 use hipanel\grid\MainColumn;
 use hipanel\helpers\Url;
+use hipanel\modules\finance\logic\bill\BillQuantityFactory;
+use hipanel\modules\finance\logic\bill\BillQuantityInterface;
+use hipanel\modules\finance\menus\BillActionsMenu;
+use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\widgets\BillTypeFilter;
 use hipanel\widgets\ArraySpoiler;
+use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\helpers\Html;
 
@@ -66,6 +71,10 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     return ['class' => 'text-right' . ($model->sum > 0 ? ' text-bold' : '')];
                 },
             ],
+            'quantity' => [
+                'headerOptions' => ['class' => 'text-right'],
+                'contentOptions' => ['class' => 'text-right text-bold'],
+            ],
             'balance' => [
                 'class' => CurrencyColumn::class,
                 'headerOptions' => ['class' => 'text-right'],
@@ -110,21 +119,45 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                         Yii::t('hipanel', 'Tariff') . ': ' . Html::a($model->tariff,
                             ['@tariff/view', 'id' => $model->tariff_id]), ['class' => 'pull-right']) : '';
                     $amount = static::billQuantity($model);
-                    $object = $model->object ? implode(':&nbsp;',
-                        [$model->class_label, static::objectLink($model)]) : '';
+                    $object = static::objectTag($model);
 
                     return $tariff . $amount . ' ' . implode('<br>', array_filter([$object, $text]));
                 },
             ],
-            'tariff' => [
+            'tariff_link' => [
                 'attribute' => 'tariff',
+                'format' => 'html',
+                'value' => function ($model) {
+                    return static::tariffLink($model);
+                },
+            ],
+            'object' => [
+                'attribute' => 'object',
+                'format' => 'html',
+                'value' => function ($model) {
+                    return static::objectTag($model);
+                },
+            ],
+            'actions' => [
+                'class' => MenuColumn::class,
+                'menuClass' => BillActionsMenu::class,
             ],
         ];
     }
 
+    public static function tariffLink($model)
+    {
+        return Html::a($model->tariff, ['@tariff/view', 'id' => $model->tariff_id]);
+    }
+
+    public static function objectTag($model)
+    {
+        return $model->object ? implode(':&nbsp;', [$model->class_label, static::objectLink($model)]) : '';
+    }
+
     /**
      * Creates link to object details page.
-     * @param Model $model
+     * @param Bill $model
      */
     public static function objectLink($model)
     {
@@ -134,31 +167,18 @@ class BillGridView extends \hipanel\grid\BoxedGridView
     }
 
     /**
-     * @param Model $model
+     * @param Bill $model
      * @return null|string
      */
     public static function billQuantity($model)
     {
-        switch ($model->type) {
-            case 'support_time':
-                $text = Yii::t('hipanel:finance', '{quantity, time, HH:mm} hour(s)',
-                    ['quantity' => ceil($model->quantity * 3600)]);
-                break;
-            case 'server_traf_max':
-            case 'backup_du':
-                $text = Yii::$app->formatter->asShortSize($model->quantity * 1024 * 1024 * 1024);
-                break;
-            case 'ip_num':
-                $text = Yii::t('hipanel:finance', '{quantity} IP', ['quantity' => $model->quantity]);
-                break;
-            case 'monthly':
-                $days = ceil($model->quantity * date('t', strtotime($model->time)));
-                $text = Yii::t('hipanel:finance', '{quantity, plural, one{# day} other{# days}}', ['quantity' => $days]);
-                break;
-            default:
-                return null;
+        $factory = Yii::$container->get(BillQuantityFactory::class);
+        $billQty = $factory->createByType($model->type, $model);
+
+        if ($billQty and $billQty instanceof BillQuantityInterface) {
+            return Html::tag('nobr', Html::tag('b', $billQty->getText()));
         }
 
-        return Html::tag('nobr', Html::tag('b', $text));
+        return null;
     }
 }

@@ -17,7 +17,7 @@ class ExchangeRatesLine extends Widget
 
     public function run()
     {
-        if (!Yii::$app->user->can('manage')) {
+        if (!Yii::$app->user->can('manage') || empty($this->rates)) {
             return '';
         }
 

@@ -13,19 +13,27 @@ namespace hipanel\modules\finance\controllers;
 use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartCreateAction;
+use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\modules\client\controllers\ContactController;
 use hipanel\modules\finance\actions\BillManagementAction;
+use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\forms\CurrencyExchangeForm;
 use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\models\BillSearch;
+use hipanel\modules\finance\models\Charge;
+use hipanel\modules\finance\models\ChargeSearch;
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\providers\BillTypesProvider;
+use hiqdev\hiart\ActiveDataProvider;
 use Yii;
+use yii\base\Event;
 use yii\base\Module;
+use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
 
 class BillController extends \hipanel\base\CrudController
@@ -88,6 +96,14 @@ class BillController extends \hipanel\base\CrudController
             ],
             'view' => [
                 'class' => ViewAction::class,
+                'on beforePerform' => function (Event $event) {
+                    /** @var \hipanel\actions\SearchAction $action */
+                    $action = $event->sender;
+                    $dataProvider = $action->getDataProvider();
+                    $dataProvider->query
+                        ->joinWith('charges')
+                        ->andWhere(['with_charges' => true]);
+                },
             ],
             'validate-form' => [
                 'class' => ValidateFormAction::class,
@@ -113,7 +129,7 @@ class BillController extends \hipanel\base\CrudController
                 },
             ],
             'delete' => [
-                'class' => SmartPerformAction::class,
+                'class' => SmartDeleteAction::class,
                 'success' => Yii::t('hipanel:finance', 'Payment was deleted successfully'),
             ],
             'requisites' => [
@@ -144,6 +160,7 @@ class BillController extends \hipanel\base\CrudController
             $models = $model->parse();
 
             if ($models !== false) {
+                $models = BillForm::createMultipleFromBills($models, 'create');
                 list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
 
                 return $this->render('create', [

@@ -13,6 +13,7 @@ return [
     'server' => 'Серверный',
     'grouping' => 'Группирующий',
     'resources' => 'Ресурсный',
+    'certificate' => 'Сертификатный',
     'avds' => 'XEN VDS',
     'ovds' => 'OpenVZ VDS',
     'svds' => 'XEN SSD VDS',
@@ -23,4 +24,5 @@ return [
     'XEN VDS tariff' => 'XEN VDS',
     'OpenVZ VDS tariff' => 'OpenVZ VDS',
     'XENSSD VDS tariff' => 'XEN SSD VDS',
+    'Certificate tariff' => 'Сертификатный'
 ];

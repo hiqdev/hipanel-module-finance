@@ -18,7 +18,9 @@ return [
     'tariff detailed information' => 'детальная информация о тарифе',
 
     'Create domain tariff' => 'Создать тариф для доменов',
+    'Create certificate tariff' => 'Создать тариф для сертификатов',
     'Update domain tariff' => 'Редактировать тариф для домена',
+    'Update certificate tariff' => 'Редактировать тариф для сертификата',
     'Create SVDS tariff' => 'Создать тариф для SVDS',
     'Create OVDS tariff' => 'Создать тариф для OVDS',
     'Create server tariff' => 'Создать тариф для серверов',
@@ -65,9 +67,12 @@ return [
     '24/7 support' => 'Поддержка 24/7',
     'No panel / {hipanelLink}' => 'Без панели / {hipanelLink}',
     'ISP manager' => 'ISP manager',
+    'Monthly fee' => 'Месячная абнплата',
 
     'Location' => 'Расположение',
     'Used' => 'Использован',
 
     'hour' => 'час',
+    '{n, plural, one{# year} other{# years}}' => '{n, plural, one{# год} few{# года} many{# лет} other{# лет}}',
+    '{operation} for {duration}' => '{operation} на {duration}',
 ];

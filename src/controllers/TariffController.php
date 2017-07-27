@@ -18,6 +18,7 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\models\Ref;
 use hipanel\modules\finance\logic\DomainTariffManager;
 use hipanel\modules\finance\logic\TariffManagerFactory;
+use hipanel\modules\finance\models\CertificateResource;
 use Yii;
 
 class TariffController extends \hipanel\base\CrudController
@@ -50,10 +51,10 @@ class TariffController extends \hipanel\base\CrudController
         ];
     }
 
-    public function actionCreateDomain()
+    public function actionCreateDomain($parent_id = null)
     {
         /** @var DomainTariffManager $manager */
-        $manager = TariffManagerFactory::createByType('domain');
+        $manager = TariffManagerFactory::createByType('domain', $parent_id);
         $form = $manager->form;
 
         if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
@@ -93,6 +94,34 @@ class TariffController extends \hipanel\base\CrudController
         return $this->render('vds/create', ['model' => $form]);
     }
 
+    public function actionCreateCertificate($parent_id = null)
+    {
+        /** @var CertificateResource $manager */
+        $manager = TariffManagerFactory::createByType('certificate', $parent_id);
+        $form = $manager->form;
+
+        if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
+            $manager->insert();
+            return $this->redirect(['view', 'id' => $form->id]);
+        }
+
+        return $this->render('certificate/create', ['model' => $form]);
+    }
+
+    public function actionCreateServer($parent_id = null)
+    {
+        /** @var CertificateResource $manager */
+        $manager = TariffManagerFactory::createByType('server', $parent_id);
+        $form = $manager->form;
+
+        if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
+            $manager->insert();
+            return $this->redirect(['view', 'id' => $form->id]);
+        }
+
+        return $this->render('server/create', ['model' => $form]);
+    }
+
     public function actionUpdate($id)
     {
         $manager = TariffManagerFactory::createById($id, ['scenario' => 'update']);
@@ -104,6 +133,15 @@ class TariffController extends \hipanel\base\CrudController
         }
 
         return $this->render($manager->getType() . '/update', ['model' => $form]);
+    }
+
+    public function actionCopy()
+    {
+        $id = Yii::$app->request->post('selection')[0];
+        $manager = TariffManagerFactory::createById($id, ['scenario' => 'create']);
+        $form = $manager->form;
+
+        return $this->render($manager->getType() . '/copy', ['model' => $form]);
     }
 
     public function actionView($id)

@@ -34,6 +34,7 @@ return [
     'Sum' => 'Сумма',
     'Amount' => 'Сумма',
     'Currency' => 'Валюта',
+    'Quantity' => 'Количество',
     'Date' => 'Дата',
     'Label' => 'Описание',
     'Create payment' => 'Создать платеж',
@@ -54,6 +55,7 @@ return [
     'Add payment' => 'Создать платёж',
     '{quantity, plural, one{# minute} other{# minutes}}' => '{quantity, plural, one{# минута} few{# минуты} other{# минут}}',
     '{quantity, plural, one{# day} other{# days}}' => '{quantity, plural, one{# день} few{# дня} other{# дней}}',
+    '{quantity, plural, one{# year} other{# years}}' => '{quantity, plural, one{# год} few{# года} other{# лет}}',
     '{quantity, time, HH:mm} hour(s)' => '{quantity, time, HH:mm} час(ов)',
     '{quantity} IP' => '{quantity} IP',
     'Held payments' => 'Ожидающие платежи',
@@ -67,6 +69,8 @@ return [
     'Detalization' => 'Детализация',
     'Bill was created successfully' => 'Счёт был успешно создан',
     'Bill was updated successfully' => 'Счёт был успешно изменён',
+
+    'Failed to generate document! Check requisites!' => 'Не удалось сгенерить документ! Проверьте реквизиты!',
 
     // Типы платежей
     'Negative balance correction' => 'Отрицательная корректировка',

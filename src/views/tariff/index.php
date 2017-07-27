@@ -18,22 +18,25 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php Pjax::begin(array_merge(Yii::$app->params['pjax'], ['enablePushState' => true])) ?>
 <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
 
-    <?= $page->setSearchFormData(compact(['types'])) ?>
+    <?php $page->setSearchFormData(compact(['types'])) ?>
 
     <?php $page->beginContent('main-actions') ?>
         <?php if (Yii::$app->user->can('manage')) : ?>
             <div class="dropdown">
-                <a class="btn btn-sm btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="true">
+                <a class="btn btn-sm btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     <?= Yii::t('hipanel', 'Create') ?>
                     <span class="caret"></span>
                 </a>
                 <?= Dropdown::widget([
-                    'items' => [
-                        ['label' => Yii::t('hipanel:finance:tariff', 'Create domain tariff'), 'url' => 'create-domain'],
-                        ['label' => Yii::t('hipanel:finance:tariff', 'Create SSD VDS tariff'), 'url' => 'create-svds'],
-                        ['label' => Yii::t('hipanel:finance:tariff', 'Create OpenVZ tariff'), 'url' => 'create-ovds'],
-                    ],
+                    'items' => array_filter([
+                        ['label' => Yii::t('hipanel:finance:tariff', 'Create domain tariff'), 'url' => ['@tariff/create-domain']],
+                        ['label' => Yii::t('hipanel:finance:tariff', 'Create SSD VDS tariff'), 'url' => ['@tariff/create-svds']],
+                        ['label' => Yii::t('hipanel:finance:tariff', 'Create OpenVZ tariff'), 'url' => ['@tariff/create-ovds']],
+                        ['label' => Yii::t('hipanel:finance:tariff', 'Create server tariff'), 'url' => ['@tariff/create-server']],
+                        Yii::getAlias('@certificate', false)
+                            ? ['label' => Yii::t('hipanel:finance:tariff', 'Create certificate tariff'), 'url' => ['@tariff/create-certificate']]
+                            : null,
+                    ]),
                 ]) ?>
             </div>
         <?php endif ?>
@@ -52,6 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $page->beginContent('bulk-actions') ?>
         <?php if (Yii::$app->user->can('manage')) : ?>
+            <?= $page->renderBulkButton(Yii::t('hipanel', 'Copy'), 'copy', 'default') ?>
             <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), 'delete', 'danger') ?>
         <?php endif ?>
     <?php $page->endContent() ?>

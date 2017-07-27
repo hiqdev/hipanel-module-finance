@@ -4,13 +4,17 @@
  * @var \yii\web\View
  * @var $model \hipanel\modules\finance\forms\DomainTariffForm
  */
+use hipanel\modules\finance\models\Tariff;
 use hipanel\widgets\Box;
+use hipanel\widgets\Pjax;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 ?>
-
-<?php $form = ActiveForm::begin([
+<?php
+Pjax::begin(['id' => 'tariff-pjax-container']);
+$form = ActiveForm::begin([
     'id' => 'tariff-create-form',
 ]) ?>
 
@@ -18,123 +22,92 @@ use yii\helpers\Html;
 <div class="row">
     <div class="col-md-12">
         <?= Html::activeHiddenInput($model, 'id') ?>
+        <?= $form->field($model, 'parent_id')->widget(\hipanel\modules\finance\widgets\TariffCombo::class, [
+            'tariffType' => Tariff::TYPE_DOMAIN,
+            'inputOptions' => [
+                'id' => 'tariff-parent_id',
+                'data-url' => Url::current(['parent_id' => null]),
+                'readonly' => isset($model->id),
+            ],
+        ]); ?>
         <?= $form->field($model, 'name') ?>
-        <?= Html::activeHiddenInput($model, 'parent_id') ?>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-12">
-        <table class="table table-condensed">
-            <thead>
-            <tr>
-                <th></th>
-                <?php foreach ($model->getResourceTypes() as $type) {
-    echo Html::tag('th', $type);
-} ?>
-            </tr>
-            </thead>
-            <tbody>
-            <?php
-            $i = 0;
-            foreach ($model->getZones() as $zone => $id) {
-                ?>
-                <tr>
-                    <td><?= $zone ?></td>
-                    <?php foreach ($model->getZoneResources($zone) as $type => $resource) {
-                    $baseResources = $model->getZoneParentResources($zone); ?>
-                        <td>
-                            <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
-                            <?= Html::activeHiddenInput($resource, "[$i]type") ?>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <?php
-                                    $activeField = $form->field($resource, "[$i]price");
-                                    Html::addCssClass($activeField->options, 'form-group-sm');
-                                    echo $activeField->input('number', [
-                                        'class' => 'form-control price-input',
-                                        'autocomplete' => false,
-                                        'step' => 'any',
-                                    ])->label(false); ?>
-                                </div>
-                                <div class="col-md-6">
-                                    <?= Html::tag('span', '', [
-                                        'class' => 'base-price text-bold',
-                                        'data-original-price' => $baseResources[$type]->price,
-                                    ]); ?>
-                                </div>
-                            </div>
-                        </td>
-
-                        <?php ++$i;
-                } ?>
-                </tr>
-            <?php 
-            } ?>
-            </tbody>
-        </table>
     </div>
 </div>
 <?php Box::end() ?>
 
-<div class="row">
-    <?php
-    $services = $model->getServices();
-    $baseServices = $model->getParentServices();
-    foreach ($services as $service) {
-        ?>
-        <div class="col-md-3">
-            <?php Box::begin([
-                'title' => $service->name,
-            ]) ?>
+<?php if (isset($model->parentTariff)): ?>
+    <?php Box::begin() ?>
+    <div class="row">
+        <div class="col-md-12">
             <table class="table table-condensed">
                 <thead>
                 <tr>
-                    <?php foreach ($service->getOperations() as $operation => $title) {
-                echo Html::tag('td', $title);
-            } ?>
+                    <th></th>
+                    <?php foreach ($model->getResourceTypes() as $type) {
+                        echo Html::tag('th', $type);
+                    } ?>
                 </tr>
+                </thead>
                 <tbody>
-                <tr>
-                    <?php foreach ($service->getOperations() as $operation => $title) {
-                $resource = $service->getResource($operation); ?>
+                <?php $i = 0 ?>
+                <?php foreach ($model->getZones() as $zone => $id) : ?>
+                    <tr>
+                        <td><?= $zone ?></td>
+                        <?php $baseResources = $model->getZoneParentResources($zone); ?>
+                        <?php foreach ($model->getZoneResources($zone) as $type => $resource) : ?>
                         <td>
                             <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
                             <?= Html::activeHiddenInput($resource, "[$i]type") ?>
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <?php
-
-                                    $activeField = $form->field($resource, "[$i]price");
-                Html::addCssClass($activeField->options, 'form-group-sm');
-                echo $activeField->input('number', [
-                                        'class' => 'form-control price-input',
-                                        'autocomplete' => false,
-                                        'step' => 'any',
-                                    ])->label(false)
-
-                                    ?>
-                                </div>
-                                <div class="col-md-6">
-                                    <?= Html::tag('span', '', [
-                                        'class' => 'base-price text-bold',
-                                        'data-original-price' => $baseServices[$service->type]->getResource($operation)->price,
-                                    ]); ?>
-                                </div>
-                            </div>
-                        </td>
-                        <?php
-                        ++$i;
-            } ?>
-                </tr>
+                            <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
+                                'basePrice' => $baseResources[$type]->price,
+                                'activeField' => $form->field($resource, "[$i]price"),
+                            ]) ?>
+                            <?php ++$i; ?>
+                            <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
                 </tbody>
-                </thead></table>
-            <?php Box::end(); ?>
+            </table>
         </div>
-    <?php 
-    } ?>
-</div>
+    </div>
+    <?php Box::end() ?>
+
+    <div class="row">
+        <?php $services = $model->getServices(); ?>
+        <?php $baseServices = $model->getParentServices(); ?>
+        <?php foreach ($services as $service) : ?>
+            <div class="col-md-3">
+                <?php Box::begin(['title' => $service->name]) ?>
+                <table class="table table-condensed">
+                    <thead>
+                    <tr>
+                        <?php foreach ($service->getOperations() as $operation => $title) : ?>
+                            <?= Html::tag('td', $title) ?>
+                        <?php endforeach; ?>
+                    </tr>
+                    <tbody>
+                    <tr>
+                        <?php foreach ($service->getOperations() as $operation => $title) : ?>
+                            <?php $resource = $service->getResource($operation); ?>
+                            <td>
+                                <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
+                                <?= Html::activeHiddenInput($resource, "[$i]type") ?>
+                                <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
+                                    'basePrice' => $baseServices[$service->type]->getResource($operation)->price,
+                                    'activeField' => $form->field($resource, "[$i]price"),
+                                ]) ?>
+                            </td>
+                            <?php ++$i; ?>
+                        <?php endforeach ?>
+                    </tr>
+                    </tbody>
+                    </thead></table>
+                <?php Box::end(); ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php endif ?>
 
 
 <?php Box::begin(['options' => ['class' => 'box-solid']]) ?>
@@ -148,33 +121,16 @@ use yii\helpers\Html;
 <?php ActiveForm::end(); ?>
 
 <?php
-
 $this->registerJs(<<<'JS'
-    $('.price-input').on('change mouseup', function () {
-        var price = parseFloat($(this).val());
-        if (isNaN(price)) return false;
-        
-        var base = $(this).closest('td').find('.base-price');
-        var basePrice = parseFloat(base.attr('data-original-price'));
-        var delta = price - basePrice;
-        
-        if (delta <= -basePrice) {
-            $(this).val('0.01').trigger('change');
-            return false;
-        }
-        
-        base.removeClass('text-success text-danger');
-        
-        base.text(delta.toFixed(2)).addClass(delta >= 0 ? 'text-success' : 'text-danger');
+    $('#tariff-parent_id').on('change', function () {
+        var fakeInput = $('<input>').attr({'name': 'parent_id', 'value': $(this).val()});
+        var formAction = $(this).closest('select').attr('data-url');
+        var fakeForm = $('<form>').attr({'method': 'get', 'action': formAction}).html(fakeInput).on('submit', function(event) {
+            $.pjax.submit(event, '#tariff-pjax-container');
+            event.preventDefault();
+        }).trigger('submit');
     });
-
-    $('.price-input').trigger('change');
 JS
-);
+); ?>
 
-$this->registerCss('
-.base-price { font-weight: bold; }
-.form-group.form-group-sm { margin-bottom: 0; }
-');
-
-?>
+<?php Pjax::end(); ?>

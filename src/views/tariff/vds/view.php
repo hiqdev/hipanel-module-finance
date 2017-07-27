@@ -59,7 +59,10 @@ use hipanel\widgets\Box;
                     <td><?= $resource->decorator()->displayTitle() ?></td>
                     <td><?= $resource->decorator()->displayPrepaidAmount() ?></td>
                     <td>
-                        <?= Yii::$app->formatter->asCurrency($resource->fee, $resource->currency) ?>
+                        <?= \hipanel\modules\finance\widgets\ResourcePriceWidget::widget([
+                            'price' => $resource->fee,
+                            'currency' => $resource->currency
+                        ]) ?>
                         <?php if (Yii::$app->user->can('manage')) : ?>
                             <?= PriceDifferenceWidget::widget([
                                 'new' => $resource->fee,
@@ -92,7 +95,10 @@ use hipanel\widgets\Box;
                 <tr>
                     <td><?= $resource->decorator()->displayTitle() ?></td>
                     <td>
-                        <?= Yii::$app->formatter->asCurrency($resource->fee, $resource->currency) ?>
+                        <?= \hipanel\modules\finance\widgets\ResourcePriceWidget::widget([
+                            'price' => $resource->fee,
+                            'currency' => $resource->currency
+                        ]) ?>
                         <?php if (Yii::$app->user->can('manage')) : ?>
                             <?= PriceDifferenceWidget::widget([
                                 'new' => $resource->fee,
@@ -104,7 +110,10 @@ use hipanel\widgets\Box;
                         <?= $resource->decorator()->displayPrepaidAmount() ?>
                     </td>
                     <td>
-                        <?= Yii::$app->formatter->asCurrency($resource->price, $resource->currency) ?>
+                        <?= \hipanel\modules\finance\widgets\ResourcePriceWidget::widget([
+                            'price' => $resource->price,
+                            'currency' => $resource->currency
+                        ]) ?>
                         <?php if (Yii::$app->user->can('manage')) : ?>
                             <?= PriceDifferenceWidget::widget([
                                 'new' => $resource->price,

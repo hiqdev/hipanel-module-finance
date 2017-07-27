@@ -25,6 +25,7 @@ class TariffActionsMenu extends \hiqdev\yii2\menus\Menu
                 'label' => Yii::t('hipanel', 'Update'),
                 'icon' => 'fa-pencil',
                 'url' => ['@tariff/update', 'id' => $this->model->id],
+                'visible' => Yii::$app->user->can('manage'),
             ],
             [
                 'label' => ModalButton::widget([
