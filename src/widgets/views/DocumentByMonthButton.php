@@ -38,6 +38,7 @@ use yii\helpers\Html;
 ]) ?>
 
 <?= $prepend ?>
+
 <?= $modalButton->form->field($model, 'month')->widget(DatePicker::class, [
     'options' => [
         'id' => 'purse-month-' . uniqid(),
@@ -47,7 +48,7 @@ use yii\helpers\Html;
         'viewMode' => 'months',
         'minViewMode' => 'months',
         'autoclose' => true,
-        'endDate' => $dt->modify('last day of this month')->format('d-m-Y'),
+        'endDate' => $dt->modify('next month')->format('Y-m'),
     ],
 ]) ?>
 <?= $append ?>
