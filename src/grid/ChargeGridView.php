@@ -10,9 +10,9 @@ use yii\helpers\Html;
 
 class ChargeGridView extends \hipanel\grid\BoxedGridView
 {
-    public static function defaultColumns()
+    public function columns()
     {
-        return [
+        return array_merge(parent::columns(), [
             'type_label' => [
                 'label' => Yii::t('hipanel', 'Type'),
                 'format' => 'html',
@@ -75,6 +75,6 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                     return $time === '00:00:00' ? Yii::$app->formatter->asDate($date) : Yii::$app->formatter->asDateTime($model->time);
                 },
             ],
-        ];
+        ]);
     }
 }
