@@ -17,11 +17,11 @@ use Yii;
 
 class TariffGridView extends \hipanel\grid\BoxedGridView
 {
-    public static function defaultColumns()
+    public function columns()
     {
-        return [
+        return array_merge(parent::columns(), [
             'tariff' => [
-                'class'           => 'hipanel\grid\MainColumn',
+                'class' => 'hipanel\grid\MainColumn',
                 'filterAttribute' => 'tariff_like',
             ],
             'used' => [
@@ -37,10 +37,10 @@ class TariffGridView extends \hipanel\grid\BoxedGridView
                 'class' => RefColumn::class,
                 'i18nDictionary' => 'hipanel:finance:tariff:types',
                 'gtype' => 'type,tariff',
-                'value'  => function ($model) {
+                'value' => function ($model) {
                     return Yii::t('hipanel:finance:tariff:types', $model->type);
                 },
             ],
-        ];
+        ]);
     }
 }
