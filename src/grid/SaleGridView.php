@@ -9,9 +9,9 @@ use yii\helpers\Html;
 
 class SaleGridView extends \hipanel\grid\BoxedGridView
 {
-    public static function defaultColumns()
+    public function columns()
     {
-        return [
+        return array_merge(parent::columns(), [
             'tariff' => [
                 'format' => 'html',
                 'value' => function ($model) {
@@ -62,6 +62,6 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                     return $html;
                 }
             ],
-        ];
+        ]);
     }
 }
