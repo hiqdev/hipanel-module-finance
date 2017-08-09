@@ -16,9 +16,9 @@ use Yii;
 
 class PurseGridView extends \hipanel\grid\BoxedGridView
 {
-    public static function defaultColumns()
+    public function columns()
     {
-        return [
+        return array_merge(parent::columns(), [
             'balance' => [
                 'class' => 'hipanel\modules\finance\grid\BalanceColumn',
             ],
@@ -115,6 +115,6 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                     ]);
                 },
             ],
-        ];
+        ]);
     }
 }
