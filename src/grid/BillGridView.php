@@ -25,9 +25,9 @@ use yii\helpers\Html;
 
 class BillGridView extends \hipanel\grid\BoxedGridView
 {
-    public static function defaultColumns()
+    public function columns()
     {
-        return [
+        return array_merge(parent::columns(), [
             'bill' => [
                 'class' => MainColumn::class,
                 'attribute' => 'bill',
@@ -118,8 +118,8 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     $tariff = $model->tariff ? Html::tag('span',
                         Yii::t('hipanel', 'Tariff') . ': ' . Html::a($model->tariff,
                             ['@tariff/view', 'id' => $model->tariff_id]), ['class' => 'pull-right']) : '';
-                    $amount = static::billQuantity($model);
-                    $object = static::objectTag($model);
+                    $amount = self::billQuantity($model);
+                    $object = $this->objectTag($model);
 
                     return $tariff . $amount . ' ' . implode('<br>', array_filter([$object, $text]));
                 },
@@ -128,38 +128,38 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'tariff',
                 'format' => 'html',
                 'value' => function ($model) {
-                    return static::tariffLink($model);
+                    return $this->tariffLink($model);
                 },
             ],
             'object' => [
                 'attribute' => 'object',
                 'format' => 'html',
                 'value' => function ($model) {
-                    return static::objectTag($model);
+                    return $this->objectTag($model);
                 },
             ],
             'actions' => [
                 'class' => MenuColumn::class,
                 'menuClass' => BillActionsMenu::class,
             ],
-        ];
+        ]);
     }
 
-    public static function tariffLink($model)
+    public function tariffLink($model)
     {
         return Html::a($model->tariff, ['@tariff/view', 'id' => $model->tariff_id]);
     }
 
-    public static function objectTag($model)
+    public function objectTag($model)
     {
-        return $model->object ? implode(':&nbsp;', [$model->class_label, static::objectLink($model)]) : '';
+        return $model->object ? implode(':&nbsp;', [$model->class_label, $this->objectLink($model)]) : '';
     }
 
     /**
      * Creates link to object details page.
      * @param Bill $model
      */
-    public static function objectLink($model)
+    public function objectLink($model)
     {
         return $model->class === 'device'
             ? Html::a($model->object, ['@server/view', 'id' => $model->object_id])
