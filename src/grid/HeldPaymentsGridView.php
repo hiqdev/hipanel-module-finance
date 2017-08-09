@@ -16,9 +16,9 @@ use yii\helpers\Inflector;
 
 class HeldPaymentsGridView extends \hipanel\grid\BoxedGridView
 {
-    public static function defaultColumns()
+    public function columns()
     {
-        return [
+        return array_merge(parent::columns(), [
             'user_comment' => [
                 'attribute' => 'user_comment',
                 'filterAttribute' => 'user_comment_like',
@@ -64,6 +64,6 @@ class HeldPaymentsGridView extends \hipanel\grid\BoxedGridView
                 'template' => '{view}',
                 'header' => Yii::t('hipanel', 'Actions'),
             ],
-        ];
+        ]);
     }
 }
