@@ -14,12 +14,9 @@ use hipanel\modules\finance\forms\AbstractTariffForm;
 use hipanel\modules\finance\models\Tariff;
 use Yii;
 use yii\base\InvalidConfigException;
-use yii\base\Object;
-use yii\helpers\ArrayHelper;
-use yii\web\ForbiddenHttpException;
-use yii\web\NotFoundHttpException;
+use yii\base\BaseObject;
 
-abstract class AbstractTariffManager extends Object
+abstract class AbstractTariffManager extends BaseObject
 {
     /**
      * @var int Parent tariff ID
@@ -98,6 +95,11 @@ abstract class AbstractTariffManager extends Object
             ->where(['id' => $id])
             ->details()
             ->one();
+
+        // In case parent tariff is not available - use current tariff as the last hope fallback
+        if ($this->parentTariff === null && $this->tariff !== null) {
+            $this->parentTariff = clone $this->tariff;
+        }
     }
 
     /**
@@ -107,7 +109,7 @@ abstract class AbstractTariffManager extends Object
      */
     protected function determineParentTariff()
     {
-        if (!isset($this->tariff)) {
+        if ($this->tariff === null) {
             if (!empty($this->parent_id)) {
                 return $this->parent_id;
             }
@@ -115,7 +117,7 @@ abstract class AbstractTariffManager extends Object
             return null;
         }
 
-        if (isset($this->tariff->parent_id)) {
+        if ($this->tariff->parent_id !== null) {
             return $this->tariff->parent_id;
         }
 
