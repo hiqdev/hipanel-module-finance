@@ -23,15 +23,13 @@ class TariffGridView extends \hipanel\grid\BoxedGridView
             'tariff' => [
                 'class' => 'hipanel\grid\MainColumn',
                 'filterAttribute' => 'tariff_like',
+                'note' => Yii::$app->user->can('manage') ? 'note' : null,
+                'noteOptions' => [
+                    'url' => Url::to('set-note'),
+                ],
             ],
             'used' => [
                 'filter' => false,
-            ],
-            'note' => [
-                'class' => XEditableColumn::class,
-                'pluginOptions' => [
-                    'url' => Url::to(['@tariff/set-note']),
-                ],
             ],
             'type' => [
                 'class' => RefColumn::class,

@@ -44,7 +44,7 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
             [['note', 'label'], 'safe'],
             [['is_personal'], 'boolean'],
             [['id'], 'required', 'on' => ['delete', 'set-note']],
-            [['note'], 'safe', 'on' => ['set-note']]
+            [['note'], 'string', 'on' => ['set-note']]
         ];
     }
 
