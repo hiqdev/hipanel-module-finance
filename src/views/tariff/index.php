@@ -69,11 +69,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => Yii::$app->user->can('manage')
                 ? [
                     'checkbox',
-                    'tariff', 'note', 'used', 'type',
+                    'tariff', 'used', 'type',
                     'client_id', 'seller_id',
                 ]
                 : [
-                    'tariff', 'note', 'used',
+                    'tariff', 'used',
                     'client_id', 'seller_id',
                 ],
         ]) ?>
