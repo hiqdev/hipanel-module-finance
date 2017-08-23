@@ -12,7 +12,7 @@ $this->title = Yii::t('hipanel:finance', 'Select payment option');
 ?>
 
 <div class="row">
-    <div class="col-md-offset-3 col-md-6">
+    <div class="col-md-offset-1 col-md-10">
 
         <div class="box box-solid">
             <div class="box-header with-border text-center">
