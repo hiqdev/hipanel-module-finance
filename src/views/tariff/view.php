@@ -42,16 +42,25 @@ $this->params['breadcrumbs'][] = $this->title;
             <br>
             <span class="profile-user-role"></span>
         </p>
-        <?php if (Yii::$app->user->can('manage')) : ?>
-            <div class="profile-usermenu">
+        <div class="profile-usermenu">
+            <?php if ($model->tariff->note) : ?>
+                <p style="padding: 10px 15px; border-bottom: 1px solid #f0f4f7;">
+                    <?php if (Yii::$app->user->can('manage')) : ?>
+                        <?= Yii::t('hipanel:finance:tariff', '{0}:', [Html::tag('b', $model->tariff->getAttributeLabel('note'))]) ?>
+                        <?= \hipanel\widgets\XEditable::widget([
+                            'model' => $model->tariff,
+                            'attribute' => 'note',
+                            'scenario' => 'set-note',
+                        ]) ?>
+                    <?php else : ?>
+                        <?= Yii::t('hipanel:finance:tariff', '{0}: {1}', [Html::tag('b', $model->tariff->getAttributeLabel('note')), Html::encode($model->tariff->note)]) ?>
+                    <?php endif; ?>
+                </p>
+            <?php endif; ?>
+            <?php if (Yii::$app->user->can('manage')) : ?>
                 <?= TariffDetailMenu::widget(['model' => $model]) ?>
-            </div>
-        <?php endif ?>
-        <?php if ($model->tariff->note) : ?>
-            <p style="padding: 10px 15px; border-top: 1px solid #f0f4f7;">
-                <?= Yii::t('hipanel:finance:tariff', '{0}: {1}', [Html::tag('b', $model->tariff->getAttributeLabel('note')), Html::encode($model->tariff->note)]) ?>
-            </p>
-        <?php endif; ?>
+            <?php endif ?>
+        </div>
         <?php Box::end() ?>
     </div>
     <div class="col-md-9">
