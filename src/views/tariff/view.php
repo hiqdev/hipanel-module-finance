@@ -4,6 +4,7 @@
  * @var \yii\web\View
  * @var $manager \hipanel\modules\finance\logic\AbstractTariffManager
  */
+
 use hipanel\modules\finance\menus\TariffDetailMenu;
 use hipanel\widgets\Box;
 use hipanel\widgets\ClientSellerLink;
@@ -46,6 +47,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= TariffDetailMenu::widget(['model' => $model]) ?>
             </div>
         <?php endif ?>
+        <?php if ($model->tariff->note) : ?>
+            <p style="padding: 10px 15px; border-top: 1px solid #f0f4f7;">
+                <?= Yii::t('hipanel:finance:tariff', '{0}: {1}', [Html::tag('b', $model->tariff->getAttributeLabel('note')), Html::encode($model->tariff->note)]) ?>
+            </p>
+        <?php endif; ?>
         <?php Box::end() ?>
     </div>
     <div class="col-md-9">
