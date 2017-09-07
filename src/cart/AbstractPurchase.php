@@ -86,4 +86,12 @@ abstract class AbstractPurchase extends \hipanel\base\Model
             [['amount'], 'number'],
         ];
     }
+
+    /**
+     * @return string[]
+     */
+    public function getPurchasabilityRules()
+    {
+        return [];
+    }
 }
