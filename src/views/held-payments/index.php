@@ -32,15 +32,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php // TODO: add actions?>
     <?php $page->endContent() ?>
 
-    <?php $page->beginContent('show-actions') ?>
-        <?= $page->renderLayoutSwitcher() ?>
+    <?php $page->beginContent('sorter-actions') ?>
         <?= $page->renderSorter([
             'attributes' => [
                 'client',
                 'time',
             ],
         ]) ?>
-        <?= $page->renderPerPage() ?>
     <?php $page->endContent() ?>
 
     <?php $page->beginContent('bulk-actions') ?>

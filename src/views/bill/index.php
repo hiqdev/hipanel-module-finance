@@ -39,8 +39,7 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
             <?php endif ?>
         <?php $page->endContent() ?>
 
-        <?php $page->beginContent('show-actions') ?>
-            <?= $page->renderLayoutSwitcher() ?>
+        <?php $page->beginContent('sorter-actions') ?>
             <?= $page->renderSorter([
                 'attributes' => [
                     'seller', 'client',
@@ -48,7 +47,6 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
                     'type', 'descr',
                 ],
             ]) ?>
-            <?= $page->renderPerPage() ?>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('bulk-actions') ?>

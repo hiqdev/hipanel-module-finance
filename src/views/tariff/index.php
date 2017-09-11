@@ -42,15 +42,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php endif ?>
     <?php $page->endContent() ?>
 
-    <?php $page->beginContent('show-actions') ?>
-        <?= $page->renderLayoutSwitcher() ?>
+    <?php $page->beginContent('sorter-actions') ?>
         <?= $page->renderSorter([
             'attributes' => [
                 'seller', 'client',
                 'tariff',
             ],
         ]) ?>
-        <?= $page->renderPerPage() ?>
     <?php $page->endContent() ?>
 
     <?php $page->beginContent('bulk-actions') ?>
