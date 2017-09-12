@@ -12,6 +12,10 @@ namespace hipanel\modules\finance\models;
 
 use hiqdev\hiart\ActiveRecord;
 
+/**
+ * Value.
+ * API returns this object as result of billing cost calculation.
+ */
 class Value extends ActiveRecord
 {
     public function attributes()

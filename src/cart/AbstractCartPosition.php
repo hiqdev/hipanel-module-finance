@@ -19,7 +19,13 @@ use Yii;
 use yii\base\InvalidConfigException;
 
 /**
- * Class AbstractCartPosition.
+ * AbstractCartPosition represents position (item) in cart.
+ * Holds:
+ * - calculation object
+ * - purchase object
+ * - price for single item
+ * - value for selected quantity
+ *
  * @property Calculation $actionCalcModel
  */
 abstract class AbstractCartPosition extends ActiveRecord implements CartPositionInterface, CalculableModelInterface
