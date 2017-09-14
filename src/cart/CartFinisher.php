@@ -10,7 +10,6 @@
 
 namespace hipanel\modules\finance\cart;
 
-use hiqdev\hiart\ResponseErrorException;
 use hiqdev\yii2\cart\ShoppingCart;
 use Yii;
 use yii\base\BaseObject;
@@ -21,6 +20,11 @@ class CartFinisher extends BaseObject
      * @var ShoppingCart
      */
     public $cart;
+
+    /**
+     * @var PurchaseStrategyInterface[]
+     */
+    protected $purchasers = [];
 
     /**
      * @var AbstractPurchase[] array of successful purchases
@@ -75,25 +79,18 @@ class CartFinisher extends BaseObject
         }
 
         $this->ensureCanBeFinished();
+        $this->createPurchasers();
 
-        foreach ($this->cart->positions as $position) {
-            $purchase = $position->getPurchaseModel();
+        foreach ($this->purchasers as $purchaser) {
+            $purchaser->run();
 
-            try {
-                if ($purchase->execute()) {
-                    $this->_success[] = $purchase;
-                    $this->cart->remove($position);
-                } else {
-                    $this->_error[] = new ErrorPurchaseException(reset(reset($purchase->getErrors())), $purchase);
-                }
-            } catch (PendingPurchaseException $e) {
-                $this->_pending[] = $e;
-                $this->cart->remove($position);
-            } catch (ResponseErrorException $e) {
-                $this->_error[] = new ErrorPurchaseException($e->getMessage(), $purchase, $e);
-            } catch (\hiqdev\hiart\Exception $e) {
-                $this->_error[] = new ErrorPurchaseException($e->getMessage(), $purchase, $e);
+            foreach ($this->_success = $purchaser->getSuccessPurchases() as $purchase) {
+                $this->cart->remove($purchase->position);
             }
+            foreach ($this->_pending = $purchaser->getPendingPurchaseExceptions() as $exception) {
+                $this->cart->remove($exception->position);
+            }
+            $this->_error = $purchaser->getErrorPurchaseExceptions();
         }
     }
 
@@ -119,5 +116,31 @@ class CartFinisher extends BaseObject
         } catch (NotPurchasablePositionException $e) {
             $e->resolve();
         }
+    }
+
+    protected function createPurchasers()
+    {
+        foreach ($this->cart->positions as $position) {
+            if ($position instanceof BatchPurchasablePositionInterface) {
+                $purchaser = $this->getPurchaser($position->getBatchPurchaseStrategyClass());
+            } else {
+                $purchaser = $this->getPurchaser(OneByOnePurchaseStrategy::class);
+            }
+
+            $purchaser->addPosition($position);
+        }
+    }
+
+    /**
+     * @param string $class
+     * @return PurchaseStrategyInterface
+     */
+    protected function getPurchaser($class)
+    {
+        if (!isset($this->purchasers[$class])) {
+            $this->purchasers[$class] = new $class($this->cart);
+        }
+
+        return $this->purchasers[$class];
     }
 }
