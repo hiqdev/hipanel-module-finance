@@ -47,11 +47,12 @@ abstract class AbstractPurchase extends \hipanel\base\Model
     }
 
     /**
-     * @var string operation to be performed, e.g.: Renew, Transfer, Registration
+     * @throws InvalidConfigException
+     * @internal param string $ operation to be performed, e.g.: Renew, Transfer, Registration
      */
     public static function operation()
     {
-        throw new InvalidConfigException('Method "operation" must be declared');
+        throw new InvalidConfigException('Method "operation" must be implemented');
     }
 
     /** {@inheritdoc} */
