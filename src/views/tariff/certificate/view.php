@@ -39,9 +39,11 @@ Box::begin() ?>
                         <?php foreach ($model->getPeriods() as $period => $periodLabel) : ?>
                             <td>
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <?php $price = $resource->getPriceForPeriod($period) ?>
+                                    <?php $textc = $price > 0 ? '' : ' text-warning' ?>
+                                    <div class="col-md-6 <?= $textc ?>">
                                         <?= \hipanel\modules\finance\widgets\ResourcePriceWidget::widget([
-                                            'price' => $resource->getPriceForPeriod($period),
+                                            'price' => $price,
                                             'currency' => $resource->currency
                                         ]) ?>
                                     </div>

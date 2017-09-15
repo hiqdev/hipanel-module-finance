@@ -55,7 +55,7 @@ use yii\helpers\Html;
                             <td>
                                 <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
                                     'basePrice' => $baseResources[$type]->getPriceForPeriod($period),
-                                    'activeField' => $form->field($resource, "[$i]data[prices][$period]"),
+                                    'activeField' => $form->field($resource, "[$i]data[sums][$period]"),
                                 ]) ?>
                             </td>
                         <?php endforeach; ?>

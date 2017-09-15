@@ -70,7 +70,7 @@ class CertificateResource extends Resource
             throw new InvalidConfigException('Period ' . $period . ' is not available');
         }
 
-        return (float)$this->data['prices'][$period];
+        return (float)$this->data['sums'][$period];
     }
 
     public function validatePrices()
@@ -79,13 +79,13 @@ class CertificateResource extends Resource
         $validator = new NumberValidator();
 
         foreach (array_keys($periods) as $period) {
-            $validation = $validator->validate($this->data['prices'][$period]);
+            $validation = $validator->validate($this->data['sums'][$period]);
             if ($validation === false) {
-                unset($this->data['prices'][$period]);
+                unset($this->data['sums'][$period]);
             }
         }
 
-        $this->data = ['prices' => $this->data['prices']];
+        $this->data = ['sums' => $this->data['sums']];
 
         return true;
     }
