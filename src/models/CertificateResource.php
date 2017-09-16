@@ -64,13 +64,33 @@ class CertificateResource extends Resource
         ];
     }
 
+    /**
+     * @return array
+     */
+    public function getAvailablePeriods()
+    {
+        $periods = [];
+        foreach ([1,2,3] as $period) {
+            if ($this->hasPriceForPeriod($period)) {
+                $periods[$period] = Yii::t('hipanel:finance:tariff', '{n, plural, one{# year} other{# years}}', ['n' => $period]);
+            }
+        }
+
+        return $periods;
+    }
+
     public function getPriceForPeriod($period)
     {
-        if (!isset(self::getPeriods()[$period])) {
+        if (!$this->hasPriceForPeriod($period)) {
             throw new InvalidConfigException('Period ' . $period . ' is not available');
         }
 
         return (float)$this->data['sums'][$period];
+    }
+
+    public function hasPriceForPeriod($period)
+    {
+        return !empty($this->data['sums'][$period]);
     }
 
     public function validatePrices()
