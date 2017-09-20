@@ -124,9 +124,9 @@ class CartFinisher extends BaseObject
     {
         foreach ($this->cart->positions as $position) {
             if ($position instanceof BatchPurchasablePositionInterface) {
-                $purchaser = $this->getPurchaser($position->getBatchPurchaseStrategyClass());
+                $purchaser = $this->getPurchaser(get_class($position), $position->getBatchPurchaseStrategyClass());
             } else {
-                $purchaser = $this->getPurchaser(OneByOnePurchaseStrategy::class);
+                $purchaser = $this->getPurchaser(get_class($position), OneByOnePurchaseStrategy::class);
             }
 
             $purchaser->addPosition($position);
@@ -134,15 +134,16 @@ class CartFinisher extends BaseObject
     }
 
     /**
-     * @param string $class
+     * @param string $positionClass
+     * @param string $purchaserClass
      * @return PurchaseStrategyInterface
      */
-    protected function getPurchaser($class)
+    protected function getPurchaser($positionClass, $purchaserClass)
     {
-        if (!isset($this->purchasers[$class])) {
-            $this->purchasers[$class] = new $class($this->cart);
+        if (!isset($this->purchasers[$positionClass])) {
+            $this->purchasers[$positionClass] = new $purchaserClass($this->cart);
         }
 
-        return $this->purchasers[$class];
+        return $this->purchasers[$positionClass];
     }
 }
