@@ -84,13 +84,15 @@ class CartFinisher extends BaseObject
         foreach ($this->purchasers as $purchaser) {
             $purchaser->run();
 
-            foreach ($this->_success = $purchaser->getSuccessPurchases() as $purchase) {
+            $this->_success = array_merge($this->_success, $purchaser->getSuccessPurchases());
+            foreach ($purchaser->getSuccessPurchases() as $purchase) {
                 $this->cart->remove($purchase->position);
             }
-            foreach ($this->_pending = $purchaser->getPendingPurchaseExceptions() as $exception) {
+            $this->_pending = array_merge($this->_pending, $purchaser->getPendingPurchaseExceptions());
+            foreach ($purchaser->getPendingPurchaseExceptions() as $exception) {
                 $this->cart->remove($exception->position);
             }
-            $this->_error = $purchaser->getErrorPurchaseExceptions();
+            $this->_error = array_merge($this->_error, $purchaser->getErrorPurchaseExceptions());
         }
     }
 
