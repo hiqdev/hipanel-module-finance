@@ -15,6 +15,7 @@ use hipanel\modules\finance\models\Calculation;
 use hiqdev\hiart\ActiveRecord;
 use hiqdev\yii2\cart\CartPositionInterface;
 use hiqdev\yii2\cart\CartPositionTrait;
+use Serializable;
 use Yii;
 use yii\base\InvalidConfigException;
 
@@ -28,7 +29,7 @@ use yii\base\InvalidConfigException;
  *
  * @property Calculation $actionCalcModel
  */
-abstract class AbstractCartPosition extends ActiveRecord implements CartPositionInterface, CalculableModelInterface
+abstract class AbstractCartPosition extends ActiveRecord implements CartPositionInterface, CalculableModelInterface, Serializable
 {
     use CartPositionTrait;
 
@@ -168,5 +169,58 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
     public function setValue($value)
     {
         $this->_value = (float) $value;
+    }
+
+    public function serialize()
+    {
+        return serialize($this->serializationMap());
+    }
+
+    /**
+     * Method stores map of attributes that must be serialized.
+     *
+     * @return array key is the attribute name where the value should be extracted
+     * In case when the value shoule be assigned in a special way, use [[unserializationMap]]
+     * to map key to a closure, that will set the value.
+     *
+     * @see unserializationMap
+     */
+    protected function serializationMap()
+    {
+        return [
+            'attributes' => $this->getAttributes(),
+            '_quantity' => $this->_quantity,
+            '_price' => $this->_price,
+            '_value' => $this->_value
+        ];
+    }
+
+    /**
+     * @return array
+     * Key is the attribute name, value - the closure to unserialize the value
+     */
+    protected function unserializationMap()
+    {
+        return [
+            'attributes' => function ($value) {
+                $this->setAttributes($value, false);
+            },
+        ];
+    }
+
+    public function unserialize($serialized)
+    {
+        $map = $this->unserializationMap();
+        $array = unserialize($serialized);
+        foreach ($array as $key => $value) {
+            if (!isset($map[$key])) {
+                $this->{$key} = $value;
+                continue;
+            }
+
+            if ($map[$key] instanceof \Closure) {
+                $map[$key]($value);
+            }
+        }
     }
 }

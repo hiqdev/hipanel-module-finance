@@ -38,6 +38,7 @@ return [
             },
             'shoppingCartOptions' => [
                 'on cartChange' => [\hipanel\modules\finance\cart\CartCalculator::class, 'handle'],
+                'session' => \yii\di\Instance::of(\hipanel\modules\finance\cart\storage\CartStorageInterface::class)
             ],
         ],
         'merchant' => [
@@ -124,6 +125,9 @@ return [
             hiqdev\yii2\merchant\transactions\TransactionRepositoryInterface::class => hipanel\modules\finance\transaction\ApiTransactionRepository::class,
             hipanel\modules\finance\logic\bill\BillQuantityFactoryInterface::class => hipanel\modules\finance\logic\bill\BillQuantityFactory::class,
             hipanel\modules\finance\models\ServerResourceTypesProviderInterface::class => hipanel\modules\finance\models\ServerResourceTypesProvider::class,
+            hipanel\modules\finance\cart\storage\CartStorageInterface::class => function (yii\di\Container $container) {
+                return hipanel\modules\finance\cart\storage\CartStorageFactory::forUser($container->get(\yii\web\User::class));
+            },
         ],
     ],
 ];
