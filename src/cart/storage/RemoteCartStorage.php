@@ -53,7 +53,12 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
     {
         try {
             $this->data = $this->cache->getOrSet($this->getCacheKey(), function () {
-                return Json::decode(base64_decode($this->settingsStorage->getBounded($this->getStorageKey())));
+                $data = $this->settingsStorage->getBounded($this->getStorageKey());
+                if ($data === []) {
+                    return [];
+                }
+
+                return Json::decode(base64_decode($data));
             }, self::CACHE_DURATION);
         } catch (\Exception $exception) {
             Yii::error('Failed to read cart: ' . $exception->getMessage(), __METHOD__);
