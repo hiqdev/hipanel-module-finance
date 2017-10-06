@@ -54,6 +54,16 @@ class Collection extends \hiqdev\yii2\merchant\Collection
             $defaults['username'] = Yii::$app->user->identity->username;
         }
 
+        if (isset($params['name'])) {
+            // When the Request contains concrete merchant name,
+            // parameters `finishUrl`, `cancelUrl`, `notifyUrl` contain
+            // correct URLs, adjusted by [[hiqdev\yii2-merchant\Module::prepareRequestData()]]
+            // and they must be used as success, failure and confirm URLs
+            $params['success_url'] = $params['returnUrl'];
+            $params['failure_url'] = $params['cancelUrl'];
+            $params['confirm_url'] = $params['notifyUrl'];
+        }
+
         $params = array_merge($defaults, (array)$params);
 
         try {
