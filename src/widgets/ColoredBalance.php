@@ -32,7 +32,7 @@ class ColoredBalance extends Widget
 
     public function getUrl($model)
     {
-        return $this->urlCallback ? call_user_func($this->urlCallback, $model, $key, $index) : null;
+        return $this->urlCallback ? call_user_func($this->urlCallback, $model) : null;
     }
 
     public function run()
