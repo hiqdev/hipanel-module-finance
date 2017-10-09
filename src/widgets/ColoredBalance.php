@@ -14,6 +14,8 @@ class ColoredBalance extends Widget
 
     public $nameAttribute = 'balance';
 
+    public $url;
+
     /**
      * @var bool|string Whether to compare [[attribute]] with another attribute to change the display colors
      *  - boolean false - do not compare
@@ -30,11 +32,6 @@ class ColoredBalance extends Widget
         return $this->colors[$type] ?: $type;
     }
 
-    public function getUrl($model)
-    {
-        return $this->urlCallback ? call_user_func($this->urlCallback, $model) : null;
-    }
-
     public function run()
     {
         $value = $this->model->getAttribute($this->attribute);
@@ -48,7 +45,7 @@ class ColoredBalance extends Widget
             $color = 'danger';
         }
 
-        $url = $this->getUrl($this->model);
+        $url = $this->url;
         $txt = Yii::$app->formatter->format($value, ['currency', $this->model->currency]);
         $ops = ['class' => 'text-nowrap text-' . $this->getColor($color), 'data-pjax' => 0];
         return $url ? Html::a($txt, $url, $ops) : Html::tag('span', $txt, $ops);
