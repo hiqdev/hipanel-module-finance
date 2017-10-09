@@ -67,6 +67,7 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
                 'boxed' => false,
                 'dataProvider' => $dataProvider,
                 'filterModel'  => $model,
+                'currencies' => $this->context->getCurrencyTypes(),
                 'columns'      => [
                     'checkbox', 'actions', 'client_id', 'time', 'sum_editable', 'balance',
                     'type_label', 'description',

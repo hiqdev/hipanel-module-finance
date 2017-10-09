@@ -12,19 +12,24 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\CurrencyColumn;
 use hipanel\grid\MainColumn;
+use hipanel\helpers\StringHelper;
 use hipanel\helpers\Url;
 use hipanel\modules\finance\logic\bill\BillQuantityFactory;
 use hipanel\modules\finance\logic\bill\BillQuantityInterface;
 use hipanel\modules\finance\menus\BillActionsMenu;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\widgets\BillTypeFilter;
+use hipanel\modules\finance\widgets\ColoredBalance;
 use hipanel\widgets\ArraySpoiler;
+use hiqdev\combo\StaticCombo;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\helpers\Html;
 
 class BillGridView extends \hipanel\grid\BoxedGridView
 {
+    public $currencies = [];
+
     public function columns()
     {
         return array_merge(parent::columns(), [
@@ -76,11 +81,24 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'contentOptions' => ['class' => 'text-right text-bold'],
             ],
             'balance' => [
-                'class' => CurrencyColumn::class,
+                'attribute' => 'balance',
+                'format' => 'raw',
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => function ($model, $key, $index) {
                     return ['class' => 'text-right' . ($index ? '' : ' text-bold')];
                 },
+                'value' => function ($model) {
+                    return ColoredBalance::widget(compact('model'));
+                },
+                'filterAttribute' => 'currency_in',
+                'filterOptions' => ['class' => 'narrow-filter'],
+                'filter' => function ($column, $filterModel) {
+                    $currencies = array_combine(array_keys($this->currencies), array_map(function ($k) {
+                        return StringHelper::getCurrencySymbol($k);
+                    }, array_keys($this->currencies)));
+
+                    return Html::activeDropDownList($filterModel, 'currency_in', $currencies, ['class' => 'form-control', 'prompt' => '--']);
+                }
             ],
             'gtype' => [
                 'attribute' => 'gtype',
