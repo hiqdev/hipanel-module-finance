@@ -70,17 +70,12 @@ class LocationResourceDecorator extends AbstractServerResourceDecorator
 
     private function amountOptions()
     {
-        $data = [
-            Tariff::TYPE_XEN => [
-                1 => Yii::t('hipanel:finance:tariff', 'Netherlands, Amsterdam'),
-                2 => Yii::t('hipanel:finance:tariff', 'USA, Ashburn'),
-            ],
-            Tariff::TYPE_OPENVZ => [
-                2 => Yii::t('hipanel:finance:tariff', 'USA, Ashburn'),
-                // Disabled on RED demand
-                // 3 => Yii::t('hipanel:finance:tariff', 'Netherlands, Amsterdam')
-            ],
-        ];
+        $data = Yii::$app->cache->getOrSet([__METHOD__ , 'serversGetLocations'], function() {
+            return \hipanel\modules\server\models\Server::Perform('getLocations',[
+                Tariff::TYPE_XEN => ['type' => Tariff::TYPE_XEN],
+                Tariff::TYPE_OPENVZ => ['type' => Tariff::TYPE_OPENVZ],
+            ], ['batch' => true]);
+        }, 3600);
 
         return $data[$this->resource->tariff->type];
     }
