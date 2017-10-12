@@ -41,8 +41,8 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 
         $data = array_merge([
             'transactionId' => $transaction->getId(),
+            'merchant' => $transaction->getMerchant(),
             'username' => $transaction->getParameter('username'),
-            'merchant' => $transaction->getParameter('merchant'),
         ], $_REQUEST);
         Yii::info(http_build_query($data), 'merchant');
 

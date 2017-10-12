@@ -47,7 +47,7 @@ return [
             'notifyPage' => '/finance/pay/notify',
             'finishPage' => '/finance/bill',
             'depositClass' => \hipanel\modules\finance\merchant\Deposit::class,
-            'collectionClass' => \hipanel\modules\finance\merchant\Collection::class,
+            'purchaseRequestCollectionClass' => \hipanel\modules\finance\merchant\PurchaseRequestCollection::class,
         ],
     ],
     'components' => [

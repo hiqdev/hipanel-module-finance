@@ -12,20 +12,29 @@ namespace hipanel\modules\finance\merchant;
 
 use hipanel\modules\finance\models\Merchant;
 use hiqdev\hiart\ResponseErrorException;
+use hiqdev\php\merchant\exceptions\MerchantException;
+use hiqdev\php\merchant\response\RedirectPurchaseResponse;
+use hiqdev\yii2\merchant\models\DepositRequest;
+use hiqdev\yii2\merchant\models\PurchaseRequest;
 use Yii;
 use yii\helpers\ArrayHelper;
 
-class Collection extends \hiqdev\yii2\merchant\Collection
+class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
 {
     public function init()
     {
         parent::init();
-        $this->loadMerchants($this->params);
+
+        if ($this->depositRequest === null) {
+            $this->depositRequest = $this->createDefaultDepositRequest();
+        }
+
+        $this->loadMerchants($this->depositRequest);
     }
 
-    public function loadMerchants(array $params = null)
+    public function loadMerchants($depositRequest)
     {
-        $this->addItems($this->fetchMerchants($params));
+        $this->addItems($this->fetchMerchants($depositRequest));
     }
 
     public static $supportedSystems = [
@@ -41,30 +50,28 @@ class Collection extends \hiqdev\yii2\merchant\Collection
         'bitpay' => 1
     ];
 
-    public function fetchMerchants(array $params = [])
+    public function fetchMerchants(DepositRequest $depositRequest)
     {
-        $defaults = [
-            'sum' => $params['amount'] ?: 1,
+        $params = [
+            'sum' => $depositRequest->amount,
             'site' => Yii::$app->request->getHostInfo(),
         ];
 
         if (Yii::$app->user->getIsGuest()) {
-            $defaults['seller'] = Yii::$app->params['user.seller'];
+            $params['seller'] = Yii::$app->params['user.seller'];
         } else {
-            $defaults['username'] = Yii::$app->user->identity->username;
+            $params['username'] = $depositRequest->username;
         }
 
-        if (isset($params['name'])) {
+        if (isset($depositRequest->merchant)) {
             // When the Request contains concrete merchant name,
             // parameters `finishUrl`, `cancelUrl`, `notifyUrl` contain
             // correct URLs, adjusted by [[hiqdev\yii2-merchant\Module::prepareRequestData()]]
             // and they must be used as success, failure and confirm URLs
-            $params['success_url'] = $params['returnUrl'];
-            $params['failure_url'] = $params['cancelUrl'];
-            $params['confirm_url'] = $params['notifyUrl'];
+            $params['success_url'] = $depositRequest->returnUrl;
+            $params['failure_url'] = $depositRequest->cancelUrl;
+            $params['confirm_url'] = $depositRequest->notifyUrl;
         }
-
-        $params = array_merge($defaults, (array)$params);
 
         try {
             $merchants = $this->requestMerchants($params);
@@ -98,13 +105,26 @@ class Collection extends \hiqdev\yii2\merchant\Collection
 
     public function convertMerchant($data)
     {
-        $data['currency'] = strtoupper($data['currency']);
-        $data['amount']   = $data['sum'];
+        $request = new PurchaseRequest();
 
-        return [
-            'gateway' => $data['system'],
-            'label' => $data['label'],
-            'data' => $data,
-        ];
+        $request->merchant_name = $data['name'];
+        $request->system = $data['system'];
+        $request->currency = strtoupper($data['currency']);
+        $request->label = $data['label'];
+        $request->fee = $data['fee'];
+        $request->commission = $data['commission_fee'];
+        $request->id = $data['invoice_id'];
+        $request->amount = $data['sum'];
+        $request->form = (new RedirectPurchaseResponse($data['action'], $data['inputs']))->setMethod($data['method']);
+
+        return $request;
+    }
+
+    protected function createDefaultDepositRequest()
+    {
+        $request = new DepositRequest();
+        $request->amount = 10;
+
+        return $request;
     }
 }
