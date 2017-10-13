@@ -33,7 +33,7 @@ return [
             },*/
             'paymentMethods' => function () {
                 return Yii::$app->getView()->render('@hipanel/modules/finance/views/cart/payment-methods', [
-                    'merchants' => Yii::$app->getModule('merchant')->getCollection([])->getItems(),
+                    'merchants' => Yii::$app->getModule('merchant')->getPurchaseRequestCollection([])->getItems(),
                 ]);
             },
             'shoppingCartOptions' => [
