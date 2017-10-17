@@ -14,6 +14,8 @@ use hipanel\modules\finance\models\Merchant;
 use hiqdev\hiart\ResponseErrorException;
 use hiqdev\yii2\merchant\transactions\Transaction;
 use Yii;
+use yii\base\InvalidParamException;
+use yii\helpers\Json;
 
 /**
  * Class PayController.
@@ -45,6 +47,12 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
             'username' => $transaction->getParameter('username'),
         ], $_REQUEST);
         Yii::info(http_build_query($data), 'merchant');
+
+        if (($input = file_get_contents('php://input')) !== null) {
+            try {
+                $data['rawBody'] = Json::decode($input);
+            } catch (InvalidParamException $e) {}
+        }
 
         try {
             return Yii::$app->get('hiart')->callWithDisabledAuth(function () use ($transaction, $data) {
