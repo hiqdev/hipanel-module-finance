@@ -46,7 +46,6 @@ return [
             'returnPage' => '/finance/pay/return',
             'notifyPage' => '/finance/pay/notify',
             'finishPage' => '/finance/bill',
-            'depositClass' => \hipanel\modules\finance\merchant\Deposit::class,
             'purchaseRequestCollectionClass' => \hipanel\modules\finance\merchant\PurchaseRequestCollection::class,
         ],
     ],
@@ -119,6 +118,9 @@ return [
             ],
             \hipanel\modules\finance\logic\ServerTariffCalculatorInterface::class => \hipanel\modules\finance\logic\CalculatorInterface::class,
             \hipanel\modules\finance\logic\CalculatorInterface::class => \hipanel\modules\finance\logic\Calculator::class,
+            \hiqdev\yii2\merchant\widgets\PayButton::class => [
+                'action' => ['@finance/pay/request']
+            ]
         ],
         'singletons' => [
             hipanel\modules\finance\providers\BillTypesProvider::class => hipanel\modules\finance\providers\BillTypesProvider::class,

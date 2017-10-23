@@ -12,6 +12,8 @@ namespace hipanel\modules\finance\controllers;
 
 use hipanel\modules\finance\models\Merchant;
 use hiqdev\hiart\ResponseErrorException;
+use hiqdev\yii2\merchant\actions\RequestAction;
+use hiqdev\yii2\merchant\events\TransactionInsertEvent;
 use hiqdev\yii2\merchant\transactions\Transaction;
 use Yii;
 use yii\base\InvalidParamException;
@@ -23,6 +25,22 @@ use yii\helpers\Json;
  */
 class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 {
+    const SESSION_MERCHANT_LATEST_TRANSACTION_ID = 'MERCHANT_LATEST_TRANSACTION_ID';
+
+    public function actions()
+    {
+        return array_merge(parent::actions(), [
+            'request' => [
+                'class' => RequestAction::class,
+                'on ' . RequestAction::EVENT_AFTER_TRANSACTION_INSERT => function (TransactionInsertEvent $event) {
+                    if ($event->transaction instanceof Transaction) {
+                        Yii::$app->session->set(self::SESSION_MERCHANT_LATEST_TRANSACTION_ID, $event->transaction->getId());
+                    }
+                }
+            ]
+        ]);
+    }
+
     public function getMerchantModule()
     {
         return $this->module->getMerchant();
@@ -35,7 +53,10 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 
     public function checkNotify()
     {
-        $id = Yii::$app->request->get('transactionId') ?: Yii::$app->request->post('transactionId');
+        $id = Yii::$app->request->get('transactionId')
+            ?? Yii::$app->request->post('transactionId')
+            ?? Yii::$app->session->get(self::SESSION_MERCHANT_LATEST_TRANSACTION_ID);
+
         $transaction = $this->getMerchantModule()->findTransaction($id);
         if ($transaction === null) {
             return null;
