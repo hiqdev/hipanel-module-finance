@@ -53,6 +53,7 @@ class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
     public function fetchMerchants(DepositRequest $depositRequest)
     {
         $params = [
+            'transactionId' => $depositRequest->id,
             'sum' => floatval($depositRequest->amount),
             'site' => Yii::$app->request->getHostInfo(),
         ];
