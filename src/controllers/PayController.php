@@ -79,11 +79,12 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
             return Yii::$app->get('hiart')->callWithDisabledAuth(function () use ($transaction, $data) {
                 $result = Merchant::perform('pay', $data);
 
-                return $this->completeTransaction($transaction, $result);
+                $this->completeTransaction($transaction, $result);
+                return $transaction;
             });
         } catch (ResponseErrorException $e) {
             // Does not matter
-            return null;
+            return $transaction;
         }
     }
 
