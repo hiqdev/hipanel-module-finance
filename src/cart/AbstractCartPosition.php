@@ -191,7 +191,8 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
             'attributes' => $this->getAttributes(),
             '_quantity' => $this->_quantity,
             '_price' => $this->_price,
-            '_value' => $this->_value
+            '_value' => $this->_value,
+            '_id' => $this->_id,
         ];
     }
 
