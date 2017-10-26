@@ -12,12 +12,10 @@ namespace hipanel\modules\finance\merchant;
 
 use hipanel\modules\finance\models\Merchant;
 use hiqdev\hiart\ResponseErrorException;
-use hiqdev\php\merchant\exceptions\MerchantException;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use hiqdev\yii2\merchant\models\DepositRequest;
 use hiqdev\yii2\merchant\models\PurchaseRequest;
 use Yii;
-use yii\helpers\ArrayHelper;
 
 class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
 {
@@ -101,7 +99,7 @@ class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
     {
         return Yii::$app->getCache()->getOrSet([__METHOD__, $params], function () use ($params) {
             return Merchant::perform('prepare-info', $params, ['batch' => true]);
-        }, 3600*24);
+        }, 3600*1);
     }
 
     public function convertMerchant($data)
@@ -113,7 +111,7 @@ class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
         $request->currency = strtoupper($data['currency']);
         $request->label = $data['label'];
         $request->fee = $data['fee'];
-        $request->commission = $data['commission_fee'];
+        $request->commission_fee = $data['commission_fee'];
         $request->id = $data['invoice_id'];
         $request->amount = $data['sum'];
         $request->form = (new RedirectPurchaseResponse($data['action'], $data['inputs']))->setMethod($data['method']);
