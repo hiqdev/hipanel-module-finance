@@ -88,6 +88,19 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
         }
     }
 
+    public function actionProxyNotification()
+    {
+        // Currently used at least for FreeKassa integration
+        $data = array_merge(Yii::$app->request->get(), Yii::$app->request->post());
+
+        $result = Yii::$app->get('hiart')->callWithDisabledAuth(function () use ($data) {
+            return Merchant::perform('pay-transaction', $data);
+        });
+
+        $this->layout = false;
+        return $result;
+    }
+
     /**
      * @param Transaction $transaction
      * @param $response
