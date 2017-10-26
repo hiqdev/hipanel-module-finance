@@ -112,15 +112,13 @@ return [
             ],
             \hiqdev\yii2\merchant\widgets\PayButton::class => [
                 'class' => \hiqdev\yii2\merchant\widgets\PayButton::class,
+                'action' => ['@finance/pay/request'],
                 'as commentBehavior' => [
                     'class' => \hipanel\modules\finance\behaviors\PayButtonCommentBehavior::class,
                 ],
             ],
             \hipanel\modules\finance\logic\ServerTariffCalculatorInterface::class => \hipanel\modules\finance\logic\CalculatorInterface::class,
             \hipanel\modules\finance\logic\CalculatorInterface::class => \hipanel\modules\finance\logic\Calculator::class,
-            \hiqdev\yii2\merchant\widgets\PayButton::class => [
-                'action' => ['@finance/pay/request']
-            ]
         ],
         'singletons' => [
             hipanel\modules\finance\providers\BillTypesProvider::class => hipanel\modules\finance\providers\BillTypesProvider::class,
