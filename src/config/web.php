@@ -32,8 +32,12 @@ return [
                 ]);
             },*/
             'paymentMethods' => function () {
+                $merchants = Yii::$app->getModule('merchant')->getPurchaseRequestCollection(
+                    new \hiqdev\yii2\merchant\models\DepositRequest(['amount' => 5])
+                )->getItems();
+
                 return Yii::$app->getView()->render('@hipanel/modules/finance/views/cart/payment-methods', [
-                    'merchants' => Yii::$app->getModule('merchant')->getPurchaseRequestCollection([])->getItems(),
+                    'merchants' => $merchants,
                 ]);
             },
             'shoppingCartOptions' => [
