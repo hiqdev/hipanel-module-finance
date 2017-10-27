@@ -116,6 +116,7 @@ class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
         $request->id = $data['invoice_id'];
         $request->amount = $data['sum'];
         $request->form = (new RedirectPurchaseResponse($data['action'], $data['inputs']))->setMethod($data['method']);
+        $request->disableReason = $data['disable_reason'] ?? null;
 
         return $request;
     }
