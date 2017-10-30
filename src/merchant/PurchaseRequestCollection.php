@@ -98,7 +98,7 @@ class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
 
     public function requestMerchants($params)
     {
-        return Yii::$app->getCache()->getOrSet([__METHOD__, $params, 1], function () use ($params) {
+        return Yii::$app->getCache()->getOrSet([__METHOD__, $params], function () use ($params) {
             return Merchant::perform('prepare-info', $params, ['batch' => true]);
         }, 3600*1);
     }
