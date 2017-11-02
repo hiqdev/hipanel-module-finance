@@ -74,10 +74,7 @@ use yii\helpers\Html;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('servers')->widget(ServerCombo::class, [
-        'formElementSelector' => '.form-group',
-        'multiple' => true,
-    ]) ?>
+    <?= $search->field('servers') ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
