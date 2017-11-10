@@ -24,7 +24,7 @@ class PurseController extends \hipanel\base\CrudController
 {
     public function actions()
     {
-        return [
+        return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
             ],
@@ -55,7 +55,7 @@ class PurseController extends \hipanel\base\CrudController
                 'class' => SmartPerformAction::class,
                 'success' => Yii::t('hipanel:finance', 'Document updated'),
             ],
-        ];
+        ]);
     }
 
     public function actionGenerateMonthlyDocument($id, $type, $month = null)

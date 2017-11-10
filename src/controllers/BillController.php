@@ -84,7 +84,7 @@ class BillController extends \hipanel\base\CrudController
 
     public function actions()
     {
-        return [
+        return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
                 'data' => function ($action) {
@@ -144,7 +144,7 @@ class BillController extends \hipanel\base\CrudController
                     return array_merge(ContactController::getSearchUrl(['client' => $seller]), ['representation' => 'requisites']);
                 },
             ],
-        ];
+        ]);
     }
 
     public function actionImport()

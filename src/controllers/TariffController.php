@@ -25,7 +25,7 @@ class TariffController extends \hipanel\base\CrudController
 {
     public function actions()
     {
-        return [
+        return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
                 'data' => function () {
@@ -48,7 +48,7 @@ class TariffController extends \hipanel\base\CrudController
                 'class' => SmartDeleteAction::class,
                 'success' => Yii::t('hipanel:finance:tariff', 'Tariff deleted'),
             ],
-        ];
+        ]);
     }
 
     public function actionCreateDomain($parent_id = null)
@@ -59,6 +59,7 @@ class TariffController extends \hipanel\base\CrudController
 
         if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
             $manager->insert();
+
             return $this->redirect(['view', 'id' => $form->id]);
         }
 
@@ -74,6 +75,7 @@ class TariffController extends \hipanel\base\CrudController
 
         if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
             $manager->insert();
+
             return $this->redirect(['view', 'id' => $form->id]);
         }
 
@@ -88,6 +90,7 @@ class TariffController extends \hipanel\base\CrudController
 
         if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
             $manager->insert();
+
             return $this->redirect(['view', 'id' => $form->id]);
         }
 
@@ -102,6 +105,7 @@ class TariffController extends \hipanel\base\CrudController
 
         if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
             $manager->insert();
+
             return $this->redirect(['view', 'id' => $form->id]);
         }
 
@@ -116,6 +120,7 @@ class TariffController extends \hipanel\base\CrudController
 
         if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
             $manager->insert();
+
             return $this->redirect(['view', 'id' => $form->id]);
         }
 
@@ -129,6 +134,7 @@ class TariffController extends \hipanel\base\CrudController
 
         if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post())) {
             $manager->update();
+
             return $this->redirect(['view', 'id' => $form->id]);
         }
 

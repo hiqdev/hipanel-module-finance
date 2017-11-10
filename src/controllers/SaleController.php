@@ -23,13 +23,13 @@ class SaleController extends \hipanel\base\CrudController
                         'actions' => ['index', 'view'],
                     ],
                 ],
-            ]
+            ],
         ]);
     }
 
     public function actions()
     {
-        return [
+        return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
             ],
@@ -49,6 +49,6 @@ class SaleController extends \hipanel\base\CrudController
                     return compact('client', 'tariff');
                 },
             ],
-        ];
+        ]);
     }
 }
