@@ -12,6 +12,7 @@ namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
+use hipanel\actions\RenderAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
@@ -46,6 +47,9 @@ class PurseController extends \hipanel\base\CrudController
             'invoice-archive' => [
                 'class' => RedirectAction::class,
                 'error' => Yii::t('hipanel', 'Under construction'),
+            ],
+            'generate-all' => [
+                'class' => RenderAction::class,
             ],
             'generate-and-save-monthly-document' => [
                 'class' => SmartPerformAction::class,
