@@ -12,13 +12,14 @@ namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
-use hipanel\actions\RenderAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
+use hipanel\modules\finance\widgets\StatisticTableGenerator;
 use hipanel\modules\finance\models\Purse;
 use hiqdev\hiart\ResponseErrorException;
+use hipanel\modules\document\models\Statistic as DocumentStatisticModel;
 use Yii;
 
 class PurseController extends \hipanel\base\CrudController
@@ -48,9 +49,6 @@ class PurseController extends \hipanel\base\CrudController
                 'class' => RedirectAction::class,
                 'error' => Yii::t('hipanel', 'Under construction'),
             ],
-            'generate-all' => [
-                'class' => RenderAction::class,
-            ],
             'generate-and-save-monthly-document' => [
                 'class' => SmartPerformAction::class,
                 'success' => Yii::t('hipanel:finance', 'Document updated'),
@@ -60,6 +58,23 @@ class PurseController extends \hipanel\base\CrudController
                 'success' => Yii::t('hipanel:finance', 'Document updated'),
             ],
         ]);
+    }
+
+    public function actionGenerateAll()
+    {
+        $request = Yii::$app->request;
+        $model = new DocumentStatisticModel();
+        $statisticByTypes = DocumentStatisticModel::batchPerform('get-stats', $model->getAttributes([
+            'types',
+            'since',
+        ]));
+
+        $type = $request->post('type');
+        if ($request->isAjax && $type && in_array($type, explode(',', $model->types))) {
+            return StatisticTableGenerator::widget(['type' => $type, 'statistic' => $statisticByTypes[$type]]);
+        } else {
+            return $this->render('generate-all', ['statisticByTypes' => $statisticByTypes]);
+        }
     }
 
     public function actionGenerateMonthlyDocument($id, $type, $month = null)
