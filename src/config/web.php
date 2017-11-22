@@ -32,8 +32,12 @@ return [
                 ]);
             },*/
             'paymentMethods' => function () {
+                $merchants = Yii::$app->getModule('merchant')->getPurchaseRequestCollection(
+                    new \hiqdev\yii2\merchant\models\DepositRequest(['amount' => 5])
+                )->getItems();
+
                 return Yii::$app->getView()->render('@hipanel/modules/finance/views/cart/payment-methods', [
-                    'merchants' => Yii::$app->getModule('merchant')->getCollection([])->getItems(),
+                    'merchants' => $merchants,
                 ]);
             },
             'shoppingCartOptions' => [
@@ -46,8 +50,7 @@ return [
             'returnPage' => '/finance/pay/return',
             'notifyPage' => '/finance/pay/notify',
             'finishPage' => '/finance/bill',
-            'depositClass' => \hipanel\modules\finance\merchant\Deposit::class,
-            'collectionClass' => \hipanel\modules\finance\merchant\Collection::class,
+            'purchaseRequestCollectionClass' => \hipanel\modules\finance\merchant\PurchaseRequestCollection::class,
         ],
     ],
     'components' => [
@@ -113,6 +116,7 @@ return [
             ],
             \hiqdev\yii2\merchant\widgets\PayButton::class => [
                 'class' => \hiqdev\yii2\merchant\widgets\PayButton::class,
+                'action' => ['@finance/pay/request'],
                 'as commentBehavior' => [
                     'class' => \hipanel\modules\finance\behaviors\PayButtonCommentBehavior::class,
                 ],

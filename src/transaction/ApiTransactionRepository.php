@@ -63,6 +63,13 @@ class ApiTransactionRepository implements TransactionRepositoryInterface
      */
     public function create($id, $merchant, $parameters)
     {
+        if (empty($id)) {
+            throw new TransactionException('Transaction ID is missing');
+        }
+        if (empty($merchant)) {
+            throw new TransactionException('Merchant name is missing');
+        }
+
         $transaction = new Transaction($id, $merchant);
         $transaction->setParameters($parameters);
 

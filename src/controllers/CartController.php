@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\controllers;
 use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\cart\CartFinisher;
 use hipanel\modules\finance\Module;
+use hiqdev\yii2\merchant\models\DepositForm;
 use Yii;
 use yii\filters\AccessControl;
 
@@ -39,12 +40,16 @@ class CartController extends \yii\web\Controller
         ];
     }
 
-    public function renderDeposit($sum)
+    /**
+     * @param float $amount
+     * @return \yii\web\Response
+     */
+    public function renderDeposit($amount)
     {
-        return $this->module->getMerchant()->renderDeposit([
-            'sum' => $sum,
-            'finishUrl' => '/finance/cart/finish',
-        ]);
+        $form = new DepositForm(['amount' => $amount]);
+        $form->finishUrl = '/finance/cart/finish';
+
+        return $this->module->getMerchant()->renderDeposit($form);
     }
 
     public function actionSelect()
@@ -93,16 +98,6 @@ class CartController extends \yii\web\Controller
             'error' => $finisher->getError(),
             'pending' => $finisher->getPending(),
             'remarks' => (array) Yii::$app->getView()->params['remarks'],
-        ]);
-    }
-
-    public function actionTest()
-    {
-        $cart = $this->module->getCart();
-        return $this->render('finish', [
-            'remarks' => [
-                'tr' => Yii::$app->view->render('@hipanel/modules/domain/views/domain/_transferAttention'),
-            ],
         ]);
     }
 }

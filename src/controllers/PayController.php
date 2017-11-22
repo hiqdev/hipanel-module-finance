@@ -12,6 +12,8 @@ namespace hipanel\modules\finance\controllers;
 
 use hipanel\modules\finance\models\Merchant;
 use hiqdev\hiart\ResponseErrorException;
+use hiqdev\yii2\merchant\actions\RequestAction;
+use hiqdev\yii2\merchant\events\TransactionInsertEvent;
 use hiqdev\yii2\merchant\transactions\Transaction;
 use Yii;
 use yii\base\InvalidParamException;
@@ -23,6 +25,22 @@ use yii\helpers\Json;
  */
 class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 {
+    const SESSION_MERCHANT_LATEST_TRANSACTION_ID = 'MERCHANT_LATEST_TRANSACTION_ID';
+
+    public function actions()
+    {
+        return array_merge(parent::actions(), [
+            'request' => [
+                'class' => RequestAction::class,
+                'on ' . RequestAction::EVENT_AFTER_TRANSACTION_INSERT => function (TransactionInsertEvent $event) {
+                    if ($event->transaction instanceof Transaction) {
+                        Yii::$app->session->set(self::SESSION_MERCHANT_LATEST_TRANSACTION_ID, $event->transaction->getId());
+                    }
+                }
+            ]
+        ]);
+    }
+
     public function getMerchantModule()
     {
         return $this->module->getMerchant();
@@ -35,7 +53,10 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 
     public function checkNotify()
     {
-        $id = Yii::$app->request->get('transactionId') ?: Yii::$app->request->post('transactionId');
+        $id = Yii::$app->request->get('transactionId')
+            ?? Yii::$app->request->post('transactionId')
+            ?? Yii::$app->session->get(self::SESSION_MERCHANT_LATEST_TRANSACTION_ID);
+
         $transaction = $this->getMerchantModule()->findTransaction($id);
         if ($transaction === null) {
             return null;
@@ -43,8 +64,8 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 
         $data = array_merge([
             'transactionId' => $transaction->getId(),
+            'merchant' => $transaction->getMerchant(),
             'username' => $transaction->getParameter('username'),
-            'merchant' => $transaction->getParameter('merchant'),
         ], $_REQUEST);
         Yii::info(http_build_query($data), 'merchant');
 
@@ -58,12 +79,26 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
             return Yii::$app->get('hiart')->callWithDisabledAuth(function () use ($transaction, $data) {
                 $result = Merchant::perform('pay', $data);
 
-                return $this->completeTransaction($transaction, $result);
+                $this->completeTransaction($transaction, $result);
+                return $transaction;
             });
         } catch (ResponseErrorException $e) {
             // Does not matter
-            return null;
+            return $transaction;
         }
+    }
+
+    public function actionProxyNotification()
+    {
+        // Currently used at least for FreeKassa integration
+        $data = array_merge(Yii::$app->request->get(), Yii::$app->request->post());
+
+        $result = Yii::$app->get('hiart')->callWithDisabledAuth(function () use ($data) {
+            return Merchant::perform('pay-transaction', $data);
+        });
+
+        $this->layout = false;
+        return $result;
     }
 
     /**

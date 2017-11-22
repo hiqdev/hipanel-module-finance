@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @var \yii\web\View $this
+ * @var \hiqdev\yii2\merchant\models\PurchaseRequest[] $merchants
+ */
+
 \hiqdev\paymenticons\yii2\PaymentIconsAsset::register($this);
 
 $methods = [];
@@ -10,11 +15,9 @@ $provides = [
 ];
 
 foreach ($merchants as $merchant) {
-    $name = strtolower($merchant->gateway);
-    $methods[] = $name;
-    $pro = $provides[$name];
-    if ($pro) {
-        $methods = array_merge($pro, $methods);
+    $methods[] = $name = $merchant->system;
+    if (isset($provides[$name])) {
+        $methods = array_merge($provides[$name], $methods);
     }
 }
 

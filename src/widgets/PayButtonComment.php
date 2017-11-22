@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\widgets;
 
+use hiqdev\yii2\merchant\widgets\PayButton;
 use yii\base\Event;
 use yii\base\Widget;
 
@@ -118,5 +119,13 @@ class PayButtonComment extends Widget
     public function getViewPath()
     {
         return parent::getViewPath() . DIRECTORY_SEPARATOR . 'payButtonComments';
+    }
+
+    /**
+     * @return PayButton
+     */
+    public function getPayButton()
+    {
+        return $this->event->sender;
     }
 }
