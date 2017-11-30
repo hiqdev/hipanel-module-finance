@@ -112,6 +112,11 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
             return $transaction;
         }
 
+        if ($response === '"OK"') {
+            echo $response;
+            Yii::$app->end();
+        }
+
         $transaction->complete();
         $transaction->addParameter('bill_id', $response['id']);
 
