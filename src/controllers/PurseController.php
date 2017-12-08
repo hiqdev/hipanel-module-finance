@@ -73,6 +73,11 @@ class PurseController extends \hipanel\base\CrudController
         if ($request->isAjax && $type && in_array($type, explode(',', $model->types))) {
             return StatisticTableGenerator::widget(['type' => $type, 'statistic' => $statisticByTypes[$type]]);
         } else {
+            if ($request->isPost) {
+                Purse::batchPerform('generate-and-save-all-monthly-documents', [
+                    'type' => $type,
+                ]);
+            }
             return $this->render('generate-all', ['statisticByTypes' => $statisticByTypes]);
         }
     }
