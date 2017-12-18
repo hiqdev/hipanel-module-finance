@@ -42,7 +42,7 @@ return [
             },
             'shoppingCartOptions' => [
                 'on cartChange' => [\hipanel\modules\finance\cart\CartCalculator::class, 'handle'],
-                'session' => \yii\di\Instance::of(\hipanel\modules\finance\cart\storage\CartStorageInterface::class)
+                'session' => \yii\di\Instance::of(\hipanel\modules\finance\cart\storage\CartStorageInterface::class),
             ],
         ],
         'merchant' => [
@@ -103,6 +103,19 @@ return [
     ],
     'container' => [
         'definitions' => [
+            \hipanel\modules\dashboard\menus\DashboardMenu::class => [
+                'add' => [
+                    'finance' => [
+                        'menu' => [
+                            'class' => \hipanel\modules\finance\menus\DashboardItem::class,
+                        ],
+                        'where' => [
+                            'after' => ['clients', 'dashboard'],
+                            'before' => ['tickets', 'domains', 'servers', 'hosting'],
+                        ],
+                    ],
+                ],
+            ],
             \hiqdev\thememanager\menus\AbstractSidebarMenu::class => [
                 'add' => [
                     'finance' => [
