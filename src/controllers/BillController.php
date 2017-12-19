@@ -18,6 +18,7 @@ use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
+use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\controllers\ContactController;
 use hipanel\modules\finance\actions\BillManagementAction;
 use hipanel\modules\finance\forms\BillForm;
@@ -34,7 +35,6 @@ use Yii;
 use yii\base\Event;
 use yii\base\Module;
 use yii\data\ArrayDataProvider;
-use yii\filters\AccessControl;
 
 class BillController extends \hipanel\base\CrudController
 {
@@ -54,31 +54,15 @@ class BillController extends \hipanel\base\CrudController
     {
         return array_merge(parent::behaviors(), [
             'access-bill' => [
-                'class' => AccessControl::class,
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'create-exchange'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['manage', 'deposit'],
-                        'actions' => ['index', 'view'],
-                    ],
-                    [
-                        'allow' => true,
-                        'roles' => ['bill.create'],
-                        'actions' => ['create', 'import', 'copy', 'create-exchange'],
-                    ],
-                    [
-                        'allow' => true,
-                        'roles' => ['bill.update'],
-                        'actions' => ['update'],
-                    ],
-                    [
-                        'allow' => true,
-                        'roles' => ['bill.delete'],
-                        'actions' => ['delete'],
-                    ],
+                'class' => EasyAccessControl::class,
+                'actions' => [
+                    'create,import,copy' => 'bill.create',
+                    'create-exchange' => 'bill.create',
+                    'update'    => 'bill.update',
+                    'delete'    => 'bill.delete',
+                    '*'         => 'bill.read',
                 ],
-            ]
+            ],
         ]);
     }
 
