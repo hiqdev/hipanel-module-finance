@@ -15,6 +15,7 @@ use hipanel\actions\IndexAction;
 use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
+use hipanel\filters\EasyAccessControl;
 use hipanel\models\Ref;
 use hipanel\modules\finance\logic\DomainTariffManager;
 use hipanel\modules\finance\logic\TariffManagerFactory;
@@ -23,6 +24,21 @@ use Yii;
 
 class TariffController extends \hipanel\base\CrudController
 {
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            'access-control' => [
+                'class' => EasyAccessControl::class,
+                'actions' => [
+                    'create,import,copy' => 'plan.create',
+                    'update'    => 'plan.update',
+                    'delete'    => 'plan.delete',
+                    '*'         => 'plan.read',
+                ],
+            ],
+        ]);
+    }
+
     public function actions()
     {
         return array_merge(parent::actions(), [

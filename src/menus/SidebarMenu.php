@@ -28,18 +28,19 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                 'icon'  => 'fa-dollar',
                 'items' => [
                     'payments' => [
-                        'label' => Yii::t('hipanel:finance', 'Payments'),
-                        'url'   => ['/finance/bill/index'],
+                        'label'   => Yii::t('hipanel:finance', 'Payments'),
+                        'url'     => ['/finance/bill/index'],
+                        'visible' => $user->can('bill.read'),
                     ],
                     'deposit' => [
-                        'label' => Yii::t('hipanel:finance', 'Recharge account'),
-                        'url'   => ['/merchant/pay/deposit'],
+                        'label'   => Yii::t('hipanel:finance', 'Recharge account'),
+                        'url'     => ['/merchant/pay/deposit'],
                         'visible' => $user->can('deposit'),
                     ],
                     'tariffs' => [
                         'label'   => Yii::t('hipanel:finance', 'Tariffs'),
                         'url'     => ['/finance/tariff/index'],
-                        'visible' => $user->can('manage'),
+                        'visible' => $user->can('plan.create'),
                     ],
                     'requisites' => [
                         'label'   => Yii::t('hipanel:finance', 'Requisites'),
