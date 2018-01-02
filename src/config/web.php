@@ -102,6 +102,10 @@ return [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/finance/messages',
                 ],
+                'hipanel.finance.price' => [
+                    'class' => \yii\i18n\PhpMessageSource::class,
+                    'basePath' => '@hipanel/modules/finance/messages',
+                ],
             ],
         ],
     ],
