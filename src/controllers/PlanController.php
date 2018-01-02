@@ -3,8 +3,10 @@
 namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
+use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
+use Yii;
 
 class PlanController extends CrudController
 {
@@ -16,6 +18,10 @@ class PlanController extends CrudController
             ],
             'view' => [
                 'class' => ViewAction::class,
+            ],
+            'set-note' => [
+                'class' => SmartUpdateAction::class,
+                'success' => Yii::t('hipanel', 'Note changed'),
             ],
         ]);
     }

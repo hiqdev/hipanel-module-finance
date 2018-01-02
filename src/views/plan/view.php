@@ -1,11 +1,14 @@
 <?php
 
-use hipanel\modules\finance\grid\SaleGridView;
-use hipanel\modules\finance\grid\TariffGridView;
+use hipanel\helpers\Url;
+use hipanel\modules\finance\grid\PlanGridView;
+use hipanel\modules\finance\grid\PriceGridView;
+use hipanel\modules\finance\menus\PlanDetailMenu;
+use hipanel\widgets\IndexPage;
 use yii\helpers\Html;
 
-$this->title = Html::encode($model->object);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance:sale', 'Sale'), 'url' => ['index']];
+$this->title = Html::encode($model->name);
+$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel.finance.plan', 'Plans'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerCss("
@@ -15,46 +18,55 @@ $this->registerCss("
 ");
 
 ?>
+
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="box box-solid">
-            <div class="box-header with-border">
-                <h3 class="box-title"><?= Yii::t('hipanel:finance:sale', 'Sale information') ?></h3>
+            <div class="box-body no-padding">
+                <div class="profile-user-img text-center">
+                    <i class="fa fa-bar-chart fa-5x"></i>
+                </div>
+                <p class="text-center">
+                    <span class="profile-user-role">
+                        <?= $this->title ?>
+                    </span>
+                    <br>
+                    <span class="profile-user-name">test text</span>
+                </p>
+
+                <div class="profile-usermenu">
+                    <?= PlanDetailMenu::widget(['model' => $model]) ?>
+                </div>
+
             </div>
-            <div class="box-body">
-                <?= SaleGridView::detailView([
+            <div class="box-footer no-padding">
+                <?= PlanGridView::detailView([
                     'model' => $model,
                     'boxed' => false,
-                    'columns' => [
-                        'object_v',
-                        'time',
-                        'seller',
-                        'buyer',
-                        'tariff'
-                    ],
+//                    'gridOptions' => [
+//                        'typeOptions' => $typeOptions,
+//                    ],
+                    'columns' => array_filter([
+                        'name',
+                    ]),
                 ]) ?>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <?= $this->render('@hipanel/modules/ticket/views/ticket/_clientInfo', compact('client')); ?>
-    </div>
-    <div class="col-md-4">
-        <div class="box box-solid">
-            <div class="box-header with-border">
-                <h3 class="box-title"><?= Yii::t('hipanel:finance:sale', 'Tariff information') ?></h3>
-            </div>
-            <div class="box-body">
-                <?= TariffGridView::detailView([
-                    'model' => $tariff,
-                    'boxed' => false,
-                    'columns' => [
-                        'used',
-                        'note',
-                        'type',
-                    ],
-                ]) ?>
-            </div>
-        </div>
+    <div class="col-md-9">
+        <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
+        <?php $page->beginContent('show-actions') ?>
+            <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel.finance.price', 'Prices') ?></h4>
+        <?php $page->endContent() ?>
+
+        <?php $page->beginContent('bulk-actions') ?>
+            <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), Url::to(['/finance/price/delete']), 'danger') ?>
+        <?php $page->endContent() ?>
+
+        <?php $page->beginContent('table') ?>
+            <?php $page->beginBulkForm() ?>
+            <?php $page->endBulkForm() ?>
+        <?php $page->endContent() ?>
+        <?php $page->end() ?>
     </div>
 </div>
