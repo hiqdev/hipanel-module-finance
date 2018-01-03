@@ -9,5 +9,5 @@ use hipanel\modules\finance\widgets\TariffCombo;
 ?>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('type_id')->dropDownList([]) ?>
+    <?= $search->field('type')->dropDownList($search->model->typeOptions, ['prompt' => '--']) ?>
 </div>

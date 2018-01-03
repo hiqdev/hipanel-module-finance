@@ -45,11 +45,8 @@ $this->registerCss("
                 <?= PlanGridView::detailView([
                     'model' => $model,
                     'boxed' => false,
-//                    'gridOptions' => [
-//                        'typeOptions' => $typeOptions,
-//                    ],
                     'columns' => array_filter([
-                        'name',
+                        'simple_name',
                     ]),
                 ]) ?>
             </div>

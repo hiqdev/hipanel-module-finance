@@ -13,13 +13,18 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
     {
         return array_merge(parent::columns(), [
             'name' => [
+                'attribute' => 'name',
                 'class' => MainColumn::class,
                 'note' => 'note',
                 'noteOptions' => [
                     'url' => Url::to(['/finance/plan/set-note']),
                 ],
             ],
+            'simple_name' => [
+                'attribute' => 'name',
+            ],
             'state' => [
+                'attribute' => 'state',
                 'class' => RefColumn::class,
                 'filterAttribute' => 'state',
                 'filterOptions' => ['class' => 'narrow-filter'],
@@ -27,6 +32,7 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'gtype' => 'state,tariff',
             ],
             'type' => [
+                'attribute' => 'type',
                 'class' => RefColumn::class,
                 'filterAttribute' => 'type',
                 'filterOptions' => ['class' => 'narrow-filter'],

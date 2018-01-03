@@ -15,9 +15,9 @@ use hipanel\modules\client\widgets\combo\ClientCombo;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('type_id')->dropDownList($search->model->typeOptions, ['prompt' => '--']) ?>
+    <?= $search->field('type')->dropDownList($search->model->typeOptions, ['prompt' => '--']) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('state_id')->dropDownList($search->model->stateOptions, ['prompt' => '--']) ?>
+    <?= $search->field('state')->dropDownList($search->model->stateOptions, ['prompt' => '--']) ?>
 </div>

@@ -2,6 +2,8 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\models\Ref;
+
 class Price extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
@@ -16,5 +18,15 @@ class Price extends \hipanel\base\Model
             [['plan_id', 'type', 'price'], 'required', 'on' => 'create'],
             [['id'], 'required', 'on' => ['update', 'set-note']],
         ]);
+    }
+
+    public function getTypeOptions()
+    {
+        return Ref::getList('type,bill', null, ['pnames' => 'monthly,overuse', 'with_recursive' => 1]);
+    }
+
+    public function getUnitOptions()
+    {
+        return Ref::getList('type,unit', null, ['with_recursive' => 1]);
     }
 }
