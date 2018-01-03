@@ -2,8 +2,6 @@
 
 namespace hipanel\modules\finance\grid;
 
-use hipanel\grid\MainColumn;
-use hipanel\helpers\Url;
 use yii\bootstrap\Html;
 
 class PriceGridView extends \hipanel\grid\BoxedGridView
@@ -12,14 +10,10 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
     {
         return array_merge(parent::columns(), [
             'plan' => [
-                'class' => MainColumn::class,
-                'note' => 'note',
+                'format' => 'html',
                 'value' => function ($model) {
-                    return Html::a($model->plan, ['/finance/price/view', 'id' => $model->id], ['class' => 'bold']);
+                    return Html::a($model->plan, ['/finance/plan/view', 'id' => $model->id]);
                 },
-                'noteOptions' => [
-                    'url' => Url::to(['/finance/price/set-note']),
-                ],
             ],
         ]);
     }

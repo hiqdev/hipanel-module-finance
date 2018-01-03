@@ -77,7 +77,11 @@ $this->registerCss("
                     ])),
                     'columns' => [
                         'checkbox',
+                        'price',
+                        'currency',
                         'plan',
+                        'unit',
+                        'type',
                     ],
                 ]) ?>
             <?php $page->endBulkForm() ?>
