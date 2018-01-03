@@ -28,8 +28,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         'checkbox',
                         'price',
                         'currency',
-                        'plan',
                         'unit',
+                        'plan',
                         'type',
                     ],
                 ]) ?>
