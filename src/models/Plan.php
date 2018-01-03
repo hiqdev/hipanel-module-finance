@@ -2,6 +2,8 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\models\Ref;
+
 class Plan extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
@@ -20,5 +22,15 @@ class Plan extends \hipanel\base\Model
     public function getPrices()
     {
         return $this->hasMany(Price::class, ['plan_id' => 'id']);
+    }
+
+    public function getTypeOptions()
+    {
+        return Ref::getList('type,tariff');
+    }
+
+    public function getStateOptions()
+    {
+        return Ref::getList('state,tariff');
     }
 }

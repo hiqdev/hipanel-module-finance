@@ -23,17 +23,15 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'class' => RefColumn::class,
                 'filterAttribute' => 'state',
                 'filterOptions' => ['class' => 'narrow-filter'],
-                'format' => 'raw',
+                'format' => 'html',
                 'gtype' => 'state,tariff',
-                'i18nDictionary' => 'hipanel.finance.plan',
             ],
             'type' => [
                 'class' => RefColumn::class,
                 'filterAttribute' => 'type',
                 'filterOptions' => ['class' => 'narrow-filter'],
-                'format' => 'raw',
+                'format' => 'html',
                 'gtype' => 'type,tariff',
-                'i18nDictionary' => 'hipanel.finance.plan',
             ],
         ]);
     }
