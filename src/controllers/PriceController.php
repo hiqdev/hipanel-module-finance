@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
 use hipanel\actions\SmartUpdateAction;
+use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use Yii;
@@ -22,6 +23,9 @@ class PriceController extends CrudController
             'set-note' => [
                 'class' => SmartUpdateAction::class,
                 'success' => Yii::t('hipanel', 'Note changed'),
+            ],
+            'validate-form' => [
+                'class' => ValidateFormAction::class,
             ],
         ]);
     }

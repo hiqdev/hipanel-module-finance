@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\models\Ref;
+use Yii;
 
 class Plan extends \hipanel\base\Model
 {
@@ -12,10 +13,17 @@ class Plan extends \hipanel\base\Model
     {
         return array_merge(parent::rules(), [
             [['id', 'type_id', 'state_id', 'client_id'], 'integer'],
-            [['type', 'state', 'client', 'name', 'note'], 'string'],
+            [['type', 'state', 'client', 'name', 'note', 'descr', 'label'], 'string'],
 
-            [['parent_id'], 'required', 'on' => 'create'],
+            [['type', 'name'], 'required', 'on' => 'create'],
             [['id'], 'required', 'on' => ['update', 'delete', 'set-note']],
+        ]);
+    }
+
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(), [
+            'name' => Yii::t('hipanel.finance.plan', 'Name'),
         ]);
     }
 
