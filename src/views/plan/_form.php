@@ -20,9 +20,6 @@ use yii\helpers\Html;
                 <?= $form->field($model, 'type')->dropDownList($model->typeOptions, ['prompt' => '--']) ?>
                 <?= $form->field($model, 'client')->widget(ClientCombo::class) ?>
                 <?= $form->field($model, 'note') ?>
-                <?= $form->field($model, 'label') ?>
-                <?= $form->field($model, 'descr')->textarea() ?>
-
             </div>
         </div>
 

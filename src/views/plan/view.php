@@ -47,6 +47,10 @@ $this->registerCss("
                     'boxed' => false,
                     'columns' => array_filter([
                         'simple_name',
+                        'client',
+                        'type',
+                        'state',
+                        'note',
                     ]),
                 ]) ?>
             </div>
