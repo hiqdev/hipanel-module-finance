@@ -17,6 +17,10 @@ class PlanController extends CrudController
                 'class' => IndexAction::class,
             ],
             'view' => [
+                'on beforePerform' => function ($event) {
+                    $action = $event->sender;
+                    $action->getDataProvider()->query->joinWith('prices');
+                },
                 'class' => ViewAction::class,
             ],
             'set-note' => [

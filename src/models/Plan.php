@@ -16,4 +16,9 @@ class Plan extends \hipanel\base\Model
             [['id'], 'required', 'on' => ['update', 'delete', 'set-note']],
         ]);
     }
+
+    public function getPrices()
+    {
+        return $this->hasMany(Price::class, ['plan_id' => 'id']);
+    }
 }
