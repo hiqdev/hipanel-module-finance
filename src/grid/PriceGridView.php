@@ -12,7 +12,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
             'plan' => [
                 'format' => 'html',
                 'value' => function ($model) {
-                    return Html::a($model->plan, ['/finance/plan/view', 'id' => $model->id]);
+                    return Html::a($model->plan, ['/finance/plan/view', 'id' => $model->plan_id]);
                 },
             ],
         ]);

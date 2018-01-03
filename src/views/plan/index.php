@@ -4,7 +4,7 @@ use hipanel\modules\finance\grid\PlanGridView;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 
-$this->title = Yii::t('hipanel:finance', 'Plans');
+$this->title = Yii::t('hipanel.finance.plan', 'Plans');
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

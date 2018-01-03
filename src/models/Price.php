@@ -10,7 +10,7 @@ class Price extends \hipanel\base\Model
     {
         return array_merge(parent::rules(), [
             [['id', 'type_id', 'parent_id', 'plan_id', 'object_id', 'type_id', 'unit_id', 'currency_id'], 'integer'],
-            [['type', 'plan', 'unit', 'currency', 'note'], 'string'],
+            [['type', 'plan', 'unit', 'currency', 'note', 'data'], 'string'],
             [['quantity', 'price'], 'number'],
 
             [['plan_id', 'type', 'price'], 'required', 'on' => 'create'],
