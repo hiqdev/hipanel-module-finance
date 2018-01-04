@@ -33,10 +33,10 @@ $this->registerCss("
                         <?= $this->title ?>
                     </span>
                     <br>
-                    <span class="profile-user-name">test text</span>
+                    <span class="profile-user-name"><?= $model->type ?></span>
                 </p>
 
-                <div class="profile-usermenu">
+                <div class="profile-usermenu" style="border-top: 1px solid #f4f4f4;">
                     <?= PlanDetailMenu::widget(['model' => $model]) ?>
                 </div>
 
