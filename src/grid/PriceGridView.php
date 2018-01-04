@@ -12,6 +12,8 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
         return array_merge(parent::columns(), [
             'plan' => [
                 'format' => 'html',
+                'filterAttribute' => 'plan_ilike',
+                'filterOptions' => ['class' => 'narrow-filter'],
                 'value' => function ($model) {
                     return Html::a($model->plan, ['/finance/plan/view', 'id' => $model->plan_id]);
                 },

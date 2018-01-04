@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\models\Ref;
+use Yii;
 
 class Price extends \hipanel\base\Model
 {
@@ -20,6 +21,13 @@ class Price extends \hipanel\base\Model
         ]);
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'plan_ilike' => Yii::t('hipanel.finance.plan', 'Plan'),
+        ];
+    }
+
     public function getTypeOptions()
     {
         return Ref::getList('type,bill', null, ['pnames' => 'monthly,overuse', 'with_recursive' => 1]);
@@ -28,5 +36,10 @@ class Price extends \hipanel\base\Model
     public function getUnitOptions()
     {
         return Ref::getList('type,unit', null, ['with_recursive' => 1]);
+    }
+
+    public function getCurrencyOptions()
+    {
+        return Ref::getList('type,currency');
     }
 }
