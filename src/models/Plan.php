@@ -23,7 +23,7 @@ class Plan extends \hipanel\base\Model
     public function attributeLabels()
     {
         return array_merge(parent::attributeLabels(), [
-            'name' => Yii::t('hipanel.finance.plan', 'Name'),
+            'name' => Yii::t('hipanel:finance', 'Name'),
         ]);
     }
 

@@ -24,7 +24,7 @@ class Price extends \hipanel\base\Model
     public function attributeLabels()
     {
         return [
-            'plan_ilike' => Yii::t('hipanel.finance.plan', 'Plan'),
+            'plan_ilike' => Yii::t('hipanel:finance', 'Plan'),
         ];
     }
 

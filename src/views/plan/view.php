@@ -10,7 +10,7 @@ use hipanel\widgets\IndexPage;
 use yii\helpers\Html;
 
 $this->title = Html::encode($model->name);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel.finance.plan', 'Plans'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Plans'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerCss("
@@ -59,7 +59,7 @@ $this->registerCss("
     <div class="col-md-9">
         <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
         <?php $page->beginContent('show-actions') ?>
-            <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel.finance.price', 'Prices') ?></h4>
+            <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('bulk-actions') ?>

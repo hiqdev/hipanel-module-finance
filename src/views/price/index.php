@@ -3,8 +3,9 @@
 use hipanel\modules\finance\grid\PriceGridView;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
+use yii\helpers\Html;
 
-$this->title = Yii::t('hipanel.finance.price', 'Price');
+$this->title = Yii::t('hipanel:finance', 'Price');
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -13,6 +14,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
 
         <?php $page->setSearchFormData([]) ?>
+
+        <?php $page->beginContent('main-actions') ?>
+            <?= Html::a(Yii::t('hipanel', 'Create'), ['/finance/price/create'], ['class' => 'btn btn-sm btn-success']) ?>
+        <?php $page->endContent() ?>
 
         <?php $page->beginContent('sorter-actions') ?>
             <?= $page->renderSorter(['attributes' => ['id']]) ?>
