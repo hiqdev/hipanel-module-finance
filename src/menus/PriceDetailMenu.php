@@ -4,18 +4,18 @@ namespace hipanel\modules\finance\menus;
 
 use Yii;
 
-class PlanDetailMenu extends \hipanel\menus\AbstractDetailMenu
+class PriceDetailMenu extends \hipanel\menus\AbstractDetailMenu
 {
     public $model;
 
     public function items()
     {
-        $actions = PlanActionsMenu::create(['model' => $this->model])->items();
+        $actions = PriceActionsMenu::create(['model' => $this->model])->items();
         $items = array_merge($actions, [
             'delete' => [
                 'label' => Yii::t('hipanel', 'Delete'),
                 'icon' => 'fa-trash',
-                'url' => ['@plan/delete', 'id' => $this->model->id],
+                'url' => ['@price/delete', 'id' => $this->model->id],
                 'encode' => false,
                 'linkOptions' => [
                     'data' => [

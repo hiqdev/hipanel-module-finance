@@ -3,6 +3,8 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\RefColumn;
+use hipanel\modules\finance\menus\PriceActionsMenu;
+use hiqdev\yii2\menus\grid\MenuColumn;
 use yii\bootstrap\Html;
 
 class PriceGridView extends \hipanel\grid\BoxedGridView
@@ -15,7 +17,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'filterAttribute' => 'plan_ilike',
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'value' => function ($model) {
-                    return Html::a($model->plan, ['/finance/plan/view', 'id' => $model->plan_id]);
+                    return Html::a($model->plan, ['@plan/view', 'id' => $model->plan_id]);
                 },
             ],
             'type' => [
@@ -25,7 +27,12 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'format' => 'html',
                 'gtype' => 'type,bill',
-                'findOptions' => ['pnames' => 'monthly,overuse', 'with_recursive' => 1],
+                'findOptions' => [
+                    'select' => 'oname_label',
+                    'pnames' => 'monthly,overuse',
+                    'with_recursive' => 1,
+                    'mapOptions' => ['from' => 'oname'],
+                ],
             ],
             'unit' => [
                 'class' => RefColumn::class,
@@ -34,7 +41,11 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'format' => 'html',
                 'gtype' => 'type,unit',
-                'findOptions' => ['with_recursive' => 1],
+                'findOptions' => [
+                    'with_recursive' => 1,
+                    'select' => 'oname_label',
+                    'mapOptions' => ['from' => 'oname'],
+                ],
             ],
             'currency' => [
                 'class' => RefColumn::class,
@@ -43,6 +54,10 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'format' => 'html',
                 'gtype' => 'type,currency',
+            ],
+            'actions' => [
+                'class' => MenuColumn::class,
+                'menuClass' => PriceActionsMenu::class,
             ],
         ]);
     }

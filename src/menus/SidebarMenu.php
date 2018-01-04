@@ -64,12 +64,12 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     ],
                     'plans' => [
                         'label'   => Yii::t('hipanel:finance', 'Plans'),
-                        'url'     => ['/finance/plan/index'],
+                        'url'     => ['@plan/index'],
                         'visible' => $user->can('test.beta'),
                     ],
                     'prices' => [
                         'label'   => Yii::t('hipanel:finance', 'Prices'),
-                        'url'     => ['/finance/price/index'],
+                        'url'     => ['@price/index'],
                         'visible' => $user->can('test.beta'),
                     ],
                 ],

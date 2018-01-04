@@ -17,6 +17,8 @@ return [
         '@pay' => '/merchant/pay',
         '@cart' => '/cart/cart',
         '@finance' => '/finance',
+        '@plan' => '/finance/plan',
+        '@price' => '/finance/price',
     ],
     'modules' => [
         'finance' => [

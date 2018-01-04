@@ -16,7 +16,7 @@ class Price extends \hipanel\base\Model
             [['type', 'plan', 'unit', 'currency', 'note', 'data'], 'string'],
             [['quantity', 'price'], 'number'],
 
-            [['plan_id', 'type', 'price'], 'required', 'on' => 'create'],
+            [['plan_id', 'type', 'price', 'currency'], 'required', 'on' => 'create'],
             [['id'], 'required', 'on' => ['update', 'set-note']],
         ]);
     }
@@ -30,12 +30,21 @@ class Price extends \hipanel\base\Model
 
     public function getTypeOptions()
     {
-        return Ref::getList('type,bill', null, ['pnames' => 'monthly,overuse', 'with_recursive' => 1]);
+        return Ref::getList('type,bill', null, [
+            'select' => 'oname_label',
+            'pnames' => 'monthly,overuse',
+            'with_recursive' => 1,
+            'mapOptions' => ['from' => 'oname'],
+        ]);
     }
 
     public function getUnitOptions()
     {
-        return Ref::getList('type,unit', null, ['with_recursive' => 1]);
+        return Ref::getList('type,unit', null, [
+            'with_recursive' => 1,
+            'select' => 'oname_label',
+            'mapOptions' => ['from' => 'oname'],
+        ]);
     }
 
     public function getCurrencyOptions()

@@ -1,6 +1,6 @@
 <?php
 
-$this->title = Yii::t('hipanel:finance', 'Create plan');
+$this->title = Yii::t('hipanel', 'Create');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Plans'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 

@@ -5,6 +5,8 @@ namespace hipanel\modules\finance\grid;
 use hipanel\grid\MainColumn;
 use hipanel\grid\RefColumn;
 use hipanel\helpers\Url;
+use hipanel\modules\finance\menus\PlanActionsMenu;
+use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 
 class PlanGridView extends \hipanel\grid\BoxedGridView
@@ -17,7 +19,7 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'class' => MainColumn::class,
                 'note' => 'note',
                 'noteOptions' => [
-                    'url' => Url::to(['/finance/plan/set-note']),
+                    'url' => Url::to(['@plan/set-note']),
                 ],
             ],
             'simple_name' => [
@@ -38,6 +40,10 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'format' => 'html',
                 'gtype' => 'type,tariff',
+            ],
+            'actions' => [
+                'class' => MenuColumn::class,
+                'menuClass' => PlanActionsMenu::class,
             ],
         ]);
     }

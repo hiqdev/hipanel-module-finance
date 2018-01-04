@@ -4,7 +4,7 @@ namespace hipanel\modules\finance\menus;
 
 use Yii;
 
-class PlanActionsMenu extends \hiqdev\yii2\menus\Menu
+class PriceActionsMenu extends \hiqdev\yii2\menus\Menu
 {
     public $model;
 
@@ -14,7 +14,7 @@ class PlanActionsMenu extends \hiqdev\yii2\menus\Menu
             'view' => [
                 'label' => Yii::t('hipanel', 'View'),
                 'icon' => 'fa-info',
-                'url' => ['@plan/view', 'id' => $this->model->id],
+                'url' => ['@price/view', 'id' => $this->model->id],
                 'linkOptions' => [
                     'data-pjax' => 0,
                 ],
@@ -22,7 +22,7 @@ class PlanActionsMenu extends \hiqdev\yii2\menus\Menu
             'update' => [
                 'label' => Yii::t('hipanel', 'Update'),
                 'icon' => 'fa-pencil',
-                'url' => ['@plan/update', 'id' => $this->model->id],
+                'url' => ['@price/update', 'id' => $this->model->id],
                 'visible' => true,
                 'linkOptions' => [
                     'data-pjax' => 0,
