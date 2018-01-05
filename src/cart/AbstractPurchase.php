@@ -16,10 +16,13 @@ use yii\base\InvalidConfigException;
  * Class Purchase.
  * Performs purchase action.
  * Holds cart position object and data needed to perform purchase:
- * - amount
- * - object - actually it is object type e.g. domain, server, certificate
- * - client
- * - currency
+ *
+ * @property int $amount
+ * @property string $client
+ * @property string $currency
+ * @property string object - object type e.g. `domain`, `server`, `certificate`
+ *
+ * @property string $calculation_id
  */
 abstract class AbstractPurchase extends \hipanel\base\Model
 {
