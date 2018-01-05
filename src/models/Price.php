@@ -25,6 +25,12 @@ class Price extends \hipanel\base\Model
     {
         return [
             'plan_ilike' => Yii::t('hipanel:finance', 'Plan'),
+            'plan_id' => Yii::t('hipanel:finance', 'Plan'),
+            'quantity' => Yii::t('hipanel:finance', 'Quantity'),
+            'unit' => Yii::t('hipanel:finance', 'Unit'),
+            'price' => Yii::t('hipanel:finance', 'Price'),
+            'note' => Yii::t('hipanel', 'Note'),
+            'type' => Yii::t('hipanel', 'Type'),
         ];
     }
 

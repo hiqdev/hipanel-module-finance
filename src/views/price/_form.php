@@ -19,8 +19,6 @@ use yii\helpers\Html;
         <div class="box box-widget">
             <div class="box-body">
                 <?= $form->field($model, 'plan_id')->widget(PlanCombo::class) ?>
-                <?= $form->field($model, 'parent_id') ?>
-                <?= $form->field($model, 'object_id') ?>
                 <?= $form->field($model, 'quantity') ?>
                 <?= $form->field($model, 'type')->dropDownList($model->typeOptions, ['prompt' => '--']) ?>
                 <?= $form->field($model, 'unit')->dropDownList($model->unitOptions, ['prompt' => '--']) ?>
