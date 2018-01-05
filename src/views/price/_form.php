@@ -2,6 +2,7 @@
 
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
+use hipanel\modules\finance\widgets\combo\PlanCombo;
 use hipanel\widgets\AmountWithCurrency;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
@@ -17,7 +18,7 @@ use yii\helpers\Html;
     <div class="col-md-4">
         <div class="box box-widget">
             <div class="box-body">
-                <?= $form->field($model, 'plan_id') ?>
+                <?= $form->field($model, 'plan_id')->widget(PlanCombo::class) ?>
                 <?= $form->field($model, 'parent_id') ?>
                 <?= $form->field($model, 'object_id') ?>
                 <?= $form->field($model, 'quantity') ?>

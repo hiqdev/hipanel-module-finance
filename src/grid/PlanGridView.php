@@ -16,6 +16,8 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
         return array_merge(parent::columns(), [
             'name' => [
                 'attribute' => 'name',
+                'filterAttribute' => 'name_ilike',
+                'filterOptions' => ['class' => 'narrow-filter'],
                 'class' => MainColumn::class,
                 'note' => 'note',
                 'noteOptions' => [
