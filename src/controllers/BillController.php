@@ -12,9 +12,7 @@ namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
-use hipanel\actions\SmartCreateAction;
 use hipanel\actions\SmartDeleteAction;
-use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
@@ -25,16 +23,11 @@ use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\forms\CurrencyExchangeForm;
 use hipanel\modules\finance\models\Bill;
-use hipanel\modules\finance\models\BillSearch;
-use hipanel\modules\finance\models\Charge;
-use hipanel\modules\finance\models\ChargeSearch;
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\providers\BillTypesProvider;
-use hiqdev\hiart\ActiveDataProvider;
 use Yii;
 use yii\base\Event;
 use yii\base\Module;
-use yii\data\ArrayDataProvider;
 
 class BillController extends \hipanel\base\CrudController
 {

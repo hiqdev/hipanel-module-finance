@@ -9,6 +9,7 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use Yii;
+use yii\base\Event;
 
 class PlanController extends CrudController
 {
@@ -25,9 +26,11 @@ class PlanController extends CrudController
                 'class' => IndexAction::class,
             ],
             'view' => [
-                'on beforePerform' => function ($event) {
+                'on beforePerform' => function (Event $event) {
                     $action = $event->sender;
-                    $action->getDataProvider()->query->joinWith('prices');
+                    $action->getDataProvider()->query
+                        ->joinWith('prices')
+                        ->joinWith('sales');
                 },
                 'class' => ViewAction::class,
             ],

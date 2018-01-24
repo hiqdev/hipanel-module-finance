@@ -5,15 +5,27 @@ namespace hipanel\modules\finance\models;
 use hipanel\models\Ref;
 use Yii;
 
+/**
+ * Class Price
+ *
+ * @property int $id
+ * @property int $plan_id
+ * @property string $object
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
 class Price extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
 
+    const SCENARIO_CREATE = 'create';
+    const SCENARIO_UPDATE = 'update';
+
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['id', 'type_id', 'parent_id', 'plan_id', 'object_id', 'type_id', 'unit_id', 'currency_id'], 'integer'],
-            [['type', 'plan', 'unit', 'currency', 'note', 'data'], 'string'],
+            [['id', 'parent_id', 'plan_id', 'object_id', 'type_id', 'unit_id', 'currency_id'], 'integer'],
+            [['type', 'plan', 'unit', 'currency', 'note', 'data', 'object'], 'string'],
             [['quantity', 'price'], 'number'],
 
             [['plan_id', 'type', 'price', 'currency'], 'required', 'on' => 'create'],
@@ -26,11 +38,12 @@ class Price extends \hipanel\base\Model
         return [
             'plan_ilike' => Yii::t('hipanel:finance', 'Plan'),
             'plan_id' => Yii::t('hipanel:finance', 'Plan'),
-            'quantity' => Yii::t('hipanel:finance', 'Quantity'),
+            'quantity' => Yii::t('hipanel:finance', 'Prepaid'),
             'unit' => Yii::t('hipanel:finance', 'Unit'),
             'price' => Yii::t('hipanel:finance', 'Price'),
             'note' => Yii::t('hipanel', 'Note'),
             'type' => Yii::t('hipanel', 'Type'),
+            'object' => Yii::t('hipanel', 'Object'),
         ];
     }
 

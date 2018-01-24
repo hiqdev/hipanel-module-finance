@@ -5,6 +5,17 @@ namespace hipanel\modules\finance\models;
 use hipanel\models\Ref;
 use Yii;
 
+/**
+ * Class Plan
+ *
+ * @property string $id
+ * @property string $name
+ *
+ * @property Sale[] $sales
+ * @property Price[] $prices
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
 class Plan extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
@@ -30,6 +41,11 @@ class Plan extends \hipanel\base\Model
     public function getPrices()
     {
         return $this->hasMany(Price::class, ['plan_id' => 'id']);
+    }
+
+    public function getSales()
+    {
+        return $this->hasMany(Sale::class, ['tariff_id' => 'id']);
     }
 
     public function getTypeOptions()

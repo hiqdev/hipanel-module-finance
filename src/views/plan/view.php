@@ -80,12 +80,37 @@ $this->registerCss("
                         'checkbox',
                         'price',
                         'currency',
-                        'plan',
                         'unit',
                         'type',
                     ],
                 ]) ?>
             <?php $page->endBulkForm() ?>
+        <?php $page->endContent() ?>
+        <?php $page->end() ?>
+
+        <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
+        <?php $page->beginContent('show-actions') ?>
+            <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance:sale', 'Sales') ?></h4>
+        <?php $page->endContent() ?>
+
+        <?php $page->beginContent('table') ?>
+        <?php $page->beginBulkForm() ?>
+            <?= \hipanel\modules\finance\grid\SaleGridView::widget([
+                'boxed' => false,
+                'dataProvider' => (new \yii\data\ArrayDataProvider([
+                    'allModels' => $model->sales,
+                    'pagination' => [
+                        'pageSize' => 10,
+                    ],
+                ])),
+                'columns' => [
+                    'object',
+                    'seller',
+                    'buyer',
+                    'time',
+                ],
+            ]) ?>
+        <?php $page->endBulkForm() ?>
         <?php $page->endContent() ?>
         <?php $page->end() ?>
     </div>

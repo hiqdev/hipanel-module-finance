@@ -8,6 +8,8 @@ use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
+use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\models\Price;
 use Yii;
 
 class PriceController extends CrudController
@@ -17,6 +19,14 @@ class PriceController extends CrudController
         return array_merge(parent::actions(), [
             'create' => [
                 'class' => SmartCreateAction::class,
+                'data' => function ($action, $data) {
+                    $plan = null;
+                    if ($plan_id = Yii::$app->request->get('plan_id')) {
+                        $plan = Plan::findOne(['id' => $plan_id]);
+                    }
+
+                    return compact('plan');
+                },
             ],
             'update' => [
                 'class' => SmartUpdateAction::class,
@@ -34,6 +44,38 @@ class PriceController extends CrudController
             'validate-form' => [
                 'class' => ValidateFormAction::class,
             ],
+        ]);
+    }
+
+    public function actionSuggest($object_id, $plan_id, $type = 'default')
+    {
+        $plan = Plan::findOne(['id' => $plan_id]);
+
+        $suggestions = (new Price)->batchQuery('suggest', [
+            'object_id' => $object_id,
+            'plan_id' => $plan_id,
+            'type' => $type
+        ]);
+
+        $models = [];
+        foreach ($suggestions as $suggestion) {
+            $models[] = new Price([
+                'type' => $suggestion['type']['name'],
+                'type_id' => $suggestion['type']['id'],
+                'object_id' => $suggestion['target']['id'],
+                'object' => $suggestion['target']['name'],
+                'unit' => $suggestion['prepaid']['unit'],
+                'quantity' => $suggestion['prepaid']['quantity'],
+                'unit_id' => 0, // todo
+                'price' => $suggestion['price']['amount'] / 100,
+                'currency' => $suggestion['price']['currency']
+            ]);
+        }
+
+        return $this->render('create', [
+            'model' => reset($models),
+            'models' => $models,
+            'plan' => $plan
         ]);
     }
 }
