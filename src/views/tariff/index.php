@@ -64,16 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'boxed' => false,
             'dataProvider' => $dataProvider,
             'filterModel' => $model,
-            'columns' => Yii::$app->user->can('manage')
-                ? [
-                    'checkbox',
-                    'tariff', 'used', 'type',
-                    'client_id', 'seller_id',
-                ]
-                : [
-                    'tariff', 'used',
-                    'client_id', 'seller_id',
-                ],
+            'columns' => $representationCollection->getByName($uiModel->representation)->getColumns(),
         ]) ?>
         <?php $page->endBulkForm() ?>
     <?php $page->endContent() ?>

@@ -34,14 +34,7 @@ $this->registerCss("
                     'boxed' => false,
                     'dataProvider' => $dataProvider,
                     'filterModel' => $model,
-                    'columns' => [
-                        'checkbox',
-                        'object',
-                        'seller',
-                        'buyer',
-                        'tariff',
-                        'time',
-                    ],
+                    'columns' => $representationCollection->getByName($uiModel->representation)->getColumns(),
                 ]) ?>
             <?php $page->endBulkForm() ?>
         <?php $page->endContent() ?>
