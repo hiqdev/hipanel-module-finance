@@ -7,7 +7,10 @@ use Yii;
 /**
  * Class Sale
  *
+ * @property string|int $id
  * @property string|int $object_id
+ * @property string|int $tariff_id
+ * @property string $tariff_type
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */

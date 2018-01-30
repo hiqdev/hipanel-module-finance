@@ -11,11 +11,11 @@ use hipanel\base\ModelTrait;
  * @property int $id
  * @property string $name
  * @property string $type
- * @property string $class_name
+ * @property string $label
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class Object extends Model
+class TargetObject extends Model
 {
     use ModelTrait;
 
@@ -23,7 +23,7 @@ class Object extends Model
     {
         return [
             [['id'], 'integer'],
-            [['name', 'class_name', 'type'], 'safe']
+            [['name', 'label', 'type'], 'safe']
         ];
     }
 }

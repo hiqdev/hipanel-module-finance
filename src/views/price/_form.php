@@ -59,7 +59,7 @@ $form = ActiveForm::begin([
                     <div class="form-instance">
                         <div class="col-md-2">
                             <?= Html::activeHiddenInput($model, "[$i]object_id", ['ref' => 'object_id']) ?>
-                            <?= $form->field($model, "[$i]object")->textInput(['disabled' => true, 'ref' => 'object']) ?>
+                            <?= $form->field($model, "[$i]object")->textInput(['disabled' => true, 'ref' => 'object', 'value' => $model->object->name]) ?>
                         </div>
                         <div class="col-md-2">
                             <?= $form->field($model, "[$i]type")->dropDownList($model->typeOptions, ['prompt' => '--']) ?>

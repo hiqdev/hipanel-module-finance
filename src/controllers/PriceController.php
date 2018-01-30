@@ -10,6 +10,8 @@ use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
+use hipanel\helpers\ArrayHelper;
+use hipanel\modules\finance\models\TargetObject;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use Yii;
@@ -82,7 +84,12 @@ class PriceController extends CrudController
 
         $models = [];
         foreach ($suggestions as $suggestion) {
-            $models[] = new Price($suggestion);
+            $object = ArrayHelper::remove($suggestion, 'object');
+
+            $price = new Price($suggestion);
+            $price->populateRelation('object', new TargetObject($object));
+
+            $models[] = $price;
         }
 
         return $this->render('suggested', [

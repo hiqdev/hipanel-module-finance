@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\menus;
 
+use hipanel\modules\finance\models\Sale;
 use Yii;
 
 /**
@@ -25,13 +26,41 @@ class SalePricesActionsMenu extends \hiqdev\yii2\menus\Menu
     {
         $buttons = [];
 
-        $buttons[] = [
-            'label' => Yii::t('hipanel', 'Default prices'),
-            'icon' => 'fa-pencil',
-            'url' => ['@tariff/update', 'id' => $this->model->id],
-            'visible' => Yii::$app->user->can('plan.update'),
-        ];
+        foreach ($this->suggestionTypesByObject() as $config) {
+            $buttons[] = [
+                'label' => $config['label'],
+                'icon' => $config['icon'],
+                'url' => $this->suggestionLink($config['type']),
+                'visible' => Yii::$app->user->can('plan.update'),
+            ];
+        }
 
         return $buttons;
+    }
+
+    protected function suggestionLink($type)
+    {
+        return ['@price/suggest', 'plan_id' => $this->model->tariff_id, 'object_id' => $this->model->object_id, 'type' => $type];
+    }
+
+    protected function suggestionTypesByObject()
+    {
+        switch ($this->model->tariff_type) {
+            case Sale::SALE_TYPE_SERVER:
+                return [
+                    [
+                        'type' => 'default',
+                        'label' => Yii::t('hipanel.finance.price', 'Main prices'),
+                        'icon' => 'fa-plus',
+                    ],
+                    [
+                        'type' => 'parts',
+                        'label' => Yii::t('hipanel.finance.price', 'Part prices'),
+                        'icon' => 'fa-hdd-o',
+                    ]
+                ];
+        }
+
+        return [];
     }
 }

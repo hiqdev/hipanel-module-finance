@@ -31,23 +31,22 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                         . '/' . Yii::t('hipanel.finance.price', $model->getUnitOptions()[$model->unit]);
                 }
             ],
-            'object->type' => [
+            'object->name' => [
                 'label' => Yii::t('hipanel', 'Object'),
                 'format' => 'html',
                 'value' => function (Price $model) {
                     $link = LinkToObjectResolver::widget([
                         'model' => $model->object,
-                        'labelAttribute' => 'type',
-                        'typeAttribute' => 'class_name'
+                        'labelAttribute' => 'name',
                     ]);
 
                     return $link ?: Yii::t('hipanel.finance.price', 'Any');
                 }
             ],
-            'object->name' => [
+            'object->label' => [
                 'label' => Yii::t('hipanel', 'Details'),
                 'value' => function (Price $model) {
-                    return $model->object->name;
+                    return $model->object->label;
                 }
             ],
             'type' => [

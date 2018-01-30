@@ -95,8 +95,8 @@ use hipanel\widgets\IndexPage;
                             ])),
                             'columns' => [
                                 'checkbox',
-                                'object->type',
                                 'object->name',
+                                'object->label',
                                 'price/unit',
                                 'type',
                             ],

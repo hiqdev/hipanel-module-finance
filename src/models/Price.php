@@ -15,7 +15,7 @@ use Yii;
  * @property string $currency
  * @property string|int $main_object_id
  *
- * @property Object $object
+ * @property TargetObject $object
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -78,6 +78,6 @@ class Price extends \hipanel\base\Model
 
     public function getObject()
     {
-        return $this->hasOne(Object::class, ['id' => 'id']);
+        return $this->hasOne(TargetObject::class, ['id' => 'id']);
     }
 }

@@ -12,6 +12,8 @@ return [
     'Applicable for all objects' => 'Применимо ко всем объектам',
     'Any' => 'Любой',
     'Price/unit' => 'Цена/ед. изм.',
+    'Main prices' => 'Основные цены',
+    'Part prices' => 'Цены железа',
 
     'minutes' => 'минут',
     'items' => 'штуки',
