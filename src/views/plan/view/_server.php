@@ -55,7 +55,8 @@ use hipanel\widgets\IndexPage;
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('bulk-actions') ?>
-            <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), Url::to(['/finance/price/delete']), 'danger') ?>
+            <?= $page->renderBulkButton(Yii::t('hipanel', 'Update'), Url::to(['@price/update']), 'warning') ?>
+            <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), Url::to(['@price/delete']), 'danger') ?>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('table') ?>

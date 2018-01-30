@@ -34,7 +34,7 @@ class Price extends \hipanel\base\Model
             [['type', 'plan', 'unit', 'currency', 'note', 'data'], 'string'],
             [['quantity', 'price'], 'number'],
 
-            [['plan_id', 'type', 'price', 'currency'], 'required', 'on' => 'create'],
+            [['plan_id', 'type', 'price', 'currency'], 'required', 'on' => ['create', 'update']],
             [['id'], 'required', 'on' => ['update', 'set-note', 'delete']],
         ]);
     }

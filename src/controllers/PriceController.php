@@ -2,8 +2,10 @@
 
 namespace hipanel\modules\finance\controllers;
 
+use hipanel\actions\Action;
 use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
+use hipanel\actions\RenderAction;
 use hipanel\actions\SmartCreateAction;
 use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartUpdateAction;
@@ -11,11 +13,14 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\helpers\ArrayHelper;
+use hipanel\modules\finance\actions\PriceUpdateAction;
 use hipanel\modules\finance\models\TargetObject;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use Yii;
+use yii\base\Event;
 use yii\rest\DeleteAction;
+use yii\web\BadRequestHttpException;
 
 class PriceController extends CrudController
 {
@@ -49,8 +54,14 @@ class PriceController extends CrudController
                 'success' => Yii::t('hipanel.finance.price', 'Prices were successfully created')
             ],
             'update' => [
-                'class' => SmartUpdateAction::class,
-                'success' => Yii::t('hipanel.finance.price', 'Prices were successfully updated')
+                'class' => PriceUpdateAction::class,
+                'success' => Yii::t('hipanel.finance.price', 'Prices were successfully updated'),
+                'on beforeFetch' => function (Event $event) {
+                    /** @var \hipanel\actions\SearchAction $action */
+                    $action = $event->sender;
+                    $dataProvider = $action->getDataProvider();
+                    $dataProvider->query->joinWith('object');
+                },
             ],
             'index' => [
                 'class' => IndexAction::class,

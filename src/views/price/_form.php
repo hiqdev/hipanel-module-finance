@@ -53,13 +53,17 @@ $form = ActiveForm::begin([
                         <?= Html::activeHiddenInput($model, "[$i]id") ?>
                         <?php if ($plan): ?>
                             <?php $model->plan_id = $plan->id ?>
-                            <?= Html::activeHiddenInput($model, "[$i]plan_id", ['ref' => 'plan_id']) ?>
                         <?php endif ?>
+                        <?= Html::activeHiddenInput($model, "[$i]plan_id", ['ref' => 'plan_id']) ?>
                     </div>
                     <div class="form-instance">
                         <div class="col-md-2">
                             <?= Html::activeHiddenInput($model, "[$i]object_id", ['ref' => 'object_id']) ?>
-                            <?= $form->field($model, "[$i]object")->textInput(['disabled' => true, 'ref' => 'object', 'value' => $model->object->name]) ?>
+                            <?= $form->field($model, "[$i]object")->textInput([
+                                'disabled' => true,
+                                'ref' => 'object',
+                                'value' => $model->object->name
+                            ]) ?>
                         </div>
                         <div class="col-md-2">
                             <?= $form->field($model, "[$i]type")->dropDownList($model->typeOptions, ['prompt' => '--']) ?>
