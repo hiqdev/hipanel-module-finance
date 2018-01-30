@@ -3,7 +3,12 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\client\grid\ClientColumn;
+use hipanel\modules\finance\menus\PriceActionsMenu;
+use hipanel\modules\finance\menus\SalePricesActionsMenu;
+use hipanel\modules\finance\models\FakeSale;
+use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
+use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\helpers\Html;
 
@@ -43,7 +48,11 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'html',
                 'value' => function ($model) {
                     $html = Html::beginTag('div', ['class' => 'sale-flex-cnt']);
-                    $html .= LinkToObjectResolver::widget(['model' => $model]);
+                    $html .= LinkToObjectResolver::widget([
+                        'model' => $model,
+                        'typeAttribute' => 'tariff_type',
+                        'idAttribute' => 'object_id',
+                    ]);
                     $html .= Html::endTag('div');
 
                     return $html;
@@ -53,15 +62,44 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'raw',
                 'filterAttribute' => 'object_like',
                 'enableSorting' => false,
-                'value' => function ($model) {
+                'value' => function (Sale $model) {
+                    if ($model instanceof FakeSale) {
+                        return $model->object;
+                    }
+
                     $html = Html::beginTag('div', ['class' => 'sale-flex-cnt']);
-                    $html .= LinkToObjectResolver::widget(['model' => $model]);
+                    $html .= LinkToObjectResolver::widget([
+                        'model' => $model,
+                        'typeAttribute' => 'tariff_type',
+                        'idAttribute' => 'object_id',
+                    ]);
                     $html .= Html::a(Yii::t('hipanel:finance:sale', 'More'), ['@sale/view', 'id' => $model->id], ['class' => 'btn btn-xs btn-default btn-flat']);
                     $html .= Html::endTag('div');
 
                     return $html;
                 }
             ],
+            'object_link' => [
+                'attribute' => 'object',
+                'format' => 'raw',
+                'filterAttribute' => 'object_like',
+                'enableSorting' => false,
+                'value' => function (Sale $model) {
+                    if ($model instanceof FakeSale) {
+                        return $model->object;
+                    }
+
+                    return LinkToObjectResolver::widget([
+                        'model' => $model,
+                        'typeAttribute' => 'tariff_type',
+                        'idAttribute' => 'object_id',
+                    ]);
+                }
+            ],
+            'price_related_actions' => [
+                'class' => MenuColumn::class,
+                'menuClass' => SalePricesActionsMenu::class,
+            ]
         ]);
     }
 }

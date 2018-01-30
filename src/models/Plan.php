@@ -10,6 +10,7 @@ use Yii;
  *
  * @property string $id
  * @property string $name
+ * @property string $type
  *
  * @property Sale[] $sales
  * @property Price[] $prices
@@ -40,7 +41,7 @@ class Plan extends \hipanel\base\Model
 
     public function getPrices()
     {
-        return $this->hasMany(Price::class, ['plan_id' => 'id']);
+        return $this->hasMany(Price::class, ['plan_id' => 'id'])->indexBy('id');
     }
 
     public function getSales()

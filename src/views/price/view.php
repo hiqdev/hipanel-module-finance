@@ -28,7 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="profile-usermenu" style="border-top: 1px solid #f4f4f4;">
                     <?= PriceDetailMenu::widget(['model' => $model]) ?>
                 </div>
-
             </div>
             <div class="box-footer no-padding">
                 <?= PriceGridView::detailView([

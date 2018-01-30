@@ -3,7 +3,9 @@
 namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
+use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartCreateAction;
+use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
@@ -11,6 +13,7 @@ use hipanel\base\CrudController;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use Yii;
+use yii\rest\DeleteAction;
 
 class PriceController extends CrudController
 {
@@ -27,15 +30,35 @@ class PriceController extends CrudController
 
                     return compact('plan');
                 },
+                'success' => Yii::t('hipanel.finance.price', 'Prices were successfully created')
+            ],
+            'create-suggested' => [
+                'class' => SmartCreateAction::class,
+                'scenario' => 'create',
+                'POST' => [
+                    'save' => true,
+                    'success' => [
+                        'class' => RedirectAction::class,
+                        'url' => function (RedirectAction $action) {
+                            return ['@plan/view', 'id' => $action->collection->getModel()->plan_id];
+                        },
+                    ],
+                ],
+                'success' => Yii::t('hipanel.finance.price', 'Prices were successfully created')
             ],
             'update' => [
                 'class' => SmartUpdateAction::class,
+                'success' => Yii::t('hipanel.finance.price', 'Prices were successfully updated')
             ],
             'index' => [
                 'class' => IndexAction::class,
             ],
             'view' => [
                 'class' => ViewAction::class,
+            ],
+            'delete' => [
+                'class' => SmartDeleteAction::class,
+                'success' => Yii::t('hipanel.finance.price', 'Prices were successfully deleted')
             ],
             'set-note' => [
                 'class' => SmartUpdateAction::class,
@@ -54,28 +77,19 @@ class PriceController extends CrudController
         $suggestions = (new Price)->batchQuery('suggest', [
             'object_id' => $object_id,
             'plan_id' => $plan_id,
-            'type' => $type
+            'type' => $type,
         ]);
 
         $models = [];
         foreach ($suggestions as $suggestion) {
-            $models[] = new Price([
-                'type' => $suggestion['type']['name'],
-                'type_id' => $suggestion['type']['id'],
-                'object_id' => $suggestion['target']['id'],
-                'object' => $suggestion['target']['name'],
-                'unit' => $suggestion['prepaid']['unit'],
-                'quantity' => $suggestion['prepaid']['quantity'],
-                'unit_id' => 0, // todo
-                'price' => $suggestion['price']['amount'] / 100,
-                'currency' => $suggestion['price']['currency']
-            ]);
+            $models[] = new Price($suggestion);
         }
 
-        return $this->render('create', [
+        return $this->render('suggested', [
+            'type' => $type,
             'model' => reset($models),
             'models' => $models,
-            'plan' => $plan
+            'plan' => $plan,
         ]);
     }
 }

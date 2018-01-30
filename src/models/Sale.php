@@ -4,6 +4,13 @@ namespace hipanel\modules\finance\models;
 
 use Yii;
 
+/**
+ * Class Sale
+ *
+ * @property string|int $object_id
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
 class Sale extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
@@ -59,4 +66,5 @@ class Sale extends \hipanel\base\Model
             self::SALE_TYPE_CLIENT => Yii::t('hipanel', 'Clients'),
         ];
     }
+
 }

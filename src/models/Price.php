@@ -10,7 +10,12 @@ use Yii;
  *
  * @property int $id
  * @property int $plan_id
- * @property string $object
+ * @property string|int $object_id
+ * @property string|float $price
+ * @property string $currency
+ * @property string|int $main_object_id
+ *
+ * @property Object $object
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -20,16 +25,17 @@ class Price extends \hipanel\base\Model
 
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
+    const SCENARIO_DELETE = 'delete';
 
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['id', 'parent_id', 'plan_id', 'object_id', 'type_id', 'unit_id', 'currency_id'], 'integer'],
-            [['type', 'plan', 'unit', 'currency', 'note', 'data', 'object'], 'string'],
+            [['id', 'parent_id', 'plan_id', 'object_id', 'type_id', 'unit_id', 'currency_id', 'main_object_id'], 'integer'],
+            [['type', 'plan', 'unit', 'currency', 'note', 'data'], 'string'],
             [['quantity', 'price'], 'number'],
 
             [['plan_id', 'type', 'price', 'currency'], 'required', 'on' => 'create'],
-            [['id'], 'required', 'on' => ['update', 'set-note']],
+            [['id'], 'required', 'on' => ['update', 'set-note', 'delete']],
         ]);
     }
 
@@ -43,7 +49,6 @@ class Price extends \hipanel\base\Model
             'price' => Yii::t('hipanel:finance', 'Price'),
             'note' => Yii::t('hipanel', 'Note'),
             'type' => Yii::t('hipanel', 'Type'),
-            'object' => Yii::t('hipanel', 'Object'),
         ];
     }
 
@@ -69,5 +74,10 @@ class Price extends \hipanel\base\Model
     public function getCurrencyOptions()
     {
         return Ref::getList('type,currency');
+    }
+
+    public function getObject()
+    {
+        return $this->hasOne(Object::class, ['id' => 'id']);
     }
 }

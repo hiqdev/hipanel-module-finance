@@ -8,6 +8,7 @@ use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
+use hiqdev\hiart\Query;
 use Yii;
 use yii\base\Event;
 
@@ -29,8 +30,13 @@ class PlanController extends CrudController
                 'on beforePerform' => function (Event $event) {
                     $action = $event->sender;
                     $action->getDataProvider()->query
-                        ->joinWith('prices')
-                        ->joinWith('sales');
+                        ->joinWith('sales')
+                        ->with([
+                            'prices' => function (Query $query) {
+                                $query->addSelect('main_object_id');
+                                $query->joinWith('object');
+                            },
+                        ]);
                 },
                 'class' => ViewAction::class,
             ],

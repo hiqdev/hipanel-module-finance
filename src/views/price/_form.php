@@ -16,7 +16,7 @@ $model = reset($models);
 
 $form = ActiveForm::begin([
     'id' => 'plan-form',
-    'action' => $model->isNewRecord ? Url::to(['@price/create']) : Url::to(['@price/update', 'id' => $model->id]),
+    'action' => $model->isNewRecord ? Url::to(['@price/create-suggested']) : Url::to(['@price/update', 'id' => $model->id]),
     'enableClientValidation' => true,
     'validationUrl' => Url::toRoute([
         'validate-form',
@@ -40,16 +40,9 @@ $form = ActiveForm::begin([
 
 <div class="box box-solid">
     <div class="box-header with-border">
-        <h3 class="box-title"><?= $plan ? $plan->name : '' ?></h3>
-        <div class="box-tools">
-            <?php if ($model->isNewRecord) : ?>
-                <div class="btn-group">
-                    <button type="button" class="add-item btn btn-box-tool">
-                        <i class="glyphicon glyphicon-plus text-success"></i>
-                    </button>
-                </div>
-            <?php endif ?>
-        </div>
+        <h3 class="box-title">
+            <?= $plan ? Yii::t('hipanel.finance.price', 'Tariff: {name}', ['name' => $plan->name]) : '' ?>
+        </h3>
     </div>
     <div class="container-items">
         <?php $i = 0; ?>
