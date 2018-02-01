@@ -17,7 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php Pjax::begin(array_merge(Yii::$app->params['pjax'], ['enablePushState' => true])) ?>
 <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
-
     <?php $page->setSearchFormData(compact(['types'])) ?>
 
     <?php $page->beginContent('main-actions') ?>

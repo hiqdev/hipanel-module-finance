@@ -30,6 +30,7 @@ class LinkToObjectResolver extends Widget
         'account' => '@account/view',
         'server' => '@server/view',
         'part' => '@part/view',
+        'tariff' => '@plan/view',
     ];
 
     /**

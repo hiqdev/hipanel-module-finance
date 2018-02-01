@@ -19,6 +19,8 @@ use Yii;
  */
 class Plan extends \hipanel\base\Model
 {
+    const TYPE_SERVER = 'server';
+
     use \hipanel\base\ModelTrait;
 
     public function rules()

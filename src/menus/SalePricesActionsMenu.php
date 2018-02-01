@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\menus;
 
+use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Sale;
 use Yii;
 
@@ -45,6 +46,16 @@ class SalePricesActionsMenu extends \hiqdev\yii2\menus\Menu
 
     protected function suggestionTypesByObject()
     {
+        if ($this->model instanceof FakeSale && empty($this->model->tariff_type)) {
+            return [
+                [
+                    'type' => 'default',
+                    'label' => Yii::t('hipanel.finance.price', 'Main prices'),
+                    'icon' => 'fa-plus',
+                ],
+            ];
+        }
+
         switch ($this->model->tariff_type) {
             case Sale::SALE_TYPE_SERVER:
                 return [

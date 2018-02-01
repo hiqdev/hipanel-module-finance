@@ -14,6 +14,11 @@ return [
     'Price/unit' => 'Цена/ед. изм.',
     'Main prices' => 'Основные цены',
     'Part prices' => 'Цены железа',
+    'No prices found' => 'Нет цен',
+    'Prices' => 'Цены',
+    'For the whole tariff' => 'На весь тариф',
+    'Proceed to creation' => 'Перейти к созданию',
+    'Create prices' => 'Создать цены',
 
     'minutes' => 'минут',
     'items' => 'штуки',

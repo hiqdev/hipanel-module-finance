@@ -62,8 +62,8 @@ $form = ActiveForm::begin([
                             <?= $form->field($model, "[$i]object")->textInput([
                                 'disabled' => true,
                                 'ref' => 'object',
-                                'value' => $model->object->name
-                            ]) ?>
+                                'value' => $model->object->name,
+                            ])->label(Yii::t('hipanel', 'Object')) ?>
                         </div>
                         <div class="col-md-2">
                             <?= $form->field($model, "[$i]type")->dropDownList($model->typeOptions, ['prompt' => '--']) ?>

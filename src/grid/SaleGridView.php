@@ -3,7 +3,6 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\client\grid\ClientColumn;
-use hipanel\modules\finance\menus\PriceActionsMenu;
 use hipanel\modules\finance\menus\SalePricesActionsMenu;
 use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Sale;
@@ -85,10 +84,6 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'filterAttribute' => 'object_like',
                 'enableSorting' => false,
                 'value' => function (Sale $model) {
-                    if ($model instanceof FakeSale) {
-                        return $model->object;
-                    }
-
                     return LinkToObjectResolver::widget([
                         'model' => $model,
                         'typeAttribute' => 'tariff_type',
@@ -99,6 +94,11 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
             'price_related_actions' => [
                 'class' => MenuColumn::class,
                 'menuClass' => SalePricesActionsMenu::class,
+                'menuButtonOptions' => [
+                    'icon' => '<i class="fa fa-plus"></i>&nbsp;'
+                        . Yii::t('hipanel.finance.price', 'Prices')
+                        . '&nbsp;<span class="caret"></span>'
+                ]
             ]
         ]);
     }

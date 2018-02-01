@@ -43,6 +43,12 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                     return $link ?: Yii::t('hipanel.finance.price', 'Any');
                 }
             ],
+            'object->name-any' => [
+                'label' => Yii::t('hipanel', 'Object'),
+                'value' => function (Price $model) {
+                    return Yii::t('hipanel.finance.price', 'Any');
+                }
+            ],
             'object->label' => [
                 'label' => Yii::t('hipanel', 'Details'),
                 'value' => function (Price $model) {
@@ -51,6 +57,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
             ],
             'type' => [
                 'class' => RefColumn::class,
+                'label' => Yii::t('hipanel', 'Type'),
                 'attribute' => 'type',
                 'filterAttribute' => 'type',
                 'filterOptions' => ['class' => 'narrow-filter'],
