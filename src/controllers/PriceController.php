@@ -2,10 +2,8 @@
 
 namespace hipanel\modules\finance\controllers;
 
-use hipanel\actions\Action;
 use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
-use hipanel\actions\RenderAction;
 use hipanel\actions\SmartCreateAction;
 use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartUpdateAction;
@@ -19,14 +17,25 @@ use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use Yii;
 use yii\base\Event;
-use yii\rest\DeleteAction;
-use yii\web\BadRequestHttpException;
 
 class PriceController extends CrudController
 {
     public function actions()
     {
         return array_merge(parent::actions(), [
+            'index' => [
+                'class' => IndexAction::class,
+                'on beforePerform' => function (Event $event) {
+                    $action = $event->sender;
+                    $action->getDataProvider()->query
+                        ->addSelect('main_object_id')
+                        ->joinWith('object')
+                        ->joinWith('plan');
+                },
+            ],
+            'view' => [
+                'class' => ViewAction::class,
+            ],
             'create' => [
                 'class' => SmartCreateAction::class,
                 'data' => function ($action, $data) {
@@ -62,12 +71,6 @@ class PriceController extends CrudController
                     $dataProvider = $action->getDataProvider();
                     $dataProvider->query->joinWith('object');
                 },
-            ],
-            'index' => [
-                'class' => IndexAction::class,
-            ],
-            'view' => [
-                'class' => ViewAction::class,
             ],
             'delete' => [
                 'class' => SmartDeleteAction::class,

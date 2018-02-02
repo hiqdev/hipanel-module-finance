@@ -2,14 +2,20 @@
 
 /** @var \hipanel\widgets\AdvancedSearch $search */
 
+use hipanel\helpers\StringHelper;
+
 ?>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('object_name_ilike') ?>
+</div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field('price') ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('plan_ilike') ?>
+    <?= $search->field('plan_name_ilike') ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
@@ -21,5 +27,16 @@
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('currency')->dropDownList($search->model->currencyOptions, ['prompt' => '--']) ?>
+    <?php
+    $currencies = $search->model->currencyOptions;
+    $currencies = array_combine(array_keys($currencies), array_map(function ($k) {
+        return StringHelper::getCurrencySymbol($k);
+    }, array_keys($currencies)));
+    ?>
+
+    <?= $search->field('currency_in')->widget(\hiqdev\combo\StaticCombo::class, [
+        'data' => $currencies,
+        'hasId' => true,
+        'multiple' => true,
+    ]) ?>
 </div>

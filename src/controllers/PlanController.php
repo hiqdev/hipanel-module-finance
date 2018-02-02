@@ -115,11 +115,22 @@ class PlanController extends CrudController
 
         foreach ($pricesByMainObject as $id => $prices) {
             if (!isset($salesByObject[$id])) {
-                $firstPrice = reset($prices);
+                foreach ($prices as $price) {
+                    if ($price->object_id === (int)$id) {
+                        $salesByObject[$id] = new FakeSale([
+                            'object' => $price->object->name,
+                            'tariff_id' => $model->id,
+                            'object_id' => $price->object_id,
+                            'tariff_type' => $model->type,
+                        ]);
+                        continue 2;
+                    }
+                }
+
                 $salesByObject[$id] = new FakeSale([
-                    'object' => $firstPrice->object->name,
+                    'object' => Yii::t('hipanel.finance.price', 'Unknown object name – no direct object prices exist'),
                     'tariff_id' => $model->id,
-                    'object_id' => $firstPrice->object_id,
+                    'object_id' => $id,
                     'tariff_type' => $model->type,
                 ]);
             }

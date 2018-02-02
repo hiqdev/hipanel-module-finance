@@ -4,9 +4,15 @@ use hipanel\modules\finance\grid\PriceGridView;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = Yii::t('hipanel:finance', 'Price');
 $this->params['breadcrumbs'][] = $this->title;
+
+/**
+ * @var \hiqdev\hiart\ActiveDataProvider $dataProvider
+ * @var \hipanel\modules\finance\models\Price $model
+ */
 
 ?>
 
@@ -15,12 +21,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php $page->setSearchFormData([]) ?>
 
-        <?php $page->beginContent('main-actions') ?>
-            <?= Html::a(Yii::t('hipanel', 'Create'), ['/finance/price/create'], ['class' => 'btn btn-sm btn-success']) ?>
-        <?php $page->endContent() ?>
-
         <?php $page->beginContent('sorter-actions') ?>
             <?= $page->renderSorter(['attributes' => ['id']]) ?>
+        <?php $page->endContent() ?>
+
+        <?php $page->beginContent('bulk-actions') ?>
+            <?= $page->renderBulkButton(Yii::t('hipanel', 'Update'), Url::to(['@price/update']), 'warning') ?>
+            <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), Url::to(['@price/delete']), 'danger') ?>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('table') ?>
@@ -31,12 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filterModel' => $model,
                     'columns' => [
                         'checkbox',
-                        'actions',
-                        'price',
-                        'currency',
-                        'unit',
-                        'plan',
+                        'object->name',
+                        'object->label',
+                        'price/unit',
                         'type',
+                        'note',
+                        'plan'
                     ],
                 ]) ?>
             <?php $page->endBulkForm() ?>

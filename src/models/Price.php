@@ -16,6 +16,7 @@ use Yii;
  * @property string|int $main_object_id
  *
  * @property TargetObject $object
+ * @property Plan $plan
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -31,7 +32,7 @@ class Price extends \hipanel\base\Model
     {
         return array_merge(parent::rules(), [
             [['id', 'parent_id', 'plan_id', 'object_id', 'type_id', 'unit_id', 'currency_id', 'main_object_id'], 'integer'],
-            [['type', 'plan', 'unit', 'currency', 'note', 'data'], 'string'],
+            [['type', 'plan_name', 'unit', 'currency', 'note', 'data'], 'string'],
             [['quantity', 'price'], 'number'],
 
             [['plan_id', 'type', 'price', 'currency'], 'required', 'on' => ['create', 'update']],
@@ -42,8 +43,8 @@ class Price extends \hipanel\base\Model
     public function attributeLabels()
     {
         return [
-            'plan_ilike' => Yii::t('hipanel:finance', 'Plan'),
             'plan_id' => Yii::t('hipanel:finance', 'Plan'),
+            'plan' => Yii::t('hipanel:finance', 'Plan'),
             'quantity' => Yii::t('hipanel:finance', 'Prepaid'),
             'unit' => Yii::t('hipanel:finance', 'Unit'),
             'price' => Yii::t('hipanel:finance', 'Price'),
@@ -79,5 +80,10 @@ class Price extends \hipanel\base\Model
     public function getObject()
     {
         return $this->hasOne(TargetObject::class, ['id' => 'id']);
+    }
+
+    public function getPlan()
+    {
+        return $this->hasOne(Plan::class, ['id' => 'plan_id']);
     }
 }

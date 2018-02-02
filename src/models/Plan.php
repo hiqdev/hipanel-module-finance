@@ -43,7 +43,7 @@ class Plan extends \hipanel\base\Model
 
     public function getPrices()
     {
-        return $this->hasMany(Price::class, ['plan_id' => 'id'])->indexBy('id');
+        return $this->hasMany(Price::class, ['plan_id' => 'id'])->indexBy('id')->inverseOf('plan');
     }
 
     public function getSales()
