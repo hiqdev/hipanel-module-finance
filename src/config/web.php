@@ -24,9 +24,9 @@ return [
         'finance' => [
             'class' => \hipanel\modules\finance\Module::class,
         ],
-        'cart' => [
+        'cart' => array_filter([
             'class' => \hiqdev\yii2\cart\Module::class,
-            'termsPage' => (isset($params['organizationUrl']) ? $params['organizationUrl'] : ''),
+            'termsPage' => $params['organization.termsUrl'] ?: $params['organization.url'],
             'orderPage' => '/finance/cart/select',
             /*'orderButton'    => function ($module) {
                 return Yii::$app->getView()->render('@hipanel/modules/finance/views/cart/order-button', [
@@ -46,7 +46,7 @@ return [
                 'on cartChange' => [\hipanel\modules\finance\cart\CartCalculator::class, 'handle'],
                 'session' => \yii\di\Instance::of(\hipanel\modules\finance\cart\storage\CartStorageInterface::class),
             ],
-        ],
+        ]),
         'merchant' => [
             'class' => \hiqdev\yii2\merchant\Module::class,
             'returnPage' => '/finance/pay/return',
