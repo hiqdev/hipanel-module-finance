@@ -9,6 +9,7 @@ use yii\base\NotSupportedException;
 use yii\caching\CacheInterface;
 use yii\helpers\Json;
 use yii\web\MultiFieldSession;
+use yii\web\Session;
 use yii\web\User;
 
 /**
@@ -18,7 +19,13 @@ use yii\web\User;
  */
 class RemoteCartStorage extends MultiFieldSession implements CartStorageInterface
 {
-    const CACHE_DURATION = 60*60; // 1 hour
+    /**
+     * To marge sesstion and remote cart storage
+     * @var string
+     */
+    public $sessionCartId;
+
+    const CACHE_DURATION = 60 * 60; // 1 hour
     /**
      * @var array
      */
@@ -40,13 +47,19 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
      */
     private $user;
 
-    public function __construct(User $user, SettingsStorage $settingsStorage, CacheInterface $cache, array $config = [])
+    /**
+     * @var Session
+     */
+    private $session;
+
+    public function __construct(Session $session, User $user, SettingsStorage $settingsStorage, CacheInterface $cache, array $config = [])
     {
         parent::__construct($config);
 
         $this->settingsStorage = $settingsStorage;
         $this->cache = $cache;
         $this->user = $user;
+        $this->session = $session;
     }
 
     protected function read()
@@ -54,15 +67,34 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
         try {
             $this->data = $this->cache->getOrSet($this->getCacheKey(), function () {
                 $data = $this->settingsStorage->getBounded($this->getStorageKey());
-                if ($data === []) {
+                $sessionCartData = $this->getSessionCartData();
+                if ($data === [] && $sessionCartData === []) {
                     return [];
                 }
 
-                return Json::decode(base64_decode($data));
+                return $this->mergeCartData($data, $sessionCartData);
             }, self::CACHE_DURATION);
         } catch (\Exception $exception) {
             Yii::error('Failed to read cart: ' . $exception->getMessage(), __METHOD__);
         }
+    }
+
+    protected function getSessionCartData()
+    {
+        $result = [];
+        if (isset($this->session[$this->sessionCartId])) {
+            $result = unserialize($this->session[$this->sessionCartId]);
+        }
+
+        return $result;
+    }
+
+    protected function mergeCartData($remoteData, $sessionData)
+    {
+        $data = Json::decode(base64_decode($remoteData));
+        $rawData = array_merge(unserialize($data[$this->sessionCartId]), $sessionData);
+
+        return [$this->sessionCartId => serialize($rawData)];
     }
 
     protected function getCacheKey()
@@ -93,6 +125,7 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
      * @var bool
      */
     private $_isActive;
+
     public function getIsActive()
     {
         return $this->_isActive;
