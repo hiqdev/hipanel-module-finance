@@ -48,58 +48,17 @@ $form = ActiveForm::begin([
         <?php $i = 0; ?>
         <?php foreach ($models as $model) : ?>
             <div class="box-body price-item">
+                <?= Html::activeHiddenInput($model, "[$i]id") ?>
+                <?php if ($plan): ?>
+                    <?php $model->plan_id = $plan->id ?>
+                <?php endif ?>
+                <?= Html::activeHiddenInput($model, "[$i]plan_id", ['ref' => 'plan_id']) ?>
                 <div class="row input-row">
-                    <div class="col-lg-offset-10 col-sm-2 text-right">
-                        <?= Html::activeHiddenInput($model, "[$i]id") ?>
-                        <?php if ($plan): ?>
-                            <?php $model->plan_id = $plan->id ?>
-                        <?php endif ?>
-                        <?= Html::activeHiddenInput($model, "[$i]plan_id", ['ref' => 'plan_id']) ?>
-                    </div>
-                    <div class="form-instance">
-                        <div class="col-md-2">
-                            <?= Html::activeHiddenInput($model, "[$i]object_id", ['ref' => 'object_id']) ?>
-                            <?= $form->field($model, "[$i]object")->textInput([
-                                'disabled' => true,
-                                'ref' => 'object',
-                                'value' => $model->object->name,
-                            ])->label(Yii::t('hipanel', 'Object')) ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $form->field($model, "[$i]type")->dropDownList($model->typeOptions, ['prompt' => '--']) ?>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="<?= AmountWithCurrency::$widgetClass ?>">
-                                <?= $form->field($model, "[$i]price")->widget(AmountWithCurrency::class, [
-                                    'currencyAttributeName' => "currency",
-                                    'currencyAttributeOptions' => [
-                                        'items' => $this->context->getCurrencyTypes(),
-                                    ],
-                                    'inputOptions' => [
-                                        'data-bill-sum' => true,
-                                    ],
-                                ]) ?>
-                                <?= $form->field($model, "[$i]currency", ['template' => '{input}{error}'])->hiddenInput([
-                                    'ref' => 'currency'
-                                ]) ?>
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <?= $form->field($model, "[$i]unit")->dropDownList($model->unitOptions, ['prompt' => '--']) ?>
-                        </div>
-                        <div class="col-md-1">
-                            <?= $form->field($model, "[$i]quantity") ?>
-                        </div>
-                        <div class="col-md-3">
-                            <?= $form->field($model, "[$i]note") ?>
-                        </div>
-                        <div class="col-md-1" style="padding-top: 25px;">
-                            <label>&nbsp;</label>
-                            <button type="button" class="remove-item btn bg-maroon btn-sm btn-flat">
-                                <i class="glyphicon glyphicon-minus"></i>
-                            </button>
-                        </div>
-                    </div>
+                    <?php if ($model instanceof \hipanel\modules\finance\models\ModelGroupPrice): ?>
+                        <?= $this->render('formRow/modelGroup', compact('plan', 'model', 'form', 'i')) ?>
+                    <?php else: ?>
+                        <?= $this->render('formRow/simple', compact('plan', 'model', 'form', 'i')) ?>
+                    <?php endif ?>
                 </div>
             </div>
             <?php $i++ ?>

@@ -12,12 +12,18 @@ use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\actions\PriceUpdateAction;
+use hipanel\modules\finance\collections\PricesCollection;
 use hipanel\modules\finance\models\TargetObject;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use Yii;
 use yii\base\Event;
 
+/**
+ * Class PriceController
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
 class PriceController extends CrudController
 {
     public function actions()
@@ -50,6 +56,7 @@ class PriceController extends CrudController
             ],
             'create-suggested' => [
                 'class' => SmartCreateAction::class,
+                'collection' => ['class' => PricesCollection::class],
                 'scenario' => 'create',
                 'POST' => [
                     'save' => true,
@@ -64,6 +71,7 @@ class PriceController extends CrudController
             ],
             'update' => [
                 'class' => PriceUpdateAction::class,
+                'collection' => ['class' => PricesCollection::class],
                 'success' => Yii::t('hipanel.finance.price', 'Prices were successfully updated'),
                 'on beforeFetch' => function (Event $event) {
                     /** @var \hipanel\actions\SearchAction $action */
@@ -82,6 +90,7 @@ class PriceController extends CrudController
             ],
             'validate-form' => [
                 'class' => ValidateFormAction::class,
+                'collection' => ['class' => PricesCollection::class],
             ],
         ]);
     }
@@ -100,7 +109,9 @@ class PriceController extends CrudController
         foreach ($suggestions as $suggestion) {
             $object = ArrayHelper::remove($suggestion, 'object');
 
-            $price = new Price($suggestion);
+            /** @var Price $price */
+            $price = Price::instantiate($suggestion);
+            $price->setAttributes($suggestion);
             $price->populateRelation('object', new TargetObject($object));
 
             $models[] = $price;

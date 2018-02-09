@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\RefColumn;
+use hipanel\modules\finance\grid\presenters\price\PricePresenterFactory;
 use hipanel\modules\finance\menus\PriceActionsMenu;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
@@ -11,24 +12,40 @@ use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\bootstrap\Html;
 
+/**
+ * Class PriceGridView
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
 class PriceGridView extends \hipanel\grid\BoxedGridView
 {
+    /**
+     * @var \hipanel\modules\finance\grid\presenters\price\PricePresenterFactory
+     */
+    private $presenterFactory;
+
+    public function __construct(PricePresenterFactory $presenterFactory, array $config = [])
+    {
+        parent::__construct($config);
+        $this->presenterFactory = $presenterFactory;
+    }
+
     public function columns()
     {
         return array_merge(parent::columns(), [
             'plan' => [
-                'format' => 'html',
+                'format' => 'raw',
                 'filterAttribute' => 'plan_name_ilike',
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'value' => function (Price $model) {
                     return Html::a($model->plan->name, ['@plan/view', 'id' => $model->plan->id]);
                 },
             ],
-            'price/unit' => [
-                'label' => Yii::t('hipanel.finance.price', 'Price/unit'),
+            'price' => [
+                'label' => Yii::t('hipanel.finance.price', 'Price'),
+                'format' => 'raw',
                 'value' => function (Price $model) {
-                    return Yii::$app->formatter->asCurrency($model->price, $model->currency)
-                        . '/' . Yii::t('hipanel.finance.price', $model->getUnitOptions()[$model->unit]);
+                    return $this->presenterFactory->build(get_class($model))->renderPrice($model);
                 }
             ],
             'object->name' => [
@@ -61,7 +78,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'type',
                 'filterAttribute' => 'type',
                 'filterOptions' => ['class' => 'narrow-filter'],
-                'format' => 'html',
+                'format' => 'raw',
                 'gtype' => 'type,price',
                 'findOptions' => [
                     'select' => 'name_label',
@@ -78,7 +95,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'unit',
                 'filterAttribute' => 'unit',
                 'filterOptions' => ['class' => 'narrow-filter'],
-                'format' => 'html',
+                'format' => 'raw',
                 'gtype' => 'type,unit',
                 'findOptions' => [
                     'with_recursive' => 1,
@@ -91,7 +108,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'currency',
                 'filterAttribute' => 'currency',
                 'filterOptions' => ['class' => 'narrow-filter'],
-                'format' => 'html',
+                'format' => 'raw',
                 'gtype' => 'type,currency',
             ],
             'actions' => [

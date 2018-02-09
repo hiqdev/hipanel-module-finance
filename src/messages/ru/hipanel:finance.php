@@ -217,4 +217,5 @@ return [
     'Unit' => 'Единица изм.',
     'Object' => 'Объект',
     'Create price' => 'Создать цены',
+    'This plan type viewing is not implemented yet' => 'Управление тарифным планом этого типа ещё не реализовано'
 ];

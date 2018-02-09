@@ -6,6 +6,12 @@ use yii\base\Model;
 use yii\base\Widget;
 use yii\helpers\Html;
 
+/**
+ * Class LinkToObjectResolver
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ * @author Andrey Klockok <tofid@hiqdev.com>
+ */
 class LinkToObjectResolver extends Widget
 {
     /** @var Model */
@@ -29,8 +35,10 @@ class LinkToObjectResolver extends Widget
         'client' => '@client/view',
         'account' => '@account/view',
         'server' => '@server/view',
+        'device' => '@server/view',
         'part' => '@part/view',
         'tariff' => '@plan/view',
+        'model_group' => '@model-group/view',
     ];
 
     /**

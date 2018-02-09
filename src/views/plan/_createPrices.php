@@ -16,27 +16,24 @@ $model = new \hipanel\modules\finance\models\PriceSuggestionRequestForm([
 
 <?php $form = ActiveForm::begin(['action' => ['@price/suggest'], 'method' => 'GET']) ?>
 
-<?= $form->field($model, 'plan_id')->hiddenInput([
-    'name' => 'plan_id',
-])->label(false) ?>
+<?= $form->field($model, 'plan_id')->hiddenInput()->label(false) ?>
 
 <?php if ($plan->type === Plan::TYPE_SERVER): ?>
-    <?= $form->field($model, 'object_id')->widget(ServerCombo::class, [
-        'inputOptions' => [
-            'name' => 'object_id',
+    <?= $form->field($model, 'object_id')->widget(ServerCombo::class) ?>
+    <?= $form->field($model, 'type')->widget(\hiqdev\combo\StaticCombo::class, [
+        'data' => [
+            'default' => Yii::t('hipanel.finance.suggestionTypes', 'default'),
+            'parts' => Yii::t('hipanel.finance.suggestionTypes', 'parts'),
+        ],
+    ]) ?>
+<?php elseif ($plan->type === Plan::TYPE_TEMPLATE): ?>
+    <?= $form->field($model, 'object_id')->hiddenInput(['value' => $model->plan_id])->label(false) ?>
+    <?= $form->field($model, 'type')->widget(\hiqdev\combo\StaticCombo::class, [
+        'data' => [
+            'model_groups' => Yii::t('hipanel.finance.suggestionTypes', 'model_groups'),
         ],
     ]) ?>
 <?php endif ?>
-
-<?= $form->field($model, 'type')->widget(\hiqdev\combo\StaticCombo::class, [
-    'inputOptions' => [
-        'name' => 'type',
-    ],
-    'data' => [
-        'default' => Yii::t('hipanel.finance.suggestionTypes', 'default'),
-        'parts' => Yii::t('hipanel.finance.suggestionTypes', 'parts'),
-    ],
-]) ?>
 
 <hr/>
 

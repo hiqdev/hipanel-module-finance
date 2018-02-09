@@ -18,6 +18,11 @@ class PriceSuggestionRequestForm extends Model
 
     public $object_id;
 
+    public function formName()
+    {
+        return '';
+    }
+
     public function rules()
     {
         return [

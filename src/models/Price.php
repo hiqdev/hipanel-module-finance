@@ -3,7 +3,10 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\models\Ref;
+use hipanel\modules\finance\models\factories\PriceModelFactory;
 use Yii;
+use yii\helpers\Inflector;
+use yii\helpers\StringHelper;
 
 /**
  * Class Price
@@ -14,6 +17,7 @@ use Yii;
  * @property string|float $price
  * @property string $currency
  * @property string|int $main_object_id
+ * @property string $unit
  *
  * @property TargetObject $object
  * @property Plan $plan
@@ -34,9 +38,14 @@ class Price extends \hipanel\base\Model
             [['id', 'parent_id', 'plan_id', 'object_id', 'type_id', 'unit_id', 'currency_id', 'main_object_id'], 'integer'],
             [['type', 'plan_name', 'unit', 'currency', 'note', 'data'], 'string'],
             [['quantity', 'price'], 'number'],
+            [['class'], 'string'], // todo: probably, refactor is needed
 
             [['plan_id', 'type', 'price', 'currency'], 'required', 'on' => ['create', 'update']],
             [['id'], 'required', 'on' => ['update', 'set-note', 'delete']],
+            [['class'], 'default', 'value' => function ($model) {
+                return (new \ReflectionClass($this))->getShortName();
+            }],
+            [['class'], 'string'],
         ]);
     }
 
@@ -85,5 +94,24 @@ class Price extends \hipanel\base\Model
     public function getPlan()
     {
         return $this->hasOne(Plan::class, ['id' => 'plan_id']);
+    }
+
+    public static function tableName()
+    {
+        return Inflector::camel2id(StringHelper::basename(__CLASS__), '-');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function instantiate($row)
+    {
+        if (empty($row['class'])) {
+            return parent::instance($row);
+        }
+
+        /** @var PriceModelFactory $factory */
+        $factory = Yii::$container->get(PriceModelFactory::class);
+        return $factory->build($row['class']);
     }
 }

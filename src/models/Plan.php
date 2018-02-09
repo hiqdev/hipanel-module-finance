@@ -20,6 +20,7 @@ use Yii;
 class Plan extends \hipanel\base\Model
 {
     const TYPE_SERVER = 'server';
+    const TYPE_TEMPLATE = 'template';
 
     use \hipanel\base\ModelTrait;
 
