@@ -9,6 +9,7 @@ use yii\base\NotSupportedException;
 use yii\caching\CacheInterface;
 use yii\helpers\Json;
 use yii\web\MultiFieldSession;
+use yii\web\Session;
 use yii\web\User;
 
 /**
@@ -19,7 +20,7 @@ use yii\web\User;
 class RemoteCartStorage extends MultiFieldSession implements CartStorageInterface
 {
     /**
-     * For marge sesstion and remote cart storage
+     * To marge sesstion and remote cart storage
      * @var string
      */
     public $sessionCartId;
@@ -46,35 +47,54 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
      */
     private $user;
 
-    public function __construct(User $user, SettingsStorage $settingsStorage, CacheInterface $cache, array $config = [])
+    /**
+     * @var Session
+     */
+    private $session;
+
+    public function __construct(Session $session, User $user, SettingsStorage $settingsStorage, CacheInterface $cache, array $config = [])
     {
         parent::__construct($config);
 
         $this->settingsStorage = $settingsStorage;
         $this->cache = $cache;
         $this->user = $user;
+        $this->session = $session;
     }
 
     protected function read()
     {
         try {
             $this->data = $this->cache->getOrSet($this->getCacheKey(), function () {
-                $sessionCartData = [];
-                if (isset(Yii::$app->session[$this->sessionCartId])) {
-                    $sessionCartData = unserialize(Yii::$app->session[$this->sessionCartId]);
-                }
                 $data = $this->settingsStorage->getBounded($this->getStorageKey());
+                $sessionCartData = $this->getSessionCartData();
                 if ($data === [] && $sessionCartData === []) {
                     return [];
                 }
 
-                $data = Json::decode(base64_decode($data));
-                $rawData = array_merge(unserialize($data[$this->sessionCartId]), $sessionCartData);
-                return [$this->sessionCartId => serialize($rawData)];
+                return $this->mergeCartData($data, $sessionCartData);
             }, self::CACHE_DURATION);
         } catch (\Exception $exception) {
             Yii::error('Failed to read cart: ' . $exception->getMessage(), __METHOD__);
         }
+    }
+
+    protected function getSessionCartData()
+    {
+        $result = [];
+        if (isset($this->session[$this->sessionCartId])) {
+            $result = unserialize($this->session[$this->sessionCartId]);
+        }
+
+        return $result;
+    }
+
+    protected function mergeCartData($remoteData, $sessionData)
+    {
+        $data = Json::decode(base64_decode($remoteData));
+        $rawData = array_merge(unserialize($data[$this->sessionCartId]), $sessionData);
+
+        return [$this->sessionCartId => serialize($rawData)];
     }
 
     protected function getCacheKey()
