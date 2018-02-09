@@ -18,7 +18,13 @@ use yii\web\User;
  */
 class RemoteCartStorage extends MultiFieldSession implements CartStorageInterface
 {
-    const CACHE_DURATION = 60*60; // 1 hour
+    /**
+     * For marge sesstion and remote cart storage
+     * @var string
+     */
+    public $sessionCartId;
+
+    const CACHE_DURATION = 60 * 60; // 1 hour
     /**
      * @var array
      */
@@ -53,12 +59,18 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
     {
         try {
             $this->data = $this->cache->getOrSet($this->getCacheKey(), function () {
+                $sessionCartData = [];
+                if (isset(Yii::$app->session[$this->sessionCartId])) {
+                    $sessionCartData = unserialize(Yii::$app->session[$this->sessionCartId]);
+                }
                 $data = $this->settingsStorage->getBounded($this->getStorageKey());
-                if ($data === []) {
+                if ($data === [] && $sessionCartData === []) {
                     return [];
                 }
 
-                return Json::decode(base64_decode($data));
+                $data = Json::decode(base64_decode($data));
+                $rawData = array_merge(unserialize($data[$this->sessionCartId]), $sessionCartData);
+                return [$this->sessionCartId => serialize($rawData)];
             }, self::CACHE_DURATION);
         } catch (\Exception $exception) {
             Yii::error('Failed to read cart: ' . $exception->getMessage(), __METHOD__);
@@ -93,6 +105,7 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
      * @var bool
      */
     private $_isActive;
+
     public function getIsActive()
     {
         return $this->_isActive;

@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\cart\storage;
 
 use Yii;
 use yii\web\User;
+use yii\di\Instance;
 
 /**
  * Class CartStorageFactory
@@ -24,6 +25,6 @@ class CartStorageFactory
             return Yii::$app->session;
         }
 
-        return Yii::createObject(RemoteCartStorage::class);
+        return Yii::createObject(['class' => RemoteCartStorage::class, 'sessionCartId' => 'yz\shoppingcart\ShoppingCart']);
     }
 }
