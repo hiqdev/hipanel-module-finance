@@ -4,24 +4,19 @@ namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
 use hipanel\actions\ViewAction;
+use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\models\stub\ClientRelationFreeStub;
 use hipanel\modules\finance\models\Tariff;
-use yii\filters\AccessControl;
 
 class SaleController extends \hipanel\base\CrudController
 {
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
-            'access-sale' => [
-                'class' => AccessControl::class,
-                'only' => ['index', 'view'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['manage'],
-                        'actions' => ['index', 'view'],
-                    ],
+            [
+                'class' => EasyAccessControl::class,
+                'actions' => [
+                    '*' => 'manage',
                 ],
             ],
         ]);
