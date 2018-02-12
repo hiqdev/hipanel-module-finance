@@ -10,12 +10,12 @@
 
 namespace hipanel\modules\finance\controllers;
 
+use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\cart\CartFinisher;
 use hipanel\modules\finance\Module;
 use hiqdev\yii2\merchant\models\DepositForm;
 use Yii;
-use yii\filters\AccessControl;
 
 class CartController extends \yii\web\Controller
 {
@@ -27,14 +27,14 @@ class CartController extends \yii\web\Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::class,
-                'only' => ['deposit', 'select', 'partial', 'full', 'finish'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
+            [
+                'class' => EasyAccessControl::class,
+                'actions' => [
+                    'deposit' => '@',
+                    'select' => '@',
+                    'partial' => '@',
+                    'full' => '@',
+                    'finish' => '@',
                 ],
             ],
         ];
@@ -64,7 +64,7 @@ class CartController extends \yii\web\Controller
         }
 
         return $this->render('select', [
-            'cart'   => $cart,
+            'cart' => $cart,
             'client' => $client,
             'budget' => $budget,
         ]);
@@ -97,7 +97,7 @@ class CartController extends \yii\web\Controller
             'success' => $finisher->getSuccess(),
             'error' => $finisher->getError(),
             'pending' => $finisher->getPending(),
-            'remarks' => (array) Yii::$app->getView()->params['remarks'],
+            'remarks' => (array)Yii::$app->getView()->params['remarks'],
         ]);
     }
 }
