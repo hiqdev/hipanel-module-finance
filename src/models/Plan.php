@@ -11,6 +11,8 @@ use Yii;
  * @property string $id
  * @property string $name
  * @property string $type
+ * @property string $currency
+ * @property int $currency_id
  *
  * @property Sale[] $sales
  * @property Price[] $prices
@@ -27,10 +29,10 @@ class Plan extends \hipanel\base\Model
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['id', 'type_id', 'state_id', 'client_id'], 'integer'],
-            [['type', 'state', 'client', 'name', 'note'], 'string'],
+            [['id', 'type_id', 'state_id', 'client_id', 'currency_id'], 'integer'],
+            [['type', 'state', 'client', 'name', 'note', 'currency'], 'string'],
 
-            [['type', 'name'], 'required', 'on' => 'create'],
+            [['type', 'name', 'currency'], 'required', 'on' => ['create', 'update']],
             [['id'], 'required', 'on' => ['update', 'delete', 'set-note']],
         ]);
     }
