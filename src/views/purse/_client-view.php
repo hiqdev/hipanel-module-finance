@@ -4,6 +4,7 @@ use hipanel\modules\finance\grid\PurseGridView;
 use hipanel\widgets\Box;
 use yii\helpers\Html;
 
+$user = Yii::$app->user;
 $client = $model->clientModel;
 $isEmployee = $client->type === $client::TYPE_EMPLOYEE;
 $documentType = $isEmployee ? 'acceptance' : 'invoice';
@@ -14,7 +15,7 @@ $documentType = $isEmployee ? 'acceptance' : 'invoice';
     <?php $box->beginHeader() ?>
         <?= $box->renderTitle(Yii::t('hipanel:finance', '<b>{currency}</b> account', ['currency' => strtoupper($model->currency)]), '&nbsp;') ?>
         <?php $box->beginTools() ?>
-            <?php if (Yii::$app->user->can('deposit')) : ?>
+            <?php if ($user->can('deposit')) : ?>
                 <?= Html::a(Yii::t('hipanel', 'Recharge account'), '#', ['class' => 'btn btn-default btn-xs']) ?>
             <?php endif ?>
         <?php $box->endTools() ?>
@@ -24,10 +25,10 @@ $documentType = $isEmployee ? 'acceptance' : 'invoice';
             'boxed' => false,
             'model' => $model,
             'columns' => array_filter([
-                'balance',
-                $model->currency === 'usd' ? 'credit' : null,
+                $user->can('bill.read') ? 'balance' : null,
+                $user->can('bill.read') && $model->currency === 'usd' ? 'credit' : null,
                 'contact', 'requisite',
-                $isEmployee ? 'acceptances' : 'invoices',
+                $user->can('bill.read') && $isEmployee ? 'acceptances' : 'invoices',
                 $isEmployee ? 'contracts' : null,
                 $isEmployee ? 'probations' : null,
                 $isEmployee ? 'ndas' : null
