@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'default' => 'Default prices',
+    'default' => 'Main prices',
     'parts' => 'Parts prices',
     'model_groups' => 'Model groups',
 ];
