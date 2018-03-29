@@ -25,8 +25,8 @@ $documentType = $isEmployee ? 'acceptance' : 'invoice';
             'boxed' => false,
             'model' => $model,
             'columns' => array_filter([
-                $user->can('document.read') && $user->can('bill.read') ? 'balance' : null,
-                $user->can('document.read') && $user->can('bill.read') && $model->currency === 'usd' ? 'credit' : null,
+                $user->can('bill.read') ? 'balance' : null,
+                $user->can('bill.read') && $model->currency === 'usd' ? 'credit' : null,
                 'contact',
                 'requisite',
                 $user->can('document.read') && $user->can('bill.read') ? ($isEmployee ? 'acceptances' : 'invoices') : null,
