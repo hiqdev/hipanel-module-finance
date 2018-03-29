@@ -27,11 +27,12 @@ $documentType = $isEmployee ? 'acceptance' : 'invoice';
             'columns' => array_filter([
                 $user->can('bill.read') ? 'balance' : null,
                 $user->can('bill.read') && $model->currency === 'usd' ? 'credit' : null,
-                'contact', 'requisite',
-                $user->can('bill.read') && $isEmployee ? 'acceptances' : 'invoices',
-                $isEmployee ? 'contracts' : null,
-                $isEmployee ? 'probations' : null,
-                $isEmployee ? 'ndas' : null
+                'contact',
+                'requisite',
+                $user->can('document.read') && $user->can('bill.read') ? ($isEmployee ? 'acceptances' : 'invoices') : null,
+                $user->can('document.read') && $isEmployee ? 'contracts' : null,
+                $user->can('document.read') && $isEmployee ? 'probations' : null,
+                $user->can('document.read') && $isEmployee ? 'ndas' : null
             ]),
         ]) ?>
     <?php $box->endBody() ?>
