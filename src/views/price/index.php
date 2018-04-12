@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'checkbox',
                         'object->name',
                         'object->label',
-                        'price/unit',
+                        'price',
                         'type',
                         'note',
                         'plan'
