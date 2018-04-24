@@ -95,25 +95,7 @@ class CertificateTariffForm extends AbstractTariffForm
      */
     public function getTypeResources($type)
     {
-        $id = $this->getCertificateTypeId($type);
-
-        $result = [];
-
-        foreach ($this->tariff->resources as $resource) {
-            if (strcmp($resource->object_id, $id) === 0 && $resource->isTypeCorrect()) {
-                $result[$resource->type] = $resource;
-            }
-        }
-
-        $types = $resource->getTypes();
-        if (count($result) !== count($types)) {
-            throw new IntegrityException('Found ' . count($result) . ' resources for certificate "' . $type . '". Must be exactly ' . count($types));
-        }
-
-        // sorts $result by order of $resource->getTypes()
-        $result = array_merge($types, $result);
-
-        return $result;
+        return $this->extractResources($type, $this->tariff->resources);
     }
 
     /**
@@ -125,30 +107,41 @@ class CertificateTariffForm extends AbstractTariffForm
     }
 
     /**
-     * @param $certificateType
+     * @param $type
      * @return CertificateResource[]
      * @throws IntegrityException
      */
-    public function getTypeParentResources($certificateType)
+    public function getTypeParentResources($type)
     {
-        $id = $this->getCertificateTypeId($certificateType);
+        return $this->extractResources($type, $this->parentTariff->resources);
+    }
 
-        $result = [];
+    protected function extractResources($type, $resources)
+    {
+        $id = $this->getCertificateTypeId($type);
 
-        foreach ($this->parentTariff->resources as $resource) {
+        $tmpres = [];
+
+        foreach ($resources as $resource) {
             if (strcmp($resource->object_id, $id) === 0 && $resource->isTypeCorrect()) {
-                $result[$resource->type] = $resource;
+                $tmpres[$resource->type] = $resource;
             }
         }
 
         $types = $resource->getTypes();
-        if (count($result) !== count($types)) {
-            throw new IntegrityException('Found ' . count($result) . ' resources for certificate "' . $certificateType . '". Must be exactly ' . count($types));
+        /* XXX why die? let's try with empty resource
+         * if (count($tmpres) !== count($types)) {
+            throw new IntegrityException('Found ' . count($tmpres) . ' resources for certificate "' . $type . '". Must be exactly ' . count($types));
         }
 
-        // sorts $result by order of $resource->getTypes()
-        $result = array_merge($types, $result);
+        // sorts $tmpres by order of $resource->getTypes()
+        $tmpres = array_merge($types, $tmpres);
+         */
 
-        return $result;
+        foreach (array_keys($types) as $type) {
+            $res[$type] = isset($tmpres[$type]) ? $tmpres[$type] : new CertificateResource;
+        }
+
+        return $res;
     }
 }
