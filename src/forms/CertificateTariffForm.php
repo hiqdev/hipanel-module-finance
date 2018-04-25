@@ -51,23 +51,26 @@ class CertificateTariffForm extends AbstractTariffForm
     {
         $result = [];
         foreach ($resources as $resource) {
-            if ($resource instanceof CertificateResource) {
-                $result[] = $resource;
-                continue;
-            }
-
-            $model = new CertificateResource(['scenario' => $this->scenario]);
-
-            if ($model->load($resource, '') && $model->validate()) {
-                $result[] = $model;
-            } else {
-                throw new UnprocessableEntityHttpException('Failed to load resource model: ' . reset($model->getFirstErrors()));
-            }
+            $result[] = $this->createResource($resource);
         }
 
         $this->_resources = $result;
 
         return $this;
+    }
+
+    protected function createResource($resource)
+    {
+        if ($resource instanceof CertificateResource) {
+            return $resource;
+        }
+
+        $model = new CertificateResource(['scenario' => $this->scenario ?: 'default']);
+        if ($model->load($resource, '') && $model->validate()) {
+            return $model;
+        } else {
+            throw new UnprocessableEntityHttpException('Failed to load resource model: ' . reset($model->getFirstErrors()));
+        }
     }
 
     public function getCertificateTypes()
@@ -116,9 +119,9 @@ class CertificateTariffForm extends AbstractTariffForm
         return $this->extractResources($type, $this->parentTariff->resources);
     }
 
-    protected function extractResources($type, $resources)
+    protected function extractResources($certificateType, $resources)
     {
-        $id = $this->getCertificateTypeId($type);
+        $id = $this->getCertificateTypeId($certificateType);
 
         $tmpres = [];
 
@@ -139,7 +142,10 @@ class CertificateTariffForm extends AbstractTariffForm
          */
 
         foreach (array_keys($types) as $type) {
-            $res[$type] = isset($tmpres[$type]) ? $tmpres[$type] : new CertificateResource;
+            $res[$type] = isset($tmpres[$type]) ? $tmpres[$type] : $this->createResource([
+                'object_id' => $id,
+                'type' => $type,
+            ]);
         }
 
         return $res;
