@@ -18,12 +18,28 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\modules\finance\widgets\StatisticTableGenerator;
 use hipanel\modules\finance\models\Purse;
+use hipanel\filters\EasyAccessControl;
 use hiqdev\hiart\ResponseErrorException;
 use hipanel\modules\document\models\Statistic as DocumentStatisticModel;
 use Yii;
 
 class PurseController extends \hipanel\base\CrudController
 {
+
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            [
+                'class' => EasyAccessControl::class,
+                'actions' => [
+                    'update' => 'bill.update',
+                    '*' => 'bill.read',
+                ],
+            ],
+        ]);
+    }
+
+
     public function actions()
     {
         return array_merge(parent::actions(), [

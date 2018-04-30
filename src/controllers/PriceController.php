@@ -16,6 +16,7 @@ use hipanel\modules\finance\collections\PricesCollection;
 use hipanel\modules\finance\models\TargetObject;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
+use hipanel\filters\EasyAccessControl;
 use Yii;
 use yii\base\Event;
 
@@ -26,6 +27,18 @@ use yii\base\Event;
  */
 class PriceController extends CrudController
 {
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            [
+                'class' => EasyAccessControl::class,
+                'actions' => [
+                    '*' => 'plan.read',
+                ],
+            ],
+        ]);
+    }
+
     public function actions()
     {
         return array_merge(parent::actions(), [

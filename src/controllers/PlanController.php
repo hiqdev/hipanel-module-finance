@@ -11,6 +11,7 @@ use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\models\Plan;
+use hipanel\filters\EasyAccessControl;
 use hiqdev\hiart\Query;
 use Yii;
 use yii\base\Event;
@@ -18,6 +19,20 @@ use yii\web\NotFoundHttpException;
 
 class PlanController extends CrudController
 {
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            [
+                'class' => EasyAccessControl::class,
+                'actions' => [
+                    'create' => 'plan.create',
+                    'update' => 'plan.update',
+                    '*' => 'plan.read',
+                ],
+            ],
+        ]);
+    }
+
     public function actions()
     {
         return array_merge(parent::actions(), [
