@@ -44,7 +44,7 @@ class BillChargesSumValidator extends Validator
             sum += parseFloat($(this).val());
         });
         if (Math.abs(sum) !== Math.abs(value)) {
-            messages.push($message + ': ' + (sum));
+            messages.push($message + ': ' + sum);
         }
     }
 JS;
