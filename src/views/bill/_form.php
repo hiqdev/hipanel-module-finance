@@ -104,8 +104,7 @@ $form = ActiveForm::begin([
                             <div class="col-md-2">
                                 <?= $form->field($model, "[$i]time")->widget(DateTimePicker::class, [
                                     'model' => $model,
-                                    'type' => DatePicker::TYPE_COMPONENT_APPEND,
-                                    'pluginOptions' => [
+                                    'clientOptions' => [
                                         'autoclose' => true,
                                         'format' => 'yyyy-mm-dd hh:ii:ss',
                                     ],
