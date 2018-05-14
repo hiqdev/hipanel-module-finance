@@ -108,6 +108,7 @@ $form = ActiveForm::begin([
                                         'autoclose' => true,
                                         'format' => 'yyyy-mm-dd hh:ii:ss',
                                     ],
+                                    'language' => Yii::$app->language,
                                     'options' => [
                                         'value' => Yii::$app->formatter->asDatetime(($model->isNewRecord && empty($model->time) ? new DateTime() : $model->time),
                                             'php:Y-m-d H:i:s'),
