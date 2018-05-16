@@ -5,6 +5,7 @@ namespace hipanel\modules\finance\cart\storage;
 use hipanel\components\SettingsStorage;
 use hipanel\helpers\StringHelper;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
 use yii\caching\CacheInterface;
 use yii\helpers\Json;
@@ -20,8 +21,8 @@ use yii\web\User;
 class RemoteCartStorage extends MultiFieldSession implements CartStorageInterface
 {
     /**
-     * To marge sesstion and remote cart storage
-     * @var string
+     * @var string The cart name. Used to distinguish carts, if there are different carts stored.
+     * E.g. site, panel and mobile-app cart.
      */
     public $sessionCartId;
 
@@ -54,47 +55,55 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
 
     public function __construct(Session $session, User $user, SettingsStorage $settingsStorage, CacheInterface $cache, array $config = [])
     {
-        parent::__construct($config);
-
         $this->settingsStorage = $settingsStorage;
         $this->cache = $cache;
         $this->user = $user;
         $this->session = $session;
+
+        parent::__construct($config);
+    }
+
+    public function init()
+    {
+        parent::init();
+
+        if (empty($this->sessionCartId)) {
+            throw new InvalidConfigException('Parameter "sessionCartId" must be set in RemoteCartStorage');
+        }
     }
 
     protected function read()
     {
         try {
             $this->data = $this->cache->getOrSet($this->getCacheKey(), function () {
-                $data = $this->settingsStorage->getBounded($this->getStorageKey());
-                $sessionCartData = $this->getSessionCartData();
-                if ($data === [] && $sessionCartData === []) {
-                    return [];
+                $remoteCartData = $this->settingsStorage->getBounded($this->getStorageKey());
+                $localCartData = $this->session[$this->sessionCartId] ?? null;
+                if ($remoteCartData === [] && $localCartData === null) {
+                    return $this->session;
                 }
 
-                return $this->mergeCartData($data, $sessionCartData);
+                return $this->mergedCartData($remoteCartData, $localCartData);
             }, self::CACHE_DURATION);
         } catch (\Exception $exception) {
             Yii::error('Failed to read cart: ' . $exception->getMessage(), __METHOD__);
         }
     }
 
-    protected function getSessionCartData()
+    /**
+     * @param string $remoteData base64 encoded JSON of serialized remotely stored cart items.
+     * @param string $localData local cart items array. Defaults to `null`, meaning no local data exists
+     * @return array
+     */
+    private function mergedCartData($remoteData, $localData = null)
     {
-        $result = [];
-        if (isset($this->session[$this->sessionCartId])) {
-            $result = unserialize($this->session[$this->sessionCartId]);
-        }
+        $decodedRemote = Json::decode(base64_decode($remoteData));
 
-        return $result;
-    }
+        $local = $localData ? unserialize($localData) : [];
+        $remote = isset($decodedRemote[$this->sessionCartId])
+            ? unserialize($decodedRemote[$this->sessionCartId])
+            : [];
 
-    protected function mergeCartData($remoteData, $sessionData)
-    {
-        $data = Json::decode(base64_decode($remoteData));
-        $rawData = array_merge(unserialize($data[$this->sessionCartId]), $sessionData);
-
-        return [$this->sessionCartId => serialize($rawData)];
+        return [$this->sessionCartId => serialize(array_merge($remote, $local))];
     }
 
     protected function getCacheKey()
