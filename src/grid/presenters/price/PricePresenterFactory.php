@@ -2,7 +2,7 @@
 
 namespace hipanel\modules\finance\grid\presenters\price;
 
-use hipanel\modules\finance\models\ModelGroupPrice;
+use hipanel\modules\finance\models\TemplatePrice;
 use hipanel\modules\finance\models\Price;
 use yii\base\InvalidConfigException;
 
@@ -18,7 +18,7 @@ class PricePresenterFactory
      */
     protected $map = [
         Price::class => PricePresenter::class,
-        ModelGroupPrice::class => ModelGroupPricePresenter::class,
+        TemplatePrice::class => ModelGroupPricePresenter::class,
     ];
 
     /**

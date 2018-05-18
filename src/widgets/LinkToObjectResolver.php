@@ -76,6 +76,9 @@ class LinkToObjectResolver extends Widget
         if (!isset($this->links[$type])) {
             return null;
         }
+        if (!isset($this->model->{$this->idAttribute})) {
+            return null;
+        }
 
         return [$this->links[$type], 'id' => $this->model->{$this->idAttribute}];
     }

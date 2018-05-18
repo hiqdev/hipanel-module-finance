@@ -14,7 +14,7 @@ use yii\helpers\Html;
 class ModelGroupPricePresenter extends PricePresenter
 {
     /**
-     * @param \hipanel\modules\finance\models\ModelGroupPrice $price
+     * @param \hipanel\modules\finance\models\TemplatePrice $price
      * @return string
      */
     public function renderPrice($price): string

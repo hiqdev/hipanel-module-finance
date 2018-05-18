@@ -31,6 +31,7 @@ $model = new \hipanel\modules\finance\models\PriceSuggestionRequestForm([
     <?= $form->field($model, 'type')->widget(\hiqdev\combo\StaticCombo::class, [
         'data' => [
             'model_groups' => Yii::t('hipanel.finance.suggestionTypes', 'model_groups'),
+            'server_monthly' => Yii::t('hipanel.finance.suggestionTypes', 'server_monthly'),
         ],
     ]) ?>
 <?php endif ?>

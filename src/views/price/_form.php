@@ -54,8 +54,8 @@ $form = ActiveForm::begin([
                 <?php endif ?>
                 <?= Html::activeHiddenInput($model, "[$i]plan_id", ['ref' => 'plan_id']) ?>
                 <div class="row input-row">
-                    <?php if ($model instanceof \hipanel\modules\finance\models\ModelGroupPrice): ?>
-                        <?= $this->render('formRow/modelGroup', compact('plan', 'model', 'form', 'i')) ?>
+                    <?php if ($model instanceof \hipanel\modules\finance\models\TemplatePrice): ?>
+                        <?= $this->render('formRow/template', compact('plan', 'model', 'form', 'i')) ?>
                     <?php else: ?>
                         <?= $this->render('formRow/simple', compact('plan', 'model', 'form', 'i')) ?>
                     <?php endif ?>
