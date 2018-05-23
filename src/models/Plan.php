@@ -34,6 +34,7 @@ class Plan extends \hipanel\base\Model
 
             [['type', 'name', 'currency'], 'required', 'on' => ['create', 'update']],
             [['id'], 'required', 'on' => ['update', 'delete', 'set-note']],
+            [['id'], 'required', 'on' => ['delete', 'restore']],
         ]);
     }
 

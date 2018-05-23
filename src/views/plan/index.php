@@ -23,6 +23,15 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= $page->renderSorter(['attributes' => ['id']]) ?>
         <?php $page->endContent() ?>
 
+        <?php $page->beginContent('bulk-actions') ?>
+            <?php if (Yii::$app->user->can('bill.create')) : ?>
+                <?= $page->renderBulkButton(Yii::t('hipanel', 'Restore'), '@plan/restore') ?>
+            <?php endif ?>
+            <?php if (Yii::$app->user->can('bill.update')) : ?>
+                <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), '@plan/delete', 'danger') ?>
+            <?php endif ?>
+        <?php $page->endContent() ?>
+
         <?php $page->beginContent('table') ?>
             <?php $page->beginBulkForm() ?>
                 <?= PlanGridView::widget([

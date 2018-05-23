@@ -5,6 +5,7 @@ namespace hipanel\modules\finance\controllers;
 use hipanel\actions\Action;
 use hipanel\actions\IndexAction;
 use hipanel\actions\SmartCreateAction;
+use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
@@ -73,6 +74,10 @@ class PlanController extends CrudController
             'validate-form' => [
                 'class' => ValidateFormAction::class,
             ],
+            'delete' => [
+                'class' => SmartDeleteAction::class,
+                'success' => Yii::t('hipanel', 'Deleted'),
+            ]
         ]);
     }
 

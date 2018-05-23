@@ -24,7 +24,7 @@ class PlanDetailMenu extends \hipanel\menus\AbstractDetailMenu
                         'pjax' => '0',
                     ],
                 ],
-                'visible' => true,
+                'visible' => \count($this->model->sales) === 0,
             ],
         ]);
         unset($items['view']);
