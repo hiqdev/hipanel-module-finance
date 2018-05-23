@@ -27,7 +27,10 @@ class PlanInternalsGrouper
     }
 
     /**
-     * Should be used to group prices of [[Plan]] with type `server`.
+     * Should be used to group prices of [[Plan]] with the following types:
+     * - server
+     * - sVDS
+     * - oVDS
      *
      * @return array of two elements:
      * 0: sales, grouped by sold object

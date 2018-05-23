@@ -74,11 +74,35 @@ class Price extends \hipanel\base\Model
 
     public function getUnitOptions()
     {
-        return Ref::getList('type,unit', null, [
+        $unitGroup = [
+            'speed' => ['bps', 'kbps', 'mbps', 'gbps', 'tbps'],
+            'size' => ['mb', 'mb10', 'mb100', 'gb', 'tb'],
+        ];
+
+        $availableUnitsByPriceType = [
+            'overuse,ip_num' => ['items'],
+            'overuse,support_time' => ['hour'],
+            'overuse,backup_du' => $unitGroup['size'],
+            'overuse,server_traf_max' => $unitGroup['size'],
+            'overuse,server_traf95_max' => $unitGroup['speed'],
+            'overuse,server_du' => $unitGroup['size'],
+            'overuse,server_ssd' => $unitGroup['size'],
+            'overuse,server_sata' => $unitGroup['size'],
+        ];
+
+        $units = Ref::getList('type,unit', 'hipanel:finance:units', [
             'with_recursive' => 1,
             'select' => 'oname_label',
             'mapOptions' => ['from' => 'oname'],
         ]);
+
+        $possibleTypes = $availableUnitsByPriceType[$this->type] ?? [];
+        return array_intersect_key($units, array_combine($possibleTypes, $possibleTypes));
+    }
+
+    public function getUnitLabel()
+    {
+        return $this->getUnitOptions()[$this->unit] ?? null;
     }
 
     public function getCurrencyOptions()
@@ -99,6 +123,11 @@ class Price extends \hipanel\base\Model
     public static function tableName()
     {
         return Inflector::camel2id(StringHelper::basename(__CLASS__), '-');
+    }
+
+    public function isOveruse()
+    {
+        return strpos($this->type, 'overuse,') === 0;
     }
 
     /**

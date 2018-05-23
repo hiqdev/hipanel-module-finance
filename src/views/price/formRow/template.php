@@ -20,13 +20,29 @@ use yii\bootstrap\Html;
         <?= Html::activeHiddenInput($model, "[$i]currency") ?>
         <?= Html::activeHiddenInput($model, "[$i]class") ?>
         <?= Html::activeHiddenInput($model, "[$i]object") ?>
-        <?= \hipanel\modules\finance\widgets\LinkToObjectResolver::widget([
-            'model' => $model->object,
-            'labelAttribute' => 'name'
-        ]) ?><br />
-        <?= $model->type ?>
+        <strong>
+            <?= \hipanel\modules\finance\widgets\LinkToObjectResolver::widget([
+                'model' => $model->object,
+                'labelAttribute' => 'name'
+            ]) ?>
+        </strong>
+        <br />
+        <?= \hipanel\modules\finance\widgets\PriceType::widget([
+            'model' => $model,
+            'field' => 'type',
+        ])?>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-1">
+        <?php if ($model->isOveruse()): ?>
+            <?= $form->field($model, "[$i]quantity")->textInput() ?>
+        <?php endif ?>
+    </div>
+    <div class="col-md-1">
+        <?php if ($model->unitOptions !== []): ?>
+            <?= $form->field($model, "[$i]unit")->dropDownList($model->unitOptions) ?>
+        <?php endif ?>
+    </div>
+    <div class="col-md-4">
         <div class="col-md-4">
             <div class="<?= AmountWithCurrency::$widgetClass ?>">
                 <?= $form->field($model, "[$i]price")->widget(AmountWithCurrency::class, [
@@ -36,6 +52,7 @@ use yii\bootstrap\Html;
                     ],
                     'currencyDropdownOptions' => [
                         'disabled' => true,
+                        'hidden' => true,
                     ],
                 ]) ?>
             </div>
@@ -53,6 +70,7 @@ use yii\bootstrap\Html;
                         'currencyAttributeName' => "subprices",
                         'currencyDropdownOptions' => [
                             'disabled' => true,
+                            'hidden' => true,
                         ],
                         'currencyAttributeOptions' => [
                             'items' => $this->context->getCurrencyTypes(),

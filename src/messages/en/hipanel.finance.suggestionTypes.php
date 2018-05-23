@@ -4,5 +4,7 @@ return [
     'default' => 'Main prices',
     'parts' => 'Parts prices',
     'model_groups' => 'Model groups',
-    'server_monthly' => 'Dedicated servers monthly',
+    'dedicated_server' => 'Dedicated Server',
+    'p_cdn' => 'pCDN',
+    'v_cdn' => 'vCDN',
 ];

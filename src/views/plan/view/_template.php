@@ -39,8 +39,8 @@ use yii\helpers\Html;
                 'checkbox',
                 'object->name',
                 'object->label',
-                'price',
                 'type',
+                'price',
                 'note',
             ],
         ]) ?>
