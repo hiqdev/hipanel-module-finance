@@ -11,21 +11,40 @@ use yii\bootstrap\Html;
 ?>
 
 <div class="form-instance">
-    <div class="col-md-3">
+    <div class="col-md-2">
         <?= Html::activeHiddenInput($model, "[$i]object_id", ['ref' => 'object_id']) ?>
+        <?= Html::activeHiddenInput($model, "[$i]type") ?>
+        <?= Html::activeHiddenInput($model, "[$i]class") ?>
+        <?= Html::activeHiddenInput($model, "[$i]object") ?>
+        <?= Html::activeHiddenInput($model, "[$i]quantity") ?>
+        <?= Html::activeHiddenInput($model, "[$i]unit") ?>
 
         <div class="form-group">
-            <label class="control-label"><?= Yii::t('hipanel', 'Object') ?></label>
-            <div>
+            <strong>
                 <?= \hipanel\modules\finance\widgets\LinkToObjectResolver::widget([
                     'model' => $model->object,
                     'labelAttribute' => 'name',
+                    'linkOptions' => [
+                        'tabindex' => '-1'
+                    ]
                 ]) ?>
-            </div>
+            </strong>
+            <br />
+            <?= \hipanel\modules\finance\widgets\PriceType::widget([
+                'model' => $model,
+                'field' => 'type',
+            ])?>
         </div>
     </div>
-    <div class="col-md-2">
-        <?= $form->field($model, "[$i]type")->dropDownList($model->typeOptions, ['prompt' => '--']) ?>
+    <div class="col-md-1">
+        <?php if ($model->isOveruse()): ?>
+            <?= $form->field($model, "[$i]quantity")->textInput() ?>
+        <?php endif ?>
+    </div>
+    <div class="col-md-1">
+        <?php if ($model->unitOptions !== []): ?>
+            <?= $form->field($model, "[$i]unit")->dropDownList($model->unitOptions) ?>
+        <?php endif ?>
     </div>
     <div class="col-md-2">
         <div class="<?= AmountWithCurrency::$widgetClass ?>">
@@ -40,14 +59,8 @@ use yii\bootstrap\Html;
             ]) ?>
         </div>
     </div>
-    <div class="col-md-1">
-        <?= $form->field($model, "[$i]unit")->dropDownList($model->unitOptions, ['prompt' => '--']) ?>
-    </div>
-    <div class="col-md-1">
-        <?= $form->field($model, "[$i]quantity") ?>
-    </div>
     <div class="col-md-2">
-        <?= $form->field($model, "[$i]note") ?>
+        <?= $form->field($model, "[$i]note")->textInput(['tabindex' => -1]) ?>
     </div>
     <div class="col-md-1" style="padding-top: 25px;">
         <label>&nbsp;</label>

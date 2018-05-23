@@ -4,5 +4,7 @@ return [
     'default' => 'Основные цены',
     'parts' => 'Цены деталей',
     'model_groups' => 'Группы моделей',
-    'server_monthly' => 'Абонплата дедиков',
+    'dedicated_server' => 'Dedicated Server',
+    'p_cdn' => 'pCDN',
+    'v_cdn' => 'vCDN',
 ];

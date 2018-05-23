@@ -18,7 +18,7 @@ class PricePresenterFactory
      */
     protected $map = [
         Price::class => PricePresenter::class,
-        TemplatePrice::class => ModelGroupPricePresenter::class,
+        TemplatePrice::class => TemplatePricePresenter::class,
     ];
 
     /**

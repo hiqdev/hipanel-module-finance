@@ -97,11 +97,15 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'format' => 'raw',
                 'gtype' => 'type,unit',
+                'i18nDictionary' => 'hipanel:finance:units',
                 'findOptions' => [
                     'with_recursive' => 1,
                     'select' => 'name_label',
                     'mapOptions' => ['from' => 'name'],
                 ],
+                'value' => function (Price $model) {
+                    return $model->getUnitLabel();
+                }
             ],
             'currency' => [
                 'class' => RefColumn::class,

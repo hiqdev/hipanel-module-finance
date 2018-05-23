@@ -21,6 +21,6 @@ class PricePresenter
     public function renderPrice($price): string
     {
         return Yii::$app->formatter->asCurrency($price->price, $price->currency)
-            . '/' . Yii::t('hipanel.finance.price', $price->getUnitOptions()[$price->unit]);
+            . '/' . Yii::t('hipanel.finance.price', $price->getUnitLabel());
     }
 }
