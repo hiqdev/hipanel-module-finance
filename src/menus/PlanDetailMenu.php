@@ -24,8 +24,21 @@ class PlanDetailMenu extends \hipanel\menus\AbstractDetailMenu
                         'pjax' => '0',
                     ],
                 ],
-                'visible' => \count($this->model->sales) === 0,
+                'visible' => \count($this->model->sales) === 0 && $this->model->state !== 'deleted',
             ],
+            'restore' => [
+                'label' => Yii::t('hipanel.finance.plan', 'Restore'),
+                'icon' => 'fa-refresh',
+                'url' => ['@plan/restore'],
+                'linkOptions' => [
+                    'data' => [
+                        'method' => 'POST',
+                        'pjax' => '0',
+                        'params' => ['selection[]' => $this->model->id]
+                    ],
+                ],
+                'visible' => $this->model->state === 'deleted',
+            ]
         ]);
         unset($items['view']);
 

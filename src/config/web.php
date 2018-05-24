@@ -87,7 +87,7 @@ return [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/finance/messages',
                 ],
-                'hipanel:finance:units' => [
+                'hipanel.finance.units' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/finance/messages',
                 ],
@@ -113,6 +113,10 @@ return [
                     'basePath' => '@hipanel/modules/finance/messages',
                 ],
                 'hipanel.finance.priceTypes' => [
+                    'class' => \yii\i18n\PhpMessageSource::class,
+                    'basePath' => '@hipanel/modules/finance/messages',
+                ],
+                'hipanel.finance.plan' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/finance/messages',
                 ],

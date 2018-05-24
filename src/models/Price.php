@@ -90,7 +90,7 @@ class Price extends \hipanel\base\Model
             'overuse,server_sata' => $unitGroup['size'],
         ];
 
-        $units = Ref::getList('type,unit', 'hipanel:finance:units', [
+        $units = Ref::getList('type,unit', 'hipanel.finance.units', [
             'with_recursive' => 1,
             'select' => 'oname_label',
             'mapOptions' => ['from' => 'oname'],

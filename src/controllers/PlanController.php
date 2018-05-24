@@ -6,6 +6,7 @@ use hipanel\actions\Action;
 use hipanel\actions\IndexAction;
 use hipanel\actions\SmartCreateAction;
 use hipanel\actions\SmartDeleteAction;
+use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
@@ -52,6 +53,7 @@ class PlanController extends CrudController
                     $action = $event->sender;
                     $action->getDataProvider()->query
                         ->joinWith('sales')
+                        ->andWhere(['state' => ['ok', 'deleted']])
                         ->with([
                             'prices' => function (Query $query) {
                                 $query
@@ -77,6 +79,10 @@ class PlanController extends CrudController
             'delete' => [
                 'class' => SmartDeleteAction::class,
                 'success' => Yii::t('hipanel', 'Deleted'),
+            ],
+            'restore' => [
+                'class' => SmartPerformAction::class,
+                'success' => Yii::t('hipanel.finance.plan', 'Restored'),
             ]
         ]);
     }
