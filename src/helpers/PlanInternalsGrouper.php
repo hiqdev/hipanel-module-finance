@@ -6,6 +6,7 @@ use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
+use Tuck\Sort\Sort;
 use Yii;
 
 /**
@@ -66,26 +67,32 @@ class PlanInternalsGrouper
         }
 
         foreach ($pricesByMainObject as $id => $prices) {
-            if (!isset($salesByObject[$id])) {
-                foreach ($prices as $price) {
-                    if ((int)$price->object_id === (int)$id) {
-                        $salesByObject[$id] = new FakeSale([
-                            'object' => $price->object->name,
-                            'tariff_id' => $model->id,
-                            'object_id' => $price->object_id,
-                            'tariff_type' => $model->type,
-                        ]);
-                        continue 2;
-                    }
-                }
-
-                $salesByObject[$id] = new FakeSale([
-                    'object' => Yii::t('hipanel.finance.price', 'Unknown object name - no direct object prices exist'),
-                    'tariff_id' => $model->id,
-                    'object_id' => $id,
-                    'tariff_type' => $model->type,
-                ]);
+            if (isset($salesByObject[$id])) {
+                continue;
             }
+
+            foreach ($prices as $price) {
+                if ((int)$price->object_id === (int)$id) {
+                    $salesByObject[$id] = new FakeSale([
+                        'object' => $price->object->name,
+                        'tariff_id' => $model->id,
+                        'object_id' => $price->object_id,
+                        'tariff_type' => $model->type,
+                    ]);
+                    continue 2;
+                }
+            }
+
+            $salesByObject[$id] = new FakeSale([
+                'object' => Yii::t('hipanel.finance.price', 'Unknown object name - no direct object prices exist'),
+                'tariff_id' => $model->id,
+                'object_id' => $id,
+                'tariff_type' => $model->type,
+            ]);
+        }
+
+        foreach ($pricesByMainObject as &$objPrices) {
+            $objPrices = PriceSort::serverPrices()->values($objPrices, true);
         }
 
         return [$salesByObject, $pricesByMainObject];

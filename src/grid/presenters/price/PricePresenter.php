@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\grid\presenters\price;
 
 use hipanel\modules\finance\models\Price;
 use Yii;
+use yii\bootstrap\Html;
 
 /**
  * Class PricePresenter contains methods that present price properties.
@@ -14,13 +15,33 @@ use Yii;
 class PricePresenter
 {
     /**
+     * @var \yii\i18n\Formatter
+     */
+    private $formatter;
+
+    public function __construct()
+    {
+        $this->formatter = Yii::$app->formatter;
+    }
+
+    /**
      * @param Price $price
      * @return string
      * @throws \yii\base\InvalidConfigException
      */
     public function renderPrice($price): string
     {
-        return Yii::$app->formatter->asCurrency($price->price, $price->currency)
-            . '/' . Yii::t('hipanel.finance.price', $price->getUnitLabel());
+        $unit = '';
+        if ($price->getUnitLabel()) {
+            $unit = ' ' . Yii::t('hipanel:finance', 'per {unit}', ['unit' => $price->getUnitLabel()]);
+        }
+
+        if ($price->isOveruse()) {
+            $prepaid = ', ' . Yii::t('hipanel:finance', 'prepaid {amount,number}', ['amount' => $price->quantity]);
+        } else {
+            $prepaid = ' ' . Yii::t('hipanel:finance', 'monthly');
+        }
+
+        return Html::tag('strong', $this->formatter->asCurrency($price->price, $price->currency)) . $unit . $prepaid;
     }
 }

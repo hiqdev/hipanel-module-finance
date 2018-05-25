@@ -18,6 +18,8 @@ use yii\helpers\StringHelper;
  * @property string $currency
  * @property string|int $main_object_id
  * @property string $unit
+ * @property string $type
+ * @property string $quantity
  *
  * @property TargetObject $object
  * @property Plan $plan
@@ -128,6 +130,12 @@ class Price extends \hipanel\base\Model
     public function isOveruse()
     {
         return strpos($this->type, 'overuse,') === 0;
+    }
+
+    public function getSubtype()
+    {
+        [, $subtype] = explode(',', $this->type);
+        return $subtype;
     }
 
     /**

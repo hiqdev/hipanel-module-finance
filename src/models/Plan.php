@@ -16,12 +16,15 @@ use Yii;
  *
  * @property Sale[] $sales
  * @property Price[] $prices
+ * @property-read string[] typeOptions
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
 class Plan extends \hipanel\base\Model
 {
     const TYPE_SERVER = 'server';
+    const TYPE_PCDN = 'vcdn';
+    const TYPE_VCDN = 'pcdn';
     const TYPE_TEMPLATE = 'template';
 
     use \hipanel\base\ModelTrait;

@@ -40,9 +40,11 @@ class PlanController extends CrudController
         return array_merge(parent::actions(), [
             'create' => [
                 'class' => SmartCreateAction::class,
+                'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully created')
             ],
             'update' => [
                 'class' => SmartUpdateAction::class,
+                'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully updated')
             ],
             'index' => [
                 'class' => IndexAction::class,
@@ -82,11 +84,11 @@ class PlanController extends CrudController
             ],
             'delete' => [
                 'class' => SmartDeleteAction::class,
-                'success' => Yii::t('hipanel', 'Deleted'),
+                'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully deleted')
             ],
             'restore' => [
                 'class' => SmartPerformAction::class,
-                'success' => Yii::t('hipanel.finance.plan', 'Restored'),
+                'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully restored')
             ],
             'copy' => [
                 'class' => SmartUpdateAction::class,

@@ -50,7 +50,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
             ],
             'object->name' => [
                 'label' => Yii::t('hipanel', 'Object'),
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (Price $model) {
                     $link = LinkToObjectResolver::widget([
                         'model' => $model->object,
@@ -67,6 +67,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 }
             ],
             'object->label' => [
+                'format' => 'raw',
                 'label' => Yii::t('hipanel', 'Details'),
                 'value' => function (Price $model) {
                     return $model->object->label;

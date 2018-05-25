@@ -36,6 +36,17 @@ $model = new \hipanel\modules\finance\models\PriceSuggestionRequestForm([
             'p_cdn' => Yii::t('hipanel.finance.suggestionTypes', 'p_cdn'),
         ],
     ]) ?>
+<?php elseif (in_array($plan->type, [Plan::TYPE_VCDN, Plan::TYPE_PCDN])): ?>
+    <?= $form->field($model, 'object_id')->widget(ServerCombo::class, [
+        'filter' => ['type' => ['format' => $plan->type === Plan::TYPE_PCDN ? 'cdnpix' : 'cdn']]
+    ]) ?>
+    <?= $form->field($model, 'type')->widget(\hiqdev\combo\StaticCombo::class, [
+        'data' => [
+            'default' => Yii::t('hipanel.finance.suggestionTypes', 'default'),
+        ],
+    ]) ?>
+<?php else: ?>
+    <h4>This object does not support detailed prices</h4>
 <?php endif ?>
 
 <hr/>
