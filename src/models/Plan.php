@@ -43,6 +43,7 @@ class Plan extends \hipanel\base\Model
     {
         return array_merge(parent::attributeLabels(), [
             'name' => Yii::t('hipanel:finance', 'Name'),
+            'server_ids' => Yii::t('hipanel.finance.plan', 'Servers'),
         ]);
     }
 
