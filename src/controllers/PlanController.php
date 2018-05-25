@@ -76,6 +76,10 @@ class PlanController extends CrudController
             'validate-form' => [
                 'class' => ValidateFormAction::class,
             ],
+            'validate-single-form' => [
+                'class' => ValidateFormAction::class,
+                'validatedInputId' => false,
+            ],
             'delete' => [
                 'class' => SmartDeleteAction::class,
                 'success' => Yii::t('hipanel', 'Deleted'),
@@ -83,7 +87,12 @@ class PlanController extends CrudController
             'restore' => [
                 'class' => SmartPerformAction::class,
                 'success' => Yii::t('hipanel.finance.plan', 'Restored'),
-            ]
+            ],
+            'copy' => [
+                'class' => SmartUpdateAction::class,
+                'view' => 'modals/copy',
+                'queryOptions' => ['batch' => false],
+            ],
         ]);
     }
 

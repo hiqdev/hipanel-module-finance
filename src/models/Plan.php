@@ -35,6 +35,7 @@ class Plan extends \hipanel\base\Model
             [['type', 'name', 'currency'], 'required', 'on' => ['create', 'update']],
             [['id'], 'required', 'on' => ['update', 'delete', 'set-note']],
             [['id'], 'required', 'on' => ['delete', 'restore']],
+            [['id', 'server_ids'], 'safe', 'on' => ['copy']],
         ]);
     }
 
@@ -63,5 +64,10 @@ class Plan extends \hipanel\base\Model
     public function getStateOptions()
     {
         return Ref::getList('state,tariff');
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->state === 'deleted';
     }
 }
