@@ -68,7 +68,16 @@ class SalePricesActionsMenu extends \hiqdev\yii2\menus\Menu
                         'type' => 'parts',
                         'label' => Yii::t('hipanel.finance.price', 'Part prices'),
                         'icon' => 'fa-hdd-o',
-                    ]
+                    ],
+                ];
+            case Sale::SALE_TYPE_PCDN:
+            case Sale::SALE_TYPE_VCDN:
+                return [
+                    [
+                        'type' => 'default',
+                        'label' => Yii::t('hipanel.finance.price', 'Main prices'),
+                        'icon' => 'fa-plus',
+                    ],
                 ];
         }
 

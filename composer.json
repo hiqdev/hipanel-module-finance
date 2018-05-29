@@ -48,7 +48,7 @@
         "hiqdev/yii2-merchant": "<2.0 || dev-master",
         "hiqdev/hipanel-core": "<2.0 || dev-master",
         "hiqdev/hipanel-module-client": "<2.0 || dev-master",
-        "tuck/sort": "dev-master"
+        "tuck/sort": "^0.1.0"
     },
     "require-dev": {
         "hiqdev/hidev-php": "<2.0",

@@ -13,6 +13,7 @@ use hipanel\base\CrudController;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\actions\PriceUpdateAction;
 use hipanel\modules\finance\collections\PricesCollection;
+use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\models\TargetObject;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
@@ -92,6 +93,10 @@ class PriceController extends CrudController
                     $dataProvider = $action->getDataProvider();
                     $dataProvider->query->joinWith('object');
                 },
+                'data' => function ($action, $data) {
+                     $data['models'] = PriceSort::anyPrices()->values($data['models'], true);
+                     return $data;
+                }
             ],
             'delete' => [
                 'class' => SmartDeleteAction::class,
@@ -129,6 +134,8 @@ class PriceController extends CrudController
 
             $models[] = $price;
         }
+
+        $models = PriceSort::anyPrices()->values($models, true);
 
         return $this->render('suggested', [
             'type' => $type,
