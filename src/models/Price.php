@@ -54,8 +54,8 @@ class Price extends \hipanel\base\Model
     public function attributeLabels()
     {
         return [
-            'plan_id' => Yii::t('hipanel:finance', 'Plan'),
-            'plan' => Yii::t('hipanel:finance', 'Plan'),
+            'plan_id' => Yii::t('hipanel:finance', 'Tariff plan'),
+            'plan' => Yii::t('hipanel:finance', 'Tariff plan'),
             'quantity' => Yii::t('hipanel:finance', 'Prepaid'),
             'unit' => Yii::t('hipanel:finance', 'Unit'),
             'price' => Yii::t('hipanel:finance', 'Price'),

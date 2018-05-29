@@ -6,7 +6,7 @@ use hipanel\modules\finance\models\Price;
 use yii\helpers\Html;
 
 $this->title = Yii::t('hipanel.finance.price', 'Create suggested prices');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Plans'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $plan->name, 'url' => ['@plan/view', 'id' => $plan->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
