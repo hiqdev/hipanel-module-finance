@@ -19,7 +19,7 @@ return [
     'For the whole tariff' => 'На весь тариф',
     'Proceed to creation' => 'Перейти к созданию',
     'Create prices' => 'Создать цены',
-    'Plan' => 'План',
+    'Tariff plan' => 'Тарифный план',
     'Unknown object name - no direct object prices exist' => 'Неизвестное имя объекта – нет прямых цен на объект',
     'Price in {currency}' => 'Цена в {currency}',
     'Price' => 'Цена',

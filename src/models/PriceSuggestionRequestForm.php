@@ -35,7 +35,7 @@ class PriceSuggestionRequestForm extends Model
     public function attributeLabels()
     {
         return [
-            'plan_id' => Yii::t('hipanel.finance.price', 'Plan'),
+            'plan_id' => Yii::t('hipanel.finance.price', 'Tariff plan'),
             'type' => Yii::t('hipanel', 'Type'),
             'object_id' => Yii::t('hipanel', 'Object'),
         ];

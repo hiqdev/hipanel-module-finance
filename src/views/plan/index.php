@@ -5,7 +5,7 @@ use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 use yii\helpers\Html;
 
-$this->title = Yii::t('hipanel:finance', 'Plans');
+$this->title = Yii::t('hipanel:finance', 'Tariff plans');
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
