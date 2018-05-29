@@ -29,4 +29,12 @@ return [
     'items' => 'штуки',
     'hours' => 'часы',
     'files' => 'файлы',
+
+    'Object name' => 'Название объекта',
+    'Tariff plan name' => 'Название тарифного плана',
+    'Tariff plan buyer' => 'Покупатель тарифного плана',
+    'Tariff plan owner' => 'Владелец тарифного плана',
+    'Group model name' => 'Название группы моделей',
+    'Model partno' => 'Артикул модели',
+    'Who sold the tariff plan.' => 'Кому продана услуга по тарифу.',
 ];
