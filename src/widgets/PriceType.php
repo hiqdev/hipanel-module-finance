@@ -40,7 +40,8 @@ class PriceType extends Type
     public $field = 'type';
     public $i18nDictionary = 'hipanel.finance.priceTypes';
 
-    protected function titlelize(string $label): string
+    /** {@inheritdoc} */
+    protected function titlelize($label): string
     {
         return parent::titlelize(substr($label, strpos($label, ',')+1));
     }
