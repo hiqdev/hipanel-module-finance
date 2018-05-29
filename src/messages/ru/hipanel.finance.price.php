@@ -20,6 +20,7 @@ return [
     'Proceed to creation' => 'Перейти к созданию',
     'Create prices' => 'Создать цены',
     'Tariff plan' => 'Тарифный план',
+    'Plan' => 'План',
     'Unknown object name - no direct object prices exist' => 'Неизвестное имя объекта – нет прямых цен на объект',
     'Price in {currency}' => 'Цена в {currency}',
     'Price' => 'Цена',
