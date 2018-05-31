@@ -56,7 +56,8 @@
     },
     "autoload": {
         "psr-4": {
-            "hipanel\\modules\\finance\\": "src"
+            "hipanel\\modules\\finance\\": "src",
+            "hipanel\\modules\\finance\\tests\\": "tests"
         }
     },
     "extra": {
