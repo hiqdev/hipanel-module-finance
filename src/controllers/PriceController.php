@@ -113,13 +113,14 @@ class PriceController extends CrudController
         ]);
     }
 
-    public function actionSuggest($object_id, $plan_id, $type = 'default')
+    public function actionSuggest($object_id, $plan_id, $template_plan_id = null, $type = 'default')
     {
         $plan = Plan::findOne(['id' => $plan_id]);
 
         $suggestions = (new Price)->batchQuery('suggest', [
             'object_id' => $object_id,
             'plan_id' => $plan_id,
+            'template_plan_id' => $template_plan_id,
             'type' => $type,
         ]);
 

@@ -16,8 +16,8 @@ class PriceSort
     public static function anyPrices(): SortChain
     {
         return Sort::chain()
-            ->compare(self::byTargetObjectName())
-            ->compare(self::serverPrices());
+            ->compare(self::serverPrices())
+            ->compare(self::byTargetObjectName());
     }
 
     /**

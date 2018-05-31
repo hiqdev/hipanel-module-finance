@@ -14,6 +14,8 @@ class PriceSuggestionRequestForm extends Model
 {
     public $plan_id;
 
+    public $template_plan_id;
+
     public $type;
 
     public $object_id;
@@ -27,7 +29,7 @@ class PriceSuggestionRequestForm extends Model
     {
         return [
             [['plan_id', 'object_id', 'type'], 'required'],
-            [['plan_id', 'object_id'], 'integer'],
+            [['plan_id', 'object_id', 'template_plan_id'], 'integer'],
             [['type'], 'safe']
         ];
     }
@@ -36,6 +38,7 @@ class PriceSuggestionRequestForm extends Model
     {
         return [
             'plan_id' => Yii::t('hipanel.finance.price', 'Tariff plan'),
+            'template_plan_id' => Yii::t('hipanel.finance.price', 'Template tariff plan'),
             'type' => Yii::t('hipanel', 'Type'),
             'object_id' => Yii::t('hipanel', 'Object'),
         ];
