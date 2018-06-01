@@ -13,7 +13,7 @@ $this->registerCss('#form-advancedsearch-price-search .hint-block { color: #ccc;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('plan_owner_id') ?>
+    <?= $search->field('plan_owner_ilike') ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">

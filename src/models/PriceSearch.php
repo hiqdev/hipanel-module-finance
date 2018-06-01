@@ -16,7 +16,7 @@ class PriceSearch extends Price
         return array_merge(self::defaultSearchAttributes(), [
             'object_name_ilike',
             'buyer_ilike',
-            'plan_owner_id',
+            'plan_owner_ilike',
             'group_model_name_ilike',
             'model_partno_ilike',
         ]);
@@ -29,7 +29,7 @@ class PriceSearch extends Price
             'object_name_ilike' => Yii::t('hipanel.finance.price', 'Object name'),
             'plan_name_ilike' => Yii::t('hipanel.finance.price', 'Tariff plan name'),
             'buyer_ilike' => Yii::t('hipanel.finance.price', 'Tariff plan buyer'),
-            'plan_owner_id' => Yii::t('hipanel.finance.price', 'Tariff plan owner'),
+            'plan_owner_ilike' => Yii::t('hipanel.finance.price', 'Tariff plan owner'),
             'group_model_name_ilike' => Yii::t('hipanel.finance.price', 'Group model name'),
             'model_partno_ilike' => Yii::t('hipanel.finance.price', 'Model partno'),
         ]);
