@@ -13,6 +13,13 @@ use Tuck\Sort\SortChain;
  */
 class PriceSort
 {
+    public static function anyPrices(): SortChain
+    {
+        return Sort::chain()
+            ->compare(self::serverPrices())
+            ->compare(self::byTargetObjectName());
+    }
+
     /**
      * @return \Tuck\Sort\SortChain
      */
@@ -63,6 +70,13 @@ class PriceSort
             }
 
             return INF;
+        };
+    }
+
+    private static function byTargetObjectName(): \Closure
+    {
+        return function (Price $a, Price $b) {
+            return strnatcasecmp($a->object->name, $b->object->name);
         };
     }
 }

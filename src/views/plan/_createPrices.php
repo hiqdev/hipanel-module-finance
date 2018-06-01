@@ -1,6 +1,7 @@
 <?php
 
 use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\widgets\combo\TemplatePlanCombo;
 use hipanel\modules\server\widgets\combo\ServerCombo;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
@@ -26,6 +27,10 @@ $model = new \hipanel\modules\finance\models\PriceSuggestionRequestForm([
             'parts' => Yii::t('hipanel.finance.suggestionTypes', 'parts'),
         ],
     ]) ?>
+    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
+        'plan_id' => $plan->id,
+        'object_input_type' => 'server/server'
+    ]) ?>
 <?php elseif ($plan->type === Plan::TYPE_TEMPLATE): ?>
     <?= $form->field($model, 'object_id')->hiddenInput(['value' => $model->plan_id])->label(false) ?>
     <?= $form->field($model, 'type')->widget(\hiqdev\combo\StaticCombo::class, [
@@ -45,8 +50,12 @@ $model = new \hipanel\modules\finance\models\PriceSuggestionRequestForm([
             'default' => Yii::t('hipanel.finance.suggestionTypes', 'default'),
         ],
     ]) ?>
+    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
+        'plan_id' => $plan->id,
+        'object_input_type' => 'server/server'
+    ]) ?>
 <?php else: ?>
-    <h4>This object does not support detailed prices</h4>
+    <h4>This plan does not support detailed prices</h4>
 <?php endif ?>
 
 <hr/>

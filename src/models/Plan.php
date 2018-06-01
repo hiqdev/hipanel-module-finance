@@ -23,8 +23,8 @@ use Yii;
 class Plan extends \hipanel\base\Model
 {
     const TYPE_SERVER = 'server';
-    const TYPE_PCDN = 'vcdn';
-    const TYPE_VCDN = 'pcdn';
+    const TYPE_PCDN = 'pcdn';
+    const TYPE_VCDN = 'vcdn';
     const TYPE_TEMPLATE = 'template';
 
     use \hipanel\base\ModelTrait;

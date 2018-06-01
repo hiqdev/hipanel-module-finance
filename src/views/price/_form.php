@@ -1,6 +1,7 @@
 <?php
 
 use hipanel\helpers\Url;
+use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\models\Price;
 use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\Box;

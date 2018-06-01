@@ -17,7 +17,7 @@ use yii\helpers\Html;
  * @var Price[][] $pricesByMainObject
  */
 
-[$salesByObject, $pricesByMainObject] = $grouper->groupServerPrices();
+[$salesByObject, $pricesByMainObject] = $grouper->group();
 
 ?>
 <?php $page->beginContent('main-actions') ?>

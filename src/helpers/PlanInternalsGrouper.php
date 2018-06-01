@@ -37,7 +37,7 @@ class PlanInternalsGrouper
      * 0: sales, grouped by sold object
      * 1: prices, grouped by sold object
      */
-    public function groupServerPrices()
+    public function group()
     {
         $model = $this->plan;
         /** @var Sale[] $salesByObject */
@@ -92,7 +92,7 @@ class PlanInternalsGrouper
         }
 
         foreach ($pricesByMainObject as &$objPrices) {
-            $objPrices = PriceSort::serverPrices()->values($objPrices, true);
+            $objPrices = PriceSort::anyPrices()->values($objPrices, true);
         }
 
         return [$salesByObject, $pricesByMainObject];

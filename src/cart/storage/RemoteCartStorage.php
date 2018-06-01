@@ -77,11 +77,13 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
         try {
             $this->data = $this->cache->getOrSet($this->getCacheKey(), function () {
                 $remoteCartData = $this->settingsStorage->getBounded($this->getStorageKey());
-                $localCartData = $this->session[$this->sessionCartId] ?? null;
-                if ($remoteCartData === [] && $localCartData === null) {
+                if ($remoteCartData === []) {
                     return $this->session;
+                } elseif (!is_string($remoteCartData)) {
+                    Yii::warning('Remote cart data is neither empty array nor string. See: ' . var_export($remoteCartData, true));
                 }
 
+                $localCartData = $this->session[$this->sessionCartId] ?? null;
                 return $this->mergedCartData($remoteCartData, $localCartData);
             }, self::CACHE_DURATION);
         } catch (\Exception $exception) {

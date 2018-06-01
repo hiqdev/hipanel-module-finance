@@ -18,6 +18,7 @@ use hiqdev\hiart\Query;
 use Yii;
 use yii\base\Event;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 class PlanController extends CrudController
 {
@@ -29,6 +30,7 @@ class PlanController extends CrudController
                 'actions' => [
                     'create' => 'plan.create',
                     'update' => 'plan.update',
+                    'templates' => 'plan.create',
                     '*' => 'plan.read',
                 ],
             ],
@@ -107,5 +109,21 @@ class PlanController extends CrudController
         $this->layout = false;
 
         return $this->renderAjax('_createPrices', ['plan' => $plan]);
+    }
+
+    /**
+     * @param string $object_id
+     * @param string $plan_id
+     */
+    public function actionTemplates($plan_id, $object_id)
+    {
+        $templates = (new Plan())->query('search-templates', [
+            'id' => $plan_id,
+            'object_id' => $object_id,
+        ]);
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return $templates;
     }
 }
