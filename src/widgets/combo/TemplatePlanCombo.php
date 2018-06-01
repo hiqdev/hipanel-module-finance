@@ -4,6 +4,8 @@ namespace hipanel\modules\finance\widgets\combo;
 
 use hiqdev\combo\Combo;
 use yii\base\InvalidConfigException;
+use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\web\JsExpression;
 
 /**
@@ -50,7 +52,6 @@ class TemplatePlanCombo extends Combo
             throw new InvalidConfigException('Property "object_input_type" must be set');
         }
 
-        $this->_pluginOptions['type'] = 'get';
         $this->_filter['plan_id'] = ['format' => $this->plan_id];
         $this->_filter['object_id'] = [
             'field' => $this->object_input_type,
@@ -85,5 +86,25 @@ class TemplatePlanCombo extends Combo
                 }'),
             ],
         ]);
+    }
+
+    public function registerClientConfig()
+    {
+        parent::registerClientConfig();
+
+        $object_input_type = Json::encode($this->object_input_type);
+        $id = Json::encode('#' . $this->inputOptions['id']);
+
+        $this->view->registerJs(<<<JS
+        (function () {
+            var form = $($id).closest('{$this->formElementSelector}');
+            form.combo().getField($object_input_type).element.on('select2:selecting', function () {
+                setTimeout(function () {
+                    form.combo().getField('{$this->type}').element.select2('open');
+                }, 0);
+            });
+        })()
+JS
+);
     }
 }

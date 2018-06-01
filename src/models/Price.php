@@ -2,11 +2,11 @@
 
 namespace hipanel\modules\finance\models;
 
-use hipanel\models\Ref;
-use hipanel\modules\finance\models\factories\PriceModelFactory;
 use Yii;
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
+use hipanel\models\Ref;
+use hipanel\modules\finance\models\factories\PriceModelFactory;
 
 /**
  * Class Price
@@ -20,6 +20,7 @@ use yii\helpers\StringHelper;
  * @property string $unit
  * @property string $type
  * @property string $quantity
+ * @property string $formula
  *
  * @property TargetObject $object
  * @property Plan $plan
@@ -48,6 +49,7 @@ class Price extends \hipanel\base\Model
                 return (new \ReflectionClass($this))->getShortName();
             }],
             [['class'], 'string'],
+            [['formula'], 'string', 'on' => ['create', 'update']] // TODO syn check
         ]);
     }
 
@@ -59,6 +61,7 @@ class Price extends \hipanel\base\Model
             'quantity' => Yii::t('hipanel:finance', 'Prepaid'),
             'unit' => Yii::t('hipanel:finance', 'Unit'),
             'price' => Yii::t('hipanel:finance', 'Price'),
+            'formula' => Yii::t('hipanel.finance.price', 'Formula'),
             'note' => Yii::t('hipanel', 'Note'),
             'type' => Yii::t('hipanel', 'Type'),
         ];

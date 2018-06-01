@@ -1,11 +1,12 @@
 <?php
 
+use hipanel\modules\finance\widgets\FormulaInput;
 use hipanel\widgets\AmountWithCurrency;
 use yii\bootstrap\Html;
 
 /**
  * @var \hipanel\modules\finance\models\Plan|null $plan
- * @var \hipanel\modules\finance\models\Price $price
+ * @var \hipanel\modules\finance\models\Price $
  * @var \yii\widgets\ActiveForm $form
  */
 ?>
@@ -61,6 +62,9 @@ use yii\bootstrap\Html;
     </div>
     <div class="col-md-2">
         <?= $form->field($model, "[$i]note")->textInput(['tabindex' => -1]) ?>
+    </div>
+    <div class="col-md-3">
+        <?= $form->field($model, "[$i]formula")->widget(FormulaInput::class) ?>
     </div>
     <div class="col-md-1" style="padding-top: 25px;">
         <label>&nbsp;</label>

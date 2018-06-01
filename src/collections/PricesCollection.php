@@ -72,6 +72,7 @@ class PricesCollection extends Collection
             /** @var Price $modelPrototype */
             $modelPrototype = $this->priceModelFactory->build($formName);
             $modelPrototype->setAttributes($this->modelOptions);
+            $modelPrototype->scenario = $this->getScenario();
 
             $data = $request[$formName];
             foreach ($data as $key => $modelData) {

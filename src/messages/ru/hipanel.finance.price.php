@@ -25,6 +25,7 @@ return [
     'Unknown object name - no direct object prices exist' => 'Неизвестное имя объекта – нет прямых цен на объект',
     'Price in {currency}' => 'Цена в {currency}',
     'Price' => 'Цена',
+    'Formula' => 'Формула',
 
     'minutes' => 'минут',
     'items' => 'штуки',

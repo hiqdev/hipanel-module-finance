@@ -21,15 +21,15 @@ $model = new \hipanel\modules\finance\models\PriceSuggestionRequestForm([
 
 <?php if ($plan->type === Plan::TYPE_SERVER): ?>
     <?= $form->field($model, 'object_id')->widget(ServerCombo::class) ?>
+    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
+        'plan_id' => $plan->id,
+        'object_input_type' => 'server/server'
+    ]) ?>
     <?= $form->field($model, 'type')->widget(\hiqdev\combo\StaticCombo::class, [
         'data' => [
             'default' => Yii::t('hipanel.finance.suggestionTypes', 'default'),
             'parts' => Yii::t('hipanel.finance.suggestionTypes', 'parts'),
         ],
-    ]) ?>
-    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
-        'plan_id' => $plan->id,
-        'object_input_type' => 'server/server'
     ]) ?>
 <?php elseif ($plan->type === Plan::TYPE_TEMPLATE): ?>
     <?= $form->field($model, 'object_id')->hiddenInput(['value' => $model->plan_id])->label(false) ?>
@@ -45,14 +45,14 @@ $model = new \hipanel\modules\finance\models\PriceSuggestionRequestForm([
     <?= $form->field($model, 'object_id')->widget(ServerCombo::class, [
         'filter' => ['type' => ['format' => $plan->type === Plan::TYPE_PCDN ? 'cdnpix' : 'cdn']]
     ]) ?>
+    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
+        'plan_id' => $plan->id,
+        'object_input_type' => 'server/server'
+    ]) ?>
     <?= $form->field($model, 'type')->widget(\hiqdev\combo\StaticCombo::class, [
         'data' => [
             'default' => Yii::t('hipanel.finance.suggestionTypes', 'default'),
         ],
-    ]) ?>
-    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
-        'plan_id' => $plan->id,
-        'object_input_type' => 'server/server'
     ]) ?>
 <?php else: ?>
     <h4>This plan does not support detailed prices</h4>
