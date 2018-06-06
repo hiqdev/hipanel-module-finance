@@ -16,9 +16,10 @@ use yii\bootstrap\Html;
         <?= Html::activeHiddenInput($model, "[$i]object_id", ['ref' => 'object_id']) ?>
         <?= Html::activeHiddenInput($model, "[$i]type") ?>
         <?= Html::activeHiddenInput($model, "[$i]class") ?>
-        <?= Html::activeHiddenInput($model, "[$i]object") ?>
+        <?= Html::activeHiddenInput($model, "[$i]object", ['value' => $model->object->name]) ?>
         <?= Html::activeHiddenInput($model, "[$i]quantity") ?>
         <?= Html::activeHiddenInput($model, "[$i]unit") ?>
+        <?= Html::activeHiddenInput($model, "[$i]note") ?>
 
         <div class="form-group">
             <strong>
@@ -59,11 +60,11 @@ use yii\bootstrap\Html;
                 'ref' => 'currency',
             ]) ?>
         </div>
+        <div class="price-estimates">
+            <strong>$181.00</strong>, <i title="Август 2018">$181.00</i>, <i>$181.00</i>
+        </div>
     </div>
-    <div class="col-md-2">
-        <?= $form->field($model, "[$i]note")->textInput(['tabindex' => -1]) ?>
-    </div>
-    <div class="col-md-3">
+    <div class="col-md-5">
         <?= $form->field($model, "[$i]formula")->widget(FormulaInput::class) ?>
     </div>
     <div class="col-md-1" style="padding-top: 25px;">

@@ -1,9 +1,8 @@
 <?php
 
 use hipanel\helpers\Url;
-use hipanel\modules\finance\helpers\PriceSort;
+use hipanel\modules\finance\assets\PriceEstimator;
 use hipanel\modules\finance\models\Price;
-use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\Box;
 use hipanel\widgets\DynamicFormWidget;
 use yii\bootstrap\ActiveForm;
@@ -16,7 +15,7 @@ use yii\helpers\Html;
 $model = reset($models);
 
 $form = ActiveForm::begin([
-    'id' => 'plan-form',
+    'id' => 'prices-form',
     'action' => $model->isNewRecord ? Url::to(['@price/create-suggested']) : Url::to(['@price/update', 'id' => $model->id]),
     'enableClientValidation' => true,
     'validationUrl' => Url::toRoute([
@@ -48,7 +47,7 @@ $form = ActiveForm::begin([
     <div class="container-items">
         <?php $i = 0; ?>
         <?php foreach ($models as $model) : ?>
-            <div class="box-body price-item">
+            <div class="box-body price-item" data-id="<?= $model->id ?? uniqid() ?>">
                 <?= Html::activeHiddenInput($model, "[$i]id") ?>
                 <?php if ($plan): ?>
                     <?php $model->plan_id = $plan->id ?>
@@ -72,6 +71,8 @@ $form = ActiveForm::begin([
     <div class="col-md-12">
         <?= Html::submitButton(Yii::t('hipanel', 'Save'), ['class' => 'btn btn-success']) ?>
         &nbsp;
+        <?= Html::button(Yii::t('hipanel', 'Update estimates'), ['class' => 'btn btn-info', 'onclick' => '$(this).priceEstimator().update()']) ?>
+        &nbsp;
         <?= Html::button(Yii::t('hipanel', 'Cancel'),
             ['class' => 'btn btn-default', 'onclick' => 'history.go(-1)']) ?>
     </div>
@@ -83,3 +84,12 @@ $form = ActiveForm::begin([
     'itemSelector' => '.price-item',
     'inputSelectors' => ['input[ref=object_id]', 'input[ref=object]', 'input[ref=plan_id]', 'input[ref=currency]']
 ]) ?>
+
+<?php
+PriceEstimator::register($this);
+$this->registerJs(<<<'JS'
+$('#prices-form').priceEstimator({
+    rowSelector: '.price-item',
+});
+JS
+);

@@ -4,10 +4,11 @@ namespace hipanel\modules\finance\widgets;
 
 use hipanel\modules\finance\models\Price;
 use hiqdev\assets\autosize\AutosizeAsset;
-use yii\bootstrap\Html;
+use Yii;
 use yii\helpers\BaseHtml;
+use yii\web\NotAcceptableHttpException;
+use yii\web\View;
 use yii\widgets\InputWidget;
-
 
 /**
  * Class FormulaInput
@@ -19,13 +20,14 @@ class FormulaInput extends InputWidget
     /** @var Price */
     public $model;
 
-    private function getAttributeValue()
-    {
-        return BaseHtml::getAttributeName($this->attribute);
-    }
+    /**
+     * @var string
+     */
+    private $helpModalSelector;
 
     public function registerClientScript()
     {
+        $this->registerHelpModal();
         AutosizeAsset::register($this->view);
         $this->view->registerJs("autosize($('.formula-input'));");
     }
@@ -34,14 +36,25 @@ class FormulaInput extends InputWidget
     {
         $this->registerClientScript();
 
-        return Html::activeTextarea($this->model, $this->attribute, [
-            'class' => 'form-control formula-input',
-            'rows' => $this->formulaLinesCount(),
-        ]);
+        return $this->render('formulaInput');
     }
 
-    private function formulaLinesCount()
+    private function registerHelpModal(): void
     {
-        return count(explode("\n", $this->getAttributeValue()));
+        $help = Yii::createObject(FormulaHelpModal::class);
+        $this->helpModalSelector = '#' . $help->run();
+    }
+
+    public function formulaLinesCount()
+    {
+        return count($this->model->formulaLines());
+    }
+
+    /**
+     * @return string
+     */
+    public function getHelpModalSelector(): string
+    {
+        return $this->helpModalSelector;
     }
 }

@@ -154,4 +154,13 @@ class Price extends \hipanel\base\Model
         $factory = Yii::$container->get(PriceModelFactory::class);
         return $factory->build($row['class']);
     }
+
+    public function formulaLines(): array
+    {
+        if (strlen($this->formula) === 0) {
+            return [];
+        }
+
+        return explode("\n", $this->formula);
+    }
 }
