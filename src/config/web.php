@@ -167,8 +167,9 @@ return [
             hipanel\modules\finance\cart\storage\CartStorageInterface::class => function (yii\di\Container $container) {
                 return hipanel\modules\finance\cart\storage\CartStorageFactory::forUser($container->get(\yii\web\User::class));
             },
-            \hipanel\modules\finance\models\factories\PriceModelFactory::class,
-            \hipanel\modules\finance\grid\presenters\price\PricePresenterFactory::class,
+            \hipanel\modules\finance\models\factories\PriceModelFactory::class => \hipanel\modules\finance\models\factories\PriceModelFactory::class,
+            \hipanel\modules\finance\grid\presenters\price\PricePresenterFactory::class => \hipanel\modules\finance\grid\presenters\price\PricePresenterFactory::class,
+            \hipanel\modules\finance\widgets\FormulaHelpModal::class => \hipanel\modules\finance\widgets\FormulaHelpModal::class,
         ],
     ],
 ];

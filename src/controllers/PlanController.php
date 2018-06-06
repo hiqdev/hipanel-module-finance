@@ -15,6 +15,11 @@ use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\models\Plan;
 use hipanel\filters\EasyAccessControl;
 use hiqdev\hiart\Query;
+use Money\Currencies\ISOCurrencies;
+use Money\Currency;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\Formatter\IntlMoneyFormatter;
+use Money\Money;
 use Yii;
 use yii\base\Event;
 use yii\web\NotFoundHttpException;
@@ -125,5 +130,52 @@ class PlanController extends CrudController
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         return $templates;
+    }
+
+    public function actionCalculateCharges()
+    {
+        $request = Yii::$app->request;
+
+        $response = Plan::perform('calculate-charges', [
+            'actions' => $request->post('actions'),
+            'prices' => $request->post('prices'),
+            'times' => [
+                'now',
+                'first day of +1 month',
+                'first day of +2 month',
+            ],
+        ]);
+
+        $moneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
+
+        $result = [];
+        foreach ($response as $time => $charges) {
+            $chargesByTarget = [];
+
+            foreach ($charges as $charge) {
+                $action = $charge['action'];
+                $targetId = $action['target']['id'];
+                if (empty($targetId)) {
+                    Yii::warning('Action does not contain target ID');
+                    continue;
+                }
+                $actionType = $action['type']['name'];
+
+                $price = $charge['price'];
+                $priceType = $price['type']['name'];
+
+                $chargesByTarget[$targetId][$actionType][] = [
+                    'price' => $moneyFormatter->format(
+                        new Money($price['price']['amount'], new Currency($price['price']['currency']))
+                    ),
+                    'type' => $priceType
+                ];
+            }
+
+            $result[date('m Y', strtotime($time))] = $chargesByTarget;
+        }
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $result;
     }
 }
