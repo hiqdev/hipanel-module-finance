@@ -4,7 +4,6 @@ use hipanel\modules\server\widgets\combo\ServerCombo;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
-$model->id = 1502584;
 
 ?>
 <?php $form = ActiveForm::begin([
