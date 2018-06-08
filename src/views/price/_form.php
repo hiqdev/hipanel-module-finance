@@ -71,7 +71,7 @@ $form = ActiveForm::begin([
     <div class="col-md-12">
         <?= Html::submitButton(Yii::t('hipanel', 'Save'), ['class' => 'btn btn-success']) ?>
         &nbsp;
-        <?= Html::button(Yii::t('hipanel', 'Update estimates'), ['class' => 'btn btn-info', 'onclick' => '$(this).priceEstimator().update()']) ?>
+        <?= Html::button(Yii::t('hipanel:finance', 'Update estimates'), ['class' => 'btn btn-info', 'onclick' => '$(this).priceEstimator().update()']) ?>
         &nbsp;
         <?= Html::button(Yii::t('hipanel', 'Cancel'),
             ['class' => 'btn btn-default', 'onclick' => 'history.go(-1)']) ?>

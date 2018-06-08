@@ -222,5 +222,6 @@ return [
     'This plan type viewing is not implemented yet' => 'Управление тарифным планом этого типа ещё не реализовано',
     'per {unit}' => 'за {unit}',
     'prepaid {amount,number}' => 'включено {amount,number}',
-    'monthly' => 'в месяц'
+    'monthly' => 'в месяц',
+    'Update estimates' => 'Рассчитать стоимость',
 ];

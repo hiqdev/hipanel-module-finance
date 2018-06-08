@@ -33,8 +33,8 @@ class FormulaExamplesProvider
     {
         return [
             sprintf("discount.since('%s').grows('10%%').every('month').max('100%%').reason('because')", date('m.Y')),
-            sprintf("discount.since('%s').min('50 USD').grows('20 USD').every('2 months').max('80 USD')", date('m.Y')),
-            sprintf("discount.since('%s').min('5%%').grows('1%%').every('1 months').max('25%%')", date('m.Y')),
+            sprintf("discount.since('%s').grows('20 USD').every('2 months')min('30 USD').max('80 USD')", date('m.Y')),
+            sprintf("discount.since('%s').grows('1%%').every('1 months').min('5%%').max('25%%')", date('m.Y')),
         ];
     }
 

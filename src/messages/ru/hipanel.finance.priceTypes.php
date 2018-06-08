@@ -14,4 +14,6 @@ return [
     'Server du' => 'Диск',
     'Server ssd' => 'SSD диск',
     'Server sata' => 'SATA диск',
+    'Discount' => 'Скидка',
+    'Overuse' => 'Перебор',
 ];

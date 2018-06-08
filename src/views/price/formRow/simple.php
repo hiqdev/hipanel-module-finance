@@ -61,7 +61,6 @@ use yii\bootstrap\Html;
             ]) ?>
         </div>
         <div class="price-estimates">
-            <strong>$181.00</strong>, <i title="Август 2018">$181.00</i>, <i>$181.00</i>
         </div>
     </div>
     <div class="col-md-5">

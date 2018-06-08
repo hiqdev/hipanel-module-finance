@@ -12,14 +12,11 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
+use hipanel\modules\finance\helpers\PriceChargesEstimator;
 use hipanel\modules\finance\models\Plan;
 use hipanel\filters\EasyAccessControl;
 use hiqdev\hiart\Query;
-use Money\Currencies\ISOCurrencies;
-use Money\Currency;
-use Money\Formatter\DecimalMoneyFormatter;
-use Money\Formatter\IntlMoneyFormatter;
-use Money\Money;
+use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\Event;
 use yii\web\NotFoundHttpException;
@@ -47,11 +44,11 @@ class PlanController extends CrudController
         return array_merge(parent::actions(), [
             'create' => [
                 'class' => SmartCreateAction::class,
-                'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully created')
+                'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully created'),
             ],
             'update' => [
                 'class' => SmartUpdateAction::class,
-                'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully updated')
+                'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully updated'),
             ],
             'index' => [
                 'class' => IndexAction::class,
@@ -91,11 +88,11 @@ class PlanController extends CrudController
             ],
             'delete' => [
                 'class' => SmartDeleteAction::class,
-                'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully deleted')
+                'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully deleted'),
             ],
             'restore' => [
                 'class' => SmartPerformAction::class,
-                'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully restored')
+                'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully restored'),
             ],
             'copy' => [
                 'class' => SmartUpdateAction::class,
@@ -134,48 +131,26 @@ class PlanController extends CrudController
 
     public function actionCalculateCharges()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $request = Yii::$app->request;
 
-        $response = Plan::perform('calculate-charges', [
-            'actions' => $request->post('actions'),
-            'prices' => $request->post('prices'),
-            'times' => [
+        /** @var PriceChargesEstimator $calculator */
+        $calculator = Yii::$container->get(PriceChargesEstimator::class, [
+            $request->post('actions'),
+            $request->post('prices'),
+        ]);
+
+        try {
+            return $calculator->calculateForPeriods([
                 'now',
                 'first day of +1 month',
                 'first day of +2 month',
-            ],
-        ]);
-
-        $moneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
-
-        $result = [];
-        foreach ($response as $time => $charges) {
-            $chargesByTarget = [];
-
-            foreach ($charges as $charge) {
-                $action = $charge['action'];
-                $targetId = $action['target']['id'];
-                if (empty($targetId)) {
-                    Yii::warning('Action does not contain target ID');
-                    continue;
-                }
-                $actionType = $action['type']['name'];
-
-                $price = $charge['price'];
-                $priceType = $price['type']['name'];
-
-                $chargesByTarget[$targetId][$actionType][] = [
-                    'price' => $moneyFormatter->format(
-                        new Money($price['price']['amount'], new Currency($price['price']['currency']))
-                    ),
-                    'type' => $priceType
-                ];
-            }
-
-            $result[date('m Y', strtotime($time))] = $chargesByTarget;
+            ]);
+        } catch (ResponseErrorException $exception) {
+            Yii::$app->response->setStatusCode(412, $exception->getMessage());
+            return [
+                'formula' => $exception->getResponse()->getData()['_error_ops']['formula'] ?? null
+            ];
         }
-
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return $result;
     }
 }
