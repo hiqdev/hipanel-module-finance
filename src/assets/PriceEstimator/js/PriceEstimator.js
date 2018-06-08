@@ -36,7 +36,7 @@
         init() {
         },
         update() {
-            this.getPriceCharges();
+            this.updatePriceCharges();
         },
         getActions(prices) {
             let result = {};
@@ -48,7 +48,7 @@
                     type: price.type,
                     object_id: price.object_id,
                     unit: price.unit,
-                    amount: 1,
+                    amount: price.quantity * 2 || 1,
                 };
             }
 
@@ -61,47 +61,64 @@
                 let objectActions = objects[object_id];
 
                 Object.keys(objectActions).forEach(type => {
-                    let row = this.matchPriceRow(object_id, type);
+                    let row = this.matchPriceRow(object_id, type),
+                        id = row.data('id');
 
                     if (row) {
-                        let charges = objectActions[type];
-                        if (estimatesPerRow[row.data('id')] === undefined) {
-                            estimatesPerRow[row.data('id')] = [];
+                        let estimate = objectActions[type];
+                        if (estimatesPerRow[id] === undefined) {
+                            estimatesPerRow[id] = [];
                         }
-                        estimatesPerRow[row.data('id')].push(...charges);
+                        estimatesPerRow[id] = estimate;
                     }
                 });
             });
 
             this.estimatesPerPeriod[period] = estimatesPerRow;
         },
+        renderEstimatesTable: function (estimatesPerRowElement) {
+            return estimatesPerRowElement.detailsTable;
+        },
+        attachPopover: function (element, estimatesPerRowElement) {
+            element.data({
+                'popover-group': 'price-estimate',
+                'content': this.renderEstimatesTable(estimatesPerRowElement),
+                'placement': 'bottom'
+            });
+            element.popover({html: true}).on('show.bs.popover', e => {
+                $('.price-estimates *').not(e.target).popover('hide');
+            });
+        },
         drawEstimates() {
             let rows = this.getPriceRows();
             rows.find('.price-estimates').html('');
 
             Object.keys(this.estimatesPerPeriod).forEach(period => {
-                let chargesPerRow = this.estimatesPerPeriod[period];
+                let estimatesPerRow = this.estimatesPerPeriod[period];
 
-                Object.keys(chargesPerRow).forEach(rowId => {
+                Object.keys(estimatesPerRow).forEach(rowId => {
                     let row = rows.filter('[data-id=' + rowId + ']'),
-                        charges = chargesPerRow[rowId],
-                        sum = 0.0;
+                        sum = estimatesPerRow[rowId]['sumFormatted'],
+                        estimateBox = row.find('.price-estimates');
 
-                    charges.forEach(charge => {
-                        sum += parseFloat(charge['price']);
-                    })
-
-                    let est = row.find('.price-estimates');
-                    if (est.html().length === 0) {
-                        est.append(`<strong title="${period}">${sum}</strong>`)
+                    if (estimateBox.html().length === 0) {
+                        estimateBox.append($('<strong>').attr({title: period}).text(sum));
                     } else {
-                        est.append(`, <i title="${period}">${sum}</i>`);
+                        estimateBox.append('; ');
+                        estimateBox.append($('<i>').attr({title: period}).text(sum));
                     }
+
+                    this.attachPopover(
+                        estimateBox.find(`[title="${period}"]`),
+                        estimatesPerRow[rowId]
+                    );
                 });
             });
         },
-        getPriceCharges() {
+        updatePriceCharges() {
             let prices = this.getPrices();
+
+            this.getPriceRows().find('.price-estimates').html('<i class="fa fa-spinner fa-spin fa-lg"></i>');
 
             $.ajax({
                 method: 'post',
@@ -114,6 +131,10 @@
                     Object.keys(json).forEach(period => this.displayEstimate(period, json[period]))
                     this.drawEstimates();
                 },
+                error: xhr => {
+                    this.showError(xhr.statusText);
+                    this.getPriceRows().find('.price-estimates').html('');
+                }
             })
         },
         getPriceRows() {
