@@ -4,9 +4,9 @@ use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\widgets\ChargeObjectSelector;
+use hipanel\modules\finance\widgets\PriceObjectSelector;
 use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\Box;
-use hipanel\widgets\DatePicker;
 use hipanel\widgets\DateTimePicker;
 use hipanel\widgets\DynamicFormWidget;
 use yii\bootstrap\ActiveForm;
@@ -74,6 +74,9 @@ $form = ActiveForm::begin([
                         </div>
                         <div class="form-instance">
                             <div class="col-md-2">
+                                <?= $form->field($model, "[$i]object_id")->widget(PriceObjectSelector::class) ?>
+                            </div>
+                            <div class="col-md-2">
                                 <?= $form->field($model, "[$i]client_id")->widget(ClientCombo::class, [
                                     'formElementSelector' => '.form-instance',
                                     'inputOptions' => [
@@ -81,7 +84,7 @@ $form = ActiveForm::begin([
                                     ],
                                 ]) ?>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <?= $form->field($model, "[$i]type")->dropDownList($billTypes, [
                                     'groups' => $billGroupLabels,
                                     'value' => $model->gtype ? implode(',', [$model->gtype, $model->type]) : null,
@@ -115,7 +118,7 @@ $form = ActiveForm::begin([
                                     ],
                                 ]) ?>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <?= $form->field($model, "[$i]label") ?>
                             </div>
                         </div>
