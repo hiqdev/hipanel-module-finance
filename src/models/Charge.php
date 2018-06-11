@@ -35,6 +35,7 @@ class Charge extends \hiqdev\hiart\ActiveRecord
             'quantity' => Yii::t('hipanel', 'Quantity'),
             'label' => Yii::t('hipanel', 'Description'),
             'time' => Yii::t('hipanel', 'Time'),
+            'object_id' => Yii::t('hipanel', 'Object'),
         ]);
     }
 

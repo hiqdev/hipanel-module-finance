@@ -3,6 +3,7 @@
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\widgets\ChargeObjectSelector;
 use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\Box;
 use hipanel\widgets\DatePicker;
@@ -151,7 +152,10 @@ $form = ActiveForm::begin([
                                     <div class="charge-item col-md-12">
                                         <div class="row input-row margin-bottom">
                                             <div class="form-instance">
-                                                <div class="col-md-4">
+                                                <div class="col-md-2">
+                                                    <?= $form->field($charge, "[$i][$j]object_id")->widget(ChargeObjectSelector::class) ?>
+                                                </div>
+                                                <div class="col-md-2">
                                                     <?= $form->field($charge, "[$i][$j]type")->dropDownList($billTypes, [
                                                         'groups' => $billGroupLabels,
                                                         'value' => $charge->ftype,
