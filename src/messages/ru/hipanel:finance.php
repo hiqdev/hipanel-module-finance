@@ -65,7 +65,7 @@ return [
     'Requisite' => 'Реквизит',
     'Requisites' => 'Реквизиты',
     'Payment details' => 'Реквизиты',
-    'Bill sum must match resources sum' => 'Сумма счёта должна совпадать с сумой его списаний',
+    'Bill sum must match charges sum' => 'Сумма счёта должна соответствовать сумме его списаний',
     'Detalization' => 'Детализация',
     'Bill was created successfully' => 'Счёт был успешно создан',
     'Bill was updated successfully' => 'Счёт был успешно изменён',
