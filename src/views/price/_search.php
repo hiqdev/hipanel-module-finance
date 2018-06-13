@@ -25,7 +25,7 @@ $this->registerCss('#form-advancedsearch-price-search .hint-block { color: #ccc;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('group_model_name_ilike') ?>
+    <?= $search->field('model_group_name_ilike') ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">

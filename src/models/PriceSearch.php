@@ -17,7 +17,7 @@ class PriceSearch extends Price
             'object_name_ilike',
             'buyer_ilike',
             'plan_owner_ilike',
-            'group_model_name_ilike',
+            'model_group_name_ilike',
             'model_partno_ilike',
         ]);
     }
@@ -30,7 +30,7 @@ class PriceSearch extends Price
             'plan_name_ilike' => Yii::t('hipanel.finance.price', 'Tariff plan name'),
             'buyer_ilike' => Yii::t('hipanel.finance.price', 'Tariff plan buyer'),
             'plan_owner_ilike' => Yii::t('hipanel.finance.price', 'Tariff plan owner'),
-            'group_model_name_ilike' => Yii::t('hipanel.finance.price', 'Group model name'),
+            'model_group_name_ilike' => Yii::t('hipanel.finance.price', 'Group model name'),
             'model_partno_ilike' => Yii::t('hipanel.finance.price', 'Model partno'),
         ]);
     }
