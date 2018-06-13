@@ -14,7 +14,7 @@ class BillChargesSumValidator extends Validator
     {
         parent::init();
 
-        $this->message = Yii::t('hipanel:finance', 'Bill sum must match resources sum');
+        $this->message = Yii::t('hipanel:finance', 'Bill sum must match charges sum');
     }
 
     /**
@@ -25,8 +25,8 @@ class BillChargesSumValidator extends Validator
     {
         if (count($model->charges) > 0) {
             $chargesSum = array_sum(ArrayHelper::getColumn($model->charges, 'sum'));
-            if (floatval(abs($chargesSum)) !== floatval(abs($model->sum))) {
-                $model->addError($attribute, $this->message . ': ' . $chargesSum);
+            if ($model->sum != -$chargesSum) {
+                $model->addError($attribute, $this->message . ': ' . -$chargesSum);
             }
         }
     }
@@ -36,17 +36,17 @@ class BillChargesSumValidator extends Validator
         $message = Json::encode($this->message);
 
         return <<<JS
-    var sum = 0,
-        inputs = $(this.input).closest('.bill-item').find('input[data-attribute="sum"]');
+        var sum = 0,
+            inputs = $(this.input).closest('.bill-item').find('input[data-attribute="sum"]');
 
-    if (inputs.length > 0) {
-        inputs.map(function () {
-            sum += parseFloat($(this).val());
-        });
-        if (Math.abs(sum) !== Math.abs(value)) {
-            messages.push($message + ': ' + sum);
+        if (inputs.length > 0) {
+            inputs.map(function () {
+                sum += parseFloat($(this).val());
+            });
+            if (value != -sum) {
+                messages.push($message + ': ' + (-sum));
+            }
         }
-    }
 JS;
     }
 }
