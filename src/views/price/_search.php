@@ -41,10 +41,6 @@ $this->registerCss('#form-advancedsearch-price-search .hint-block { color: #ccc;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('unit')->dropDownList($search->model->unitOptions, ['prompt' => '--']) ?>
-</div>
-
-<div class="col-md-4 col-sm-6 col-xs-12">
     <?php
     $currencies = $search->model->currencyOptions;
     $currencies = array_combine(array_keys($currencies), array_map(function ($k) {

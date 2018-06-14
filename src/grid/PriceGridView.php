@@ -80,9 +80,9 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'filterAttribute' => 'type',
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'format' => 'raw',
-                'gtype' => 'type,price',
+                'gtype' => 'type,bill',
                 'findOptions' => [
-                    'select' => 'name_label',
+                    'select' => 'oname_label',
                     'pnames' => 'monthly,overuse',
                     'with_recursive' => 1,
                     'mapOptions' => ['from' => 'oname'],
