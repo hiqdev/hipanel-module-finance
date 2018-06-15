@@ -70,10 +70,9 @@ class Price extends \hipanel\base\Model
     public function getTypeOptions()
     {
         return Ref::getList('type,bill', null, [
-            'select' => 'oname_label',
+            'select' => 'name',
             'pnames' => 'monthly,overuse',
             'with_recursive' => 1,
-            'mapOptions' => ['from' => 'oname'],
         ]);
     }
 

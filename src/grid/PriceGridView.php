@@ -82,10 +82,9 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'raw',
                 'gtype' => 'type,bill',
                 'findOptions' => [
-                    'select' => 'oname_label',
+                    'select' => 'name',
                     'pnames' => 'monthly,overuse',
                     'with_recursive' => 1,
-                    'mapOptions' => ['from' => 'oname'],
                 ],
                 'value' => function ($model) {
                     return PriceType::widget(['model' => $model]);
