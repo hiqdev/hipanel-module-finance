@@ -92,6 +92,15 @@ class Price extends \hipanel\base\Model
             'overuse,server_du' => $unitGroup['size'],
             'overuse,server_ssd' => $unitGroup['size'],
             'overuse,server_sata' => $unitGroup['size'],
+            'overuse,backup_traf' => $unitGroup['size'],
+            'overuse,domain_traf' => $unitGroup['size'],
+            'overuse,domain_num' => ['items'],
+            'overuse,ip_traf_max' => $unitGroup['size'],
+            'overuse,account_traf' => $unitGroup['size'],
+            'overuse,account_du' => $unitGroup['size'],
+            'overuse,mail_num' => ['items'],
+            'overuse,mail_du' => $unitGroup['size'],
+            'overuse,db_num' => ['items'],
         ];
 
         $units = Ref::getList('type,unit', 'hipanel.finance.units', [
@@ -101,6 +110,7 @@ class Price extends \hipanel\base\Model
         ]);
 
         $possibleTypes = $availableUnitsByPriceType[$this->type] ?? [];
+
         return array_intersect_key($units, array_combine($possibleTypes, $possibleTypes));
     }
 
