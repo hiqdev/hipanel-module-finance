@@ -12,10 +12,11 @@ use yii\helpers\Html;
 
 $model = new \hipanel\modules\finance\models\PriceSuggestionRequestForm([
     'plan_id' => $plan->id,
+    'plan_type' => $plan->type,
 ]);
 ?>
 
-<?php $form = ActiveForm::begin(['action' => ['@price/suggest'], 'method' => 'GET']) ?>
+<?php $form = ActiveForm::begin(['id' => 'create-prices', 'action' => ['@price/suggest'], 'method' => 'GET']) ?>
 
 <?= $form->field($model, 'plan_id')->hiddenInput()->label(false) ?>
 
