@@ -32,7 +32,7 @@ $form = ActiveForm::begin([
     'insertButton' => '.add-item', // css class
     'deleteButton' => '.remove-item', // css class
     'model' => $model,
-    'formId' => 'plan-form',
+    'formId' => 'prices-form',
     'formFields' => [
         'id', 'quantity', 'type', 'unit', 'price', 'currency', 'note'
     ],
