@@ -3,10 +3,12 @@
 namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
+use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\ViewAction;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\models\stub\ClientRelationFreeStub;
-use hipanel\modules\finance\models\Tariff;
+use hipanel\modules\finance\models\Plan;
+use Yii;
 
 class SaleController extends \hipanel\base\CrudController
 {
@@ -39,10 +41,14 @@ class SaleController extends \hipanel\base\CrudController
                         'seller_id' => $sale->seller_id,
                     ];
                     $client = new ClientRelationFreeStub($attributes);
-                    $tariff = Tariff::find()->where(['id' => $sale->tariff_id])->one();
+                    $tariff = Plan::find()->where(['id' => $sale->tariff_id])->one();
 
                     return compact('client', 'tariff');
                 },
+            ],
+            'delete' => [
+                'class' => SmartDeleteAction::class,
+                'success' => Yii::t('hipanel:finance:sale', 'Sale was successfully deleted.'),
             ],
         ]);
     }

@@ -47,6 +47,7 @@ class Sale extends \hipanel\base\Model
                 'is_grouping',
                 'from_old',
             ], 'string'],
+            [['id'], 'required', 'on' => 'delete'],
         ]);
     }
 

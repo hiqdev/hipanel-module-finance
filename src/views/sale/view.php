@@ -1,11 +1,13 @@
 <?php
 
+use hipanel\modules\finance\grid\PlanGridView;
 use hipanel\modules\finance\grid\SaleGridView;
-use hipanel\modules\finance\grid\TariffGridView;
+use hipanel\modules\finance\menus\SaleDetailMenu;
+use hipanel\widgets\MainDetails;
 use yii\helpers\Html;
 
 $this->title = Html::encode($model->object);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance:sale', 'Sale'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance:sale', 'Sales'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerCss("
@@ -16,12 +18,14 @@ $this->registerCss("
 
 ?>
 <div class="row">
-    <div class="col-md-4">
-        <div class="box box-solid">
-            <div class="box-header with-border">
-                <h3 class="box-title"><?= Yii::t('hipanel:finance:sale', 'Sale information') ?></h3>
-            </div>
-            <div class="box-body">
+    <div class="col-md-3">
+        <?= MainDetails::widget([
+            'title' => $this->title ?? Yii::t('hipanel', 'No title'),
+            'icon' => 'fa-briefcase',
+            'menu' => SaleDetailMenu::widget(['model' => $model], ['linkTemplate' => '<a href="{url}" {linkOptions}><span class="pull-right">{icon}</span>&nbsp;{label}</a>']),
+        ]) ?>
+        <div class="box box-widget">
+            <div class="box-body no-padding">
                 <?= SaleGridView::detailView([
                     'model' => $model,
                     'boxed' => false,
@@ -35,9 +39,10 @@ $this->registerCss("
                 ]) ?>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <?= $this->render('@hipanel/modules/ticket/views/ticket/_clientInfo', compact('client')); ?>
+
+        <div class="row">
+            <?= $this->render('@hipanel/modules/ticket/views/ticket/_clientInfo', compact('client')); ?>
+        </div>
     </div>
     <div class="col-md-4">
         <div class="box box-solid">
@@ -45,13 +50,15 @@ $this->registerCss("
                 <h3 class="box-title"><?= Yii::t('hipanel:finance:sale', 'Tariff information') ?></h3>
             </div>
             <div class="box-body">
-                <?= TariffGridView::detailView([
+                <?= PlanGridView::detailView([
                     'model' => $tariff,
                     'boxed' => false,
                     'columns' => [
-                        'used',
-                        'note',
+                        'simple_name',
+                        'client',
                         'type',
+                        'state',
+                        'note',
                     ],
                 ]) ?>
             </div>
