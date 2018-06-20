@@ -26,8 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('bulk-actions') ?>
-            <?= $page->renderBulkButton(Yii::t('hipanel', 'Update'), Url::to(['@price/update']), 'warning') ?>
-            <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), Url::to(['@price/delete']), 'danger') ?>
+            <?= $page->renderBulkButton('@price/update', Yii::t('hipanel', 'Update'), ['color' => 'warning']) ?>
+            <?= $page->renderBulkDeleteButton('@price/delete') ?>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('table') ?>
