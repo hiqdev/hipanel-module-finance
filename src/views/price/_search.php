@@ -4,12 +4,10 @@
 
 use hipanel\helpers\StringHelper;
 
-$this->registerCss('#form-advancedsearch-price-search .hint-block { color: #ccc; padding: .5rem .4rem 0; } ');
-
 ?>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('buyer_ilike')->hint(Yii::t('hipanel.finance.price', 'Who sold the tariff plan.')) ?>
+    <?= $search->field('buyer_ilike') ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
