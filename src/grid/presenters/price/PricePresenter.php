@@ -30,17 +30,11 @@ class PricePresenter
      * @return string
      * @throws \yii\base\InvalidConfigException
      */
-    public function renderPrice($price): string
+    public function renderPrice(Price $price): string
     {
         $unit = $formula = '';
         if ($price->getUnitLabel()) {
             $unit = ' ' . Yii::t('hipanel:finance', 'per {unit}', ['unit' => $price->getUnitLabel()]);
-        }
-
-        if ($price->isOveruse()) {
-            $prepaid = ', ' . Yii::t('hipanel:finance', 'prepaid {amount,number}', ['amount' => $price->quantity]);
-        } else {
-            $prepaid = ' ' . Yii::t('hipanel:finance', 'monthly');
         }
 
         if (count($price->formulaLines()) > 0) {
@@ -61,6 +55,27 @@ class PricePresenter
             ]);
         }
 
-        return Html::tag('strong', $this->formatter->asCurrency($price->price, $price->currency)) . $unit . $prepaid . $formula;
+        return Html::tag('strong', $this->formatter->asCurrency($price->price, $price->currency)) . $unit . $formula;
+    }
+
+    /**
+     * @param Price $price
+     * @return string
+     */
+    public function renderInfo(Price $price): string
+    {
+        if ($price->isOveruse()) {
+            return Yii::t('hipanel:finance', '{coins}&nbsp;&nbsp;{amount,number} {unit}', [
+                'coins' => Html::tag('i', '', ['class' => 'fa fa-money', 'title' => Yii::t('hipanel.finance.price', 'Prepaid amount')]),
+                'amount' => $price->quantity,
+                'unit' => $price->getUnitLabel()
+            ]);
+        }
+
+        if ($price->getSubtype() === 'hardware') {
+            return $price->object->label;
+        }
+
+        return ''; // Do not display any information unless we are sure what we are displaying
     }
 }

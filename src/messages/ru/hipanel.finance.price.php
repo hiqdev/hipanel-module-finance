@@ -39,4 +39,5 @@ return [
     'Group model name' => 'Название группы моделей',
     'Model partno' => 'Артикул модели',
     'Who sold the tariff plan.' => 'Кому продана услуга по тарифу.',
+    'Prepaid amount' => 'Предоплаченный объём',
 ];
