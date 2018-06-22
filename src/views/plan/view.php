@@ -68,8 +68,8 @@ $this->registerCss("
             <?php $page->endContent() ?>
 
             <?php $page->beginContent('bulk-actions') ?>
-                <?= $page->renderBulkButton(Yii::t('hipanel', 'Update'), Url::to(['@price/update']), 'warning') ?>
-                <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), Url::to(['@price/delete']), 'danger') ?>
+                <?= $page->renderBulkButton(Url::to(['@price/update']), Yii::t('hipanel', 'Update'), ['color' => 'warning']) ?>
+                <?= $page->renderBulkButton(Url::to(['@price/delete']), Yii::t('hipanel', 'Delete'), ['color' => 'danger']) ?>
             <?php $page->endContent() ?>
 
                 <?php if (in_array($model->type, [Plan::TYPE_SERVER, Plan::TYPE_VCDN, Plan::TYPE_PCDN])): ?>
