@@ -162,6 +162,7 @@ class TariffController extends \hipanel\base\CrudController
         $id = Yii::$app->request->post('selection')[0];
         $manager = TariffManagerFactory::createById($id, ['scenario' => 'create']);
         $form = $manager->form;
+        $form->id = null;
 
         return $this->render($manager->getType() . '/copy', ['model' => $form]);
     }

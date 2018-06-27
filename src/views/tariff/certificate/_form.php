@@ -10,9 +10,10 @@ use yii\helpers\Html;
 
 ?>
 
-<?php $form = ActiveForm::begin([
+<?php $form = ActiveForm::begin(array_filter([
     'id' => 'tariff-create-form',
-]) ?>
+    'action' => isset($action) ? $action : null,
+])) ?>
 
 <?php Box::begin() ?>
 <div class="row">
