@@ -2,7 +2,6 @@
 
 namespace hipanel\modules\finance\grid\presenters\price;
 
-use hipanel\modules\finance\models\Price;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
@@ -18,7 +17,7 @@ class TemplatePricePresenter extends PricePresenter
      * @param \hipanel\modules\finance\models\TemplatePrice $price
      * @return string
      */
-    public function renderPrice(Price $price): string
+    public function renderPrice($price): string
     {
         $formatter = Yii::$app->formatter;
 

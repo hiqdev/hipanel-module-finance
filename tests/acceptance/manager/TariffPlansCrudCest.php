@@ -11,20 +11,23 @@ use hipanel\tests\_support\Step\Acceptance\Manager;
 
 class TariffPlansCrudCest
 {
+    /**
+     * @var string
+     */
     private $id;
 
+    /**
+     * @var array
+     */
     private $fields;
 
     public function ensureThatICanCreateTariffPlan(Manager $I)
     {
         $this->fields = [
             'name' => uniqid(),
-            'type' => [
-                'selector' => "//select/option[@value='template']",
-                'value' => 'Template',
-            ],
+            'type' => 'Template',
             'client' => 'hipanel_test_manager',
-            'currency' => "//select/option[@value='usd']",
+            'currency' => 'USD',
             'note' => 'test note',
         ];
         $plan = new Create($I, $this->fields);
@@ -37,7 +40,7 @@ class TariffPlansCrudCest
     {
         $plan = new View($I, $this->fields, $this->id);
         $plan->visitPlan();
-        $plan->seeNewPlan();
+        $plan->seePlan();
         $search = new Index($I);
         $search->ensurePageWorks();
         $search->ensurePlanCanBeFound($this->fields['name']);
@@ -47,12 +50,9 @@ class TariffPlansCrudCest
     {
         $this->fields = [
             'name' => uniqid(),
-            'type' => [
-                'selector' => "//select/option[@value='server']",
-                'value' => 'Server',
-            ],
+            'type' => 'Server',
             'client' => 'hipanel_test_manager',
-            'currency' => "//select/option[@value='eur']",
+            'currency' => 'EUR',
             'note' => 'new_test_note',
         ];
         $plan = new Update($I, $this->fields);
