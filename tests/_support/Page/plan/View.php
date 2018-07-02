@@ -24,13 +24,13 @@ class View extends Plan
         return $this;
     }
 
-    public function seeNewPlan()
+    public function seePlan()
     {
         $I = $this->tester;
 
         $I->see($this->name);
         $I->see($this->client);
-        $I->see($this->type['value']);
+        $I->see($this->type);
         $I->see($this->note);
     }
 }

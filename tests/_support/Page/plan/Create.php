@@ -48,7 +48,7 @@ class Create extends Plan
         $I = $this->tester;
 
         $I->click(['name' => 'Plan[type]']);
-        $I->click($this->type['selector']);
+        $I->click("//select/option[.='{$this->type}']");
     }
 
     private function findClient()
@@ -66,7 +66,7 @@ class Create extends Plan
         $I = $this->tester;
 
         $I->click("//select[@name='Plan[currency]']/../span");
-        $I->click($this->currency);
+        $I->click("//select/option[.='{$this->currency}']");
         $I->click("//select[@name='Plan[currency]']/../span");
     }
 

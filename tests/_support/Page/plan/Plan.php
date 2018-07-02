@@ -6,16 +6,34 @@ use hipanel\tests\_support\Page\Authenticated;
 
 abstract class Plan extends Authenticated
 {
+    /**
+     * @var string
+     */
     protected $name;
 
+    /**
+     * @var string
+     */
     protected $type;
 
+    /**
+     * @var string
+     */
     protected $client;
 
+    /**
+     * @var string
+     */
     protected $currency;
 
+    /**
+     * @var string
+     */
     protected $note;
 
+    /**
+     * @var string
+     */
     protected $id;
 
     public function __construct(AcceptanceTester $I, $fields = null)
