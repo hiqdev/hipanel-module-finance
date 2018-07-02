@@ -22,6 +22,10 @@ modules:
             seller.id: '%seller.id%'
             seller.login: '%seller.login%'
             seller.password: '%seller.password%'
+            manager.id: '%manager.id%'
+            manager.login: '%manager.login%'
+            manager.password: '%manager.password%'
             admin.id: '%admin.id%'
             admin.login: '%admin.login%'
             admin.password: '%admin.password%'
+        - \hipanel\tests\_support\Helper\PnotifyHelper
