@@ -91,5 +91,6 @@ $this->registerJs(<<<'JS'
 $('#prices-form').priceEstimator({
     rowSelector: '.price-item',
 });
+hipanel.form.preventSubmitWithEnter('#prices-form')
 JS
 );
