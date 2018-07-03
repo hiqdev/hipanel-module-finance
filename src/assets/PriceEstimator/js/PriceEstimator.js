@@ -54,7 +54,7 @@
 
             return result;
         },
-        displayEstimate(period, objects) {
+        rememberEstimates(period, objects) {
             let estimatesPerRow = {};
 
             Object.keys(objects).forEach(object_id => {
@@ -128,7 +128,7 @@
                     actions: this.getActions(prices),
                 },
                 success: json => {
-                    Object.keys(json).forEach(period => this.displayEstimate(period, json[period]))
+                    Object.keys(json).forEach(period => this.rememberEstimates(period, json[period]))
                     this.drawEstimates();
                 },
                 error: xhr => {

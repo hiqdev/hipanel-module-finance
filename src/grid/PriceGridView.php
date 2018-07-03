@@ -119,6 +119,13 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'class' => MenuColumn::class,
                 'menuClass' => PriceActionsMenu::class,
             ],
+            'info' => [
+                'format' => 'raw',
+                'label' => Yii::t('hipanel', 'Details'),
+                'value' => function (Price $model) {
+                    return $this->presenterFactory->build(get_class($model))->renderInfo($model);
+                }
+            ]
         ]);
     }
 }

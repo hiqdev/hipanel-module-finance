@@ -28,18 +28,28 @@ class PriceSort
         return Sort::chain()
             ->asc(self::byServerPriceGroups())
             ->asc(self::byServerMainPrices())
-            ->asc(self::byHardwareType());
+            ->asc(self::byHardwareType())
+            ->compare(self::byServerPriceType());
+    }
+
+    private static function byServerPriceType()
+    {
+        return function (Price $a, Price $b) {
+            if ($a->getSubtype() === $b->getSubtype()) {
+                return $a->isOveruse() ? 1 : -1;
+            }
+
+            return 0;
+        };
     }
 
     private static function byServerPriceGroups(): \Closure
     {
         return function (Price $price) {
-            if (!$price->isOveruse() && $price->type !== 'monthly,hardware') {
+            if ($price->type !== 'monthly,hardware') {
                 return 1;
-            } elseif ($price->isOveruse()) {
-                return 2;
             } elseif ($price->getSubtype() === 'hardware') {
-                return 3;
+                return 2;
             }
 
             return INF;

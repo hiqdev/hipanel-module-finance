@@ -155,9 +155,11 @@ abstract class AbstractTariffForm extends \yii\base\Model
     /**
      * @return array
      */
-    public function getResourceTypes()
+    public function getResourceTypes(): array
     {
-        return reset($this->parentTariff->resources)->getTypes();
+        $res = $this->parentTariff->resources;
+
+        return $res ? reset($res)->getTypes() : [];
     }
 
     /**

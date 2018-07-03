@@ -11,5 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="tariff-create">
-    <?= $this->render('_form', ['model' => $model]); ?>
+    <?= $this->render('_form', [
+        'model' => $model,
+    ]) ?>
 </div>

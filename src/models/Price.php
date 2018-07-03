@@ -76,6 +76,12 @@ class Price extends \hipanel\base\Model
         ]);
     }
 
+    /**
+     * Returns array of unit option, that are available for this price
+     * depending on price type.
+     *
+     * @return array
+     */
     public function getUnitOptions()
     {
         $unitGroup = [

@@ -89,9 +89,9 @@ class SalesInPlanGridView extends SaleGridView
                 'columns' => [
                     'checkbox',
                     'object->name',
-                    'object->label',
-                    'price',
                     'type',
+                    'price',
+                    'info',
                     'note',
                 ],
             ]);
