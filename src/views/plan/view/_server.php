@@ -41,6 +41,9 @@ use yii\helpers\Html;
             'allModels' => $salesByObject,
             'pagination' => false,
         ])),
+        'summaryRenderer' => function () {
+            return ''; // remove unnecessary summary
+        },
         'columns' => [
             'object_link',
             'object_label',
