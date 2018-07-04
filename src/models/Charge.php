@@ -22,7 +22,7 @@ class Charge extends \hiqdev\hiart\ActiveRecord
             [['type', 'label', 'ftype', 'time', 'type_label', 'currency'], 'safe'],
             [['sum', 'quantity'], 'number'],
 
-            [['sum', 'type', 'quantity'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['object_id', 'sum', 'type', 'quantity'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['id'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]]
         ];
     }

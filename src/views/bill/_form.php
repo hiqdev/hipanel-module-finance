@@ -3,12 +3,10 @@
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\models\Bill;
-use hipanel\modules\finance\widgets\ChargeObjectSelector;
-use hipanel\modules\finance\widgets\PriceObjectSelector;
 use hipanel\widgets\AmountWithCurrency;
-use hipanel\widgets\Box;
 use hipanel\widgets\DateTimePicker;
 use hipanel\widgets\DynamicFormWidget;
+use hipanel\widgets\combo\ObjectCombo;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
@@ -19,7 +17,7 @@ use yii\helpers\Html;
 $model = reset($models);
 
 $form = ActiveForm::begin([
-    'id' => 'dynamic-form',
+    'id' => 'bill-dynamic-form',
     'action' => $model->isNewRecord ? Url::to(['@bill/create']) : Url::to(['@bill/update', 'id' => $model->id]),
     'enableClientValidation' => true,
     'validationUrl' => Url::toRoute([
@@ -28,7 +26,7 @@ $form = ActiveForm::begin([
     ]),
 ]) ?>
 <?php DynamicFormWidget::begin([
-    'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+    'widgetContainer' => 'bills_dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
     'widgetBody' => '.container-items', // required: css class selector
     'widgetItem' => '.bill-item', // required: css class
     'limit' => 99, // the maximum times, an element can be cloned (default 999)
@@ -36,8 +34,10 @@ $form = ActiveForm::begin([
     'insertButton' => '.add-item', // css class
     'deleteButton' => '.remove-item', // css class
     'model' => $model,
-    'formId' => 'dynamic-form',
+    'formId' => 'bill-dynamic-form',
     'formFields' => [
+        'class',
+        'object_id',
         'client_id',
         'type',
         'sum',
@@ -73,10 +73,12 @@ $form = ActiveForm::begin([
                             <?= Html::activeHiddenInput($model, "[$i]id") ?>
                         </div>
                         <div class="form-instance">
-                            <div class="col-md-2">
-                                <?= $form->field($model, "[$i]object_id")->widget(PriceObjectSelector::class) ?>
+                            <div class="col-md-3">
+                                <?php print $form->field($model, "[$i]object_id")->widget(ObjectCombo::class, [
+                                    'class_attribute_name' => "[$i]class",
+                                ]) ?>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <?= $form->field($model, "[$i]client_id")->widget(ClientCombo::class, [
                                     'formElementSelector' => '.form-instance',
                                     'inputOptions' => [
@@ -129,7 +131,7 @@ $form = ActiveForm::begin([
                     <?php if ($charge) : ?>
                         <div class="row input-row">
                             <?php DynamicFormWidget::begin([
-                                'widgetContainer' => 'bill_charges',
+                                'widgetContainer' => 'charges_dynamicform_wrapper',
                                 'widgetBody' => '.bill-charges', // required: css class selector
                                 'widgetItem' => '.charge-item', // required: css class
                                 'limit' => 99, // the maximum times, an element can be cloned (default 999)
@@ -137,9 +139,11 @@ $form = ActiveForm::begin([
                                 'insertButton' => '.add-charge',
                                 'deleteButton' => '.remove-charge',
                                 'model' => $charge,
-                                'formId' => 'dynamic-form',
+                                'formId' => 'bill-dynamic-form',
                                 'formFields' => [
                                     'id',
+                                    'class',
+                                    'object_id',
                                     'type',
                                     'sum',
                                     'label',
@@ -153,12 +157,15 @@ $form = ActiveForm::begin([
                                 </div>
                                 <?php foreach ($charges as $j => $charge) : ?>
                                     <div class="charge-item col-md-12">
+                                        <?php if (!$charge->isNewRecord) echo Html::activeHiddenInput($charge, "[$i][$j]id") ?>
                                         <div class="row input-row margin-bottom">
                                             <div class="form-instance">
-                                                <div class="col-md-2">
-                                                    <?= $form->field($charge, "[$i][$j]object_id")->widget(ChargeObjectSelector::class) ?>
+                                                <div class="col-md-3">
+                                                    <?php print $form->field($charge, "[$i][$j]object_id")->widget(ObjectCombo::class, [
+                                                        'class_attribute_name' => "[$i][$j]class",
+                                                    ]) ?>
                                                 </div>
-                                                <div class="col-md-2">
+                                                <div class="col-md-1">
                                                     <?= $form->field($charge, "[$i][$j]type")->dropDownList($billTypes, [
                                                         'groups' => $billGroupLabels,
                                                         'value' => $charge->ftype,
@@ -179,7 +186,8 @@ $form = ActiveForm::begin([
 
                                             <div class="col-md-1" style="padding-top: 25px;">
                                                 <label>&nbsp;</label>
-                                                <button type="button" class="remove-charge btn bg-maroon btn-sm btn-flat">
+                                                <button type="button"
+                                                        class="remove-charge btn bg-maroon btn-sm btn-flat">
                                                     <i class="glyphicon glyphicon-minus"></i>
                                                 </button>
                                             </div>
@@ -204,7 +212,7 @@ $form = ActiveForm::begin([
 JS
 ) ?>
 <?php DynamicFormWidget::end() ?>
-<?php Box::begin(['options' => ['class' => 'box-solid']]) ?>
+
 <div class="row">
     <div class="col-md-12">
         <?= Html::submitButton(Yii::t('hipanel', 'Save'), ['class' => 'btn btn-success']) ?>
@@ -212,6 +220,6 @@ JS
         <?= Html::button(Yii::t('hipanel', 'Cancel'),
             ['class' => 'btn btn-default', 'onclick' => 'history.go(-1)']) ?>
     </div>
-</div>
-<?php Box::end() ?>
+</div
+
 <?php ActiveForm::end() ?>

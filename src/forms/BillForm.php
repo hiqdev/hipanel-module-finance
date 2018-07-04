@@ -80,6 +80,11 @@ class BillForm extends Model
     public $object;
 
     /**
+     * @var string
+     */
+    public $class;
+
+    /**
      * @var Charge[]
      */
     public $charges = [];
@@ -102,7 +107,7 @@ class BillForm extends Model
      */
     public static function createFromBill($bill, $scenario)
     {
-        $attributes = $bill->getAttributes(['id', 'object_id', 'client_id', 'currency', 'type', 'gtype', 'sum', 'time', 'quantity', 'label', 'object']);
+        $attributes = $bill->getAttributes(['id', 'object_id', 'client_id', 'currency', 'type', 'gtype', 'sum', 'time', 'quantity', 'label', 'object', 'class']);
 
         $form = new self(['scenario' => $scenario]);
         $form->setAttributes($attributes, false);
@@ -173,8 +178,9 @@ class BillForm extends Model
             [['id', 'object_id'], 'integer', 'on' => [self::SCENARIO_UPDATE]],
             [['sum', 'quantity'], 'number', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
-            [['label', 'currency', 'type', 'object'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['label', 'currency', 'type', 'object', 'class'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['sum'], BillChargesSumValidator::class],
+            [['object_id'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
 
             [['id'], 'required', 'on' => [self::SCENARIO_UPDATE]],
             [
@@ -230,6 +236,7 @@ class BillForm extends Model
             'quantity',
             'label',
             'object',
+            'class',
             'charges' => function () {
                 return $this->getChargesAsArray();
             },
@@ -275,8 +282,8 @@ class BillForm extends Model
     public function batchQuery($defaultScenario, $data = [], array $options = [])
     {
         $map = [
-            'create' => 'create-with-charges',
-            'update' => 'update-with-charges',
+            'create' => 'create',
+            'update' => 'update',
         ];
         $scenario = isset($map[$defaultScenario]) ? $map[$defaultScenario] : $defaultScenario;
 
