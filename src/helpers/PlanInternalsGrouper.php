@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\helpers;
 
+use hipanel\modules\finance\models\CertificatePrice;
 use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
@@ -32,12 +33,25 @@ class PlanInternalsGrouper
      * - server
      * - sVDS
      * - oVDS
-     *
+     * - certificate
+     * @return array
+     */
+    public function group()
+    {
+        switch ($this->plan->type) {
+            case Plan::TYPE_CERTIFICATE:
+                return $this->groupCertificatePrices();
+            default:
+                return $this->groupServerPrices();
+        }
+    }
+
+    /**
      * @return array of two elements:
      * 0: sales, grouped by sold object
      * 1: prices, grouped by sold object
      */
-    public function group()
+    private function groupServerPrices()
     {
         $model = $this->plan;
         /** @var Sale[] $salesByObject */
@@ -96,5 +110,23 @@ class PlanInternalsGrouper
         }
 
         return [$salesByObject, $pricesByMainObject];
+    }
+
+    /**
+     * @return array of certificate prices
+     * every element of array consist of two elements:
+     * certificate,certificate_purchase: CertificatePrice
+     * certificate,certificate_renewal: CertificatePrice
+     */
+    private function groupCertificatePrices(): array
+    {
+        $result = [];
+
+        foreach ($this->plan->prices as $price) {
+            /** @var CertificatePrice $price */
+            $result[$price->object_id][$price->type] = $price;
+        }
+
+        return $result;
     }
 }

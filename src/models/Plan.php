@@ -15,7 +15,7 @@ use Yii;
  * @property int $currency_id
  *
  * @property Sale[] $sales
- * @property Price[] $prices
+ * @property Price[]|CertificatePrice[] $prices
  * @property-read string[] typeOptions
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
@@ -26,6 +26,7 @@ class Plan extends \hipanel\base\Model
     const TYPE_PCDN = 'pcdn';
     const TYPE_VCDN = 'vcdn';
     const TYPE_TEMPLATE = 'template';
+    const TYPE_CERTIFICATE = 'certificate';
 
     use \hipanel\base\ModelTrait;
 
@@ -52,6 +53,9 @@ class Plan extends \hipanel\base\Model
 
     public function getPrices()
     {
+        if ($this->type === Plan::TYPE_CERTIFICATE) {
+            return $this->hasMany(CertificatePrice::class, ['plan_id' => 'id'])->inverseOf('plan');
+        }
         return $this->hasMany(Price::class, ['plan_id' => 'id'])->indexBy('id')->inverseOf('plan');
     }
 

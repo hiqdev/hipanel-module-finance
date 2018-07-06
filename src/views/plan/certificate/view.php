@@ -8,10 +8,11 @@ use yii\helpers\Html;
 /**
  * @var \yii\web\View $this
  * @var \hipanel\modules\finance\models\Plan $model
- * @var \hipanel\modules\finance\models\Sale[] $salesByObject
- * @var \hipanel\modules\finance\models\Price[] $pricesByMainObject
+ * @var \hipanel\modules\finance\helpers\PlanInternalsGrouper $grouper
  * @var IndexPage $page
  */
+
+$prices = $grouper->group();
 
 ?>
 
@@ -28,20 +29,18 @@ use yii\helpers\Html;
 
 <?php $page->beginContent('table') ?>
     <?php $page->beginBulkForm() ?>
-        <?= \hipanel\modules\finance\grid\PriceGridView::widget([
+        <?= \hipanel\modules\finance\grid\CertificatePriceGridView::widget([
             'boxed' => false,
             'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
             'dataProvider' => (new \yii\data\ArrayDataProvider([
-                'allModels' => $model->prices,
+                'allModels' => $prices,
                 'pagination' => false,
             ])),
+            'filterModel' => $model,
             'columns' => [
-                'checkbox',
-                'object->name',
-                'object->label',
-                'type',
-                'price',
-                'note',
+                'certificate',
+                'purchase',
+                'renewal',
             ],
         ]) ?>
     <?php $page->endBulkForm() ?>

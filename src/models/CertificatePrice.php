@@ -1,35 +1,23 @@
 <?php
-/**
- * Finance module for HiPanel
- *
- * @link      https://github.com/hiqdev/hipanel-module-finance
- * @package   hipanel-module-finance
- * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
- */
 
 namespace hipanel\modules\finance\models;
 
-use hipanel\base\ModelTrait;
 use Yii;
-use yii\base\InvalidConfigException;
+use hipanel\base\ModelTrait;
 use yii\validators\NumberValidator;
 
 /**
- * Class CertificateResource
- *
- * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- * @deprecated Is implemented in plan module
+ * Class CertificatePrice
+ * @package hipanel\modules\finance\models
+ * @property array $sums
  */
-class CertificateResource extends Resource
+class CertificatePrice extends Price
 {
     use ModelTrait;
 
-    public $certificateType;
-
     public static function tableName()
     {
-        return 'resource';
+        return 'price';
     }
 
     const TYPE_CERT_PURCHASE = 'certificate_purchase';
@@ -48,9 +36,14 @@ class CertificateResource extends Resource
             },
         ];
         $rules[] = [['certificateType'], 'safe'];
-        $rules[] = [['data'], 'validatePrices', 'on' => ['create', 'update']];
+        $rules[] = [['sums'], 'validatePrices', 'on' => ['create', 'update']];
 
         return $rules;
+    }
+
+    public function isTypeCorrect()
+    {
+        return isset($this->getTypes()[$this->type]);
     }
 
     /**
@@ -83,15 +76,14 @@ class CertificateResource extends Resource
     {
         if (!$this->hasPriceForPeriod($period)) {
             return null;
-            /// XXX throw new InvalidConfigException('Period ' . $period . ' is not available');
         }
 
-        return (float)$this->data['sums'][$period];
+        return ((float)$this->sums[$period]) / 100;
     }
 
     public function hasPriceForPeriod($period)
     {
-        return !empty($this->data['sums'][$period]);
+        return !empty($this->sums[$period]);
     }
 
     public function validatePrices()
@@ -100,13 +92,11 @@ class CertificateResource extends Resource
         $validator = new NumberValidator();
 
         foreach (array_keys($periods) as $period) {
-            $validation = $validator->validate($this->data['sums'][$period]);
+            $validation = $validator->validate($this->sums[$period]);
             if ($validation === false) {
-                unset($this->data['sums'][$period]);
+                unset($this->sums[$period]);
             }
         }
-
-        $this->data = ['sums' => $this->data['sums']];
 
         return true;
     }

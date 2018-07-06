@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\models\factories;
 
+use hipanel\modules\finance\models\CertificatePrice;
 use hipanel\modules\finance\models\TemplatePrice;
 use hipanel\modules\finance\models\Price;
 use yii\base\InvalidConfigException;
@@ -21,6 +22,7 @@ class PriceModelFactory
         'Price' => Price::class,
         'TemplatePrice' => TemplatePrice::class,
         'SinglePrice' => Price::class,
+        'CertificatePrice' => CertificatePrice::class,
     ];
 
     /**
