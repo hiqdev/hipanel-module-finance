@@ -2,7 +2,7 @@
 
 namespace hipanel\modules\finance\models\factories;
 
-use hipanel\modules\finance\models\ModelGroupPrice;
+use hipanel\modules\finance\models\TemplatePrice;
 use hipanel\modules\finance\models\Price;
 use yii\base\InvalidConfigException;
 
@@ -19,7 +19,7 @@ class PriceModelFactory
      */
     protected $map = [
         'Price' => Price::class,
-        'ModelGroupPrice' => ModelGroupPrice::class,
+        'TemplatePrice' => TemplatePrice::class,
         'SinglePrice' => Price::class,
     ];
 

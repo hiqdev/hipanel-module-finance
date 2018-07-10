@@ -5,7 +5,7 @@ use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 use yii\helpers\Html;
 
-$this->title = Yii::t('hipanel:finance:sale', 'Sale');
+$this->title = Yii::t('hipanel:finance:sale', 'Sales');
 $this->params['breadcrumbs'][] = $this->title;
 $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
 $this->registerCss("
@@ -27,6 +27,11 @@ $this->registerCss("
         <?php $page->beginContent('sorter-actions') ?>
             <?= $page->renderSorter(['attributes' => ['id', 'time']]) ?>
         <?php $page->endContent() ?>
+
+        <?php $page->beginContent('bulk-actions') ?>
+            <?= $page->renderBulkDeleteButton('@sale/delete') ?>
+        <?php $page->endContent() ?>
+
 
         <?php $page->beginContent('table') ?>
             <?php $page->beginBulkForm() ?>

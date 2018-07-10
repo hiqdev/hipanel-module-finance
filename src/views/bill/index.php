@@ -51,13 +51,13 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
 
         <?php $page->beginContent('bulk-actions') ?>
             <?php if (Yii::$app->user->can('bill.create')) : ?>
-                <?= $page->renderBulkButton(Yii::t('hipanel', 'Copy'), 'copy') ?>
+                <?= $page->renderBulkButton('copy', Yii::t('hipanel', 'Copy')) ?>
             <?php endif ?>
             <?php if (Yii::$app->user->can('bill.update')) : ?>
-                <?= $page->renderBulkButton(Yii::t('hipanel', 'Update'), '@bill/update') ?>
+                <?= $page->renderBulkButton('@bill/update', Yii::t('hipanel', 'Update')) ?>
             <?php endif ?>
             <?php if (Yii::$app->user->can('bill.delete')) : ?>
-                <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), 'delete', 'danger') ?>
+                <?= $page->renderBulkDeleteButton('delete') ?>
             <?php endif ?>
         <?php $page->endContent() ?>
 

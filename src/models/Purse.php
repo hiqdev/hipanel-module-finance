@@ -91,8 +91,11 @@ class Purse extends \hipanel\base\Model
 
     public function getDocumentsOfType($type)
     {
-        $res = [];
+        if (Yii::$app->user->can('document.read') === false) {
+            return [];
+        }
 
+        $res = [];
         foreach ($this->documents as $id => $doc) {
             if ($doc->type === $type) {
                 $res[$id] = $doc;

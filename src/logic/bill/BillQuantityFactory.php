@@ -17,6 +17,7 @@ class BillQuantityFactory implements BillQuantityFactoryInterface
         'ip_num' => 'IPNumQuantity',
         'monthly' => 'MonthlyQuantity',
         'drenewal' => 'DomainRenewalQuantity',
+        'hw_purchase' => 'ItemsQuantity',
     ];
 
     protected $type;

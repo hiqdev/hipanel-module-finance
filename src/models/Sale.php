@@ -19,9 +19,13 @@ class Sale extends \hipanel\base\Model
     use \hipanel\base\ModelTrait;
 
     const SALE_TYPE_IP = 'ip';
+    const SALE_TYPE_DEVICE = 'device';
     const SALE_TYPE_SERVER = 'server';
+    const SALE_TYPE_PCDN = 'pcdn';
+    const SALE_TYPE_VCDN = 'vcdn';
     const SALE_TYPE_ACCOUNT = 'account';
     const SALE_TYPE_CLIENT = 'client';
+    const SALE_TYPE_PART = 'part';
 
     public function rules()
     {
@@ -30,6 +34,7 @@ class Sale extends \hipanel\base\Model
             [[
                 'object',
                 'object_like',
+                'object_type',
                 'seller',
                 'login',
                 'buyer',
@@ -42,6 +47,7 @@ class Sale extends \hipanel\base\Model
                 'is_grouping',
                 'from_old',
             ], 'string'],
+            [['id'], 'required', 'on' => 'delete'],
         ]);
     }
 
@@ -51,6 +57,7 @@ class Sale extends \hipanel\base\Model
             'time' => Yii::t('hipanel:finance:sale', 'Time'),
             'object' => Yii::t('hipanel:finance:sale', 'Object'),
             'object_like' => Yii::t('hipanel:finance:sale', 'Object'),
+            'object_type' => Yii::t('hipanel:finance:sale', 'Object type'),
             'buyer' => Yii::t('hipanel:finance:sale', 'Buyer'),
             'buyer_id' => Yii::t('hipanel:finance:sale', 'Buyer'),
             'seller' => Yii::t('hipanel:finance:sale', 'Seller'),
@@ -63,10 +70,11 @@ class Sale extends \hipanel\base\Model
     public function getTypes()
     {
         return [
-            self::SALE_TYPE_SERVER => Yii::t('hipanel:finance', 'Servers'),
+            self::SALE_TYPE_DEVICE => Yii::t('hipanel:finance', 'Servers'),
             self::SALE_TYPE_IP => 'IP',
             self::SALE_TYPE_ACCOUNT => Yii::t('hipanel:hosting', 'Accounts'),
             self::SALE_TYPE_CLIENT => Yii::t('hipanel', 'Clients'),
+            self::SALE_TYPE_PART => Yii::t('hipanel:stock', 'Parts'),
         ];
     }
 

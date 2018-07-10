@@ -1,5 +1,7 @@
 <?php
 
+use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\Sale;
 use hipanel\widgets\AjaxModal;
 use hipanel\widgets\IndexPage;
 use yii\bootstrap\Modal;
@@ -11,11 +13,11 @@ use yii\helpers\Html;
  * @var \hipanel\modules\finance\models\Plan $model
  * @var IndexPage $page
  * @var \hipanel\modules\finance\helpers\PlanInternalsGrouper $grouper
- * @var \hipanel\modules\finance\models\Sale[] $salesByObject
- * @var \hipanel\modules\finance\models\Price[] $pricesByMainObject
+ * @var Sale[] $salesByObject
+ * @var Price[][] $pricesByMainObject
  */
 
-[$salesByObject, $pricesByMainObject] = $grouper->groupServerPrices();
+[$salesByObject, $pricesByMainObject] = $grouper->group();
 
 ?>
 <?php $page->beginContent('main-actions') ?>
@@ -31,50 +33,25 @@ use yii\helpers\Html;
 
 <?php $page->beginContent('table') ?>
 <?php $page->beginBulkForm() ?>
-    <?= \hipanel\modules\finance\grid\SaleGridView::widget([
+    <?= \hipanel\modules\finance\grid\SalesInPlanGridView::widget([
         'boxed' => false,
         'showHeader' => false,
+        'pricesBySoldObject' => $pricesByMainObject,
         'dataProvider' => (new \yii\data\ArrayDataProvider([
             'allModels' => $salesByObject,
             'pagination' => false,
         ])),
+        'summaryRenderer' => function () {
+            return ''; // remove unnecessary summary
+        },
         'columns' => [
             'object_link',
+            'object_label',
             'seller',
             'buyer',
             'time',
             'price_related_actions',
-        ],
-        'afterRow' => function (\hipanel\modules\finance\models\Sale $sale, $key, $index, $grid) use ($pricesByMainObject) {
-            $prices = $pricesByMainObject[$sale->object_id ?? $sale->tariff_id];
-            if (empty($prices)) {
-                return '';
-            }
-
-            return \hipanel\modules\finance\grid\PriceGridView::widget([
-                'boxed' => false,
-                'showHeader' => true,
-                'showFooter' => false,
-                'options' => [
-                    'tag' => 'tr',
-                    'id' => crc32($sale->id ?? microtime(true)),
-                ],
-                'layout' => '<td colspan="5">{items}</td>',
-                'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
-                'dataProvider' => (new \yii\data\ArrayDataProvider([
-                    'allModels' => $prices,
-                    'pagination' => false,
-                ])),
-                'columns' => [
-                    'checkbox',
-                    'object->name',
-                    'object->label',
-                    'price',
-                    'type',
-                    'note',
-                ],
-            ]);
-        }
+        ]
     ]) ?>
 <?php $page->endBulkForm() ?>
 <?php $page->endContent() ?>

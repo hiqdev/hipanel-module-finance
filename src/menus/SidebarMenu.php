@@ -50,7 +50,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     'holds' => [
                         'label'   => Yii::t('hipanel:finance', 'Held payments'),
                         'url'     => ['/finance/held-payments/index'],
-                        'visible' => $user->can('resell'),
+                        'visible' => $user->can('resell') && $user->can('bill.update'),
                     ],
                     'sale' => [
                         'label'   => Yii::t('hipanel:finance:sale', 'Sales'),
@@ -63,7 +63,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                         'visible' => $user->can('document.generate-all'),
                     ],
                     'plans' => [
-                        'label'   => Yii::t('hipanel:finance', 'Plans'),
+                        'label'   => Yii::t('hipanel:finance', 'Tariff plans'),
                         'url'     => ['@plan/index'],
                         'visible' => $user->can('test.beta'),
                     ],

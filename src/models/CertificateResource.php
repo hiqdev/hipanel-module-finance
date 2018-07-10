@@ -60,7 +60,6 @@ class CertificateResource extends Resource
         return [
             1 => Yii::t('hipanel:finance:tariff', '{n, plural, one{# year} other{# years}}', ['n' => 1]),
             2 => Yii::t('hipanel:finance:tariff', '{n, plural, one{# year} other{# years}}', ['n' => 2]),
-            3 => Yii::t('hipanel:finance:tariff', '{n, plural, one{# year} other{# years}}', ['n' => 3]),
         ];
     }
 
@@ -70,7 +69,7 @@ class CertificateResource extends Resource
     public function getAvailablePeriods()
     {
         $periods = [];
-        foreach ([1,2,3] as $period) {
+        foreach ([1,2] as $period) {
             if ($this->hasPriceForPeriod($period)) {
                 $periods[$period] = Yii::t('hipanel:finance:tariff', '{n, plural, one{# year} other{# years}}', ['n' => $period]);
             }

@@ -70,6 +70,16 @@ class BillForm extends Model
     public $label;
 
     /**
+     * @var integer
+     */
+    public $object_id;
+
+    /**
+     * @var string
+     */
+    public $object;
+
+    /**
      * @var Charge[]
      */
     public $charges = [];
@@ -92,7 +102,7 @@ class BillForm extends Model
      */
     public static function createFromBill($bill, $scenario)
     {
-        $attributes = $bill->getAttributes(['id', 'client_id', 'currency', 'type', 'gtype', 'sum', 'time', 'quantity', 'label']);
+        $attributes = $bill->getAttributes(['id', 'object_id', 'client_id', 'currency', 'type', 'gtype', 'sum', 'time', 'quantity', 'label', 'object']);
 
         $form = new self(['scenario' => $scenario]);
         $form->setAttributes($attributes, false);
@@ -160,10 +170,10 @@ class BillForm extends Model
     public function rules()
     {
         return [
-            [['id'], 'integer', 'on' => [self::SCENARIO_UPDATE]],
+            [['id', 'object_id'], 'integer', 'on' => [self::SCENARIO_UPDATE]],
             [['sum', 'quantity'], 'number', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
-            [['label', 'currency', 'type'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['label', 'currency', 'type', 'object'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['sum'], BillChargesSumValidator::class],
 
             [['id'], 'required', 'on' => [self::SCENARIO_UPDATE]],
@@ -186,6 +196,7 @@ class BillForm extends Model
             'label' => Yii::t('hipanel', 'Description'),
             'type' => Yii::t('hipanel', 'Type'),
             'quantity' => Yii::t('hipanel', 'Quantity'),
+            'object_id' => Yii::t('hipanel', 'Object'),
         ];
     }
 
@@ -211,12 +222,14 @@ class BillForm extends Model
         return [
             'id',
             'client_id',
+            'object_id',
             'currency',
             'sum',
             'time',
             'type',
             'quantity',
             'label',
+            'object',
             'charges' => function () {
                 return $this->getChargesAsArray();
             },

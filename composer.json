@@ -47,7 +47,9 @@
         "hiqdev/yii2-cart": "<2.0 || dev-master",
         "hiqdev/yii2-merchant": "<2.0 || dev-master",
         "hiqdev/hipanel-core": "<2.0 || dev-master",
-        "hiqdev/hipanel-module-client": "<2.0 || dev-master"
+        "hiqdev/hipanel-module-client": "<2.0 || dev-master",
+        "tuck/sort": "^0.1.0",
+        "moneyphp/money": "*"
     },
     "require-dev": {
         "hiqdev/hidev-php": "<2.0",
@@ -55,7 +57,8 @@
     },
     "autoload": {
         "psr-4": {
-            "hipanel\\modules\\finance\\": "src"
+            "hipanel\\modules\\finance\\": "src",
+            "hipanel\\modules\\finance\\tests\\": "tests"
         }
     },
     "extra": {

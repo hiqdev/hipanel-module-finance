@@ -1,5 +1,7 @@
 <?php
 
+use hipanel\modules\finance\helpers\PlanInternalsGrouper;
+use hipanel\modules\finance\models\Plan;
 use yii\helpers\Html;
 use hipanel\helpers\Url;
 use hipanel\modules\finance\grid\PlanGridView;
@@ -9,12 +11,12 @@ use hipanel\widgets\IndexPage;
 
 /**
  * @var \yii\web\View $this
- * @var \hipanel\modules\finance\models\Plan $model
- * @var \hipanel\modules\finance\helpers\PlanInternalsGrouper $grouper
+ * @var Plan $model
+ * @var PlanInternalsGrouper $grouper
  */
 
 $this->title = Html::encode($model->name);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Plans'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerCss("
@@ -66,13 +68,13 @@ $this->registerCss("
             <?php $page->endContent() ?>
 
             <?php $page->beginContent('bulk-actions') ?>
-                <?= $page->renderBulkButton(Yii::t('hipanel', 'Update'), Url::to(['@price/update']), 'warning') ?>
-                <?= $page->renderBulkButton(Yii::t('hipanel', 'Delete'), Url::to(['@price/delete']), 'danger') ?>
+                <?= $page->renderBulkButton('@price/update', Yii::t('hipanel', 'Update'), ['color' => 'warning']) ?>
+                <?= $page->renderBulkDeleteButton('@price/delete') ?>
             <?php $page->endContent() ?>
 
-                <?php if ($model->type === 'server'): ?>
+                <?php if (in_array($model->type, [Plan::TYPE_SERVER, Plan::TYPE_VCDN, Plan::TYPE_PCDN])): ?>
                     <?= $this->render('view/_server', compact('model', 'grouper', 'page')) ?>
-                <?php elseif ($model->type === 'template'): ?>
+                <?php elseif ($model->type === Plan::TYPE_TEMPLATE): ?>
                     <?= $this->render('view/_template', compact('model', 'grouper', 'page')) ?>
                 <?php else: ?>
                     <?php $page->beginContent('table') ?>
@@ -80,7 +82,7 @@ $this->registerCss("
                             <h2><?= Yii::t('hipanel:finance', 'This plan type viewing is not implemented yet') ?></h2>
                         </div>
                     <?php $page->endContent() ?>
-                <?php endif ?>
+                <?php endif; ?>
         <?php $page->end() ?>
     </div>
 </div>

@@ -6,6 +6,7 @@ use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
+use Tuck\Sort\Sort;
 use Yii;
 
 /**
@@ -27,13 +28,16 @@ class PlanInternalsGrouper
     }
 
     /**
-     * Should be used to group prices of [[Plan]] with type `server`.
+     * Should be used to group prices of [[Plan]] with the following types:
+     * - server
+     * - sVDS
+     * - oVDS
      *
      * @return array of two elements:
      * 0: sales, grouped by sold object
      * 1: prices, grouped by sold object
      */
-    public function groupServerPrices()
+    public function group()
     {
         $model = $this->plan;
         /** @var Sale[] $salesByObject */
@@ -63,26 +67,32 @@ class PlanInternalsGrouper
         }
 
         foreach ($pricesByMainObject as $id => $prices) {
-            if (!isset($salesByObject[$id])) {
-                foreach ($prices as $price) {
-                    if ((int)$price->object_id === (int)$id) {
-                        $salesByObject[$id] = new FakeSale([
-                            'object' => $price->object->name,
-                            'tariff_id' => $model->id,
-                            'object_id' => $price->object_id,
-                            'tariff_type' => $model->type,
-                        ]);
-                        continue 2;
-                    }
-                }
-
-                $salesByObject[$id] = new FakeSale([
-                    'object' => Yii::t('hipanel.finance.price', 'Unknown object name - no direct object prices exist'),
-                    'tariff_id' => $model->id,
-                    'object_id' => $id,
-                    'tariff_type' => $model->type,
-                ]);
+            if (isset($salesByObject[$id])) {
+                continue;
             }
+
+            foreach ($prices as $price) {
+                if ((int)$price->object_id === (int)$id) {
+                    $salesByObject[$id] = new FakeSale([
+                        'object' => $price->object->name,
+                        'tariff_id' => $model->id,
+                        'object_id' => $price->object_id,
+                        'tariff_type' => $model->type,
+                    ]);
+                    continue 2;
+                }
+            }
+
+            $salesByObject[$id] = new FakeSale([
+                'object' => Yii::t('hipanel.finance.price', 'Unknown object name - no direct object prices exist'),
+                'tariff_id' => $model->id,
+                'object_id' => $id,
+                'tariff_type' => $model->type,
+            ]);
+        }
+
+        foreach ($pricesByMainObject as &$objPrices) {
+            $objPrices = PriceSort::anyPrices()->values($objPrices, true);
         }
 
         return [$salesByObject, $pricesByMainObject];

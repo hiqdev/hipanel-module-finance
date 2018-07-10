@@ -12,7 +12,6 @@ namespace hipanel\modules\finance\logic;
 
 use hipanel\models\Ref;
 use hipanel\modules\finance\forms\CertificateTariffForm;
-use hipanel\modules\finance\forms\DomainTariffForm;
 use hipanel\modules\finance\models\Tariff;
 use hiqdev\hiart\ConnectionInterface;
 use hiqdev\hiart\ResponseErrorException;
@@ -29,7 +28,7 @@ use yii\web\UnprocessableEntityHttpException;
 class CertificateTariffManager extends AbstractTariffManager
 {
     /**
-     * @var DomainTariffForm
+     * @var CertifcateTariffForm
      */
     public $form;
 
