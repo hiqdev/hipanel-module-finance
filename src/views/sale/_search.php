@@ -17,7 +17,7 @@ use hipanel\modules\finance\widgets\TariffCombo;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('tariff_type')->dropDownList($search->model->types, ['prompt' => '---']) ?>
+    <?= $search->field('object_type')->dropDownList($search->model->types, ['prompt' => '---']) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">

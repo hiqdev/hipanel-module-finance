@@ -7,11 +7,11 @@ use hipanel\helpers\StringHelper;
 ?>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('object_name_ilike') ?>
+    <?= $search->field('buyer_ilike') ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('price') ?>
+    <?= $search->field('plan_owner_ilike') ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
@@ -19,11 +19,23 @@ use hipanel\helpers\StringHelper;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('type')->dropDownList($search->model->typeOptions, ['prompt' => '--']) ?>
+    <?= $search->field('object_name_ilike') ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('unit')->dropDownList($search->model->unitOptions, ['prompt' => '--']) ?>
+    <?= $search->field('model_group_name_ilike') ?>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('model_partno_ilike') ?>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('price') ?>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('type')->dropDownList($search->model->typeOptions, ['prompt' => '--']) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">

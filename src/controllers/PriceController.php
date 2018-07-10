@@ -13,9 +13,11 @@ use hipanel\base\CrudController;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\actions\PriceUpdateAction;
 use hipanel\modules\finance\collections\PricesCollection;
+use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\models\TargetObject;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
+use hipanel\filters\EasyAccessControl;
 use Yii;
 use yii\base\Event;
 
@@ -26,6 +28,18 @@ use yii\base\Event;
  */
 class PriceController extends CrudController
 {
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            [
+                'class' => EasyAccessControl::class,
+                'actions' => [
+                    '*' => 'plan.read',
+                ],
+            ],
+        ]);
+    }
+
     public function actions()
     {
         return array_merge(parent::actions(), [
@@ -73,12 +87,17 @@ class PriceController extends CrudController
                 'class' => PriceUpdateAction::class,
                 'collection' => ['class' => PricesCollection::class],
                 'success' => Yii::t('hipanel.finance.price', 'Prices were successfully updated'),
+                'scenario' => 'update',
                 'on beforeFetch' => function (Event $event) {
                     /** @var \hipanel\actions\SearchAction $action */
                     $action = $event->sender;
                     $dataProvider = $action->getDataProvider();
                     $dataProvider->query->joinWith('object');
                 },
+                'data' => function ($action, $data) {
+                     $data['models'] = PriceSort::anyPrices()->values($data['models'], true);
+                     return $data;
+                }
             ],
             'delete' => [
                 'class' => SmartDeleteAction::class,
@@ -95,13 +114,14 @@ class PriceController extends CrudController
         ]);
     }
 
-    public function actionSuggest($object_id, $plan_id, $type = 'default')
+    public function actionSuggest($object_id, $plan_id, $template_plan_id = null, $type = 'default')
     {
         $plan = Plan::findOne(['id' => $plan_id]);
 
         $suggestions = (new Price)->batchQuery('suggest', [
             'object_id' => $object_id,
             'plan_id' => $plan_id,
+            'template_plan_id' => $template_plan_id,
             'type' => $type,
         ]);
 
@@ -112,10 +132,13 @@ class PriceController extends CrudController
             /** @var Price $price */
             $price = Price::instantiate($suggestion);
             $price->setAttributes($suggestion);
+            $price->setScenario('create');
             $price->populateRelation('object', new TargetObject($object));
 
             $models[] = $price;
         }
+
+        $models = PriceSort::anyPrices()->values($models, true);
 
         return $this->render('suggested', [
             'type' => $type,

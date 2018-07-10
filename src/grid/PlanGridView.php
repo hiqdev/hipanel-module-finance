@@ -5,6 +5,7 @@ namespace hipanel\modules\finance\grid;
 use hipanel\grid\MainColumn;
 use hipanel\grid\RefColumn;
 use hipanel\helpers\Url;
+use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\menus\PlanActionsMenu;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
@@ -14,6 +15,9 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
     public function columns()
     {
         return array_merge(parent::columns(), [
+            'client' => [
+                'class' => ClientColumn::class,
+            ],
             'name' => [
                 'attribute' => 'name',
                 'filterAttribute' => 'name_ilike',

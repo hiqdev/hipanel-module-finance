@@ -3,6 +3,7 @@
 /** @var \hipanel\widgets\AdvancedSearch $search */
 
 use hipanel\modules\client\widgets\combo\ClientCombo;
+use hiqdev\combo\StaticCombo;
 
 ?>
 
@@ -19,5 +20,9 @@ use hipanel\modules\client\widgets\combo\ClientCombo;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('state')->dropDownList($search->model->stateOptions, ['prompt' => '--']) ?>
+    <?= $search->field('states')->widget(StaticCombo::class, [
+        'data' => $search->model->stateOptions,
+        'hasId' => false,
+        'multiple' => true,
+    ]) ?>
 </div>

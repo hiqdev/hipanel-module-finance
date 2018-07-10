@@ -3,9 +3,15 @@
 use hipanel\helpers\Url;
 use hipanel\models\Ref;
 use hipanel\modules\client\widgets\combo\ClientCombo;
+use hipanel\modules\finance\models\Plan;
 use hipanel\widgets\RefCombo;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+
+/**
+ * @var \yii\web\View $this
+ * @var Plan $model
+ */
 
 ?>
 

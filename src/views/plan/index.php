@@ -5,7 +5,7 @@ use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 use yii\helpers\Html;
 
-$this->title = Yii::t('hipanel:finance', 'Plans');
+$this->title = Yii::t('hipanel:finance', 'Tariff plans');
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -21,6 +21,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php $page->beginContent('sorter-actions') ?>
             <?= $page->renderSorter(['attributes' => ['id']]) ?>
+        <?php $page->endContent() ?>
+
+        <?php $page->beginContent('bulk-actions') ?>
+            <?php if (Yii::$app->user->can('bill.create')) : ?>
+                <?= $page->renderBulkButton('@plan/restore', Yii::t('hipanel.finance.plan', 'Restore')) ?>
+            <?php endif ?>
+            <?php if (Yii::$app->user->can('bill.update')) : ?>
+                <?= $page->renderBulkDeleteButton('@plan/delete') ?>
+            <?php endif ?>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('table') ?>

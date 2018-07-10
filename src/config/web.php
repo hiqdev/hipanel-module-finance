@@ -87,6 +87,10 @@ return [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/finance/messages',
                 ],
+                'hipanel.finance.units' => [
+                    'class' => \yii\i18n\PhpMessageSource::class,
+                    'basePath' => '@hipanel/modules/finance/messages',
+                ],
                 'hipanel:finance:tariff:types' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/finance/messages',
@@ -109,6 +113,10 @@ return [
                     'basePath' => '@hipanel/modules/finance/messages',
                 ],
                 'hipanel.finance.priceTypes' => [
+                    'class' => \yii\i18n\PhpMessageSource::class,
+                    'basePath' => '@hipanel/modules/finance/messages',
+                ],
+                'hipanel.finance.plan' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/finance/messages',
                 ],
@@ -159,8 +167,9 @@ return [
             hipanel\modules\finance\cart\storage\CartStorageInterface::class => function (yii\di\Container $container) {
                 return hipanel\modules\finance\cart\storage\CartStorageFactory::forUser($container->get(\yii\web\User::class));
             },
-            \hipanel\modules\finance\models\factories\PriceModelFactory::class,
-            \hipanel\modules\finance\grid\presenters\price\PricePresenterFactory::class,
+            \hipanel\modules\finance\models\factories\PriceModelFactory::class => \hipanel\modules\finance\models\factories\PriceModelFactory::class,
+            \hipanel\modules\finance\grid\presenters\price\PricePresenterFactory::class => \hipanel\modules\finance\grid\presenters\price\PricePresenterFactory::class,
+            \hipanel\modules\finance\widgets\FormulaHelpModal::class => \hipanel\modules\finance\widgets\FormulaHelpModal::class,
         ],
     ],
 ];

@@ -35,6 +35,8 @@ class LinkToObjectResolver extends Widget
         'client' => '@client/view',
         'account' => '@account/view',
         'server' => '@server/view',
+        'pcdn' => '@server/view',
+        'vcdn' => '@server/view',
         'device' => '@server/view',
         'part' => '@part/view',
         'tariff' => '@plan/view',
@@ -74,6 +76,9 @@ class LinkToObjectResolver extends Widget
     {
         $type = $this->model->{$this->typeAttribute};
         if (!isset($this->links[$type])) {
+            return null;
+        }
+        if (!isset($this->model->{$this->idAttribute})) {
             return null;
         }
 

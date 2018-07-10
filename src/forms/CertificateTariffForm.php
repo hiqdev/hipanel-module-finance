@@ -51,23 +51,26 @@ class CertificateTariffForm extends AbstractTariffForm
     {
         $result = [];
         foreach ($resources as $resource) {
-            if ($resource instanceof CertificateResource) {
-                $result[] = $resource;
-                continue;
-            }
-
-            $model = new CertificateResource(['scenario' => $this->scenario]);
-
-            if ($model->load($resource, '') && $model->validate()) {
-                $result[] = $model;
-            } else {
-                throw new UnprocessableEntityHttpException('Failed to load resource model: ' . reset($model->getFirstErrors()));
-            }
+            $result[] = $this->createResource($resource);
         }
 
         $this->_resources = $result;
 
         return $this;
+    }
+
+    protected function createResource($resource)
+    {
+        if ($resource instanceof CertificateResource) {
+            return $resource;
+        }
+
+        $model = new CertificateResource(['scenario' => $this->scenario ?: 'default']);
+        if ($model->load($resource, '') && $model->validate()) {
+            return $model;
+        } else {
+            throw new UnprocessableEntityHttpException('Failed to load resource model: ' . reset($model->getFirstErrors()));
+        }
     }
 
     public function getCertificateTypes()
@@ -95,25 +98,7 @@ class CertificateTariffForm extends AbstractTariffForm
      */
     public function getTypeResources($type)
     {
-        $id = $this->getCertificateTypeId($type);
-
-        $result = [];
-
-        foreach ($this->tariff->resources as $resource) {
-            if (strcmp($resource->object_id, $id) === 0 && $resource->isTypeCorrect()) {
-                $result[$resource->type] = $resource;
-            }
-        }
-
-        $types = $resource->getTypes();
-        if (count($result) !== count($types)) {
-            throw new IntegrityException('Found ' . count($result) . ' resources for certificate "' . $type . '". Must be exactly ' . count($types));
-        }
-
-        // sorts $result by order of $resource->getTypes()
-        $result = array_merge($types, $result);
-
-        return $result;
+        return $this->extractResources($type, $this->tariff->resources);
     }
 
     /**
@@ -125,30 +110,44 @@ class CertificateTariffForm extends AbstractTariffForm
     }
 
     /**
-     * @param $certificateType
+     * @param $type
      * @return CertificateResource[]
      * @throws IntegrityException
      */
-    public function getTypeParentResources($certificateType)
+    public function getTypeParentResources($type)
+    {
+        return $this->extractResources($type, $this->parentTariff->resources);
+    }
+
+    protected function extractResources($certificateType, $resources)
     {
         $id = $this->getCertificateTypeId($certificateType);
 
-        $result = [];
+        $tmpres = [];
 
-        foreach ($this->parentTariff->resources as $resource) {
+        foreach ($resources as $resource) {
             if (strcmp($resource->object_id, $id) === 0 && $resource->isTypeCorrect()) {
-                $result[$resource->type] = $resource;
+                $tmpres[$resource->type] = $resource;
             }
         }
 
         $types = $resource->getTypes();
-        if (count($result) !== count($types)) {
-            throw new IntegrityException('Found ' . count($result) . ' resources for certificate "' . $certificateType . '". Must be exactly ' . count($types));
+        /* XXX why die? let's try with empty resource
+         * if (count($tmpres) !== count($types)) {
+            throw new IntegrityException('Found ' . count($tmpres) . ' resources for certificate "' . $type . '". Must be exactly ' . count($types));
         }
 
-        // sorts $result by order of $resource->getTypes()
-        $result = array_merge($types, $result);
+        // sorts $tmpres by order of $resource->getTypes()
+        $tmpres = array_merge($types, $tmpres);
+         */
 
-        return $result;
+        foreach (array_keys($types) as $type) {
+            $res[$type] = isset($tmpres[$type]) ? $tmpres[$type] : $this->createResource([
+                'object_id' => $id,
+                'type' => $type,
+            ]);
+        }
+
+        return $res;
     }
 }

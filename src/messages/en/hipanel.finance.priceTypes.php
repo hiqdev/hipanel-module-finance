@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'Rack unit' => 'Unit in rack',
     'Monthly' => 'Monthly',
     'Server traf max' => 'Traffic overuse',
     'Ip num' => 'IP addresses',
@@ -10,4 +11,6 @@ return [
     'Db num' => 'DB count',
     'Domain num' => 'Domains count',
     'Domain traf' => 'Domain traffic',
+    'Server ssd' => 'SSD диск',
+    'Server sata' => 'SATA диск',
 ];

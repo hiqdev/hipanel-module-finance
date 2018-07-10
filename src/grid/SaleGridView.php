@@ -91,15 +91,6 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                     ]);
                 }
             ],
-            'price_related_actions' => [
-                'class' => MenuColumn::class,
-                'menuClass' => SalePricesActionsMenu::class,
-                'menuButtonOptions' => [
-                    'icon' => '<i class="fa fa-plus"></i>&nbsp;'
-                        . Yii::t('hipanel.finance.price', 'Prices')
-                        . '&nbsp;<span class="caret"></span>'
-                ]
-            ]
         ]);
     }
 }

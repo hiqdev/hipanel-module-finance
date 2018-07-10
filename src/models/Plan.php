@@ -16,12 +16,15 @@ use Yii;
  *
  * @property Sale[] $sales
  * @property Price[] $prices
+ * @property-read string[] typeOptions
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
 class Plan extends \hipanel\base\Model
 {
     const TYPE_SERVER = 'server';
+    const TYPE_PCDN = 'pcdn';
+    const TYPE_VCDN = 'vcdn';
     const TYPE_TEMPLATE = 'template';
 
     use \hipanel\base\ModelTrait;
@@ -34,6 +37,8 @@ class Plan extends \hipanel\base\Model
 
             [['type', 'name', 'currency'], 'required', 'on' => ['create', 'update']],
             [['id'], 'required', 'on' => ['update', 'delete', 'set-note']],
+            [['id'], 'required', 'on' => ['delete', 'restore']],
+            [['id', 'server_ids'], 'safe', 'on' => ['copy']],
         ]);
     }
 
@@ -41,6 +46,7 @@ class Plan extends \hipanel\base\Model
     {
         return array_merge(parent::attributeLabels(), [
             'name' => Yii::t('hipanel:finance', 'Name'),
+            'server_ids' => Yii::t('hipanel.finance.plan', 'Servers'),
         ]);
     }
 
@@ -62,5 +68,10 @@ class Plan extends \hipanel\base\Model
     public function getStateOptions()
     {
         return Ref::getList('state,tariff');
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->state === 'deleted';
     }
 }

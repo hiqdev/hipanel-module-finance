@@ -5,13 +5,13 @@ namespace hipanel\modules\finance\models;
 use hipanel\base\ModelTrait;
 
 /**
- * Class ModelGroupPrice
+ * Class TemplatePrice
  *
  * @property int[] $subprices
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class ModelGroupPrice extends Price
+class TemplatePrice extends Price
 {
     use ModelTrait;
 

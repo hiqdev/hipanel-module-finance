@@ -1,31 +1,52 @@
 <?php
 
+use hipanel\modules\finance\widgets\FormulaInput;
 use hipanel\widgets\AmountWithCurrency;
 use yii\bootstrap\Html;
 
 /**
  * @var \hipanel\modules\finance\models\Plan|null $plan
- * @var \hipanel\modules\finance\models\Price $price
+ * @var \hipanel\modules\finance\models\Price $
  * @var \yii\widgets\ActiveForm $form
  */
 ?>
 
 <div class="form-instance">
-    <div class="col-md-3">
+    <div class="col-md-2">
         <?= Html::activeHiddenInput($model, "[$i]object_id", ['ref' => 'object_id']) ?>
+        <?= Html::activeHiddenInput($model, "[$i]type") ?>
+        <?= Html::activeHiddenInput($model, "[$i]class") ?>
+        <?= Html::activeHiddenInput($model, "[$i]object", ['value' => $model->object->name]) ?>
+        <?= Html::activeHiddenInput($model, "[$i]quantity") ?>
+        <?= Html::activeHiddenInput($model, "[$i]unit") ?>
+        <?= Html::activeHiddenInput($model, "[$i]note") ?>
 
         <div class="form-group">
-            <label class="control-label"><?= Yii::t('hipanel', 'Object') ?></label>
-            <div>
+            <strong>
                 <?= \hipanel\modules\finance\widgets\LinkToObjectResolver::widget([
                     'model' => $model->object,
                     'labelAttribute' => 'name',
+                    'linkOptions' => [
+                        'tabindex' => '-1'
+                    ]
                 ]) ?>
-            </div>
+            </strong>
+            <br />
+            <?= \hipanel\modules\finance\widgets\PriceType::widget([
+                'model' => $model,
+                'field' => 'type',
+            ])?>
         </div>
     </div>
-    <div class="col-md-2">
-        <?= $form->field($model, "[$i]type")->dropDownList($model->typeOptions, ['prompt' => '--']) ?>
+    <div class="col-md-1">
+        <?php if ($model->isOveruse()): ?>
+            <?= $form->field($model, "[$i]quantity")->textInput() ?>
+        <?php endif ?>
+    </div>
+    <div class="col-md-1">
+        <?php if ($model->unitOptions !== []): ?>
+            <?= $form->field($model, "[$i]unit")->dropDownList($model->unitOptions) ?>
+        <?php endif ?>
     </div>
     <div class="col-md-2">
         <div class="<?= AmountWithCurrency::$widgetClass ?>">
@@ -39,15 +60,11 @@ use yii\bootstrap\Html;
                 'ref' => 'currency',
             ]) ?>
         </div>
+        <div class="price-estimates">
+        </div>
     </div>
-    <div class="col-md-1">
-        <?= $form->field($model, "[$i]unit")->dropDownList($model->unitOptions, ['prompt' => '--']) ?>
-    </div>
-    <div class="col-md-1">
-        <?= $form->field($model, "[$i]quantity") ?>
-    </div>
-    <div class="col-md-2">
-        <?= $form->field($model, "[$i]note") ?>
+    <div class="col-md-5">
+        <?= $form->field($model, "[$i]formula")->widget(FormulaInput::class) ?>
     </div>
     <div class="col-md-1" style="padding-top: 25px;">
         <label>&nbsp;</label>
