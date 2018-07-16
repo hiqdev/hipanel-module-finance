@@ -43,4 +43,21 @@ class View extends Authenticated
         return prices;
         ");
     }
+
+    protected function fillRandomCertificatePrices()
+    {
+        $I = $this->tester;
+
+        $this->priceValues = $I->executeJS("
+        var prices = [];
+        $('table > tbody > tr').each(function(){
+            var number = $(this).find('input[id^=certificateprice][id*=sums]');
+            var randomValue = Math.floor(Math.random() * 2147483647);
+            number.val(randomValue);
+            prices.push(randomValue);
+        });
+        return prices;
+        ");
+    }
+
 }

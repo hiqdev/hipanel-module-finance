@@ -25,7 +25,7 @@ class Create extends View
         $this->loadPage($id);
         $this->loadForm();
         $this->choosePriceType($priceType);
-        $this->proceedToCreation();
+        $this->proceedToCreation('Create suggested prices');
         $this->fillRandomPrices('templateprice');
         $this->savePrice();
         $this->seeRandomPrices();
@@ -48,8 +48,22 @@ class Create extends View
         $this->findObject($object);
         $this->findTemplate($template);
         $this->choosePriceType($priceType);
-        $this->proceedToCreation();
+        $this->proceedToCreation('Create suggested prices');
         $this->fillRandomPrices('price');
+        $this->savePrice();
+        $this->seeRandomPrices();
+    }
+
+    public function addPriceForCertificate($id, $template)
+    {
+        $I = $this->tester;
+
+        $this->loadPage($id);
+        $this->loadForm();
+        $I->click('//div[contains(@class, "field-template_plan_id")]/span');
+        $this->findTemplate($template);
+        $this->proceedToCreation('Create prices');
+        $this->fillRandomCertificatePrices();
         $this->savePrice();
         $this->seeRandomPrices();
     }
@@ -73,11 +87,11 @@ class Create extends View
         $I->click("//li[contains(text(), '{$template}')]");
     }
 
-    private function proceedToCreation()
+    private function proceedToCreation($text)
     {
         $I = $this->tester;
 
         $I->click('Proceed to creation');
-        $I->waitForText('Create suggested prices');
+        $I->waitForText($text);
     }
 }
