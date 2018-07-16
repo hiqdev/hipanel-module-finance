@@ -4,15 +4,17 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\ColspanColumn;
 use hipanel\modules\finance\models\CertificatePrice;
+use Yii;
 
 class CertificatePriceGridView extends PriceGridView
 {
     public function columns()
     {
         return array_merge(parent::columns(), [
-            'purchase' => $this->getPriceGrid('certificate,certificate_purchase'),
-            'renewal' => $this->getPriceGrid('certificate,certificate_renewal'),
+            'purchase' => $this->getPriceGrid('Purchase', 'certificate,certificate_purchase'),
+            'renewal' => $this->getPriceGrid('Renewal', 'certificate,certificate_renewal'),
             'certificate' => [
+                'label' => Yii::t('hipanel:finance:tariff', 'Name'),
                 'value' => function ($prices) {
                     /** @var CertificatePrice[] $prices  */
                     return current($prices)->object->label;
@@ -21,9 +23,10 @@ class CertificatePriceGridView extends PriceGridView
         ]);
     }
 
-    private function getPriceGrid($type)
+    private function getPriceGrid($name, $type)
     {
         $result = [
+            'label' =>  Yii::t('hipanel:finance:tariff', $name),
             'class' => ColspanColumn::class,
             'headerOptions' => [
                 'class' => 'text-center',
@@ -32,7 +35,7 @@ class CertificatePriceGridView extends PriceGridView
         ];
         foreach (CertificatePrice::getPeriods() as $period => $label) {
             $result['columns'][] = [
-                'label' => $label,
+                'label' => Yii::t('hipanel:finance:tariff', $label),
                 'contentOptions' => ['class' => 'text-center'],
                 'format' => 'raw',
                 'value' => function ($prices) use ($type, $period) {

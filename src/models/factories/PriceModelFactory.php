@@ -23,6 +23,7 @@ class PriceModelFactory
         'TemplatePrice' => TemplatePrice::class,
         'SinglePrice' => Price::class,
         'CertificatePrice' => CertificatePrice::class,
+        'EnumPrice' => CertificatePrice::class,
     ];
 
     /**

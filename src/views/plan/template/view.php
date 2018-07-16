@@ -23,7 +23,7 @@ use yii\helpers\Html;
         'id' => 'create-prices-modal',
         'header' => Html::tag('h4', Yii::t('hipanel.finance.price', 'Create prices'), ['class' => 'modal-title']),
         'scenario' => 'create-prices',
-        'actionUrl' => ['@plan/create-prices', 'id' => $model->id],
+        'actionUrl' => ['@plan/suggest-prices-modal', 'id' => $model->id],
         'size' => Modal::SIZE_SMALL,
         'toggleButton' => ['label' => Yii::t('hipanel', 'Create'), 'class' => 'btn btn-sm btn-success'],
     ]) ?>

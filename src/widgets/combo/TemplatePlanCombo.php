@@ -48,20 +48,19 @@ class TemplatePlanCombo extends Combo
         if (empty($this->plan_id)) {
             throw new InvalidConfigException('Property "plan_id" must be set');
         }
-        if (empty($this->object_input_type)) {
-            throw new InvalidConfigException('Property "object_input_type" must be set');
-        }
-
         $this->_filter['plan_id'] = ['format' => $this->plan_id];
-        $this->_filter['object_id'] = [
-            'field' => $this->object_input_type,
-            'format' => 'id'
-        ];
+
+        if (!empty($this->object_input_type)) {
+            $this->_filter['object_id'] = [
+                'field' => $this->object_input_type,
+                'format' => 'id'
+            ];
+        }
     }
 
     public function getPluginOptions($options = [])
     {
-        return parent::getPluginOptions([
+        return parent::getPluginOptions(array_filter([
             'activeWhen' => $this->object_input_type,
             'select2Options' => [
                 'ajax' => [
@@ -85,12 +84,16 @@ class TemplatePlanCombo extends Combo
                     return markup; // Allows HTML
                 }'),
             ],
-        ]);
+        ]));
     }
 
     public function registerClientConfig()
     {
         parent::registerClientConfig();
+
+        if (empty($this->object_input_type)) {
+            return;
+        }
 
         $object_input_type = Json::encode($this->object_input_type);
         $id = Json::encode('#' . $this->inputOptions['id']);

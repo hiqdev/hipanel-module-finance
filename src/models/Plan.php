@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\models\Ref;
+use hipanel\modules\finance\models\query\PlanQuery;
 use Yii;
 
 /**
@@ -59,6 +60,15 @@ class Plan extends \hipanel\base\Model
         return $this->hasMany(Price::class, ['plan_id' => 'id'])->indexBy('id')->inverseOf('plan');
     }
 
+    public function getDesiredPriceClass()
+    {
+        if ($this->type === Plan::TYPE_CERTIFICATE) {
+            return CertificatePrice::class;
+        }
+
+        return Price::class;
+    }
+
     public function getSales()
     {
         return $this->hasMany(Sale::class, ['tariff_id' => 'id']);
@@ -77,5 +87,16 @@ class Plan extends \hipanel\base\Model
     public function isDeleted(): bool
     {
         return $this->state === 'deleted';
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return PlanQuery
+     */
+    public static function find($options = [])
+    {
+        return new PlanQuery(get_called_class(), [
+            'options' => $options,
+        ]);
     }
 }

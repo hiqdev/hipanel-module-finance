@@ -55,6 +55,11 @@ $model = new \hipanel\modules\finance\models\PriceSuggestionRequestForm([
             'default' => Yii::t('hipanel.finance.suggestionTypes', 'default'),
         ],
     ]) ?>
+<?php elseif ($plan->type === Plan::TYPE_CERTIFICATE): ?>
+    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
+        'plan_id' => $plan->id,
+    ]) ?>
+<?php $form->action = ['@plan/create-prices', 'id' => $plan->id]; ?>
 <?php else: ?>
     <h4>This plan does not support detailed prices</h4>
 <?php endif ?>

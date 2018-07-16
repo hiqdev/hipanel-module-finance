@@ -131,8 +131,8 @@ class PriceController extends CrudController
 
             /** @var Price $price */
             $price = Price::instantiate($suggestion);
-            $price->setAttributes($suggestion);
             $price->setScenario('create');
+            $price->setAttributes($suggestion);
             $price->populateRelation('object', new TargetObject($object));
 
             $models[] = $price;

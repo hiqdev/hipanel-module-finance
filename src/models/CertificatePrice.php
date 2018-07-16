@@ -2,8 +2,14 @@
 
 namespace hipanel\modules\finance\models;
 
+use Money\Currency;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\Money;
+use Money\Currencies\ISOCurrencies;
+use Money\Parser\DecimalMoneyParser;
 use Yii;
 use hipanel\base\ModelTrait;
+use yii\behaviors\AttributeTypecastBehavior;
 use yii\validators\NumberValidator;
 
 /**
@@ -15,13 +21,67 @@ class CertificatePrice extends Price
 {
     use ModelTrait;
 
+    const TYPE_CERT_PURCHASE = 'certificate,certificate_purchase';
+    const TYPE_CERT_RENEWAL = 'certificate,certificate_renewal';
+
+    /**
+     * @var DecimalMoneyFormatter
+     */
+    private $moneyFormatter;
+
+    /**
+     * @var DecimalMoneyParser
+     */
+    private $moneyParser;
+
+    public function __construct(array $config = [])
+    {
+        parent::__construct($config);
+        $this->moneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
+        $this->moneyParser = new DecimalMoneyParser(new ISOCurrencies());
+    }
+
     public static function tableName()
     {
         return 'price';
     }
 
-    const TYPE_CERT_PURCHASE = 'certificate_purchase';
-    const TYPE_CERT_RENEWAL = 'certificate_renewal';
+    public function behaviors()
+    {
+        return [
+            'typecastAfterFind' => [
+                'class' => AttributeTypecastBehavior::class,
+                'attributeTypes' => [
+                    'sums' => function ($sums) {
+                        foreach ($sums as $key => $value) {
+                            if ($value) {
+                                $sums[$key] = new Money($value, new Currency(strtoupper($this->currency)));
+                            }
+                        }
+                        return $sums;
+                    }],
+                'typecastAfterFind' => true,
+                'typecastAfterValidate' => false,
+                'typecastBeforeSave' => false,
+            ],
+            'typecastBeforeSave' => [
+                'class' => AttributeTypecastBehavior::class,
+                'attributeTypes' => [
+                    'sums' => function ($sums) {
+                        foreach ($sums as $key => $value) {
+                            $sums[$key] = $this->moneyParser
+                                ->parse($value, strtoupper($this->currency))
+                                ->getAmount();
+                        }
+                        return $sums;
+                    }],
+                'typecastAfterFind' => false,
+                'typecastAfterValidate' => false,
+                'typecastBeforeSave' => true,
+            ],
+        ];
+    }
+
 
     public function rules()
     {
@@ -63,7 +123,7 @@ class CertificatePrice extends Price
     public function getAvailablePeriods()
     {
         $periods = [];
-        foreach ([1,2] as $period) {
+        foreach ([1, 2] as $period) {
             if ($this->hasPriceForPeriod($period)) {
                 $periods[$period] = Yii::t('hipanel:finance:tariff', '{n, plural, one{# year} other{# years}}', ['n' => $period]);
             }
@@ -78,7 +138,7 @@ class CertificatePrice extends Price
             return null;
         }
 
-        return ((float)$this->sums[$period]) / 100;
+        return $this->moneyFormatter->format($this->sums[$period]);
     }
 
     public function hasPriceForPeriod($period)
