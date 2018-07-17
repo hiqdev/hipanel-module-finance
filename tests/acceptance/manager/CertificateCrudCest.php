@@ -44,6 +44,6 @@ class CertificateCrudCest
     public function ensureICanUpdatePrices(Manager $I)
     {
         $price = new PriceCertificateUpdate($I);
-        $price->updateCertificatePrice($this->id);
+        $price->updatePrices($this->id);
     }
 }

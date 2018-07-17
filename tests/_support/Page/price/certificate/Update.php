@@ -3,7 +3,7 @@ namespace hipanel\modules\finance\tests\_support\Page\price\certificate;
 
 class Update extends Create
 {
-    public function updateCertificatePrice(int $id): void
+    public function updatePrices(int $id): void
     {
         $I = $this->tester;
 
