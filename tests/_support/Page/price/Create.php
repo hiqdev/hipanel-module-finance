@@ -78,6 +78,6 @@ class Create extends View
         $I = $this->tester;
 
         $I->click('Proceed to creation');
-        $I->wait(1);
+        $I->waitForText('Save');
     }
 }

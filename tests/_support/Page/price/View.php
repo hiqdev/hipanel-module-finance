@@ -10,7 +10,7 @@ class View extends Authenticated
     /**
      * @var array
      */
-    protected $priceValues;
+    protected $priceValues = [];
 
     protected function loadPage(int $id): void
     {
@@ -32,8 +32,10 @@ class View extends Authenticated
     {
         $I = $this->tester;
 
-        if ($type) {
-            $this->priceValues = $I->executeJS("
+        if ($type === null) {
+            return;
+        }
+        $this->priceValues = $I->executeJS("
             var prices = [];
             $('.price-item').each(function(){
                 var number = $(this).find('input[id^={$type}][id$=price]');
@@ -42,7 +44,6 @@ class View extends Authenticated
                 prices.push(randomValue);
             });
             return prices;
-            ");
-        }
+        ");
     }
 }
