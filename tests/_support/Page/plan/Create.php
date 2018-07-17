@@ -23,7 +23,7 @@ class Create extends Plan
         $this->id = $I->grabFromCurrentUrl('/id=(\d+)/');
     }
 
-    public function createPlan()
+    public function createPlan(): int
     {
         $this->loadPage();
         $this->fillName();
