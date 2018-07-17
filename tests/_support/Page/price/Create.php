@@ -4,7 +4,7 @@ namespace hipanel\modules\finance\tests\_support\Page\price;
 
 class Create extends View
 {
-    private function loadForm()
+    protected function loadForm(): void
     {
         $I = $this->tester;
 
@@ -12,7 +12,7 @@ class Create extends View
         $I->waitForElement('#create-prices');
     }
 
-    private function savePrice()
+    protected function savePrice(): void
     {
         $I = $this->tester;
 
@@ -20,7 +20,7 @@ class Create extends View
         $I->closeNotification('Prices were successfully created');
     }
 
-    public function addPriceForTemplate($id, $priceType)
+    public function addPriceForTemplate(int $id, string $priceType): void
     {
         $this->loadPage($id);
         $this->loadForm();
@@ -31,7 +31,7 @@ class Create extends View
         $this->seeRandomPrices();
     }
 
-    private function choosePriceType($priceType)
+    private function choosePriceType(string $priceType): void
     {
         $I = $this->tester;
 
@@ -41,7 +41,7 @@ class Create extends View
         $I->click("//li[contains(text(), '{$priceType}')]");
     }
 
-    public function addPriceForNonTemplate($id, $object, $template, $priceType)
+    public function addPriceForNonTemplate(int $id, string $object, string $template, string $priceType): void
     {
         $this->loadPage($id);
         $this->loadForm();
@@ -54,21 +54,7 @@ class Create extends View
         $this->seeRandomPrices();
     }
 
-    public function addPriceForCertificate($id, $template)
-    {
-        $I = $this->tester;
-
-        $this->loadPage($id);
-        $this->loadForm();
-        $I->click('//div[contains(@class, "field-template_plan_id")]/span');
-        $this->findTemplate($template);
-        $this->proceedToCreation('Create prices');
-        $this->fillRandomCertificatePrices();
-        $this->savePrice();
-        $this->seeRandomPrices();
-    }
-
-    private function findObject($object)
+    private function findObject(string $object): void
     {
         $I = $this->tester;
 
@@ -78,7 +64,7 @@ class Create extends View
         $I->click("//li[text()='{$object}']");
     }
 
-    private function findTemplate($template)
+    protected function findTemplate(string $template): void
     {
         $I = $this->tester;
 
@@ -87,7 +73,7 @@ class Create extends View
         $I->click("//li[contains(text(), '{$template}')]");
     }
 
-    private function proceedToCreation($text)
+    protected function proceedToCreation(string $text): void
     {
         $I = $this->tester;
 

@@ -4,7 +4,7 @@ namespace hipanel\modules\finance\tests\_support\Page\price;
 
 class Delete extends View
 {
-    public function deleteTemplatePrices($id)
+    public function deleteTemplatePrices(int $id): void
     {
         $I = $this->tester;
 

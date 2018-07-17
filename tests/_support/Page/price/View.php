@@ -12,14 +12,14 @@ class View extends Authenticated
      */
     protected $priceValues;
 
-    protected function loadPage($id)
+    protected function loadPage(int $id): void
     {
         $I = $this->tester;
 
         $I->needPage(Url::to(['@plan/view', 'id' => $id]));
     }
 
-    protected function seeRandomPrices()
+    protected function seeRandomPrices(): void
     {
         $I = $this->tester;
 
@@ -28,7 +28,7 @@ class View extends Authenticated
         }
     }
 
-    protected function fillRandomPrices($type)
+    protected function fillRandomPrices(string $type): void
     {
         $I = $this->tester;
 
@@ -43,21 +43,4 @@ class View extends Authenticated
         return prices;
         ");
     }
-
-    protected function fillRandomCertificatePrices()
-    {
-        $I = $this->tester;
-
-        $this->priceValues = $I->executeJS("
-        var prices = [];
-        $('table > tbody > tr').each(function(){
-            var number = $(this).find('input[id^=certificateprice][id*=sums]');
-            var randomValue = Math.floor(Math.random() * 2147483647);
-            number.val(randomValue);
-            prices.push(randomValue);
-        });
-        return prices;
-        ");
-    }
-
 }

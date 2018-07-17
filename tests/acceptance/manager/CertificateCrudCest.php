@@ -4,8 +4,8 @@ namespace hipanel\modules\finance\tests\acceptance\manager;
 
 use hipanel\helpers\Url;
 use hipanel\modules\finance\tests\_support\Page\plan\Create as PlanCreatePage;
-use hipanel\modules\finance\tests\_support\Page\price\Create as PriceCreatePage;
-use hipanel\modules\finance\tests\_support\Page\price\Update as PriceUpdatePage;
+use hipanel\modules\finance\tests\_support\Page\price\certificate\Create as PriceCertificateCreate;
+use hipanel\modules\finance\tests\_support\Page\price\certificate\Update as PriceCertificateUpdate;
 use hipanel\tests\_support\Step\Acceptance\Manager;
 
 class CertificateCrudCest
@@ -20,7 +20,7 @@ class CertificateCrudCest
      */
     private $fields;
 
-    public function ensureThatICanCreateTariffPlan(Manager $I)
+    public function ensureThatICanCreateTariffPlan(Manager $I): void
     {
         $this->fields = [
             'name' => uniqid(),
@@ -37,13 +37,13 @@ class CertificateCrudCest
     {
         $I->needPage(Url::to(['@plan/view', 'id' => $this->id]));
         $I->see('No prices found');
-        $page = new PriceCreatePage($I);
-        $page->addPriceForCertificate($this->id, 'Certificate tariff');
+        $price = new PriceCertificateCreate($I);
+        $price->addPriceForCertificate($this->id, 'Certificate tariff');
     }
 
     public function ensureICanUpdatePrices(Manager $I)
     {
-        $page = new PriceUpdatePage($I);
-        $page->updateCertificatePrice($this->id);
+        $price = new PriceCertificateUpdate($I);
+        $price->updateCertificatePrice($this->id);
     }
 }

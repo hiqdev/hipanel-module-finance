@@ -195,21 +195,20 @@ class PlanController extends CrudController
 
         $request = Yii::$app->request;
         if ($request->isPost) {
-            $priceClass =  $plan->getDesiredPriceClass();
-            /** @var Price $price */
-            $price = new $priceClass(['scenario' => $scenario]);
-            $prices = $request->post($price->formName());
-            $collection = new Collection([
-                'model' => $price,
-                'scenario' => $scenario,
-            ]);
-            $collection->load($prices);
             try {
+                $priceClass = $plan->getDesiredPriceClass();
+                /** @var Price $price */
+                $price = new $priceClass(['scenario' => $scenario]);
+                $prices = $request->post($price->formName());
+                $collection = new Collection([
+                    'model' => $price,
+                    'scenario' => $scenario,
+                ]);
+                $collection->load($prices);
                 $collection->save();
                 if ($scenario === 'create') {
                     Yii::$app->session->addFlash('success', Yii::t('hipanel:finance', 'Prices were successfully created'));
-                }
-                elseif  ($scenario === 'update') {
+                } elseif ($scenario === 'update') {
                     Yii::$app->session->addFlash('success', Yii::t('hipanel:finance', 'Prices were successfully updated'));
                 }
                 return $this->redirect(['@plan/view', 'id' => $id]);
