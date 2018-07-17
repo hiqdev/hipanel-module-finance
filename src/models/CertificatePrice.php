@@ -139,7 +139,7 @@ class CertificatePrice extends Price
 
     public function hasPriceForPeriod($period)
     {
-        return !empty($this->sums[$period]) && $this->sums[$period]->getAmount();
+        return !empty($this->sums[$period]);
     }
 
     public function validatePrices()
