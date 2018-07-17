@@ -52,9 +52,7 @@ class CertificatePrice extends Price
                 'attributeTypes' => [
                     'sums' => function ($sums) {
                         foreach ($sums as $key => $value) {
-                            if ($value) {
-                                $sums[$key] = new Money($value, new Currency(strtoupper($this->currency)));
-                            }
+                            $sums[$key] = new Money($value, new Currency(strtoupper($this->currency)));
                         }
                         return $sums;
                     }],
@@ -141,7 +139,7 @@ class CertificatePrice extends Price
 
     public function hasPriceForPeriod($period)
     {
-        return !empty($this->sums[$period]);
+        return !empty($this->sums[$period]) && $this->sums[$period]->getAmount();
     }
 
     public function validatePrices()
