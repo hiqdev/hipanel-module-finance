@@ -9,6 +9,8 @@ return [
     'Prices were successfully created' => 'Цены были успешно созданы',
     'Prices were successfully updated' => 'Цены были успешно изменены',
     'Prices were successfully deleted' => 'Цены были успешно удалены',
+    'Error occurred during creation of prices' => 'Произошла ошибка при создании цен',
+    'Error occurred during prices update' => 'Произошла ошибка при изменении цен',
     'Applicable for all objects' => 'Применимо ко всем объектам',
     'Any' => 'Любой',
     'Price/unit' => 'Цена/ед. изм.',

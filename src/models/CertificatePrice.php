@@ -13,8 +13,6 @@ use yii\behaviors\AttributeTypecastBehavior;
 use yii\validators\NumberValidator;
 
 /**
- * Class CertificatePrice
- * @package hipanel\modules\finance\models
  * @property array $sums
  */
 class CertificatePrice extends Price

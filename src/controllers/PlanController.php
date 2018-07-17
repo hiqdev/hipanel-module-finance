@@ -36,7 +36,9 @@ class PlanController extends CrudController
                 'actions' => [
                     'create' => 'plan.create',
                     'update' => 'plan.update',
+                    'update-prices' => 'plan.update',
                     'templates' => 'plan.create',
+                    'create-prices' => 'plan.create',
                     '*' => 'plan.read',
                 ],
             ],
@@ -205,11 +207,18 @@ class PlanController extends CrudController
                     'scenario' => $scenario,
                 ]);
                 $collection->load($prices);
-                $collection->save();
-                if ($scenario === 'create') {
-                    Yii::$app->session->addFlash('success', Yii::t('hipanel:finance', 'Prices were successfully created'));
-                } elseif ($scenario === 'update') {
-                    Yii::$app->session->addFlash('success', Yii::t('hipanel:finance', 'Prices were successfully updated'));
+                if ($collection->save() === false) {
+                    if ($scenario === 'create') {
+                        Yii::$app->session->addFlash('error', Yii::t('hipanel.finance.price', 'Error occurred during creation of prices'));
+                    } elseif ($scenario === 'update') {
+                        Yii::$app->session->addFlash('error', Yii::t('hipanel.finance.price', 'Error occurred during prices update'));
+                    }
+                } else {
+                    if ($scenario === 'create') {
+                        Yii::$app->session->addFlash('success', Yii::t('hipanel.finance.price', 'Prices were successfully created'));
+                    } elseif ($scenario === 'update') {
+                        Yii::$app->session->addFlash('success', Yii::t('hipanel.finance.price', 'Prices were successfully updated'));
+                    }
                 }
                 return $this->redirect(['@plan/view', 'id' => $id]);
             } catch (\Exception $e) {
