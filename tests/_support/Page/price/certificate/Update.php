@@ -10,7 +10,7 @@ class Update extends Create
         $this->loadPage($id);
         $I->click('Update');
         $I->waitForText('Update');
-        $this->fillRandomCertificatePrices();
+        $this->fillRandomPrices();
         $I->click('Save');
         $I->closeNotification('Prices were successfully updated');
         $this->seeRandomPrices();

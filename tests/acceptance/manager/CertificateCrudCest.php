@@ -38,7 +38,7 @@ class CertificateCrudCest
         $I->needPage(Url::to(['@plan/view', 'id' => $this->id]));
         $I->see('No prices found');
         $price = new PriceCertificateCreate($I);
-        $price->addPriceForCertificate($this->id, 'Certificate tariff');
+        $price->addPrices($this->id, 'Certificate tariff');
     }
 
     public function ensureICanUpdatePrices(Manager $I)

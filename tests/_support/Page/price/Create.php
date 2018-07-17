@@ -25,7 +25,7 @@ class Create extends View
         $this->loadPage($id);
         $this->loadForm();
         $this->choosePriceType($priceType);
-        $this->proceedToCreation('Create suggested prices');
+        $this->proceedToCreation();
         $this->fillRandomPrices('templateprice');
         $this->savePrice();
         $this->seeRandomPrices();
@@ -48,7 +48,7 @@ class Create extends View
         $this->findObject($object);
         $this->findTemplate($template);
         $this->choosePriceType($priceType);
-        $this->proceedToCreation('Create suggested prices');
+        $this->proceedToCreation();
         $this->fillRandomPrices('price');
         $this->savePrice();
         $this->seeRandomPrices();
@@ -73,11 +73,11 @@ class Create extends View
         $I->click("//li[contains(text(), '{$template}')]");
     }
 
-    protected function proceedToCreation(string $text): void
+    protected function proceedToCreation(): void
     {
         $I = $this->tester;
 
         $I->click('Proceed to creation');
-        $I->waitForText($text);
+        $I->wait(1);
     }
 }

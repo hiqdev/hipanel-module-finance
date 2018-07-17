@@ -6,21 +6,7 @@ use hipanel\modules\finance\tests\_support\Page\price\Create as PriceCreate;
 
 class Create extends PriceCreate
 {
-    public function addPriceForCertificate(int $id, string $template): void
-    {
-        $I = $this->tester;
-
-        $this->loadPage($id);
-        $this->loadForm();
-        $I->click('//div[contains(@class, "field-template_plan_id")]/span');
-        $this->findTemplate($template);
-        $this->proceedToCreation('Create prices');
-        $this->fillRandomCertificatePrices();
-        $this->savePrice();
-        $this->seeRandomPrices();
-    }
-
-    protected function fillRandomCertificatePrices(): void
+    protected function fillRandomPrices(string $type = null): void
     {
         $I = $this->tester;
 
@@ -34,5 +20,19 @@ class Create extends PriceCreate
         });
         return prices;
         ");
+    }
+
+    public function addPrices(int $id, string $template): void
+    {
+        $I = $this->tester;
+
+        $this->loadPage($id);
+        $this->loadForm();
+        $I->click('//div[contains(@class, "field-template_plan_id")]/span');
+        $this->findTemplate($template);
+        $this->proceedToCreation();
+        $this->fillRandomPrices();
+        $this->savePrice();
+        $this->seeRandomPrices();
     }
 }

@@ -28,19 +28,21 @@ class View extends Authenticated
         }
     }
 
-    protected function fillRandomPrices(string $type): void
+    protected function fillRandomPrices(string $type = null): void
     {
         $I = $this->tester;
 
-        $this->priceValues = $I->executeJS("
-        var prices = [];
-        $('.price-item').each(function(){
-            var number = $(this).find('input[id^={$type}][id$=price]');
-            var randomValue = Math.floor(Math.random() * 2147483647);
-            number.val(randomValue);
-            prices.push(randomValue);
-        });
-        return prices;
-        ");
+        if ($type) {
+            $this->priceValues = $I->executeJS("
+            var prices = [];
+            $('.price-item').each(function(){
+                var number = $(this).find('input[id^={$type}][id$=price]');
+                var randomValue = Math.floor(Math.random() * 2147483647);
+                number.val(randomValue);
+                prices.push(randomValue);
+            });
+            return prices;
+            ");
+        }
     }
 }
