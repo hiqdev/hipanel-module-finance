@@ -2,7 +2,6 @@
 
 namespace hipanel\modules\finance\tests\acceptance\manager;
 
-use Codeception\Example;
 use Codeception\Scenario;
 use hipanel\helpers\Url;
 use hipanel\modules\finance\tests\_support\Page\plan\Create as PlanCreatePage;
@@ -19,6 +18,7 @@ abstract class PriceCest
     protected $id;
 
     /**
+     * @param Manager $I
      * @return array of settings for future plan
      * ```php
      *  [
@@ -29,22 +29,27 @@ abstract class PriceCest
      *  ],
      * ```
      */
-    abstract protected function suggestedPricesOptionsProvider(): array;
+    abstract protected function suggestedPricesOptionsProvider(Manager $I): array;
 
     /**
-     * @dataProvider suggestedPricesOptionsProvider
      * @param Manager $I
-     * @param Example $example
      */
-    public function ensureICanCreateSuggestedPrices(Manager $I, Example $example): void
+    public function ensureICanCreateSuggestedPrices(Manager $I): void
     {
-        $id = $this->createPlan($I, uniqid(), $example['type']);
-        $I->needPage(Url::to(['@plan/view', 'id' => $id]));
-        $I->see('No results found.');
+        foreach ($this->suggestedPricesOptionsProvider($I) as $example) {
+            $I->amGoingTo(sprintf(
+                'Create new plan with type "%s" and fill it with prices of template "%s" (suggestions %s) for object %s',
+                $example['type'], $example['templateName'], implode(', ', $example['priceTypes']), $example['object']
+            ));
 
-        $page = new PriceCreatePage($I, $id);
-        foreach ($example['priceTypes'] as $priceType) {
-            $page->createRandomPrices($example['object'], $example['templateName'], $priceType);
+            $id = $this->createPlan($I, uniqid($example['type'].'Plan_Of_'.$example['templateName'], true), $example['type']);
+            $I->needPage(Url::to(['@plan/view', 'id' => $id]));
+            $I->see('No results found.');
+
+            $page = new PriceCreatePage($I, $id);
+            foreach ($example['priceTypes'] as $priceType) {
+                $page->createRandomPrices($example['object'], $example['templateName'], $priceType);
+            }
         }
     }
 
