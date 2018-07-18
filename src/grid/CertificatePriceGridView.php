@@ -42,7 +42,7 @@ class CertificatePriceGridView extends PriceGridView
                     /** @var CertificatePrice[] $prices */
                     $price = $prices[$type] ?? null;
                     return $price ? \hipanel\modules\finance\widgets\ResourcePriceWidget::widget([
-                        'price' => $price->getPriceForPeriod($period) !== '0.00' ?
+                        'price' => floatval($price->getPriceForPeriod($period)) ?
                             $price->getPriceForPeriod($period) : null,
                         'currency' => $price->currency
                     ]) : '';

@@ -128,7 +128,11 @@ class CertificatePrice extends Price
         return $periods;
     }
 
-    public function getPriceForPeriod($period)
+    /**
+     * @param int $period
+     * @return null|string
+     */
+    public function getPriceForPeriod(int $period)
     {
         if (!$this->hasPriceForPeriod($period)) {
             return null;
@@ -137,12 +141,16 @@ class CertificatePrice extends Price
         return $this->moneyFormatter->format($this->sums[$period]);
     }
 
-    public function hasPriceForPeriod($period)
+    /**
+     * @param int $period
+     * @return bool
+     */
+    public function hasPriceForPeriod(int $period)
     {
         return !empty($this->sums[$period]);
     }
 
-    public function validatePrices()
+    public function validatePrices(): bool
     {
         $periods = $this->getPeriods();
         $validator = new NumberValidator();
