@@ -12,10 +12,9 @@ class Create extends PriceCreate
 
         $this->priceValues = $I->executeJS("
         var prices = [];
-        $('table > tbody > tr').each(function(){
-            var number = $(this).find('input[id^=certificateprice][id*=sums]');
+        $('.price-input').each(function(){
             var randomValue = Math.floor(Math.random() * 2147483647);
-            number.val(randomValue);
+            $(this).val(randomValue);
             prices.push(randomValue);
         });
         return prices;
