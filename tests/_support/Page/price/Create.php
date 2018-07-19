@@ -34,20 +34,9 @@ class Create extends View
         $I->waitForElement('#create-prices');
     }
 
-    public function choosePriceType(string $priceType): void
-    {
-        $I = $this->tester;
-
-        $I->click('//div[contains(@class, "field-type")]/span');
-        $this->select2->fillSearchField($priceType);
-        $this->select2->chooseOption($priceType);
-    }
-
     public function chooseObject(string $objectName): void
     {
-        $I = $this->tester;
-
-        $I->click('//div[contains(@class, "field-object_id")]/span');
+        $this->select2->open('#object_id');
         $this->select2->fillSearchField($objectName);
         $this->select2->chooseOption($objectName);
     }
@@ -56,6 +45,13 @@ class Create extends View
     {
         $this->select2->fillSearchField($templateName);
         $this->select2->chooseOption($templateName);
+    }
+
+    public function choosePriceType(string $priceType): void
+    {
+        $this->select2->open('#type');
+        $this->select2->fillSearchField($priceType);
+        $this->select2->chooseOption($priceType);
     }
 
     public function proceedToCreation(): void
