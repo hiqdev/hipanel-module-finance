@@ -2,10 +2,19 @@
 
 namespace hipanel\modules\finance\tests\_support\Page\price;
 
+use hipanel\tests\_support\Page\Widget\Select2;
+
 class Create extends View
 {
+    /**
+     * @var Select2
+     */
+    private $select2;
+
     public function createRandomPrices(string $objectName, string $templateName, string $priceType): void
     {
+        $this->select2 = new Select2($this->tester);
+
         $this->loadPage();
         $this->openModal();
         $this->chooseObject($objectName);
@@ -30,9 +39,8 @@ class Create extends View
         $I = $this->tester;
 
         $I->click('//div[contains(@class, "field-type")]/span');
-        $I->fillField('.select2-search__field', $priceType);
-        $I->waitForElementNotVisible('.loading-results', 120);
-        $I->click("//li[contains(text(), '{$priceType}')]");
+        $this->select2->fillSearchField($priceType);
+        $this->select2->chooseOption($priceType);
     }
 
     public function chooseObject(string $objectName): void
@@ -40,25 +48,14 @@ class Create extends View
         $I = $this->tester;
 
         $I->click('//div[contains(@class, "field-object_id")]/span');
-        $I->fillField('.select2-search__field', $objectName);
-        $I->waitForElementNotVisible('.loading-results', 120);
-        $I->click("//li[text()='{$objectName}']");
+        $this->select2->fillSearchField($objectName);
+        $this->select2->chooseOption($objectName);
     }
 
     public function chooseTemplate(string $templateName): void
     {
-        $I = $this->tester;
-
-        $I->fillField('.select2-search__field', $templateName);
-        $I->waitForElementNotVisible('.loading-results', 120);
-        $I->executeJS(<<<JS
-        $("li:contains('{$templateName}')").each(function() {
-            if (this.firstChild.data === '{$templateName}') {
-                $(this).trigger('mouseup');
-            }
-        });
-JS
-);
+        $this->select2->fillSearchField($templateName);
+        $this->select2->chooseOption($templateName);
     }
 
     public function proceedToCreation(): void
