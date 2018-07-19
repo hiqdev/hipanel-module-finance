@@ -51,7 +51,13 @@ class Create extends View
 
         $I->fillField('.select2-search__field', $templateName);
         $I->waitForElementNotVisible('.loading-results', 120);
-        $I->click("//li[contains(text(), '{$templateName}')]");
+        $I->executeJS("
+        $(\"li:contains('{$templateName}')\").each(function() {
+            if (this.firstChild.data === '{$templateName}') {
+                $(this).trigger('mouseup');
+            }
+        });
+        ");
     }
 
     public function proceedToCreation(): void
