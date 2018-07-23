@@ -229,7 +229,10 @@ class PlanController extends CrudController
      */
     private function getParentPrices(int $plan_id)
     {
-        $parent_id = Plan::batchPerform('get-parent-id', ['plan_id' => $plan_id]);
+        $parent_id = (new Plan())->query('get-parent-id', [
+            'id' => $plan_id,
+        ]);
+        $parent_id = $parent_id['parent_id'];
         if ($parent_id === null) {
             return null;
         }
