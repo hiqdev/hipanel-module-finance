@@ -71,6 +71,7 @@ class PlanController extends CrudController
                 'data' => function (Action $action, array $data) {
                     return array_merge($data, [
                         'grouper' => new PlanInternalsGrouper($data['model']),
+                        'parentPrices' => $this->getParentPrices($data['model']['id'])
                     ]);
                 },
             ],
@@ -112,27 +113,16 @@ class PlanController extends CrudController
             'type' => $plan->type,
         ]);
 
-        $prices = [];
-        foreach ($suggestions as $suggestion) {
-            $object = ArrayHelper::remove($suggestion, 'object');
+        $this->populateWithPrices($plan, $suggestions);
+        $parentPrices = $this->getParentPrices($plan_id);
 
-            /** @var Price $price */
-            $price = Price::instantiate($suggestion);
-            $price->setScenario('create');
-            $price->setAttributes($suggestion);
-            $price->populateRelation('object', new TargetObject($object));
-            $price->trigger(Price::EVENT_AFTER_FIND);
-            $prices[] = $price;
-        }
-
-        $plan->populateRelation('prices', $prices);
         $targetPlan = Plan::findOne(['id' => $plan_id]);
         [$name, $id] = [$targetPlan->name, $targetPlan->id];
         $grouper = new PlanInternalsGrouper($plan);
         $action = ['@plan/update-prices', 'id' => $id, 'scenario' => 'create'];
 
         return $this->render($plan->type . '/' . 'createPrices',
-            compact('plan', 'grouper', 'plan_id', 'name', 'id', 'action'));
+            compact('plan', 'grouper', 'parentPrices', 'action', 'plan_id', 'name', 'id'));
     }
 
     public function actionSuggestPricesModal($id)
@@ -227,7 +217,53 @@ class PlanController extends CrudController
         }
 
         $grouper = new PlanInternalsGrouper($plan);
+        $parentPrices = $this->getParentPrices($id);
 
-        return $this->render($plan->type . '/' . 'updatePrices', compact('plan', 'grouper'));
+        return $this->render($plan->type . '/' . 'updatePrices',
+            compact('plan', 'grouper', 'parentPrices'));
+    }
+
+    /**
+     * @param int $plan_id
+     * @return array | null
+     */
+    private function getParentPrices(int $plan_id)
+    {
+        $parent_id = Plan::batchPerform('get-parent-id', ['plan_id' => $plan_id]);
+        if ($parent_id === null) {
+            return null;
+        }
+
+        $parent = Plan::find()
+            ->byId($parent_id)
+            ->withPrices()
+            ->one();
+
+        return $parent ? (new PlanInternalsGrouper($parent))->group() : null;
+    }
+
+    /**
+     * @param Plan $plan
+     * @param array $pricesData
+     */
+    private function populateWithPrices(Plan $plan, $pricesData): void
+    {
+        $prices = [];
+        foreach ($pricesData as $priceData) {
+            $object = ArrayHelper::remove($priceData, 'object');
+            if (isset($priceData['plan_type']) &&
+                $priceData['plan_type'] === 'certificate') {
+                $priceData['class'] = 'CertificatePrice';
+            }
+
+            /** @var Price $price */
+            $price = Price::instantiate($priceData);
+            $price->setScenario('create');
+            $price->setAttributes($priceData);
+            $price->populateRelation('object', new TargetObject($object));
+            $price->trigger(Price::EVENT_AFTER_FIND);
+            $prices[] = $price;
+        }
+        $plan->populateRelation('prices', $prices);
     }
 }

@@ -4,6 +4,7 @@
  * @var \yii\web\View $this
  * @var \hipanel\modules\finance\helpers\PlanInternalsGrouper $grouper
  * @var \hipanel\modules\finance\models\Plan $plan
+ * @var array $parentPrices
  */
 
 $this->title = Yii::t('hipanel.finance.price', 'Update prices');
@@ -15,4 +16,4 @@ $prices = $grouper->group();
 
 ?>
 
-<?= $this->render('_form', compact('prices', 'plan_id', 'action')) ?>
+<?= $this->render('_form', compact('prices', 'plan_id', 'action', 'parentPrices')) ?>

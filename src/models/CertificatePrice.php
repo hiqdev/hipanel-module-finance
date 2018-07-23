@@ -93,6 +93,10 @@ class CertificatePrice extends Price
         ];
         $rules[] = [['certificateType'], 'safe'];
         $rules[] = [['sums'], 'validatePrices', 'on' => ['create', 'update']];
+        $rules[] = [['sums'], 'number', 'min' => 0, 'when' => function () {
+            return false;
+        }];
+        $rules[] = [['sums'], 'each', 'rule' => ['number', 'min' => 0]];
 
         return $rules;
     }

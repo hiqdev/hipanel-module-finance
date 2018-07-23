@@ -4,10 +4,17 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\ColspanColumn;
 use hipanel\modules\finance\models\CertificatePrice;
+use hipanel\modules\finance\widgets\PriceDifferenceWidget;
+use hipanel\modules\finance\widgets\ResourcePriceWidget;
 use Yii;
 
 class CertificatePriceGridView extends PriceGridView
 {
+    /**
+     * @var CertificatePrice[]
+     */
+    public $parentPrices;
+
     public function columns()
     {
         return array_merge(parent::columns(), [
@@ -40,12 +47,21 @@ class CertificatePriceGridView extends PriceGridView
                 'format' => 'raw',
                 'value' => function ($prices) use ($type, $period) {
                     /** @var CertificatePrice[] $prices */
-                    $price = $prices[$type] ?? null;
-                    return $price ? \hipanel\modules\finance\widgets\ResourcePriceWidget::widget([
-                        'price' => floatval($price->getPriceForPeriod($period)) ?
-                            $price->getPriceForPeriod($period) : null,
-                        'currency' => $price->currency
+                    if (!isset($prices[$type])) {
+                        return '';
+                    }
+                    $price = $prices[$type];
+                    $parent = $this->parentPrices[$price->object_id][$type] ?? null;
+                    $parent = $parent ? PriceDifferenceWidget::widget([
+                        'new' => $price->getPriceForPeriod($period),
+                        'old' => $parent->getPriceForPeriod($period),
                     ]) : '';
+                    $price = !(!floatval($price->getPriceForPeriod($period)) && !$parent) ?
+                        ResourcePriceWidget::widget([
+                            'price' => $price->getPriceForPeriod($period),
+                            'currency' => $price->currency
+                        ]) : '';
+                    return "<div class='col-md-6'>$price</div> <div class='col-md-6'>$parent</div>";
                 }
             ];
         }

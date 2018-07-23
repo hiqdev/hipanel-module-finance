@@ -3,11 +3,22 @@
 /**
  * @var \yii\web\View $this
  * @var \hipanel\modules\finance\models\CertificatePrice[] $prices
+ * @var array $parentPrices
  */
 
 use hipanel\widgets\Box;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+
+$this->registerJs("
+$('#tariff-create-form').on('afterValidate', function (event, messages) {
+    if(typeof $('.has-error').first().offset() !== 'undefined') {
+        $('html, body').animate({
+            scrollTop: $('.has-error').first().offset().top
+        }, 1000);
+    }
+});
+");
 
 ?>
 <div class="tariff-create">
@@ -38,7 +49,7 @@ use yii\helpers\Html;
                 <tbody>
                 <?php
                 $i = 0;
-                foreach ($prices as $group) {
+                foreach ($prices as $object_id => $group) {
                     ?>
                     <tr>
                         <td><?= current($group)->object->label ?></td>
@@ -52,10 +63,15 @@ use yii\helpers\Html;
                             <?= Html::activeHiddenInput($price, "[$i]price") ?>
                             <?= Html::activeHiddenInput($price, "[$i]type") ?>
                             <?= Html::activeHiddenInput($price, "[$i]unit") ?>
+                            <?php /** @var \hipanel\modules\finance\models\CertificatePrice $originalPrice */ ?>
+                            <?php $originalPrice = $parentPrices[$object_id][$type] ?? null; ?>
                             <?php foreach ($price->getPeriods() as $period => $periodLabel) : ?>
                                 <td>
                                     <?= \hipanel\modules\finance\widgets\PriceInput::widget([
                                         'basePrice' => $price->getPriceForPeriod($period),
+                                        'originalPrice' => $originalPrice ?
+                                            $originalPrice->getPriceForPeriod($period) :
+                                            $price->getPriceForPeriod($period),
                                         'activeField' => $form->field($price, "[$i]sums[$period]")]) ?>
                                 </td>
                             <?php endforeach; ?>

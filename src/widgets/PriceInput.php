@@ -7,8 +7,8 @@ use yii\base\Widget;
 class PriceInput extends Widget
 {
     public $basePrice = 0;
+    public $originalPrice = 0;
     public $activeField;
-    public $minPrice = 0.01;
 
     public function run()
     {
@@ -16,8 +16,8 @@ class PriceInput extends Widget
 
         return $this->render('PriceInput', [
             'basePrice' => $this->basePrice,
+            'originalPrice' => $this->originalPrice,
             'activeField' => $this->activeField,
-            'minPrice' => $this->minPrice
         ]);
     }
 
@@ -29,16 +29,9 @@ class PriceInput extends Widget
                 if (isNaN(price)) return false;
                 var base = $(this).closest('td').find('.base-price'),
                     basePrice = parseFloat(base.attr('data-original-price')),
-                    minValue = parseFloat($(this).attr('data-min-price')),
                     delta = price - basePrice;
-                
-                if (delta <= -basePrice && basePrice > 0) {
-                    $(this).val(minValue).trigger('change');
-                    return false;
-                }
-                
+
                 base.removeClass('text-success text-danger');
-                
                 base.text(delta.toFixed(2)).addClass(delta >= 0 ? 'text-success' : 'text-danger');
             });
         

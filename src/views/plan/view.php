@@ -12,6 +12,7 @@ use hipanel\widgets\IndexPage;
  * @var \yii\web\View $this
  * @var Plan $model
  * @var PlanInternalsGrouper $grouper
+ * @var array $parentPrices
  */
 
 $this->title = Html::encode($model->name);
@@ -66,7 +67,7 @@ $this->registerCss("
                 <?php $page->beginContent('show-actions') ?>
                     <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>
                 <?php $page->endContent() ?>
-                <?= $this->render($model->type . '/view', compact('model', 'grouper', 'page')) ?>
+                <?= $this->render($model->type . '/view', compact('model', 'grouper', 'page', 'parentPrices')) ?>
             <?php else: ?>
                 <?php $page->beginContent('table') ?>
                     <div class="col-md-12">

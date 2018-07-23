@@ -6,8 +6,8 @@ use yii\web\View;
 /**
  * @var View $this
  * @var float $basePrice
+ * @var float $originalPrice
  * @var \yii\widgets\ActiveField $activeField
- * @var float $minPrice
  */
 
 ?>
@@ -20,16 +20,13 @@ use yii\web\View;
             'class' => 'form-control price-input',
             'autocomplete' => false,
             'step' => 'any',
-            'data' => [
-                'min-price' => $minPrice
-            ],
             'value' => $basePrice
         ])->label(false); ?>
     </div>
     <div class="col-md-6">
         <?= Html::tag('span', '', [
             'class' => 'base-price text-bold',
-            'data-original-price' => $basePrice,
+            'data-original-price' => $originalPrice,
         ]); ?>
     </div>
 </div>
