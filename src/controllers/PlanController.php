@@ -14,6 +14,7 @@ use hipanel\base\CrudController;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\helpers\PriceChargesEstimator;
+use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\models\Plan;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\Price;
@@ -267,6 +268,8 @@ class PlanController extends CrudController
             $price->trigger(Price::EVENT_AFTER_FIND);
             $prices[] = $price;
         }
+        $prices = PriceSort::anyPrices()->values($prices, true);
+
         $plan->populateRelation('prices', $prices);
     }
 }
