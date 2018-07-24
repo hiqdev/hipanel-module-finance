@@ -221,6 +221,8 @@ return [
     'Object' => 'Объект',
     'Create price' => 'Создать цены',
     'This plan type viewing is not implemented yet' => 'Управление тарифным планом этого типа ещё не реализовано',
+    'We accept the following automatic payment methods' => 'Мы принимаем к оплате в автоматическом режиме следующие платежные системы',
+    'as well as PayPal payments from your Visa and MasterCard' => ', а также платежные карты Visa и MasterCard, процессинг которых осуществляется через PayPal',
     'per {unit}' => 'за {unit}',
     'prepaid {amount,number}' => 'включено {amount,number}',
     'Prepaid {amount,number} {unit}' => 'Предоплачено {amount,number} {unit}',
