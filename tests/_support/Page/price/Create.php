@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\tests\_support\Page\price;
 
+use hipanel\tests\_support\AcceptanceTester;
 use hipanel\tests\_support\Page\Widget\Select2;
 
 class Create extends View
@@ -9,12 +10,17 @@ class Create extends View
     /**
      * @var Select2
      */
-    private $select2;
+    protected $select2;
+
+    public function __construct(AcceptanceTester $I, int $id)
+    {
+        parent::__construct($I, $id);
+
+        $this->select2 = new Select2($this->tester);
+    }
 
     public function createRandomPrices(string $objectName, string $templateName, string $priceType): void
     {
-        $this->select2 = new Select2($this->tester);
-
         $this->loadPage();
         $this->openModal();
         $this->chooseObject($objectName);
@@ -59,7 +65,7 @@ class Create extends View
         $I = $this->tester;
 
         $I->click('Proceed to creation');
-        $I->waitForText('Create suggested prices');
+        $I->waitForText('Create suggested prices', 60);
     }
 
     public function saveForm(): void
