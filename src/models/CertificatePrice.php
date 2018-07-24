@@ -172,7 +172,7 @@ class CertificatePrice extends Price
     /**
      * @return array
      */
-    public function getTypes()
+    public static function getTypes()
     {
         return [
             static::TYPE_CERT_PURCHASE => Yii::t('hipanel:finance:tariff', 'Purchase'),

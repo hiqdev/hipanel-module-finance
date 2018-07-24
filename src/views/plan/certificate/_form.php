@@ -3,9 +3,11 @@
 /**
  * @var \yii\web\View $this
  * @var \hipanel\modules\finance\models\CertificatePrice[] $prices
+ * @var \hipanel\modules\finance\models\CertificatePrice $price
  * @var \hipanel\modules\finance\models\CertificatePrice[][] $parentPrices
  */
 
+use hipanel\modules\finance\models\CertificatePrice;
 use hipanel\widgets\Box;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
@@ -35,10 +37,10 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
                 <tr>
                     <?= Html::tag('th', Yii::t('hipanel:finance:tariff', 'Name')); ?>
                     <?php if (!empty($prices)) : ?>
-                        <?php foreach (current($prices) as $type => $price) : ?>
-                            <?php foreach ($price->getPeriods() as $period) : ?>
-                                <?= Html::tag('th', Yii::t('hipanel:finance:tariff', '{operation} for {duration}', [
-                                    'operation' => $price->getTypes()[$type],
+                        <?php foreach (CertificatePrice::getTypes() as $name) : ?>
+                            <?php foreach (CertificatePrice::getPeriods() as $period) : ?>
+                                <?= Html::tag('th', Yii::t('hipanel:finance:tariff', '{name} for {duration}', [
+                                    'name' => $name,
                                     'duration' => $period,
                                 ])); ?>
                             <?php endforeach; ?>
@@ -53,8 +55,8 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
                     ?>
                     <tr>
                         <td><?= current($group)->object->label ?></td>
-                        <?php foreach ($group as $type => $price) : ?>
-                            <?php /** @var \hipanel\modules\finance\models\CertificatePrice $price */ ?>
+                        <?php foreach (CertificatePrice::getTypes() as $type => $name) : ?>
+                            <?php $price = $group[$type]; ?>
                             <?php $price->plan_id = $plan_id ?? $price->plan_id; ?>
                             <?= Html::activeHiddenInput($price, "[$i]id") ?>
                             <?= Html::activeHiddenInput($price, "[$i]plan_id") ?>
@@ -64,7 +66,7 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
                             <?= Html::activeHiddenInput($price, "[$i]type") ?>
                             <?= Html::activeHiddenInput($price, "[$i]unit") ?>
                             <?php $originalPrice = $parentPrices[$object_id][$type] ?? null; ?>
-                            <?php foreach ($price->getPeriods() as $period => $periodLabel) : ?>
+                            <?php foreach (CertificatePrice::getPeriods() as $period => $periodLabel) : ?>
                                 <td>
                                     <?= \hipanel\modules\finance\widgets\PriceInput::widget([
                                         'basePrice' => $price->getPriceForPeriod($period),
