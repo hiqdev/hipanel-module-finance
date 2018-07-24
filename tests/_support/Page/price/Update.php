@@ -4,11 +4,11 @@ namespace hipanel\modules\finance\tests\_support\Page\price;
 
 class Update extends View
 {
-    public function updatePrice(int $id): void
+    public function updatePrices(): void
     {
         $I = $this->tester;
 
-        $this->loadPage($id);
+        $this->loadPage();
         for ($i = 1; $i < 10; $i++) {
             $I->click("(//tbody/tr/td/input[@type='checkbox'])[{$i}]");
         }
