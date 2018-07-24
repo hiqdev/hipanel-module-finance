@@ -16,4 +16,4 @@ $prices = $grouper->group();
 
 ?>
 
-<?= $this->render('_form', compact('prices', 'plan_id', 'action', 'parentPrices')) ?>
+<?= $this->render('_form', compact('plan', 'prices', 'plan_id', 'action', 'parentPrices', 'name', 'id')) ?>
