@@ -3,7 +3,7 @@
 /**
  * @var \yii\web\View $this
  * @var \hipanel\modules\finance\models\CertificatePrice[] $prices
- * @var array $parentPrices
+ * @var \hipanel\modules\finance\models\CertificatePrice[][] $parentPrices
  */
 
 use hipanel\widgets\Box;
@@ -63,15 +63,12 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
                             <?= Html::activeHiddenInput($price, "[$i]price") ?>
                             <?= Html::activeHiddenInput($price, "[$i]type") ?>
                             <?= Html::activeHiddenInput($price, "[$i]unit") ?>
-                            <?php /** @var \hipanel\modules\finance\models\CertificatePrice $originalPrice */ ?>
                             <?php $originalPrice = $parentPrices[$object_id][$type] ?? null; ?>
                             <?php foreach ($price->getPeriods() as $period => $periodLabel) : ?>
                                 <td>
                                     <?= \hipanel\modules\finance\widgets\PriceInput::widget([
                                         'basePrice' => $price->getPriceForPeriod($period),
-                                        'originalPrice' => $originalPrice ?
-                                            $originalPrice->getPriceForPeriod($period) :
-                                            $price->getPriceForPeriod($period),
+                                        'originalPrice' => $originalPrice ? $originalPrice->getPriceForPeriod($period) : $price->getPriceForPeriod($period),
                                         'activeField' => $form->field($price, "[$i]sums[$period]")]) ?>
                                 </td>
                             <?php endforeach; ?>

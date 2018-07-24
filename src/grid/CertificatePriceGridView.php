@@ -56,7 +56,7 @@ class CertificatePriceGridView extends PriceGridView
                         'new' => $price->getPriceForPeriod($period),
                         'old' => $parent->getPriceForPeriod($period),
                     ]) : '';
-                    $price = !(!floatval($price->getPriceForPeriod($period)) && !$parent) ?
+                    $price = floatval($price->getPriceForPeriod($period)) || (!floatval($price->getPriceForPeriod($period)) && $parent) ?
                         ResourcePriceWidget::widget([
                             'price' => $price->getPriceForPeriod($period),
                             'currency' => $price->currency

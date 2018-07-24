@@ -4,7 +4,7 @@
  * @var \yii\web\View $this
  * @var \hipanel\modules\finance\helpers\PlanInternalsGrouper $grouper
  * @var \hipanel\modules\finance\models\Plan $plan
- * @var array $parentPrices
+ * @var \hipanel\modules\finance\models\CertificatePrice[][] $parentPrices
  */
 
 $this->title = Yii::t('hipanel.finance.price', 'Create prices');

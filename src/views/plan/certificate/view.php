@@ -9,7 +9,7 @@ use yii\helpers\Html;
  * @var \yii\web\View $this
  * @var \hipanel\modules\finance\models\Plan $model
  * @var \hipanel\modules\finance\helpers\PlanInternalsGrouper $grouper
- * @var array $parentPrices
+ * @var \hipanel\modules\finance\models\CertificatePrice[][] $parentPrices
  * @var IndexPage $page
  */
 
