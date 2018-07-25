@@ -32,16 +32,14 @@ class BillCest
 
     private function ensureICanSeeBulkBillSearchBox(Client $I)
     {
-        $columns = [
+        $sortColumns = [
             'time' => 'Time',
             'sum' => 'Sum',
             'balance' => 'Balance',
             'type_label' => 'Type',
             'descr' => 'Description',
         ];
-        foreach ($columns as $param => $text) {
-            $I->seeLink($text, Url::to(['@bill/index', 'sort' => $param]));
-        }
+        $I->seeSortColumns($sortColumns, '@bill/index');
         $I->see('No results found.', "//div[@class='empty']");
     }
 }
