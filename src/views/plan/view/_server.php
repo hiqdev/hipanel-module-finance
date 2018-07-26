@@ -37,10 +37,10 @@ use yii\helpers\Html;
         'boxed' => false,
         'showHeader' => false,
         'pricesBySoldObject' => $pricesByMainObject,
-        'dataProvider' => (new \yii\data\ArrayDataProvider([
+        'dataProvider' => new \yii\data\ArrayDataProvider([
             'allModels' => $salesByObject,
             'pagination' => false,
-        ])),
+        ]),
         'summaryRenderer' => function () {
             return ''; // remove unnecessary summary
         },

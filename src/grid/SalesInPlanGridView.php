@@ -28,7 +28,7 @@ class SalesInPlanGridView extends SaleGridView
     {
         parent::init();
 
-        if (!isset($this->pricesBySoldObject)) {
+        if ($this->pricesBySoldObject === null) {
             throw new InvalidConfigException("Property 'pricesBySoldObject' must be set");
         }
         if (empty($this->afterRow)) {
@@ -80,12 +80,12 @@ class SalesInPlanGridView extends SaleGridView
                     'tag' => 'tr',
                     'id' => crc32($sale->id ?? microtime(true)),
                 ],
-                'layout' => '<td colspan="' . count($this->columns) . '">{items}</td>',
+                'layout' => '<td colspan="' . \count($this->columns) . '">{items}</td>',
                 'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
-                'dataProvider' => (new ArrayDataProvider([
+                'dataProvider' => new ArrayDataProvider([
                     'allModels' => $prices,
                     'pagination' => false,
-                ])),
+                ]),
                 'columns' => [
                     'checkbox',
                     'object->name',
