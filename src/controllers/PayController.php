@@ -64,7 +64,6 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
         }
 
         $data = array_merge([
-            'transactionId' => $transaction->getId(),
             'merchant' => $transaction->getMerchant(),
             'username' => $transaction->getParameter('username'),
         ], $_REQUEST);
