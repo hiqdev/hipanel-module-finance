@@ -51,9 +51,10 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
         return $this->getMerchantModule()->getPayController()->render($view, $params);
     }
 
-    public function checkNotify()
+    public function checkNotify(string $transactionId = null): ?Transaction
     {
-        $id = Yii::$app->request->get('transactionId')
+        $id = $transactionId
+            ?? Yii::$app->request->get('transactionId')
             ?? Yii::$app->request->post('transactionId')
             ?? Yii::$app->session->get(self::SESSION_MERCHANT_LATEST_TRANSACTION_ID);
 
