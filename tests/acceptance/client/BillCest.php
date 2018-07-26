@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\tests\acceptance\client;
 
 use hipanel\helpers\Url;
+use hipanel\tests\_support\Page\GridView;
 use hipanel\tests\_support\Step\Acceptance\Client;
 
 class BillCest
@@ -39,7 +40,9 @@ class BillCest
             'type_label' => 'Type',
             'descr' => 'Description',
         ];
-        $I->seeSortColumns($sortColumns, '@bill/index');
+        $gridView = new GridView($I);
+        $gridView->containsColumns($sortColumns, '@bill/index');
+
         $I->see('No results found.', "//div[@class='empty']");
     }
 }
