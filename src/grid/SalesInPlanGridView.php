@@ -90,8 +90,8 @@ class SalesInPlanGridView extends SaleGridView
                     'checkbox',
                     'object->name',
                     'type',
-                    'price',
                     'info',
+                    'price',
                     'note',
                 ],
             ]);
