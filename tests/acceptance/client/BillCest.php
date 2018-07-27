@@ -20,6 +20,7 @@ class BillCest
     private function ensureICanSeeAdvancedSearchBox(Client $I)
     {
         $I->see('Advanced search');
+        $I->seeLink('Recharge account', Url::to('@pay/deposit'));
 
         $index = new IndexPage($I);
         $index->containsFilters('form-advancedsearch-bill-search', [
@@ -35,12 +36,6 @@ class BillCest
 
         $I->see('Date', 'label');
         $I->see('Tariff', 'span');
-
-        $index->containsButtons([
-            ['a' => 'Recharge account'],
-            ["//button[@type='submit']" => 'Search'],
-            ['a' => 'Clear'],
-        ]);
     }
 
     private function ensureICanSeeBulkBillSearchBox(Client $I)
