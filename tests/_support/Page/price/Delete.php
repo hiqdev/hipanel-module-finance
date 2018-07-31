@@ -4,11 +4,11 @@ namespace hipanel\modules\finance\tests\_support\Page\price;
 
 class Delete extends View
 {
-    public function deleteTemplatePrices($id)
+    public function deleteTemplatePrices(): void
     {
         $I = $this->tester;
 
-        $this->loadPage($id);
+        $this->loadPage();
         $I->click("//thead/tr/th/input[@name='selection_all']");
         $I->click('Delete');
         $I->acceptPopup();

@@ -66,6 +66,10 @@ return [
                     'pattern' => 'finance/purse/<id:\d+>/generate/<type:\w+>.<login:[.\@\w\d_]+>.<currency:\w+>.pdf',
                     'route' => 'finance/purse/generate-document',
                 ],
+                [
+                    'pattern' => 'finance/pay/return/<username:.+>/<merchant:[\w\d_]+>/<transactionId:[\w\d]+>',
+                    'route' => 'finance/pay/return',
+                ],
             ],
         ],
         'themeManager' => [
