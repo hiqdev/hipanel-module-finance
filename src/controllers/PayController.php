@@ -103,12 +103,13 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 
     /**
      * @param Transaction $transaction
-     * @param $response
+     * @param string|array $response
      * @return mixed
+     * @throws \yii\base\ExitException
      */
     protected function completeTransaction($transaction, $response)
     {
-        if ($transaction->isCompleted() || isset($data['_error'])) {
+        if ($transaction->isCompleted() || isset($response['_error'])) {
             return $transaction;
         }
 
