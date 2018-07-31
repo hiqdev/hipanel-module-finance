@@ -74,7 +74,7 @@ $form = ActiveForm::begin([
                         </div>
                         <div class="form-instance">
                             <div class="col-md-3">
-                                <?php print $form->field($model, "[$i]object_id")->widget(ObjectCombo::class, [
+                                <?= $form->field($model, "[$i]object_id")->widget(ObjectCombo::class, [
                                     'class_attribute_name' => "[$i]class",
                                 ]) ?>
                             </div>
@@ -161,7 +161,7 @@ $form = ActiveForm::begin([
                                         <div class="row input-row margin-bottom">
                                             <div class="form-instance">
                                                 <div class="col-md-3">
-                                                    <?php print $form->field($charge, "[$i][$j]object_id")->widget(ObjectCombo::class, [
+                                                    <?= $form->field($charge, "[$i][$j]object_id")->widget(ObjectCombo::class, [
                                                         'class_attribute_name' => "[$i][$j]class",
                                                     ]) ?>
                                                 </div>
@@ -220,6 +220,6 @@ JS
         <?= Html::button(Yii::t('hipanel', 'Cancel'),
             ['class' => 'btn btn-default', 'onclick' => 'history.go(-1)']) ?>
     </div>
-</div
+</div>
 
 <?php ActiveForm::end() ?>
