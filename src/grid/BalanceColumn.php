@@ -21,6 +21,8 @@ class BalanceColumn extends \hipanel\grid\CurrencyColumn
 
     public function getUrl($model, $key, $index)
     {
-        return BillController::getSearchUrl(['client_id' => $model->client_id, 'purse_id' => $model->id]);
+        return BillController::getSearchUrl([
+            'client_id' => $model->client_id, 'purse_id' => $model->id, 'currency_in' => [$model->currency],
+        ]);
     }
 }
