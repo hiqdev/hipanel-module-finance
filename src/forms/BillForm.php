@@ -180,7 +180,7 @@ class BillForm extends Model
             [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
             [['label', 'currency', 'type', 'object', 'class'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['sum'], BillChargesSumValidator::class],
-            [['object_id'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['object_id'], 'integer', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
 
             [['id'], 'required', 'on' => [self::SCENARIO_UPDATE]],
             [
