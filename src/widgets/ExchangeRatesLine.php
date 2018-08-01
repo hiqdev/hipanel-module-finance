@@ -4,6 +4,8 @@ namespace hipanel\modules\finance\widgets;
 
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\widgets\ArraySpoiler;
+use Tuck\Sort\Sort;
+use Tuck\Sort\SortChain;
 use Yii;
 use yii\base\Widget;
 use yii\helpers\Html;
@@ -15,6 +17,15 @@ class ExchangeRatesLine extends Widget
      */
     public $rates;
 
+    /**
+     * @var string[] pairs that should be shown first (if exist)
+     */
+    public $priorityPairCodes = [
+        'USD/EUR',
+        'EUR/USD',
+        'USB/BTC'
+    ];
+
     public function run()
     {
         if (!Yii::$app->user->can('manage') || empty($this->rates)) {
@@ -24,18 +35,37 @@ class ExchangeRatesLine extends Widget
         return $this->renderLine();
     }
 
+    /**
+     * @param ExchangeRate[] $rates not sorted rates array
+     * @return ExchangeRate[] sorted rates
+     */
+    private function sortRates(array $rates): array
+    {
+        $chain = Sort::chain()
+            ->asc(function (ExchangeRate $rate) {
+                $pos = array_search($rate->pairCode(), $this->priorityPairCodes, true);
+
+                return $pos !== false ? $pos : INF;
+            })
+            ->compare(function (ExchangeRate $a, ExchangeRate $b) {
+                return strnatcasecmp($a->pairCode(), $b->pairCode());
+            });
+
+        return $chain->values($rates);
+    }
+
     protected function renderLine()
     {
         return Html::tag('span', ArraySpoiler::widget([
-            'data' => $this->rates,
+            'data' => $this->sortRates($this->rates),
             'visibleCount' => 3,
             'button' => [
                 'label' => '+{count}',
                 'popoverOptions' => ['html' => true],
             ],
-            'formatter' => function ($model) {
-                /** @var \hipanel\modules\finance\models\ExchangeRate $model */
-                return Html::tag('span', $model->from . '/' . $model->to, ['style' => 'font-weight: 400']) . ': ' . $model->rate;
+            'hiddenDelimiter' => '<br />',
+            'formatter' => function (ExchangeRate $model) {
+                return Html::tag('span', $model->pairCode(), ['style' => 'font-weight: 400']) . ': ' . $model->rate;
             }
         ]), ['style' => 'padding-left: 20px; color: #737272;']);
     }
