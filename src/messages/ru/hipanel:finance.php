@@ -165,6 +165,7 @@ return [
     'Resource consumption' => 'Потребление ресурсов',
     'Backup disk usage' => 'Потребление диска бэкапами',
     'Backup traffic' => 'Потребление трафика бэкапами',
+    'Server disk usage' => 'Потребление диска',
     'Number of domains' => 'Количество доменов',
     'Number of IPs' => 'Количество IP',
     'Panel ISP5' => 'Панель ISP5',

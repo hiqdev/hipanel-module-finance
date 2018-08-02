@@ -113,6 +113,7 @@ class Bill extends \hipanel\base\Model
             'overuse,server_traf95',
             'overuse,server_traf95_in',
             'overuse,server_traf95_max',
+            'overuse,server_du',
             'overuse,server_traf_in',
             'overuse,server_traf_max',
             'overuse,support_time',
