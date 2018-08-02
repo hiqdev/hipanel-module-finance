@@ -12,10 +12,20 @@ namespace hipanel\modules\finance\models\decorators\server;
 
 use Yii;
 
-class Traffic95ResourceDecorator extends TrafficResourceDecorator
+class Traffic95ResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
         return Yii::t('hipanel:server:order', '95 percentile traffic');
+    }
+
+    public function displayValue()
+    {
+        return Yii::t('yii', '{nFormatted} Mbps', ['nFormatted' => $this->getPrepaidQuantity()]);
+    }
+
+    public function displayUnit()
+    {
+        return Yii::t('hipanel', 'Mbps');
     }
 }
