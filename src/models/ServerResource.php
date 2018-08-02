@@ -44,6 +44,7 @@ class ServerResource extends Resource
     const TYPE_SERVER_TRAF_MAX = 'server_traf_max';
     const TYPE_SERVER_TRAF95_MAX = 'server_traf95_max';
     const TYPE_BACKUP_DU = 'backup_du';
+    const TYPE_SERVER_DU = 'server_du';
     const TYPE_MONTHLY = 'monthly';
 
     public function rules()
