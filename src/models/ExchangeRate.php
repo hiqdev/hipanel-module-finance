@@ -6,6 +6,14 @@ use hipanel\base\ModelTrait;
 use hiqdev\hiart\ActiveQuery;
 use hiqdev\hiart\ActiveRecord;
 
+/**
+ * Class ExchangeRate
+ *
+ * @property string from
+ * @property string to
+ * @property float rate
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
 class ExchangeRate extends ActiveRecord
 {
     use ModelTrait;
@@ -29,6 +37,11 @@ class ExchangeRate extends ActiveRecord
         return [
             [['from', 'to', 'rate'], 'safe']
         ];
+    }
+
+    public function pairCode(string $delimiter = '/'): string
+    {
+        return implode($delimiter, [$this->from, $this->to]);
     }
 
     public function attributeLabels()
