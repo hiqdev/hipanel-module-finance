@@ -6,6 +6,7 @@ use hipanel\modules\finance\behaviors\BillQuantity;
 use hipanel\modules\finance\logic\bill\QuantityTrait;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
+use hipanel\modules\finance\models\Currency;
 use hipanel\modules\finance\validation\BillChargesSumValidator;
 use Yii;
 use yii\base\Model;
@@ -181,7 +182,12 @@ class BillForm extends Model
             [['label', 'currency', 'type', 'object', 'class'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['sum'], BillChargesSumValidator::class],
             [['object_id'], 'integer', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
-
+            [['currency'], function ($attribute) {
+                    if (!in_array(mb_strtolower($this->{$attribute}), array_keys(array_change_key_case(Currency::list(), CASE_LOWER)), true)) {
+                        $this->addError($attribute, Yii::t('hipanel:finance', 'Currency is invalid'));
+                    }
+                }, 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE],
+            ],
             [['id'], 'required', 'on' => [self::SCENARIO_UPDATE]],
             [
                 ['client_id', 'sum', 'quantity', 'time', 'currency', 'type'],
