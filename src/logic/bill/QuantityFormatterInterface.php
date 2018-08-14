@@ -2,24 +2,27 @@
 
 namespace hipanel\modules\finance\logic\bill;
 
-interface BillQuantityInterface
+interface QuantityFormatterInterface
 {
     /**
      * Returns textual user friendly representation of the quantity.
      * E.g. 20 days, 30 GB, 1 year
+     *
      * @return string
      */
-    public function getText();
+    public function format(): string;
 
     /**
      * Returns numeric to be saved in DB.
-     * @return float|int
+     *
+     * @return string
      */
-    public function getValue();
+    public function getValue(): string;
 
     /**
      * Returns numeric user friendly representation of the quantity.
-     * @return float|int
+     *
+     * @return string
      */
-    public function getClientValue();
+    public function getClientValue(): string;
 }

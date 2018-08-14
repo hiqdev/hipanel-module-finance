@@ -13,6 +13,15 @@ namespace hipanel\modules\finance\models;
 use hipanel\modules\finance\behaviors\BillNegation;
 use Yii;
 
+/**
+ * Class Bill
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ *
+ * @property string $type
+ * @property string $unit
+ * @property string $quantity
+ */
 class Bill extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
@@ -44,7 +53,7 @@ class Bill extends \hipanel\base\Model
         return [
             [['client_id', 'seller_id', 'id'], 'integer'],
             [['object_id', 'tariff_id'], 'integer'],
-            [['client', 'seller', 'bill'], 'safe'],
+            [['client', 'seller', 'bill', 'unit'], 'safe'],
             [['domain', 'server'], 'safe'],
             [['sum', 'balance', 'quantity'], 'number'],
             [['currency', 'label', 'descr'], 'safe'],

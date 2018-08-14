@@ -4,31 +4,15 @@ namespace hipanel\modules\finance\logic\bill;
 
 use Yii;
 
-class DomainRenewalQuantity extends AbstractBillQuantity
+class DomainRenewalQuantity extends DefaultQuantityFormatter
 {
     /**
      * @inheritdoc
      */
-    public function getText()
+    public function format(): string
     {
-        $text = Yii::t('hipanel:finance', '{quantity, plural, one{# year} other{# years}}', ['quantity' => $this->getClientValue()]);
-
-        return $text;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getValue()
-    {
-        return $this->model->quantity;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getClientValue()
-    {
-        return $this->model->quantity;
+        return Yii::t('hipanel:finance', '{quantity, plural, one{# year} other{# years}}', [
+            'quantity' => $this->getClientValue()
+        ]);
     }
 }

@@ -4,18 +4,12 @@ namespace hipanel\modules\finance\logic\bill;
 
 use Yii;
 
-class SupportTimeQuantity extends AbstractBillQuantity implements BillQuantityInterface
+class SupportTimeQuantity extends DefaultQuantityFormatter
 {
-    public function getText()
+    public function format(): string
     {
-        $text = Yii::t('hipanel:finance', '{quantity, time, HH:mm} hour(s)',
-            ['quantity' => ceil($this->model->quantity * 3600)]);
-
-        return $text;
-    }
-
-    public function getValue()
-    {
-        return $this->model->quantity;
+        return Yii::t('hipanel:finance', '{quantity, time, HH:mm} hour(s)', [
+            'quantity' => ceil($this->getQuantity()->getQuantity() * 3600)
+        ]);
     }
 }

@@ -9,10 +9,11 @@ trait QuantityTrait
     public function getQuantity()
     {
         if (!$this->isNewRecord && isset($this->type)) {
-            $factory = Yii::$container->get(BillQuantityFactoryInterface::class);
+            /** @var QuantityFormatterFactoryInterface $factory */
+            $factory = Yii::$container->get(QuantityFormatterFactoryInterface::class);
             $billQty = $factory->create($this);
 
-            if ($billQty) {
+            if ($billQty !== null) {
                 return $billQty->getClientValue();
             }
         }

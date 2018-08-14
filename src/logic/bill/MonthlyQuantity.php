@@ -2,14 +2,24 @@
 
 namespace hipanel\modules\finance\logic\bill;
 
+use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\models\Charge;
 use Yii;
 
-class MonthlyQuantity extends AbstractBillQuantity
+/**
+ * Class MonthlyQuantity
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
+class MonthlyQuantity extends DefaultQuantityFormatter implements ContextAwareQuantityFormatter
 {
+    /** @var Bill|Charge */
+    protected $model;
+
     /**
      * @inheritdoc
      */
-    public function getText()
+    public function format(): string
     {
         $text = Yii::t('hipanel:finance', '{quantity, plural, one{# day} other{# days}}', ['quantity' => $this->getClientValue()]);
 
@@ -19,17 +29,17 @@ class MonthlyQuantity extends AbstractBillQuantity
     /**
      * @inheritdoc
      */
-    public function getValue()
+    public function getValue(): string
     {
-        return $this->model->quantity / $this->getNumberOfDays();
+        return $this->getQuantity() / $this->getNumberOfDays();
     }
 
     /**
      * @inheritdoc
      */
-    public function getClientValue()
+    public function getClientValue(): string
     {
-        return round($this->model->quantity * $this->getNumberOfDays());
+        return round($this->getQuantity()->getQuantity() * $this->getNumberOfDays());
     }
 
     /**
@@ -38,5 +48,20 @@ class MonthlyQuantity extends AbstractBillQuantity
     protected function getNumberOfDays()
     {
         return date('t', strtotime($this->model->time));
+    }
+
+    /**
+     * @param $context
+     * @return ContextAwareQuantityFormatter
+     */
+    public function setContext($context): ContextAwareQuantityFormatter
+    {
+        if (!$context instanceof Bill && !$context instanceof Charge) {
+            throw new \OutOfBoundsException('Context is not supported by Monthly quantity');
+        }
+
+        $this->model = $context;
+
+        return $this;
     }
 }
