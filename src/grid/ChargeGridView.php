@@ -5,6 +5,7 @@ namespace hipanel\modules\finance\grid;
 use hipanel\grid\CurrencyColumn;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\models\Charge;
+use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\widgets\ArraySpoiler;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\yii2\formatters\IntlFormatter;
@@ -65,14 +66,12 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'label',
                 'format' => 'raw',
                 'value' => function ($model) {
-                    if ($model->name) {
-                        $descr = Yii::t('hipanel', ucfirst($model->class)) . ' ' . Html::tag('b', $model->name);
-                    } elseif ($model->label) {
-                        $descr = $model->label;
-                    }
-                    $text = mb_strlen($descr) > 70 ? ArraySpoiler::widget(['data' => $descr]) : $descr;
-
-                    return $text;
+                    return LinkToObjectResolver::widget([
+                        'model' => $model,
+                        'idAttribute' => 'object_id',
+                        'typeAttribute' => 'class',
+                        'labelAttribute' => 'name',
+                    ]) . ($model->label ? " &ndash; $model->label" : '');
                 },
             ],
             'quantity' => [

@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\logic\bill;
 
+use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
 use hiqdev\php\units\Quantity;
@@ -38,12 +39,24 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
     }
 
     /** {@inheritdoc} */
-    public function create(Bill $model): ?QuantityFormatterInterface
+    public function create($model): ?QuantityFormatterInterface
     {
-        return $this->forBill($model);
+        if ($model instanceof Bill || $model instanceof BillForm) {
+            return $this->forBill($model);
+        }
+
+        if ($model instanceof Charge) {
+            return $this->forCharge($model);
+        }
+
+        throw new \InvalidArgumentException();
     }
 
-    public function forBill(Bill $bill): ?QuantityFormatterInterface
+    /**
+     * @param Bill|BillForm $bill
+     * @return QuantityFormatterInterface|null
+     */
+    public function forBill($bill): ?QuantityFormatterInterface
     {
         return $this->createByType($bill->type, Quantity::create($bill->unit, $bill->quantity), $bill);
     }

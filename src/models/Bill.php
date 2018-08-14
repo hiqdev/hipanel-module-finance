@@ -21,6 +21,7 @@ use Yii;
  * @property string $type
  * @property string $unit
  * @property string $quantity
+ * @property Charge[] charges
  */
 class Bill extends \hipanel\base\Model
 {

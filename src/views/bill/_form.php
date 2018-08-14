@@ -105,6 +105,7 @@ $form = ActiveForm::begin([
                                 <?= $form->field($model, "[$i]currency", ['template' => '{input}{error}'])->hiddenInput() ?>
                             </div>
                             <div class="col-md-1">
+                                <?= Html::activeHiddenInput($model, "[$i]unit") ?>
                                 <?= $form->field($model, "[$i]quantity")->input('text', ['value' => $model->getQuantity()]) ?>
                             </div>
                             <div class="col-md-2">
@@ -146,6 +147,8 @@ $form = ActiveForm::begin([
                                     'object_id',
                                     'type',
                                     'sum',
+                                    'unit',
+                                    'quantity',
                                     'label',
                                 ],
                             ]) ?>
@@ -177,6 +180,7 @@ $form = ActiveForm::begin([
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-1">
+                                                    <?= Html::activeHiddenInput($charge, "[$i][$j]unit") ?>
                                                     <?= $form->field($charge, "[$i][$j]quantity")->input('text', ['value' => $charge->getQuantity()]) ?>
                                                 </div>
                                                 <div class="col-md-5">

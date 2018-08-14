@@ -63,6 +63,11 @@ class BillForm extends Model
     /**
      * @var float
      */
+    public $unit;
+
+    /**
+     * @var float
+     */
     public $userQuantity;
 
     /**
@@ -108,7 +113,10 @@ class BillForm extends Model
      */
     public static function createFromBill($bill, $scenario)
     {
-        $attributes = $bill->getAttributes(['id', 'object_id', 'client_id', 'currency', 'type', 'gtype', 'sum', 'time', 'quantity', 'label', 'object', 'class']);
+        $attributes = $bill->getAttributes([
+            'id', 'object_id', 'client_id', 'currency', 'type',
+            'gtype', 'sum', 'time', 'quantity', 'unit', 'label', 'object', 'class'
+        ]);
 
         $form = new self(['scenario' => $scenario]);
         $form->setAttributes($attributes, false);
@@ -167,7 +175,7 @@ class BillForm extends Model
      */
     public function newCharge()
     {
-        return (new Charge(['scenario' => Charge::SCENARIO_CREATE]));
+        return new Charge(['scenario' => Charge::SCENARIO_CREATE]);
     }
 
     /**
@@ -179,18 +187,19 @@ class BillForm extends Model
             [['id', 'object_id'], 'integer', 'on' => [self::SCENARIO_UPDATE]],
             [['sum', 'quantity'], 'number', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
-            [['label', 'currency', 'type', 'object', 'class'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['label', 'currency', 'unit', 'type', 'object', 'class'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['sum'], BillChargesSumValidator::class],
+            [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]], // TODO: should be probably replaced with input on client side
             [['object_id'], 'integer', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['currency'], function ($attribute) {
-                    if (!in_array(mb_strtolower($this->{$attribute}), array_keys(array_change_key_case(Currency::list(), CASE_LOWER)), true)) {
+                    if (!array_key_exists(mb_strtolower($this->{$attribute}), array_change_key_case(Currency::list(), CASE_LOWER))) {
                         $this->addError($attribute, Yii::t('hipanel:finance', 'Currency is invalid'));
                     }
                 }, 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE],
             ],
             [['id'], 'required', 'on' => [self::SCENARIO_UPDATE]],
             [
-                ['client_id', 'sum', 'quantity', 'time', 'currency', 'type'],
+                ['client_id', 'sum', 'quantity', 'unit', 'time', 'currency', 'type'],
                 'required',
                 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE],
             ],
