@@ -3,7 +3,6 @@
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\models\Plan;
 use yii\helpers\Html;
-use hipanel\helpers\Url;
 use hipanel\modules\finance\grid\PlanGridView;
 use hipanel\modules\finance\menus\PlanDetailMenu;
 use hipanel\widgets\IndexPage;
@@ -13,6 +12,7 @@ use hipanel\widgets\IndexPage;
  * @var \yii\web\View $this
  * @var Plan $model
  * @var PlanInternalsGrouper $grouper
+ * @var array $parentPrices
  */
 
 $this->title = Html::encode($model->name);
@@ -63,26 +63,18 @@ $this->registerCss("
     </div>
     <div class="col-md-9">
         <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
-            <?php $page->beginContent('show-actions') ?>
-                <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>
-            <?php $page->endContent() ?>
-
-            <?php $page->beginContent('bulk-actions') ?>
-                <?= $page->renderBulkButton('@price/update', Yii::t('hipanel', 'Update'), ['color' => 'warning']) ?>
-                <?= $page->renderBulkDeleteButton('@price/delete') ?>
-            <?php $page->endContent() ?>
-
-                <?php if (in_array($model->type, [Plan::TYPE_SERVER, Plan::TYPE_VCDN, Plan::TYPE_PCDN])): ?>
-                    <?= $this->render('view/_server', compact('model', 'grouper', 'page')) ?>
-                <?php elseif ($model->type === Plan::TYPE_TEMPLATE): ?>
-                    <?= $this->render('view/_template', compact('model', 'grouper', 'page')) ?>
-                <?php else: ?>
-                    <?php $page->beginContent('table') ?>
-                        <div class="col-md-12">
-                            <h2><?= Yii::t('hipanel:finance', 'This plan type viewing is not implemented yet') ?></h2>
-                        </div>
-                    <?php $page->endContent() ?>
-                <?php endif; ?>
+            <?php if (in_array($model->type, [Plan::TYPE_SERVER, Plan::TYPE_VCDN, Plan::TYPE_PCDN, Plan::TYPE_TEMPLATE, Plan::TYPE_CERTIFICATE])): ?>
+                <?php $page->beginContent('show-actions') ?>
+                    <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>
+                <?php $page->endContent() ?>
+                <?= $this->render($model->type . '/view', compact('model', 'grouper', 'page', 'parentPrices')) ?>
+            <?php else: ?>
+                <?php $page->beginContent('table') ?>
+                    <div class="col-md-12">
+                        <h2><?= Yii::t('hipanel:finance', 'This plan type viewing is not implemented yet') ?></h2>
+                    </div>
+                <?php $page->endContent() ?>
+            <?php endif; ?>
         <?php $page->end() ?>
     </div>
 </div>

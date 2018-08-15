@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\models\Ref;
+use hipanel\modules\finance\models\query\PlanQuery;
 use Yii;
 
 /**
@@ -15,7 +16,7 @@ use Yii;
  * @property int $currency_id
  *
  * @property Sale[] $sales
- * @property Price[] $prices
+ * @property Price[]|CertificatePrice[] $prices
  * @property-read string[] typeOptions
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
@@ -26,6 +27,7 @@ class Plan extends \hipanel\base\Model
     const TYPE_PCDN = 'pcdn';
     const TYPE_VCDN = 'vcdn';
     const TYPE_TEMPLATE = 'template';
+    const TYPE_CERTIFICATE = 'certificate';
 
     use \hipanel\base\ModelTrait;
 
@@ -52,7 +54,19 @@ class Plan extends \hipanel\base\Model
 
     public function getPrices()
     {
+        if ($this->type === Plan::TYPE_CERTIFICATE) {
+            return $this->hasMany(CertificatePrice::class, ['plan_id' => 'id'])->inverseOf('plan');
+        }
         return $this->hasMany(Price::class, ['plan_id' => 'id'])->indexBy('id')->inverseOf('plan');
+    }
+
+    public function getDesiredPriceClass()
+    {
+        if ($this->type === Plan::TYPE_CERTIFICATE) {
+            return CertificatePrice::class;
+        }
+
+        return Price::class;
     }
 
     public function getSales()
@@ -73,5 +87,16 @@ class Plan extends \hipanel\base\Model
     public function isDeleted(): bool
     {
         return $this->state === 'deleted';
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return PlanQuery
+     */
+    public static function find($options = [])
+    {
+        return new PlanQuery(get_called_class(), [
+            'options' => $options,
+        ]);
     }
 }

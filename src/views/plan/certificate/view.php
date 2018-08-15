@@ -8,10 +8,12 @@ use yii\helpers\Html;
 /**
  * @var \yii\web\View $this
  * @var \hipanel\modules\finance\models\Plan $model
- * @var \hipanel\modules\finance\models\Sale[] $salesByObject
- * @var \hipanel\modules\finance\models\Price[] $pricesByMainObject
+ * @var \hipanel\modules\finance\helpers\PlanInternalsGrouper $grouper
+ * @var \hipanel\modules\finance\models\CertificatePrice[][] $parentPrices
  * @var IndexPage $page
  */
+
+$prices = $grouper->group();
 
 ?>
 
@@ -20,28 +22,28 @@ use yii\helpers\Html;
         'id' => 'create-prices-modal',
         'header' => Html::tag('h4', Yii::t('hipanel.finance.price', 'Create prices'), ['class' => 'modal-title']),
         'scenario' => 'create-prices',
-        'actionUrl' => ['@plan/create-prices', 'id' => $model->id],
+        'actionUrl' => ['@plan/suggest-prices-modal', 'id' => $model->id],
         'size' => Modal::SIZE_SMALL,
         'toggleButton' => ['label' => Yii::t('hipanel', 'Create'), 'class' => 'btn btn-sm btn-success'],
     ]) ?>
+    <?= Html::a(Yii::t('hipanel', 'Update'), ['@plan/update-prices', 'id' => $model->id], ['class' => 'btn btn-sm btn-warning']) ?>
 <?php $page->endContent() ?>
 
 <?php $page->beginContent('table') ?>
     <?php $page->beginBulkForm() ?>
-        <?= \hipanel\modules\finance\grid\PriceGridView::widget([
+        <?= \hipanel\modules\finance\grid\CertificatePriceGridView::widget([
             'boxed' => false,
             'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
             'dataProvider' => (new \yii\data\ArrayDataProvider([
-                'allModels' => $model->prices,
+                'allModels' => $prices,
                 'pagination' => false,
             ])),
+            'parentPrices' => $parentPrices,
+            'filterModel' => $model,
             'columns' => [
-                'checkbox',
-                'object->name',
-                'object->label',
-                'type',
-                'price',
-                'note',
+                'certificate',
+                'purchase',
+                'renewal',
             ],
         ]) ?>
     <?php $page->endBulkForm() ?>

@@ -20,12 +20,18 @@ use yii\helpers\Html;
 [$salesByObject, $pricesByMainObject] = $grouper->group();
 
 ?>
+
+<?php $page->beginContent('bulk-actions') ?>
+    <?= $page->renderBulkButton('@price/update', Yii::t('hipanel', 'Update'), ['color' => 'warning']) ?>
+    <?= $page->renderBulkDeleteButton('@price/delete') ?>
+<?php $page->endContent() ?>
+
 <?php $page->beginContent('main-actions') ?>
     <?= AjaxModal::widget([
         'id' => 'create-prices-modal',
         'header' => Html::tag('h4', Yii::t('hipanel.finance.price', 'Create prices'), ['class' => 'modal-title']),
         'scenario' => 'create-prices',
-        'actionUrl' => ['@plan/create-prices', 'id' => $model->id],
+        'actionUrl' => ['@plan/suggest-prices-modal', 'id' => $model->id],
         'size' => Modal::SIZE_SMALL,
         'toggleButton' => ['label' => Yii::t('hipanel', 'Create'), 'class' => 'btn btn-sm btn-success'],
     ]) ?>

@@ -19,6 +19,7 @@ use yii\validators\NumberValidator;
  * Class CertificateResource
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ * @deprecated Is implemented in plan module
  */
 class CertificateResource extends Resource
 {

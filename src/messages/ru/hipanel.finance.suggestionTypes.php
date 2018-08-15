@@ -7,4 +7,5 @@ return [
     'dedicated_server' => 'Dedicated Server',
     'p_cdn' => 'pCDN',
     'v_cdn' => 'vCDN',
+    'certificate' => 'Сертификат',
 ];
