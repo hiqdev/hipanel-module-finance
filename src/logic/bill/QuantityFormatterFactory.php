@@ -17,7 +17,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
      * @var array maps bill type to a QuantityFormatter
      * // TODO: use DI to configure
      */
-    protected $types = [
+    private $types = [
         'support_time' => SupportTimeQuantity::class,
         'server_traf_max' => DefaultQuantityFormatter::class,
         'server_traf95_max' => DefaultQuantityFormatter::class,
@@ -49,7 +49,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
             return $this->forCharge($model);
         }
 
-        throw new \InvalidArgumentException();
+        throw new \InvalidArgumentException('Create is not supported for the passed model');
     }
 
     /**

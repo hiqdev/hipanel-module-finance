@@ -2,22 +2,23 @@
 
 namespace hipanel\modules\finance\logic\bill;
 
+use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
 
 interface QuantityFormatterFactoryInterface
 {
     /**
-     * @param Bill $model
+     * @param object $model
      * @return QuantityFormatterInterface|null
      */
-    public function create(Bill $model): ?QuantityFormatterInterface;
+    public function create($model): ?QuantityFormatterInterface;
 
     /**
-     * @param Bill $bill
+     * @param Bill|BillForm $bill
      * @return QuantityFormatterInterface|null
      */
-    public function forBill(Bill $bill): ?QuantityFormatterInterface;
+    public function forBill($bill): ?QuantityFormatterInterface;
 
     /**
      * @param Charge $charge

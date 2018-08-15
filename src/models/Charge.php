@@ -12,6 +12,7 @@ use Yii;
  *
  * @property string $unit
  * @property string $quantity
+ * @property string $type
  */
 class Charge extends \hiqdev\hiart\ActiveRecord
 {
