@@ -169,7 +169,7 @@ class PlanController extends CrudController
             return $calculator->calculateForPeriods([
                 'now',
                 'first day of +1 month',
-                'first day of +2 month',
+                'first day of +1 year',
             ]);
         } catch (ResponseErrorException $exception) {
             Yii::$app->response->setStatusCode(412, $exception->getMessage());

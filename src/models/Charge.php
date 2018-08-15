@@ -5,6 +5,14 @@ namespace hipanel\modules\finance\models;
 use hipanel\modules\finance\logic\bill\QuantityTrait;
 use Yii;
 
+/**
+ * Class Charge
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ *
+ * @property string $unit
+ * @property string $quantity
+ */
 class Charge extends \hiqdev\hiart\ActiveRecord
 {
     use QuantityTrait;
@@ -18,11 +26,11 @@ class Charge extends \hiqdev\hiart\ActiveRecord
     {
         return [
             [['id', 'type_id', 'object_id', 'bill_id'], 'integer'],
-            [['class', 'name'], 'string'],
+            [['class', 'name', 'unit'], 'string'],
             [['type', 'label', 'ftype', 'time', 'type_label', 'currency'], 'safe'],
             [['sum', 'quantity'], 'number'],
-
-            [['sum', 'type', 'quantity'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['object_id', 'sum', 'type', 'quantity', 'unit'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['id'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]]
         ];
     }

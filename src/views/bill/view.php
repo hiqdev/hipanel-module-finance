@@ -8,7 +8,13 @@ use hipanel\widgets\IndexPage;
 use hipanel\widgets\MainDetails;
 use hipanel\widgets\Pjax;
 
-$this->title = $model->label ?: '&nbsp;';
+$this->title = sprintf(
+    '%s: %s %s %s',
+    $model->client,
+    $model->sum,
+    $model->currency,
+    $model->label
+) ?: '&nbsp;';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Payments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 

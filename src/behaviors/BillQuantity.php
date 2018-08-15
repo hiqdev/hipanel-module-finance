@@ -2,7 +2,7 @@
 
 namespace hipanel\modules\finance\behaviors;
 
-use hipanel\modules\finance\logic\bill\BillQuantityFactory;
+use hipanel\modules\finance\logic\bill\QuantityFormatterFactory;
 use hipanel\modules\finance\models\Charge;
 use yii\behaviors\AttributeBehavior;
 use yii\db\ActiveRecord;
@@ -12,11 +12,11 @@ class BillQuantity extends AttributeBehavior
     public $quantityAttribute = 'quantity';
 
     /**
-     * @var BillQuantityFactory
+     * @var QuantityFormatterFactory
      */
     private $qtyFactory;
 
-    public function __construct($config = [], BillQuantityFactory $qtyFactory)
+    public function __construct($config = [], QuantityFormatterFactory $qtyFactory)
     {
         parent::__construct($config);
         $this->qtyFactory = $qtyFactory;

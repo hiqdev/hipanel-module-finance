@@ -38,23 +38,26 @@ use yii\helpers\Html;
 <?php $page->endContent() ?>
 
 <?php $page->beginContent('table') ?>
-    <?php $page->beginBulkForm() ?>
-        <?= \hipanel\modules\finance\grid\SalesInPlanGridView::widget([
-            'boxed' => false,
-            'showHeader' => false,
-            'pricesBySoldObject' => $pricesByMainObject,
-            'dataProvider' => (new \yii\data\ArrayDataProvider([
-                'allModels' => $salesByObject,
-                'pagination' => false,
-            ])),
-            'columns' => [
-                'object_link',
-                'object_label',
-                'seller',
-                'buyer',
-                'time',
-                'price_related_actions',
-            ]
-        ]) ?>
-    <?php $page->endBulkForm() ?>
+<?php $page->beginBulkForm() ?>
+    <?= \hipanel\modules\finance\grid\SalesInPlanGridView::widget([
+        'boxed' => false,
+        'showHeader' => false,
+        'pricesBySoldObject' => $pricesByMainObject,
+        'dataProvider' => new \yii\data\ArrayDataProvider([
+            'allModels' => $salesByObject,
+            'pagination' => false,
+        ]),
+        'summaryRenderer' => function () {
+            return ''; // remove unnecessary summary
+        },
+        'columns' => [
+            'object_link',
+            'object_label',
+            'seller',
+            'buyer',
+            'time',
+            'price_related_actions',
+        ]
+    ]) ?>
+<?php $page->endBulkForm() ?>
 <?php $page->endContent() ?>

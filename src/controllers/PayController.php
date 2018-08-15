@@ -51,9 +51,10 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
         return $this->getMerchantModule()->getPayController()->render($view, $params);
     }
 
-    public function checkNotify()
+    public function checkNotify(string $transactionId = null): ?Transaction
     {
-        $id = Yii::$app->request->get('transactionId')
+        $id = $transactionId
+            ?? Yii::$app->request->get('transactionId')
             ?? Yii::$app->request->post('transactionId')
             ?? Yii::$app->session->get(self::SESSION_MERCHANT_LATEST_TRANSACTION_ID);
 
@@ -63,7 +64,6 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
         }
 
         $data = array_merge([
-            'transactionId' => $transaction->getId(),
             'merchant' => $transaction->getMerchant(),
             'username' => $transaction->getParameter('username'),
         ], $_REQUEST);
@@ -103,12 +103,13 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 
     /**
      * @param Transaction $transaction
-     * @param $response
+     * @param string|array $response
      * @return mixed
+     * @throws \yii\base\ExitException
      */
     protected function completeTransaction($transaction, $response)
     {
-        if ($transaction->isCompleted() || isset($data['_error'])) {
+        if ($transaction->isCompleted() || isset($response['_error'])) {
             return $transaction;
         }
 

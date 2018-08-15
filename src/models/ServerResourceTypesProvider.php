@@ -22,6 +22,7 @@ class ServerResourceTypesProvider implements ServerResourceTypesProviderInterfac
             ServerResource::TYPE_SERVER_TRAF_MAX => Yii::t('hipanel:finance:tariff', 'Server traffic'),
             ServerResource::TYPE_SERVER_TRAF95_MAX => Yii::t('hipanel:finance:tariff', '95 percentile traffic'),
             ServerResource::TYPE_BACKUP_DU => Yii::t('hipanel:finance:tariff', 'Backup disk usage'),
+            ServerResource::TYPE_SERVER_DU => Yii::t('hipanel:finance:tariff', 'Server disk usage'),
         ];
     }
 }
