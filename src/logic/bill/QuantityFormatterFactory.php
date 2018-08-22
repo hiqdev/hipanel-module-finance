@@ -5,6 +5,7 @@ namespace hipanel\modules\finance\logic\bill;
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
+use hipanel\modules\server\models\Consumption;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\yii2\formatters\IntlFormatter;
 
@@ -64,6 +65,11 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
     public function forCharge(Charge $charge): ?QuantityFormatterInterface
     {
         return $this->createByType($charge->type, Quantity::create($charge->unit, $charge->quantity), $charge);
+    }
+
+    public function forConsumption(Consumption $consumption)
+    {
+        return $this->createByType($consumption->type, Quantity::create($consumption->unit, $consumption->quantity), $consumption);
     }
 
     /** {@inheritdoc} */

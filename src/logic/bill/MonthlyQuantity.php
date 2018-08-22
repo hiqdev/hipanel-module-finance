@@ -5,6 +5,8 @@ namespace hipanel\modules\finance\logic\bill;
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
+use hipanel\modules\server\models\Consumption;
+use hiqdev\php\units\Quantity;
 use Yii;
 
 /**
@@ -57,7 +59,7 @@ class MonthlyQuantity extends DefaultQuantityFormatter implements ContextAwareQu
      */
     public function setContext($context): ContextAwareQuantityFormatter
     {
-        if (!$context instanceof Bill && !$context instanceof Charge && !$context instanceof BillForm) {
+        if (!$context instanceof Bill && !$context instanceof Charge && !$context instanceof BillForm && !$context instanceof Consumption) {
             throw new \OutOfBoundsException('Context is not supported by Monthly quantity');
         }
 
