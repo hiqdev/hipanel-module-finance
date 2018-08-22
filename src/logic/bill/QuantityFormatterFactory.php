@@ -67,7 +67,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
         return $this->createByType($charge->type, Quantity::create($charge->unit, $charge->quantity), $charge);
     }
 
-    public function forConsumption(Consumption $consumption)
+    public function forConsumption(Consumption $consumption): ?QuantityFormatterInterface
     {
         return $this->createByType($consumption->type, Quantity::create($consumption->unit, $consumption->quantity), $consumption);
     }
