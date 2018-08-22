@@ -52,7 +52,7 @@ class Create extends Authenticated
     }
 
     /**
-     * Tries to create a new detailed bill without detailed data
+     * Tries to create a new detailed bill without detailed data.
      *
      * Expects blank field errors.
      *
