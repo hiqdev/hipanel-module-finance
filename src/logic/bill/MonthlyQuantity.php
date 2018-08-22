@@ -58,7 +58,10 @@ class MonthlyQuantity extends DefaultQuantityFormatter implements ContextAwareQu
     public function setContext($context): ContextAwareQuantityFormatter
     {
         if (!$context instanceof Bill && !$context instanceof Charge && !$context instanceof BillForm) {
-            throw new \OutOfBoundsException('Context is not supported by Monthly quantity');
+            throw new \OutOfBoundsException(sprintf(
+                'Context "%s" is not supported by Monthly quantity',
+                get_class($context)
+            ));
         }
 
         $this->model = $context;
