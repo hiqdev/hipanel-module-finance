@@ -28,10 +28,10 @@ class Create extends Authenticated
     {
         $I = $this->tester;
 
-        $I->amOnPage(Url::to('@bill/create'));
+        $I->needPage(Url::to('@bill/create'));
         $this->clickSaveButton();
 
-        $this->seeBlankError(['Client', 'Sum', 'Currency', 'Quantity']);
+        $this->seeBlankFieldsError(['Client', 'Sum', 'Currency', 'Quantity']);
     }
 
     /**
@@ -45,7 +45,7 @@ class Create extends Authenticated
     {
         $I = $this->tester;
 
-        $I->amOnPage(Url::to('@bill/create'));
+        $I->needPage(Url::to('@bill/create'));
         $this->fillBillFields($billData);
         $this->clickSaveButton();
         $this->seeBillWasCreated();
@@ -63,11 +63,11 @@ class Create extends Authenticated
     {
         $I = $this->tester;
 
-        $I->amOnPage(Url::to('@bill/create'));
+        $I->needPage(Url::to('@bill/create'));
         $this->fillBillFields($billData);
         $this->clickDetailingButton();
         $this->clickSaveButton();
-        $this->seeBlankError(['Object', 'Sum', 'Quantity']);
+        $this->seeBlankFieldsError(['Object', 'Sum', 'Quantity']);
     }
 
     /**
@@ -83,10 +83,9 @@ class Create extends Authenticated
     {
         $I = $this->tester;
 
-        $I->amOnPage(Url::to('@bill/create'));
+        $I->needPage(Url::to('@bill/create'));
         $this->fillBillFields($billData);
 
-        $this->clickDetailingButton();
         $this->fillDetailingFields($billData, 1);
         $this->clickDetailingButton();
         $this->fillDetailingFields($billData, 2);
@@ -174,7 +173,7 @@ class Create extends Authenticated
      * @param array $fieldsList
      * @throws \Exception
      */
-    protected function seeBlankError(array $fieldsList): void
+    protected function seeBlankFieldsError(array $fieldsList): void
     {
         foreach ($fieldsList as $field) {
             $this->tester->waitForText("$field cannot be blank.");
