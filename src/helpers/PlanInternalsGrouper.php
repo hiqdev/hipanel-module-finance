@@ -3,6 +3,8 @@
 namespace hipanel\modules\finance\helpers;
 
 use hipanel\modules\finance\models\CertificatePrice;
+use hipanel\modules\finance\models\DomainServicePrice;
+use hipanel\modules\finance\models\DomainZonePrice;
 use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
@@ -41,6 +43,8 @@ class PlanInternalsGrouper
         switch ($this->plan->type) {
             case Plan::TYPE_CERTIFICATE:
                 return $this->groupCertificatePrices();
+            case Plan::TYPE_DOMAIN:
+                return $this->groupDomainPrices();
             default:
                 return $this->groupServerPrices();
         }
@@ -128,5 +132,26 @@ class PlanInternalsGrouper
         }
 
         return $result;
+    }
+
+    /**
+     * @return array[] of domain prices
+     */
+    private function groupDomainPrices(): array
+    {
+        $zonePrices = [];
+        $servicePrices = [];
+
+        foreach ($this->plan->prices as $price) {
+            if ($price instanceof DomainZonePrice) {
+                /** @var DomainZonePrice $price */
+                $zonePrices[$price->object_id][$price->type] = $price;
+            } elseif ($price instanceof DomainServicePrice) {
+                /** @var DomainServicePrice $price */
+                $servicePrices[$price->type] = $price;
+            }
+        }
+
+        return [$zonePrices, $servicePrices];
     }
 }

@@ -12,14 +12,15 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\helpers\ArrayHelper;
+use hipanel\modules\finance\collections\PricesCollection;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\helpers\PriceChargesEstimator;
 use hipanel\modules\finance\helpers\PriceSort;
+use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\Plan;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\TargetObject;
-use hiqdev\hiart\Collection;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\Event;
@@ -189,15 +190,8 @@ class PlanController extends CrudController
         $request = Yii::$app->request;
         if ($request->isPost) {
             try {
-                $priceClass = $plan->getDesiredPriceClass();
-                /** @var Price $price */
-                $price = new $priceClass(['scenario' => $scenario]);
-                $prices = $request->post($price->formName());
-                $collection = new Collection([
-                    'model' => $price,
-                    'scenario' => $scenario,
-                ]);
-                $collection->load($prices);
+                $collection = new PricesCollection(new PriceModelFactory(), ['scenario' => $scenario]);
+                $collection->load();
                 if ($collection->save() === false) {
                     if ($scenario === 'create') {
                         Yii::$app->session->addFlash('error', Yii::t('hipanel.finance.price', 'Error occurred during creation of prices'));

@@ -63,7 +63,7 @@ $this->registerCss("
     </div>
     <div class="col-md-9">
         <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
-            <?php if (in_array($model->type, [Plan::TYPE_SERVER, Plan::TYPE_VCDN, Plan::TYPE_PCDN, Plan::TYPE_TEMPLATE, Plan::TYPE_CERTIFICATE])): ?>
+            <?php if (in_array($model->type, [Plan::TYPE_SERVER, Plan::TYPE_VCDN, Plan::TYPE_PCDN, Plan::TYPE_TEMPLATE, Plan::TYPE_CERTIFICATE, Plan::TYPE_DOMAIN])): ?>
                 <?php $page->beginContent('show-actions') ?>
                     <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>
                 <?php $page->endContent() ?>

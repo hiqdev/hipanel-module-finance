@@ -8,4 +8,5 @@ return [
     'p_cdn' => 'pCDN',
     'v_cdn' => 'vCDN',
     'certificate' => 'Сертификат',
+    'domain' => 'Домен',
 ];
