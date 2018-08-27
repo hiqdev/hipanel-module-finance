@@ -27,7 +27,7 @@ class PaymentsCest
 
     public function ensureICantCreateDetailedBillWithoutDetailedData(Manager $I): void
     {
-        (new Create($I))->createDetailedBillWithoutDetailedData($this->getBillData());
+        (new Create($I))->createDetailedBillWithoutChargeData($this->getBillData());
     }
 
     public function ensureICanCreateDetailedBill(Manager $I): void
@@ -35,10 +35,20 @@ class PaymentsCest
         (new Create($I))->createDetailedBill($this->getBillData());
     }
 
+    public function ensureICanUpdateBill(Manager $I)
+    {
+        (new Create($I))->updateBill();
+    }
+
+    public function ensureUpdatedBillWasSavedProperty(Manager $I)
+    {
+        (new Create($I))->checkUpdatedBill();
+    }
+
     protected function getBillData(): array
     {
         return [
-            'login'     => 'hipanel_test_user@hiqdev.com',
+            'login'     => 'hipanel_test_admin@hiqdev.com',
             'type'      => 'monthly,monthly',
             'currency'  => '$',
             'sum'       =>  10,

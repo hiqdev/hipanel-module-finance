@@ -35,7 +35,7 @@ class Create extends Authenticated
     }
 
     /**
-     * Tries to create a new simple bill with all the necessary data.
+     * Tries to create a new simple bill with all necessary data.
      *
      * Expects successful bill creation.
      *
@@ -52,14 +52,14 @@ class Create extends Authenticated
     }
 
     /**
-     * Tries to create a new detailed bill without detailed data.
+     * Tries to create a new detailed bill without charge data.
      *
      * Expects blank field errors.
      *
      * @param array $billData
      * @throws \Exception
      */
-    public function createDetailedBillWithoutDetailedData(array $billData): void
+    public function createDetailedBillWithoutChargeData(array $billData): void
     {
         $I = $this->tester;
 
@@ -84,11 +84,10 @@ class Create extends Authenticated
         $I = $this->tester;
 
         $I->needPage(Url::to('@bill/create'));
-        $this->fillBillFields($billData);
 
-        $this->fillDetailingFields($billData, 1);
+        $this->fillChargeFields($billData, 1);
         $this->clickDetailingButton();
-        $this->fillDetailingFields($billData, 2);
+        $this->fillChargeFields($billData, 2);
         $this->clickSaveButton();
 
         $I->waitForText('Bill sum must match charges sum:');
@@ -97,6 +96,46 @@ class Create extends Authenticated
 
         $this->clickSaveButton();
         $this->seeBillWasCreated();
+    }
+
+    public function updateBill(): void
+    {
+        $I = $this->tester;
+
+        $I->click('.//tr[1]/td/div/button');
+        $I->click('//a[contains(text(),\'Update\')]');
+
+        $I->seeInCurrentUrl('finance/bill/update?id');
+
+        $I->fillField('#billform-0-sum', 250);
+        $I->fillField('#charge-0-0-sum', -250);
+
+
+        $I->click('//div[@class=\'bill-charges\']/div[3]/div[1]/div[2]/button[1]');
+
+        $this->clickSaveButton();
+
+        $this->seeBillWasUpdated();
+    }
+
+    /**
+     * Checks whether a bill was updated successfully.
+     */
+    public function checkUpdatedBill(): void
+    {
+        $I = $this->tester;
+
+        $I->click('.//tr[1]/td/div/button');
+        $I->click('//a[contains(text(),\'Update\')]');
+
+        $I->seeOptionIsSelected('#charge-0-0-class', 'Server');
+        $I->seeOptionIsSelected('#charge-0-0-type', 'Monthly fee');
+
+        $I->seeElement('span', ['title' => 'TEST02']);
+
+        $I->dontSeeElement('#charge-0-1-class');
+        $I->dontSeeElement('#charge-0-1-type');
+        $I->dontSeeElement('span', ['title' => 'TEST01']);
     }
 
     /**
@@ -114,29 +153,29 @@ class Create extends Authenticated
 
         $I->selectOption('#billform-0-type', ['value' => $billData['type']]);
 
-        $I->fillField(['name' => 'BillForm[0][sum]'], $billData['sum']);
+        $I->fillField(['billform-0-sum'], $billData['sum']);
 
-        $I->click('//div[contains(@class,\'input-group-btn\')]//button[2]');
-        $I->click('//a[contains(text(),\'$\')]');
+        $I->click('//div[@class=\'input-group-btn\']/button[2]');
+        $I->click('//li/a[contains(text(),\'$\')]');
 
         $I->fillField(['name' => 'BillForm[0][quantity]'], $billData['quantity']);
     }
 
     /**
-     * Fills detailed bill fields.
+     * Fills charge fields.
      *
      * @param array $billData
-     * @param int $n number of detailed block
+     * @param int $n number of charge block
      */
-    protected function fillDetailingFields(array $billData, $n): void
+    protected function fillChargeFields(array $billData, $n): void
     {
         $I = $this->tester;
 
         $I->selectOption("#charge-0-$n-class", ['value' => 'Server']);
 
         $this->select2->open("#charge-0-$n-object_id");
-        $this->select2->fillSearchField("TEST01");
-        $this->select2->chooseOption("TEST01");
+        $this->select2->fillSearchField("TEST0$n");
+        $this->select2->chooseOption("TEST0$n");
 
         $I->selectOption("#charge-0-$n-type", ['value' => $billData['type']]);
 
@@ -153,17 +192,25 @@ class Create extends Authenticated
     protected function clickDetailingButton(): void
     {
         $this->tester->click('//div[@class=\'col-md-12 margin-bottom\']' .
-                                '//button[@type=\'button\']');
+                                '/button[@type=\'button\']');
     }
 
     /**
-     * Checks whether a bill was successfully created.
+     * Checks whether a bill was created successfully.
      */
     protected function seeBillWasCreated(): void
     {
         $I = $this->tester;
 
         $I->closeNotification('Bill was created successfully');
+        $I->seeInCurrentUrl('/finance/bill?id');
+    }
+
+    protected function seeBillWasUpdated(): void
+    {
+        $I = $this->tester;
+
+        $I->closeNotification('Bill was updated successfully');
         $I->seeInCurrentUrl('/finance/bill?id');
     }
 
