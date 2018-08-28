@@ -14,26 +14,23 @@ use hipanel\base\ModelTrait;
 use Yii;
 
 /**
- * Class DomainResource.
- * @deprecated Is implemented in plan module
+ * Class DomainZonePrice.
  */
-class DomainResource extends Resource
+class DomainZonePrice extends Price
 {
     use ModelTrait;
 
     public static function tableName()
     {
-        return 'resource';
+        return 'price';
     }
 
-    const TYPE_DOMAIN_REGISTRATION = 'dregistration';
-    const TYPE_DOMAIN_TRANSFER = 'dtransfer';
-    const TYPE_DOMAIN_RENEWAL = 'drenewal';
-    const TYPE_DOMAIN_DELETE_AGP = 'ddelete_agp';
-    const TYPE_DOMAIN_RESTORE_EXPIRED = 'drestore_expired';
-    const TYPE_DOMAIN_RESTORE_DELETED = 'drestore_deleted';
-
-    const TYPE_PREMIUM_DNS = 'premium_dns';
+    public const TYPE_DOMAIN_REGISTRATION = 'domain,dregistration';
+    public const TYPE_DOMAIN_TRANSFER = 'domain,dtransfer';
+    public const TYPE_DOMAIN_RENEWAL = 'domain,drenewal';
+    public const TYPE_DOMAIN_DELETE_AGP = 'domain,ddelete_agp';
+    public const TYPE_DOMAIN_RESTORE_EXPIRED = 'domain,drestore_expired';
+    public const TYPE_DOMAIN_RESTORE_DELETED = 'domain,drestore_deleted';
 
     public function rules()
     {
@@ -43,19 +40,28 @@ class DomainResource extends Resource
             'required',
             'on' => ['create', 'update'],
             'when' => function ($model) {
+                /** @var DomainZonePrice $model */
                 return $model->isTypeCorrect();
             },
         ];
-        $rules['create-required-price'] = [['price'], 'required', 'on' => ['create', 'update']];
-        $rules[] = [['zone'], 'safe'];
+        $rules['create-required-price'] = [['price'], 'required'];
+        $rules[] = [['price'], 'number', 'min' => 0];
 
         return $rules;
     }
 
     /**
+     * @return bool
+     */
+    public function isTypeCorrect(): bool
+    {
+        return isset($this->getTypes()[$this->type]);
+    }
+
+    /**
      * @return array
      */
-    public function getTypes()
+    public static function getTypes(): array
     {
         return [
             static::TYPE_DOMAIN_REGISTRATION => Yii::t('hipanel:finance:tariff', 'Registration'),
@@ -65,17 +71,5 @@ class DomainResource extends Resource
             static::TYPE_DOMAIN_RESTORE_EXPIRED => Yii::t('hipanel:finance:tariff', 'Restoring expired'),
             static::TYPE_DOMAIN_RESTORE_DELETED => Yii::t('hipanel:finance:tariff', 'Restoring deleted'),
         ];
-    }
-
-    public function getServiceTypes()
-    {
-        return [
-            static::TYPE_PREMIUM_DNS => Yii::t('hipanel:finance:tariff', 'Premium DNS'),
-        ];
-    }
-
-    public function isTypeCorrect()
-    {
-        return isset($this->getTypes()[$this->type]);
     }
 }

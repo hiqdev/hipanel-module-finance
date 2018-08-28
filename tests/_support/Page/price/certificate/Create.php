@@ -50,7 +50,7 @@ class Create extends PriceCreate
         $this->seeNoSuggestions();
     }
 
-    private function seeNoSuggestions(): void
+    protected function seeNoSuggestions(): void
     {
         $I = $this->tester;
 

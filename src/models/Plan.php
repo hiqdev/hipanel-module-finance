@@ -28,6 +28,7 @@ class Plan extends \hipanel\base\Model
     const TYPE_VCDN = 'vcdn';
     const TYPE_TEMPLATE = 'template';
     const TYPE_CERTIFICATE = 'certificate';
+    const TYPE_DOMAIN = 'domain';
 
     use \hipanel\base\ModelTrait;
 

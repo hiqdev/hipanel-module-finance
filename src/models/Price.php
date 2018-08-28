@@ -161,13 +161,9 @@ class Price extends \hipanel\base\Model
      */
     public static function instantiate($row)
     {
-        if (empty($row['class'])) {
-            return parent::instance($row);
-        }
-
         /** @var PriceModelFactory $factory */
         $factory = Yii::$container->get(PriceModelFactory::class);
-        return $factory->build($row['class']);
+        return $factory->build($row['class'] ?? 'SinglePrice', $row['type']);
     }
 
     public function formulaLines(): array

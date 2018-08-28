@@ -45,8 +45,16 @@ class PricesCollection extends Collection
     {
         $request = Yii::$app->request->post();
 
-        foreach ($this->priceModelFactory->getMap() as $formName => $className) {
-            if (isset($request[$formName])) {
+        $map = $this->priceModelFactory->getMap();
+        foreach ($map as $formName => $className) {
+            if (is_array($map[$formName])) {
+                foreach ($map[$formName] as $type => $class) {
+                    $class = (new \ReflectionClass($class))->getShortName();
+                    if (isset($request[$class])) {
+                        return true;
+                    }
+                }
+            } elseif (isset($request[$formName])) {
                 return true;
             }
         }
@@ -60,7 +68,12 @@ class PricesCollection extends Collection
         $result = [];
         $request = Yii::$app->request->post();
 
-        foreach ($this->priceModelFactory->getMap() as $formName => $className) {
+        $iter = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($this->priceModelFactory->getMap()));
+        foreach ($iter as $className) {
+            if (is_array($className)) {
+                continue;
+            }
+            $formName = (new \ReflectionClass($className))->getShortName();
             if (empty($request[$formName])) {
                 continue;
             }
@@ -70,7 +83,7 @@ class PricesCollection extends Collection
             /** @var array $modelsData */
             $modelsData = [];
             /** @var Price $modelPrototype */
-            $modelPrototype = $this->priceModelFactory->build($formName);
+            $modelPrototype = $this->priceModelFactory->instantiate($className);
             $modelPrototype->setAttributes($this->modelOptions);
             $modelPrototype->scenario = $this->getScenario();
 
@@ -81,7 +94,7 @@ class PricesCollection extends Collection
             }
 
             $modelPrototype->loadMultiple($models, $modelsData);
-            $result += $models;
+            $result = array_merge($result, $models);
         }
 
         return $result;

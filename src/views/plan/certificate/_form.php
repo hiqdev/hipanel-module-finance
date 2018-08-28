@@ -13,6 +13,7 @@ use hipanel\widgets\Box;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use hipanel\helpers\Url;
+use hipanel\modules\finance\widgets\PriceInput;
 
 $this->registerJs("
 $('#tariff-create-form').on('afterValidate', function (event, messages) {
@@ -69,7 +70,7 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
                                 <?php $originalPrice = $parentPrices[$object_id][$type] ?? null; ?>
                                 <?php foreach (CertificatePrice::getPeriods() as $period => $periodLabel) : ?>
                                     <td>
-                                        <?= \hipanel\modules\finance\widgets\PriceInput::widget([
+                                        <?= PriceInput::widget([
                                             'basePrice' => $price->getPriceForPeriod($period),
                                             'originalPrice' => $originalPrice ? $originalPrice->getPriceForPeriod($period) : $price->getPriceForPeriod($period),
                                             'activeField' => $form->field($price, "[$i]sums[$period]")]) ?>
@@ -98,7 +99,7 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
         <?php ActiveForm::end(); ?>
     </div>
 <?php else: ?>
-    <?php $box = \hipanel\widgets\Box::begin([
+    <?php $box = Box::begin([
         'title' => Yii::t('hipanel.finance.price', 'No price suggestions for this object'),
     ]) ?>
     <?= Yii::t('hipanel.finance.price', 'We could not suggest any new prices of type "{suggestionType}" for the selected object. Probably, they were already created earlier or this suggestion type is not compatible with this object type', [
@@ -108,7 +109,7 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
     <br/>
 
     <?= Yii::t('hipanel.finance.price', 'You can return back to plan {backToPlan}', [
-        'backToPlan' => Html::a($name ?? $plan->name, Url::to(['@plan/view', 'id' => $id ?? $plan->id])),
+        'backToPlan' => Html::a($plan->name, Url::to(['@plan/view', 'id' => $plan->id])),
     ]) ?>
     <?= $box->endBody(); ?>
 <?php endif ?>

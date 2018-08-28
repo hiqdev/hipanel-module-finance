@@ -12,23 +12,44 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\helpers\ArrayHelper;
+use hipanel\modules\finance\collections\PricesCollection;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\helpers\PriceChargesEstimator;
 use hipanel\modules\finance\helpers\PriceSort;
+use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\Plan;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\TargetObject;
-use hiqdev\hiart\Collection;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\Event;
+use yii\base\Module;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\UnprocessableEntityHttpException;
 
 class PlanController extends CrudController
 {
+    /**
+     * @var PriceModelFactory
+     */
+    public $priceModelFactory;
+
+    /**
+     * PlanController constructor.
+     * @param string $id
+     * @param Module $module
+     * @param PriceModelFactory $priceModelFactory
+     * @param array $config
+     */
+    public function __construct(string $id, Module $module, PriceModelFactory $priceModelFactory, array $config = [])
+    {
+        parent::__construct($id, $module, $config);
+
+        $this->priceModelFactory = $priceModelFactory;
+    }
+
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
@@ -118,12 +139,12 @@ class PlanController extends CrudController
         $parentPrices = $this->getParentPrices($plan_id);
 
         $targetPlan = Plan::findOne(['id' => $plan_id]);
-        [$name, $id] = [$targetPlan->name, $targetPlan->id];
         $grouper = new PlanInternalsGrouper($plan);
-        $action = ['@plan/update-prices', 'id' => $id, 'scenario' => 'create'];
+        [$plan->name, $plan->id] = [$targetPlan->name, $targetPlan->id];
+        $action = ['@plan/update-prices', 'id' => $plan->id, 'scenario' => 'create'];
 
         return $this->render($plan->type . '/' . 'createPrices',
-            compact('plan', 'grouper', 'parentPrices', 'action', 'plan_id', 'name', 'id'));
+            compact('plan', 'grouper', 'parentPrices', 'action', 'plan_id'));
     }
 
     public function actionSuggestPricesModal($id)
@@ -189,15 +210,8 @@ class PlanController extends CrudController
         $request = Yii::$app->request;
         if ($request->isPost) {
             try {
-                $priceClass = $plan->getDesiredPriceClass();
-                /** @var Price $price */
-                $price = new $priceClass(['scenario' => $scenario]);
-                $prices = $request->post($price->formName());
-                $collection = new Collection([
-                    'model' => $price,
-                    'scenario' => $scenario,
-                ]);
-                $collection->load($prices);
+                $collection = new PricesCollection($this->priceModelFactory, ['scenario' => $scenario]);
+                $collection->load();
                 if ($collection->save() === false) {
                     if ($scenario === 'create') {
                         Yii::$app->session->addFlash('error', Yii::t('hipanel.finance.price', 'Error occurred during creation of prices'));

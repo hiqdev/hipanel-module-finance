@@ -7,6 +7,7 @@ use hipanel\modules\finance\models\CertificatePrice;
 use hipanel\modules\finance\widgets\PriceDifferenceWidget;
 use hipanel\modules\finance\widgets\ResourcePriceWidget;
 use Yii;
+use yii\helpers\Html;
 
 class CertificatePriceGridView extends PriceGridView
 {
@@ -23,17 +24,22 @@ class CertificatePriceGridView extends PriceGridView
             'certificate' => [
                 'label' => Yii::t('hipanel:finance:tariff', 'Name'),
                 'value' => function ($prices) {
-                    /** @var CertificatePrice[] $prices  */
+                    /** @var CertificatePrice[] $prices */
                     return current($prices)->object->label;
                 }
             ],
         ]);
     }
 
-    private function getPriceGrid($name, $type)
+    /**
+     * @param string $name column label
+     * @param string $type certificate type
+     * @return array
+     */
+    private function getPriceGrid(string $name, string $type): array
     {
         $result = [
-            'label' =>  Yii::t('hipanel:finance:tariff', $name),
+            'label' => Yii::t('hipanel:finance:tariff', $name),
             'class' => ColspanColumn::class,
             'headerOptions' => [
                 'class' => 'text-center',
@@ -52,16 +58,19 @@ class CertificatePriceGridView extends PriceGridView
                     }
                     $price = $prices[$type];
                     $parent = $this->parentPrices[$price->object_id][$type] ?? null;
-                    $parent = $parent ? PriceDifferenceWidget::widget([
+                    $parentValue = $parent ? PriceDifferenceWidget::widget([
                         'new' => $price->getPriceForPeriod($period),
                         'old' => $parent->getPriceForPeriod($period),
                     ]) : '';
-                    $price = floatval($price->getPriceForPeriod($period)) || (!floatval($price->getPriceForPeriod($period)) && $parent) ?
+                    $priceValue = floatval($price->getPriceForPeriod($period)) ||
+                    (!floatval($price->getPriceForPeriod($period)) && $parentValue) ?
                         ResourcePriceWidget::widget([
                             'price' => $price->getPriceForPeriod($period),
                             'currency' => $price->currency
                         ]) : '';
-                    return "<div class='col-md-6'>$price</div> <div class='col-md-6'>$parent</div>";
+                    $options = ['class' => 'col-md-6'];
+                    return Html::tag('div', $priceValue, $options) .
+                        Html::tag('div', $parentValue, $options);
                 }
             ];
         }
