@@ -176,6 +176,7 @@ return [
     'Server traffic IN' => 'Серверный трафик ВХО',
     'Server traffic overuse' => 'Перебор серверного трафика',
     'Support time' => 'Время поддержки',
+    'Number of IP addresses' => 'Кол-во IP адресов',
     'Partnership' => 'Сотрудничество',
     'Partnership program' => 'Партнерская программа',
     'Common' => 'Общий',
