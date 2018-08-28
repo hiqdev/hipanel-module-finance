@@ -40,12 +40,14 @@ class PlanController extends CrudController
      * PlanController constructor.
      * @param string $id
      * @param Module $module
+     * @param PriceModelFactory $priceModelFactory
      * @param array $config
      */
-    public function __construct(string $id, Module $module, array $config = [])
+    public function __construct(string $id, Module $module, PriceModelFactory $priceModelFactory, array $config = [])
     {
         parent::__construct($id, $module, $config);
-        $this->priceModelFactory = new PriceModelFactory();
+
+        $this->priceModelFactory = $priceModelFactory;
     }
 
     public function behaviors()
