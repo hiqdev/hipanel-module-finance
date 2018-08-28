@@ -5,6 +5,7 @@ namespace hipanel\modules\finance\grid;
 use hipanel\modules\finance\models\DomainZonePrice;
 use hipanel\modules\finance\widgets\PriceDifferenceWidget;
 use hipanel\modules\finance\widgets\ResourcePriceWidget;
+use yii\helpers\Html;
 
 class DomainZonePriceGridView extends PriceGridView
 {
@@ -16,7 +17,6 @@ class DomainZonePriceGridView extends PriceGridView
     public function columns()
     {
         return array_merge(parent::columns(), [
-
             'name' => [
                 'label' => '',
                 'contentOptions'=> ['style' => 'font-weight:bold'],
@@ -34,7 +34,11 @@ class DomainZonePriceGridView extends PriceGridView
         ]);
     }
 
-    private function getPriceGrid($type)
+    /**
+     * @param string $type
+     * @return array
+     */
+    private function getPriceGrid(string $type): array
     {
         return [
             'label' =>  DomainZonePrice::getTypes()[$type],
@@ -47,16 +51,19 @@ class DomainZonePriceGridView extends PriceGridView
                 }
                 $price = $prices[$type];
                 $parent = $this->parentPrices[$price->object_id][$type] ?? null;
-                $parent = $parent ? PriceDifferenceWidget::widget([
+                $parentValue = $parent ? PriceDifferenceWidget::widget([
                     'new' => $price->price,
                     'old' => $parent->price,
                 ]) : '';
-                $price = floatval($price->price) || (!floatval($price->price) && $parent) ?
+                $priceValue = floatval($price->price) ||
+                (!floatval($price->price) && $parent) ?
                     ResourcePriceWidget::widget([
                         'price' => $price->price,
                         'currency' => $price->currency
                     ]) : '';
-                return "<div class='col-md-6'>$price</div> <div class='col-md-6'>$parent</div>";
+                $options = ['class' => 'col-md-6'];
+                return Html::tag('div', $priceValue, $options) .
+                    Html::tag('div', $parentValue, $options);
             }
         ];
     }

@@ -45,7 +45,7 @@ class DomainServicePrice extends Price
     /**
      * @return string
      */
-    public static function getType(): string
+    public static function getLabel(): string
     {
         return Yii::t('hipanel:finance:tariff', 'Premium DNS');
     }

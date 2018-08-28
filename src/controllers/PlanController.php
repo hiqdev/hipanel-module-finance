@@ -24,12 +24,30 @@ use hipanel\modules\finance\models\TargetObject;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\Event;
+use yii\base\Module;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\UnprocessableEntityHttpException;
 
 class PlanController extends CrudController
 {
+    /**
+     * @var PriceModelFactory
+     */
+    public $priceModelFactory;
+
+    /**
+     * PlanController constructor.
+     * @param string $id
+     * @param Module $module
+     * @param array $config
+     */
+    public function __construct(string $id, Module $module, array $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        $this->priceModelFactory = new PriceModelFactory();
+    }
+
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
@@ -119,12 +137,12 @@ class PlanController extends CrudController
         $parentPrices = $this->getParentPrices($plan_id);
 
         $targetPlan = Plan::findOne(['id' => $plan_id]);
-        [$name, $id] = [$targetPlan->name, $targetPlan->id];
         $grouper = new PlanInternalsGrouper($plan);
-        $action = ['@plan/update-prices', 'id' => $id, 'scenario' => 'create'];
+        [$plan->name, $plan->id] = [$targetPlan->name, $targetPlan->id];
+        $action = ['@plan/update-prices', 'id' => $plan->id, 'scenario' => 'create'];
 
         return $this->render($plan->type . '/' . 'createPrices',
-            compact('plan', 'grouper', 'parentPrices', 'action', 'plan_id', 'name', 'id'));
+            compact('plan', 'grouper', 'parentPrices', 'action', 'plan_id'));
     }
 
     public function actionSuggestPricesModal($id)
@@ -190,7 +208,7 @@ class PlanController extends CrudController
         $request = Yii::$app->request;
         if ($request->isPost) {
             try {
-                $collection = new PricesCollection(new PriceModelFactory(), ['scenario' => $scenario]);
+                $collection = new PricesCollection($this->priceModelFactory, ['scenario' => $scenario]);
                 $collection->load();
                 if ($collection->save() === false) {
                     if ($scenario === 'create') {

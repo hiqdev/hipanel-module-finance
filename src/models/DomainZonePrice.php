@@ -25,12 +25,12 @@ class DomainZonePrice extends Price
         return 'price';
     }
 
-    const TYPE_DOMAIN_REGISTRATION = 'domain,dregistration';
-    const TYPE_DOMAIN_TRANSFER = 'domain,dtransfer';
-    const TYPE_DOMAIN_RENEWAL = 'domain,drenewal';
-    const TYPE_DOMAIN_DELETE_AGP = 'domain,ddelete_agp';
-    const TYPE_DOMAIN_RESTORE_EXPIRED = 'domain,drestore_expired';
-    const TYPE_DOMAIN_RESTORE_DELETED = 'domain,drestore_deleted';
+    public const TYPE_DOMAIN_REGISTRATION = 'domain,dregistration';
+    public const TYPE_DOMAIN_TRANSFER = 'domain,dtransfer';
+    public const TYPE_DOMAIN_RENEWAL = 'domain,drenewal';
+    public const TYPE_DOMAIN_DELETE_AGP = 'domain,ddelete_agp';
+    public const TYPE_DOMAIN_RESTORE_EXPIRED = 'domain,drestore_expired';
+    public const TYPE_DOMAIN_RESTORE_DELETED = 'domain,drestore_deleted';
 
     public function rules()
     {
@@ -50,7 +50,10 @@ class DomainZonePrice extends Price
         return $rules;
     }
 
-    public function isTypeCorrect()
+    /**
+     * @return bool
+     */
+    public function isTypeCorrect(): bool
     {
         return isset($this->getTypes()[$this->type]);
     }
@@ -58,7 +61,7 @@ class DomainZonePrice extends Price
     /**
      * @return array
      */
-    public static function getTypes()
+    public static function getTypes(): array
     {
         return [
             static::TYPE_DOMAIN_REGISTRATION => Yii::t('hipanel:finance:tariff', 'Registration'),

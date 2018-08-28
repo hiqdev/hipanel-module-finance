@@ -5,6 +5,7 @@ namespace hipanel\modules\finance\grid;
 use hipanel\modules\finance\models\DomainServicePrice;
 use hipanel\modules\finance\widgets\PriceDifferenceWidget;
 use hipanel\modules\finance\widgets\ResourcePriceWidget;
+use yii\helpers\Html;
 
 class DomainServicePriceGridView extends PriceGridView
 {
@@ -21,7 +22,11 @@ class DomainServicePriceGridView extends PriceGridView
         ]);
     }
 
-    private function getPriceGrid($type)
+    /**
+     * @param string $type
+     * @return array
+     */
+    private function getPriceGrid(string $type): array
     {
         return [
             'label' =>  DomainServicePrice::getOperations()[$type],
@@ -34,16 +39,19 @@ class DomainServicePriceGridView extends PriceGridView
                 }
                 $price = $prices[$type];
                 $parent = $this->parentPrices[$type] ?? null;
-                $parent = $parent ? PriceDifferenceWidget::widget([
+                $parentValue = $parent ? PriceDifferenceWidget::widget([
                     'new' => $price->price,
                     'old' => $parent->price,
                 ]) : '';
-                $price = floatval($price->price) || (!floatval($price->price) && $parent) ?
+                $priceValue = floatval($price->price) ||
+                (!floatval($price->price) && $parentValue) ?
                     ResourcePriceWidget::widget([
                         'price' => $price->price,
                         'currency' => $price->currency
                     ]) : '';
-                return "<div class='col-md-6'>$price</div> <div class='col-md-6'>$parent</div>";
+                $options = ['class' => 'col-md-6'];
+                return Html::tag('div', $priceValue, $options) .
+                    Html::tag('div', $parentValue, $options);
             }
         ];
     }

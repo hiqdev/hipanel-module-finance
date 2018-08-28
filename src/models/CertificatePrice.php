@@ -19,8 +19,8 @@ class CertificatePrice extends Price
 {
     use ModelTrait;
 
-    const TYPE_CERT_PURCHASE = 'certificate,certificate_purchase';
-    const TYPE_CERT_RENEWAL = 'certificate,certificate_renewal';
+    public const TYPE_CERT_PURCHASE = 'certificate,certificate_purchase';
+    public const TYPE_CERT_RENEWAL = 'certificate,certificate_renewal';
 
     /**
      * @var DecimalMoneyFormatter
@@ -78,7 +78,6 @@ class CertificatePrice extends Price
         ];
     }
 
-
     public function rules()
     {
         $rules = parent::rules();
@@ -101,7 +100,10 @@ class CertificatePrice extends Price
         return $rules;
     }
 
-    public function isTypeCorrect()
+    /**
+     * @return bool
+     */
+    public function isTypeCorrect(): bool
     {
         return isset($this->getTypes()[$this->type]);
     }

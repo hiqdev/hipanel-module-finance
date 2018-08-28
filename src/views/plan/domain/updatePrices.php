@@ -11,13 +11,6 @@
  * @var \hipanel\modules\finance\models\DomainServicePrice[] $parentServicePrices
  */
 
-if (isset($name)) {
-    $plan->name = $name;
-}
-if (isset($id)) {
-    $plan->id = $id;
-}
-
 $this->title = Yii::t('hipanel.finance.price', 'Update prices');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $plan->name, 'url' => ['view', 'id' => $plan->id]];

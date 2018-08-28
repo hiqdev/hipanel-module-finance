@@ -56,7 +56,7 @@ use hipanel\modules\finance\models\DomainServicePrice;
             ],
         ]) ?>
         <h4 class="box-title" style="display: inline-block;">&nbsp;
-            <?= DomainServicePrice::getType() ?>
+            <?= DomainServicePrice::getLabel() ?>
         </h4>
         <?= \hipanel\modules\finance\grid\DomainServicePriceGridView::widget([
             'boxed' => false,

@@ -12,6 +12,7 @@
 use hipanel\modules\finance\models\DomainZonePrice;
 use hipanel\modules\finance\models\DomainServicePrice;
 use hipanel\widgets\Box;
+use hipanel\modules\finance\widgets\PriceInput;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use hipanel\helpers\Url;
@@ -70,7 +71,7 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
                                 <?= Html::activeHiddenInput($price, "[$i]type") ?>
                                 <?= Html::activeHiddenInput($price, "[$i]unit") ?>
                                 <td>
-                                    <?= \hipanel\modules\finance\widgets\PriceInput::widget([
+                                    <?= PriceInput::widget([
                                         'basePrice' => $price->price,
                                         'originalPrice' => $originalPrice ? $originalPrice->price : $price->price,
                                         'activeField' => $form->field($price, "[$i]price")]) ?>
@@ -86,7 +87,7 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
                     <tr>
                         <th>
                             <h4 class="box-title" style="display: inline-block;">&nbsp;
-                                <?= DomainServicePrice::getType() ?>
+                                <?= DomainServicePrice::getLabel() ?>
                             </h4>
                         </th>
                     </tr>
@@ -108,7 +109,7 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
                             <?= Html::activeHiddenInput($price, "[$i]type") ?>
                             <?= Html::activeHiddenInput($price, "[$i]unit") ?>
                             <td>
-                                <?= \hipanel\modules\finance\widgets\PriceInput::widget([
+                                <?= PriceInput::widget([
                                     'basePrice' => $price->price,
                                     'originalPrice' => $originalPrice ? $originalPrice->price : $price->price,
                                     'activeField' => $form->field($price, "[$i]price")]) ?>
@@ -134,7 +135,7 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
         <?php ActiveForm::end(); ?>
     </div>
 <?php else: ?>
-    <?php $box = \hipanel\widgets\Box::begin([
+    <?php $box = Box::begin([
         'title' => Yii::t('hipanel.finance.price', 'No price suggestions for this object'),
     ]) ?>
     <?= Yii::t('hipanel.finance.price', 'We could not suggest any new prices of type "{suggestionType}" for the selected object. Probably, they were already created earlier or this suggestion type is not compatible with this object type', [
