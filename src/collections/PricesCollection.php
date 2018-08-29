@@ -67,10 +67,11 @@ class PricesCollection extends Collection
         /** @var Price[] $result */
         $result = [];
         $request = Yii::$app->request->post();
+        $usedClasses = [];
 
         $iter = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($this->priceModelFactory->getMap()));
         foreach ($iter as $className) {
-            if (is_array($className)) {
+            if (is_array($className) || isset($usedClasses[$className])) {
                 continue;
             }
             $formName = (new \ReflectionClass($className))->getShortName();
@@ -78,6 +79,7 @@ class PricesCollection extends Collection
                 continue;
             }
 
+            $usedClasses[$className] = true;
             /** @var Price[] $models */
             $models = [];
             /** @var array $modelsData */
