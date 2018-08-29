@@ -41,8 +41,11 @@ class View extends Authenticated
 
         $I = $this->tester;
 
-        foreach ($this->priceValues as $value) {
-            $I->seeInSource(number_format($value, 2));
+        foreach ($this->priceValues as $values) {
+            $I->seeInSource('$' . number_format($values['dollarValue'], 2));
+            if (isset($values['euroValue'])) {
+                $I->seeInSource('€' . number_format($values['euroValue'], 2));
+            }
         }
     }
 
@@ -53,10 +56,15 @@ class View extends Authenticated
         $this->priceValues = $I->executeJS("
         var prices = [];
         $('.price-item').each(function(){
-            var number = $(this).find('input[id^={$type}][id$=price]');
-            var randomValue = Math.floor(Math.random() * 2147483647);
-            number.val(randomValue);
-            prices.push(randomValue);
+            var dollarInput = $(this).find('input[id^={$type}][id$=price]');
+            var euroInput = $(this).find('input[id^=TemplatePrice][id*=subprices][id*=EUR]');
+            var values = {'dollarValue': Math.floor(Math.random() * 2147483647)};
+            dollarInput.val(values['dollarValue']);
+            if (euroInput[0]) {
+                values['euroValue'] = Math.floor(Math.random() * 2147483647);
+                euroInput.val(values['euroValue']);
+            }
+            prices.push(values);
         });
         return prices;
         ");
