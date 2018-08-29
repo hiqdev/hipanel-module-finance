@@ -18,93 +18,23 @@ class Create extends Authenticated
         $this->select2 = new Select2($I);
     }
 
-    /**
-     * Tries to create a new simple bill without any data.
-     *
-     * Expects blank field errors.
-     * @throws \Exception
-     */
-    public function createBillWithoutData(): void
+    public function createBill(array $billData, $chargesData = []): void
     {
-        $I = $this->tester;
+        $this->tester->needPage(Url::to('@bill/create'));
+        $this->fillBillFields($billData, $chargesData);
+        $this->save();
+    }
 
-        $I->needPage(Url::to('@bill/create'));
-        $this->clickSaveButton();
-
-        $this->seeBlankFieldsError(['Client', 'Sum', 'Currency', 'Quantity']);
+    private function fillBillFields(array $billData, array $chargesData = []): void
+    {
+        $this->fillMainBillFields($billData);
+        $this->addCharges($chargesData);
     }
 
     /**
-     * Tries to create a new simple bill with all the necessary data.
-     *
-     * Expects successful bill creation.
-     *
      * @param array $billData
      */
-    public function createBill(array $billData): void
-    {
-        $I = $this->tester;
-
-        $I->needPage(Url::to('@bill/create'));
-        $this->fillBillFields($billData);
-        $this->clickSaveButton();
-        $this->seeBillWasCreated();
-    }
-
-    /**
-     * Tries to create a new detailed bill without detailed data.
-     *
-     * Expects blank field errors.
-     *
-     * @param array $billData
-     * @throws \Exception
-     */
-    public function createDetailedBillWithoutDetailedData(array $billData): void
-    {
-        $I = $this->tester;
-
-        $I->needPage(Url::to('@bill/create'));
-        $this->fillBillFields($billData);
-        $this->clickDetailingButton();
-        $this->clickSaveButton();
-        $this->seeBlankFieldsError(['Object', 'Sum', 'Quantity']);
-    }
-
-    /**
-     * Tries to create a new detailed bill with all the necessary data.
-     *
-     * Expects successful bill creation.
-     * Also checks Sum field mismatch error.
-     *
-     * @param array $billData
-     * @throws \Exception
-     */
-    public function createDetailedBill(array $billData): void
-    {
-        $I = $this->tester;
-
-        $I->needPage(Url::to('@bill/create'));
-        $this->fillBillFields($billData);
-
-        $this->fillDetailingFields($billData, 1);
-        $this->clickDetailingButton();
-        $this->fillDetailingFields($billData, 2);
-        $this->clickSaveButton();
-
-        $I->waitForText('Bill sum must match charges sum:');
-        $I->fillField(['name' => 'Charge[0][1][sum]'], -$billData['sum'] / 2);
-        $I->fillField(['name' => 'Charge[0][2][sum]'], -$billData['sum'] / 2);
-
-        $this->clickSaveButton();
-        $this->seeBillWasCreated();
-    }
-
-    /**
-     * Fills basic bill fields.
-     *
-     * @param array $billData
-     */
-    protected function fillBillFields(array $billData): void
+    public function fillMainBillFields(array $billData): void
     {
         $I = $this->tester;
 
@@ -112,59 +42,135 @@ class Create extends Authenticated
         $this->select2->fillSearchField($billData['login']);
         $this->select2->chooseOption($billData['login']);
 
-        $I->selectOption('#billform-0-type', ['value' => $billData['type']]);
+        $I->selectOption('#billform-0-type', $billData['type']);
 
-        $I->fillField(['name' => 'BillForm[0][sum]'], $billData['sum']);
+        $I->fillField(['billform-0-sum'], $billData['sum']);
 
-        $I->click('//div[contains(@class,\'input-group-btn\')]//button[2]');
-        $I->click('//a[contains(text(),\'$\')]');
+        $I->click('//div[@class=\'input-group-btn\']/button[2]');
+        $I->click('//li/a[contains(text(),\'$\')]');
 
         $I->fillField(['name' => 'BillForm[0][quantity]'], $billData['quantity']);
     }
 
     /**
-     * Fills detailed bill fields.
-     *
-     * @param array $billData
-     * @param int $n number of detailed block
+     * @param int $sum
      */
-    protected function fillDetailingFields(array $billData, $n): void
+    public function setBillTotalSum(int $sum): void
     {
-        $I = $this->tester;
-
-        $I->selectOption("#charge-0-$n-class", ['value' => 'Server']);
-
-        $this->select2->open("#charge-0-$n-object_id");
-        $this->select2->fillSearchField("TEST01");
-        $this->select2->chooseOption("TEST01");
-
-        $I->selectOption("#charge-0-$n-type", ['value' => $billData['type']]);
-
-        $I->fillField(['name' => "Charge[0][$n][sum]"], $billData['sum']);
-
-        $I->fillField(['name' => "Charge[0][$n][quantity]"], $billData['quantity']);
+        $this->tester->fillField(['billform-0-sum'], $sum);
     }
 
-    protected function clickSaveButton(): void
+    public function addCharges(array $chargesData)
     {
-        $this->tester->click('//button[contains(@type,\'submit\')]');
-    }
-
-    protected function clickDetailingButton(): void
-    {
-        $this->tester->click('//div[@class=\'col-md-12 margin-bottom\']' .
-                                '//button[@type=\'button\']');
+        foreach ($chargesData as $chargeData) {
+            $this->addCharge($chargeData);
+        }
     }
 
     /**
-     * Checks whether a bill was successfully created.
+     * @param array $chargeData
      */
-    protected function seeBillWasCreated(): void
+    public function addCharge(array $chargeData): void
+    {
+        $this->clickAddChargeButton();
+        if (!empty($chargeData)) {
+            $this->fillChargeFields($chargeData);
+        }
+    }
+
+    protected function clickAddChargeButton(): void
+    {
+        $this->tester->click('//div[@class=\'col-md-12 margin-bottom\']' .
+            '/button[@type=\'button\']');
+    }
+
+    /**
+     * @param array $chargeData
+     */
+    protected function fillChargeFields(array $chargeData): void
+    {
+        $I = $this->tester;
+
+        $base = 'div.bill-charges>div:last-child ';
+        $classSelector = $base . 'div[class=row] select[id$=class]';
+        $I->selectOption($classSelector, $chargeData['class']);
+
+        $objectIdSelector = $base . 'div[class=row] select[id$=object_id]';
+        $this->select2->open($objectIdSelector);
+        $this->select2->fillSearchField($chargeData['objectId']);
+        $this->select2->chooseOption($chargeData['objectId']);
+
+        $typeSelector = $base . 'div[class$=type] select';
+        $I->selectOption($typeSelector, $chargeData['type']);
+
+        $sumSelector = $base . 'div[class$=sum] input';
+        $I->fillField($sumSelector, $chargeData['sum']);
+
+        $qtySelector = $base . 'div[class$=quantity] input';
+        $I->fillField($qtySelector, $chargeData['quantity']);
+    }
+
+    /**
+     * Checks whether a page contains the specified quantity of charges
+     *
+     * @param int $n - quantity of charges
+     */
+    public function containsCharges(int $n): void
+    {
+        $this->tester->assertEquals($n, $this->getChargesQuantity());
+    }
+
+    /**
+     * @return int - quantity of charges
+     */
+    protected function getChargesQuantity(): int
+    {
+        $qty = $this->tester->executeJS(<<<JS
+        var selector = 'div.bill-charges div[class*=sum] input';
+            return document.querySelectorAll(selector).length;
+JS
+);
+        return $qty;
+    }
+
+    /**
+     * Adds sum of each charge on page and returns it.
+     *
+     * @return int - total sum of charges
+     */
+    public function getChargesTotalSum(): int
+    {
+        $sum = $this->tester->executeJS(<<<JS
+            var sum = 0;
+            var selector = 'div.bill-charges div[class*=sum] input';
+            var chargesSum = document.querySelectorAll(selector);
+            chargesSum.forEach(function(chargeSum) {
+               sum += parseInt(chargeSum.value); 
+            });
+            return sum
+JS
+        );
+        return $sum;
+    }
+
+    public function deleteLastCharge()
+    {
+        $this->tester->click('div.bill-charges>div:last-child button');
+    }
+
+    /**
+     * Checks whether a bill was created successfully and returns its id.
+     *
+     * @return string - id of created bill.
+     */
+    public function seeBillWasCreated(): string
     {
         $I = $this->tester;
 
         $I->closeNotification('Bill was created successfully');
         $I->seeInCurrentUrl('/finance/bill?id');
+
+        return $I->grabFromCurrentUrl('~id_in%5B0%5D=(\d+)~');
     }
 
     /**
@@ -173,10 +179,28 @@ class Create extends Authenticated
      * @param array $fieldsList
      * @throws \Exception
      */
-    protected function seeBlankFieldsError(array $fieldsList): void
+    public function containsBlankFieldsError(array $fieldsList): void
     {
         foreach ($fieldsList as $field) {
             $this->tester->waitForText("$field cannot be blank.");
         }
+    }
+
+    /**
+     * Looking for sum mismatch errors.
+     *
+     * @throws \Exception
+     */
+    public function containsSumMismatch(): void
+    {
+        $this->tester->waitForText('Bill sum must match charges sum:');
+    }
+
+    /**
+     *  Saves created bill.
+     */
+    public function save(): void
+    {
+        $this->tester->click('//button[contains(@type,\'submit\')]');
     }
 }
