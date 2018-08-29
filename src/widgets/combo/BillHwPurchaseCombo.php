@@ -6,7 +6,7 @@ use hiqdev\combo\Combo;
 use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
 
-class BillCombo extends Combo
+class BillHwPurchaseCombo extends Combo
 {
     /** {@inheritdoc} */
     public $type = 'bill/descr';
