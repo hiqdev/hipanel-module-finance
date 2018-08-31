@@ -2,7 +2,6 @@
 
 namespace hipanel\modules\finance\tests\acceptance\manager;
 
-
 use hipanel\helpers\Url;
 use hipanel\modules\finance\tests\_support\Page\bill\Create;
 use hipanel\modules\finance\tests\_support\Page\bill\Update;
