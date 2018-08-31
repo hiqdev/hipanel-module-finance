@@ -48,7 +48,7 @@
                     type: price.type,
                     object_id: price.object_id,
                     unit: price.unit,
-                    amount: price.quantity * 2 || 1,
+                    amount: 1,
                 };
             }
 
