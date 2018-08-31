@@ -26,7 +26,7 @@ class Index extends Authenticated
 
         $I->fillField(['name' => 'PlanSearch[name_ilike]'], $name);
         $I->click('Search');
-        $I->waitForJS("return $('tbody tr td a.bold').length === 1;");
+        $I->waitForJS("return $('tbody tr td a.bold').length === 1;", 60);
         $I->see($name);
 
         return $this;
@@ -38,7 +38,7 @@ class Index extends Authenticated
 
         $I->fillField(['name' => 'PlanSearch[name_ilike]'], $name);
         $I->click('Search');
-        $I->waitForJS("return $('tbody tr td a.bold').length === 0;");
+        $I->waitForJS("return $('tbody tr td a.bold').length === 0;", 60);
         $I->see('No results found.', '.empty');
 
         return $this;
