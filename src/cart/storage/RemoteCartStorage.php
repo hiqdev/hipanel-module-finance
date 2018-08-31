@@ -105,7 +105,8 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
             ? unserialize($decodedRemote[$this->sessionCartId])
             : [];
 
-        return [$this->sessionCartId => serialize(array_merge($remote, $local))];
+        /** @noinspection AdditionOperationOnArraysInspection */
+        return [$this->sessionCartId => serialize($remote + $local)];
     }
 
     protected function getCacheKey()
