@@ -117,20 +117,8 @@ class Create extends Authenticated
      */
     public function containsCharges(int $n): void
     {
-        $this->tester->assertEquals($n, $this->getChargesQuantity());
-    }
-
-    /**
-     * @return int - quantity of charges
-     */
-    protected function getChargesQuantity(): int
-    {
-        $qty = $this->tester->executeJS(<<<JS
-        var selector = 'div.bill-charges div[class*=sum] input';
-            return document.querySelectorAll(selector).length;
-JS
-);
-        return $qty;
+        $selector = 'div.bill-charges div[class*=input-row]';
+        $this->tester->seeNumberOfElements($selector, $n);
     }
 
     /**
