@@ -67,7 +67,7 @@ class PriceChargesEstimator
         return Plan::perform('calculate-charges', [
             'actions' => $this->actions,
             'prices' => $this->prices,
-            'periods' => $this->periods,
+            'times' => $this->periods,
         ]);
     }
 
