@@ -76,13 +76,10 @@
 
             this.estimatesPerPeriod[period] = estimatesPerRow;
         },
-        renderEstimatesTable: function (estimatesPerRowElement) {
-            return estimatesPerRowElement.detailsTable;
-        },
-        attachPopover: function (element, estimatesPerRowElement) {
+        attachPopover: function (element, estimate) {
             element.data({
                 'popover-group': 'price-estimate',
-                'content': this.renderEstimatesTable(estimatesPerRowElement),
+                'content': estimate.detailsTable || '<p style="text-align: center">&mdash;</p>',
                 'placement': 'bottom'
             });
             element.popover({html: true}).on('show.bs.popover', e => {
@@ -93,24 +90,27 @@
             let rows = this.getPriceRows();
             rows.find('.price-estimates').html('');
 
-            Object.keys(this.estimatesPerPeriod).forEach(period => {
-                let estimatesPerRow = this.estimatesPerPeriod[period];
+            rows.each((k, row) => { // For each price row
+                Object.keys(this.estimatesPerPeriod).forEach(period => { // Get all estimation periods
+                    let estimatesPerRow = this.estimatesPerPeriod[period],
+                        estimateBox = $(row).find('.price-estimates'),
+                        sum = '&mdash;',
+                        estimate = estimatesPerRow[row.dataset.id];
 
-                Object.keys(estimatesPerRow).forEach(rowId => {
-                    let row = rows.filter('[data-id=' + rowId + ']'),
-                        sum = estimatesPerRow[rowId]['sumFormatted'],
-                        estimateBox = row.find('.price-estimates');
+                    if (estimate) {
+                        sum = estimate['sumFormatted'];
+                    }
 
                     if (estimateBox.html().length === 0) {
-                        estimateBox.append($('<strong>').attr({title: period}).text(sum));
+                        estimateBox.append($('<strong>').attr({title: period}).html(sum));
                     } else {
                         estimateBox.append('; ');
-                        estimateBox.append($('<i>').attr({title: period}).text(sum));
+                        estimateBox.append($('<i>').attr({title: period}).html(sum));
                     }
 
                     this.attachPopover(
                         estimateBox.find(`[title="${period}"]`),
-                        estimatesPerRow[rowId]
+                        estimate || {}
                     );
                 });
             });
