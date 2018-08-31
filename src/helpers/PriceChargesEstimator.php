@@ -10,6 +10,11 @@ use Money\Formatter\DecimalMoneyFormatter;
 use Money\Money;
 use Yii;
 
+/**
+ * Class PriceChargesEstimator
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
 class PriceChargesEstimator
 {
     /**
@@ -27,7 +32,10 @@ class PriceChargesEstimator
 
     private $actions;
     private $prices;
-    private $periods;
+    /**
+     * @var string[] array of strings compatible with `strtotime()`, e.g. `first day of next month`
+     */
+    private $periods = [];
 
     public function __construct($actions, $prices)
     {
@@ -42,6 +50,10 @@ class PriceChargesEstimator
         $this->calculateForPeriods($periods);
     }
 
+    /**
+     * @var string[] array of strings compatible with `strtotime()`, e.g. `first day of next month`
+     * @return array
+     */
     public function calculateForPeriods($periods): array
     {
         $this->periods = $periods;
@@ -55,20 +67,15 @@ class PriceChargesEstimator
         return Plan::perform('calculate-charges', [
             'actions' => $this->actions,
             'prices' => $this->prices,
-            'times' => [
-                'now',
-                'first day of +1 month',
-                'first day of +2 month',
-            ],
+            'periods' => $this->periods,
         ]);
     }
 
     private function groupCalculationsByTarget()
     {
         $result = [];
-        $response = $this->calculations;
 
-        foreach ($response as $period => $charges) {
+        foreach ($this->calculations as $period => $charges) {
             $actionsByTarget = [];
 
             foreach ($charges as $charge) {
