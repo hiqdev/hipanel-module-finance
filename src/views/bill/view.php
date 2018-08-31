@@ -55,17 +55,10 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
                     <?= ChargeGridView::widget([
                         'boxed' => false,
                         'dataProvider' => new \yii\data\ArrayDataProvider([
-                            'allModels' => $model->charges,
-                            'sort'=> [
-                                'defaultOrder' => [
-                                    'id' => SORT_DESC,
-                                    'time' => SORT_DESC,
-                                ],
-                                'attributes' => ['id', 'time'],
-                            ],
-                            'pagination' => [
-                                'pageSize' => 50,
-                            ],
+                            'allModels' => \hipanel\modules\finance\helpers\ChargeSort::anyCharges()
+                                ->values($model->charges, true),
+                            'sort' => false,
+                            'pagination' => false
                         ]),
                         'filterModel' => $model->charges,
                         'tableOptions' => [

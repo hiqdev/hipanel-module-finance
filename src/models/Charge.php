@@ -10,8 +10,10 @@ use Yii;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  *
+ * @property int $id
  * @property string $unit
  * @property string $quantity
+ * @property int $parent_id
  * @property string $type
  */
 class Charge extends \hiqdev\hiart\ActiveRecord
@@ -26,7 +28,7 @@ class Charge extends \hiqdev\hiart\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'type_id', 'object_id', 'bill_id'], 'integer'],
+            [['id', 'type_id', 'object_id', 'bill_id', 'parent_id'], 'integer'],
             [['class', 'name', 'unit'], 'string'],
             [['type', 'label', 'ftype', 'time', 'type_label', 'currency'], 'safe'],
             [['sum', 'quantity'], 'number'],

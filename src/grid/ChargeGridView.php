@@ -41,8 +41,8 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
         return array_merge(parent::columns(), [
             'type_label' => [
                 'label' => Yii::t('hipanel', 'Type'),
-                'format' => 'html',
-                'value' => function ($model) {
+                'format' => 'raw',
+                'value' => function (Charge $model) {
                     static $colors = [
                         'correction' => 'normal',
                         'exchange' => 'warning',
@@ -76,13 +76,13 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             ],
             'quantity' => [
                 'attribute' => 'quantity',
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (Charge $model) {
                     return $this->renderQuantity($model);
                 }
             ],
             'time' => [
-                'format' => 'html',
+                'format' => 'raw',
                 'filter' => false,
                 'enableSorting' => false,
                 'contentOptions' => ['class' => 'text-nowrap'],
