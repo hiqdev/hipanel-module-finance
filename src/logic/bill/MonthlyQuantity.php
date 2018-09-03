@@ -34,7 +34,7 @@ class MonthlyQuantity extends DefaultQuantityFormatter implements ContextAwareQu
      */
     public function getValue(): string
     {
-        return $this->getQuantity() / $this->getNumberOfDays();
+        return $this->getQuantity()->getQuantity() / $this->getNumberOfDays();
     }
 
     /**
