@@ -24,9 +24,9 @@ class Update extends Create
         $I = $this->tester;
 
         $I->click("//tr[@data-key=$billId]/td/div/button");
-        $I->click('//a[contains(text(),\'Update\')]');
+        $I->click("a[href='/finance/bill/update?id=$billId']");
 
-        $I->seeInCurrentUrl('finance/bill/update?id');
+        $I->seeInCurrentUrl('finance/bill/update?id=' . $billId);
     }
 
     /**
