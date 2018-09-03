@@ -20,13 +20,26 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
      */
     private $types = [
         'support_time' => SupportTimeQuantity::class,
+        'monthly,support_time' => MonthlyQuantity::class,
+
         'server_traf_max' => DefaultQuantityFormatter::class,
+        'monthly,server_traf_max' => MonthlyQuantity::class,
+
         'server_traf95_max' => DefaultQuantityFormatter::class,
+        'monthly,server_traf95_max' => MonthlyQuantity::class,
+
         'backup_du' => DefaultQuantityFormatter::class,
+        'monthly,backup_du' => MonthlyQuantity::class,
+
         'server_du' => DefaultQuantityFormatter::class,
-        'hw_purchase' => DefaultQuantityFormatter::class,
+        'monthly,server_du' => DefaultQuantityFormatter::class,
+
         'ip_num' => IPNumQuantity::class,
+        'monthly,ip_num' => MonthlyQuantity::class,
+
         'monthly' => MonthlyQuantity::class,
+
+        'hw_purchase' => DefaultQuantityFormatter::class,
         'drenewal' => DomainRenewalQuantity::class,
     ];
     /**
@@ -64,7 +77,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
 
     public function forCharge(Charge $charge): ?QuantityFormatterInterface
     {
-        return $this->createByType($charge->type, Quantity::create($charge->unit, $charge->quantity), $charge);
+        return $this->createByType($charge->ftype, Quantity::create($charge->unit, $charge->quantity), $charge);
     }
 
     public function forConsumption(Consumption $consumption): ?QuantityFormatterInterface
@@ -75,7 +88,10 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
     /** {@inheritdoc} */
     public function createByType(string $type, Quantity $quantity, $context = null): ?QuantityFormatterInterface
     {
-        $type = $this->fixType($type);
+        if (!isset($this->types[$type])) {
+            $type = $this->fixType($type);
+        }
+
         if ($className = $this->types[$type] ?? null) {
             /** @var QuantityFormatterInterface $formatter */
             $formatter = new $className($quantity, $this->intlFormatter);

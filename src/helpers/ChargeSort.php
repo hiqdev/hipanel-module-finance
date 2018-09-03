@@ -17,6 +17,7 @@ class ChargeSort
     {
         return Sort::chain()
             ->asc(self::byType())
+            ->compare(self::byName())
             ->asc(self::keepDiscountsWithParents());
     }
 
@@ -41,6 +42,13 @@ class ChargeSort
                 : $charge->id * 10 + 1;
 
             return $a;
+        };
+    }
+
+    private static function byName(): \Closure
+    {
+        return function (Charge $a, Charge $b) {
+            return strnatcasecmp($a->name, $b->name);
         };
     }
 }

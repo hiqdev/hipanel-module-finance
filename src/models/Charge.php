@@ -15,6 +15,8 @@ use Yii;
  * @property string $quantity
  * @property int $parent_id
  * @property string $type
+ * @property string $name
+ * @property string $ftype
  */
 class Charge extends \hiqdev\hiart\ActiveRecord
 {
@@ -58,5 +60,10 @@ class Charge extends \hiqdev\hiart\ActiveRecord
     public function getIsNewRecord()
     {
         return $this->isNewRecord !== false && parent::getIsNewRecord();
+    }
+
+    public function typeLabel(): string
+    {
+        return Yii::t('hipanel.finance.priceTypes', \yii\helpers\Inflector::titleize($this->type));
     }
 }

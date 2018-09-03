@@ -3,9 +3,11 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\CurrencyColumn;
+use hipanel\modules\finance\logic\bill\MonthlyQuantity;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
+use hipanel\modules\finance\widgets\PriceType;
 use hipanel\widgets\ArraySpoiler;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\yii2\formatters\IntlFormatter;
@@ -43,14 +45,10 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 'label' => Yii::t('hipanel', 'Type'),
                 'format' => 'raw',
                 'value' => function (Charge $model) {
-                    static $colors = [
-                        'correction' => 'normal',
-                        'exchange' => 'warning',
-                        'deposit' => 'success',
-                    ];
-                    $color = $colors[$model->type] ?: 'muted';
-
-                    return Html::tag('b', Yii::t('hipanel:finance', $model->type_label), ['class' => "text-$color"]);
+                    return PriceType::widget([
+                        'model' => $model,
+                        'field' => 'ftype'
+                    ]);
                 },
             ],
             'sum' => [

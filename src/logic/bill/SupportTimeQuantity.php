@@ -4,6 +4,11 @@ namespace hipanel\modules\finance\logic\bill;
 
 use Yii;
 
+/**
+ * Class SupportTimeQuantity
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
 class SupportTimeQuantity extends DefaultQuantityFormatter
 {
     public function format(): string
