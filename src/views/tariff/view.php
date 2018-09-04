@@ -15,6 +15,12 @@ $type = $manager->getType();
 
 $this->title = Html::encode($model->name);
 $this->params['subtitle'] = Yii::t('hipanel:finance:tariff', 'tariff detailed information');
+$this->params['subtitle'] .= ' ' . Html::a(
+    Yii::t('hipanel:finance:tariff', 'View as plan'),
+    ['@plan/view', 'id' => $model->id],
+    ['class' => 'btn btn-xs btn-info']
+);
+
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel', 'Tariffs'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
