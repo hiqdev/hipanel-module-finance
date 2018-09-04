@@ -29,6 +29,7 @@ class PriceSort
             ->asc(self::byServerPriceGroups())
             ->asc(self::byServerMainPrices())
             ->asc(self::byHardwareType())
+            ->compare(self::byTargetObjectName())
             ->compare(self::byServerPriceType());
     }
 
