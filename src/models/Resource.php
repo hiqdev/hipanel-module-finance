@@ -35,7 +35,7 @@ class Resource extends \hipanel\base\Model
     {
         return [
             [['id', 'tariff_id', 'object_id', 'type_id', 'unit_id', 'currency_id', 'hardlim'], 'integer'],
-            [['type', 'ftype', 'unit', 'unit_factor', 'currency'], 'safe'],
+            [['type', 'unit', 'unit_factor', 'currency'], 'safe'],
             [['price', 'fee', 'quantity', 'discount'], 'number'],
 
             [['object_id', 'type_id'], 'integer', 'on' => ['create', 'update']],

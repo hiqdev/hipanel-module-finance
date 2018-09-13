@@ -89,7 +89,6 @@ $form = ActiveForm::begin([
                             <div class="col-md-1">
                                 <?= $form->field($model, "[$i]type")->dropDownList($billTypes, [
                                     'groups' => $billGroupLabels,
-                                    'value' => $model->gtype ? implode(',', [$model->gtype, $model->type]) : null,
                                 ]) ?>
                             </div>
                             <div class="col-md-2 <?= AmountWithCurrency::$widgetClass ?>">
@@ -171,7 +170,6 @@ $form = ActiveForm::begin([
                                                 <div class="col-md-1">
                                                     <?= $form->field($charge, "[$i][$j]type")->dropDownList($billTypes, [
                                                         'groups' => $billGroupLabels,
-                                                        'value' => $charge->ftype,
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-1">

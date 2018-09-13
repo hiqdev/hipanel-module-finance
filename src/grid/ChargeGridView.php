@@ -47,7 +47,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 'value' => function (Charge $model) {
                     return PriceType::widget([
                         'model' => $model,
-                        'field' => 'ftype'
+                        'field' => 'type'
                     ]);
                 },
             ],

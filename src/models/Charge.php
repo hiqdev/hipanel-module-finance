@@ -16,7 +16,6 @@ use Yii;
  * @property int $parent_id
  * @property string $type
  * @property string $name
- * @property string $ftype
  */
 class Charge extends \hiqdev\hiart\ActiveRecord
 {
@@ -32,7 +31,7 @@ class Charge extends \hiqdev\hiart\ActiveRecord
         return [
             [['id', 'type_id', 'object_id', 'bill_id', 'parent_id'], 'integer'],
             [['class', 'name', 'unit'], 'string'],
-            [['type', 'label', 'ftype', 'time', 'type_label', 'currency'], 'safe'],
+            [['type', 'label', 'type', 'time', 'type_label', 'currency'], 'safe'],
             [['sum', 'quantity'], 'number'],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['object_id', 'sum', 'type', 'quantity', 'unit'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],

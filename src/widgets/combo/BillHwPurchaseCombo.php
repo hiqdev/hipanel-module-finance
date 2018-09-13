@@ -54,7 +54,7 @@ class BillHwPurchaseCombo extends Combo
     public function getFilter()
     {
         return ArrayHelper::merge(parent::getFilter(), [
-            'ftype' => ['format' => 'other,hw_purchase'],
+            'type' => ['format' => 'other,hw_purchase'],
             'limit' => ['format' => '50'],
         ]);
     }

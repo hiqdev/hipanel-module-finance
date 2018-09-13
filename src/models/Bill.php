@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\modules\finance\behaviors\BillNegation;
+use hipanel\modules\finance\logic\bill\QuantityTrait;
 use Yii;
 
 /**
@@ -25,7 +26,7 @@ use Yii;
  */
 class Bill extends \hipanel\base\Model
 {
-    use \hipanel\base\ModelTrait;
+    use \hipanel\base\ModelTrait, QuantityTrait;
 
     public $time_from;
     public $time_till;
