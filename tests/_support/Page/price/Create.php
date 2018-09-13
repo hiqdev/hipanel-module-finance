@@ -2,23 +2,10 @@
 
 namespace hipanel\modules\finance\tests\_support\Page\price;
 
-use hipanel\tests\_support\AcceptanceTester;
-use hipanel\tests\_support\Page\Widget\Select2;
+use hipanel\tests\_support\Page\Widget\Input\Select2;
 
 class Create extends View
 {
-    /**
-     * @var Select2
-     */
-    protected $select2;
-
-    public function __construct(AcceptanceTester $I, int $id)
-    {
-        parent::__construct($I, $id);
-
-        $this->select2 = new Select2($this->tester);
-    }
-
     public function createRandomPrices(string $objectName, string $templateName, string $priceType): void
     {
         $this->loadPage();
@@ -42,29 +29,29 @@ class Create extends View
 
     public function chooseObject(string $objectName): void
     {
-        $this->select2->open('#object_id');
-        $this->select2->fillSearchField($objectName);
-        $this->select2->chooseOption($objectName);
+        (new Select2($this->tester, '#object_id'))
+            ->setValue($objectName);
     }
 
     public function chooseTemplate(string $templateName): void
     {
-        $this->select2->fillSearchField($templateName);
-        $this->select2->chooseOption($templateName);
+        (new Select2($this->tester, '#template_plan_id'))
+            ->fillSearchField($templateName)
+            ->chooseOptionLike($templateName);
     }
 
     public function choosePriceType(string $priceType): void
     {
-        $this->select2->open('#type');
-        $this->select2->fillSearchField($priceType);
-        $this->select2->chooseOption($priceType);
+        (new Select2($this->tester, '#type'))
+            ->setValue($priceType);
     }
 
     public function proceedToCreation(): void
     {
         $I = $this->tester;
 
-        $I->click('Proceed to creation');
+//        $I->click('Proceed to creation');
+        $I->pressButton('Proceed to creation');
         $I->waitForText('Create suggested prices', 60);
     }
 
@@ -75,5 +62,4 @@ class Create extends View
         $I->click('Save');
         $I->closeNotification('Prices were successfully created');
     }
-
 }

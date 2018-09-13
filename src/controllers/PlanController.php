@@ -159,15 +159,18 @@ class PlanController extends CrudController
     }
 
     /**
+     * @param string $plan_id
      * @param string|null $object_id Object ID or `null`
      * when the desired templates are not related to a specific object
-     * @param string $plan_id
+     * @param string $name_ilike
+     * @return array
      */
-    public function actionTemplates($plan_id, $object_id = null)
+    public function actionTemplates($plan_id, $object_id = null, string $name_ilike = null)
     {
         $templates = (new Plan())->query('search-templates', [
             'id' => $plan_id,
             'object_id' => $object_id ?? $plan_id,
+            'name_ilike' => $name_ilike
         ]);
 
         Yii::$app->response->format = Response::FORMAT_JSON;
