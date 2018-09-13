@@ -26,24 +26,24 @@ class SalesCest
         $I->login();
         $I->needPage(Url::to('@sale'));
         $I->see('Sales', 'h1');
-        $this->ensureICanSeeAdvancedSearchBox();
+        $this->ensureICanSeeAdvancedSearchBox($I);
         $this->ensureICanSeeBulkBillSearchBox();
     }
 
-    private function ensureICanSeeAdvancedSearchBox()
+    private function ensureICanSeeAdvancedSearchBox(Seller $I)
     {
         $this->index->containsFilters([
-            new Select2('Seller'),
-            new Select2('Buyer'),
-            (new Dropdown('salesearch-object_type'))->withItems([
+            Select2::asAdvancedSearch($I, 'Seller'),
+            Select2::asAdvancedSearch($I, 'Buyer'),
+            (Dropdown::asAdvancedSearch($I,'Object type'))->withItems([
                 'Servers',
                 'IP',
                 'Accounts',
                 'Clients',
                 'Parts',
             ]),
-            new Select2('Tariff'),
-            new Input('Object'),
+            Select2::asAdvancedSearch($I, 'Tariff'),
+            Input::asAdvancedSearch($I, 'Object'),
         ]);
     }
 

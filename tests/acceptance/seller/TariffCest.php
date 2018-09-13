@@ -26,18 +26,18 @@ class TariffCest
         $I->needPage(Url::to('@tariff'));
         $I->see('Tariffs', 'h1');
         $I->see('Create', 'a');
-        $this->ensureICanSeeAdvancedSearchBox();
+        $this->ensureICanSeeAdvancedSearchBox($I);
         $this->ensureICanSeeBulkBillSearchBox();
     }
 
-    private function ensureICanSeeAdvancedSearchBox()
+    private function ensureICanSeeAdvancedSearchBox(Seller $I)
     {
         $this->index->containsFilters([
-            new Input('Tariff'),
-            new Input('Note'),
-            new Input('Type'),
-            new Select2('Client'),
-            new Select2('Reseller'),
+            Input::asAdvancedSearch($I, 'Tariff'),
+            Input::asAdvancedSearch($I, 'Note'),
+            Select2::asAdvancedSearch($I, 'Type'),
+            Select2::asAdvancedSearch($I, 'Client'),
+            Select2::asAdvancedSearch($I, 'Reseller'),
         ]);
     }
 

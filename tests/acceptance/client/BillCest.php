@@ -26,18 +26,18 @@ class BillCest
         $I->needPage(Url::to('@bill/index'));
         $I->see('Bills', 'h1');
         $I->seeLink('Recharge account', Url::to('@pay/deposit'));
-        $this->ensureICanSeeAdvancedSearchBox();
+        $this->ensureICanSeeAdvancedSearchBox($I);
         $this->ensureICanSeeBulkBillSearchBox();
     }
 
-    private function ensureICanSeeAdvancedSearchBox()
+    private function ensureICanSeeAdvancedSearchBox(Client $I)
     {
         $this->index->containsFilters([
-            new Input('Currency'),
-            new Input('Type'),
-            new Input('Servers'),
-            new Input('Description'),
-            new Select2('Tariff'),
+            Select2::asAdvancedSearch($I, 'Currency'),
+            Select2::asAdvancedSearch($I, 'Type'),
+            Input::asAdvancedSearch($I, 'Servers'),
+            Input::asAdvancedSearch($I, 'Description'),
+            Select2::asAdvancedSearch($I, 'Tariff'),
         ]);
     }
 
