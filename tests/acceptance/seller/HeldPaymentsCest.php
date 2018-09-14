@@ -25,15 +25,15 @@ class HeldPaymentsCest
         $I->login();
         $I->needPage(Url::to('@finance/held-payments'));
         $I->see('Pending confirmation payments', 'h1');
-        $this->ensureICanSeeAdvancedSearchBox();
+        $this->ensureICanSeeAdvancedSearchBox($I);
         $this->ensureICanSeeBulkBillSearchBox();
     }
 
-    private function ensureICanSeeAdvancedSearchBox()
+    private function ensureICanSeeAdvancedSearchBox(Seller $I)
     {
         $this->index->containsFilters([
-            new Select2('Client'),
-            (new Dropdown('changesearch-state'))->withItems([
+            Select2::asAdvancedSearch($I,'Client'),
+            (Dropdown::asAdvancedSearch($I,'State'))->withItems([
                 'New',
                 'Approved',
                 'Rejected',

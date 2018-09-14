@@ -29,20 +29,20 @@ class BillCest
         $I->seeLink('Add payment', Url::to('@bill/create'));
         $I->seeLink('Currency exchange', Url::to('@bill/create-exchange'));
         $I->seeLink('Import payments', Url::to('@bill/import'));
-        $this->ensureICanSeeAdvancedSearchBox();
+        $this->ensureICanSeeAdvancedSearchBox($I);
         $this->ensureICanSeeBulkBillSearchBox();
     }
 
-    private function ensureICanSeeAdvancedSearchBox()
+    private function ensureICanSeeAdvancedSearchBox(Seller $I)
     {
         $this->index->containsFilters([
-            new Select2('Client'),
-            new Input('Currency'),
-            new Input('Type'),
-            new Input('Servers'),
-            new Input('Description'),
-            new Select2('Tariff'),
-            new Select2('Reseller'),
+            Select2::asAdvancedSearch($I, 'Client'),
+            Select2::asAdvancedSearch($I, 'Currency'),
+            Select2::asAdvancedSearch($I, 'Type'),
+            Input::asAdvancedSearch($I, 'Servers'),
+            Input::asAdvancedSearch($I,'Description'),
+            Select2::asAdvancedSearch($I, 'Tariff'),
+            Select2::asAdvancedSearch($I, 'Reseller'),
         ]);
     }
 

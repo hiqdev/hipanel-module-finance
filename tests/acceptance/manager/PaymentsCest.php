@@ -5,6 +5,7 @@ namespace hipanel\modules\finance\tests\acceptance\manager;
 use hipanel\helpers\Url;
 use hipanel\modules\finance\tests\_support\Page\bill\Create;
 use hipanel\modules\finance\tests\_support\Page\bill\Update;
+use hipanel\tests\_support\Page\IndexPage;
 use hipanel\tests\_support\Step\Acceptance\Manager;
 
 class PaymentsCest
@@ -31,7 +32,7 @@ class PaymentsCest
 
         $I->needPage(Url::to('@bill/create'));
 
-        $page->save();
+        $I->pressButton('Save');
         $page->containsBlankFieldsError(['Client', 'Sum', 'Currency', 'Quantity']);
     }
 
@@ -41,13 +42,16 @@ class PaymentsCest
      * Expects successful bill creation.
      *
      * @param Manager $I
+     * @throws \Exception
      */
     public function ensureICanCreateSimpleBill(Manager $I): void
     {
         $page = new Create($I);
-        $page->createBill($this->getBillData());
 
-        $page->seeBillWasCreated();
+        $page->fillMainBillFields($this->getBillData());
+        $I->pressButton('Save');
+
+        $page->seeActionSuccess();
     }
 
     /**
@@ -66,7 +70,7 @@ class PaymentsCest
 
         $page->fillMainBillFields($this->getBillData());
         $page->addCharge([]);
-        $page->save();
+        $I->pressButton('Save');
         $page->containsBlankFieldsError(['Object', 'Sum', 'Quantity']);
     }
 
@@ -92,14 +96,15 @@ class PaymentsCest
         ]);
         $page->containsCharges(2);
 
-        $page->save();
+        $I->pressButton('Save');
+
         $page->containsSumMismatch();
 
         $chargesSum = $page->getChargesTotalSum();
 
         $page->setBillTotalSum(-$chargesSum);
-        $page->save();
-        $this->billId = $page->seeBillWasCreated();
+        $I->pressButton('Save');
+        $this->billId = $page->seeActionSuccess();
     }
 
     /**
@@ -109,19 +114,22 @@ class PaymentsCest
      */
     public function ensureICanUpdateBill(Manager $I): void
     {
-        $page = new Update($I);
+        $indexPage  = new IndexPage($I);
+        $updatePage = new Update($I);
 
-        $page->goToUpdatePage($this->billId);
-        $page->containsCharges(2);
+        $indexPage->openRowMenuById($this->billId);
+        $indexPage->chooseRowMenuOption('Update');
 
-        $page->deleteLastCharge();
-        $page->containsCharges(1);
+        $updatePage->containsCharges(2);
 
-        $chargesSum = $page->getChargesTotalSum();
-        $page->setBillTotalSum(-$chargesSum);
+        $updatePage->deleteLastCharge();
+        $updatePage->containsCharges(1);
 
-        $page->save();
-        $page->seeBillWasUpdated();
+        $chargesSum = $updatePage->getChargesTotalSum();
+        $updatePage->setBillTotalSum(-$chargesSum);
+
+        $I->pressButton('Save');
+        $updatePage->seeActionSuccess();
     }
 
     /**
@@ -132,14 +140,18 @@ class PaymentsCest
      */
     public function ensureBillWasSuccessfullyUpdated (Manager $I): void
     {
-        $page = new Update($I);
+        $indexPage  = new IndexPage($I);
+        $updatePage = new Update($I);
 
-        $page->goToUpdatePage($this->billId);
-        $page->containsCharges(1);
+        $indexPage->openRowMenuById($this->billId);
+        $indexPage->chooseRowMenuOption('Update');
 
-        $I->waitForElement('span[title=vCDN-soltest]', 5);
-        $I->see('Server', 'div.bill-charges:first-child');
-        $I->see('Monthly fee', 'div.bill-charges:first-child');
+        $updatePage->containsCharges(1);
+
+        $chargeSelector = 'div.bill-charges:first-child';
+        $I->see('vCDN-soltest', $chargeSelector);
+        $I->see('Server', $chargeSelector);
+        $I->see('Monthly fee', $chargeSelector);
     }
 
     /**
