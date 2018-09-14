@@ -2,19 +2,13 @@
 
 namespace hipanel\modules\finance\tests\_support\Page\bill;
 
-use hipanel\helpers\Url;
-use hipanel\tests\_support\AcceptanceTester;
 use hipanel\tests\_support\Page\Authenticated;
+use hipanel\tests\_support\Page\Widget\Input\Dropdown;
+use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 
 class Create extends Authenticated
 {
-    public function __construct(AcceptanceTester $I)
-    {
-        parent::__construct($I);
-    }
-
-
     /**
      * @param array $billData
      * @throws \Exception
@@ -23,17 +17,14 @@ class Create extends Authenticated
     {
         $I = $this->tester;
 
-        (new Select2($I, '#billform-0-client_id'))->
-                                    setValue($billData['login']);
-
-        $I->selectOption('#billform-0-type', $billData['type']);
-
-        $I->fillField(['billform-0-sum'], $billData['sum']);
+        (new Select2($I, '#billform-0-client_id'))->setValue($billData['login']);
+        (new Dropdown($I, '#billform-0-type'))->setValue($billData['type']);
+        (new Input($I, '#billform-0-sum'))->setValue($billData['sum']);
 
         $I->click('//div[@class=\'input-group-btn\']/button[2]');
         $I->click('//li/a[contains(text(),\'$\')]');
 
-        $I->fillField(['name' => 'BillForm[0][quantity]'], $billData['quantity']);
+        (new Input($I, '#billform-0-quantity'))->setValue($billData['quantity']);
     }
 
     /**
@@ -44,6 +35,10 @@ class Create extends Authenticated
         $this->tester->fillField(['billform-0-sum'], $sum);
     }
 
+    /**
+     * @param array $chargesData
+     * @throws \Exception
+     */
     public function addCharges(array $chargesData)
     {
         foreach ($chargesData as $chargeData) {
@@ -78,21 +73,19 @@ class Create extends Authenticated
 
         $base = 'div.bill-charges>div:last-child ';
         $classSelector = $base . 'div[class=row] select[id$=class]';
-        $I->selectOption($classSelector, $chargeData['class']);
+        (new Dropdown($I, $classSelector))->setValue($chargeData['class']);
 
         $objectIdSelector = $base . 'div[class=row] select[id$=object_id]';
-
-        (new Select2($I, $objectIdSelector))->
-                                    setValue($chargeData['objectId']);
+        (new Select2($I, $objectIdSelector))->setValue($chargeData['objectId']);
 
         $typeSelector = $base . 'div[class$=type] select';
-        $I->selectOption($typeSelector, $chargeData['type']);
+        (new Dropdown($I, $typeSelector))->setValue($chargeData['type']);
 
         $sumSelector = $base . 'div[class$=sum] input';
-        $I->fillField($sumSelector, $chargeData['sum']);
+        (new Input($I, $sumSelector))->setValue($chargeData['sum']);
 
         $qtySelector = $base . 'div[class$=quantity] input';
-        $I->fillField($qtySelector, $chargeData['quantity']);
+        (new Input($I, $qtySelector))->setValue($chargeData['quantity']);
     }
 
     /**
@@ -136,7 +129,7 @@ JS
      *
      * @return string - id of created bill.
      */
-    public function seeActionSuccess(): string
+    public function seeActionSuccess(): ?string
     {
         $I = $this->tester;
 
