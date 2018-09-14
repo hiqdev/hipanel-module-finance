@@ -50,7 +50,6 @@ class Create extends View
     {
         $I = $this->tester;
 
-//        $I->click('Proceed to creation');
         $I->pressButton('Proceed to creation');
         $I->waitForText('Create suggested prices', 60);
     }
