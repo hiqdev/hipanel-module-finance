@@ -15,12 +15,10 @@ class TariffRepresentations extends RepresentationCollection
             'used',
             'type',
             'client_id',
-            'seller_id',
         ] : [
             'tariff',
             'used',
             'client_id',
-            'seller_id',
         ];
         $this->representations = array_filter([
             'common' => [
