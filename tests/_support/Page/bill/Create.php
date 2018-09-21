@@ -72,19 +72,19 @@ class Create extends Authenticated
         $I = $this->tester;
 
         $base = 'div.bill-charges>div:last-child ';
-        $classSelector = $base . 'div[class=row] select[id$=class]';
+        $classSelector = $base . 'div[class=row] select[id*=class]';
         (new Dropdown($I, $classSelector))->setValue($chargeData['class']);
 
-        $objectIdSelector = $base . 'div[class=row] select[id$=object_id]';
+        $objectIdSelector = $base . 'div[class=row] select[id*=object_id]';
         (new Select2($I, $objectIdSelector))->setValue($chargeData['objectId']);
 
-        $typeSelector = $base . 'div[class$=type] select';
+        $typeSelector = $base . 'div[class*=type] select';
         (new Dropdown($I, $typeSelector))->setValue($chargeData['type']);
 
-        $sumSelector = $base . 'div[class$=sum] input';
+        $sumSelector = $base . 'div[class*=sum] input';
         (new Input($I, $sumSelector))->setValue($chargeData['sum']);
 
-        $qtySelector = $base . 'div[class$=quantity] input';
+        $qtySelector = $base . 'div[class*=quantity] input';
         (new Input($I, $qtySelector))->setValue($chargeData['quantity']);
     }
 
