@@ -52,7 +52,6 @@ class TariffCest
             'Used',
             'Type',
             'Client',
-            'Reseller',
         ]);
     }
 }
