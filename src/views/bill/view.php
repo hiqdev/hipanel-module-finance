@@ -52,7 +52,7 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
             <?php $page->endContent() ?>
             <?php $page->beginContent('table') ?>
                 <?php $page->beginBulkForm() ?>
-                    <?= ChargeGridView::widget([
+                    <?= \hipanel\modules\finance\grid\GroupedChargesGridView::widget([
                         'boxed' => false,
                         'dataProvider' => new \yii\data\ArrayDataProvider([
                             'allModels' => \hipanel\modules\finance\helpers\ChargeSort::anyCharges()
@@ -66,7 +66,7 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
                         ],
                         'columns' => [
                             'type_label', 'label',
-                            'quantity', 'sum', 'time',
+                            'quantity', 'sum', 'sum_with_children', 'time',
                         ],
                     ]) ?>
                 <?php $page->endBulkForm() ?>

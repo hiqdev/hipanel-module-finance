@@ -17,6 +17,8 @@ use Yii;
  * @property string $type
  * @property string $name
  * @property string $ftype
+ * @property string $currency
+ * @property float $sum
  */
 class Charge extends \hiqdev\hiart\ActiveRecord
 {

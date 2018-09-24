@@ -34,14 +34,14 @@ class ColoredBalance extends Widget
 
     public function run()
     {
-        $value = $this->model->getAttribute($this->attribute);
+        $value = $this->model->{$this->attribute};
         $color = $value === 0 ? 'primary' : 'success';
 
         if ($value < 0) {
             $color = 'warning';
         }
 
-        if ($value < -($this->model->getAttribute($this->compare) ?: 0)) {
+        if ($this->compare && $value < -($this->model->{$this->compare} ?: 0)) {
             $color = 'danger';
         }
 
