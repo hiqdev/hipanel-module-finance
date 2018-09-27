@@ -85,11 +85,11 @@ class PaymentsCest
      */
     public function ensureICanCreateDetailedBill(Manager $I): void
     {
-        $I->needPage(Url::to('@bill/create'));
-
         $page = new Create($I);
-        $page->deleteLastCharge();
 
+        $I->amOnPage(Url::to('@bill/create'));
+
+        $page->fillMainBillFields($this->getBillData());
         $page->addCharges([
             $this->getChargeData('TEST01'),
             $this->getChargeData('vCDN-soltest')
@@ -111,6 +111,7 @@ class PaymentsCest
      * Tries to update early created bill.
      *
      * @param Manager $I
+     * @throws \Codeception\Exception\ModuleException
      */
     public function ensureICanUpdateBill(Manager $I): void
     {
