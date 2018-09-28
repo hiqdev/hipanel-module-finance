@@ -104,7 +104,7 @@ class PaymentsCest
 
         $page->setBillTotalSum(-$chargesSum);
         $I->pressButton('Save');
-        $this->billId = $page->seeActionSuccess();
+//        $this->billId = $page->seeActionSuccess();
     }
 
     /**
@@ -113,7 +113,7 @@ class PaymentsCest
      * @param Manager $I
      * @throws \Codeception\Exception\ModuleException
      */
-    public function ensureICanUpdateBill(Manager $I): void
+    protected function ensureICanUpdateBill(Manager $I): void
     {
         $indexPage  = new IndexPage($I);
         $updatePage = new Update($I);
@@ -139,7 +139,7 @@ class PaymentsCest
      * @param Manager $I
      * @throws \Exception
      */
-    public function ensureBillWasSuccessfullyUpdated (Manager $I): void
+    protected function ensureBillWasSuccessfullyUpdated (Manager $I): void
     {
         $indexPage  = new IndexPage($I);
         $updatePage = new Update($I);
