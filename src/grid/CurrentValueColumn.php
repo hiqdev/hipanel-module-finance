@@ -28,7 +28,7 @@ class CurrentValueColumn extends Column
     public function init()
     {
         parent::init();
-        $this->header = Yii::t('hipanel.finance.price', 'Estimate value');
+        $this->header = Yii::t('hipanel.finance.plan', 'Estimate value');
         $this->planId = $this->findPlanId();
         $this->regesterClientScript();
     }
