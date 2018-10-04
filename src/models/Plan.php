@@ -32,6 +32,11 @@ class Plan extends \hipanel\base\Model
 
     use \hipanel\base\ModelTrait;
 
+    /**
+     * @var string
+     */
+    public $monthly;
+
     public function rules()
     {
         return array_merge(parent::rules(), [
@@ -50,6 +55,7 @@ class Plan extends \hipanel\base\Model
         return array_merge(parent::attributeLabels(), [
             'name' => Yii::t('hipanel:finance', 'Name'),
             'server_ids' => Yii::t('hipanel.finance.plan', 'Servers'),
+            'monthly' => Yii::t('hipanel.finance.plan', 'Monthly'),
         ]);
     }
 

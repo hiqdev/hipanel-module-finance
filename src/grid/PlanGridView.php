@@ -51,6 +51,10 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'class' => MenuColumn::class,
                 'menuClass' => PlanActionsMenu::class,
             ],
+            'monthly' => [
+                'attribute' => 'monthly',
+                'contentOptions' => ['id' => 'plan-monthly-value'],
+            ],
         ]);
     }
 }

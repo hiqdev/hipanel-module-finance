@@ -183,24 +183,42 @@ class PlanController extends CrudController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $request = Yii::$app->request;
 
-        /** @var PriceChargesEstimator $calculator */
-        $calculator = Yii::$container->get(PriceChargesEstimator::class, [
-            $request->post('actions'),
-            $request->post('prices'),
+        $periods = ['now', 'first day of +1 month', 'first day of +1 year'];
+        $calculations = Plan::perform('calculate-charges', [
+            'actions' => $request->post('actions'),
+            'prices' => $request->post('prices'),
+            'times' => $periods,
         ]);
+        /** @var PriceChargesEstimator $calculator */
+        $calculator = Yii::$container->get(PriceChargesEstimator::class, [$calculations]);
 
         try {
-            return $calculator->calculateForPeriods([
-                'now',
-                'first day of +1 month',
-                'first day of +1 year',
-            ]);
+            return $calculator->calculateForPeriods($periods);
         } catch (ResponseErrorException $exception) {
             Yii::$app->response->setStatusCode(412, $exception->getMessage());
             return [
                 'formula' => $exception->getResponse()->getData()['_error_ops']['formula'] ?? null
             ];
         }
+    }
+
+    public function actionCalculateCurrentValue($planId)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $periods = ['now', 'first day of +1 month', 'first day of +1 year'];
+        try {
+            $calculations = Plan::perform('calculate-current-value', ['id' => $planId, 'times' => $periods]);
+            $calculator = Yii::$container->get(PriceChargesEstimator::class, [$calculations]);
+
+            return $calculator->calculateForPeriods($periods);
+        } catch (ResponseErrorException $exception) {
+            Yii::$app->response->setStatusCode(412, $exception->getMessage());
+
+            return [
+                'formula' => $exception->getResponse()->getData()['_error_ops']['formula'] ?? null
+            ];
+        }
+
     }
 
     public function actionUpdatePrices(int $id, string $scenario = 'update')

@@ -13,9 +13,9 @@ $i = 1;
 
 <table class="table table-condensed">
     <tr>
-        <th>№</th>
-        <th>Тип</th>
-        <th>Сумма</th>
+        <th><?= Yii::t('hipanel', '#') ?></th>
+        <th><?= Yii::t('hipanel', 'Type') ?></th>
+        <th><?= Yii::t('hipanel', 'Sum') ?></th>
     </tr>
 <?php foreach ($charges as $charge): ?>
     <tr>

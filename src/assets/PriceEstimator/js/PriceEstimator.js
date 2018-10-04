@@ -117,18 +117,16 @@
         },
         updatePriceCharges() {
             let prices = this.getPrices();
+            let actions = this.getActions(prices);
 
             this.getPriceRows().find('.price-estimates').html('<i class="fa fa-spinner fa-spin fa-lg"></i>');
 
             $.ajax({
                 method: 'post',
                 url: '/finance/plan/calculate-charges',
-                data: {
-                    prices,
-                    actions: this.getActions(prices),
-                },
+                data: { prices, actions },
                 success: json => {
-                    Object.keys(json).forEach(period => this.rememberEstimates(period, json[period]))
+                    Object.keys(json).forEach(period => this.rememberEstimates(period, json[period].targets));
                     this.drawEstimates();
                 },
                 error: xhr => {
