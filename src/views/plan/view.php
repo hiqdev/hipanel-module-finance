@@ -52,6 +52,7 @@ $this->registerCss("
                     'boxed' => false,
                     'columns' => array_filter([
                         'simple_name',
+                        'monthly',
                         'client',
                         'type',
                         'state',

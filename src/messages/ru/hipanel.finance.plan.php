@@ -7,4 +7,6 @@ return [
     'Plan was successfully deleted' => 'Тарифный план был успешно удалён',
     'Plan was successfully restored' => 'Тарифный план был успешно восстановлен',
     'Servers' => 'Серверы',
+    'Monthly' => 'Ежемесячно',
+    'Estimate value' => 'Оценочная стоимость',
 ];
