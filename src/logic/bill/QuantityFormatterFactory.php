@@ -39,7 +39,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
 
         'monthly' => MonthlyQuantity::class,
         'monthly,hardware' => MonthlyQuantity::class,
-        'monthly,rack_unit' => DefaultQuantityFormatter::class,
+        'monthly,rack_unit' => MonthlyQuantity::class,
 
         'hw_purchase' => DefaultQuantityFormatter::class,
         'drenewal' => DomainRenewalQuantity::class,
