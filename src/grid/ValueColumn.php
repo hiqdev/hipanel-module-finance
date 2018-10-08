@@ -16,9 +16,9 @@ use yii\grid\Column;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-class CurrentValueColumn extends Column
+class ValueColumn extends Column
 {
-    public $attribute = 'current-value';
+    public $attribute = 'value';
 
     /**
      * @var integer
@@ -28,7 +28,7 @@ class CurrentValueColumn extends Column
     public function init()
     {
         parent::init();
-        $this->header = Yii::t('hipanel.finance.plan', 'Estimate value');
+        $this->header = Yii::t('hipanel.finance.plan', 'Estimated value');
         $this->planId = $this->findPlanId();
         $this->regesterClientScript();
     }
@@ -46,7 +46,7 @@ class CurrentValueColumn extends Column
 
     private function regesterClientScript()
     {
-        $calculateCurrentValueUrl = Url::toRoute(['@plan/calculate-current-value', 'planId' => $this->planId]);
+        $calculateValueUrl = Url::toRoute(['@plan/calculate-value', 'planId' => $this->planId]);
         $view = Yii::$app->view;
         $view->registerAssetBundle(PriceEstimator::class);
         $view->registerJs(/** @lang ECMAScript 6 */
@@ -74,7 +74,7 @@ class CurrentValueColumn extends Column
             }
             $.ajax({
                 method: 'post',
-                url: '{$calculateCurrentValueUrl}',
+                url: '{$calculateValueUrl}',
                 success: json => {
                     Object.keys(json).forEach(period => Estimator.rememberEstimates(period, json[period].targets));
                     Estimator.drawEstimates();

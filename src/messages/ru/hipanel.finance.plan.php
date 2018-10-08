@@ -8,5 +8,5 @@ return [
     'Plan was successfully restored' => 'Тарифный план был успешно восстановлен',
     'Servers' => 'Серверы',
     'Monthly' => 'Ежемесячно',
-    'Estimate value' => 'Оценочная стоимость',
+    'Estimated value' => 'Оценочная стоимость',
 ];

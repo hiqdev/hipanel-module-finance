@@ -126,8 +126,8 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                     return $this->presenterFactory->build(get_class($model))->renderInfo($model);
                 }
             ],
-            'current-value' => [
-                'class' => CurrentValueColumn::class,
+            'value' => [
+                'class' => ValueColumn::class,
             ],
         ]);
     }

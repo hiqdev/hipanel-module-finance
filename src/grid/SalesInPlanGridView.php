@@ -93,7 +93,7 @@ class SalesInPlanGridView extends SaleGridView
                     'info',
                     'price',
                     'note',
-                    'current-value'
+                    'value',
                 ],
             ]);
         };
