@@ -104,7 +104,7 @@
                     if (estimateBox.html().length === 0) {
                         estimateBox.append($('<strong>').attr({title: period}).html(sum));
                     } else {
-                        estimateBox.append('; ');
+                        estimateBox.append('&nbsp; ');
                         estimateBox.append($('<i>').attr({title: period}).html(sum));
                     }
 

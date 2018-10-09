@@ -27,6 +27,13 @@ class PriceEstimator extends AssetBundle
     /**
      * @var array
      */
+    public $css = [
+        'css/PriceEstimator.css',
+    ];
+
+    /**
+     * @var array
+     */
     public $depends = [
         JqueryAsset::class
     ];

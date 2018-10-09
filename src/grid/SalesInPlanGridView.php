@@ -92,8 +92,8 @@ class SalesInPlanGridView extends SaleGridView
                     'type',
                     'info',
                     'price',
-                    'note',
                     'value',
+                    'note',
                 ],
             ]);
         };

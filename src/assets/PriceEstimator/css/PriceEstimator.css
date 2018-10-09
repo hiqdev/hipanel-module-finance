@@ -1,0 +1,9 @@
+.price-item {
+    white-space: nowrap;
+}
+.price-estimates I {
+    font-size: 80%;
+}
+#plan-monthly-value I {
+    font-size: 80%;
+}

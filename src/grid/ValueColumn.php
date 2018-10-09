@@ -67,7 +67,7 @@ class ValueColumn extends Column
                     if (totalCell.html().length === 0) {
                         totalCell.append($('<strong>').attr({title: period}).html(sum));
                     } else {
-                        totalCell.append('; ');
+                        totalCell.append('&nbsp; ');
                         totalCell.append($('<i>').attr({title: period}).html(sum));
                     }
                 });
