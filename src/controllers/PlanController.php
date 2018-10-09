@@ -18,6 +18,7 @@ use hipanel\modules\finance\helpers\PriceChargesEstimator;
 use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\Plan;
+use hipanel\modules\server\models\Server;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\TargetObject;
@@ -91,6 +92,28 @@ class PlanController extends CrudController
                         ->withPrices();
                 },
                 'data' => function (Action $action, array $data) {
+                    $object_ids = [];
+                    foreach ($data['models'] as $key => $model) {
+                        foreach ($model->prices as $price) {
+                            $object_ids[$price->object_id] = $price->object_id;
+                        }
+                    }
+                    if ($object_ids) {
+                        $rawServers = Server::find()->withHardwareSettings()->andWhere(['ids' => implode(',', $object_ids)])->all();
+                        $servers = [];
+                        foreach ($rawServers as $server) {
+                            $servers[$server->id] = $server;
+                        }
+                        foreach ($data['models'] as $key => &$model) {
+                            foreach ($model->prices as $price) {
+                                $server_id = $price->object_id;
+                                if (isset($servers[$server_id])) {
+                                    $model->servers[$server_id] = $servers[$server_id];
+                                }
+                            }
+                        }
+                    }
+
                     return array_merge($data, [
                         'grouper' => new PlanInternalsGrouper($data['model']),
                         'parentPrices' => $this->getParentPrices($data['model']['id'])

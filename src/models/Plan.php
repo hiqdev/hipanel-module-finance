@@ -37,6 +37,8 @@ class Plan extends \hipanel\base\Model
      */
     public $monthly;
 
+    public $servers = [];
+
     public function rules()
     {
         return array_merge(parent::rules(), [

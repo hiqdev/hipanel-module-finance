@@ -54,6 +54,7 @@ return [
     'TXN' => 'Транзакция',
     'Add payment' => 'Создать платёж',
     '{quantity, plural, one{# item} other{# items}}' => '{quantity, plural, one{# штука} few{# штуки} other{# штук}}',
+    '{quantity, plural, one{# unit} other{# units}}' => '{quantity, plural, one{# юнит} few{# юнита} other{# юнитов}}',
     '{quantity, plural, one{# minute} other{# minutes}}' => '{quantity, plural, one{# минута} few{# минуты} other{# минут}}',
     '{quantity, plural, one{# day} other{# days}}' => '{quantity, plural, one{# день} few{# дня} other{# дней}}',
     '{quantity, plural, one{# year} other{# years}}' => '{quantity, plural, one{# год} few{# года} other{# лет}}',
