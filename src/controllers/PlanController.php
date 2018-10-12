@@ -225,12 +225,12 @@ class PlanController extends CrudController
         }
     }
 
-    public function actionCalculateValue($planId)
+    public function actionCalculateValues($planId)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $periods = ['now', 'first day of +1 month', 'first day of +1 year'];
         try {
-            $calculations = Plan::perform('calculate-value', ['id' => $planId, 'times' => $periods]);
+            $calculations = Plan::perform('calculate-values', ['id' => $planId, 'times' => $periods]);
             $calculator = Yii::$container->get(PriceChargesEstimator::class, [$calculations]);
 
             return $calculator->calculateForPeriods($periods);

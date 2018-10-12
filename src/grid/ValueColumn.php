@@ -46,7 +46,7 @@ class ValueColumn extends Column
 
     private function regesterClientScript()
     {
-        $calculateValueUrl = Url::toRoute(['@plan/calculate-value', 'planId' => $this->planId]);
+        $calculateValueUrl = Url::toRoute(['@plan/calculate-values', 'planId' => $this->planId]);
         $view = Yii::$app->view;
         $view->registerAssetBundle(PriceEstimator::class);
         $view->registerJs(/** @lang ECMAScript 6 */
