@@ -28,7 +28,10 @@ use yii\helpers\Html;
     ]) ?>
     <?php $box->endBody() ?>
     <?php $box->beginFooter() ?>
-    <?= Html::a(Yii::t('hipanel', 'View') . $box->icon(), '@tariff/index', ['class' => 'small-box-footer']) ?>
+    <?= Html::a(Yii::t('hipanel', 'View') . $box->icon(), '@plan/index', ['class' => 'small-box-footer']) ?>
+    <?php if (Yii::$app->user->can('plan.create')) : ?>
+        <?= Html::a(Yii::t('hipanel', 'Create') . $box->icon('fa-plus'), '@plan/create', ['class' => 'small-box-footer']) ?>
+    <?php endif ?>
     <?php $box->endFooter() ?>
     <?php $box::end() ?>
 </div>

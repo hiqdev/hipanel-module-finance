@@ -38,6 +38,9 @@ use yii\helpers\Html;
     <?php $box->endBody() ?>
     <?php $box->beginFooter() ?>
     <?= Html::a(Yii::t('hipanel', 'View') . $box->icon(), '@bill/index', ['class' => 'small-box-footer']) ?>
+    <?php if (Yii::$app->user->can('bill.create')) : ?>
+        <?= Html::a(Yii::t('hipanel', 'Create') . $box->icon('fa-plus'), '@bill/create', ['class' => 'small-box-footer']) ?>
+    <?php endif ?>
     <?php if (Yii::$app->user->can('deposit')) : ?>
         <?= Html::a(Yii::t('hipanel', 'Recharge') . $box->icon('fa-credit-card-alt'), '@pay/deposit', ['class' => 'small-box-footer']) ?>
     <?php endif ?>
