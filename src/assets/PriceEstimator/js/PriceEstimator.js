@@ -57,22 +57,24 @@
         rememberEstimates(period, objects) {
             let estimatesPerRow = {};
 
-            Object.keys(objects).forEach(object_id => {
-                let objectActions = objects[object_id];
+            if (objects) {
+                Object.keys(objects).forEach(object_id => {
+                    let objectActions = objects[object_id];
 
-                Object.keys(objectActions).forEach(type => {
-                    let row = this.matchPriceRow(object_id, type),
-                        id = row.data('id');
+                    Object.keys(objectActions).forEach(type => {
+                        let row = this.matchPriceRow(object_id, type),
+                            id = row.data('id');
 
-                    if (row) {
-                        let estimate = objectActions[type];
-                        if (estimatesPerRow[id] === undefined) {
-                            estimatesPerRow[id] = [];
+                        if (row) {
+                            let estimate = objectActions[type];
+                            if (estimatesPerRow[id] === undefined) {
+                                estimatesPerRow[id] = [];
+                            }
+                            estimatesPerRow[id] = estimate;
                         }
-                        estimatesPerRow[id] = estimate;
-                    }
+                    });
                 });
-            });
+            }
 
             this.estimatesPerPeriod[period] = estimatesPerRow;
         },
