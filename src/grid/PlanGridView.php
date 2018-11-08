@@ -30,7 +30,7 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 ],
                 'badges' => function ($model) {
                     if ($model->is_grouping) {
-                        return Html::tag('span', 'Grouping', ['class' => 'label bg-olive', 'style' => 'float:right']);
+                        return Html::tag('span', Yii::t('hipanel.finance.plan', 'Grouping'), ['class' => 'label bg-olive', 'style' => 'float:right']);
                     }
                     return '';
                 },
@@ -40,7 +40,7 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'html',
                 'value' => function ($model) {
                     if ($model->is_grouping) {
-                        $flag = Html::tag('span', 'Grouping', ['class' => 'label bg-olive', 'style' => 'float:right']);
+                        $flag = Html::tag('span', Yii::t('hipanel.finance.plan', 'Grouping'), ['class' => 'label bg-olive', 'style' => 'float:right']);
                         return sprintf('%s %s', $model->name, $flag);
                     }
                     return $model->name;

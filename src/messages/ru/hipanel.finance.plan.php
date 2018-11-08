@@ -9,4 +9,5 @@ return [
     'Servers' => 'Серверы',
     'Monthly' => 'Ежемесячно',
     'Estimated value' => 'Оценочная стоимость',
+    'Grouping' => 'Группирующий',
 ];

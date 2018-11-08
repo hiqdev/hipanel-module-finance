@@ -39,7 +39,7 @@ use yii\helpers\Html;
                         }]
                     ]
                 ]) ?>
-                <?= $form->field($model, 'is_grouping')->checkBox();  ?>
+                <?= $form->field($model, 'is_grouping')->checkBox(['label' => Yii::t('hipanel.finance.plan', 'Grouping')]);  ?>
                 <?= $form->field($model, 'note') ?>
             </div>
         </div>
