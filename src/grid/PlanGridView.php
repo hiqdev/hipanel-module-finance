@@ -29,9 +29,8 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                     'url' => Url::to(['@plan/set-note']),
                 ],
                 'badges' => function ($model) {
-                    $flag = Html::tag('span', 'Grouping', ['class' => 'label bg-olive', 'style' => 'float:right']);
                     if ($model->is_grouping) {
-                        return $flag;
+                        return Html::tag('span', 'Grouping', ['class' => 'label bg-olive', 'style' => 'float:right']);
                     }
                     return '';
                 },
