@@ -39,6 +39,7 @@ use yii\helpers\Html;
                         }]
                     ]
                 ]) ?>
+                <?= $form->field($model, 'is_grouping')->checkBox();  ?>
                 <?= $form->field($model, 'note') ?>
             </div>
         </div>
