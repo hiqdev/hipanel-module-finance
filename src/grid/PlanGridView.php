@@ -8,8 +8,8 @@ use hipanel\helpers\Url;
 use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\menus\PlanActionsMenu;
 use hiqdev\yii2\menus\grid\MenuColumn;
-use Yii;
 use yii\helpers\Html;
+use Yii;
 
 class PlanGridView extends \hipanel\grid\BoxedGridView
 {
@@ -40,8 +40,8 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'name',
                 'format' => 'html',
                 'value' => function ($model) {
-                    $flag = Html::tag('span', 'Grouping', ['class' => 'label bg-olive', 'style' => 'float:right']);
                     if ($model->is_grouping) {
+                        $flag = Html::tag('span', 'Grouping', ['class' => 'label bg-olive', 'style' => 'float:right']);
                         return sprintf('%s %s', $model->name, $flag);
                     }
                     return $model->name;
