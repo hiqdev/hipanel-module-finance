@@ -29,21 +29,14 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                     'url' => Url::to(['@plan/set-note']),
                 ],
                 'badges' => function ($model) {
-                    if ($model->is_grouping) {
-                        return Html::tag('span', Yii::t('hipanel.finance.plan', 'Grouping'), ['class' => 'label bg-olive', 'style' => 'float:right']);
-                    }
-                    return '';
+                    return $this->prepareBadges($model);
                 },
             ],
             'simple_name' => [
                 'attribute' => 'name',
                 'format' => 'html',
                 'value' => function ($model) {
-                    if ($model->is_grouping) {
-                        $flag = Html::tag('span', Yii::t('hipanel.finance.plan', 'Grouping'), ['class' => 'label bg-olive', 'style' => 'float:right']);
-                        return sprintf('%s %s', $model->name, $flag);
-                    }
-                    return $model->name;
+                    return sprintf('%s %s', $model->name, $this->prepareBadges($model));
                 },
             ],
             'state' => [
@@ -71,5 +64,14 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'contentOptions' => ['id' => 'plan-monthly-value'],
             ],
         ]);
+    }
+
+    protected function prepareBadges($model)
+    {
+        $localization = Yii::t('hipanel.finance.plan', 'Grouping');
+        if ($model->is_grouping) {
+            return Html::tag('span', $localization, ['class' => 'label bg-olive', 'style' => 'float:right']);
+        }
+        return '';
     }
 }
