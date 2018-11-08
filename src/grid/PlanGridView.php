@@ -9,6 +9,7 @@ use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\menus\PlanActionsMenu;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
+use yii\helpers\Html;
 
 class PlanGridView extends \hipanel\grid\BoxedGridView
 {
@@ -27,9 +28,24 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'noteOptions' => [
                     'url' => Url::to(['@plan/set-note']),
                 ],
+                'badges' => function ($model) {
+                    $flag = Html::tag('span', 'Grouping', ['class' => 'label bg-olive', 'style' => 'float:right']);
+                    if ($model->is_grouping) {
+                        return $flag;
+                    }
+                    return '';
+                },
             ],
             'simple_name' => [
                 'attribute' => 'name',
+                'format' => 'html',
+                'value' => function ($model) {
+                    $flag = Html::tag('span', 'Grouping', ['class' => 'label bg-olive', 'style' => 'float:right']);
+                    if ($model->is_grouping) {
+                        return sprintf('%s %s', $model->name, $flag);
+                    }
+                    return $model->name;
+                },
             ],
             'state' => [
                 'attribute' => 'state',
