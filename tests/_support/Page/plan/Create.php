@@ -28,6 +28,7 @@ class Create extends Plan
         $this->loadPage();
         $this->fillName();
         $this->chooseType();
+        $this->setGrouping();
         $this->findClient();
         $this->chooseCurrency();
         $this->fillNote();
@@ -49,6 +50,13 @@ class Create extends Plan
 
         $I->click(['name' => 'Plan[type]']);
         $I->click("//select/option[.='{$this->type}']");
+    }
+
+    protected function setGrouping()
+    {
+        $I = $this->tester;
+
+        $I->uncheckOption("//input[@name='Plan[is_grouping]'][@type='checkbox']");
     }
 
     private function findClient()
