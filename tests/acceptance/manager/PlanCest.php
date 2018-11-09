@@ -7,11 +7,6 @@ use hipanel\tests\_support\Step\Acceptance\Manager;
 
 class PlanCest extends PriceCest
 {
-//    public function _before(Manager $I)
-//    {
-//        $I->login();
-//    }
-
     /**
      * @param Manager $I
      * @return array of settings for future plan
