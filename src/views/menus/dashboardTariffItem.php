@@ -1,7 +1,7 @@
 <?php
 
 use hipanel\helpers\Url;
-use hipanel\modules\client\models\ClientSearch;
+use hipanel\modules\finance\models\TariffSearch;
 use hipanel\modules\dashboard\widgets\SearchForm;
 use hipanel\modules\dashboard\widgets\SmallBox;
 use yii\helpers\Html;
@@ -19,10 +19,10 @@ use yii\helpers\Html;
     <br>
     <?= SearchForm::widget([
         'formOptions' => [
-            'id' => 'client-search',
-            'action' => Url::to('@client/index'),
+            'id' => 'tariff-search',
+            'action' => Url::to('@finance/tariff/index'),
         ],
-        'model' => new ClientSearch(),
+        'model' => new TariffSearch(),
         'attribute' => 'tariff_like',
         'buttonColor' => SmallBox::COLOR_GREEN,
     ]) ?>
