@@ -29,14 +29,14 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'noteOptions' => [
                     'url' => Url::to(['@plan/set-note']),
                 ],
-                'badges' => function (Plan $model) {
+                'badges' => function (Plan $model):string {
                     return $this->prepareBadges($model);
                 },
             ],
             'simple_name' => [
                 'attribute' => 'name',
                 'format' => 'html',
-                'value' => function (Plan $model) {
+                'value' => function (Plan $model):string {
                     return sprintf('%s %s', $model->name, $this->prepareBadges($model));
                 },
             ],
