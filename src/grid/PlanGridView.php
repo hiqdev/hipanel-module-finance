@@ -7,13 +7,14 @@ use hipanel\grid\RefColumn;
 use hipanel\helpers\Url;
 use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\menus\PlanActionsMenu;
+use hipanel\modules\finance\models\Plan;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use yii\helpers\Html;
 use Yii;
 
 class PlanGridView extends \hipanel\grid\BoxedGridView
 {
-    public function columns()
+    public function columns(): array
     {
         return array_merge(parent::columns(), [
             'client' => [
@@ -28,14 +29,14 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'noteOptions' => [
                     'url' => Url::to(['@plan/set-note']),
                 ],
-                'badges' => function ($model) {
+                'badges' => function (Plan $model): string {
                     return $this->prepareBadges($model);
                 },
             ],
             'simple_name' => [
                 'attribute' => 'name',
                 'format' => 'html',
-                'value' => function ($model) {
+                'value' => function (Plan $model): string {
                     return sprintf('%s %s', $model->name, $this->prepareBadges($model));
                 },
             ],
@@ -66,7 +67,11 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
         ]);
     }
 
-    protected function prepareBadges($model)
+    /**
+     * @param Plan $model
+     * @return string
+     */
+    protected function prepareBadges(Plan $model): string
     {
         $localization = Yii::t('hipanel.finance.plan', 'Grouping');
         if ($model->is_grouping) {
