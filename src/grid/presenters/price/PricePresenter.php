@@ -65,9 +65,7 @@ class PricePresenter
     public function renderInfo(Price $price): string
     {
         if ($price->type === 'monthly,rack_unit') {
-            return Html::tag('i', '', ['class' => 'fa fa-server']) .'&nbsp;'. Yii::t('hipanel:finance', '{quantity, plural, one{# unit} other{# units}}', [
-                'quantity' => $price->plan->servers[$price->object_id]->hardwareSettings->units ?? 1,
-            ]);
+            return Html::tag('i', '', ['class' => 'fa fa-server']) .'&nbsp;'. Html::tag('b', '?', []) . '&nbsp;' . Yii::t('hipanel:finance', 'unit(s)');
         }
         if ($price->isOveruse()) {
             return Yii::t('hipanel:finance', '{coins}&nbsp;&nbsp;{amount,number} {unit}', [
