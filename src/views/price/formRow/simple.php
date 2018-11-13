@@ -19,7 +19,7 @@ use yii\bootstrap\Html;
         <?= Html::activeHiddenInput($model, "[$i]object", ['value' => $model->object->name]) ?>
         <?= Html::activeHiddenInput($model, "[$i]quantity") ?>
         <?= Html::activeHiddenInput($model, "[$i]unit") ?>
-        <?= Html::activeHiddenInput($model, "[$i]note") ?>
+        <?= Html::activeHiddenInput($model, "[$i]note", ['data-attribute' => 'note']) ?>
 
         <div class="form-group">
             <strong>
@@ -43,9 +43,7 @@ use yii\bootstrap\Html;
                 'pluginOptions' => [
                     'url' => new \yii\web\JsExpression(<<<'JS'
                     function(params) {
-    // $("div input[name*=note]:hidden")
-                        console.log(params);
-                        $(`div[data-id=${params.pk}] input[name*=note]:hidden`).val(params.value);
+                        $(this).closest('.form-instance').find('input[data-attribute=note]').val(params.value);
                         return $.Deferred().resolve();
                     }
 JS
