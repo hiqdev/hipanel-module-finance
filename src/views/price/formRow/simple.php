@@ -36,6 +36,22 @@ use yii\bootstrap\Html;
                 'model' => $model,
                 'field' => 'type',
             ])?>
+            <br />
+            <?= \hipanel\widgets\XEditable::widget([
+                'model' => $model,
+                'attribute' => 'note',
+                'pluginOptions' => [
+                    'url' => new \yii\web\JsExpression(<<<'JS'
+                    function(params) {
+    // $("div input[name*=note]:hidden")
+                        console.log(params);
+                        $(`div[data-id=${params.pk}] input[name*=note]:hidden`).val(params.value);
+                        return $.Deferred().resolve();
+                    }
+JS
+)
+                ],
+            ]) ?>
         </div>
     </div>
     <div class="col-md-1">
