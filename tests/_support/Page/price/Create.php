@@ -16,6 +16,9 @@ class Create extends View
         $this->proceedToCreation();
         $this->fillRandomPrices('price');
         $this->saveForm();
+        // //a[contains(@class, 'editable')]
+        // //div[contains(@class,'editable-input')]//input[contains(@type,'text')]
+        // //div[contains(@class,'editable-buttons')]//button[contains(@type,'submit')]
         $this->seeRandomPrices();
     }
 
