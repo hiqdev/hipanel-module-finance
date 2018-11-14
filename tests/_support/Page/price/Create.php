@@ -15,10 +15,17 @@ class Create extends View
         $this->choosePriceType($priceType);
         $this->proceedToCreation();
         $this->fillRandomPrices('price');
-        $this->saveForm();
+        // get all xeditable link
         // //a[contains(@class, 'editable')]
+        // counts links? or count row?
+        // get link, press open input
         // //div[contains(@class,'editable-input')]//input[contains(@type,'text')]
+        // write random note and submit
         // //div[contains(@class,'editable-buttons')]//button[contains(@type,'submit')]
+        // go to line 'get link' or exit
+        // JS?????
+        // $$('a[class*=editable]').each(function(){ this.click(); $(".editable-input input").val("1"); $(".editable-submit").click(); });
+        $this->saveForm();
         $this->seeRandomPrices();
     }
 
