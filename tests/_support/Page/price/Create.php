@@ -78,10 +78,10 @@ class Create extends View
     public function fillXEditable(string $text): void
     {
         $this->tester->executeJS("
-            $('a[class*=editable]').each(function(){
-            this.click();
-            $('.editable-input input').val('{$text}');
-            $('.editable-submit').click();
+            $('a[class*=editable]').each(function() {
+                this.click();
+                $('.editable-input input').val('{$text}');
+                $('.editable-submit').click();
             });
         ");
     }
