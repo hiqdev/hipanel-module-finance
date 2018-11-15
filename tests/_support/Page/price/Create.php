@@ -24,7 +24,8 @@ class Create extends View
         // //div[contains(@class,'editable-buttons')]//button[contains(@type,'submit')]
         // go to line 'get link' or exit
         // JS?????
-        // $$('a[class*=editable]').each(function(){ this.click(); $(".editable-input input").val("1"); $(".editable-submit").click(); });
+        // $('a[class*=editable]').each(function(){ this.click(); $(".editable-input input").val("1"); $(".editable-submit").click(); });
+        $this->fillXEditable("test note");
         $this->saveForm();
         $this->seeRandomPrices();
     }
@@ -70,5 +71,16 @@ class Create extends View
 
         $I->click('Save');
         $I->closeNotification('Prices were successfully created');
+    }
+
+    public function fillXEditable(string $text): void
+    {
+        $this->tester->executeJS("
+        $('a[class*=editable]').each(function(){
+        this.click();
+        $('.editable-input input').val('{$text}');
+        $('.editable-submit').click();
+        });
+        ");
     }
 }
