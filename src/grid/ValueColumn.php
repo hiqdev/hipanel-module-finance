@@ -73,21 +73,32 @@ class ValueColumn extends Column
                 });
             }
             function drawDynamicQuantity(rows) {
-                let qty = '?', dynamicQuantity = $('[data-dynamic-quantity]');
-                if (dynamicQuantity.length) {
-                    let firstPeriod = Object.keys(rows)[0];
-                    qty = rows[firstPeriod].quantity;
-                    dynamicQuantity.eq(0).text(qty);
+                let firstPeriod = Object.keys(rows)[0];
+                let period = rows[firstPeriod];
+                if (period.targets) {
+                    Object.keys(period.targets).forEach(object_id => {
+                        let objectActions = period.targets[object_id];
+
+                        Object.keys(objectActions).forEach(type => {
+                            let row = Estimator.matchPriceRow(object_id, type);
+                            if (row) {
+                                let dynamicQuantity = row.parents('tr[data-key]').find('[data-dynamic-quantity]');
+                                if (dynamicQuantity.length) {
+                                    dynamicQuantity.text(objectActions[type].quantity);
+                                }
+                            }
+                        });
+                    });
                 }
             }
             $.ajax({
                 method: 'post',
                 url: '{$calculateValueUrl}',
                 success: json => {
+                    drawDynamicQuantity(json);
                     Object.keys(json).forEach(period => Estimator.rememberEstimates(period, json[period].targets));
                     Estimator.drawEstimates();
                     drawPlanTotal(json);
-                    drawDynamicQuantity(json);
                 },
                 error: xhr => {
                     hipanel.notify.error(xhr.statusText);
