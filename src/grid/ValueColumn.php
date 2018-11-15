@@ -72,6 +72,14 @@ class ValueColumn extends Column
                     }
                 });
             }
+            function drawDynamicQuantity(rows) {
+                let qty = '?', dynamicQuantity = $('[data-dynamic-quantity]');
+                if (dynamicQuantity.length) {
+                    let firstPeriod = Object.keys(rows)[0];
+                    qty = rows[firstPeriod].quantity;
+                    dynamicQuantity.eq(0).text(qty);
+                }
+            }
             $.ajax({
                 method: 'post',
                 url: '{$calculateValueUrl}',
@@ -79,6 +87,7 @@ class ValueColumn extends Column
                     Object.keys(json).forEach(period => Estimator.rememberEstimates(period, json[period].targets));
                     Estimator.drawEstimates();
                     drawPlanTotal(json);
+                    drawDynamicQuantity(json);
                 },
                 error: xhr => {
                     hipanel.notify.error(xhr.statusText);
