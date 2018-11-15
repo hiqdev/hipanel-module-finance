@@ -2,12 +2,20 @@
 
 namespace hipanel\modules\finance\tests\_support\Page\price;
 
+use hipanel\tests\_support\Page\IndexPage;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 
 class Create extends View
 {
+    /**
+     * @param string $objectName
+     * @param string $templateName
+     * @param string $priceType
+     */
     public function createRandomPrices(string $objectName, string $templateName, string $priceType): void
     {
+        $note = 'test note';
+
         $this->loadPage();
         $this->openModal();
         $this->chooseObject($objectName);
@@ -15,18 +23,9 @@ class Create extends View
         $this->choosePriceType($priceType);
         $this->proceedToCreation();
         $this->fillRandomPrices('price');
-        // get all xeditable link
-        // //a[contains(@class, 'editable')]
-        // counts links? or count row?
-        // get link, press open input
-        // //div[contains(@class,'editable-input')]//input[contains(@type,'text')]
-        // write random note and submit
-        // //div[contains(@class,'editable-buttons')]//button[contains(@type,'submit')]
-        // go to line 'get link' or exit
-        // JS?????
-        // $('a[class*=editable]').each(function(){ this.click(); $(".editable-input input").val("1"); $(".editable-submit").click(); });
-        $this->fillXEditable("test note");
+        $this->fillXEditable($note);
         $this->saveForm();
+        $this->seeNoteInTbodyRow($note);
         $this->seeRandomPrices();
     }
 
@@ -73,14 +72,30 @@ class Create extends View
         $I->closeNotification('Prices were successfully created');
     }
 
+    /**
+     * @param string $text
+     */
     public function fillXEditable(string $text): void
     {
         $this->tester->executeJS("
-        $('a[class*=editable]').each(function(){
-        this.click();
-        $('.editable-input input').val('{$text}');
-        $('.editable-submit').click();
-        });
+            $('a[class*=editable]').each(function(){
+            this.click();
+            $('.editable-input input').val('{$text}');
+            $('.editable-submit').click();
+            });
         ");
     }
+
+    /**
+     * @param string $note
+     */
+    public function seeNoteInTbodyRow(string $note): void
+    {
+        $page = new IndexPage($this->tester);
+        $howRow = $page->countRowsInTableBody();
+        foreach (range(1, $howRow) as $i) {
+            $this->tester->see($note, "//tbody/tr[$i]");
+        }
+    }
 }
+
