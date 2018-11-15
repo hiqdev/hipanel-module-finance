@@ -23,7 +23,7 @@ class Create extends View
         $this->choosePriceType($priceType);
         $this->proceedToCreation();
         $this->fillRandomPrices('price');
-        $this->fillXEditable($note);
+        $this->fillNote($note);
         $this->saveForm();
         $this->seeNoteInTbodyRow($note);
         $this->seeRandomPrices();
@@ -75,7 +75,7 @@ class Create extends View
     /**
      * @param string $text
      */
-    public function fillXEditable(string $text): void
+    public function fillNote(string $text): void
     {
         $this->tester->executeJS("
             $('a[class*=editable]').each(function() {
@@ -94,7 +94,7 @@ class Create extends View
         $page = new IndexPage($this->tester);
         $howRow = $page->countRowsInTableBody();
         foreach (range(1, $howRow) as $i) {
-            $this->tester->see($note, "//tbody/tr[$i]");
+            $this->tester->see($note . " $i", "//tbody/tr[$i]");
         }
     }
 }
