@@ -120,6 +120,20 @@ class Price extends \hipanel\base\Model
         return array_intersect_key($units, array_combine($possibleTypes, $possibleTypes));
     }
 
+    /**
+     * Method checks, whether current price quantity is predefined and is not a result
+     * of sophisticated calculation on server side.
+     * @return bool
+     */
+    public function isQuantityPredefined(): bool
+    {
+        if (!$this->isOveruse() && $this->getSubtype() === 'rack_unit') {
+            return false;
+        }
+
+        return true;
+    }
+
     public function getUnitLabel()
     {
         return $this->getUnitOptions()[$this->unit] ?? null;

@@ -64,8 +64,11 @@ class PricePresenter
      */
     public function renderInfo(Price $price): string
     {
-        if ($price->type === 'monthly,rack_unit') {
-            return Html::tag('i', '', ['class' => 'fa fa-server']) .'&nbsp;'. Html::tag('b', '?', []) . '&nbsp;' . Yii::t('hipanel:finance', 'unit(s)');
+        if (!$price->isQuantityPredefined()) {
+            return Yii::t('hipanel:finance', '{icon} {quantity} unit(s)', [
+                'icon' => Html::tag('i', '', ['class' => 'fa fa-server']),
+                'quantity' => Html::tag('b', '<i class="fa fa-spin fa-refresh"></i>', ['data-dynamic-quantity' => true])
+            ]);
         }
         if ($price->isOveruse()) {
             return Yii::t('hipanel:finance', '{coins}&nbsp;&nbsp;{amount,number} {unit}', [
