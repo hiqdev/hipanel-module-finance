@@ -2,8 +2,8 @@
 
 namespace hipanel\modules\finance\tests\_support\Page\price;
 
-use hipanel\tests\_support\Page\IndexPage;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
+use hipanel\tests\_support\Page\Widget\Input\XEditable;
 
 class Create extends View
 {
@@ -23,9 +23,9 @@ class Create extends View
         $this->choosePriceType($priceType);
         $this->proceedToCreation();
         $this->fillRandomPrices('price');
-        $this->fillNote($note);
+        $howNotes = $this->fillNote($note);
         $this->saveForm();
-        $this->seeNoteInTbodyRow($note);
+        $this->seeNoteInTbodyRow($note, $howNotes);
         $this->seeRandomPrices();
     }
 
@@ -73,28 +73,28 @@ class Create extends View
     }
 
     /**
-     * @param string $text
+     * @param string $note
+     * @return int
      */
-    public function fillNote(string $text): void
+    public function fillNote(string $note): int
     {
-        $this->tester->executeJS("
-            $('a[class*=editable]').each(function() {
-                this.click();
-                $('.editable-input input').val('{$text}');
-                $('.editable-submit').click();
-            });
-        ");
+        $xEditable = new XEditable($this->tester);
+
+        $how = $xEditable->getRowsInTableForFill();
+        foreach (range(1, $how) as $i) {
+            $xEditable->fillNoteWithoutAjax("$note $i", $i);
+        }
+        return $how;
     }
 
     /**
      * @param string $note
+     * @param int $how
      */
-    public function seeNoteInTbodyRow(string $note): void
+    public function seeNoteInTbodyRow(string $note, int $how): void
     {
-        $page = new IndexPage($this->tester);
-        $howRow = $page->countRowsInTableBody();
-        foreach (range(1, $howRow) as $i) {
-            $this->tester->see($note . " $i", "//tbody/tr[$i]");
+        foreach (range(1, $how) as $i) {
+            $this->tester->see($note . " $i", "//tbody");
         }
     }
 }
