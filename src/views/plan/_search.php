@@ -20,6 +20,10 @@ use hiqdev\combo\StaticCombo;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('note_ilike')->textInput(['placeholder' => Yii::t('hipanel', 'Note')]) ?>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field('states')->widget(StaticCombo::class, [
         'data' => $search->model->stateOptions,
         'hasId' => false,
