@@ -123,7 +123,7 @@ class PaymentsCest
 
         $updatePage->containsCharges(2);
 
-        $updatePage->deleteLastCharge();
+        $updatePage->deleteChargeByName('TEST01');
         $updatePage->containsCharges(1);
 
         $chargesSum = $updatePage->getChargesTotalSum();
