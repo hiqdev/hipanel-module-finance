@@ -78,11 +78,10 @@ class Create extends View
      */
     public function fillNote(string $note): int
     {
-        $xEditable = new XEditable($this->tester, '');
-
         $how = count($this->tester->grabMultiple("//a[contains(@class, 'editable')]"));
         foreach (range(1, $how) as $i) {
-            $xEditable->setRow($i);
+//
+            $xEditable = new XEditable($this->tester, "div.price-item:nth-child($i)");
             $xEditable->setValue("$note $i");
         }
         return $how;
