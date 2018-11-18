@@ -21,7 +21,9 @@ class PlanSearch extends Plan
     public function attributeLabels()
     {
         return array_merge(parent::attributeLabels(), [
+            'type_in'             => Yii::t('hipanel', 'Type'),
             'name_ilike'          => Yii::t('hipanel:finance', 'Name'),
+            'note_ilike'          => Yii::t('hipanel', 'Note'),
         ]);
     }
 }
