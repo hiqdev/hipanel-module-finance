@@ -3,11 +3,19 @@
 namespace hipanel\modules\finance\tests\_support\Page\price;
 
 use hipanel\tests\_support\Page\Widget\Input\Select2;
+use hipanel\tests\_support\Page\Widget\Input\XEditable;
 
 class Create extends View
 {
+    /**
+     * @param string $objectName
+     * @param string $templateName
+     * @param string $priceType
+     */
     public function createRandomPrices(string $objectName, string $templateName, string $priceType): void
     {
+        $note = 'test note';
+
         $this->loadPage();
         $this->openModal();
         $this->chooseObject($objectName);
@@ -15,7 +23,9 @@ class Create extends View
         $this->choosePriceType($priceType);
         $this->proceedToCreation();
         $this->fillRandomPrices('price');
+        $howNotes = $this->fillNote($note);
         $this->saveForm();
+        $this->seeNoteInTbodyRow($note, $howNotes);
         $this->seeRandomPrices();
     }
 
@@ -61,4 +71,30 @@ class Create extends View
         $I->click('Save');
         $I->closeNotification('Prices were successfully created');
     }
+
+    /**
+     * @param string $note
+     * @return int
+     */
+    public function fillNote(string $note): int
+    {
+        $how = count($this->tester->grabMultiple("//a[contains(@class, 'editable')]"));
+        foreach (range(1, $how) as $i) {
+            (new XEditable($this->tester, "div.price-item:nth-child($i)"))
+                ->setValue("$note $i");
+        }
+        return $how;
+    }
+
+    /**
+     * @param string $note
+     * @param int $how
+     */
+    public function seeNoteInTbodyRow(string $note, int $how): void
+    {
+        foreach (range(1, $how) as $i) {
+            $this->tester->see("$note $i", "//tbody");
+        }
+    }
 }
+
