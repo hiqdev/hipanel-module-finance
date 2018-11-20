@@ -48,10 +48,10 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'html',
                 'gtype' => 'state,tariff',
             ],
-            'type' => [
+            'type_in' => [
                 'attribute' => 'type',
                 'class' => RefColumn::class,
-                'filterAttribute' => 'type',
+                'filterAttribute' => 'type_in',
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'format' => 'html',
                 'gtype' => 'type,tariff',

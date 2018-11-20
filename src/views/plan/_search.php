@@ -16,7 +16,15 @@ use hiqdev\combo\StaticCombo;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('type')->dropDownList($search->model->typeOptions, ['prompt' => '--']) ?>
+    <?= $search->field('type_in')->widget(\hipanel\widgets\RefCombo::class, [
+        'gtype' => "type,tariff",
+        'i18nDictionary' => 'hipanel:finance',
+        'multiple' => true,
+    ]) ?>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('note_ilike')->textInput(['placeholder' => Yii::t('hipanel', 'Note')]) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">

@@ -82,6 +82,7 @@ class Create extends View
         foreach (range(1, $how) as $i) {
             (new XEditable($this->tester, "div.price-item:nth-child($i)"))
                 ->setValue("$note $i");
+
         }
         return $how;
     }
@@ -94,6 +95,7 @@ class Create extends View
     {
         foreach (range(1, $how) as $i) {
             $this->tester->see("$note $i", "//tbody");
+
         }
     }
 }
