@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'checkbox',
                         'name',
                         'client',
-                        'type_in',
+                        'type',
                         'state',
                     ],
                 ]) ?>
