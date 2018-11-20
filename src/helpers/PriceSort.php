@@ -59,7 +59,17 @@ class PriceSort
 
     private static function byServerMainPrices(): \Closure
     {
-        $order = ['rack_unit', 'ip_num', 'support_time', 'backup_du', 'server_traf_max', 'server_traf95_max'];
+        $order = [
+            'rack_unit',
+            'ip_num',
+            'support_time',
+            'backup_du',
+            'server_traf_max',
+            'server_traf95_max',
+            'server_du',
+            'server_ssd',
+            'server_sata',
+        ];
 
         return function (Price $price) use ($order) {
             if (($key = array_search($price->getSubtype(), $order)) !== false) {

@@ -11,6 +11,6 @@ return [
     'Db num' => 'DB count',
     'Domain num' => 'Domains count',
     'Domain traf' => 'Domain traffic',
-    'Server ssd' => 'SSD диск',
-    'Server sata' => 'SATA диск',
+    'Server ssd' => 'SSD cache',
+    'Server sata' => 'SATA cache',
 ];
