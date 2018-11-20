@@ -15,7 +15,7 @@ class PlanSearch extends Plan
     public function searchAttributes()
     {
         return ArrayHelper::merge($this->defaultSearchAttributes(), [
-            'states', 'buyer_in',
+            'states',
         ]);
     }
     public function attributeLabels()
