@@ -47,7 +47,7 @@ use yii\bootstrap\Html;
                         return $.Deferred().resolve();
                     }
 JS
-)
+                )
                 ],
             ]) ?>
         </div>
