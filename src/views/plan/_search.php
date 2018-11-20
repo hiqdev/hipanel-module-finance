@@ -16,7 +16,7 @@ use hiqdev\combo\StaticCombo;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('type')->widget(\hipanel\widgets\RefCombo::class, [
+    <?= $search->field('type_in')->widget(\hipanel\widgets\RefCombo::class, [
         'gtype' => "type,tariff",
         'i18nDictionary' => 'hipanel:finance',
         'multiple' => true,
