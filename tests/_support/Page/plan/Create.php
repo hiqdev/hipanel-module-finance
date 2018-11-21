@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\tests\_support\Page\plan;
 
 use hipanel\helpers\Url;
+use hipanel\tests\_support\Page\Widget\Input\Select2;
 
 class Create extends Plan
 {
@@ -61,21 +62,14 @@ class Create extends Plan
 
     private function findClient()
     {
-        $I = $this->tester;
-
-        $I->click("//select[@name='Plan[client]']/../span");
-        $I->fillField('//input[@class="select2-search__field"]', $this->client);
-        $I->waitForElementNotVisible('.loading-results', 120);
-        $I->click('.select2-results__option--highlighted');
+        (new Select2($this->tester, '#plan-client'))
+            ->setValue($this->client);
     }
 
     private function chooseCurrency()
     {
-        $I = $this->tester;
-
-        $I->click("//select[@name='Plan[currency]']/../span");
-        $I->click("//select/option[.='{$this->currency}']");
-        $I->click("//select[@name='Plan[currency]']/../span");
+        (new Select2($this->tester, '#plan-currency'))
+            ->setValueLike($this->currency);
     }
 
     private function fillNote()
