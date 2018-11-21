@@ -17,6 +17,7 @@ use hipanel\modules\finance\models\factories\PriceModelFactory;
  * @property string|float $price
  * @property string $currency
  * @property string|int $main_object_id
+ * @property string $main_object_name
  * @property string $unit
  * @property string $type
  * @property string $quantity
@@ -39,7 +40,7 @@ class Price extends \hipanel\base\Model
     {
         return array_merge(parent::rules(), [
             [['id', 'parent_id', 'plan_id', 'object_id', 'type_id', 'unit_id', 'currency_id', 'main_object_id'], 'integer'],
-            [['type', 'plan_name', 'unit', 'currency', 'note', 'data'], 'string'],
+            [['type', 'plan_name', 'unit', 'currency', 'note', 'data', 'main_object_name'], 'string'],
             [['quantity', 'price'], 'number'],
             [['class'], 'string'], // todo: probably, refactor is needed
 
