@@ -13,7 +13,9 @@ use Yii;
  * @property string $name
  * @property string $type
  * @property string $currency
+ * @property string $state
  * @property int $currency_id
+ * @property bool $is_grouping
  *
  * @property Sale[] $sales
  * @property Price[]|CertificatePrice[] $prices
@@ -23,12 +25,12 @@ use Yii;
  */
 class Plan extends \hipanel\base\Model
 {
-    const TYPE_SERVER = 'server';
-    const TYPE_PCDN = 'pcdn';
-    const TYPE_VCDN = 'vcdn';
-    const TYPE_TEMPLATE = 'template';
-    const TYPE_CERTIFICATE = 'certificate';
-    const TYPE_DOMAIN = 'domain';
+    public const TYPE_SERVER = 'server';
+    public const TYPE_PCDN = 'pcdn';
+    public const TYPE_VCDN = 'vcdn';
+    public const TYPE_TEMPLATE = 'template';
+    public const TYPE_CERTIFICATE = 'certificate';
+    public const TYPE_DOMAIN = 'domain';
 
     use \hipanel\base\ModelTrait;
 
@@ -58,6 +60,7 @@ class Plan extends \hipanel\base\Model
             'name' => Yii::t('hipanel:finance', 'Name'),
             'server_ids' => Yii::t('hipanel.finance.plan', 'Servers'),
             'monthly' => Yii::t('hipanel.finance.plan', 'Monthly'),
+            'is_grouping' => Yii::t('hipanel.finance.plan', 'Grouping'),
         ]);
     }
 
