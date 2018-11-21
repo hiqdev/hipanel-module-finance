@@ -64,7 +64,7 @@ abstract class PriceCest
         $fields = [
             'name' => $name,
             'type' => $type,
-            'client' => 'hipanel_test_manager',
+            'client' => 'hipanel_test_manager@hiqdev.com',
             'currency' => 'USD',
             'note' => 'test note',
         ];
