@@ -30,6 +30,17 @@ class LinkToObjectResolver extends Widget
         'class' => 'text-bold',
     ];
 
+    /**
+     * Custom links for $links. For example:
+     *
+     * ```php
+     * 'customLinks' => [
+     *   'part' => '@server/view',
+     * ]
+     * ```
+     */
+    public $customLinks = [];
+
     private $links = [
         'ip' => '@ip/view',
         'client' => '@client/view',
@@ -48,6 +59,9 @@ class LinkToObjectResolver extends Widget
      */
     public function run()
     {
+        foreach ($this->customLinks as $link => $path) {
+            $this->links[$link] = $path;
+        }
         $label = $this->getLabel();
         if ($label === null) {
             return '';
