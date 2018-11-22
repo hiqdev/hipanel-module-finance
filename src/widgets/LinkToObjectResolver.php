@@ -31,11 +31,13 @@ class LinkToObjectResolver extends Widget
     ];
 
     /**
-     * Custom links for $links. For example
+     * Custom links for $links. For example:
+     *
      * ```php
      * 'customLinks' => [
      *   'part' => '@server/view',
-     * ]```
+     * ]
+     * ```
      */
     public $customLinks = [];
 
