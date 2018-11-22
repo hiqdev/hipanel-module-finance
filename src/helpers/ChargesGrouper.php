@@ -34,7 +34,7 @@ class ChargesGrouper
         /** @var Charge[][] $chargesByMainObject */
         $chargesByMainObject = [];
         foreach ($model->charges as $charge) {
-            $chargesByMainObject[$charge->common_object_id][$charge->object_id] = $charge;
+            $chargesByMainObject[$charge->common_object_id][$charge->id] = $charge;
         }
         foreach ($model->charges as $charge) {
             $idToNameObject[$charge->common_object_id] = $charge;
