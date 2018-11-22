@@ -20,6 +20,7 @@ use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\widgets\BillTypeFilter;
 use hipanel\modules\finance\widgets\ColoredBalance;
+use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\widgets\ArraySpoiler;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
@@ -184,10 +185,18 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'menuClass' => BillActionsMenu::class,
             ],
             'common_object_link' => [
-                'attribute' => 'server',
                 'format' => 'html',
                 'value' => function (Charge $model) {
-                    return $this->commonObjectLink($model);
+                    $link = LinkToObjectResolver::widget([
+                        'model'          => $model,
+                        'labelAttribute' => 'common_object_name',
+                        'idAttribute'    => 'common_object_id',
+                        'typeAttribute'  => 'class',
+                        'customLinks' => [
+                            'part' => '@server/view'
+                        ]
+                    ]);
+                    return $link;
                 }
             ],
         ]);
@@ -196,10 +205,6 @@ class BillGridView extends \hipanel\grid\BoxedGridView
     public function tariffLink($model): string
     {
         return Html::a($model->tariff, ['@tariff/view', 'id' => $model->tariff_id]);
-    }
-    public function commonObjectLink($model): string
-    {
-        return Html::a($model->common_object_name, ['@server/view', 'id' => $model->common_object_id]);
     }
 
     public function objectTag($model): string

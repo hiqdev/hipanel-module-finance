@@ -30,6 +30,8 @@ class LinkToObjectResolver extends Widget
         'class' => 'text-bold',
     ];
 
+    public $customLinks = [];
+
     private $links = [
         'ip' => '@ip/view',
         'client' => '@client/view',
@@ -48,6 +50,9 @@ class LinkToObjectResolver extends Widget
      */
     public function run()
     {
+        foreach ($this->customLinks as $link => $path) {
+            $this->links[$link] = $path;
+        }
         $label = $this->getLabel();
         if ($label === null) {
             return '';
