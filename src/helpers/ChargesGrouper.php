@@ -10,7 +10,6 @@ use Tuck\Sort\SortChain;
  * Class ChargesGrouper can be used to group charges inside $charge by common_object_id
  * @var \hipanel\modules\finance\models\Charge $model
  */
-
 class ChargesGrouper
 {
     /**
@@ -20,7 +19,7 @@ class ChargesGrouper
 
     /**
      * ChargesGrouper constructor.
-     * @param array Charge[] $charges
+     * @param Charge[] $charges
      */
     public function __construct(array $charges)
     {
@@ -55,4 +54,3 @@ class ChargesGrouper
         });
     }
 }
-
