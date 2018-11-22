@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\controllers;
 
+use hipanel\actions\Action;
 use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartDeleteAction;
@@ -22,6 +23,7 @@ use hipanel\modules\finance\actions\BillManagementAction;
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\forms\CurrencyExchangeForm;
+use hipanel\modules\finance\helpers\ChargesGrouper;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\providers\BillTypesProvider;
@@ -80,6 +82,11 @@ class BillController extends \hipanel\base\CrudController
                     $dataProvider->query
                         ->joinWith('charges')
                         ->andWhere(['with_charges' => true]);
+                },
+                'data' => function (Action $action, array $data) {
+                    return array_merge($data, [
+                        'grouper' => new ChargesGrouper($data['model']),
+                    ]);
                 },
             ],
             'validate-form' => [

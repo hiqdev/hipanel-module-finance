@@ -19,6 +19,9 @@ use Yii;
  * @property string $ftype
  * @property string $currency
  * @property float $sum
+ * @property mixed common_object_id
+ * @property mixed common_object_name
+ * @property mixed object_id
  */
 class Charge extends \hiqdev\hiart\ActiveRecord
 {
@@ -32,8 +35,8 @@ class Charge extends \hiqdev\hiart\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'type_id', 'object_id', 'bill_id', 'parent_id'], 'integer'],
-            [['class', 'name', 'unit'], 'string'],
+            [['id', 'type_id', 'object_id', 'bill_id', 'parent_id', 'common_object_id'], 'integer'],
+            [['class', 'name', 'unit', 'common_object_name'], 'string'],
             [['type', 'label', 'ftype', 'time', 'type_label', 'currency'], 'safe'],
             [['sum', 'quantity'], 'number'],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],

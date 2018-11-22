@@ -182,12 +182,23 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'class' => MenuColumn::class,
                 'menuClass' => BillActionsMenu::class,
             ],
+            'server_link' => [
+                'attribute' => 'server',
+                'format' => 'html',
+                'value' => function ($model) {
+                    return $this->serverLink($model);
+                }
+            ],
         ]);
     }
 
     public function tariffLink($model): string
     {
         return Html::a($model->tariff, ['@tariff/view', 'id' => $model->tariff_id]);
+    }
+    public function serverLink($model): string
+    {
+        return Html::a($model->common_object_name, ['@server/view', 'id' => $model->common_object_id]);
     }
 
     public function objectTag($model): string

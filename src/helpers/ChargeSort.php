@@ -23,7 +23,17 @@ class ChargeSort
 
     private static function byType(): \Closure
     {
-        $order = ['rack_unit', 'ip_num', 'support_time', 'backup_du', 'server_traf_max', 'server_traf95_max'];
+        $order = [
+            'rack_unit',
+            'ip_num',
+            'support_time',
+            'backup_du',
+            'server_traf_max',
+            'server_traf95_max',
+            'server_du',
+            'server_ssd',
+            'server_sata',
+            ];
 
         return function (Charge $charge) use ($order) {
             if (($key = array_search($charge->type, $order, true)) !== false) {
