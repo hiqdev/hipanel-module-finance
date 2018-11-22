@@ -19,9 +19,9 @@ use Yii;
  * @property string $ftype
  * @property string $currency
  * @property float $sum
- * @property mixed common_object_id
- * @property mixed common_object_name
- * @property mixed object_id
+ * @property int object_id
+ * @property int common_object_id
+ * @property string common_object_name
  */
 class Charge extends \hiqdev\hiart\ActiveRecord
 {
