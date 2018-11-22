@@ -14,7 +14,7 @@ use hipanel\widgets\Pjax;
  * @var \hipanel\modules\finance\models\Charge $model
  * @var IndexPage $page
  * @var \hipanel\modules\finance\helpers\ChargesGrouper $grouper
- * @var array[] $idToNameObject
+ * @var Charge[] $idToNameObject
  * @var Charge[][] $chargesByMainObject
  */
 

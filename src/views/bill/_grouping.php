@@ -3,6 +3,8 @@
 use hipanel\widgets\IndexPage;
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\helpers\ChargesGrouper;
+use hipanel\modules\finance\grid\GroupedByServerChargesGridView;
+use \yii\data\ArrayDataProvider;
 
 /**
  * @var \hipanel\modules\finance\models\Charge $model
@@ -17,11 +19,11 @@ use hipanel\modules\finance\helpers\ChargesGrouper;
 ?>
 <?php $page->beginContent('table') ?>
     <?php $page->beginBulkForm() ?>
-        <?= \hipanel\modules\finance\grid\GroupedByServerChargesGridView::widget([
+        <?= GroupedByServerChargesGridView::widget([
             'boxed' => false,
             'showHeader' => false,
             'chargesByMainObject' => $chargesByMainObject,
-            'dataProvider' => new \yii\data\ArrayDataProvider([
+            'dataProvider' => new ArrayDataProvider([
                 'allModels' => $idToNameObject,
                 'pagination' => false,
             ]),
