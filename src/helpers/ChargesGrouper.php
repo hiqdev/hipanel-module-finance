@@ -2,7 +2,6 @@
 
 namespace hipanel\modules\finance\helpers;
 
-use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
 use Tuck\Sort\Sort;
 use Tuck\Sort\SortChain;
@@ -13,14 +12,16 @@ use Tuck\Sort\SortChain;
  */
 class ChargesGrouper
 {
-    /**
-     * @var Bill
-     */
+
     private $charges;
 
-    public function __construct(Bill $bill)
+    /**
+     * ChargesGrouper constructor.
+     * @param array Charge[] $charges
+     */
+    public function __construct(array $charges)
     {
-        $this->charges = $bill->charges;
+        $this->charges = $charges;
     }
 
     /**
@@ -30,15 +31,14 @@ class ChargesGrouper
      */
     public function group()
     {
-        $model = $this->charges;
         /** @var Charge[] $idToNameObject */
         $idToNameObject = [];
         /** @var Charge[][] $chargesByMainObject */
         $chargesByMainObject = [];
-        foreach ($model as $charge) {
+        foreach ($this->charges as $charge) {
             $chargesByMainObject[$charge->common_object_id][$charge->id] = $charge;
         }
-        foreach ($model as $charge) {
+        foreach ($this->charges as $charge) {
             $idToNameObject[$charge->common_object_id] = $charge;
         }
         $idToNameObject = $this->sortByServerName()->values($idToNameObject);

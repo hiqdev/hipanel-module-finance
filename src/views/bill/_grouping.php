@@ -29,7 +29,7 @@ use hipanel\modules\finance\helpers\ChargesGrouper;
                 return ''; // remove unnecessary summary
             },
             'columns' => [
-                'server_link',
+                'common_object_link',
             ],
         ]) ?>
     <?php $page->endBulkForm() ?>

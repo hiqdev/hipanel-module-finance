@@ -3,11 +3,11 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\finance\models\Charge;
-
+use hipanel\modules\finance\helpers\ChargeSort;
+use \yii\data\ArrayDataProvider;
 
 /**
  * Class GroupedChargesGridView
- *
  */
 class GroupedByServerChargesGridView extends BillGridView
 {
@@ -33,14 +33,12 @@ class GroupedByServerChargesGridView extends BillGridView
         return array_merge(parent::columns(), [
             'object_link' => [
                 'format' => 'html',
-                'value' => function (Charge $obj) {
-                    return $obj->common_object_name;
-                },
+                'attribute' => 'common_object_name',
             ],
         ]);
     }
 
-    private function initAfterRow()
+    private function initAfterRow(): void
     {
         /**
          * @param Charge $obj
@@ -52,25 +50,25 @@ class GroupedByServerChargesGridView extends BillGridView
                 return '';
             }
             return GroupedChargesGridView::widget([
-                'boxed' => false,
-                'showHeader' => true,
-                'showFooter' => false,
-                'options' => [
+                'boxed'        => false,
+                'showHeader'   => true,
+                'showFooter'   => false,
+                'options'      => [
                     'tag' => 'tr',
-                    'id' => crc32($model->id ?? microtime(true)),
+                    'id'  => crc32($model->id ?? microtime(true)),
                 ],
-                'layout' => '<td colspan="' . \count($this->columns) . '">{items}</td>',
-                'dataProvider' => new \yii\data\ArrayDataProvider([
-                    'allModels' => \hipanel\modules\finance\helpers\ChargeSort::anyCharges()
+                'layout'       => '<td colspan="' . \count($this->columns) . '">{items}</td>',
+                'dataProvider' => new ArrayDataProvider([
+                    'allModels'  => ChargeSort::anyCharges()
                         ->values($model, true),
-                    'sort' => false,
+                    'sort'       => false,
                     'pagination' => false
                 ]),
-                'filterModel' => $model,
+                'filterModel'  => $model,
                 'tableOptions' => [
                     'class' => 'table table-striped table-bordered'
                 ],
-                'columns' => [
+                'columns'      => [
                     'type_label', 'label',
                     'quantity', 'sum', 'sum_with_children', 'time',
                 ],

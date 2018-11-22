@@ -17,6 +17,7 @@ use hipanel\helpers\Url;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\menus\BillActionsMenu;
 use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\widgets\BillTypeFilter;
 use hipanel\modules\finance\widgets\ColoredBalance;
 use hipanel\widgets\ArraySpoiler;
@@ -57,7 +58,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'html',
                 'filter' => false,
                 'contentOptions' => ['class' => 'text-nowrap'],
-                'value' => function ($model) {
+                'value' => function (Bill $model) {
                     list($date, $time) = explode(' ', $model->time, 2);
 
                     if (\in_array($model->gtype, [
@@ -75,7 +76,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'sum',
                 'colors' => ['danger' => 'warning'],
                 'headerOptions' => ['class' => 'text-right'],
-                'contentOptions' => function ($model) {
+                'contentOptions' => function (Bill $model) {
                     return ['class' => 'text-right' . ($model->sum > 0 ? ' text-bold' : '')];
                 },
             ],
@@ -90,7 +91,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                         ? Url::to(['@bill/view', 'id' => $model->id])
                         : null;
                 },
-                'contentOptions' => function ($model) {
+                'contentOptions' => function (Bill $model) {
                     return ['class' => 'text-right' . ($model->sum > 0 ? ' text-bold' : '')];
                 },
             ],
@@ -109,7 +110,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'contentOptions' => function ($model, $key, $index) {
                     return ['class' => 'text-right' . ($index ? '' : ' text-bold')];
                 },
-                'value' => function ($model) {
+                'value' => function (Bill $model) {
                     return ColoredBalance::widget(compact('model'));
                 },
                 'filterAttribute' => 'currency_in',
@@ -135,10 +136,10 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 },
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'text-right'],
-                'contentOptions' => function ($model) {
+                'contentOptions' => function (Bill $model) {
                     return ['class' => 'text-right'];
                 },
-                'value' => function ($model) {
+                'value' => function (Bill $model) {
                     static $colors = [
                         'correction' => 'normal',
                         'exchange' => 'warning',
@@ -152,7 +153,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             'description' => [
                 'attribute' => 'descr',
                 'format' => 'raw',
-                'value' => function ($model) {
+                'value' => function (Bill $model) {
                     $descr = $model->descr ?: $model->label;
                     $text = mb_strlen($descr) > 70 ? ArraySpoiler::widget(['data' => $descr]) : $descr;
                     $tariff = $model->tariff ? Html::tag('span',
@@ -167,14 +168,14 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             'tariff_link' => [
                 'attribute' => 'tariff',
                 'format' => 'html',
-                'value' => function ($model) {
+                'value' => function (Bill $model) {
                     return $this->tariffLink($model);
                 },
             ],
             'object' => [
                 'attribute' => 'object',
                 'format' => 'html',
-                'value' => function ($model) {
+                'value' => function (Bill $model) {
                     return $this->objectTag($model);
                 },
             ],
@@ -182,10 +183,10 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'class' => MenuColumn::class,
                 'menuClass' => BillActionsMenu::class,
             ],
-            'server_link' => [
+            'common_object_link' => [
                 'attribute' => 'server',
                 'format' => 'html',
-                'value' => function ($model) {
+                'value' => function (Charge $model) {
                     return $this->serverLink($model);
                 }
             ],

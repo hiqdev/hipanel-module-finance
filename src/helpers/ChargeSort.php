@@ -33,7 +33,7 @@ class ChargeSort
             'server_du',
             'server_ssd',
             'server_sata',
-            ];
+        ];
 
         return function (Charge $charge) use ($order) {
             if (($key = array_search($charge->type, $order, true)) !== false) {

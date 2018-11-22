@@ -85,7 +85,7 @@ class BillController extends \hipanel\base\CrudController
                 },
                 'data' => function (Action $action, array $data) {
                     return array_merge($data, [
-                        'grouper' => new ChargesGrouper($data['model']),
+                        'grouper' => new ChargesGrouper($data['model']->charges),
                     ]);
                 },
             ],
