@@ -187,7 +187,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'server',
                 'format' => 'html',
                 'value' => function (Charge $model) {
-                    return $this->serverLink($model);
+                    return $this->commonObjectLink($model);
                 }
             ],
         ]);
@@ -197,7 +197,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
     {
         return Html::a($model->tariff, ['@tariff/view', 'id' => $model->tariff_id]);
     }
-    public function serverLink($model): string
+    public function commonObjectLink($model): string
     {
         return Html::a($model->common_object_name, ['@server/view', 'id' => $model->common_object_id]);
     }
