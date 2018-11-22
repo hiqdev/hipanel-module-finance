@@ -22,6 +22,7 @@ class PlanSearch extends Plan
     {
         return array_merge(parent::attributeLabels(), [
             'type_in'             => Yii::t('hipanel', 'Type'),
+            'buyer_in'            => Yii::t('hipanel:finance:sale', 'Buyer'),
             'name_ilike'          => Yii::t('hipanel:finance', 'Name'),
             'note_ilike'          => Yii::t('hipanel', 'Note'),
         ]);
