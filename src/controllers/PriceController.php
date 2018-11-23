@@ -37,6 +37,7 @@ class PriceController extends CrudController
                     'create' => 'price.create',
                     'update' => 'price.update',
                     'delete' => 'price.delete',
+                    'create-suggested' => 'price.update',
                     '*' => ['plan.read', 'price.read'],
                 ],
             ],
