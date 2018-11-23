@@ -19,7 +19,7 @@ use yii\bootstrap\Html;
         <?= Html::activeHiddenInput($model, "[$i]object", ['value' => $model->object->name]) ?>
         <?= Html::activeHiddenInput($model, "[$i]quantity") ?>
         <?= Html::activeHiddenInput($model, "[$i]unit") ?>
-        <?= Html::activeHiddenInput($model, "[$i]note") ?>
+        <?= Html::activeHiddenInput($model, "[$i]note", ['data-attribute' => 'note']) ?>
 
         <div class="form-group">
             <strong>
@@ -36,6 +36,20 @@ use yii\bootstrap\Html;
                 'model' => $model,
                 'field' => 'type',
             ])?>
+            <br />
+            <?= \hipanel\widgets\XEditable::widget([
+                'model' => $model,
+                'attribute' => 'note',
+                'pluginOptions' => [
+                    'url' => new \yii\web\JsExpression(<<<'JS'
+                    function(params) {
+                        $(this).closest('.form-instance').find('input[data-attribute=note]').val(params.value);
+                        return $.Deferred().resolve();
+                    }
+JS
+                )
+                ],
+            ]) ?>
         </div>
     </div>
     <div class="col-md-1">

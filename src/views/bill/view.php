@@ -1,12 +1,23 @@
 <?php
 
+use hipanel\modules\finance\models\Charge;
+use hipanel\modules\finance\helpers\ChargesGrouper;
 use hipanel\modules\finance\grid\BillGridView;
-use hipanel\modules\finance\grid\ChargeGridView;
 use hipanel\modules\finance\menus\BillDetailMenu;
 use hipanel\widgets\ClientSellerLink;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\MainDetails;
 use hipanel\widgets\Pjax;
+
+/**
+ * @var \yii\web\View $this
+ * @var \hipanel\modules\finance\models\Charge $model
+ * @var IndexPage $page
+ * @var \hipanel\modules\finance\helpers\ChargesGrouper $grouper
+ * @var Charge[] $idToNameObject
+ * @var Charge[][] $chargesByMainObject
+ */
+
 
 $this->title = sprintf(
     '%s: %s %s %s',
@@ -50,27 +61,7 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
             <?php $page->beginContent('show-actions') ?>
                 <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Detalization') ?></h4>
             <?php $page->endContent() ?>
-            <?php $page->beginContent('table') ?>
-                <?php $page->beginBulkForm() ?>
-                    <?= \hipanel\modules\finance\grid\GroupedChargesGridView::widget([
-                        'boxed' => false,
-                        'dataProvider' => new \yii\data\ArrayDataProvider([
-                            'allModels' => \hipanel\modules\finance\helpers\ChargeSort::anyCharges()
-                                ->values($model->charges, true),
-                            'sort' => false,
-                            'pagination' => false
-                        ]),
-                        'filterModel' => $model->charges,
-                        'tableOptions' => [
-                            'class' => 'table table-striped table-bordered'
-                        ],
-                        'columns' => [
-                            'type_label', 'label',
-                            'quantity', 'sum', 'sum_with_children', 'time',
-                        ],
-                    ]) ?>
-                <?php $page->endBulkForm() ?>
-            <?php $page->endContent() ?>
+            <?= $this->render('_grouping', compact('model', 'grouper', 'page')) ?>
         <?php $page->end() ?>
     </div>
 

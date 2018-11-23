@@ -25,7 +25,7 @@ return [
     'Tariff plan' => 'Тарифный план',
     'Template tariff plan' => 'Шаблонный тарифный план',
     'Plan' => 'План',
-    'Unknown object name - no direct object prices exist' => 'Неизвестное имя объекта – нет прямых цен на объект',
+    'Unknown object name - neither direct object prices, nor resolvable references exist' => 'Неизвестное имя объекта – нет ни прямых цен на объект, ни разрешимых связей',
     'Price in {currency}' => 'Цена в {currency}',
     'Price' => 'Цена',
     'Formula' => 'Формула',

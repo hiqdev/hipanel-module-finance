@@ -84,6 +84,10 @@ class PriceChargesEstimator
                 ];
 
                 $chargesByTargetAndAction['sum'] += $price;
+                $chargesByTargetAndAction['targets'][$targetId][$actionType]['quantity'] = max(
+                    $charge['action']['quantity']['quantity'],
+                    $chargesByTargetAndAction['targets'][$targetId][$actionType]['quantity'] ?? 0
+                );
                 $chargesByTargetAndAction['sumFormatted'] = $this->yiiFormatter->asCurrency($chargesByTargetAndAction['sum'], $sum['currency']);
             }
             unset($action);

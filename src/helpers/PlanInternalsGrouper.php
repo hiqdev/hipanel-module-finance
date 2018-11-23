@@ -90,6 +90,16 @@ class PlanInternalsGrouper
             }
 
             foreach ($prices as $price) {
+                if ((int)$price->main_object_id === (int)$id) {
+                    $salesByObject[$id] = new FakeSale([
+                        'object' => $price->main_object_name,
+                        'tariff_id' => $model->id,
+                        'object_id' => $id,
+                        'tariff_type' => $model->type,
+                    ]);
+                    continue 2;
+                }
+
                 if ((int)$price->object_id === (int)$id) {
                     $salesByObject[$id] = new FakeSale([
                         'object' => $price->object->name,
@@ -102,7 +112,7 @@ class PlanInternalsGrouper
             }
 
             $salesByObject[$id] = new FakeSale([
-                'object' => Yii::t('hipanel.finance.price', 'Unknown object name - no direct object prices exist'),
+                'object' => Yii::t('hipanel.finance.price', 'Unknown object name - neither direct object prices, nor resolvable references exist'),
                 'tariff_id' => $model->id,
                 'object_id' => $id,
                 'tariff_type' => $model->type,

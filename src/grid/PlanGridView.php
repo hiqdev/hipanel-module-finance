@@ -7,12 +7,14 @@ use hipanel\grid\RefColumn;
 use hipanel\helpers\Url;
 use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\menus\PlanActionsMenu;
+use hipanel\modules\finance\models\Plan;
 use hiqdev\yii2\menus\grid\MenuColumn;
+use yii\helpers\Html;
 use Yii;
 
 class PlanGridView extends \hipanel\grid\BoxedGridView
 {
-    public function columns()
+    public function columns(): array
     {
         return array_merge(parent::columns(), [
             'client' => [
@@ -27,9 +29,16 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'noteOptions' => [
                     'url' => Url::to(['@plan/set-note']),
                 ],
+                'badges' => function (Plan $model): string {
+                    return $this->prepareBadges($model);
+                },
             ],
             'simple_name' => [
                 'attribute' => 'name',
+                'format' => 'html',
+                'value' => function (Plan $model): string {
+                    return sprintf('%s %s', $model->name, $this->prepareBadges($model));
+                },
             ],
             'state' => [
                 'attribute' => 'state',
@@ -42,7 +51,7 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
             'type' => [
                 'attribute' => 'type',
                 'class' => RefColumn::class,
-                'filterAttribute' => 'type',
+                'filterAttribute' => 'type_in',
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'format' => 'html',
                 'gtype' => 'type,tariff',
@@ -56,5 +65,18 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'contentOptions' => ['id' => 'plan-monthly-value'],
             ],
         ]);
+    }
+
+    /**
+     * @param Plan $model
+     * @return string
+     */
+    protected function prepareBadges(Plan $model): string
+    {
+        $localization = Yii::t('hipanel.finance.plan', 'Grouping');
+        if ($model->is_grouping) {
+            return Html::tag('span', $localization, ['class' => 'label bg-olive', 'style' => 'float:right']);
+        }
+        return '';
     }
 }
