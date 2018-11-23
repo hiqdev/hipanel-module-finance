@@ -17,7 +17,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
     public function items()
     {
         $user = Yii::$app->user;
-        if (!$user->can('manage') && !$user->can('deposit')) {
+        if (!$user->can('finance.read')) {
             return [];
         }
 
@@ -40,12 +40,12 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     'tariffs' => [
                         'label'   => Yii::t('hipanel:finance', 'Tariffs'),
                         'url'     => ['/finance/tariff/index'],
-                        'visible' => $user->can('plan.create'),
+                        'visible' => $user->can('plan.read'),
                     ],
                     'requisites' => [
                         'label'   => Yii::t('hipanel:finance', 'Requisites'),
                         'url'     => ['/finance/bill/requisites'],
-                        'visible' => $user->can('manage'),
+                        'visible' => $user->can('requisites.read'),
                     ],
                     'holds' => [
                         'label'   => Yii::t('hipanel:finance', 'Held payments'),
@@ -55,7 +55,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     'sale' => [
                         'label'   => Yii::t('hipanel:finance:sale', 'Sales'),
                         'url'     => ['/finance/sale/index'],
-                        'visible' => $user->can('manage'),
+                        'visible' => $user->can('sale.read'),
                     ],
                     'generate' => [
                         'label'   => Yii::t('hipanel:finance', 'Generate documents'),

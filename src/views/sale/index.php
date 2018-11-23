@@ -29,7 +29,9 @@ $this->registerCss("
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('bulk-actions') ?>
-            <?= $page->renderBulkDeleteButton('@sale/delete') ?>
+            <?php if (Yii::$app->user->can('sale.delete')) : ?>
+                <?= $page->renderBulkDeleteButton('@sale/delete') ?>
+            <?php endif ?>
         <?php $page->endContent() ?>
 
 

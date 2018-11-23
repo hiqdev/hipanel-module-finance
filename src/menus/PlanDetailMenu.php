@@ -26,7 +26,7 @@ class PlanDetailMenu extends \hipanel\menus\AbstractDetailMenu
                     'handleSubmit' => false,
                 ]),
                 'encode' => false,
-                'visible' => !$this->model->isDeleted(),
+                'visible' => !$this->model->isDeleted() && Yii::$app->user->can('plan.create'),
             ],
             'delete' => [
                 'label' => Yii::t('hipanel', 'Delete'),
@@ -40,7 +40,7 @@ class PlanDetailMenu extends \hipanel\menus\AbstractDetailMenu
                         'pjax' => '0',
                     ],
                 ],
-                'visible' => \count($this->model->sales) === 0 && !$this->model->isDeleted(),
+                'visible' => \count($this->model->sales) === 0 && !$this->model->isDeleted() && Yii::$app->user->can('plan.delete'),
             ],
             'restore' => [
                 'label' => Yii::t('hipanel.finance.plan', 'Restore'),
@@ -53,7 +53,7 @@ class PlanDetailMenu extends \hipanel\menus\AbstractDetailMenu
                         'params' => ['selection[]' => $this->model->id]
                     ],
                 ],
-                'visible' => $this->model->isDeleted(),
+                'visible' => $this->model->isDeleted() && Yii::$app->user->can('plan.update'),
             ],
         ]);
         unset($items['view']);

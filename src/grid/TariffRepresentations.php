@@ -9,7 +9,7 @@ class TariffRepresentations extends RepresentationCollection
 {
     protected function fillRepresentations()
     {
-        $columns = Yii::$app->user->can('manage') ? [
+        $columns = Yii::$app->user->can('plan.force-read') ? [
             'checkbox',
             'tariff',
             'used',
