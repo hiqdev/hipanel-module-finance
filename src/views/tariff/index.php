@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $page->endContent() ?>
 
     <?php $page->beginContent('bulk-actions') ?>
-        <?php if (Yii::$app->user->can('plan.crate')) : ?>
+        <?php if (Yii::$app->user->can('plan.create')) : ?>
             <?= $page->renderBulkButton('copy', Yii::t('hipanel', 'Copy')) ?>
         <?php endif ?>
         <?php if (Yii::$app->user->can('plan.delete')) : ?>
