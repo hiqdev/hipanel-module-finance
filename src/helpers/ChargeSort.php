@@ -17,13 +17,9 @@ class ChargeSort
     {
         return Sort::chain()
             ->asc(self::byType())
+            ->asc(self::byHardwareType())
             ->compare(self::byName())
             ->asc(self::keepDiscountsWithParents());
-    }
-
-    public static function chargesHardwareType(): SortChain
-    {
-        return Sort::chain()->asc(self::byHardwareType());
     }
 
     private static function byHardwareType(): \Closure

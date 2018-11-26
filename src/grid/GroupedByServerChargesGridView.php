@@ -59,7 +59,7 @@ class GroupedByServerChargesGridView extends BillGridView
                 ],
                 'layout'       => '<td colspan="' . \count($this->columns) . '">{items}</td>',
                 'dataProvider' => new ArrayDataProvider([
-                    'allModels'  => ChargeSort::chargesHardwareType()->values($models, true),
+                    'allModels'  => ChargeSort::anyCharges()->values($models, true),
                     'sort'       => false,
                     'pagination' => false
                 ]),
