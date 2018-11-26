@@ -21,6 +21,27 @@ class ChargeSort
             ->asc(self::keepDiscountsWithParents());
     }
 
+    public static function chargesHardwareType(): SortChain
+    {
+        return Sort::chain()->asc(self::byHardwareType());
+    }
+
+    private static function byHardwareType(): \Closure
+    {
+        $order = ['CHASSIS', 'MOTHERBOARD', 'CPU', 'RAM', 'HDD', 'SSD'];
+
+        return function (Charge $charge) use ($order) {
+            if ($charge->class === 'part') {
+                $type = substr($charge->name, 0, strpos($charge->name, ':'));
+                if (($key = array_search($type, $order)) !== false) {
+                    return $key;
+                }
+            }
+
+            return INF;
+        };
+    }
+
     private static function byType(): \Closure
     {
         $order = [

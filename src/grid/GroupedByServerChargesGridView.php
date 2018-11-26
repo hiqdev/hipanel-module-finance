@@ -45,8 +45,8 @@ class GroupedByServerChargesGridView extends BillGridView
          * @return string
          */
         $this->afterRow = function (Charge $obj) {
-            $model = $this->chargesByMainObject[$obj->common_object_id];
-            if (empty($model)) {
+            $models = $this->chargesByMainObject[$obj->common_object_id];
+            if (empty($models)) {
                 return '';
             }
             return GroupedChargesGridView::widget([
@@ -55,16 +55,14 @@ class GroupedByServerChargesGridView extends BillGridView
                 'showFooter'   => false,
                 'options'      => [
                     'tag' => 'tr',
-                    'id'  => crc32($model->id ?? microtime(true)),
+                    'id'  => crc32(reset($models)->id ?? microtime(true)),
                 ],
                 'layout'       => '<td colspan="' . \count($this->columns) . '">{items}</td>',
                 'dataProvider' => new ArrayDataProvider([
-                    'allModels'  => ChargeSort::anyCharges()
-                        ->values($model, true),
+                    'allModels'  => ChargeSort::chargesHardwareType()->values($models, true),
                     'sort'       => false,
                     'pagination' => false
                 ]),
-                'filterModel'  => $model,
                 'tableOptions' => [
                     'class' => 'table table-striped table-bordered'
                 ],
