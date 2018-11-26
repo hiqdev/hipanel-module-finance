@@ -92,6 +92,7 @@ class PurseController extends \hipanel\base\CrudController
             if ($request->isPost) {
                 Purse::batchPerform('generate-and-save-all-monthly-documents', [
                     'type' => $type,
+                    'client_types' => $type === 'acceptance' ? 'employee' : null,
                 ]);
             }
             return $this->render('generate-all', ['statisticByTypes' => $statisticByTypes]);

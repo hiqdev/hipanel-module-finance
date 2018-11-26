@@ -18,15 +18,19 @@ $prices = $grouper->group();
 ?>
 
 <?php $page->beginContent('main-actions') ?>
-    <?= AjaxModal::widget([
-        'id' => 'create-prices-modal',
-        'header' => Html::tag('h4', Yii::t('hipanel.finance.price', 'Create prices'), ['class' => 'modal-title']),
-        'scenario' => 'create-prices',
-        'actionUrl' => ['@plan/suggest-prices-modal', 'id' => $model->id],
-        'size' => Modal::SIZE_SMALL,
-        'toggleButton' => ['label' => Yii::t('hipanel', 'Create'), 'class' => 'btn btn-sm btn-success'],
-    ]) ?>
-    <?= Html::a(Yii::t('hipanel', 'Update'), ['@plan/update-prices', 'id' => $model->id], ['class' => 'btn btn-sm btn-warning']) ?>
+    <?php if (Yii::$app->user->can('plan.create')) : ?>
+        <?= AjaxModal::widget([
+            'id' => 'create-prices-modal',
+            'header' => Html::tag('h4', Yii::t('hipanel.finance.price', 'Create prices'), ['class' => 'modal-title']),
+            'scenario' => 'create-prices',
+            'actionUrl' => ['@plan/suggest-prices-modal', 'id' => $model->id],
+            'size' => Modal::SIZE_SMALL,
+            'toggleButton' => ['label' => Yii::t('hipanel', 'Create'), 'class' => 'btn btn-sm btn-success'],
+        ]) ?>
+    <?php endif ?>
+    <?php if (Yii::$app->user->can('plan.update')) : ?>
+        <?= Html::a(Yii::t('hipanel', 'Update'), ['@plan/update-prices', 'id' => $model->id], ['class' => 'btn btn-sm btn-warning']) ?>
+    <?php endif ?>
 <?php $page->endContent() ?>
 
 <?php $page->beginContent('table') ?>

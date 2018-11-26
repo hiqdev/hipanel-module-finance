@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $page->setSearchFormData(compact(['types'])) ?>
 
     <?php $page->beginContent('main-actions') ?>
-        <?php if (Yii::$app->user->can('manage')) : ?>
+        <?php if (Yii::$app->user->can('plan.create')) : ?>
             <div class="dropdown">
                 <a class="btn btn-sm btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     <?= Yii::t('hipanel', 'Create') ?>
@@ -51,8 +51,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $page->endContent() ?>
 
     <?php $page->beginContent('bulk-actions') ?>
-        <?php if (Yii::$app->user->can('manage')) : ?>
+        <?php if (Yii::$app->user->can('plan.create')) : ?>
             <?= $page->renderBulkButton('copy', Yii::t('hipanel', 'Copy')) ?>
+        <?php endif ?>
+        <?php if (Yii::$app->user->can('plan.delete')) : ?>
             <?= $page->renderBulkDeleteButton('delete') ?>
         <?php endif ?>
     <?php $page->endContent() ?>

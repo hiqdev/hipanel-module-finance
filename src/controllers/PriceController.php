@@ -34,7 +34,11 @@ class PriceController extends CrudController
             [
                 'class' => EasyAccessControl::class,
                 'actions' => [
-                    '*' => 'plan.read',
+                    'create' => 'price.create',
+                    'update' => 'price.update',
+                    'delete' => 'price.delete',
+                    'create-suggested' => 'price.update',
+                    '*' => ['plan.read', 'price.read'],
                 ],
             ],
         ]);

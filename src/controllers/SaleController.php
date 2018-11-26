@@ -18,7 +18,8 @@ class SaleController extends \hipanel\base\CrudController
             [
                 'class' => EasyAccessControl::class,
                 'actions' => [
-                    '*' => 'manage',
+                    'delete' => 'sale.delete',
+                    '*' => 'sale.read',
                 ],
             ],
         ]);

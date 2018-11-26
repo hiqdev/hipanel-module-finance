@@ -62,6 +62,7 @@ class PlanController extends CrudController
                     'update-prices' => 'plan.update',
                     'templates' => 'plan.create',
                     'create-prices' => 'plan.create',
+                    'delete' => 'plan.delete',
                     '*' => 'plan.read',
                 ],
             ],

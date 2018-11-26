@@ -40,28 +40,32 @@ $this->registerCss("
             </div>
         </div>
 
-        <div class="row">
-            <?= $this->render('@hipanel/modules/ticket/views/ticket/_clientInfo', compact('client')); ?>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="box box-solid">
-            <div class="box-header with-border">
-                <h3 class="box-title"><?= Yii::t('hipanel:finance:sale', 'Tariff information') ?></h3>
+        <?php if (Yii::$app->user->can('client.read') && Yii::$app->user->can('access-subclients')) : ?>
+            <div class="row">
+                <?= $this->render('@hipanel/modules/ticket/views/ticket/_clientInfo', compact('client')); ?>
             </div>
-            <div class="box-body">
-                <?= PlanGridView::detailView([
-                    'model' => $tariff,
-                    'boxed' => false,
-                    'columns' => [
-                        'simple_name',
-                        'client',
-                        'type',
-                        'state',
-                        'note',
-                    ],
-                ]) ?>
+        <?php endif ?>
+    </div>
+    <?php if (Yii::$app->user->can('plan.read')) : ?>
+        <div class="col-md-4">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><?= Yii::t('hipanel:finance:sale', 'Tariff information') ?></h3>
+                </div>
+                <div class="box-body">
+                    <?= PlanGridView::detailView([
+                        'model' => $tariff,
+                        'boxed' => false,
+                        'columns' => [
+                            'simple_name',
+                            'client',
+                            'type',
+                            'state',
+                            'note',
+                        ],
+                    ]) ?>
+                </div>
             </div>
         </div>
-    </div>
+    <?php endif ?>
 </div>

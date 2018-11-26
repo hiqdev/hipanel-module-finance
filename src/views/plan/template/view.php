@@ -14,19 +14,25 @@ use yii\helpers\Html;
 ?>
 
 <?php $page->beginContent('bulk-actions') ?>
-    <?= $page->renderBulkButton('@price/update', Yii::t('hipanel', 'Update'), ['color' => 'warning']) ?>
-    <?= $page->renderBulkDeleteButton('@price/delete') ?>
+    <?php if (Yii::$app->user->can('price.update')) : ?>
+        <?= $page->renderBulkButton('@price/update', Yii::t('hipanel', 'Update'), ['color' => 'warning']) ?>
+    <?php endif ?>
+    <?php if (Yii::$app->user->can('price.delete')) : ?>
+        <?= $page->renderBulkDeleteButton('@price/delete') ?>
+    <?php endif ?>
 <?php $page->endContent() ?>
 
 <?php $page->beginContent('main-actions') ?>
-    <?= AjaxModal::widget([
-        'id' => 'create-prices-modal',
-        'header' => Html::tag('h4', Yii::t('hipanel.finance.price', 'Create prices'), ['class' => 'modal-title']),
-        'scenario' => 'create-prices',
-        'actionUrl' => ['@plan/suggest-prices-modal', 'id' => $model->id],
-        'size' => Modal::SIZE_SMALL,
-        'toggleButton' => ['label' => Yii::t('hipanel', 'Create'), 'class' => 'btn btn-sm btn-success'],
-    ]) ?>
+    <?php if (Yii::$app->user->can('plan.create')) : ?>
+        <?= AjaxModal::widget([
+            'id' => 'create-prices-modal',
+            'header' => Html::tag('h4', Yii::t('hipanel.finance.price', 'Create prices'), ['class' => 'modal-title']),
+            'scenario' => 'create-prices',
+            'actionUrl' => ['@plan/suggest-prices-modal', 'id' => $model->id],
+            'size' => Modal::SIZE_SMALL,
+            'toggleButton' => ['label' => Yii::t('hipanel', 'Create'), 'class' => 'btn btn-sm btn-success'],
+        ]) ?>
+    <?php endif ?>
 <?php $page->endContent() ?>
 
 <?php $page->beginContent('table') ?>

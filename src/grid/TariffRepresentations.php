@@ -9,7 +9,7 @@ class TariffRepresentations extends RepresentationCollection
 {
     protected function fillRepresentations()
     {
-        $columns = Yii::$app->user->can('manage') ? [
+        $columns = (Yii::$app->user->can('plan.update') || Yii::$app->user->can('plan.delete')) ? [
             'checkbox',
             'tariff',
             'used',
@@ -18,6 +18,7 @@ class TariffRepresentations extends RepresentationCollection
         ] : [
             'tariff',
             'used',
+            'type',
             'client_id',
         ];
         $this->representations = array_filter([

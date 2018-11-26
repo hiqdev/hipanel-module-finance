@@ -18,6 +18,7 @@ class PlanActionsMenu extends \hiqdev\yii2\menus\Menu
                 'linkOptions' => [
                     'data-pjax' => 0,
                 ],
+                'visible' => Yii::$app->user->can('plan.read'),
             ],
             'update' => [
                 'label' => Yii::t('hipanel', 'Update'),
@@ -27,6 +28,7 @@ class PlanActionsMenu extends \hiqdev\yii2\menus\Menu
                 'linkOptions' => [
                     'data-pjax' => 0,
                 ],
+                'visible' => Yii::$app->user->can('plan.update'),
             ],
         ];
     }
