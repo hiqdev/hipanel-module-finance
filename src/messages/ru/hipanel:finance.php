@@ -237,4 +237,5 @@ return [
     'Prepaid {amount,number} {unit}' => 'Предоплачено {amount,number} {unit}',
     'monthly' => 'в месяц',
     'Update estimates' => 'Рассчитать стоимость',
+    'Object name' => 'Имя объекта',
 ];
