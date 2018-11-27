@@ -4,7 +4,6 @@ use hipanel\helpers\StringHelper;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\widgets\TariffCombo;
-use hipanel\modules\server\widgets\combo\ServerCombo;
 use hiqdev\yii2\daterangepicker\DateRangePicker;
 use yii\helpers\Html;
 
