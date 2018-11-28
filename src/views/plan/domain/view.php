@@ -1,8 +1,10 @@
 <?php
 
-use hipanel\widgets\AjaxModal;
+use hipanel\modules\finance\grid\DomainServicePriceGridView;
+use hipanel\modules\finance\grid\DomainZonePriceGridView;
+use hipanel\modules\finance\widgets\CreatePricesButton;
 use hipanel\widgets\IndexPage;
-use yii\bootstrap\Modal;
+use yii\data\ArrayDataProvider;
 use yii\helpers\Html;
 use hipanel\modules\finance\models\DomainServicePrice;
 
@@ -25,14 +27,7 @@ use hipanel\modules\finance\models\DomainServicePrice;
 
 <?php $page->beginContent('main-actions') ?>
     <?php if (Yii::$app->user->can('plan.create')) : ?>
-        <?= AjaxModal::widget([
-            'id' => 'create-prices-modal',
-            'header' => Html::tag('h4', Yii::t('hipanel.finance.price', 'Create prices'), ['class' => 'modal-title']),
-            'scenario' => 'create-prices',
-            'actionUrl' => ['@plan/suggest-prices-modal', 'id' => $model->id],
-            'size' => Modal::SIZE_SMALL,
-            'toggleButton' => ['label' => Yii::t('hipanel', 'Create'), 'class' => 'btn btn-sm btn-success'],
-        ]) ?>
+        <?= CreatePricesButton::widget(compact('model')) ?>
     <?php endif ?>
     <?php if (Yii::$app->user->can('plan.update')) : ?>
         <?= Html::a(Yii::t('hipanel', 'Update'), ['@plan/update-prices', 'id' => $model->id], ['class' => 'btn btn-sm btn-warning']) ?>
@@ -41,10 +36,10 @@ use hipanel\modules\finance\models\DomainServicePrice;
 
 <?php $page->beginContent('table') ?>
     <?php $page->beginBulkForm() ?>
-        <?= \hipanel\modules\finance\grid\DomainZonePriceGridView::widget([
+        <?= DomainZonePriceGridView::widget([
             'boxed' => false,
             'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
-            'dataProvider' => (new \yii\data\ArrayDataProvider([
+            'dataProvider' => (new ArrayDataProvider([
                 'allModels' => $zonePrices,
                 'pagination' => false,
             ])),
@@ -62,10 +57,10 @@ use hipanel\modules\finance\models\DomainServicePrice;
         <h4 class="box-title" style="display: inline-block;">&nbsp;
             <?= DomainServicePrice::getLabel() ?>
         </h4>
-        <?= \hipanel\modules\finance\grid\DomainServicePriceGridView::widget([
+        <?= DomainServicePriceGridView::widget([
             'boxed' => false,
             'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
-            'dataProvider' => (new \yii\data\ArrayDataProvider([
+            'dataProvider' => (new ArrayDataProvider([
                 'allModels' => [$servicePrices],
                 'pagination' => false,
             ])),
