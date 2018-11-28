@@ -18,6 +18,7 @@ use hipanel\modules\finance\helpers\PriceChargesEstimator;
 use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\models\PriceSuggestionRequestForm;
 use hipanel\modules\server\models\Server;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\Price;
@@ -128,7 +129,7 @@ class PlanController extends CrudController
 
     public function actionCreatePrices(int $plan_id, int $template_plan_id)
     {
-        $plan = Plan::findOne(['id' => $template_plan_id]);
+        $plan = $this->findPlan($template_plan_id);
 
         $suggestions = (new Price)->batchQuery('suggest', [
             'object_id' => $plan_id,
@@ -151,13 +152,42 @@ class PlanController extends CrudController
 
     public function actionSuggestPricesModal($id)
     {
+        /** @var Plan $plan */
+        $plan = $this->findPlan($id);
+        $model = new PriceSuggestionRequestForm([
+            'plan_id' => $plan->id,
+            'plan_type' => $plan->type,
+        ]);
+
+        return $this->renderAjax('modals/suggestPrices', compact('plan', 'model'));
+    }
+
+    public function actionSuggestCommonPricesModal($id)
+    {
+        /** @var Plan $plan */
+        $plan = $this->findPlan($id);
+        $model = new PriceSuggestionRequestForm([
+            'plan_id' => $plan->id,
+            'plan_type' => $plan->type,
+            'object_id' => $plan->id,
+        ]);
+
+        return $this->renderAjax('modals/suggestPrices', compact('plan', 'model'));
+    }
+
+    /**
+     * @param $id integer
+     * @return Plan|null
+     * @throws NotFoundHttpException
+     */
+    private function findPlan(int $id): ?Plan
+    {
         $plan = Plan::findOne(['id' => $id]);
         if ($plan === null) {
             throw new NotFoundHttpException('Not found');
         }
-        $this->layout = false;
 
-        return $this->renderAjax('_suggestPricesModal', ['plan' => $plan]);
+        return $plan;
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\models\PriceSuggestionRequestForm;
 use hipanel\modules\finance\widgets\combo\TemplatePlanCombo;
 use hipanel\modules\server\widgets\combo\ServerCombo;
 use hiqdev\combo\StaticCombo;
@@ -8,24 +9,31 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
 /**
+ * @var \yii\web\View $this
  * @var Plan $plan
  */
+/** @var PriceSuggestionRequestForm $modal */
 
-$model = new \hipanel\modules\finance\models\PriceSuggestionRequestForm([
-    'plan_id' => $plan->id,
-    'plan_type' => $plan->type,
-]);
 ?>
 
 <?php $form = ActiveForm::begin(['id' => 'create-prices', 'action' => ['@price/suggest'], 'method' => 'GET']) ?>
 
 <?= $form->field($model, 'plan_id')->hiddenInput()->label(false) ?>
 
+<?php
+// TODO: think about splitting to multiple files, if files becomes monstrous.
+// $this->render("../{$model->type}/suggestPricesModal", compact('form', 'model', 'plan'));
+?>
+
 <?php if ($plan->type === Plan::TYPE_SERVER): ?>
-    <?= $form->field($model, 'object_id')->widget(ServerCombo::class) ?>
+    <?php if ($model->object_id) : ?>
+        <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
+    <?php else : ?>
+        <?= $form->field($model, 'object_id')->widget(ServerCombo::class) ?>
+    <?php endif; ?>
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
         'plan_id' => $plan->id,
-        'object_input_type' => 'server/server'
+        'object_input_type' => $model->object_id ? null : 'server/server',
     ]) ?>
     <?= $form->field($model, 'type')->widget(StaticCombo::class, [
         'data' => [
@@ -44,12 +52,16 @@ $model = new \hipanel\modules\finance\models\PriceSuggestionRequestForm([
         ],
     ]) ?>
 <?php elseif (in_array($plan->type, [Plan::TYPE_VCDN, Plan::TYPE_PCDN], true)): ?>
-    <?= $form->field($model, 'object_id')->widget(ServerCombo::class, [
-        'filter' => ['type' => ['format' => $plan->type === Plan::TYPE_PCDN ? 'cdnpix' : 'cdn']]
-    ]) ?>
+    <?php if ($model->object_id) : ?>
+        <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
+    <?php else : ?>
+        <?= $form->field($model, 'object_id')->widget(ServerCombo::class, [
+            'filter' => ['type' => ['format' => $plan->type === Plan::TYPE_PCDN ? 'cdnpix' : 'cdn']],
+        ]) ?>
+    <?php endif; ?>
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
         'plan_id' => $plan->id,
-        'object_input_type' => 'server/server'
+        'object_input_type' => $model->object_id ? null : 'server/server',
     ]) ?>
     <?= $form->field($model, 'type')->widget(StaticCombo::class, [
         'data' => [
@@ -62,14 +74,12 @@ $model = new \hipanel\modules\finance\models\PriceSuggestionRequestForm([
     ]) ?>
     <?php $form->action = ['@plan/create-prices', 'id' => $plan->id]; ?>
 <?php else: ?>
-    <h4>This plan does not support detailed prices</h4>
+    <p class="text-center bg-warning"
+       style="padding: 1rem;"><?= Yii::t('hipanel.finance.plan', 'This plan doesn\'t support detailed prices') ?></p>
 <?php endif ?>
 
-<hr/>
-
 <?= Html::submitButton(Yii::t('hipanel.finance.price', 'Proceed to creation'), [
-    'class' => 'btn btn-success',
+    'class' => 'btn btn-block btn-success',
 ]) ?>
 
 <?php ActiveForm::end(); ?>
-

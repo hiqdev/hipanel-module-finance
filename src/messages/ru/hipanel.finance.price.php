@@ -21,6 +21,7 @@ return [
     'For the whole tariff' => 'На весь тариф',
     'Proceed to creation' => 'Перейти к созданию',
     'Create prices' => 'Создать цены',
+    'Create common prices' => 'Создать общие цены',
     'Update prices' => 'Изменить цены',
     'Tariff plan' => 'Тарифный план',
     'Template tariff plan' => 'Шаблонный тарифный план',

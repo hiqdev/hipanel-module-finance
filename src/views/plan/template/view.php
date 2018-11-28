@@ -1,9 +1,9 @@
 <?php
 
-use hipanel\widgets\AjaxModal;
+use hipanel\modules\finance\grid\PriceGridView;
+use hipanel\modules\finance\widgets\CreatePricesButton;
 use hipanel\widgets\IndexPage;
-use yii\bootstrap\Modal;
-use yii\helpers\Html;
+use yii\data\ArrayDataProvider;
 
 /**
  * @var \yii\web\View $this
@@ -24,23 +24,16 @@ use yii\helpers\Html;
 
 <?php $page->beginContent('main-actions') ?>
     <?php if (Yii::$app->user->can('plan.create')) : ?>
-        <?= AjaxModal::widget([
-            'id' => 'create-prices-modal',
-            'header' => Html::tag('h4', Yii::t('hipanel.finance.price', 'Create prices'), ['class' => 'modal-title']),
-            'scenario' => 'create-prices',
-            'actionUrl' => ['@plan/suggest-prices-modal', 'id' => $model->id],
-            'size' => Modal::SIZE_SMALL,
-            'toggleButton' => ['label' => Yii::t('hipanel', 'Create'), 'class' => 'btn btn-sm btn-success'],
-        ]) ?>
+        <?= CreatePricesButton::widget(compact('model')) ?>
     <?php endif ?>
 <?php $page->endContent() ?>
 
 <?php $page->beginContent('table') ?>
     <?php $page->beginBulkForm() ?>
-        <?= \hipanel\modules\finance\grid\PriceGridView::widget([
+        <?= PriceGridView::widget([
             'boxed' => false,
             'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
-            'dataProvider' => (new \yii\data\ArrayDataProvider([
+            'dataProvider' => (new ArrayDataProvider([
                 'allModels' => $model->prices,
                 'pagination' => false,
             ])),

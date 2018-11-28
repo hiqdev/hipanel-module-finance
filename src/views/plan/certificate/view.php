@@ -1,8 +1,9 @@
 <?php
 
-use hipanel\widgets\AjaxModal;
+use hipanel\modules\finance\grid\CertificatePriceGridView;
+use hipanel\modules\finance\widgets\CreatePricesButton;
 use hipanel\widgets\IndexPage;
-use yii\bootstrap\Modal;
+use yii\data\ArrayDataProvider;
 use yii\helpers\Html;
 
 /**
@@ -19,14 +20,7 @@ $prices = $grouper->group();
 
 <?php $page->beginContent('main-actions') ?>
     <?php if (Yii::$app->user->can('plan.create')) : ?>
-        <?= AjaxModal::widget([
-            'id' => 'create-prices-modal',
-            'header' => Html::tag('h4', Yii::t('hipanel.finance.price', 'Create prices'), ['class' => 'modal-title']),
-            'scenario' => 'create-prices',
-            'actionUrl' => ['@plan/suggest-prices-modal', 'id' => $model->id],
-            'size' => Modal::SIZE_SMALL,
-            'toggleButton' => ['label' => Yii::t('hipanel', 'Create'), 'class' => 'btn btn-sm btn-success'],
-        ]) ?>
+        <?= CreatePricesButton::widget(compact('model')) ?>
     <?php endif ?>
     <?php if (Yii::$app->user->can('plan.update')) : ?>
         <?= Html::a(Yii::t('hipanel', 'Update'), ['@plan/update-prices', 'id' => $model->id], ['class' => 'btn btn-sm btn-warning']) ?>
@@ -35,10 +29,10 @@ $prices = $grouper->group();
 
 <?php $page->beginContent('table') ?>
     <?php $page->beginBulkForm() ?>
-        <?= \hipanel\modules\finance\grid\CertificatePriceGridView::widget([
+        <?= CertificatePriceGridView::widget([
             'boxed' => false,
             'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
-            'dataProvider' => (new \yii\data\ArrayDataProvider([
+            'dataProvider' => (new ArrayDataProvider([
                 'allModels' => $prices,
                 'pagination' => false,
             ])),
