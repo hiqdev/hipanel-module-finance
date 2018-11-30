@@ -38,6 +38,7 @@ use yii\helpers\Html;
     <?= $form->field($model, 'type')->widget(StaticCombo::class, [
         'data' => [
             'default' => Yii::t('hipanel.finance.suggestionTypes', 'default'),
+            'services' => Yii::t('hipanel.finance.suggestionTypes', 'services'),
             'parts' => Yii::t('hipanel.finance.suggestionTypes', 'parts'),
         ],
     ]) ?>

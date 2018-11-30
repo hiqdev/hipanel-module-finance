@@ -9,7 +9,6 @@ use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
-use Tuck\Sort\Sort;
 use Yii;
 
 /**

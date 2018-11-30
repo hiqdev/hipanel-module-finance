@@ -15,6 +15,7 @@ return [
     'Any' => 'Любой',
     'Price/unit' => 'Цена/ед. изм.',
     'Main prices' => 'Основные цены',
+    'Additional services' => 'Доп. услуги',
     'Part prices' => 'Цены железа',
     'No prices found' => 'Нет цен',
     'Prices' => 'Цены',

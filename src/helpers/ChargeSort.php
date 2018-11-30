@@ -50,6 +50,7 @@ class ChargeSort
             'server_du',
             'server_ssd',
             'server_sata',
+            'win_license',
         ];
 
         return function (Charge $charge) use ($order) {

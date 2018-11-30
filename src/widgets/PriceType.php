@@ -18,6 +18,7 @@ class PriceType extends Type
             'monthly,server_du',
             'monthly,server_ssd',
             'monthly,server_sata',
+            'monthly,win_license',
         ],
         'info' => [
             'overuse,rack_unit',

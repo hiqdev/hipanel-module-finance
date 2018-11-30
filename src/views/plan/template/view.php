@@ -4,6 +4,7 @@ use hipanel\modules\finance\grid\PriceGridView;
 use hipanel\modules\finance\widgets\CreatePricesButton;
 use hipanel\widgets\IndexPage;
 use yii\data\ArrayDataProvider;
+use hipanel\modules\finance\helpers\PriceSort;
 
 /**
  * @var \yii\web\View $this
@@ -33,10 +34,10 @@ use yii\data\ArrayDataProvider;
         <?= PriceGridView::widget([
             'boxed' => false,
             'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
-            'dataProvider' => (new ArrayDataProvider([
-                'allModels' => $model->prices,
+            'dataProvider' => new ArrayDataProvider([
+                'allModels' => PriceSort::anyPrices()->values($model->prices, true),
                 'pagination' => false,
-            ])),
+            ]),
             'columns' => [
                 'checkbox',
                 'object->name',

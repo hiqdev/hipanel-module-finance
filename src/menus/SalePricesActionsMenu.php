@@ -65,6 +65,11 @@ class SalePricesActionsMenu extends \hiqdev\yii2\menus\Menu
                         'icon' => 'fa-plus',
                     ],
                     [
+                        'type' => 'services',
+                        'label' => Yii::t('hipanel.finance.price', 'Additional services'),
+                        'icon' => 'fa-codiepie',
+                    ],
+                    [
                         'type' => 'parts',
                         'label' => Yii::t('hipanel.finance.price', 'Part prices'),
                         'icon' => 'fa-hdd-o',

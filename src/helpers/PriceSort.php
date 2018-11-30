@@ -49,7 +49,9 @@ class PriceSort
         return function (Price $price) {
             if ($price->type !== 'monthly,hardware') {
                 return 1;
-            } elseif ($price->getSubtype() === 'hardware') {
+            }
+
+            if ($price->getSubtype() === 'hardware') {
                 return 2;
             }
 
@@ -69,6 +71,7 @@ class PriceSort
             'server_du',
             'server_ssd',
             'server_sata',
+            'win_license',
         ];
 
         return function (Price $price) use ($order) {
