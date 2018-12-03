@@ -63,7 +63,7 @@ class PlanInternalsGrouper
         $pricesByMainObject = [];
 
         foreach ($model->prices as $price) {
-            $pricesByMainObject[$price->main_object_id ?? 0][$price->id] = $price;
+            $pricesByMainObject[$price->main_object_id ?? $price->object_id ?? 0][$price->id] = $price;
         }
 
         if (isset($pricesByMainObject[0])) {
