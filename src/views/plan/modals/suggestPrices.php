@@ -11,8 +11,8 @@ use yii\helpers\Html;
 /**
  * @var \yii\web\View $this
  * @var Plan $plan
+ * @var PriceSuggestionRequestForm $model
  */
-/** @var PriceSuggestionRequestForm $modal */
 
 ?>
 
@@ -26,14 +26,14 @@ use yii\helpers\Html;
 ?>
 
 <?php if ($plan->type === Plan::TYPE_SERVER): ?>
-    <?php if ($model->object_id) : ?>
+    <?php if ($model->isObjectPredefined()) : ?>
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
     <?php else : ?>
         <?= $form->field($model, 'object_id')->widget(ServerCombo::class) ?>
     <?php endif; ?>
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
         'plan_id' => $plan->id,
-        'object_input_type' => $model->object_id ? null : 'server/server',
+        'object_input_type' => $model->isObjectPredefined() ? null : 'server/server',
     ]) ?>
     <?= $form->field($model, 'type')->widget(StaticCombo::class, [
         'data' => [
@@ -53,7 +53,7 @@ use yii\helpers\Html;
         ],
     ]) ?>
 <?php elseif (in_array($plan->type, [Plan::TYPE_VCDN, Plan::TYPE_PCDN], true)): ?>
-    <?php if ($model->object_id) : ?>
+    <?php if ($model->isObjectPredefined()) : ?>
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
     <?php else : ?>
         <?= $form->field($model, 'object_id')->widget(ServerCombo::class, [
@@ -62,7 +62,7 @@ use yii\helpers\Html;
     <?php endif; ?>
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
         'plan_id' => $plan->id,
-        'object_input_type' => $model->object_id ? null : 'server/server',
+        'object_input_type' => $model->isObjectPredefined() ? null : 'server/server',
     ]) ?>
     <?= $form->field($model, 'type')->widget(StaticCombo::class, [
         'data' => [

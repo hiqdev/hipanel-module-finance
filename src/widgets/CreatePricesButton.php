@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\widgets;
 
+use hipanel\modules\finance\models\Plan;
 use hipanel\widgets\AjaxModal;
 use Yii;
 use yii\base\Widget;
@@ -12,6 +13,9 @@ use yii\web\View;
 
 class CreatePricesButton extends Widget
 {
+    /**
+     * @var Plan
+     */
     public $model;
 
     public function init()
@@ -25,14 +29,27 @@ class CreatePricesButton extends Widget
                 'size' => Modal::SIZE_SMALL,
                 'toggleButton' => false,
             ]);
-            echo AjaxModal::widget([
-                'id' => 'create-common-prices-modal',
-                'header' => Html::tag('h4', Yii::t('hipanel.finance.price', 'Create common prices'), ['class' => 'modal-title']),
-                'scenario' => 'create-prices',
-                'actionUrl' => ['@plan/suggest-common-prices-modal', 'id' => $this->model->id],
-                'size' => Modal::SIZE_SMALL,
-                'toggleButton' => false,
-            ]);
+            if ($this->model->type !== Plan::TYPE_TEMPLATE) {
+                echo AjaxModal::widget([
+                    'id' => 'create-shared-prices-modal',
+                    'header' => Html::tag('h4', Yii::t('hipanel.finance.price', 'Create shared prices'),
+                        ['class' => 'modal-title']),
+                    'scenario' => 'create-prices',
+                    'actionUrl' => ['@plan/suggest-shared-prices-modal', 'id' => $this->model->id],
+                    'size' => Modal::SIZE_SMALL,
+                    'toggleButton' => false,
+                ]);
+            }
+            if ($this->model->is_grouping) {
+                echo AjaxModal::widget([
+                    'id' => 'create-grouping-prices-modal',
+                    'header' => Html::tag('h4', Yii::t('hipanel.finance.price', 'Create grouping prices'), ['class' => 'modal-title']),
+                    'scenario' => 'create-prices',
+                    'actionUrl' => ['@plan/suggest-grouping-prices-modal', 'id' => $this->model->id],
+                    'size' => Modal::SIZE_SMALL,
+                    'toggleButton' => false,
+                ]);
+            }
         });
     }
 
@@ -44,7 +61,7 @@ class CreatePricesButton extends Widget
                 'data-toggle' => 'dropdown', 'class' => 'dropdown-toggle btn btn-success btn-sm',
             ]) . Dropdown::widget([
                 'options' => ['class' => 'pull-right'],
-                'items' => [
+                'items' => array_filter([
                     [
                         'encode' => false,
                         'url' => '#',
@@ -56,18 +73,29 @@ class CreatePricesButton extends Widget
                             ],
                         ],
                     ],
-                    [
+                    $this->model->type !== Plan::TYPE_TEMPLATE ? [
                         'encode' => false,
                         'url' => '#',
-                        'label' => Yii::t('hipanel.finance.price', 'Create common prices'),
+                        'label' => Yii::t('hipanel.finance.price', 'Create shared prices'),
                         'linkOptions' => [
                             'data' => [
                                 'toggle' => 'modal',
-                                'target' => '#create-common-prices-modal',
+                                'target' => '#create-shared-prices-modal',
                             ],
                         ],
-                    ],
-                ],
+                    ] : null,
+                    $this->model->is_grouping ? [
+                        'encode' => false,
+                        'url' => '#',
+                        'label' => Yii::t('hipanel.finance.price', 'Create grouping prices'),
+                        'linkOptions' => [
+                            'data' => [
+                                'toggle' => 'modal',
+                                'target' => '#create-grouping-prices-modal',
+                            ],
+                        ],
+                    ] : null,
+                ]),
             ]), ['class' => 'dropdown']);
     }
 }

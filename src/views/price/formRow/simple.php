@@ -22,15 +22,19 @@ use yii\bootstrap\Html;
         <?= Html::activeHiddenInput($model, "[$i]note", ['data-attribute' => 'note']) ?>
 
         <div class="form-group">
-            <strong>
-                <?= \hipanel\modules\finance\widgets\LinkToObjectResolver::widget([
-                    'model' => $model->object,
-                    'labelAttribute' => 'name',
-                    'linkOptions' => [
-                        'tabindex' => '-1'
-                    ]
-                ]) ?>
-            </strong>
+            <?php if ($model->object->name === null): ?>
+                <i><?= Yii::t('hipanel.finance.price', 'Any object') ?></i>
+            <?php else: ?>
+                <strong>
+                    <?= \hipanel\modules\finance\widgets\LinkToObjectResolver::widget([
+                        'model' => $model->object,
+                        'labelAttribute' => 'name',
+                        'linkOptions' => [
+                            'tabindex' => '-1'
+                        ]
+                    ]) ?>
+                </strong>
+            <?php endif ?>
             <br />
             <?= \hipanel\modules\finance\widgets\PriceType::widget([
                 'model' => $model,

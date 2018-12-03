@@ -162,7 +162,7 @@ class PlanController extends CrudController
         return $this->renderAjax('modals/suggestPrices', compact('plan', 'model'));
     }
 
-    public function actionSuggestCommonPricesModal($id)
+    public function actionSuggestGroupingPricesModal($id)
     {
         /** @var Plan $plan */
         $plan = $this->findPlan($id);
@@ -170,6 +170,20 @@ class PlanController extends CrudController
             'plan_id' => $plan->id,
             'plan_type' => $plan->type,
             'object_id' => $plan->id,
+            'scenario' => PriceSuggestionRequestForm::SCENARIO_PREDEFINED_OBJECT,
+        ]);
+
+        return $this->renderAjax('modals/suggestPrices', compact('plan', 'model'));
+    }
+
+    public function actionSuggestSharedPricesModal($id)
+    {
+        /** @var Plan $plan */
+        $plan = $this->findPlan($id);
+        $model = new PriceSuggestionRequestForm([
+            'plan_id' => $plan->id,
+            'plan_type' => $plan->type,
+            'scenario' => PriceSuggestionRequestForm::SCENARIO_PREDEFINED_OBJECT,
         ]);
 
         return $this->renderAjax('modals/suggestPrices', compact('plan', 'model'));

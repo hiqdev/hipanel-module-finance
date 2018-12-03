@@ -63,18 +63,18 @@ class PlanInternalsGrouper
         $pricesByMainObject = [];
 
         foreach ($model->prices as $price) {
-            $pricesByMainObject[$price->main_object_id ?? $model->id][$price->id] = $price;
+            $pricesByMainObject[$price->main_object_id ?? 0][$price->id] = $price;
         }
 
-        if (isset($pricesByMainObject[null])) {
-            $salesByObject[null] = new FakeSale([
-                'object' => Yii::t('hipanel.finance.price', 'Applicable for all objects'),
+        if (isset($pricesByMainObject[0])) {
+            $salesByObject[0] = new FakeSale([
+                'object' => Yii::t('hipanel.finance.price', 'For all sold objects'),
                 'tariff_id' => $model->id,
             ]);
         }
         if (isset($pricesByMainObject[$model->id])) {
             $salesByObject[$model->id] = new FakeSale([
-                'object' => Yii::t('hipanel.finance.price', 'For the whole tariff'),
+                'object' => Yii::t('hipanel.finance.price', 'Grouping prices'),
                 'tariff_id' => $model->id,
                 'object_id' => $model->id,
             ]);

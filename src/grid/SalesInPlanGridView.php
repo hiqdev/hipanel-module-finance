@@ -41,9 +41,8 @@ class SalesInPlanGridView extends SaleGridView
         return array_merge(parent::columns(), [
             'object_label' => [
                 'format' => 'raw',
-                'value' => function (Sale $sale) {
-                    $prices = $this->pricesBySoldObject[$sale->object_id ?? $sale->tariff_id] ?? [];
-                    foreach ($prices as $price) {
+                'value' => function (Sale $sale, $key) {
+                    foreach ($this->pricesBySoldObject[$key] ?? [] as $price) {
                         if ($price->object->id === $sale->object_id) {
                             return $price->object->label;
                         }
@@ -66,8 +65,8 @@ class SalesInPlanGridView extends SaleGridView
 
     private function initAfterRow()
     {
-        $this->afterRow = function (Sale $sale) {
-            $prices = $this->pricesBySoldObject[$sale->object_id ?? $sale->tariff_id];
+        $this->afterRow = function (Sale $sale, $key) {
+            $prices = $this->pricesBySoldObject[$key];
             if (empty($prices)) {
                 return '';
             }
