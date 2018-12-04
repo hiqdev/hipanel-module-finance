@@ -180,6 +180,8 @@ return [
     'Support time' => 'Время поддержки',
     'Support time monthly fee' => 'Абонплата за поддержку',
     'Hardware monthly fee' => 'Абонплата за железо',
+    'Server traffic monthly fee' => 'Абонплата за серверный трафик',
+    'Windows License monthly fee' => 'Абонплата за лицензию Windows',
     'Rack unit monthly fee' => 'Абонплата за стойку',
     'Number of IP addresses' => 'Кол-во IP адресов',
     'IP addresses monthly fee' => 'Абонплата за IP адреса',
