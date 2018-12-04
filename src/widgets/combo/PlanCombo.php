@@ -30,5 +30,19 @@ class PlanCombo extends Combo
     /** {@inheritdoc} */
     public $_rename = ['text' => 'name'];
 
-    public $_primaryFilter = 'name_ilike';
+    public $_primaryFilter = 'plan_ilike';
+
+    /**
+     * @var string the type of tariff
+     * @see getFilter()
+     */
+    public $tariffType;
+
+    /** {@inheritdoc} */
+    public function getFilter()
+    {
+        return ArrayHelper::merge(parent::getFilter(), [
+            'type_in' => ['format' => $this->tariffType],
+        ]);
+    }
 }
