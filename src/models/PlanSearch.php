@@ -24,6 +24,7 @@ class PlanSearch extends Plan
             'type_in'             => Yii::t('hipanel', 'Type'),
             'buyer_in'            => Yii::t('hipanel:finance:sale', 'Buyer'),
             'name_ilike'          => Yii::t('hipanel:finance', 'Name'),
+            'plan_ilike'          => Yii::t('hipanel:finance', 'Name'),
             'note_ilike'          => Yii::t('hipanel', 'Note'),
             'object_id_in'        => Yii::t('hipanel:finance', 'Object name'),
         ]);

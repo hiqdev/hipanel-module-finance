@@ -45,7 +45,7 @@ class Plan extends \hipanel\base\Model
     {
         return array_merge(parent::rules(), [
             [['id', 'type_id', 'state_id', 'client_id', 'currency_id'], 'integer'],
-            [['type', 'state', 'client', 'name', 'note', 'currency', 'is_grouping'], 'string'],
+            [['type', 'state', 'client', 'name', 'plan', 'note', 'currency', 'is_grouping'], 'string'],
 
             [['type', 'name', 'currency'], 'required', 'on' => ['create', 'update']],
             [['id'], 'required', 'on' => ['update', 'delete', 'set-note']],
