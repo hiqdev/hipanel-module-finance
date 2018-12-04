@@ -6,7 +6,7 @@ use yii\bootstrap\Html;
 
 /**
  * @var \hipanel\modules\finance\models\Plan|null $plan
- * @var \hipanel\modules\finance\models\Price $
+ * @var \hipanel\modules\finance\models\Price $model
  * @var \yii\widgets\ActiveForm $form
  */
 ?>
@@ -35,6 +35,9 @@ use yii\bootstrap\Html;
                     ]) ?>
                 </strong>
             <?php endif ?>
+            <?php if (!empty($model->object->label)) : ?>
+                <br /><?= Html::encode($model->object->label) ?>
+            <?php endif; ?>
             <br />
             <?= \hipanel\modules\finance\widgets\PriceType::widget([
                 'model' => $model,
