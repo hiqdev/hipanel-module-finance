@@ -12,7 +12,7 @@ use yii\bootstrap\Html;
 ?>
 
 <div class="form-instance">
-    <div class="col-md-2">
+    <div class="col-md-2" style="white-space: normal">
         <?= Html::activeHiddenInput($model, "[$i]object_id", ['ref' => 'object_id']) ?>
         <?= Html::activeHiddenInput($model, "[$i]type") ?>
         <?= Html::activeHiddenInput($model, "[$i]class") ?>
