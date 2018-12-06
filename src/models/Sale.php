@@ -8,6 +8,7 @@ use Yii;
  * Class Sale
  *
  * @property string|int $id
+ * @property string $object
  * @property string|int $object_id
  * @property string|int $tariff_id
  * @property string $tariff_type

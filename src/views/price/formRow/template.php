@@ -46,7 +46,7 @@ use yii\bootstrap\Html;
         <div class="col-md-4">
             <div class="<?= AmountWithCurrency::$widgetClass ?>">
                 <?= $form->field($model, "[$i]price")->widget(AmountWithCurrency::class, [
-                    'currencyAttributeName' => "currency",
+                    'currencyAttributeName' => 'currency',
                     'currencyAttributeOptions' => [
                         'items' => $this->context->getCurrencyTypes(),
                     ],
@@ -67,7 +67,7 @@ use yii\bootstrap\Html;
                             'value' => $model->subprices[$currCode] ?? 0
                         ],
                         'selectedCurrencyCode' => $currCode,
-                        'currencyAttributeName' => "subprices",
+                        'currencyAttributeName' => 'subprices',
                         'currencyDropdownOptions' => [
                             'disabled' => true,
                             'hidden' => true,

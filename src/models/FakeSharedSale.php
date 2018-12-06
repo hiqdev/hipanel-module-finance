@@ -3,13 +3,13 @@
 namespace hipanel\modules\finance\models;
 
 /**
- * Class FakeSale is a stub to represent sale that did not happened yet
+ * Class FakeSharedSale is a fake sale used to group plan prices that are shared
  *
  * {@inheritdoc}
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class FakeSale extends Sale
+class FakeSharedSale extends Sale
 {
 
 }

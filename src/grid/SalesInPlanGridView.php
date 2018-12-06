@@ -3,7 +3,9 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\finance\menus\SalePricesActionsMenu;
+use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Sale;
+use hipanel\widgets\Label;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -42,6 +44,13 @@ class SalesInPlanGridView extends SaleGridView
             'object_label' => [
                 'format' => 'raw',
                 'value' => function (Sale $sale, $key) {
+                    if ($sale instanceof FakeSale) {
+                        return Label::widget([
+                            'label' => Yii::t('hipanel:finance:sale', 'Not sold'),
+                            'color' => 'danger'
+                        ]);
+                    }
+
                     foreach ($this->pricesBySoldObject[$key] ?? [] as $price) {
                         if ($price->object->id === $sale->object_id) {
                             return $price->object->label;

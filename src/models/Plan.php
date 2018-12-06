@@ -57,10 +57,12 @@ class Plan extends \hipanel\base\Model
     public function attributeLabels()
     {
         return array_merge(parent::attributeLabels(), [
+            'client' => Yii::t('hipanel', 'Seller'),
             'name' => Yii::t('hipanel:finance', 'Name'),
             'server_ids' => Yii::t('hipanel.finance.plan', 'Servers'),
             'monthly' => Yii::t('hipanel.finance.plan', 'Monthly'),
             'is_grouping' => Yii::t('hipanel.finance.plan', 'Grouping'),
+            'currency' => Yii::t('hipanel:finance', 'Currency'),
         ]);
     }
 

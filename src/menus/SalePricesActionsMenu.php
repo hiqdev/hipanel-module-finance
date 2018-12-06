@@ -2,7 +2,8 @@
 
 namespace hipanel\modules\finance\menus;
 
-use hipanel\modules\finance\models\FakeSale;
+use hipanel\modules\finance\models\FakeGroupingSale;
+use hipanel\modules\finance\models\FakeSharedSale;
 use hipanel\modules\finance\models\Sale;
 use Yii;
 
@@ -46,19 +47,9 @@ class SalePricesActionsMenu extends \hiqdev\yii2\menus\Menu
 
     protected function suggestionTypesByObject()
     {
-        if ($this->model instanceof FakeSale && empty($this->model->tariff_type)) {
-            return [
-                [
-                    'type' => 'default',
-                    'label' => Yii::t('hipanel.finance.price', 'Main prices'),
-                    'icon' => 'fa-plus',
-                ],
-            ];
-        }
-
         switch ($this->model->tariff_type) {
             case Sale::SALE_TYPE_SERVER:
-                return [
+                return array_filter([
                     [
                         'type' => 'default',
                         'label' => Yii::t('hipanel.finance.price', 'Main prices'),
@@ -69,12 +60,12 @@ class SalePricesActionsMenu extends \hiqdev\yii2\menus\Menu
                         'label' => Yii::t('hipanel.finance.price', 'Additional services'),
                         'icon' => 'fa-codiepie',
                     ],
-                    [
+                    !$this->model instanceof FakeGroupingSale && !$this->model instanceof FakeSharedSale ? [
                         'type' => 'parts',
                         'label' => Yii::t('hipanel.finance.price', 'Part prices'),
                         'icon' => 'fa-hdd-o',
-                    ],
-                ];
+                    ] : null,
+                ]);
             case Sale::SALE_TYPE_PCDN:
             case Sale::SALE_TYPE_VCDN:
                 return [

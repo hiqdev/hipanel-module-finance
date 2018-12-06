@@ -5,7 +5,9 @@ namespace hipanel\modules\finance\helpers;
 use hipanel\modules\finance\models\CertificatePrice;
 use hipanel\modules\finance\models\DomainServicePrice;
 use hipanel\modules\finance\models\DomainZonePrice;
+use hipanel\modules\finance\models\FakeGroupingSale;
 use hipanel\modules\finance\models\FakeSale;
+use hipanel\modules\finance\models\FakeSharedSale;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
@@ -67,16 +69,18 @@ class PlanInternalsGrouper
         }
 
         if (isset($pricesByMainObject[0])) {
-            $salesByObject[0] = new FakeSale([
+            $salesByObject[0] = new FakeSharedSale([
                 'object' => Yii::t('hipanel.finance.price', 'For all sold objects'),
                 'tariff_id' => $model->id,
+                'tariff_type' => $model->type,
             ]);
         }
         if (isset($pricesByMainObject[$model->id])) {
-            $salesByObject[$model->id] = new FakeSale([
+            $salesByObject[$model->id] = new FakeGroupingSale([
                 'object' => Yii::t('hipanel.finance.price', 'Grouping prices'),
-                'tariff_id' => $model->id,
                 'object_id' => $model->id,
+                'tariff_id' => $model->id,
+                'tariff_type' => $model->type,
             ]);
         }
         foreach ($model->sales as $sale) {

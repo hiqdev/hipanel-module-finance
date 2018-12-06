@@ -37,7 +37,7 @@ class PricePresenter
             $unit = ' ' . Yii::t('hipanel:finance', 'per {unit}', ['unit' => $price->getUnitLabel()]);
         }
 
-        if (count($price->formulaLines()) > 0) {
+        if (\count($price->formulaLines()) > 0) {
             $formula = ArraySpoiler::widget([
                 'data' => $price->formulaLines(),
                 'formatter' => function ($v) {
@@ -65,7 +65,7 @@ class PricePresenter
     public function renderInfo(Price $price): string
     {
         if (!$price->isQuantityPredefined()) {
-            return Yii::t('hipanel:finance', '{icon} {quantity} unit(s)', [
+            return Yii::t('hipanel:finance', '{icon} Units: {quantity}', [
                 'icon' => Html::tag('i', '', ['class' => 'fa fa-server']),
                 'quantity' => Html::tag('b', '<i class="fa fa-spin fa-refresh"></i>', ['data-dynamic-quantity' => true])
             ]);

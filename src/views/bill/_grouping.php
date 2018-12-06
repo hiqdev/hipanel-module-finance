@@ -2,7 +2,6 @@
 
 use hipanel\widgets\IndexPage;
 use hipanel\modules\finance\models\Charge;
-use hipanel\modules\finance\helpers\ChargesGrouper;
 use hipanel\modules\finance\grid\GroupedByServerChargesGridView;
 use \yii\data\ArrayDataProvider;
 

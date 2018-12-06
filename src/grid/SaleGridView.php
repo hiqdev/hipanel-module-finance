@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\menus\SalePricesActionsMenu;
+use hipanel\modules\finance\models\FakeGroupingSale;
 use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
@@ -84,6 +85,10 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'filterAttribute' => 'object_like',
                 'enableSorting' => false,
                 'value' => function (Sale $model) {
+                    if ($model instanceof FakeGroupingSale) {
+                        return $model->object;
+                    }
+
                     return LinkToObjectResolver::widget([
                         'model' => $model,
                         'typeAttribute' => 'tariff_type',
