@@ -126,6 +126,8 @@ class PlanInternalsGrouper
             $objPrices = PriceSort::anyPrices()->values($objPrices, true);
         }
 
+        $salesByObject = SaleSort::toDisplayInPlan()->values($salesByObject, true);
+
         return [$salesByObject, $pricesByMainObject];
     }
 
