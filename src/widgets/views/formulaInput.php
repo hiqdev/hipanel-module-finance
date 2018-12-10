@@ -17,10 +17,14 @@ $widget = $this->context;
     ]); ?>
     <span class="input-group-addon">
         <?= Html::button('', [
-            'class' =>        'fa fa-question-circle text-info formula-help-modal',
+            'class' => 'fa fa-question-circle text-info formula-help-modal',
             'data-toggle' => 'modal',
             'data-target' => $widget->getHelpModalSelector(),
-            'tabindex' => -1
+            'tabindex' => -1,
+            'onClick' => new \yii\web\JsExpression(<<<JS
+$($(this).data('target')).data('input', $(this).closest('.input-group').find('.formula-input'))
+JS
+            )
         ]) ?>
     </span>
 </div>

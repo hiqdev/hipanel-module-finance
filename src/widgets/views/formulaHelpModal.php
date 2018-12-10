@@ -34,8 +34,23 @@ $widget = $this->context;
         'columns' => [
             [
                 'format' => 'raw',
-                'value' => function ($formula) {
-                    return '<kbd class="javascript">' . $formula . '</kbd>';
+                'value' => function ($description, $formula) {
+                    if (is_numeric($formula)) {
+                        $formula = $description;
+                        $description = null;
+                    }
+
+                    $result = '<kbd class="javascript">' . $formula . '</kbd>';
+                    $result .= <<<'HTML'
+<button class="btn btn-small" onClick="$(this).closest('.modal').data('onPasteRequested').call(this)">
+    <i class="fa fa-paste"></i>
+</button>
+HTML;
+                    if (!empty($description)) {
+                        $result .= '<p>' . $description . '</p>';
+                    }
+
+                    return $result;
                 }
             ]
         ]

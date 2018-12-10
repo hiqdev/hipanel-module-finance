@@ -48,4 +48,6 @@ return [
     'Model partno' => 'Артикул модели',
     'Who sold the tariff plan.' => 'Кому продана услуга по тарифу.',
     'Prepaid amount' => 'Предоплаченный объём',
+    '<code>10pp</code> means "10 percent points". A percent point is the arithmetic difference of two percentages. For example, moving up from 40% to 50% is a 10 percentage point increase, but is an actual 25% percent increase in what is being measured.' => '<code>10pp</code> означает 10 процентых пунктов (англ. – "percent point"). Процентный пункт – это арифметическая разница двух процентных величин. Например, увеличение с 40% до 50% – это рост на 10 процентных пунктов, или на 25% того, что измеряется.',
+    'Formula usage examples' => 'Примеры использования формул',
 ];

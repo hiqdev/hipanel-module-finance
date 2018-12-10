@@ -240,5 +240,5 @@ return [
     'monthly' => 'в месяц',
     'Update estimates' => 'Рассчитать стоимость',
     'Object name' => 'Имя объекта',
-    '{icon} Units: {quantity}' => '{icon} Юнитов: {quantity}',
+    '{icon} Quantity: {quantity}' => '{icon} Кол-во: {quantity}',
 ];
