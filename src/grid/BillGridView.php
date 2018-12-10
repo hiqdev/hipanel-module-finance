@@ -135,6 +135,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                         'model' => $filterModel,
                     ]);
                 },
+                'sortAttribute' => 'type',
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => function (Bill $model) {
