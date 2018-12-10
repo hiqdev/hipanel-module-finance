@@ -20,7 +20,7 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
             'tariff' => [
                 'format' => 'html',
                 'value' => function ($model) {
-                    return Html::a($model->tariff, ['@tariff/view', 'id' => $model->tariff_id]);
+                    return Html::a($model->tariff, ['@plan/view', 'id' => $model->tariff_id]);
                 },
                 'enableSorting' => false,
             ],
