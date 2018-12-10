@@ -65,8 +65,8 @@ class PricePresenter
     public function renderInfo(Price $price): string
     {
         if (!$price->isQuantityPredefined()) {
-            return Yii::t('hipanel:finance', '{icon} Units: {quantity}', [
-                'icon' => Html::tag('i', '', ['class' => 'fa fa-server']),
+            return Yii::t('hipanel:finance', '{icon} Quantity: {quantity}', [
+                'icon' => Html::tag('i', '', ['class' => 'fa fa-calculator']),
                 'quantity' => Html::tag('b', '<i class="fa fa-spin fa-refresh"></i>', ['data-dynamic-quantity' => true])
             ]);
         }
