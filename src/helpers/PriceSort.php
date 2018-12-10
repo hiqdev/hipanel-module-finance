@@ -85,7 +85,7 @@ class PriceSort
 
     private static function byHardwareType(): \Closure
     {
-        $order = ['CHASSIS', 'MOTHERBOARD', 'CPU', 'RAM', 'HDD', 'SSD'];
+        $order = ['SERVER', 'CHASSIS', 'MOTHERBOARD', 'CPU', 'RAM', 'HDD', 'SSD'];
 
         return function (Price $price) use ($order) {
             $type = substr($price->object->name, 0, strpos($price->object->name, ':'));

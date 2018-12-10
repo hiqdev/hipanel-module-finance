@@ -24,7 +24,7 @@ class ChargeSort
 
     private static function byHardwareType(): \Closure
     {
-        $order = ['CHASSIS', 'MOTHERBOARD', 'CPU', 'RAM', 'HDD', 'SSD'];
+        $order = ['SERVER', 'CHASSIS', 'MOTHERBOARD', 'CPU', 'RAM', 'HDD', 'SSD'];
 
         return function (Charge $charge) use ($order) {
             if ($charge->class === 'part') {
