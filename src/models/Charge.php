@@ -71,4 +71,9 @@ class Charge extends \hiqdev\hiart\ActiveRecord
     {
         return Yii::t('hipanel.finance.priceTypes', \yii\helpers\Inflector::titleize($this->type));
     }
+
+    public function isMonthly(): bool
+    {
+        return strpos($this->ftype, 'monthly,') === 0;
+    }
 }
