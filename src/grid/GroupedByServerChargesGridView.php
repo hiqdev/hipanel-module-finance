@@ -33,7 +33,7 @@ class GroupedByServerChargesGridView extends BillGridView
         return array_merge(parent::columns(), [
             'object_link' => [
                 'format' => 'html',
-                'attribute' => 'common_object_name',
+                'attribute' => 'commonObject.name',
             ],
         ]);
     }
@@ -45,7 +45,7 @@ class GroupedByServerChargesGridView extends BillGridView
          * @return string
          */
         $this->afterRow = function (Charge $obj) {
-            $models = $this->chargesByMainObject[$obj->common_object_id];
+            $models = $this->chargesByMainObject[$obj->commonObject->id];
             if (empty($models)) {
                 return '';
             }

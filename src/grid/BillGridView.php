@@ -193,10 +193,10 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'html',
                 'value' => function (Charge $model) {
                     $link = LinkToObjectResolver::widget([
-                        'model'          => $model,
-                        'labelAttribute' => 'common_object_name',
-                        'idAttribute'    => 'common_object_id',
-                        'typeAttribute'  => 'class',
+                        'model'          => $model->commonObject,
+                        'labelAttribute' => 'name',
+                        'idAttribute'    => 'id',
+                        'typeAttribute'  => 'type',
                         'customLinks' => [
                             'part' => '@server/view'
                         ]
