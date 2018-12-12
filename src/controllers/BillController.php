@@ -83,6 +83,7 @@ class BillController extends \hipanel\base\CrudController
                     $dataProvider->query
                         ->joinWith(['charges' => function (ActiveQuery $query) {
                             $query->joinWith('commonObject');
+                            $query->joinWith('latestCommonObject');
                         }])
                         ->andWhere(['with_charges' => true]);
                 },

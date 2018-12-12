@@ -21,6 +21,7 @@ use Yii;
  * @property float $sum
  * @property int object_id
  * @property TargetObject $commonObject
+ * @property TargetObject $latestCommonObject
  */
 class Charge extends \hiqdev\hiart\ActiveRecord
 {
@@ -62,6 +63,11 @@ class Charge extends \hiqdev\hiart\ActiveRecord
     }
 
     public function getCommonObject()
+    {
+        return $this->hasOne(TargetObject::class, ['id' => 'id']);
+    }
+
+    public function getLatestCommonObject()
     {
         return $this->hasOne(TargetObject::class, ['id' => 'id']);
     }
