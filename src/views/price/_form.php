@@ -64,6 +64,12 @@ $form = ActiveForm::begin([
             </div>
             <?php $i++ ?>
         <?php endforeach ?>
+
+        <div class="box-footer with-border">
+                <?= Html::tag('p', Html::encode('Total:'), ['class' => 'total-block', 'id' => 'total-label']) ?>
+                <?= Html::tag('p', Html::encode(''), ['class' => 'total-block', 'id' => 'total-value']) ?>
+        </div>
+
     </div>
 </div>
 
@@ -73,7 +79,7 @@ $form = ActiveForm::begin([
     <div class="col-md-12">
         <?= Html::submitButton(Yii::t('hipanel', 'Save'), ['class' => 'btn btn-success']) ?>
         &nbsp;
-        <?= Html::button(Yii::t('hipanel:finance', 'Update estimates'), ['class' => 'btn btn-info', 'onclick' => '$(this).priceEstimator().update()']) ?>
+        <?= Html::button(Yii::t('hipanel:finance', 'Update estimates'), ['class' => 'btn btn-info', 'id' => 'update-estimates']) ?>
         &nbsp;
         <?= Html::button(Yii::t('hipanel', 'Cancel'), ['class' => 'btn btn-default', 'onclick' => 'history.go(-1)']) ?>
     </div>
@@ -90,7 +96,39 @@ PriceEstimator::register($this);
 $this->registerJs(<<<'JS'
 $('#prices-form').priceEstimator({
     rowSelector: '.price-item',
+    totalCellSelector: '#total-value' 
 });
+
+$('#update-estimates').click(function() {
+    $('#total-label').css({display: 'inline-block'});
+    $('#prices-form').priceEstimator().update();
+})
+
 hipanel.form.preventSubmitWithEnter('#prices-form')
 JS
+);
+
+$this->registerCss(<<<'CSS'
+#total-value {
+    font-size: 110%;
+    margin-left: 5px;
+}
+
+#total-value i {
+    font-size: 90%;
+}
+
+#total-label {
+    font-size: 120%;
+    text-transform: uppercase;
+    font-weight: bold;
+
+    display: none;
+}
+
+.total-block {
+    display: inline-block;
+    margin-bottom: 0;
+}
+CSS
 );
