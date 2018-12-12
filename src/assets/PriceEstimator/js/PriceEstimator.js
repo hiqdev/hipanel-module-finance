@@ -1,6 +1,8 @@
 ;(function ($, window, document, undefined) {
     var pluginName = "priceEstimator",
-        defaults = {};
+        defaults = {
+            totalCellSelector: '#totalCell',
+        };
 
     function name2attribute(name) {
         let regex = /(\[([\w_]+)\])$/u;
@@ -28,6 +30,7 @@
         this.form = form;
         this.rowSelector = this.settings.rowSelector;
         this.estimatesPerPeriod = {};
+        this.totalsPerPeriod = {};
 
         this.init();
     }
@@ -121,15 +124,23 @@
             let prices = this.getPrices();
             let actions = this.getActions(prices);
 
-            this.getPriceRows().find('.price-estimates').html('<i class="fa fa-spinner fa-spin fa-lg"></i>');
+            this.getPriceRows().find('.price-estimates').html(hipanel.spinner.small);
+            $(this.settings.totalCellSelector).html(hipanel.spinner.small);
 
             $.ajax({
                 method: 'post',
                 url: '/finance/plan/calculate-charges',
                 data: { prices, actions },
                 success: json => {
-                    Object.keys(json).forEach(period => this.rememberEstimates(period, json[period].targets));
+                    Object.keys(json).forEach(period => {
+                        this.rememberEstimates(period, json[period].targets);
+                        this.totalsPerPeriod[period] = {
+                            sum: json[period].sum,
+                            sumFormatted: json[period].sumFormatted,
+                        }
+                    });
                     this.drawEstimates();
+                    this.drawPlanTotal();
                 },
                 error: xhr => {
                     this.showError(xhr.statusText);
@@ -171,6 +182,25 @@
         },
         showError(message) {
             hipanel.notify.error(message);
+        },
+
+        drawPlanTotal() {
+            let totalCell = $(this.settings.totalCellSelector), sum = '&mdash;';
+            totalCell.html('');
+
+            Object.keys(this.totalsPerPeriod).forEach(period => {
+                let estimate = this.totalsPerPeriod[period];
+                if (estimate) {
+                    sum = estimate.sumFormatted;
+                }
+
+                if (totalCell.html().length === 0) {
+                    totalCell.append($('<strong>').attr({title: period}).html(sum));
+                } else {
+                    totalCell.append('&nbsp; ');
+                    totalCell.append($('<i>').attr({title: period}).html(sum));
+                }
+            });
         },
     };
 
