@@ -135,9 +135,10 @@
             });
         },
         drawPlanTotal() {
-            let totalCell = $(this.settings.totalCellSelector), sum = '&mdash;';
-            totalCell.html('');
+            let totalCell = $(this.settings.totalCellSelector),
+                sum = '&mdash;';
 
+            totalCell.html('');
             Object.keys(this.totalsPerPeriod).forEach(period => {
                 let estimate = this.totalsPerPeriod[period];
                 if (estimate) {

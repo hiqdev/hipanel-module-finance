@@ -54,24 +54,8 @@ class ValueColumn extends Column
         ;(function ($, window, document, undefined) {
             let Estimator = $('#bulk-plan').priceEstimator({
                 rowSelector: '.price-item',
+                totalCellSelector: '#plan-monthly-value',
             });
-            function drawPlanTotal(rows) {
-                let totalCell = $('#plan-monthly-value'), sum = '&mdash;';
-                totalCell.html('');
-                Object.keys(rows).forEach(period => {
-                    let estimate = rows[period];
-                    if (estimate) {
-                        sum = estimate['sumFormatted'];
-                    }
-
-                    if (totalCell.html().length === 0) {
-                        totalCell.append($('<strong>').attr({title: period}).html(sum));
-                    } else {
-                        totalCell.append('&nbsp; ');
-                        totalCell.append($('<i>').attr({title: period}).html(sum));
-                    }
-                });
-            }
             function drawDynamicQuantity(rows) {
                 let firstPeriod = Object.keys(rows)[0];
                 let period = rows[firstPeriod];
@@ -99,10 +83,14 @@ class ValueColumn extends Column
                     Object.keys(json).forEach(period => {
                         Estimator.rememberEstimates(period, json[period].targets);
                         Estimator.rememberCurrency(period, json[period].sumFormatted);
+                        Estimator.totalsPerPeriod[period] = {
+                            sum: json[period].sum,
+                            sumFormatted: json[period].sumFormatted,
+                        }
                     });
                     Estimator.drawEstimates();
                     Estimator.drawTotalPerServer();
-                    drawPlanTotal(json);
+                    Estimator.drawPlanTotal();
                 },
                 error: xhr => {
                     hipanel.notify.error(xhr.statusText);
