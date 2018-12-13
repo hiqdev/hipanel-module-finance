@@ -54,6 +54,7 @@ use hipanel\widgets\IndexPage;
             'buyer',
             'time',
             'price_related_actions',
+            'estimate_placeholder',
         ]
     ]) ?>
 <?php $page->endBulkForm() ?>

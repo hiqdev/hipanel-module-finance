@@ -10,6 +10,7 @@ use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\data\ArrayDataProvider;
+use yii\helpers\Html;
 
 /**
  * Class SalesInPlanGridView
@@ -68,6 +69,13 @@ class SalesInPlanGridView extends SaleGridView
                         . Yii::t('hipanel.finance.price', 'Prices')
                         . '&nbsp;<span class="caret"></span>'
                 ]
+            ],
+            'estimate_placeholder' => [
+                'format' => 'raw',
+                'value' => function () {
+                    return  Html::tag('span', Yii::t('hipanel:finance', 'Total:')) . '&nbsp;&nbsp;' .
+                            Html::tag('span', '', ['class' => 'total-per-object']);
+                },
             ]
         ]);
     }
