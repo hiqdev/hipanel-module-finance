@@ -66,7 +66,7 @@ $form = ActiveForm::begin([
         <?php endforeach ?>
 
         <div class="box-footer with-border">
-                <?= Html::tag('p', Html::encode('Total:'), ['class' => 'total-block', 'id' => 'total-label']) ?>
+                <?= Html::tag('p', Yii::t('hipanel:finance', 'Total:'), ['class' => 'total-block', 'id' => 'total-label']) ?>
                 <?= Html::tag('p', Html::encode(''), ['class' => 'total-block', 'id' => 'total-value']) ?>
         </div>
 

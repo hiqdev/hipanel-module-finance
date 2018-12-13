@@ -31,6 +31,8 @@
         this.rowSelector = this.settings.rowSelector;
         this.estimatesPerPeriod = {};
         this.totalsPerPeriod = {};
+        this.servers = {};
+        this.currencies = [];
 
         this.init();
     }
@@ -78,8 +80,14 @@
                     });
                 });
             }
-
             this.estimatesPerPeriod[period] = estimatesPerRow;
+        },
+        rememberCurrency(period, sumFormatted) {
+            if (isNaN(sumFormatted.charAt(0))) {
+                this.currencies[period] = sumFormatted.charAt(0);
+            } else {
+                this.currencies[period] = sumFormatted.charAt(sumFormatted.length - 1);
+            }
         },
         attachPopover: function (element, estimate) {
             element.data({
@@ -91,34 +99,81 @@
                 $('.price-estimates *').not(e.target).popover('hide');
             });
         },
+        getRelatedServerId(row) {
+            return $('tr').has($('table').has(row)).prev().attr('data-key');
+        },
+        updateServerSum(serverId, period, sum) {
+            let server = this.servers[serverId] || {};
+            if (server[period] === undefined) {
+                server[period] = 0;
+            }
+            server[period] += sum;
+            this.servers[serverId] = server;
+        },
         drawEstimates() {
             let rows = this.getPriceRows();
             rows.find('.price-estimates').html('');
 
             rows.each((k, row) => { // For each price row
+                let serverId = this.getRelatedServerId(row);
+                console.log(serverId);
                 Object.keys(this.estimatesPerPeriod).forEach(period => { // Get all estimation periods
                     let estimatesPerRow = this.estimatesPerPeriod[period],
                         estimateBox = $(row).find('.price-estimates'),
-                        sum = '&mdash;',
+                        sumFormatted = '&mdash;',
                         estimate = estimatesPerRow[row.dataset.id];
-
                     if (estimate) {
-                        sum = estimate['sumFormatted'];
+                        sumFormatted = estimate['sumFormatted'];
+                        this.updateServerSum(serverId, period, estimate['sum']);
                     }
-
-                    if (estimateBox.html().length === 0) {
-                        estimateBox.append($('<strong>').attr({title: period}).html(sum));
-                    } else {
-                        estimateBox.append('&nbsp; ');
-                        estimateBox.append($('<i>').attr({title: period}).html(sum));
-                    }
-
+                    this.drawEstimatedValue(estimateBox, period, sumFormatted);
                     this.attachPopover(
                         estimateBox.find(`[title="${period}"]`),
                         estimate || {}
                     );
                 });
             });
+        },
+        drawPlanTotal() {
+            let totalCell = $(this.settings.totalCellSelector), sum = '&mdash;';
+            totalCell.html('');
+
+            Object.keys(this.totalsPerPeriod).forEach(period => {
+                let estimate = this.totalsPerPeriod[period];
+                if (estimate) {
+                    sum = estimate.sumFormatted;
+                }
+                this.drawEstimatedValue(totalCell, period, sum);
+            });
+        },
+        drawEstimatedValue(element, period, value) {
+            if (element.html().length === 0) {
+                element.append($('<strong>').attr({title: period}).html(value));
+            } else {
+                element.append('&nbsp; ');
+                element.append($('<i>').attr({title: period}).html(value));
+            }
+        },
+        drawTotalPerServer() {
+            this.formatServersTotal();
+            Object.keys(this.servers).forEach(serverId => {
+                let server = this.servers[serverId];
+                let serverTotalCell = $(`tr[data-key=${serverId}] span.total-per-server`);
+                for (let period in server) {
+                    this.drawEstimatedValue(serverTotalCell, period, server[period]);
+                }
+            })
+        },
+        formatServersTotal() {
+            let currency = '';
+            if (this.currencies.every((val, i, arr) => val === arr[0])) {
+                currency = this.currencies[Object.keys(this.currencies)[0]];
+            }
+            Object.keys(this.servers).forEach(serverId => {
+                Object.keys(this.servers[serverId]).forEach(period => {
+                    this.servers[serverId][period] = currency + this.servers[serverId][period].toString();
+                })
+            })
         },
         updatePriceCharges() {
             let prices = this.getPrices();
@@ -182,25 +237,6 @@
         },
         showError(message) {
             hipanel.notify.error(message);
-        },
-
-        drawPlanTotal() {
-            let totalCell = $(this.settings.totalCellSelector), sum = '&mdash;';
-            totalCell.html('');
-
-            Object.keys(this.totalsPerPeriod).forEach(period => {
-                let estimate = this.totalsPerPeriod[period];
-                if (estimate) {
-                    sum = estimate.sumFormatted;
-                }
-
-                if (totalCell.html().length === 0) {
-                    totalCell.append($('<strong>').attr({title: period}).html(sum));
-                } else {
-                    totalCell.append('&nbsp; ');
-                    totalCell.append($('<i>').attr({title: period}).html(sum));
-                }
-            });
         },
     };
 

@@ -96,8 +96,12 @@ class ValueColumn extends Column
                 url: '{$calculateValueUrl}',
                 success: json => {
                     drawDynamicQuantity(json);
-                    Object.keys(json).forEach(period => Estimator.rememberEstimates(period, json[period].targets));
+                    Object.keys(json).forEach(period => {
+                        Estimator.rememberEstimates(period, json[period].targets);
+                        Estimator.rememberCurrency(period, json[period].sumFormatted);
+                    });
                     Estimator.drawEstimates();
+                    Estimator.drawTotalPerServer();
                     drawPlanTotal(json);
                 },
                 error: xhr => {
