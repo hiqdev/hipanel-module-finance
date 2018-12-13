@@ -89,7 +89,7 @@ class ValueColumn extends Column
                         }
                     });
                     Estimator.drawEstimates();
-                    Estimator.drawTotalPerServer();
+                    Estimator.drawTotalPerSaleObject();
                     Estimator.drawPlanTotal();
                 },
                 error: xhr => {

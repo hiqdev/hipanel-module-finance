@@ -31,7 +31,7 @@
         this.rowSelector = this.settings.rowSelector;
         this.estimatesPerPeriod = {};
         this.totalsPerPeriod = {};
-        this.servers = {};
+        this.saleObjects = {};
         this.currencies = [];
 
         this.init();
@@ -99,24 +99,23 @@
                 $('.price-estimates *').not(e.target).popover('hide');
             });
         },
-        getRelatedServerId(row) {
+        getRelatedSaleObjectId(row) {
             return $('tr').has($('table').has(row)).prev().attr('data-key');
         },
-        updateServerSum(serverId, period, sum) {
-            let server = this.servers[serverId] || {};
-            if (server[period] === undefined) {
-                server[period] = 0;
+        updateSaleObjectSum(saleObjectId, period, sum) {
+            let saleObject = this.saleObjects[saleObjectId] || {};
+            if (saleObject[period] === undefined) {
+                saleObject[period] = 0;
             }
-            server[period] += sum;
-            this.servers[serverId] = server;
+            saleObject[period] += sum;
+            this.saleObjects[saleObjectId] = saleObject;
         },
         drawEstimates() {
             let rows = this.getPriceRows();
             rows.find('.price-estimates').html('');
 
             rows.each((k, row) => { // For each price row
-                let serverId = this.getRelatedServerId(row);
-                console.log(serverId);
+                let saleObjectId = this.getRelatedSaleObjectId(row);
                 Object.keys(this.estimatesPerPeriod).forEach(period => { // Get all estimation periods
                     let estimatesPerRow = this.estimatesPerPeriod[period],
                         estimateBox = $(row).find('.price-estimates'),
@@ -124,7 +123,7 @@
                         estimate = estimatesPerRow[row.dataset.id];
                     if (estimate) {
                         sumFormatted = estimate['sumFormatted'];
-                        this.updateServerSum(serverId, period, estimate['sum']);
+                        this.updateSaleObjectSum(saleObjectId, period, estimate['sum']);
                     }
                     this.drawEstimatedValue(estimateBox, period, sumFormatted);
                     this.attachPopover(
@@ -155,24 +154,24 @@
                 element.append($('<i>').attr({title: period}).html(value));
             }
         },
-        drawTotalPerServer() {
-            this.formatServersTotal();
-            Object.keys(this.servers).forEach(serverId => {
-                let server = this.servers[serverId];
-                let serverTotalCell = $(`tr[data-key=${serverId}] span.total-per-server`);
-                for (let period in server) {
-                    this.drawEstimatedValue(serverTotalCell, period, server[period]);
+        drawTotalPerSaleObject() {
+            this.formatSaleObjectsTotal();
+            Object.keys(this.saleObjects).forEach(saleObjectId => {
+                let saleObject = this.saleObjects[saleObjectId];
+                let saleObjectTotalCell = $(`tr[data-key=${saleObjectId}] span.total-per-object`);
+                for (let period in saleObject) {
+                    this.drawEstimatedValue(saleObjectTotalCell, period, saleObject[period]);
                 }
             })
         },
-        formatServersTotal() {
+        formatSaleObjectsTotal() {
             let currency = '';
             if (this.currencies.every((val, i, arr) => val === arr[0])) {
                 currency = this.currencies[Object.keys(this.currencies)[0]];
             }
-            Object.keys(this.servers).forEach(serverId => {
-                Object.keys(this.servers[serverId]).forEach(period => {
-                    this.servers[serverId][period] = currency + this.servers[serverId][period].toString();
+            Object.keys(this.saleObjects).forEach(saleObjectId => {
+                Object.keys(this.saleObjects[saleObjectId]).forEach(period => {
+                    this.saleObjects[saleObjectId][period] = currency + this.saleObjects[saleObjectId][period].toString();
                 })
             })
         },

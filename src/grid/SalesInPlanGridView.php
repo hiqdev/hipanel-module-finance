@@ -74,7 +74,7 @@ class SalesInPlanGridView extends SaleGridView
                 'format' => 'raw',
                 'value' => function () {
                     return  Html::tag('span', Yii::t('hipanel:finance', 'Total:')) . '&nbsp;&nbsp;' .
-                            Html::tag('span', '', ['class' => 'total-per-server']);
+                            Html::tag('span', '', ['class' => 'total-per-object']);
                 },
             ]
         ]);
