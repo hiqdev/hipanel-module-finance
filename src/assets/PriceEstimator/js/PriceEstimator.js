@@ -74,6 +74,7 @@
                     let objectActions = objects[object_id];
 
                     Object.keys(objectActions).forEach(type => {
+                        this.currencies.push(objects[object_id][type]['currency']);
                         let row = this.matchPriceRow(object_id, type),
                             id = row.data('id');
 
@@ -88,13 +89,6 @@
                 });
             }
             this.estimatesPerPeriod[period] = estimatesPerRow;
-        },
-        rememberCurrency(period, sumFormatted) {
-            if (isNaN(sumFormatted.charAt(0))) {
-                this.currencies[period] = sumFormatted.charAt(0);
-            } else {
-                this.currencies[period] = sumFormatted.charAt(sumFormatted.length - 1);
-            }
         },
         attachPopover: function (element, estimate) {
             element.data({
@@ -175,10 +169,19 @@
             let currency = '';
             if (this.currencies.every((val, i, arr) => val === arr[0])) {
                 currency = this.currencies[Object.keys(this.currencies)[0]];
+            } else {
+                alert('Plan contains prices of different currencies!');
+                return ;
             }
+            const formatter = new Intl.NumberFormat(hipanel.locale.get(), {
+                style: 'currency',
+                currency: currency,
+                currencyDisplay: 'symbol',
+                minimumFractionDigits: 2
+            });
             Object.keys(this.saleObjects).forEach(saleObjectId => {
                 Object.keys(this.saleObjects[saleObjectId]).forEach(period => {
-                    this.saleObjects[saleObjectId][period] = currency + this.saleObjects[saleObjectId][period].toString();
+                    this.saleObjects[saleObjectId][period] = formatter.format(this.saleObjects[saleObjectId][period]);
                 })
             })
         },
@@ -218,7 +221,6 @@
                    Object.keys(json).forEach(period => {
                        this.drawDynamicQuantity(json);
                        this.rememberEstimates(period, json[period].targets);
-                       this.rememberCurrency(period, json[period].sumFormatted);
                        this.totalsPerPeriod[period] = {
                            sum: json[period].sum,
                            sumFormatted: json[period].sumFormatted,
