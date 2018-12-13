@@ -2,6 +2,7 @@
     var pluginName = "priceEstimator",
         defaults = {
             totalCellSelector: '#totalCell',
+            estimatePlan: false,
         };
 
     function name2attribute(name) {
@@ -27,12 +28,14 @@
     function Plugin(form, options) {
         this.settings = $.extend({}, defaults, options);
 
+        this.url = this.settings.url;
         this.form = form;
         this.rowSelector = this.settings.rowSelector;
         this.estimatesPerPeriod = {};
         this.totalsPerPeriod = {};
         this.saleObjects = {};
         this.currencies = [];
+        this.estimatePlan = this.settings.estimatePlan;
 
         this.init();
     }
@@ -41,7 +44,11 @@
         init() {
         },
         update() {
-            this.updatePriceCharges();
+            if (this.estimatePlan) {
+                this.updatePlanPrices();
+            } else {
+                this.updatePriceCharges();
+            }
         },
         getActions(prices) {
             let result = {};
@@ -100,7 +107,7 @@
             });
         },
         getRelatedSaleObjectId(row) {
-            return $('tr').has($('table').has(row)).prev().attr('data-key');
+            return $(row).closest('table').closest('tr').prev().attr('data-key');
         },
         updateSaleObjectSum(saleObjectId, period, sum) {
             let saleObject = this.saleObjects[saleObjectId] || {};
@@ -184,7 +191,7 @@
 
             $.ajax({
                 method: 'post',
-                url: '/finance/plan/calculate-charges',
+                url: this.url,
                 data: { prices, actions },
                 success: json => {
                     Object.keys(json).forEach(period => {
@@ -202,6 +209,49 @@
                     this.getPriceRows().find('.price-estimates').html('');
                 }
             })
+        },
+        updatePlanPrices() {
+           $.ajax({
+               method: 'post',
+               url: this.url,
+               success: json => {
+                   Object.keys(json).forEach(period => {
+                       this.drawDynamicQuantity(json);
+                       this.rememberEstimates(period, json[period].targets);
+                       this.rememberCurrency(period, json[period].sumFormatted);
+                       this.totalsPerPeriod[period] = {
+                           sum: json[period].sum,
+                           sumFormatted: json[period].sumFormatted,
+                       }
+                   });
+                   this.drawEstimates();
+                   this.drawTotalPerSaleObject();
+                   this.drawPlanTotal()
+               },
+               error: xhr => {
+                   hipanel.notify.error(xhr.statusText);
+                   $('.price-estimates').text('--');
+               }
+           });
+        },
+        drawDynamicQuantity(rows) {
+            let firstPeriod = Object.keys(rows)[0];
+            let period = rows[firstPeriod];
+            if (period.targets) {
+                Object.keys(period.targets).forEach(object_id => {
+                    let objectActions = period.targets[object_id];
+
+                    Object.keys(objectActions).forEach(type => {
+                        let row = this.matchPriceRow(object_id, type);
+                        if (row) {
+                            let dynamicQuantity = row.parents('tr[data-key]').find('[data-dynamic-quantity]');
+                            if (dynamicQuantity.length) {
+                                dynamicQuantity.text(objectActions[type].quantity);
+                            }
+                        }
+                    });
+                });
+            }
         },
         getPriceRows() {
             return this.form.find(this.rowSelector);

@@ -53,50 +53,12 @@ class ValueColumn extends Column
             "
         ;(function ($, window, document, undefined) {
             let Estimator = $('#bulk-plan').priceEstimator({
+                url: '${calculateValueUrl}',
+                estimatePlan: true,
                 rowSelector: '.price-item',
                 totalCellSelector: '#plan-monthly-value',
             });
-            function drawDynamicQuantity(rows) {
-                let firstPeriod = Object.keys(rows)[0];
-                let period = rows[firstPeriod];
-                if (period.targets) {
-                    Object.keys(period.targets).forEach(object_id => {
-                        let objectActions = period.targets[object_id];
-
-                        Object.keys(objectActions).forEach(type => {
-                            let row = Estimator.matchPriceRow(object_id, type);
-                            if (row) {
-                                let dynamicQuantity = row.parents('tr[data-key]').find('[data-dynamic-quantity]');
-                                if (dynamicQuantity.length) {
-                                    dynamicQuantity.text(objectActions[type].quantity);
-                                }
-                            }
-                        });
-                    });
-                }
-            }
-            $.ajax({
-                method: 'post',
-                url: '{$calculateValueUrl}',
-                success: json => {
-                    drawDynamicQuantity(json);
-                    Object.keys(json).forEach(period => {
-                        Estimator.rememberEstimates(period, json[period].targets);
-                        Estimator.rememberCurrency(period, json[period].sumFormatted);
-                        Estimator.totalsPerPeriod[period] = {
-                            sum: json[period].sum,
-                            sumFormatted: json[period].sumFormatted,
-                        }
-                    });
-                    Estimator.drawEstimates();
-                    Estimator.drawTotalPerSaleObject();
-                    Estimator.drawPlanTotal();
-                },
-                error: xhr => {
-                    hipanel.notify.error(xhr.statusText);
-                    $('.price-estimates').text('--');
-                }
-            });
+            Estimator.update();
         })(jQuery, window, document);
 ");
     }

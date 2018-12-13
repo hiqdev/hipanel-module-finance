@@ -95,8 +95,9 @@ $form = ActiveForm::begin([
 PriceEstimator::register($this);
 $this->registerJs(<<<'JS'
 $('#prices-form').priceEstimator({
+    url: '/finance/plan/calculate-charges',
     rowSelector: '.price-item',
-    totalCellSelector: '#total-value' 
+    totalCellSelector: '#total-value',
 });
 
 $('#update-estimates').click(function() {
