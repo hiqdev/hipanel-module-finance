@@ -20,8 +20,8 @@ use Yii;
  * @property string $currency
  * @property float $sum
  * @property int object_id
- * @property int common_object_id
- * @property string common_object_name
+ * @property TargetObject $commonObject
+ * @property TargetObject $latestCommonObject
  */
 class Charge extends \hiqdev\hiart\ActiveRecord
 {
@@ -35,8 +35,8 @@ class Charge extends \hiqdev\hiart\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'type_id', 'object_id', 'bill_id', 'parent_id', 'common_object_id'], 'integer'],
-            [['class', 'name', 'unit', 'common_object_name'], 'string'],
+            [['id', 'type_id', 'object_id', 'bill_id', 'parent_id'], 'integer'],
+            [['class', 'name', 'unit'], 'string'],
             [['type', 'label', 'ftype', 'time', 'type_label', 'currency'], 'safe'],
             [['sum', 'quantity'], 'number'],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
@@ -60,6 +60,16 @@ class Charge extends \hiqdev\hiart\ActiveRecord
     public function markAsNotNew()
     {
         $this->isNewRecord = false;
+    }
+
+    public function getCommonObject()
+    {
+        return $this->hasOne(TargetObject::class, ['id' => 'id']);
+    }
+
+    public function getLatestCommonObject()
+    {
+        return $this->hasOne(TargetObject::class, ['id' => 'id']);
     }
 
     public function getIsNewRecord()

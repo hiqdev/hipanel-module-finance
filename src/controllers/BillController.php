@@ -27,6 +27,7 @@ use hipanel\modules\finance\helpers\ChargesGrouper;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\providers\BillTypesProvider;
+use hiqdev\hiart\ActiveQuery;
 use Yii;
 use yii\base\Event;
 use yii\base\Module;
@@ -80,7 +81,10 @@ class BillController extends \hipanel\base\CrudController
                     $action = $event->sender;
                     $dataProvider = $action->getDataProvider();
                     $dataProvider->query
-                        ->joinWith('charges')
+                        ->joinWith(['charges' => function (ActiveQuery $query) {
+                            $query->joinWith('commonObject');
+                            $query->joinWith('latestCommonObject');
+                        }])
                         ->andWhere(['with_charges' => true]);
                 },
                 'data' => function (Action $action, array $data) {

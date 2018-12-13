@@ -242,5 +242,6 @@ return [
     'Update estimates' => 'Рассчитать стоимость',
     'Object name' => 'Имя объекта',
     '{icon} Quantity: {quantity}' => '{icon} Кол-во: {quantity}',
+    'Now it is in {objectLink}' => 'Сейчас уже в {objectLink}',
     'Total:' => 'Всего:',
 ];
