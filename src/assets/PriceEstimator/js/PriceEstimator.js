@@ -36,6 +36,7 @@
         this.saleObjects = {};
         this.currencies = [];
         this.estimatePlan = this.settings.estimatePlan;
+        this.totalPerObjectSelector = this.settings.totalPerObjectSelector;
 
         this.init();
     }
@@ -159,7 +160,9 @@
             this.formatSaleObjectsTotal();
             Object.keys(this.saleObjects).forEach(saleObjectId => {
                 let saleObject = this.saleObjects[saleObjectId];
-                let saleObjectTotalCell = $(`tr[data-key=${saleObjectId}] span.total-per-object`);
+                let saleObjectTotalCell = $(`tr[data-key=${saleObjectId}] ${this.totalPerObjectSelector}`);
+
+                saleObjectTotalCell.html('');
                 for (let period in saleObject) {
                     this.drawEstimatedValue(saleObjectTotalCell, period, saleObject[period]);
                 }
@@ -171,7 +174,7 @@
                 currency = this.currencies[Object.keys(this.currencies)[0]];
             } else {
                 alert('Plan contains prices of different currencies!');
-                return ;
+                return;
             }
             const formatter = new Intl.NumberFormat(hipanel.locale.get(), {
                 style: 'currency',
@@ -195,7 +198,7 @@
             $.ajax({
                 method: 'post',
                 url: this.url,
-                data: { prices, actions },
+                data: {prices, actions},
                 success: json => {
                     Object.keys(json).forEach(period => {
                         this.rememberEstimates(period, json[period].targets);
@@ -214,27 +217,30 @@
             })
         },
         updatePlanPrices() {
-           $.ajax({
-               method: 'post',
-               url: this.url,
-               success: json => {
-                   Object.keys(json).forEach(period => {
-                       this.drawDynamicQuantity(json);
-                       this.rememberEstimates(period, json[period].targets);
-                       this.totalsPerPeriod[period] = {
-                           sum: json[period].sum,
-                           sumFormatted: json[period].sumFormatted,
-                       }
-                   });
-                   this.drawEstimates();
-                   this.drawTotalPerSaleObject();
-                   this.drawPlanTotal()
-               },
-               error: xhr => {
-                   hipanel.notify.error(xhr.statusText);
-                   $('.price-estimates').text('--');
-               }
-           });
+            $(this.settings.totalCellSelector).html(hipanel.spinner.small);
+            $(this.settings.totalPerObjectSelector).html(hipanel.spinner.small);
+
+            $.ajax({
+                method: 'post',
+                url: this.url,
+                success: json => {
+                    Object.keys(json).forEach(period => {
+                        this.drawDynamicQuantity(json);
+                        this.rememberEstimates(period, json[period].targets);
+                        this.totalsPerPeriod[period] = {
+                            sum: json[period].sum,
+                            sumFormatted: json[period].sumFormatted,
+                        }
+                    });
+                    this.drawEstimates();
+                    this.drawTotalPerSaleObject();
+                    this.drawPlanTotal()
+                },
+                error: xhr => {
+                    hipanel.notify.error(xhr.statusText);
+                    $('.price-estimates').text('--');
+                }
+            });
         },
         drawDynamicQuantity(rows) {
             let firstPeriod = Object.keys(rows)[0];

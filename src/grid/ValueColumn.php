@@ -57,6 +57,7 @@ class ValueColumn extends Column
                 estimatePlan: true,
                 rowSelector: '.price-item',
                 totalCellSelector: '#plan-monthly-value',
+                totalPerObjectSelector: '.total-per-object',
             });
             Estimator.update();
         })(jQuery, window, document);
