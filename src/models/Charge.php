@@ -22,6 +22,7 @@ use Yii;
  * @property int object_id
  * @property TargetObject $commonObject
  * @property TargetObject $latestCommonObject
+ * @property Bill $bill
  */
 class Charge extends \hiqdev\hiart\ActiveRecord
 {
@@ -75,6 +76,11 @@ class Charge extends \hiqdev\hiart\ActiveRecord
     public function getIsNewRecord()
     {
         return $this->isNewRecord !== false && parent::getIsNewRecord();
+    }
+
+    public function getBill()
+    {
+        return $this->hasOne(Bill::class, ['id' => 'id'])->inverseOf('charges');
     }
 
     public function typeLabel(): string
