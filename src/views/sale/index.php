@@ -5,6 +5,12 @@ use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 use yii\helpers\Html;
 
+/* @var $this yii\web\View */
+/* @var $model hipanel\modules\finance\models\SaleSearch */
+/* @var $uiModel hipanel\models\IndexPageUiOptions */
+/* @var $representationCollection \hipanel\modules\finance\grid\SaleRepresentations */
+/* @var $dataProvider yii\data\ActiveDataProvider*/
+
 $this->title = Yii::t('hipanel:finance:sale', 'Sales');
 $this->params['breadcrumbs'][] = $this->title;
 $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');

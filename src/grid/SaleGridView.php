@@ -19,6 +19,7 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
         return array_merge(parent::columns(), [
             'tariff' => [
                 'format' => 'html',
+                'filterAttribute' => 'tariff_like',
                 'value' => function ($model) {
                     return Html::a($model->tariff, ['@plan/view', 'id' => $model->tariff_id]);
                 },
