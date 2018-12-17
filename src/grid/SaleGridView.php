@@ -23,7 +23,6 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'value' => function ($model) {
                     return Html::a($model->tariff, ['@plan/view', 'id' => $model->tariff_id]);
                 },
-                'enableSorting' => false,
             ],
             'time' => [
                 'format' => ['datetime'],
@@ -35,14 +34,12 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'idAttribute' => 'seller_id',
                 'attribute' => 'seller_id',
                 'nameAttribute' => 'seller',
-                'enableSorting' => false,
             ],
             'buyer' => [
                 'class' => ClientColumn::class,
                 'idAttribute' => 'buyer_id',
                 'attribute' => 'buyer_id',
                 'nameAttribute' => 'buyer',
-                'enableSorting' => false,
             ],
             'object_v' => [
                 'label' => Yii::t('hipanel:finance:sale', 'Object'),
@@ -62,7 +59,6 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
             'object' => [
                 'format' => 'raw',
                 'filterAttribute' => 'object_like',
-                'enableSorting' => false,
                 'value' => function (Sale $model) {
                     if ($model instanceof FakeSale) {
                         return $model->object;

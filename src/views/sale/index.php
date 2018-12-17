@@ -5,11 +5,11 @@ use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 use yii\helpers\Html;
 
-/* @var $this yii\web\View */
-/* @var $model hipanel\modules\finance\models\SaleSearch */
-/* @var $uiModel hipanel\models\IndexPageUiOptions */
-/* @var $representationCollection \hipanel\modules\finance\grid\SaleRepresentations */
-/* @var $dataProvider yii\data\ActiveDataProvider*/
+/** @var \yii\web\View $this */
+/** @var \hipanel\modules\finance\models\SaleSearch $model */
+/** @var \hipanel\models\IndexPageUiOptions $uiModel */
+/** @var \hipanel\modules\finance\grid\SaleRepresentations $representationCollection*/
+/** @var \yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = Yii::t('hipanel:finance:sale', 'Sales');
 $this->params['breadcrumbs'][] = $this->title;
