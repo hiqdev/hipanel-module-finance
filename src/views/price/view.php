@@ -9,7 +9,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Prices')
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
-
 <div class="row">
     <div class="col-md-3">
         <div class="box box-solid">
