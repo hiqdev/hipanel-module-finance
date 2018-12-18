@@ -71,6 +71,9 @@ class SalesInPlanGridView extends SaleGridView
                 ]
             ],
             'estimate_placeholder' => [
+                'contentOptions' => [
+                    'class' => 'total-per-object-cell',
+                ],
                 'format' => 'raw',
                 'value' => function () {
                     return  Html::tag('span', Yii::t('hipanel:finance', 'Total:')) . '&nbsp;&nbsp;' .

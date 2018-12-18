@@ -66,8 +66,10 @@ $form = ActiveForm::begin([
         <?php endforeach ?>
 
         <div class="box-footer with-border">
-                <?= Html::tag('p', Yii::t('hipanel:finance', 'Total:'), ['class' => 'total-block', 'id' => 'total-label']) ?>
-                <?= Html::tag('p', Html::encode(''), ['class' => 'total-block', 'id' => 'total-value']) ?>
+                <?= Html::beginTag('div', ['class' => 'total-block']) ?>
+                    <?= Html::tag('span', Yii::t('hipanel:finance', 'Total:'), ['id' => 'total-label']) ?>
+                    <?= Html::tag('span', '', ['id' => 'total-value']) ?>
+                <?= Html::endTag('div') ?>
         </div>
 
     </div>
@@ -128,8 +130,11 @@ $this->registerCss(<<<'CSS'
 }
 
 .total-block {
-    display: inline-block;
-    margin-bottom: 0;
+    display: flex;
+}
+
+.total-per-currency {
+    display: block;
 }
 CSS
 );

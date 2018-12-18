@@ -32,9 +32,8 @@
         this.form = form;
         this.rowSelector = this.settings.rowSelector;
         this.estimatesPerPeriod = {};
-        this.totalsPerPeriod = {};
+        this.totalSum = {};
         this.saleObjects = {};
-        this.currencies = [];
         this.estimatePlan = this.settings.estimatePlan;
         this.totalPerObjectSelector = this.settings.totalPerObjectSelector;
 
@@ -70,26 +69,34 @@
         rememberEstimates(period, objects) {
             let estimatesPerRow = {};
 
-            if (objects) {
-                Object.keys(objects).forEach(object_id => {
-                    let objectActions = objects[object_id];
-
-                    Object.keys(objectActions).forEach(type => {
-                        this.currencies.push(objects[object_id][type]['currency']);
-                        let row = this.matchPriceRow(object_id, type),
-                            id = row.data('id');
-
-                        if (row) {
-                            let estimate = objectActions[type];
-                            if (estimatesPerRow[id] === undefined) {
-                                estimatesPerRow[id] = [];
-                            }
-                            estimatesPerRow[id] = estimate;
-                        }
-                    });
-                });
+            if (!objects) {
+                return;
             }
+            Object.keys(objects).forEach(object_id => {
+                let objectActions = objects[object_id];
+                Object.keys(objectActions).forEach(type => {
+                    let row = this.matchPriceRow(object_id, type),
+                        id = row.data('id');
+                    if (row) {
+                        let estimate = objectActions[type];
+                        if (estimatesPerRow[id] === undefined) {
+                            estimatesPerRow[id] = [];
+                        }
+                        estimatesPerRow[id] = estimate;
+                        this.addToTotalSum(period, estimate);
+                    }
+                });
+            });
             this.estimatesPerPeriod[period] = estimatesPerRow;
+        },
+        addToTotalSum(period, estimate) {
+            let currency = estimate.currency;
+            let totalPerCurrencySum = this.totalSum[currency] || new Map([]);
+            let totalPerPeriod = totalPerCurrencySum.get(period) || 0;
+
+            totalPerPeriod += estimate.sum;
+            totalPerCurrencySum.set(period, totalPerPeriod);
+            this.totalSum[currency] = totalPerCurrencySum;
         },
         attachPopover: function (element, estimate) {
             element.data({
@@ -101,31 +108,18 @@
                 $('.price-estimates *').not(e.target).popover('hide');
             });
         },
-        getRelatedSaleObjectId(row) {
-            return $(row).closest('table').closest('tr').prev().attr('data-key');
-        },
-        updateSaleObjectSum(saleObjectId, period, sum) {
-            let saleObject = this.saleObjects[saleObjectId] || {};
-            if (saleObject[period] === undefined) {
-                saleObject[period] = 0;
-            }
-            saleObject[period] += sum;
-            this.saleObjects[saleObjectId] = saleObject;
-        },
         drawEstimates() {
             let rows = this.getPriceRows();
             rows.find('.price-estimates').html('');
 
             rows.each((k, row) => { // For each price row
-                let saleObjectId = this.getRelatedSaleObjectId(row);
                 Object.keys(this.estimatesPerPeriod).forEach(period => { // Get all estimation periods
                     let estimatesPerRow = this.estimatesPerPeriod[period],
                         estimateBox = $(row).find('.price-estimates'),
                         sumFormatted = '&mdash;',
                         estimate = estimatesPerRow[row.dataset.id];
                     if (estimate) {
-                        sumFormatted = estimate['sumFormatted'];
-                        this.updateSaleObjectSum(saleObjectId, period, estimate['sum']);
+                        sumFormatted = estimate.sumFormatted;
                     }
                     this.drawEstimatedValue(estimateBox, period, sumFormatted);
                     this.attachPopover(
@@ -136,17 +130,42 @@
             });
         },
         drawPlanTotal() {
-            let totalCell = $(this.settings.totalCellSelector),
-                sum = '&mdash;';
+            let totalCell = $(this.settings.totalCellSelector);
 
+            this.formatTotalSum();
             totalCell.html('');
-            Object.keys(this.totalsPerPeriod).forEach(period => {
-                let estimate = this.totalsPerPeriod[period];
-                if (estimate) {
-                    sum = estimate.sumFormatted;
+            Object.keys(this.totalSum).forEach(currency => {
+                let totalSpan = $(document.createElement('span'));
+                let objectCurrency = this.totalSum[currency];
+
+                totalSpan.addClass('total-per-currency');
+                for (let values of objectCurrency) {
+                    let period = values[0],
+                        sumFormatted = values[1].sumFormatted;
+
+                    this.drawEstimatedValue(totalSpan, period, sumFormatted || '&mdash;');
                 }
-                this.drawEstimatedValue(totalCell, period, sum);
+                totalCell.append(totalSpan);
             });
+        },
+        formatTotalSum() {
+            Object.keys(this.totalSum).forEach(currency => {
+                let formatter = new Intl.NumberFormat(hipanel.locale.get(), {
+                    style: 'currency',
+                    currency: currency,
+                    currencyDisplay: 'symbol',
+                    minimumFractionDigits: 2,
+                });
+                for (let values of this.totalSum[currency]) {
+                    let period = values[0],
+                        sum = values[1];
+                    this.totalSum[currency].set(period, {
+                        sum: sum,
+                        sumFormatted: formatter.format(sum),
+                    });
+                }
+            });
+
         },
         drawEstimatedValue(element, period, value) {
             if (element.html().length === 0) {
@@ -156,39 +175,78 @@
                 element.append($('<i>').attr({title: period}).html(value));
             }
         },
+        computeTotalPerSaleObject() {
+            let rows = this.getPriceRows();
+
+            rows.each((k, row) => {
+                let saleObjectId = this.getRelatedSaleObjectId(row);
+                Object.keys(this.estimatesPerPeriod).forEach(period => {
+                    let estimatesPerRow = this.estimatesPerPeriod[period],
+                        estimate = estimatesPerRow[row.dataset.id];
+                    if (estimate) {
+                        this.updateSaleObjectSum(saleObjectId, period, estimate.currency, estimate.sum);
+                    }
+                });
+            });
+        },
+        getRelatedSaleObjectId(row) {
+            return $(row).closest('table').closest('tr').prev().attr('data-key');
+        },
+        updateSaleObjectSum(saleObjectId, period, currency, sum) {
+            let saleObject = this.saleObjects[saleObjectId] || {};
+            saleObject[currency] = saleObject[currency] || {};
+            saleObject[currency][period] = saleObject[currency][period] || 0;
+            saleObject[currency][period] += sum;
+
+            this.saleObjects[saleObjectId] = saleObject;
+        },
         drawTotalPerSaleObject() {
+            this.computeTotalPerSaleObject();
             this.formatSaleObjectsTotal();
             Object.keys(this.saleObjects).forEach(saleObjectId => {
                 let saleObject = this.saleObjects[saleObjectId];
                 let saleObjectTotalCell = $(`tr[data-key=${saleObjectId}] ${this.totalPerObjectSelector}`);
 
                 saleObjectTotalCell.html('');
-                for (let period in saleObject) {
-                    this.drawEstimatedValue(saleObjectTotalCell, period, saleObject[period]);
-                }
+                Object.keys(saleObject).forEach(currency => {
+                    let saleObjectTotalSpan = $(document.createElement('span'));
+
+                    saleObjectTotalSpan.addClass('total-per-currency');
+                    let objectCurrency = saleObject[currency];
+
+                    Object.keys(objectCurrency).forEach(period => {
+                        this.drawEstimatedValue(
+                            saleObjectTotalSpan,
+                            period,
+                            objectCurrency[period].sumFormatted || '&mdash;'
+                        );
+                    });
+                    saleObjectTotalCell.append(saleObjectTotalSpan);
+                });
             })
         },
         formatSaleObjectsTotal() {
-            let currency = '';
-            if (this.currencies.every((val, i, arr) => val === arr[0])) {
-                currency = this.currencies[Object.keys(this.currencies)[0]];
-            } else {
-                alert('Plan contains prices of different currencies!');
-                return;
-            }
-            const formatter = new Intl.NumberFormat(hipanel.locale.get(), {
-                style: 'currency',
-                currency: currency,
-                currencyDisplay: 'symbol',
-                minimumFractionDigits: 2
-            });
             Object.keys(this.saleObjects).forEach(saleObjectId => {
-                Object.keys(this.saleObjects[saleObjectId]).forEach(period => {
-                    this.saleObjects[saleObjectId][period] = formatter.format(this.saleObjects[saleObjectId][period]);
-                })
-            })
+                let object = this.saleObjects[saleObjectId];
+                Object.keys(object).forEach(currency => {
+                    let objectCurrency = object[currency];
+                    let formatter = new Intl.NumberFormat(hipanel.locale.get(), {
+                        style: 'currency',
+                        currency: currency,
+                        currencyDisplay: 'symbol',
+                        minimumFractionDigits: 2,
+                    });
+                    Object.keys(objectCurrency).forEach(period => {
+                        this.saleObjects[saleObjectId][currency][period] = {
+                            'sum': objectCurrency[period],
+                            'sumFormatted': formatter.format(objectCurrency[period]),
+                        };
+                    });
+                });
+            });
         },
         updatePriceCharges() {
+            this.totalSum = {};
             let prices = this.getPrices();
             let actions = this.getActions(prices);
 
@@ -202,10 +260,6 @@
                 success: json => {
                     Object.keys(json).forEach(period => {
                         this.rememberEstimates(period, json[period].targets);
-                        this.totalsPerPeriod[period] = {
-                            sum: json[period].sum,
-                            sumFormatted: json[period].sumFormatted,
-                        }
                     });
                     this.drawEstimates();
                     this.drawPlanTotal();
@@ -227,10 +281,6 @@
                     Object.keys(json).forEach(period => {
                         this.drawDynamicQuantity(json);
                         this.rememberEstimates(period, json[period].targets);
-                        this.totalsPerPeriod[period] = {
-                            sum: json[period].sum,
-                            sumFormatted: json[period].sumFormatted,
-                        }
                     });
                     this.drawEstimates();
                     this.drawTotalPerSaleObject();

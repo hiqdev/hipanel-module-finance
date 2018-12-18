@@ -19,11 +19,23 @@ $this->title = Html::encode($model->name);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-$this->registerCss('
-    .profile-block {
-        text-align: center;
-    }
-');
+
+$this->registerCss(<<<'CSS'
+.profile-block {
+    text-align: center;
+}
+
+.total-per-object-cell {
+    display: flex;
+}
+
+.total-per-currency {
+    display: block;
+}
+
+CSS
+);
+
 
 ?>
 
