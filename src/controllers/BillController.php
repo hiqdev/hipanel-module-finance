@@ -124,7 +124,7 @@ class BillController extends \hipanel\base\CrudController
             ],
             'charge-delete' => [
                 'class' => SmartDeleteAction::class,
-                'success' => Yii::t('hipanel:finance', 'Payment was updated successfully'),
+                'success' => Yii::t('hipanel:finance', 'Charge was deleted successfully'),
                 'collection' => [
                     'class'     => Collection::class,
                     'model'     => new Resource(['scenario' => 'delete']),
