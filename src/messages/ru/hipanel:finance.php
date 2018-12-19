@@ -71,6 +71,7 @@ return [
     'Detalization' => 'Детализация',
     'Bill was created successfully' => 'Счёт был успешно создан',
     'Bill was updated successfully' => 'Счёт был успешно изменён',
+    'Charge was deleted successfully' => 'Списание было успешно удалено',
 
     'Failed to generate document! Check requisites!' => 'Не удалось сгенерить документ! Проверьте реквизиты!',
 

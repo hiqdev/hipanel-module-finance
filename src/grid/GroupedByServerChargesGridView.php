@@ -75,7 +75,11 @@ class GroupedByServerChargesGridView extends BillGridView
                 'tableOptions' => [
                     'class' => 'table table-striped table-bordered'
                 ],
-                'columns'      => $columns,
+                'columns'      => array_filter([
+                    !Yii::$app->user->can('bill.update') ? 'checkbox' : null,
+                    'type_label', 'label',
+                    'quantity', 'sum', 'sum_with_children', 'time',
+                ]),
             ]);
         };
     }
