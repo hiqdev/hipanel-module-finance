@@ -50,13 +50,6 @@ class GroupedByServerChargesGridView extends BillGridView
             if (empty($models)) {
                 return '';
             }
-            $columns = [
-                'type_label', 'label',
-                'quantity', 'sum', 'sum_with_children', 'time',
-            ];
-            if (Yii::$app->user->can('bill.update')) {
-                array_unshift($columns, 'checkbox');
-            }
 
             return GroupedChargesGridView::widget([
                 'boxed'        => false,
@@ -76,7 +69,7 @@ class GroupedByServerChargesGridView extends BillGridView
                     'class' => 'table table-striped table-bordered'
                 ],
                 'columns'      => array_filter([
-                    !Yii::$app->user->can('bill.update') ? 'checkbox' : null,
+                    Yii::$app->user->can('bill.update') ? 'checkbox' : null,
                     'type_label', 'label',
                     'quantity', 'sum', 'sum_with_children', 'time',
                 ]),
