@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\helpers\ChargeSort;
+use Yii;
 use \yii\data\ArrayDataProvider;
 
 /**
@@ -49,6 +50,14 @@ class GroupedByServerChargesGridView extends BillGridView
             if (empty($models)) {
                 return '';
             }
+            $columns = [
+                'type_label', 'label',
+                'quantity', 'sum', 'sum_with_children', 'time',
+            ];
+            if (Yii::$app->user->can('bill.update')) {
+                array_unshift($columns, 'checkbox');
+            }
+
             return GroupedChargesGridView::widget([
                 'boxed'        => false,
                 'showHeader'   => true,
@@ -66,10 +75,7 @@ class GroupedByServerChargesGridView extends BillGridView
                 'tableOptions' => [
                     'class' => 'table table-striped table-bordered'
                 ],
-                'columns'      => [
-                    'type_label', 'label',
-                    'quantity', 'sum', 'sum_with_children', 'time',
-                ],
+                'columns'      => $columns,
             ]);
         };
     }

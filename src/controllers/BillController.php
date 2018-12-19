@@ -26,6 +26,8 @@ use hipanel\modules\finance\forms\CurrencyExchangeForm;
 use hipanel\modules\finance\helpers\ChargesGrouper;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\ExchangeRate;
+use hipanel\modules\finance\models\Resource;
+use hiqdev\hiart\Collection;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use hiqdev\hiart\ActiveQuery;
 use Yii;
@@ -52,11 +54,11 @@ class BillController extends \hipanel\base\CrudController
             'access-bill' => [
                 'class' => EasyAccessControl::class,
                 'actions' => [
-                    'create,import,copy' => 'bill.create',
-                    'create-exchange' => 'bill.create',
-                    'update'    => 'bill.update',
-                    'delete'    => 'bill.delete',
-                    '*'         => 'bill.read',
+                    'create,import,copy'    => 'bill.create',
+                    'create-exchange'       => 'bill.create',
+                    'update,charge-delete'  => 'bill.update',
+                    'delete'                => 'bill.delete',
+                    '*'                     => 'bill.read',
                 ],
             ],
         ]);
@@ -119,6 +121,15 @@ class BillController extends \hipanel\base\CrudController
             'delete' => [
                 'class' => SmartDeleteAction::class,
                 'success' => Yii::t('hipanel:finance', 'Payment was deleted successfully'),
+            ],
+            'charge-delete' => [
+                'class' => SmartDeleteAction::class,
+                'success' => Yii::t('hipanel:finance', 'Payment was updated successfully'),
+                'collection' => [
+                    'class'     => Collection::class,
+                    'model'     => new Resource(['scenario' => 'delete']),
+                    'scenario'  => 'delete',
+                ],
             ],
             'requisites' => [
                 'class' => RedirectAction::class,

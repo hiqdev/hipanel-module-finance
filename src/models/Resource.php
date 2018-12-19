@@ -42,6 +42,7 @@ class Resource extends \hipanel\base\Model
             [['type'], 'safe', 'on' => ['create', 'update']],
             [['price'], 'number', 'on' => ['create', 'update']],
             'create-required' => [['object_id', 'price'], 'required', 'on' => ['create', 'update']],
+            ['id', 'integer', 'on' => 'delete'],
         ];
     }
 
