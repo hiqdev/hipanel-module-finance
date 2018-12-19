@@ -39,6 +39,7 @@ $('#{$this->getId()}').data('onPasteRequested', function() {
     }, text)
     editor.selection.moveCursorToPosition({row: session.getLength(), column: 0});
     editor.selection.selectLine();
+    setTimeout(() => editor.focus(), 500);
 });
 JS
             );
