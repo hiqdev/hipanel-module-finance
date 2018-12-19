@@ -2,10 +2,12 @@
 
 namespace hipanel\modules\finance\widgets;
 
+use hipanel\assets\AceEditorAsset;
 use hipanel\modules\finance\models\Price;
 use hiqdev\assets\autosize\AutosizeAsset;
 use Yii;
 use yii\helpers\BaseHtml;
+use yii\helpers\Html;
 use yii\web\NotAcceptableHttpException;
 use yii\web\View;
 use yii\widgets\InputWidget;
@@ -28,13 +30,25 @@ class FormulaInput extends InputWidget
     public function registerClientScript()
     {
         $this->registerHelpModal();
-        AutosizeAsset::register($this->view);
-        $this->view->registerJs("autosize($('.formula-input'));");
+        $this->registerAceEditor();
     }
 
     public function run()
     {
         $this->registerClientScript();
+
+        $this->field->label(
+            $this->model->getAttributeLabel('formula') . ' '
+            . Html::button('', [
+                'class' => 'fa fa-question-circle text-info formula-help-modal',
+                'data-toggle' => 'modal',
+                'data-target' => $this->getHelpModalSelector(),
+                'tabindex' => -1,
+                'onClick' => new \yii\web\JsExpression(<<<JS
+$($(this).data('target')).data('input', $(this).closest('.form-group').find('.formula-input'))
+JS
+                ),
+            ]));
 
         return $this->render('formulaInput');
     }
@@ -56,5 +70,52 @@ class FormulaInput extends InputWidget
     public function getHelpModalSelector(): string
     {
         return $this->helpModalSelector;
+    }
+
+    private function registerAceEditor()
+    {
+        AceEditorAsset::register($this->view);
+        $this->view->registerJs(<<<'JS'
+$('.formula-input').each(function () {
+    var JavaScriptMode = ace.require("ace/mode/javascript").Mode;
+
+    var shadow = $(this).clone();
+    shadow.hide().insertAfter($(this));
+
+    var editor = ace.edit($(this).attr('id'));
+    shadow.data('ace-editor', editor);
+
+    editor.session.setMode(new JavaScriptMode());
+    // editor.session.setUseWorker(false);
+    editor.session.$worker.call("changeOptions", [{es3: true, asi: true}]);
+    editor.setOptions({
+        maxLines: 15,
+        wrap: true,
+        autoScrollEditorIntoView: true,
+        highlightActiveLine: false,
+        highlightGutterLine: false,
+    });
+    editor.renderer.$cursorLayer.element.style.opacity = 0;
+
+    editor.on('blur', function () {
+        editor.setOptions({
+            highlightActiveLine: false,
+            highlightGutterLine: false
+        });
+        editor.renderer.$cursorLayer.element.style.opacity = 0;
+    });
+    editor.on('focus', function () {
+        editor.setOptions({
+            highlightActiveLine: true,
+            highlightGutterLine: true
+        });
+        editor.renderer.$cursorLayer.element.style.opacity = 1;
+    });
+    editor.on('change', function () {
+        shadow.val(editor.getValue());
+    });
+});
+JS
+        );
     }
 }

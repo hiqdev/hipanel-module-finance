@@ -24,19 +24,21 @@ class FormulaHelpModal extends Widget
             $this->view->registerJs(<<<JS
 $('#{$this->getId()}').data('onPasteRequested', function() {
     let template = $(this).siblings('kbd').text();
+    let input = $(this).closest('.modal').modal('hide').data('input');
+    let editor = input.data('ace-editor');
+    let session = editor.session;
 
-    $(this).closest('.modal')
-        .modal('hide')
-        .data('input')
-            .val((i, text) => {
-                let result = text;
-                if (text.length > 0) {
-                    result += '\\n';
-                }
+    let text = template;
+    if (session.getLength() > 1) {
+        text = '\\n' + text;
+    }
 
-                return result + template;
-            })
-            .focus();
+    session.insert({
+       row: session.getLength(),
+       column: 0
+    }, text)
+    editor.selection.moveCursorToPosition({row: session.getLength(), column: 0});
+    editor.selection.selectLine();
 });
 JS
             );

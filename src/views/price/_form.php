@@ -96,6 +96,7 @@ $form = ActiveForm::begin([
 <?php
 PriceEstimator::register($this);
 $this->registerJs(<<<'JS'
+
 $('#prices-form').priceEstimator({
     url: '/finance/plan/calculate-charges',
     rowSelector: '.price-item',
