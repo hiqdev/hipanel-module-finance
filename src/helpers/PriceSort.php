@@ -27,9 +27,9 @@ class PriceSort
     {
         return Sort::chain()
             ->asc(self::byServerPriceGroups())
+            ->compare(self::byTargetObjectName())
             ->asc(self::byServerMainPrices())
             ->asc(self::byHardwareType())
-            ->compare(self::byTargetObjectName())
             ->compare(self::byServerPriceType());
     }
 
@@ -62,6 +62,7 @@ class PriceSort
     private static function byServerMainPrices(): \Closure
     {
         $order = [
+            'rack',
             'rack_unit',
             'ip_num',
             'support_time',

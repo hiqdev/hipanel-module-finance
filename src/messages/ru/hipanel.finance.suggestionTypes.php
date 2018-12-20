@@ -10,4 +10,5 @@ return [
     'v_cdn' => 'vCDN',
     'certificate' => 'Сертификат',
     'domain' => 'Домен',
+    'switch' => 'Свитчи',
 ];

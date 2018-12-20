@@ -51,6 +51,7 @@ class LinkToObjectResolver extends Widget
         'device' => '@server/view',
         'part' => '@part/view',
         'tariff' => '@plan/view',
+        'switch' => '@hub/view',
         'model_group' => '@model-group/view',
     ];
 

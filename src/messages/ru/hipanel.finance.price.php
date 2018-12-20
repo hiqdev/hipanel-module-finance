@@ -16,7 +16,7 @@ return [
     'Price/unit' => 'Цена/ед. изм.',
     'Main prices' => 'Основные цены',
     'Additional services' => 'Доп. услуги',
-    'Part prices' => 'Цены железа',
+    'Hardware prices' => 'Цены железа',
     'No prices found' => 'Нет цен',
     'Prices' => 'Цены',
     'For the whole tariff' => 'На весь тариф',

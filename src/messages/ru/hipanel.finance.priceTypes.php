@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'Rack' => 'Стойка',
     'Rack unit' => 'Юнит в стойке',
     'Monthly' => 'Ежемесячно',
     'Server traf max' => 'Трафик',

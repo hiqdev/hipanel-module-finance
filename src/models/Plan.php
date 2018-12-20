@@ -31,6 +31,7 @@ class Plan extends \hipanel\base\Model
     public const TYPE_TEMPLATE = 'template';
     public const TYPE_CERTIFICATE = 'certificate';
     public const TYPE_DOMAIN = 'domain';
+    public const TYPE_SWITCH = 'switch';
 
     use \hipanel\base\ModelTrait;
 

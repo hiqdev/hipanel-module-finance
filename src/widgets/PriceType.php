@@ -9,6 +9,7 @@ class PriceType extends Type
     public $values = [];
     public $defaultValues = [
         'success' => [
+            'monthly,rack',
             'monthly,rack_unit',
             'monthly,ip_num',
             'monthly,support_time',

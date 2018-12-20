@@ -49,6 +49,7 @@ class SalePricesActionsMenu extends \hiqdev\yii2\menus\Menu
     {
         switch ($this->model->tariff_type) {
             case Sale::SALE_TYPE_SERVER:
+            case Sale::SALE_TYPE_SWITCH:
                 return array_filter([
                     [
                         'type' => 'default',
@@ -62,7 +63,7 @@ class SalePricesActionsMenu extends \hiqdev\yii2\menus\Menu
                     ],
                     !$this->model instanceof FakeGroupingSale && !$this->model instanceof FakeSharedSale ? [
                         'type' => 'parts',
-                        'label' => Yii::t('hipanel.finance.price', 'Part prices'),
+                        'label' => Yii::t('hipanel.finance.price', 'Hardware prices'),
                         'icon' => 'fa-hdd-o',
                     ] : null,
                 ]);

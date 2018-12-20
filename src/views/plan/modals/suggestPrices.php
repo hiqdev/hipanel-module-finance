@@ -4,6 +4,7 @@ use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\PriceSuggestionRequestForm;
 use hipanel\modules\finance\widgets\combo\TemplatePlanCombo;
 use hipanel\modules\server\widgets\combo\ServerCombo;
+use hipanel\modules\server\widgets\combo\HubCombo;
 use hiqdev\combo\StaticCombo;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
@@ -42,12 +43,30 @@ use yii\helpers\Html;
             'parts' => Yii::t('hipanel.finance.suggestionTypes', 'parts'),
         ],
     ]) ?>
+<?php elseif ($plan->type === Plan::TYPE_SWITCH): ?>
+    <?php if ($model->isObjectPredefined()) : ?>
+        <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
+    <?php else : ?>
+        <?= $form->field($model, 'object_id')->widget(HubCombo::class) ?>
+    <?php endif; ?>
+    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
+        'plan_id' => $plan->id,
+        'object_input_type' => $model->isObjectPredefined() ? null : 'server/hub',
+    ]) ?>
+    <?= $form->field($model, 'type')->widget(StaticCombo::class, [
+        'data' => [
+            'default' => Yii::t('hipanel.finance.suggestionTypes', 'default'),
+            'services' => Yii::t('hipanel.finance.suggestionTypes', 'services'),
+            'parts' => Yii::t('hipanel.finance.suggestionTypes', 'parts'),
+        ],
+    ]) ?>
 <?php elseif ($plan->type === Plan::TYPE_TEMPLATE): ?>
     <?= $form->field($model, 'object_id')->hiddenInput(['value' => $model->plan_id])->label(false) ?>
     <?= $form->field($model, 'type')->widget(StaticCombo::class, [
         'data' => [
             'model_groups' => Yii::t('hipanel.finance.suggestionTypes', 'model_groups'),
             'dedicated_server' => Yii::t('hipanel.finance.suggestionTypes', 'dedicated_server'),
+            'switch' => Yii::t('hipanel.finance.suggestionTypes', 'switch'),
             'v_cdn' => Yii::t('hipanel.finance.suggestionTypes', 'v_cdn'),
             'p_cdn' => Yii::t('hipanel.finance.suggestionTypes', 'p_cdn'),
         ],

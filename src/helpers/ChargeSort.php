@@ -41,6 +41,7 @@ class ChargeSort
     private static function byType(): \Closure
     {
         $order = [
+            'rack',
             'rack_unit',
             'ip_num',
             'support_time',

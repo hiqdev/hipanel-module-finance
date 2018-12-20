@@ -24,6 +24,7 @@ class Sale extends \hipanel\base\Model
     const SALE_TYPE_SERVER = 'server';
     const SALE_TYPE_PCDN = 'pcdn';
     const SALE_TYPE_VCDN = 'vcdn';
+    const SALE_TYPE_SWITCH = 'switch';
     const SALE_TYPE_ACCOUNT = 'account';
     const SALE_TYPE_CLIENT = 'client';
     const SALE_TYPE_PART = 'part';

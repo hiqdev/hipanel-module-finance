@@ -82,7 +82,8 @@ CSS
                 Plan::TYPE_PCDN,
                 Plan::TYPE_TEMPLATE,
                 Plan::TYPE_CERTIFICATE,
-                Plan::TYPE_DOMAIN
+                Plan::TYPE_DOMAIN,
+                Plan::TYPE_SWITCH,
             ], true)): ?>
                 <?php $page->beginContent('show-actions') ?>
                     <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>
