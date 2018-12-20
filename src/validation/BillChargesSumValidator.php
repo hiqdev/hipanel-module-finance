@@ -41,10 +41,13 @@ class BillChargesSumValidator extends Validator
 
         if (inputs.length > 0) {
             inputs.map(function () {
-                sum += parseFloat($(this).val());
+                sum += Number($(this).val()) * 100;
             });
-            if (value != -sum) {
-                messages.push($message + ': ' + (-sum));
+            if (isNaN(sum)) {
+                return;
+            }
+            if (value * 100 != -sum) {
+                messages.push($message + ': ' + (-(sum / 100)));
             }
         }
 JS;
