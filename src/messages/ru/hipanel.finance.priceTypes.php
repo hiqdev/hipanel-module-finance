@@ -18,4 +18,5 @@ return [
     'Discount' => 'Скидка',
     'Overuse' => 'Перебор',
     'Number of IP addresses' => 'Кол-во IP адресов',
+    'Leasing' => 'Лизинг',
 ];

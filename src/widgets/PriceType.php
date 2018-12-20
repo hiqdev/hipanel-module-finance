@@ -36,7 +36,8 @@ class PriceType extends Type
             'monthly,monthly',
         ],
         'default' => [
-            'monthly,hardware'
+            'monthly,hardware',
+            'monthly,leasing'
         ]
     ];
     public $field = 'type';
