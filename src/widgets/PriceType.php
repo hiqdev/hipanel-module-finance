@@ -35,10 +35,12 @@ class PriceType extends Type
         'warning' => [
             'monthly,monthly',
         ],
+        'primary' => [
+            'monthly,leasing',
+        ],
         'default' => [
             'monthly,hardware',
-            'monthly,leasing'
-        ]
+        ],
     ];
     public $field = 'type';
     public $i18nDictionary = 'hipanel.finance.priceTypes';
