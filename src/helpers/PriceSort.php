@@ -27,9 +27,10 @@ class PriceSort
     {
         return Sort::chain()
             ->asc(self::byServerPriceGroups())
-            ->compare(self::byTargetObjectName())
+            ->asc(self::byObjectType())
             ->asc(self::byServerMainPrices())
             ->asc(self::byHardwareType())
+            ->compare(self::byTargetObjectName())
             ->compare(self::byServerPriceType());
     }
 
@@ -102,6 +103,19 @@ class PriceSort
     {
         return function (Price $a, Price $b) {
             return strnatcasecmp($a->object->name, $b->object->name);
+        };
+    }
+
+    private static function byObjectType(): \Closure
+    {
+        $order = ['dedicated', 'net', 'model_group', 'part'];
+
+        return function (Price $price) use ($order) {
+            if (($key = array_search($price->object->type, $order, true)) !== false) {
+                return $key;
+            }
+
+            return INF;
         };
     }
 }
