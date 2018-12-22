@@ -23,9 +23,13 @@ class FormulaExamplesProvider
     private function fixedDiscountFormulas()
     {
         return [
-            sprintf("discount.since('%s').fixed('10%%').reason('because')", date('m.Y')),
-            sprintf("discount.since('%s').fixed('11 USD').reason('agreed')", date('m.Y')),
+            sprintf("discount.fixed('10%%').since('%s').reason('because')", date('m.Y')),
+            sprintf("discount.fixed('11 USD').since('%s').reason('agreed')", date('m.Y')),
             sprintf("discount.fixed('20%%').till('%s').reason('loyalty')", date('m.Y', strtotime('+6 months'))),
+            sprintf("discount.fixed('5 tb').since('%s').reason('bonus')", date('m.Y'))
+                => Yii::t('hipanel.finance.price', 'Applicable for overuse prices. The example will compensate up to 5 TB of overuse as discount. Make sure to use appropriate unit, such as <code>items</code>, <code>gbps</code> or <code>hours</code>.'),
+            sprintf("discount.fixed('5 tb').as('deposit,compensation').since('%s').reason('bonus')", date('m.Y'))
+                => Yii::t('hipanel.finance.price', 'Applicable for overuse prices. Will compensate up to 5 TB of overuse as a separate Compensation bill. You can use any other bill type in option <code>.as()</code>, such as <code>deposit,creditnote</code> or <code>correction,positive</code>.'),
         ];
     }
 

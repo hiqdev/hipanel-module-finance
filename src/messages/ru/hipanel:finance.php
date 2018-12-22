@@ -144,6 +144,7 @@ return [
     'Restore deleted' => 'Восстановить удаленные',
     'Restore expired' => 'Восстановление с истекшим сроком действия',
     'Currency exchange' => 'Обмен валют',
+    'Compensation' => 'Компенсация',
     'Feature' => 'Дополнительные возможности',
     'Hardware' => 'Аппаратные средства',
     'Purchase' => 'Покупка',

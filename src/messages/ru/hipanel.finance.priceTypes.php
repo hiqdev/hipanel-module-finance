@@ -19,4 +19,5 @@ return [
     'Overuse' => 'Перебор',
     'Number of IP addresses' => 'Кол-во IP адресов',
     'Leasing' => 'Лизинг',
+    'Compensation' => 'Компенсация',
 ];
