@@ -29,7 +29,7 @@ $('#{$this->getId()}').data('onPasteRequested', function() {
     let session = editor.session;
 
     let text = template;
-    if (session.getLength() > 1) {
+    if (session.getLength() > 1 || session.getLine(0).length > 0) {
         text = '\\n' + text;
     }
 
