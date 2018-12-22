@@ -8,6 +8,7 @@ use hipanel\modules\finance\widgets\ColoredBalance;
 use hipanel\modules\finance\widgets\PriceType;
 use Yii;
 use yii\base\DynamicModel;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class GroupedChargesGridView
@@ -54,6 +55,7 @@ class GroupedChargesGridView extends ChargeGridView
                     if ($this->allowedParentId !== null) {
                         $html .= '<i style="color: #717171" class="fa fa-arrow-up"></i>&nbsp;';
                     }
+
                     return $html . PriceType::widget([
                         'model' => $model,
                         'field' => 'ftype'
@@ -72,13 +74,14 @@ class GroupedChargesGridView extends ChargeGridView
                     $sum = array_reduce([$model] + $children, function ($accumulator, Charge $model) {
                         return $model->sum + $accumulator;
                     }, 0);
+
                     return ColoredBalance::widget([
                         'model' => new DynamicModel(['sum' => $sum, 'currency' => $model->currency]),
                         'attribute' => 'sum',
-                        'url' => false
+                        'url' => false,
                     ]);
-                }
-            ]
+                },
+            ],
         ]);
     }
 
@@ -91,11 +94,23 @@ class GroupedChargesGridView extends ChargeGridView
     public function renderTableRow($model, $key, $index)
     {
         // Prevent rendering child prices, unless it is intended
+        if ($this->allowedParentId === null
+            && $model->parent_id !== null
+            && !\in_array($model->parent_id, $this->chrgeIds(), true)
+        ) {
+            return parent::renderTableRow($model, $key, $index);
+        }
+
         if ($model->parent_id !== $this->allowedParentId) {
             return '';
         }
 
         return parent::renderTableRow($model, $key, $index);
+    }
+
+    private function chrgeIds(): array
+    {
+        return ArrayHelper::getColumn($this->dataProvider->getModels(), 'id');
     }
 
     /**
