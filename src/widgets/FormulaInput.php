@@ -75,6 +75,7 @@ JS
     private function registerAceEditor()
     {
         AceEditorAsset::register($this->view);
+        $this->view->registerCss('.form-group .ace_editor { min-height: 34px; padding: 0; }');
         $this->view->registerJs(<<<'JS'
 $('.formula-input').each(function () {
     var JavaScriptMode = ace.require("ace/mode/javascript").Mode;
@@ -86,7 +87,6 @@ $('.formula-input').each(function () {
     shadow.data('ace-editor', editor);
 
     editor.session.setMode(new JavaScriptMode());
-    // editor.session.setUseWorker(false);
     editor.session.$worker.call("changeOptions", [{es3: true, asi: true}]);
     editor.setOptions({
         maxLines: 15,
