@@ -30,11 +30,7 @@ use hiqdev\combo\StaticCombo;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('object_id_in')->widget(ServerCombo::class, [
-        'current' => array_combine((array) $search->model->object_id_in, (array) $search->model->object_id_in),
-        'hasId' => true,
-        'multiple' => true,
-    ]) ?>
+    <?= $search->field('object_inilike') ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">

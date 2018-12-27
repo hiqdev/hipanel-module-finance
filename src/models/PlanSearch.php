@@ -15,7 +15,7 @@ class PlanSearch extends Plan
     public function searchAttributes()
     {
         return ArrayHelper::merge($this->defaultSearchAttributes(), [
-            'states', 'buyer_in', 'object_id_in',
+            'states', 'buyer_in', 'object_id_in', 'object_inilike',
         ]);
     }
     public function attributeLabels()
@@ -27,6 +27,7 @@ class PlanSearch extends Plan
             'plan_ilike'          => Yii::t('hipanel:finance', 'Name'),
             'note_ilike'          => Yii::t('hipanel', 'Note'),
             'object_id_in'        => Yii::t('hipanel:finance', 'Object name'),
+            'object_inilike'      => Yii::t('hipanel:finance', 'Object name'),
         ]);
     }
 }
