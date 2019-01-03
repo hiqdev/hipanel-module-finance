@@ -58,7 +58,7 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
             ],
             'object' => [
                 'format' => 'raw',
-                'filterAttribute' => 'object_like',
+                'filterAttribute' => 'object_inilike',
                 'value' => function (Sale $model) {
                     if ($model instanceof FakeSale) {
                         return $model->object;
