@@ -30,7 +30,7 @@ use yii\helpers\Html;
     <?php if ($model->isObjectPredefined()) : ?>
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
     <?php else : ?>
-        <?= $form->field($model, 'object_id')->widget(ServerCombo::class) ?>
+        <?= $form->field($model, 'object_id')->widget(ServerCombo::class, ['primaryFilter' => 'name_like']) ?>
     <?php endif; ?>
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
         'plan_id' => $plan->id,
@@ -76,6 +76,7 @@ use yii\helpers\Html;
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
     <?php else : ?>
         <?= $form->field($model, 'object_id')->widget(ServerCombo::class, [
+            'primaryFilter' => 'name_like',
             'filter' => ['type' => ['format' => $plan->type === Plan::TYPE_PCDN ? 'cdnpix' : 'cdn']],
         ]) ?>
     <?php endif; ?>
