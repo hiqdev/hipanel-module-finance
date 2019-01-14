@@ -161,7 +161,7 @@ class PaymentsCest
     protected function getBillData(): array
     {
         return [
-            'login'     => 'hipanel_test_user@hiqdev.com',
+            'login'     => 'hipanel_test_user',
             'type'      => 'Monthly fee',
             'currency'  => '$',
             'sum'       =>  1000,
