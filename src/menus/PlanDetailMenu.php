@@ -27,7 +27,8 @@ class PlanDetailMenu extends \hipanel\menus\AbstractDetailMenu
                     'handleSubmit' => false,
                 ]),
                 'encode' => false,
-                'visible' => !$this->model->isDeleted() && Yii::$app->user->can('plan.create'),
+//                'visible' => !$this->model->isDeleted() && Yii::$app->user->can('plan.create'),
+                'visible' => false,
             ],
             'delete' => [
                 'label' => Yii::t('hipanel', 'Delete'),
