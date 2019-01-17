@@ -66,14 +66,18 @@ class GroupedChargesGridView extends ChargeGridView
                 'label' => '',
                 'format' => 'raw',
                 'value' => function (Charge $model) {
+                    if ($model->parent_id) {
+                        return '';
+                    }
+
                     $children = $this->findChargeChildren($model);
                     if (empty($children)) {
                         return '';
                     }
 
-                    $sum = array_reduce([$model] + $children, function ($accumulator, Charge $model) {
-                        return $model->sum + $accumulator;
-                    }, 0);
+                    $sum = array_reduce($children, function ($accumulator, Charge $charge) {
+                        return $charge->sum + $accumulator;
+                    }, $model->sum);
 
                     return ColoredBalance::widget([
                         'model' => new DynamicModel(['sum' => $sum, 'currency' => $model->currency]),
@@ -119,11 +123,15 @@ class GroupedChargesGridView extends ChargeGridView
      */
     private function findChargeChildren(Charge $parent): array
     {
-        return array_filter($this->dataProvider->getModels(),
-            function (Charge $charge) use ($parent) {
-                return $charge->parent_id === $parent->id;
+        $result = [];
+        foreach ($this->dataProvider->getModels() as $charge) {
+            if ($charge->parent_id === $parent->id) {
+                $result[] = $charge;
+                $result = array_merge($result, $this->findChargeChildren($charge));
             }
-        );
+        }
+
+        return $result;
     }
 
     private function renderChildCharges(Charge $parent, $key, $index): string
@@ -139,7 +147,7 @@ class GroupedChargesGridView extends ChargeGridView
 
             $result = [];
             foreach ($children as $charge) {
-                $result[] = $this->renderTableRow($charge, $key, $index);
+                $result[] = $this->renderTableRow($charge, $charge->id, $index);
             }
 
             return implode('', $result);
