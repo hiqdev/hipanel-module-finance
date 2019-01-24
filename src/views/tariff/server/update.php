@@ -11,5 +11,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="tariff-update">
-    <?= $this->render('_form', ['model' => $model]); ?>
+    <?= $this->render('_form', [
+        'model' => $model,
+        'action' => ['@tariff/update'],
+    ]) ?>
 </div>

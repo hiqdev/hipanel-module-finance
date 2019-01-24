@@ -8,7 +8,7 @@ class ResourcePriceInput extends Widget
 {
     public $basePrice = 0;
     public $activeField;
-    public $minPrice = 0.01;
+    public $minPrice = 0.00;
 
     public function run()
     {

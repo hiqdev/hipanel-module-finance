@@ -14,7 +14,10 @@ use yii\helpers\Html;
 
 <?php
 Pjax::begin(['id' => 'tariff-pjax-container']);
-$form = ActiveForm::begin(['id' => 'tariff-create-form']);
+$form = ActiveForm::begin([
+    'id' => 'tariff-create-form',
+    'action' => $action,
+]);
 $i = 0;
 ?>
 
@@ -89,6 +92,7 @@ $i = 0;
             <thead>
             <tr>
                 <th><?= Yii::t('hipanel:finance:tariff', 'Resource') ?></th>
+                <th><?=  Yii::t('hipanel:finance:tariff', 'Unit') ?></th>
                 <th><?= Yii::t('hipanel:finance:tariff', 'Price per period') ?></th>
                 <th><?= Yii::t('hipanel:finance:tariff', 'Prepaid amount') ?></th>
                 <th><?= Yii::t('hipanel:finance:tariff', 'Overuse price') ?></th>
@@ -99,6 +103,12 @@ $i = 0;
                 <tr>
                     <?php $baseResource = $model->getParentOveruseResource($resource->type_id) ?>
                     <td><?= $resource->decorator()->displayTitle() ?></td>
+                    <td>
+                        <?= \hipanel\modules\finance\widgets\ResourceUnitWidget::widget([
+                            'activeField' => $form->field($resource, "[$i]unit")->label(false),
+                            'resource' => $resource,
+                        ]) ?>
+                    </td>
                     <td style="width: 20%">
                         <?= Html::activeHiddenInput($resource, "[$i]object_id") ?>
                         <?= Html::activeHiddenInput($resource, "[$i]type") ?>

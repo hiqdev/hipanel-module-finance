@@ -12,11 +12,12 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 ?>
-<?php
-Pjax::begin(['id' => 'tariff-pjax-container']);
-$form = ActiveForm::begin([
+<?php Pjax::begin(['id' => 'tariff-pjax-container']) ?>
+
+<?php $form = ActiveForm::begin(array_filter([
     'id' => 'tariff-create-form',
-]) ?>
+    'action' => isset($action) ? $action : null,
+])) ?>
 
 <?php Box::begin() ?>
 <div class="row">
