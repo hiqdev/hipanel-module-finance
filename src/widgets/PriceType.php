@@ -9,6 +9,7 @@ class PriceType extends Type
     public $values = [];
     public $defaultValues = [
         'success' => [
+            'monthly,rack',
             'monthly,rack_unit',
             'monthly,ip_num',
             'monthly,support_time',
@@ -18,6 +19,7 @@ class PriceType extends Type
             'monthly,server_du',
             'monthly,server_ssd',
             'monthly,server_sata',
+            'monthly,win_license',
         ],
         'info' => [
             'overuse,rack_unit',
@@ -33,9 +35,12 @@ class PriceType extends Type
         'warning' => [
             'monthly,monthly',
         ],
+        'primary' => [
+            'monthly,leasing',
+        ],
         'default' => [
-            'monthly,hardware'
-        ]
+            'monthly,hardware',
+        ],
     ];
     public $field = 'type';
     public $i18nDictionary = 'hipanel.finance.priceTypes';

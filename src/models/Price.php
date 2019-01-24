@@ -128,11 +128,21 @@ class Price extends \hipanel\base\Model
      */
     public function isQuantityPredefined(): bool
     {
-        if (!$this->isOveruse() && $this->getSubtype() === 'rack_unit') {
+        if (!$this->isOveruse()
+            && ($this->isShared() || $this->getSubtype() === 'rack_unit')
+        ) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * @return bool Whether this price is shared
+     */
+    public function isShared(): bool
+    {
+        return $this->object_id === null;
     }
 
     public function getUnitLabel()

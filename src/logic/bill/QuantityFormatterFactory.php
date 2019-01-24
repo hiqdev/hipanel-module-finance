@@ -21,12 +21,14 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
     private $types = [
         'monthly'           => MonthlyQuantity::class,
 
+        'monthly,rack_unit' => RackUnitQuantity::class,
         'ip_num'            => IPNumQuantity::class,
         'support_time'      => SupportTimeQuantity::class,
         'server_traf_max'   => DefaultQuantityFormatter::class,
         'server_traf95_max' => DefaultQuantityFormatter::class,
         'backup_du'         => DefaultQuantityFormatter::class,
         'server_du'         => DefaultQuantityFormatter::class,
+        'win_license'       => DefaultQuantityFormatter::class,
         'hw_purchase'       => DefaultQuantityFormatter::class,
 
         'drenewal'          => DomainRenewalQuantity::class,

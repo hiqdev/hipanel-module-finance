@@ -110,8 +110,8 @@ class PriceChargesEstimator
     private function decorateAction(&$action)
     {
         $action['sum'] = array_sum(array_column($action['charges'], 'price'));
-        $action['sumFormatted'] = $this->yiiFormatter->asCurrency($action['sum'],
-            reset($action['charges'])['currency']);
+        $action['currency'] = reset($action['charges'])['currency'];
+        $action['sumFormatted'] = $this->yiiFormatter->asCurrency($action['sum'], $action['currency']);
         $action['detailsTable'] = PriceChargesEstimationTable::widget(['charges' => $action['charges']]);
     }
 }

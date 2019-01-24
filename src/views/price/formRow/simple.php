@@ -6,13 +6,13 @@ use yii\bootstrap\Html;
 
 /**
  * @var \hipanel\modules\finance\models\Plan|null $plan
- * @var \hipanel\modules\finance\models\Price $
+ * @var \hipanel\modules\finance\models\Price $model
  * @var \yii\widgets\ActiveForm $form
  */
 ?>
 
 <div class="form-instance">
-    <div class="col-md-2">
+    <div class="col-md-2" style="white-space: normal">
         <?= Html::activeHiddenInput($model, "[$i]object_id", ['ref' => 'object_id']) ?>
         <?= Html::activeHiddenInput($model, "[$i]type") ?>
         <?= Html::activeHiddenInput($model, "[$i]class") ?>
@@ -22,15 +22,22 @@ use yii\bootstrap\Html;
         <?= Html::activeHiddenInput($model, "[$i]note", ['data-attribute' => 'note']) ?>
 
         <div class="form-group">
-            <strong>
-                <?= \hipanel\modules\finance\widgets\LinkToObjectResolver::widget([
-                    'model' => $model->object,
-                    'labelAttribute' => 'name',
-                    'linkOptions' => [
-                        'tabindex' => '-1'
-                    ]
-                ]) ?>
-            </strong>
+            <?php if ($model->object->name === null): ?>
+                <i><?= Yii::t('hipanel.finance.price', 'Any object') ?></i>
+            <?php else: ?>
+                <strong>
+                    <?= \hipanel\modules\finance\widgets\LinkToObjectResolver::widget([
+                        'model' => $model->object,
+                        'labelAttribute' => 'name',
+                        'linkOptions' => [
+                            'tabindex' => '-1'
+                        ]
+                    ]) ?>
+                </strong>
+            <?php endif ?>
+            <?php if (!empty($model->object->label)) : ?>
+                <br /><?= Html::encode($model->object->label) ?>
+            <?php endif; ?>
             <br />
             <?= \hipanel\modules\finance\widgets\PriceType::widget([
                 'model' => $model,

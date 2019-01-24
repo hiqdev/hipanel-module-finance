@@ -45,7 +45,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'label' => Yii::t('hipanel.finance.price', 'Price'),
                 'format' => 'raw',
                 'value' => function (Price $model) {
-                    return $this->presenterFactory->build(get_class($model))->renderPrice($model);
+                    return $this->presenterFactory->build(\get_class($model))->renderPrice($model);
                 }
             ],
             'object->name' => [
@@ -123,7 +123,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'raw',
                 'label' => Yii::t('hipanel', 'Details'),
                 'value' => function (Price $model) {
-                    return $this->presenterFactory->build(get_class($model))->renderInfo($model);
+                    return $this->presenterFactory->build(\get_class($model))->renderInfo($model);
                 }
             ],
             'value' => [

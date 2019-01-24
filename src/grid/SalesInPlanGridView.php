@@ -3,11 +3,14 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\finance\menus\SalePricesActionsMenu;
+use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Sale;
+use hipanel\widgets\Label;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\data\ArrayDataProvider;
+use yii\helpers\Html;
 
 /**
  * Class SalesInPlanGridView
@@ -41,9 +44,15 @@ class SalesInPlanGridView extends SaleGridView
         return array_merge(parent::columns(), [
             'object_label' => [
                 'format' => 'raw',
-                'value' => function (Sale $sale) {
-                    $prices = $this->pricesBySoldObject[$sale->object_id ?? $sale->tariff_id] ?? [];
-                    foreach ($prices as $price) {
+                'value' => function (Sale $sale, $key) {
+                    if ($sale instanceof FakeSale) {
+                        return Label::widget([
+                            'label' => Yii::t('hipanel:finance:sale', 'Not sold'),
+                            'color' => 'danger'
+                        ]);
+                    }
+
+                    foreach ($this->pricesBySoldObject[$key] ?? [] as $price) {
                         if ($price->object->id === $sale->object_id) {
                             return $price->object->label;
                         }
@@ -60,14 +69,24 @@ class SalesInPlanGridView extends SaleGridView
                         . Yii::t('hipanel.finance.price', 'Prices')
                         . '&nbsp;<span class="caret"></span>'
                 ]
+            ],
+            'estimate_placeholder' => [
+                'contentOptions' => [
+                    'class' => 'total-per-object-cell',
+                ],
+                'format' => 'raw',
+                'value' => function () {
+                    return  Html::tag('span', Yii::t('hipanel:finance', 'Total:')) . '&nbsp;&nbsp;' .
+                            Html::tag('span', '', ['class' => 'total-per-object']);
+                },
             ]
         ]);
     }
 
     private function initAfterRow()
     {
-        $this->afterRow = function (Sale $sale) {
-            $prices = $this->pricesBySoldObject[$sale->object_id ?? $sale->tariff_id];
+        $this->afterRow = function (Sale $sale, $key) {
+            $prices = $this->pricesBySoldObject[$key];
             if (empty($prices)) {
                 return '';
             }

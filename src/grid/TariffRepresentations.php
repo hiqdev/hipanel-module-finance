@@ -9,18 +9,13 @@ class TariffRepresentations extends RepresentationCollection
 {
     protected function fillRepresentations()
     {
-        $columns = (Yii::$app->user->can('plan.update') || Yii::$app->user->can('plan.delete')) ? [
-            'checkbox',
+        $columns = array_filter([
+            (Yii::$app->user->can('plan.update') || Yii::$app->user->can('plan.delete')) ? 'checkbox' : null,
             'tariff',
             'used',
             'type',
             'client_id',
-        ] : [
-            'tariff',
-            'used',
-            'type',
-            'client_id',
-        ];
+        ]);
         $this->representations = array_filter([
             'common' => [
                 'label' => Yii::t('hipanel', 'common'),

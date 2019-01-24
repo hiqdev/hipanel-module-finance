@@ -62,14 +62,18 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'value' => function (Bill $model) {
                     list($date, $time) = explode(' ', $model->time, 2);
 
-                    if (\in_array($model->gtype, [
-                        'discount', 'domain', 'monthly', 'overuse', 'premium_package',
-                        'feature', 'intercept', 'periodic',
-                    ], true)) {
-                        return Yii::$app->formatter->asDate($date, 'LLLL y');
-                    }
-
-                    return $time === '00:00:00' ? Yii::$app->formatter->asDate($date) : Yii::$app->formatter->asDateTime($model->time);
+                    return in_array($model->gtype, [
+                        'discount',
+                        'domain',
+                        'monthly',
+                        'overuse',
+                        'premium_package',
+                        'feature',
+                        'intercept',
+                        'periodic',
+                    ], true) && $time === '00:00:00'
+                        ? Yii::$app->formatter->asDate($date, 'LLLL y')
+                        : Yii::$app->formatter->asDateTime($model->time);
                 },
             ],
             'sum' => [
@@ -135,6 +139,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                         'model' => $filterModel,
                     ]);
                 },
+                'sortAttribute' => 'type',
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => function (Bill $model) {
@@ -159,7 +164,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     $text = mb_strlen($descr) > 70 ? ArraySpoiler::widget(['data' => $descr]) : $descr;
                     $tariff = $model->tariff ? Html::tag('span',
                         Yii::t('hipanel', 'Tariff') . ': ' . Html::a($model->tariff,
-                            ['@tariff/view', 'id' => $model->tariff_id]), ['class' => 'pull-right']) : '';
+                            ['@plan/view', 'id' => $model->tariff_id]), ['class' => 'pull-right']) : '';
                     $amount = $this->formatQuantity($model);
                     $object = $this->objectTag($model);
 
@@ -188,10 +193,10 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'html',
                 'value' => function (Charge $model) {
                     $link = LinkToObjectResolver::widget([
-                        'model'          => $model,
-                        'labelAttribute' => 'common_object_name',
-                        'idAttribute'    => 'common_object_id',
-                        'typeAttribute'  => 'class',
+                        'model'          => $model->commonObject,
+                        'labelAttribute' => 'name',
+                        'idAttribute'    => 'id',
+                        'typeAttribute'  => 'type',
                         'customLinks' => [
                             'part' => '@server/view'
                         ]
@@ -204,7 +209,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
 
     public function tariffLink($model): string
     {
-        return Html::a($model->tariff, ['@tariff/view', 'id' => $model->tariff_id]);
+        return Html::a($model->tariff, ['@plan/view', 'id' => $model->tariff_id]);
     }
 
     public function objectTag($model): string

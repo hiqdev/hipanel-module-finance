@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'Rack' => 'Стойка',
     'Rack unit' => 'Юнит в стойке',
     'Monthly' => 'Ежемесячно',
     'Server traf max' => 'Трафик',
@@ -17,4 +18,6 @@ return [
     'Discount' => 'Скидка',
     'Overuse' => 'Перебор',
     'Number of IP addresses' => 'Кол-во IP адресов',
+    'Leasing' => 'Лизинг',
+    'Compensation' => 'Компенсация',
 ];

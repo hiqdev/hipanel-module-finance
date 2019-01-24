@@ -61,6 +61,11 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
             <?php $page->beginContent('show-actions') ?>
                 <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Detalization') ?></h4>
             <?php $page->endContent() ?>
+            <?php $page->beginContent('bulk-actions') ?>
+                <?php if (Yii::$app->user->can('bill.update')) : ?>
+                    <?= $page->renderBulkDeleteButton('charge-delete') ?>
+                <?php endif ?>
+            <?php $page->endContent() ?>
             <?= $this->render('_grouping', compact('model', 'grouper', 'page')) ?>
         <?php $page->end() ?>
     </div>

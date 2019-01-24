@@ -63,13 +63,30 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             'label' => [
                 'attribute' => 'label',
                 'format' => 'raw',
-                'value' => function ($model) {
-                    return LinkToObjectResolver::widget([
+                'value' => function (Charge $model) {
+                    $result = LinkToObjectResolver::widget([
                         'model' => $model,
                         'idAttribute' => 'object_id',
                         'typeAttribute' => 'class',
                         'labelAttribute' => 'name',
                     ]) . ($model->label ? " &ndash; $model->label" : '');
+
+                    if ($model->commonObject->id !== null && $model->commonObject->id !== $model->latestCommonObject->id) {
+                        $result .= ' ' . Html::tag(
+                            'span',
+                            Yii::t('hipanel:finance', 'Now it is in {objectLink}', [
+                                'objectLink' => LinkToObjectResolver::widget([
+                                    'model'          => $model->latestCommonObject,
+                                    'idAttribute'    => 'id',
+                                    'labelAttribute' => 'name',
+                                    'typeAttribute'  => 'type',
+                                ])
+                            ]),
+                            ['class' => 'badge', 'style' => 'background-color: #f89406;']
+                        );
+                    }
+
+                    return $result;
                 },
             ],
             'quantity' => [
@@ -87,15 +104,8 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 'value' => function ($model) {
                     list($date, $time) = explode(' ', $model->time, 2);
 
-                    if (\in_array($model->type, [
-                        'discount', 'domain', 'monthly', 'overuse', 'premium_package',
-                        'feature', 'intercept', 'periodic',
-                    ], true)) {
-                        return Yii::$app->formatter->asDate($date, 'LLLL y');
-                    }
-
-                    return $time === '00:00:00'
-                        ? Yii::$app->formatter->asDate($date)
+                    return $model->isMonthly() && $time === '00:00:00'
+                        ? Yii::$app->formatter->asDate($date, 'LLLL y')
                         : Yii::$app->formatter->asDateTime($model->time);
                 },
             ],

@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\helpers\ChargeSort;
+use Yii;
 use \yii\data\ArrayDataProvider;
 
 /**
@@ -33,7 +34,7 @@ class GroupedByServerChargesGridView extends BillGridView
         return array_merge(parent::columns(), [
             'object_link' => [
                 'format' => 'html',
-                'attribute' => 'common_object_name',
+                'attribute' => 'commonObject.name',
             ],
         ]);
     }
@@ -45,33 +46,33 @@ class GroupedByServerChargesGridView extends BillGridView
          * @return string
          */
         $this->afterRow = function (Charge $obj) {
-            $model = $this->chargesByMainObject[$obj->common_object_id];
-            if (empty($model)) {
+            $models = $this->chargesByMainObject[$obj->commonObject->id];
+            if (empty($models)) {
                 return '';
             }
+
             return GroupedChargesGridView::widget([
                 'boxed'        => false,
                 'showHeader'   => true,
                 'showFooter'   => false,
                 'options'      => [
                     'tag' => 'tr',
-                    'id'  => crc32($model->id ?? microtime(true)),
+                    'id'  => crc32(reset($models)->id ?? microtime(true)),
                 ],
                 'layout'       => '<td colspan="' . \count($this->columns) . '">{items}</td>',
                 'dataProvider' => new ArrayDataProvider([
-                    'allModels'  => ChargeSort::anyCharges()
-                        ->values($model, true),
+                    'allModels'  => ChargeSort::anyCharges()->values($models, true),
                     'sort'       => false,
                     'pagination' => false
                 ]),
-                'filterModel'  => $model,
                 'tableOptions' => [
                     'class' => 'table table-striped table-bordered'
                 ],
-                'columns'      => [
+                'columns'      => array_filter([
+                    Yii::$app->user->can('bill.update') ? 'checkbox' : null,
                     'type_label', 'label',
                     'quantity', 'sum', 'sum_with_children', 'time',
-                ],
+                ]),
             ]);
         };
     }

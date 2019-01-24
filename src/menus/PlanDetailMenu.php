@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\menus;
 
+use hipanel\helpers\Url;
 use hipanel\modules\finance\models\Plan;
 use hipanel\widgets\SettingsModal;
 use Yii;
@@ -26,7 +27,8 @@ class PlanDetailMenu extends \hipanel\menus\AbstractDetailMenu
                     'handleSubmit' => false,
                 ]),
                 'encode' => false,
-                'visible' => !$this->model->isDeleted() && Yii::$app->user->can('plan.create'),
+//                'visible' => !$this->model->isDeleted() && Yii::$app->user->can('plan.create'),
+                'visible' => false,
             ],
             'delete' => [
                 'label' => Yii::t('hipanel', 'Delete'),
@@ -54,6 +56,11 @@ class PlanDetailMenu extends \hipanel\menus\AbstractDetailMenu
                     ],
                 ],
                 'visible' => $this->model->isDeleted() && Yii::$app->user->can('plan.update'),
+            ],
+            'bills' => [
+                'label' => Yii::t('hipanel:finance', 'Bills'),
+                'icon' => 'fa-money',
+                'url' => Url::toSearch('bill', ['tariff_id' => $this->model->id]),
             ],
         ]);
         unset($items['view']);

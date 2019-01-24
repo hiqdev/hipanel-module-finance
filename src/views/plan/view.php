@@ -19,11 +19,23 @@ $this->title = Html::encode($model->name);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-$this->registerCss("
-    .profile-block {
-        text-align: center;
-    }
-");
+
+$this->registerCss(<<<'CSS'
+.profile-block {
+    text-align: center;
+}
+
+.total-per-object-cell {
+    display: flex;
+}
+
+.total-per-currency {
+    display: block;
+}
+
+CSS
+);
+
 
 ?>
 
@@ -70,7 +82,8 @@ $this->registerCss("
                 Plan::TYPE_PCDN,
                 Plan::TYPE_TEMPLATE,
                 Plan::TYPE_CERTIFICATE,
-                Plan::TYPE_DOMAIN
+                Plan::TYPE_DOMAIN,
+                Plan::TYPE_SWITCH,
             ], true)): ?>
                 <?php $page->beginContent('show-actions') ?>
                     <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>

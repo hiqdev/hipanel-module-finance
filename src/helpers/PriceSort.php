@@ -27,6 +27,7 @@ class PriceSort
     {
         return Sort::chain()
             ->asc(self::byServerPriceGroups())
+            ->asc(self::byObjectType())
             ->asc(self::byServerMainPrices())
             ->asc(self::byHardwareType())
             ->compare(self::byTargetObjectName())
@@ -49,7 +50,9 @@ class PriceSort
         return function (Price $price) {
             if ($price->type !== 'monthly,hardware') {
                 return 1;
-            } elseif ($price->getSubtype() === 'hardware') {
+            }
+
+            if ($price->getSubtype() === 'hardware') {
                 return 2;
             }
 
@@ -60,6 +63,7 @@ class PriceSort
     private static function byServerMainPrices(): \Closure
     {
         $order = [
+            'rack',
             'rack_unit',
             'ip_num',
             'support_time',
@@ -69,6 +73,7 @@ class PriceSort
             'server_du',
             'server_ssd',
             'server_sata',
+            'win_license',
         ];
 
         return function (Price $price) use ($order) {
@@ -82,7 +87,7 @@ class PriceSort
 
     private static function byHardwareType(): \Closure
     {
-        $order = ['CHASSIS', 'MOTHERBOARD', 'CPU', 'RAM', 'HDD', 'SSD'];
+        $order = ['SERVER', 'CHASSIS', 'MOTHERBOARD', 'CPU', 'RAM', 'HDD', 'SSD'];
 
         return function (Price $price) use ($order) {
             $type = substr($price->object->name, 0, strpos($price->object->name, ':'));
@@ -98,6 +103,19 @@ class PriceSort
     {
         return function (Price $a, Price $b) {
             return strnatcasecmp($a->object->name, $b->object->name);
+        };
+    }
+
+    private static function byObjectType(): \Closure
+    {
+        $order = ['dedicated', 'net', 'model_group', 'part'];
+
+        return function (Price $price) use ($order) {
+            if (($key = array_search($price->object->type, $order, true)) !== false) {
+                return $key;
+            }
+
+            return INF;
         };
     }
 }

@@ -8,6 +8,7 @@ use hipanel\modules\finance\widgets\ColoredBalance;
 use hipanel\modules\finance\widgets\PriceType;
 use Yii;
 use yii\base\DynamicModel;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class GroupedChargesGridView
@@ -54,6 +55,7 @@ class GroupedChargesGridView extends ChargeGridView
                     if ($this->allowedParentId !== null) {
                         $html .= '<i style="color: #717171" class="fa fa-arrow-up"></i>&nbsp;';
                     }
+
                     return $html . PriceType::widget([
                         'model' => $model,
                         'field' => 'ftype'
@@ -64,21 +66,26 @@ class GroupedChargesGridView extends ChargeGridView
                 'label' => '',
                 'format' => 'raw',
                 'value' => function (Charge $model) {
+                    if ($model->parent_id) {
+                        return '';
+                    }
+
                     $children = $this->findChargeChildren($model);
                     if (empty($children)) {
                         return '';
                     }
 
-                    $sum = array_reduce([$model] + $children, function ($accumulator, Charge $model) {
-                        return $model->sum + $accumulator;
-                    }, 0);
+                    $sum = array_reduce($children, function ($accumulator, Charge $charge) {
+                        return $charge->sum + $accumulator;
+                    }, $model->sum);
+
                     return ColoredBalance::widget([
                         'model' => new DynamicModel(['sum' => $sum, 'currency' => $model->currency]),
                         'attribute' => 'sum',
-                        'url' => false
+                        'url' => false,
                     ]);
-                }
-            ]
+                },
+            ],
         ]);
     }
 
@@ -91,11 +98,23 @@ class GroupedChargesGridView extends ChargeGridView
     public function renderTableRow($model, $key, $index)
     {
         // Prevent rendering child prices, unless it is intended
+        if ($this->allowedParentId === null
+            && $model->parent_id !== null
+            && !\in_array($model->parent_id, $this->chrgeIds(), true)
+        ) {
+            return parent::renderTableRow($model, $key, $index);
+        }
+
         if ($model->parent_id !== $this->allowedParentId) {
             return '';
         }
 
         return parent::renderTableRow($model, $key, $index);
+    }
+
+    private function chrgeIds(): array
+    {
+        return ArrayHelper::getColumn($this->dataProvider->getModels(), 'id');
     }
 
     /**
@@ -104,11 +123,15 @@ class GroupedChargesGridView extends ChargeGridView
      */
     private function findChargeChildren(Charge $parent): array
     {
-        return array_filter($this->dataProvider->getModels(),
-            function (Charge $charge) use ($parent) {
-                return $charge->parent_id === $parent->id;
+        $result = [];
+        foreach ($this->dataProvider->getModels() as $charge) {
+            if ($charge->parent_id === $parent->id) {
+                $result[] = $charge;
+                $result = array_merge($result, $this->findChargeChildren($charge));
             }
-        );
+        }
+
+        return $result;
     }
 
     private function renderChildCharges(Charge $parent, $key, $index): string
@@ -124,7 +147,7 @@ class GroupedChargesGridView extends ChargeGridView
 
             $result = [];
             foreach ($children as $charge) {
-                $result[] = $this->renderTableRow($charge, $key, $index);
+                $result[] = $this->renderTableRow($charge, $charge->id, $index);
             }
 
             return implode('', $result);

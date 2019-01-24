@@ -7,7 +7,7 @@ use Tuck\Sort\Sort;
 use Tuck\Sort\SortChain;
 
 /**
- * Class ChargesGrouper can be used to group charges inside $charge by common_object_id
+ * Class ChargesGrouper can be used to group charges inside $charge by commonObject->id
  */
 class ChargesGrouper
 {
@@ -27,8 +27,8 @@ class ChargesGrouper
 
     /**
      * @return array of two elements:
-     * 0: common_object_id => common_object_id, common_object_name
-     * 1: common_object_id => array Charge[][] by common_object_id
+     * 0: commonObject->id => commonObject->id, commonObject->name
+     * 1: commonObject->id => array Charge[][] by commonObject->id
      */
     public function group()
     {
@@ -37,10 +37,10 @@ class ChargesGrouper
         /** @var Charge[][] $chargesByMainObject */
         $chargesByMainObject = [];
         foreach ($this->charges as $charge) {
-            $chargesByMainObject[$charge->common_object_id][$charge->id] = $charge;
+            $chargesByMainObject[$charge->commonObject->id][$charge->id] = $charge;
         }
         foreach ($this->charges as $charge) {
-            $idToNameObject[$charge->common_object_id] = $charge;
+            $idToNameObject[$charge->commonObject->id] = $charge;
         }
         $idToNameObject = $this->sortByServerName()->values($idToNameObject);
         return [$idToNameObject, $chargesByMainObject];
@@ -49,7 +49,7 @@ class ChargesGrouper
     private function sortByServerName(): SortChain
     {
         return Sort::chain()->compare(function (Charge $a, Charge $b) {
-            return strnatcasecmp($a->common_object_name, $b->common_object_name);
+            return strnatcasecmp($a->commonObject->name, $b->commonObject->name);
         });
     }
 }

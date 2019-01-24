@@ -166,6 +166,7 @@ $form = ActiveForm::begin([
                                                 <div class="col-md-3">
                                                     <?= $form->field($charge, "[$i][$j]object_id")->widget(ObjectCombo::class, [
                                                         'class_attribute_name' => "[$i][$j]class",
+                                                        'selectedAttributeName' => 'name',
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-1">

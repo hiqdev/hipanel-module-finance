@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\menus\SalePricesActionsMenu;
+use hipanel\modules\finance\models\FakeGroupingSale;
 use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
@@ -18,10 +19,10 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
         return array_merge(parent::columns(), [
             'tariff' => [
                 'format' => 'html',
+                'filterAttribute' => 'tariff_like',
                 'value' => function ($model) {
-                    return Html::a($model->tariff, ['@tariff/view', 'id' => $model->tariff_id]);
+                    return Html::a($model->tariff, ['@plan/view', 'id' => $model->tariff_id]);
                 },
-                'enableSorting' => false,
             ],
             'time' => [
                 'format' => ['datetime'],
@@ -33,14 +34,12 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'idAttribute' => 'seller_id',
                 'attribute' => 'seller_id',
                 'nameAttribute' => 'seller',
-                'enableSorting' => false,
             ],
             'buyer' => [
                 'class' => ClientColumn::class,
                 'idAttribute' => 'buyer_id',
                 'attribute' => 'buyer_id',
                 'nameAttribute' => 'buyer',
-                'enableSorting' => false,
             ],
             'object_v' => [
                 'label' => Yii::t('hipanel:finance:sale', 'Object'),
@@ -59,8 +58,7 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
             ],
             'object' => [
                 'format' => 'raw',
-                'filterAttribute' => 'object_like',
-                'enableSorting' => false,
+                'filterAttribute' => 'object_inilike',
                 'value' => function (Sale $model) {
                     if ($model instanceof FakeSale) {
                         return $model->object;
@@ -84,6 +82,10 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'filterAttribute' => 'object_like',
                 'enableSorting' => false,
                 'value' => function (Sale $model) {
+                    if ($model instanceof FakeGroupingSale) {
+                        return $model->object;
+                    }
+
                     return LinkToObjectResolver::widget([
                         'model' => $model,
                         'typeAttribute' => 'tariff_type',

@@ -23,6 +23,7 @@ $form = ActiveForm::begin([
         'scenario' => $model->isNewRecord ? $model->scenario : Price::SCENARIO_UPDATE,
     ]),
 ]) ?>
+
 <?php DynamicFormWidget::begin([
     'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
     'widgetBody' => '.container-items', // required: css class selector
@@ -63,21 +64,28 @@ $form = ActiveForm::begin([
             </div>
             <?php $i++ ?>
         <?php endforeach ?>
+
+        <div class="box-footer with-border">
+                <?= Html::beginTag('div', ['class' => 'total-block']) ?>
+                    <?= Html::tag('span', Yii::t('hipanel:finance', 'Total:'), ['id' => 'total-label']) ?>
+                    <?= Html::tag('span', '', ['id' => 'total-value']) ?>
+                <?= Html::endTag('div') ?>
+        </div>
+
     </div>
 </div>
+
 <?php DynamicFormWidget::end() ?>
-<?php Box::begin(['options' => ['class' => 'box-solid']]) ?>
+
 <div class="row">
     <div class="col-md-12">
         <?= Html::submitButton(Yii::t('hipanel', 'Save'), ['class' => 'btn btn-success']) ?>
         &nbsp;
-        <?= Html::button(Yii::t('hipanel:finance', 'Update estimates'), ['class' => 'btn btn-info', 'onclick' => '$(this).priceEstimator().update()']) ?>
+        <?= Html::button(Yii::t('hipanel:finance', 'Update estimates'), ['class' => 'btn btn-info', 'id' => 'update-estimates']) ?>
         &nbsp;
-        <?= Html::button(Yii::t('hipanel', 'Cancel'),
-            ['class' => 'btn btn-default', 'onclick' => 'history.go(-1)']) ?>
+        <?= Html::button(Yii::t('hipanel', 'Cancel'), ['class' => 'btn btn-default', 'onclick' => 'history.go(-1)']) ?>
     </div>
 </div>
-<?php Box::end() ?>
 <?php ActiveForm::end() ?>
 
 <?= \hipanel\widgets\DynamicFormInputsValueInheritor::widget([
@@ -88,9 +96,46 @@ $form = ActiveForm::begin([
 <?php
 PriceEstimator::register($this);
 $this->registerJs(<<<'JS'
+
 $('#prices-form').priceEstimator({
+    url: '/finance/plan/calculate-charges',
     rowSelector: '.price-item',
+    totalCellSelector: '#total-value',
 });
+
+$('#update-estimates').click(function() {
+    $('#total-label').css({display: 'inline-block'});
+    $('#prices-form').priceEstimator().update();
+})
+
 hipanel.form.preventSubmitWithEnter('#prices-form')
 JS
+);
+
+$this->registerCss(<<<'CSS'
+#total-value {
+    font-size: 110%;
+    margin-left: 5px;
+}
+
+#total-value i {
+    font-size: 90%;
+}
+
+#total-label {
+    font-size: 120%;
+    text-transform: uppercase;
+    font-weight: bold;
+
+    display: none;
+}
+
+.total-block {
+    display: flex;
+}
+
+.total-per-currency {
+    display: block;
+}
+CSS
 );

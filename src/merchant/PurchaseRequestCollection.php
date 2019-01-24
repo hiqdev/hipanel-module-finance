@@ -87,11 +87,9 @@ class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
         }
 
         $result = [];
-        foreach (array_keys(static::$supportedSystems) as $system) {
-            foreach ($merchants as $name => $merchant) {
-                if ($merchant['system'] === $system) {
-                    $result[$name] = $this->convertMerchant($merchant);
-                }
+        foreach ($merchants as $name => $merchant) {
+            if (!empty(static::$supportedSystems[$merchant['system']])) {
+                $result[$name] = $this->convertMerchant($merchant);
             }
         }
 

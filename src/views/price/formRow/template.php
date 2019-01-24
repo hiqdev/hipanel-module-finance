@@ -12,7 +12,7 @@ use yii\bootstrap\Html;
 ?>
 
 <div class="form-instance">
-    <div class="col-md-2">
+    <div class="col-md-2" style="white-space: normal">
         <?= Html::activeHiddenInput($model, "[$i]object_id", ['ref' => 'object_id']) ?>
         <?= Html::activeHiddenInput($model, "[$i]unit") ?>
         <?= Html::activeHiddenInput($model, "[$i]quantity") ?>
@@ -46,7 +46,7 @@ use yii\bootstrap\Html;
         <div class="col-md-4">
             <div class="<?= AmountWithCurrency::$widgetClass ?>">
                 <?= $form->field($model, "[$i]price")->widget(AmountWithCurrency::class, [
-                    'currencyAttributeName' => "currency",
+                    'currencyAttributeName' => 'currency',
                     'currencyAttributeOptions' => [
                         'items' => $this->context->getCurrencyTypes(),
                     ],
@@ -67,7 +67,7 @@ use yii\bootstrap\Html;
                             'value' => $model->subprices[$currCode] ?? 0
                         ],
                         'selectedCurrencyCode' => $currCode,
-                        'currencyAttributeName' => "subprices",
+                        'currencyAttributeName' => 'subprices',
                         'currencyDropdownOptions' => [
                             'disabled' => true,
                             'hidden' => true,

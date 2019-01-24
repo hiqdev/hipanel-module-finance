@@ -7,6 +7,7 @@ use hipanel\grid\RefColumn;
 use hipanel\helpers\Url;
 use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\menus\PlanActionsMenu;
+use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Plan;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use yii\helpers\Html;

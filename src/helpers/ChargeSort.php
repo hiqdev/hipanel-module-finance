@@ -17,13 +17,31 @@ class ChargeSort
     {
         return Sort::chain()
             ->asc(self::byType())
+            ->asc(self::byHardwareType())
             ->compare(self::byName())
             ->asc(self::keepDiscountsWithParents());
+    }
+
+    private static function byHardwareType(): \Closure
+    {
+        $order = ['SERVER', 'CHASSIS', 'MOTHERBOARD', 'CPU', 'RAM', 'HDD', 'SSD'];
+
+        return function (Charge $charge) use ($order) {
+            if ($charge->class === 'part') {
+                $type = substr($charge->name, 0, strpos($charge->name, ':'));
+                if (($key = array_search($type, $order)) !== false) {
+                    return $key;
+                }
+            }
+
+            return INF;
+        };
     }
 
     private static function byType(): \Closure
     {
         $order = [
+            'rack',
             'rack_unit',
             'ip_num',
             'support_time',
@@ -33,6 +51,7 @@ class ChargeSort
             'server_du',
             'server_ssd',
             'server_sata',
+            'win_license',
         ];
 
         return function (Charge $charge) use ($order) {

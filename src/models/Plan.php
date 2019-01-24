@@ -31,6 +31,7 @@ class Plan extends \hipanel\base\Model
     public const TYPE_TEMPLATE = 'template';
     public const TYPE_CERTIFICATE = 'certificate';
     public const TYPE_DOMAIN = 'domain';
+    public const TYPE_SWITCH = 'switch';
 
     use \hipanel\base\ModelTrait;
 
@@ -45,7 +46,7 @@ class Plan extends \hipanel\base\Model
     {
         return array_merge(parent::rules(), [
             [['id', 'type_id', 'state_id', 'client_id', 'currency_id'], 'integer'],
-            [['type', 'state', 'client', 'name', 'note', 'currency', 'is_grouping'], 'string'],
+            [['type', 'state', 'client', 'name', 'plan', 'note', 'currency', 'is_grouping'], 'string'],
 
             [['type', 'name', 'currency'], 'required', 'on' => ['create', 'update']],
             [['id'], 'required', 'on' => ['update', 'delete', 'set-note']],
@@ -57,10 +58,12 @@ class Plan extends \hipanel\base\Model
     public function attributeLabels()
     {
         return array_merge(parent::attributeLabels(), [
+            'client' => Yii::t('hipanel', 'Seller'),
             'name' => Yii::t('hipanel:finance', 'Name'),
             'server_ids' => Yii::t('hipanel.finance.plan', 'Servers'),
             'monthly' => Yii::t('hipanel.finance.plan', 'Monthly'),
             'is_grouping' => Yii::t('hipanel.finance.plan', 'Grouping'),
+            'currency' => Yii::t('hipanel:finance', 'Currency'),
         ]);
     }
 

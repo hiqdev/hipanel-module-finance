@@ -45,7 +45,7 @@ class PlanQuery extends \hiqdev\hiart\ActiveQuery
                 $query
                     ->addSelect('main_object_id')
                     ->joinWith('object')
-                    ->limit('ALL');
+                    ->limit(-1);
             },
         ]);
     }

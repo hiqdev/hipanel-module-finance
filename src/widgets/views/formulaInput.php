@@ -10,20 +10,9 @@ use yii\helpers\Html;
 $widget = $this->context;
 ?>
 
-<div class="input-group">
-    <?= Html::activeTextarea($widget->model, $widget->attribute, [
-        'class' => 'form-control formula-input',
-        'rows' => $widget->formulaLinesCount(),
-    ]); ?>
-    <span class="input-group-addon">
-        <?= Html::button('', [
-            'class' =>        'fa fa-question-circle text-info formula-help-modal',
-            'data-toggle' => 'modal',
-            'data-target' => $widget->getHelpModalSelector(),
-            'tabindex' => -1
-        ]) ?>
-    </span>
-</div>
+<?= Html::activeTextarea($widget->model, $widget->attribute, [
+    'class' => 'form-control formula-input',
+]); ?>
 
 
 

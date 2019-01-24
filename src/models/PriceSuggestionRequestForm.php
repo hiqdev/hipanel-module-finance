@@ -12,6 +12,8 @@ use yii\base\Model;
  */
 class PriceSuggestionRequestForm extends Model
 {
+    public const SCENARIO_PREDEFINED_OBJECT = 'predefinedObject';
+
     public $plan_id;
 
     public $plan_type;
@@ -30,15 +32,21 @@ class PriceSuggestionRequestForm extends Model
     public function rules()
     {
         $result = [
-            [['plan_id', 'object_id', 'type'], 'required'],
-            [['plan_id', 'object_id', 'template_plan_id'], 'integer'],
-            [['type'], 'safe'],
+            [['plan_id', 'type'], 'required', 'on' => [self::SCENARIO_DEFAULT, self::SCENARIO_PREDEFINED_OBJECT]],
+            [['object_id', 'type'], 'required', 'on' => [self::SCENARIO_DEFAULT]],
+            [['plan_id', 'object_id', 'template_plan_id'], 'integer', 'on' => [self::SCENARIO_DEFAULT, self::SCENARIO_PREDEFINED_OBJECT]],
+            [['type'], 'safe', 'on' => [self::SCENARIO_DEFAULT, self::SCENARIO_PREDEFINED_OBJECT]],
         ];
         if ($this->plan_type !== Plan::TYPE_TEMPLATE) {
             $result[] = [['template_plan_id'], 'required'];
         }
 
         return $result;
+    }
+
+    public function isObjectPredefined(): bool
+    {
+        return $this->scenario === self::SCENARIO_PREDEFINED_OBJECT;
     }
 
     public function attributeLabels()

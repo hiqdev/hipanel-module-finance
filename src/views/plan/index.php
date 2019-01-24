@@ -24,10 +24,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('bulk-actions') ?>
-            <?php if (Yii::$app->user->can('bill.create')) : ?>
+            <?php if (Yii::$app->user->can('plan.create')) : ?>
                 <?= $page->renderBulkButton('@plan/restore', Yii::t('hipanel.finance.plan', 'Restore')) ?>
             <?php endif ?>
-            <?php if (Yii::$app->user->can('bill.update')) : ?>
+            <?php if (Yii::$app->user->can('plan.update')) : ?>
                 <?= $page->renderBulkDeleteButton('@plan/delete') ?>
             <?php endif ?>
         <?php $page->endContent() ?>

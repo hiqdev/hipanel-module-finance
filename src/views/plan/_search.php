@@ -3,6 +3,8 @@
 /** @var \hipanel\widgets\AdvancedSearch $search */
 
 use hipanel\modules\client\widgets\combo\ClientCombo;
+use hipanel\modules\server\widgets\combo\ServerCombo;
+use hipanel\widgets\RefCombo;
 use hiqdev\combo\StaticCombo;
 
 ?>
@@ -20,11 +22,15 @@ use hiqdev\combo\StaticCombo;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('type_in')->widget(\hipanel\widgets\RefCombo::class, [
+    <?= $search->field('type_in')->widget(RefCombo::class, [
         'gtype' => "type,tariff",
         'i18nDictionary' => 'hipanel:finance',
         'multiple' => true,
     ]) ?>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('object_inilike') ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
