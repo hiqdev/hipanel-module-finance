@@ -119,6 +119,8 @@ class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
         $request->amount = $data['sum'];
         $request->form = (new RedirectPurchaseResponse($data['action'], $data['inputs']))->setMethod($data['method']);
         $request->disableReason = $data['disable_reason'] ?? null;
+        $request->vat_rate = $data['vat_rate'] ?? null;
+        $request->vat_sum = $data['vat_sum'] ?? null;
 
         return $request;
     }
