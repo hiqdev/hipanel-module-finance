@@ -4,28 +4,30 @@ namespace hipanel\modules\finance\widgets;
 
 use hipanel\widgets\Type;
 
-class PriceType extends Type
+class BillType extends Type
 {
-    public $values = [];
     public $defaultValues = [
         'success' => [
-            'monthly,*'
+            'deposit,*',
+            'monthly,*',
         ],
         'info' => [
-            'overuse,*'
+            'overuse,*',
         ],
         'warning' => [
             'monthly,monthly',
+            'exchange,*'
         ],
         'primary' => [
             'monthly,leasing',
         ],
         'default' => [
             'monthly,hardware',
+            'correction,*',
         ],
     ];
     public $field = 'type';
-    public $i18nDictionary = 'hipanel.finance.priceTypes';
+    public $i18nDictionary = 'hipanel:finance';
 
     /** {@inheritdoc} */
     protected function titlelize($label): string

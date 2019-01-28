@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\models\Charge;
+use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\ColoredBalance;
 use hipanel\modules\finance\widgets\PriceType;
 use Yii;
@@ -56,9 +57,10 @@ class GroupedChargesGridView extends ChargeGridView
                         $html .= '<i style="color: #717171" class="fa fa-arrow-up"></i>&nbsp;';
                     }
 
-                    return $html . PriceType::widget([
+                    return $html . BillType::widget([
                         'model' => $model,
-                        'field' => 'ftype'
+                        'field' => 'ftype',
+                        'labelField' => 'type_label',
                     ]);
                 },
             ],
