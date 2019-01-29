@@ -18,6 +18,7 @@ use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\menus\BillActionsMenu;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
+use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\BillTypeFilter;
 use hipanel\modules\finance\widgets\ColoredBalance;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
@@ -134,7 +135,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             'type_label' => [
                 'filter' => function ($column, $filterModel) {
                     return BillTypeFilter::widget([
-                        'options' => ['class' => 'form-control text-right'],
+                        'options' => ['class' => 'form-control text-right', 'style' => 'max-width: 12em'],
                         'attribute' => 'ftype',
                         'model' => $filterModel,
                     ]);
@@ -146,14 +147,11 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     return ['class' => 'text-right'];
                 },
                 'value' => function (Bill $model) {
-                    static $colors = [
-                        'correction' => 'normal',
-                        'exchange' => 'warning',
-                        'deposit' => 'success',
-                    ];
-                    $color = $colors[$model->gtype] ?: 'muted';
-
-                    return Html::tag('b', Yii::t('hipanel:finance', $model->type_label), ['class' => "text-$color"]);
+                    return BillType::widget([
+                        'model' => $model,
+                        'field' => 'ftype',
+                        'labelField' => 'type_label',
+                    ]);
                 },
             ],
             'description' => [

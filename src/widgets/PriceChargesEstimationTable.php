@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\widgets;
 
+use hipanel\models\Ref;
 use yii\base\Widget;
 
 /**

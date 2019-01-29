@@ -23,9 +23,11 @@ $i = 1;
         <td>
             <?php [$type] = explode(',', $charge['type']); ?>
             <?php
-            echo Yii::t('hipanel.finance.priceTypes', \yii\helpers\Inflector::titleize($type));
+            echo \hipanel\modules\finance\widgets\BillType::widget([
+                'model' => new \yii\base\DynamicModel(['type' => $charge['type']]),
+            ]);
             if ($charge['comment']) {
-               echo ': ' . Html::tag('i', $charge['comment']);
+               echo ' &mdash; ' . Html::tag('i', $charge['comment']);
             }
             ?>
         </td>

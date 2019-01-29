@@ -59,7 +59,7 @@ class Bill extends \hipanel\base\Model
             [['sum', 'balance', 'quantity'], 'number'],
             [['currency', 'label', 'descr'], 'safe'],
             [['object', 'domains', 'tariff'], 'safe'],
-            [['type', 'gtype', 'class'], 'safe'],
+            [['type', 'gtype', 'class', 'ftype'], 'safe'],
             [['class_label'], 'safe'],
             [['type_label', 'gtype_label'], 'safe'],
             [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],

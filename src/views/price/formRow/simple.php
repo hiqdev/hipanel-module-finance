@@ -39,7 +39,7 @@ use yii\bootstrap\Html;
                 <br /><?= Html::encode($model->object->label) ?>
             <?php endif; ?>
             <br />
-            <?= \hipanel\modules\finance\widgets\PriceType::widget([
+            <?= \hipanel\modules\finance\widgets\BillType::widget([
                 'model' => $model,
                 'field' => 'type',
             ])?>

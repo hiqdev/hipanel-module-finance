@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\widgets;
 
+use hipanel\models\Ref;
 use hipanel\widgets\Type;
 
 class BillType extends Type
@@ -27,12 +28,13 @@ class BillType extends Type
         ],
     ];
     public $field = 'type';
-    public $i18nDictionary = 'hipanel:finance';
+    public $i18nDictionary = 'hipanel.finance.billTypes';
 
-    /** {@inheritdoc} */
-    protected function titlelize($label): string
+    protected function getModelLabel(): string
     {
-        return parent::titlelize(substr($label, strpos($label, ',')+1));
+        $billTypes = Ref::getListRecursively('type,bill', false);
+
+        return $billTypes[$this->getFieldValue()] ?? $this->getFieldValue();
     }
 }
 

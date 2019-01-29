@@ -86,7 +86,7 @@ class SalesInPlanGridView extends SaleGridView
     private function initAfterRow()
     {
         $this->afterRow = function (Sale $sale, $key) {
-            $prices = $this->pricesBySoldObject[$key];
+            $prices = $this->pricesBySoldObject[$key] ?? [];
             if (empty($prices)) {
                 return '';
             }

@@ -83,11 +83,6 @@ class Charge extends \hiqdev\hiart\ActiveRecord
         return $this->hasOne(Bill::class, ['id' => 'id'])->inverseOf('charges');
     }
 
-    public function typeLabel(): string
-    {
-        return Yii::t('hipanel.finance.priceTypes', \yii\helpers\Inflector::titleize($this->type));
-    }
-
     public function isMonthly(): bool
     {
         return strpos($this->ftype, 'monthly,') === 0;

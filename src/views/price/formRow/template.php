@@ -27,7 +27,7 @@ use yii\bootstrap\Html;
             ]) ?>
         </strong>
         <br />
-        <?= \hipanel\modules\finance\widgets\PriceType::widget([
+        <?= \hipanel\modules\finance\widgets\BillType::widget([
             'model' => $model,
             'field' => 'type',
         ])?>

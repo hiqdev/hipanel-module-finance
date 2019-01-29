@@ -6,7 +6,6 @@ use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\ColoredBalance;
-use hipanel\modules\finance\widgets\PriceType;
 use Yii;
 use yii\base\DynamicModel;
 use yii\helpers\ArrayHelper;

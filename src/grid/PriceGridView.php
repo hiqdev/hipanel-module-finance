@@ -6,8 +6,8 @@ use hipanel\grid\RefColumn;
 use hipanel\modules\finance\grid\presenters\price\PricePresenterFactory;
 use hipanel\modules\finance\menus\PriceActionsMenu;
 use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
-use hipanel\modules\finance\widgets\PriceType;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\bootstrap\Html;
@@ -87,7 +87,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                     'with_recursive' => 1,
                 ],
                 'value' => function ($model) {
-                    return PriceType::widget(['model' => $model]);
+                    return BillType::widget(['model' => $model]);
                 }
             ],
             'unit' => [
