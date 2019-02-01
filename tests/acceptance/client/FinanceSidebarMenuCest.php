@@ -11,13 +11,13 @@ class FinanceSidebarMenuCest
     {
         $menu = new SidebarMenu($I);
 
-        $menu->ensureContains('Finance',[
+        $menu->ensureContains('Finance', [
             'Payments' => '@bill/index',
             'Recharge account' => '@pay/deposit',
+//            'Tariffs' => '@plan/index', TODO: when changed links from `tariffs` to `plans` - uncomment!
         ]);
 
         $menu->ensureDoesNotContain('Finance', [
-            'Tariffs',
             'Requisites',
             'Held payments',
             'Sales',
