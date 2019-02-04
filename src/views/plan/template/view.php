@@ -25,7 +25,7 @@ use hipanel\modules\finance\helpers\PriceSort;
 
 <?php $page->beginContent('main-actions') ?>
     <?php if (Yii::$app->user->can('plan.create')) : ?>
-        <?= CreatePricesButton::widget(compact('model')) ?>
+       <?= CreatePricesButton::widget(compact('model')) ?>
     <?php endif ?>
 <?php $page->endContent() ?>
 

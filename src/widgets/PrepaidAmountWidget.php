@@ -47,8 +47,7 @@ final class PrepaidAmountWidget extends Widget
 
     private function renderTextInput($type)
     {
-        $this->activeField->template = "{label}\n<div class=\"input-group\">{input}<span class=\"input-group-addon\">{unit}</span></div>\n{hint}\n{error}";
-        $this->activeField->parts = ['{unit}' => $this->resource->decorator()->displayUnit()];
+        $this->activeField->template = "{label}\n<div class=\"input-group\">{input}</div>\n{hint}\n{error}";
 
         return $this->activeField->input('number', [
             'class' => 'form-control price-input',

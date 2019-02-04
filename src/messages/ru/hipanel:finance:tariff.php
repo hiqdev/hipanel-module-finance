@@ -60,6 +60,7 @@ return [
     'Parent tariff price' => 'Стоимость родительского тарифа',
     'Profit' => 'Прибыль',
 
+    'Unit' => 'Единица измерения',
     'Port speed' => 'Скорость порта',
     '{n, plural, one{# hour} other{# hours}}' => '{n, plural, one{# час} few{# часа} other{# часов}}',
     'Gbit/s' => 'Гбит/с',
