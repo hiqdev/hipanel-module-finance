@@ -59,6 +59,8 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             'time' => [
                 'format' => 'html',
                 'filter' => false,
+                'label' => Yii::t('hipanel', 'Time'),
+                'sortAttribute' => 'no',
                 'contentOptions' => ['class' => 'text-nowrap'],
                 'value' => function (Bill $model) {
                     list($date, $time) = explode(' ', $model->time, 2);
