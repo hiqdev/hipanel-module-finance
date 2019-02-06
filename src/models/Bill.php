@@ -74,6 +74,7 @@ class Bill extends \hipanel\base\Model
             }, 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['client_id', 'sum', 'time'], 'required', 'on' => [self::SCENARIO_CREATE]],
             [['client'], 'safe', 'on' => [self::SCENARIO_CREATE]],
+            [['no'], 'safe'],
         ];
     }
 
