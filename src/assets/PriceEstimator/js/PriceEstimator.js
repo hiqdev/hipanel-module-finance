@@ -222,8 +222,10 @@
                         );
                     });
                     saleObjectTotalCell.append(saleObjectTotalSpan);
+                    saleObjectTotalCell.addClass('estimated');
                 });
             })
+            this.clearUnestimatedCells();
         },
         formatSaleObjectsTotal() {
             Object.keys(this.saleObjects).forEach(saleObjectId => {
@@ -244,6 +246,10 @@
                     });
                 });
             });
+        },
+        clearUnestimatedCells() {
+            let cells = $('.total-per-object:not(.estimated)');
+            cells.html('&mdash;');
         },
         updatePriceCharges() {
             this.totalSum = {};
@@ -295,6 +301,7 @@
         drawDynamicQuantity(rows) {
             let firstPeriod = Object.keys(rows)[0];
             let period = rows[firstPeriod];
+
             if (period.targets) {
                 Object.keys(period.targets).forEach(object_id => {
                     let objectActions = period.targets[object_id];
