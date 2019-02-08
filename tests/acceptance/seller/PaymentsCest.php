@@ -6,13 +6,13 @@ use hipanel\helpers\Url;
 use hipanel\modules\finance\tests\_support\Page\bill\Create;
 use hipanel\modules\finance\tests\_support\Page\bill\Update;
 use hipanel\tests\_support\Page\IndexPage;
-use hipanel\tests\_support\Step\Acceptance\Manager;
+use hipanel\tests\_support\Step\Acceptance\Seller;
 
 class PaymentsCest
 {
     public $billId;
 
-    public function ensureBillPageWorks(Manager $I): void
+    public function ensureBillPageWorks(Seller $I): void
     {
         $I->login();
         $I->needPage(Url::to('@bill'));
@@ -23,17 +23,17 @@ class PaymentsCest
      *
      * Expects blank field errors.
      *
-     * @param Manager $I
+     * @param Seller $I
      * @throws \Exception
      */
-    public function ensureICantCreateBillWithoutRequiredData(Manager $I): void
+    public function ensureICantCreateBillWithoutRequiredData(Seller $I): void
     {
         $page = new Create($I);
 
         $I->needPage(Url::to('@bill/create'));
 
         $I->pressButton('Save');
-        $page->containsBlankFieldsError(['Client', 'Sum', 'Currency', 'Quantity']);
+        $page->containsBlankFieldsError(['Sum', 'Currency', 'Quantity']);
     }
 
     /**
@@ -41,12 +41,14 @@ class PaymentsCest
      *
      * Expects successful bill creation.
      *
-     * @param Manager $I
+     * @param Seller $I
      * @throws \Exception
      */
-    public function ensureICanCreateSimpleBill(Manager $I): void
+    public function ensureICanCreateSimpleBill(Seller $I): void
     {
         $page = new Create($I);
+
+        $I->needPage(Url::to('@bill/create'));
 
         $page->fillMainBillFields($this->getBillData());
         $I->pressButton('Save');
@@ -59,10 +61,10 @@ class PaymentsCest
      *
      * Expects blank field errors.
      *
-     * @param Manager $I
+     * @param Seller $I
      * @throws \Exception
      */
-    public function ensureICantCreateDetailedBillWithoutData(Manager $I): void
+    public function ensureICantCreateDetailedBillWithoutData(Seller $I): void
     {
         $page = new Create($I);
 
@@ -71,7 +73,7 @@ class PaymentsCest
         $page->fillMainBillFields($this->getBillData());
         $page->addCharge([]);
         $I->pressButton('Save');
-        $page->containsBlankFieldsError(['Object', 'Sum', 'Quantity']);
+        $page->containsBlankFieldsError(['Sum', 'Quantity']);
     }
 
     /**
@@ -80,19 +82,19 @@ class PaymentsCest
      * Expects successful bill creation.
      * Also checks Sum field mismatch error.
      *
-     * @param Manager $I
+     * @param Seller $I
      * @throws \Exception
      */
-    public function ensureICanCreateDetailedBill(Manager $I): void
+    public function ensureICanCreateDetailedBill(Seller $I): void
     {
         $page = new Create($I);
 
-        $I->amOnPage(Url::to('@bill/create'));
+        $I->needPage(Url::to('@bill/create'));
 
         $page->fillMainBillFields($this->getBillData());
         $page->addCharges([
-            $this->getChargeData('TEST01'),
-            $this->getChargeData('vCDN-soltest')
+            $this->getChargeData('TEST-DS-01'),
+            $this->getChargeData('TEST-DS-02')
         ]);
         $page->containsCharges(2);
 
@@ -110,20 +112,22 @@ class PaymentsCest
     /**
      * Tries to update early created bill.
      *
-     * @param Manager $I
+     * @param Seller $I
      * @throws \Codeception\Exception\ModuleException
      */
-    public function ensureICanUpdateBill(Manager $I): void
+    public function ensureICanUpdateBill(Seller $I): void
     {
         $indexPage  = new IndexPage($I);
         $updatePage = new Update($I);
+
+        $I->needPage(Url::to('@bill/index'));
 
         $indexPage->openRowMenuById($this->billId);
         $indexPage->chooseRowMenuOption('Update');
 
         $updatePage->containsCharges(2);
 
-        $updatePage->deleteChargeByName('TEST01');
+        $updatePage->deleteChargeByName('TEST-DS-01');
         $updatePage->containsCharges(1);
 
         $chargesSum = $updatePage->getChargesTotalSum();
@@ -136,13 +140,15 @@ class PaymentsCest
     /**
      * Checks whether a bill was updated successfully.
      *
-     * @param Manager $I
+     * @param Seller $I
      * @throws \Exception
      */
-    public function ensureBillWasSuccessfullyUpdated (Manager $I): void
+    public function ensureBillWasSuccessfullyUpdated (Seller $I): void
     {
         $indexPage  = new IndexPage($I);
         $updatePage = new Update($I);
+
+        $I->needPage(Url::to('@bill/index'));
 
         $indexPage->openRowMenuById($this->billId);
         $indexPage->chooseRowMenuOption('Update');
@@ -150,7 +156,7 @@ class PaymentsCest
         $updatePage->containsCharges(1);
 
         $chargeSelector = 'div.bill-charges:first-child';
-        $I->see('vCDN-soltest', $chargeSelector);
+        $I->see('TEST-DS-02', $chargeSelector);
         $I->see('Server', $chargeSelector);
         $I->see('Monthly fee', $chargeSelector);
     }
