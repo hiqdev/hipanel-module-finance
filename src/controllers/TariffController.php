@@ -17,6 +17,7 @@ use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\filters\EasyAccessControl;
 use hipanel\models\Ref;
+use hipanel\modules\finance\logic\AbstractTariffManager;
 use hipanel\modules\finance\logic\DomainTariffManager;
 use hipanel\modules\finance\logic\TariffManagerFactory;
 use hipanel\modules\finance\models\CertificateResource;
@@ -145,6 +146,7 @@ class TariffController extends \hipanel\base\CrudController
 
     public function actionUpdate($id)
     {
+        /** @var AbstractTariffManager $manager */
         $manager = TariffManagerFactory::createById($id, ['scenario' => 'update']);
         $form = $manager->form;
 

@@ -53,34 +53,6 @@ class DomainTariffManager extends AbstractTariffManager
         $this->formOptions['zones'] = $this->getZones();
     }
 
-    public function insert()
-    {
-        $data = $this->form->toArray();
-
-        try {
-            $result = Tariff::perform('create', $data);
-        } catch (ResponseErrorException $e) {
-            throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
-        }
-
-        $this->form->id = $result['id'];
-
-        return true;
-    }
-
-    public function update()
-    {
-        $data = $this->form->toArray();
-
-        try {
-            $result = Tariff::perform('update', $data);
-        } catch (ResponseErrorException $e) {
-            throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
-        }
-
-        return true;
-    }
-
     protected function getFormOptions()
     {
         return array_merge([

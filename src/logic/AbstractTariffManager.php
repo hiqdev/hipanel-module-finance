@@ -12,9 +12,11 @@ namespace hipanel\modules\finance\logic;
 
 use hipanel\modules\finance\forms\AbstractTariffForm;
 use hipanel\modules\finance\models\Tariff;
+use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\BaseObject;
+use yii\web\UnprocessableEntityHttpException;
 
 abstract class AbstractTariffManager extends BaseObject
 {
@@ -135,5 +137,33 @@ abstract class AbstractTariffManager extends BaseObject
     public function setTariff($tariff)
     {
         $this->tariff = $tariff;
+    }
+
+    public function insert(): bool
+    {
+        $data = $this->form->toArray();
+
+        try {
+            $result = Tariff::perform('create', $data);
+        } catch (ResponseErrorException $e) {
+            throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
+        }
+
+        $this->form->id = $result['id'];
+
+        return true;
+    }
+
+    public function update(): bool
+    {
+        $data = $this->form->toArray();
+
+        try {
+            $result = Tariff::perform('update', $data);
+        } catch (ResponseErrorException $e) {
+            throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
+        }
+
+        return true;
     }
 }
