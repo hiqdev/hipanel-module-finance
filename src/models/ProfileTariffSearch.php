@@ -1,0 +1,39 @@
+<?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
+
+namespace hipanel\modules\finance\models;
+
+use hipanel\base\SearchModelTrait;
+use hipanel\helpers\ArrayHelper;
+use Yii;
+
+/**
+ * Class Tariff.
+ * @property resource[]|DomainResource[]|ServerResource[] $resources
+ */
+class ProfileTariffSearch extends ProfileTariff
+{
+    use SearchModelTrait {
+        searchAttributes as defaultSearchAttributes;
+    }
+
+    public function rules()
+    {
+        return ArrayHelper::merge(parent::rules(), [
+            [['id', 'ids'], 'safe', 'on' => ['search']],
+        ]);
+    }
+
+    public function searchAttributes()
+    {
+        return ArrayHelper::merge($this->defaultSearchAttributes(), [
+        ]);
+    }
+}

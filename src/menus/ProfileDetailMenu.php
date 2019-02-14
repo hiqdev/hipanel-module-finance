@@ -8,11 +8,15 @@
  * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hipanel\modules\finance\models;
+namespace hipanel\modules\finance\menus;
 
-use hipanel\helpers\ArrayHelper;
-
-class TariffSearch extends Tariff
+class ProfileDetailMenu extends ProfileActionsMenu
 {
-    use \hipanel\base\SearchModelTrait;
+
+    public function items()
+    {
+        $items = parent::items();
+        unset($items['view']);
+        return $items;
+    }
 }
