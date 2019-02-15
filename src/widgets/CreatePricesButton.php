@@ -29,7 +29,7 @@ class CreatePricesButton extends Widget
                 'size' => Modal::SIZE_SMALL,
                 'toggleButton' => false,
             ]);
-            if ($this->model->type !== Plan::TYPE_TEMPLATE) {
+            if ($this->model->supportsSharedPrices()) {
                 echo AjaxModal::widget([
                     'id' => 'create-shared-prices-modal',
                     'header' => Html::tag('h4', Yii::t('hipanel.finance.price', 'Create shared prices'),
@@ -73,7 +73,7 @@ class CreatePricesButton extends Widget
                             ],
                         ],
                     ],
-                    $this->model->type !== Plan::TYPE_TEMPLATE ? [
+                    $this->model->supportsSharedPrices() ? [
                         'encode' => false,
                         'url' => '#',
                         'label' => Yii::t('hipanel.finance.price', 'Create shared prices'),

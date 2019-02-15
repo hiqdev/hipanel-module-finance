@@ -104,6 +104,11 @@ class Plan extends \hipanel\base\Model
         return $this->state === 'deleted';
     }
 
+    public function supportsSharedPrices(): bool
+    {
+        return !\in_array($this->type, [Plan::TYPE_TEMPLATE, Plan::TYPE_CERTIFICATE, Plan::TYPE_DOMAIN], true);
+    }
+
     /**
      * {@inheritdoc}
      * @return PlanQuery
