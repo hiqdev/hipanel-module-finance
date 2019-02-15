@@ -326,7 +326,7 @@ class PlanController extends CrudController
 
     /**
      * @param int $plan_id
-     * @return array | null
+     * @return Price[]|null Array of parent plan prices or `null`, when parent plan was not found
      */
     private function getParentPrices(int $plan_id)
     {
@@ -336,7 +336,11 @@ class PlanController extends CrudController
             ->joinWithPrices()
             ->one();
 
-        return $plan ? (new PlanInternalsGrouper($plan))->group() : null;
+        if ($plan === null || $plan->id === null) {
+            return null;
+        }
+
+        return (new PlanInternalsGrouper($plan))->group();
     }
 
     /**
