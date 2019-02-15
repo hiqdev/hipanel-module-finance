@@ -73,8 +73,8 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                         'visible' => $user->can('plan.read') && $user->can('test.beta'),
                     ],
                     'profiles' => [
-                        'label'   => Yii::t('hipanel.finance.profiletariff', 'Tariff profiles'),
-                        'url'     => ['@profiletariff/index'],
+                        'label'   => Yii::t('hipanel.finance.tariffprofile', 'Tariff profiles'),
+                        'url'     => ['@tariffprofile/index'],
                         'visible' => $user->can('plan.read'),
                     ],
                 ],

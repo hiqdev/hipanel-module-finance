@@ -8,12 +8,12 @@
 use hipanel\modules\finance\menus\ProfileDetailMenu;
 use hipanel\widgets\Box;
 use hipanel\widgets\ClientSellerLink;
-use hipanel\modules\finance\grid\ProfileTariffGridView;
+use hipanel\modules\finance\grid\TariffProfileGridView;
 use yii\helpers\Html;
 
 $this->title = Html::encode($model->name);
-$this->params['subtitle'] = Yii::t('hipanel.finance.profiletariff', 'Tariff profile detailed information');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel.finance.profiletariff', 'Tariff profiles'), 'url' => ['index']];
+$this->params['subtitle'] = Yii::t('hipanel.finance.tariffprofile', 'Tariff profile detailed information');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel.finance.tariffprofile', 'Tariff profiles'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php Box::end() ?>
     </div>
     <div class="col-md-9">
-        <?= ProfileTariffGridView::detailView([
+        <?= TariffProfileGridView::detailView([
             'boxed' => true,
             'model' => $model,
             'columns' => [

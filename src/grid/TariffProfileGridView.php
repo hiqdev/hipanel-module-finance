@@ -18,7 +18,7 @@ use yii\helpers\Html;
 
 use Yii;
 
-class ProfileTariffGridView extends \hipanel\grid\BoxedGridView
+class TariffProfileGridView extends \hipanel\grid\BoxedGridView
 {
     public function columns()
     {
@@ -29,7 +29,7 @@ class ProfileTariffGridView extends \hipanel\grid\BoxedGridView
                 'note' => null,
                 'value' => function ($model) {
                     if (empty($model->name)) {
-                        return Yii::t('hipanel.finance.profiletariff', 'Default');
+                        return Yii::t('hipanel.finance.tariffprofile', 'Default');
                     }
 
                     return $model->name;

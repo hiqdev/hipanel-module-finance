@@ -18,10 +18,10 @@ use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\filters\EasyAccessControl;
-use hipanel\modules\finance\models\ProfileTariff;
+use hipanel\modules\finance\models\TariffProfile;
 use Yii;
 
-class ProfileTariffController extends \hipanel\base\CrudController
+class TariffProfileController extends \hipanel\base\CrudController
 {
     public function behaviors()
     {
@@ -61,7 +61,7 @@ class ProfileTariffController extends \hipanel\base\CrudController
             ],
             'delete' => [
                 'class' => SmartDeleteAction::class,
-                'success' => Yii::t('hipanel.finance.profiletariff', 'Profile deleted'),
+                'success' => Yii::t('hipanel.finance.tariffprofile', 'Profile deleted'),
             ],
         ]);
     }

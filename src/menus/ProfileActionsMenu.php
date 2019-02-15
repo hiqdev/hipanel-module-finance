@@ -24,7 +24,7 @@ class ProfileActionsMenu extends \hiqdev\yii2\menus\Menu
             [
                 'label' => Yii::t('hipanel', 'Update'),
                 'icon' => 'fa-pencil',
-                'url' => ['@profiletariff/update', 'id' => $this->model->id],
+                'url' => ['@tariffprofile/update', 'id' => $this->model->id],
                 'visible' => Yii::$app->user->can('plan.update'),
             ],
             [
@@ -32,13 +32,13 @@ class ProfileActionsMenu extends \hiqdev\yii2\menus\Menu
                     'model' => $this->model,
                     'scenario' => 'delete',
                     'button' => ['label' => '<i class="fa fa-fw fa-trash-o"></i>' . Yii::t('hipanel', 'Delete')],
-                    'body' => Yii::t('hipanel.finance.profiletariff', 'Tariff must be unlinked form all objects before. Are you sure you want to delete profiletariff {name}?', ['name' => $model->name]),
+                    'body' => Yii::t('hipanel.finance.tariffprofile', 'Tariff must be unlinked form all objects before. Are you sure you want to delete tariffprofile {name}?', ['name' => $model->name]),
                     'modal' => [
                         'header' => Html::tag('h4', Yii::t('hipanel:finance:tariff', 'Confirm tariff profile deleting')),
                         'headerOptions' => ['class' => 'label-danger'],
                         'footer' => [
-                            'label' => Yii::t('hipanel.finance.profiletariff', 'Delete tariff profile'),
-                            'data-loading-text' => Yii::t('hipanel.finance.profiletariff', 'Deleting tariff profile...'),
+                            'label' => Yii::t('hipanel.finance.tariffprofile', 'Delete tariff profile'),
+                            'data-loading-text' => Yii::t('hipanel.finance.tariffprofile', 'Deleting tariff profile...'),
                             'class' => 'btn btn-danger',
                         ],
                     ],
@@ -49,7 +49,7 @@ class ProfileActionsMenu extends \hiqdev\yii2\menus\Menu
             'view' => [
                 'label' => Yii::t('hipanel', 'View'),
                 'icon' => 'fa-info',
-                'url' => ['@profiletariff/view', 'id' => $this->model->id],
+                'url' => ['@tariffprofile/view', 'id' => $this->model->id],
                 'encode' => false,
                 'visible' => Yii::$app->user->can('plan.read'),
             ],

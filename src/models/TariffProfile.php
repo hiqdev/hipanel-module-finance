@@ -17,13 +17,13 @@ use Yii;
  * Class Tariff.
  * @property resource[]|DomainResource[]|ServerResource[] $resources
  */
-class ProfileTariff extends \hipanel\base\Model
+class TariffProfile extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
 
     public static function tableName()
     {
-        return 'profiletariff';
+        return 'tariffprofile';
     }
 
     /**
@@ -38,7 +38,7 @@ class ProfileTariff extends \hipanel\base\Model
                 'required',
                 'on' => ['update', 'create'],
                 'when' => function ($model) {
-                    return $model->id != $model->client_id;
+                    return (int) $model->id !== (int) $model->client_id;
                 },
             ],
             [['id'], 'integer'],
@@ -81,13 +81,13 @@ class ProfileTariff extends \hipanel\base\Model
     public function attributeLabels()
     {
         return $this->mergeAttributeLabels([
-            'name' => Yii::t('hipanel.finance.profiletariff', 'Name'),
-            'tariff_names' => Yii::t('hipanel.finance.profiletariff', 'Tariffs'),
-            'domain' => Yii::t('hipanel.finance.profiletariff', 'Domain tariff'),
-            'certificate' => Yii::t('hipanel.finance.profiletariff', 'Certificate tariff'),
-            'svds' => Yii::t('hipanel.finance.profiletariff', 'XEN tariffs'),
-            'ovds' => Yii::t('hipanel.finance.profiletariff', 'Open-VZ tariffs'),
-            'server' => Yii::t('hipanel.finance.profiletariff', 'Server tariffs'),
+            'name' => Yii::t('hipanel.finance.tariffprofile', 'Name'),
+            'tariff_names' => Yii::t('hipanel.finance.tariffprofile', 'Tariffs'),
+            'domain' => Yii::t('hipanel.finance.tariffprofile', 'Domain tariff'),
+            'certificate' => Yii::t('hipanel.finance.tariffprofile', 'Certificate tariff'),
+            'svds' => Yii::t('hipanel.finance.tariffprofile', 'XEN tariffs'),
+            'ovds' => Yii::t('hipanel.finance.tariffprofile', 'Open-VZ tariffs'),
+            'server' => Yii::t('hipanel.finance.tariffprofile', 'Server tariffs'),
         ]);
     }
 

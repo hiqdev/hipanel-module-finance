@@ -18,7 +18,7 @@ use Yii;
  * Class Tariff.
  * @property resource[]|DomainResource[]|ServerResource[] $resources
  */
-class ProfileTariffSearch extends ProfileTariff
+class TariffProfileSearch extends TariffProfile
 {
     use SearchModelTrait {
         searchAttributes as defaultSearchAttributes;

@@ -17,7 +17,7 @@ use yii\helpers\Html;
 ?>
 
 <?php $form = ActiveForm::begin([
-    'id' => 'profiletariff-form',
+    'id' => 'tariffprofile-form',
     'validationUrl' => Url::toRoute(['validate-form', 'scenario' => $model->scenario]),
 ]) ?>
 
@@ -33,7 +33,7 @@ use yii\helpers\Html;
                 <?php if (!$model->isNewRecord) : ?>
                     <?= Html::activeHiddenInput($model, 'id') ?>
                 <?php endif ?>
-                <?php if ($model->isNewRecord) : ?>
+                <?php if ($model->isNewRecord || (int) $model->id !== (int) $model->client_id) : ?>
                     <?= $form->field($model, 'name') ?>
                 <?php endif ?>
                 <?= Html::activeHiddenInput($model, 'client_id') ?>

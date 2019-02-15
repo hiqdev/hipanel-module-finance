@@ -19,7 +19,7 @@ return [
         '@finance' => '/finance',
         '@plan' => '/finance/plan',
         '@price' => '/finance/price',
-        '@profiletariff' => '/finance/profile-tariff',
+        '@tariffprofile' => '/finance/tariff-profile',
     ],
     'modules' => [
         'finance' => [
@@ -125,7 +125,7 @@ return [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/finance/messages',
                 ],
-                'hipanel.finance.profiletariff' => [
+                'hipanel.finance.tariffprofile' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/finance/messages',
                 ],

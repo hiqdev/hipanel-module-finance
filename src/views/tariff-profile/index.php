@@ -1,6 +1,6 @@
 <?php
 
-use hipanel\modules\finance\grid\ProfileTariffGridView;
+use hipanel\modules\finance\grid\TariffProfileGridView;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 use yii\bootstrap\Dropdown;
@@ -11,7 +11,7 @@ use yii\helpers\Html;
  * @var \yii\web\View
  * @var array $types
  */
-$this->title = Yii::t('hipanel.finance.profiletariff', 'Tariff profiles');
+$this->title = Yii::t('hipanel.finance.tariffprofile', 'Tariff profiles');
 $this->params['subtitle'] = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $page->setSearchFormData(compact(['types'])) ?>
 
         <?php $page->beginContent('main-actions') ?>
-            <?= Html::a(Yii::t('hipanel.finance.profiletariff', 'Create profile'), ['@profiletariff/create'], ['class' => 'btn btn-sm btn-success']) ?>
+            <?= Html::a(Yii::t('hipanel.finance.tariffprofile', 'Create profile'), ['@tariffprofile/create'], ['class' => 'btn btn-sm btn-success']) ?>
         <?php $page->endContent() ?>
 
     <?php $page->beginContent('sorter-actions') ?>
@@ -36,11 +36,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $page->beginContent('table') ?>
         <?php $page->beginBulkForm() ?>
-        <?= ProfileTariffGridView::widget([
+        <?= TariffProfileGridView::widget([
             'boxed' => false,
             'dataProvider' => $dataProvider,
             'filterModel' => $model,
             'columns' => [
+                'checkbox',
                 'name',
                 'tariff_names',
                 'actions',
