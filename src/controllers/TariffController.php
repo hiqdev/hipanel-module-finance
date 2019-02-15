@@ -18,7 +18,11 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\filters\EasyAccessControl;
 use hipanel\models\Ref;
 use hipanel\modules\finance\logic\AbstractTariffManager;
+use hipanel\modules\finance\logic\CertificateTariffManager;
 use hipanel\modules\finance\logic\DomainTariffManager;
+use hipanel\modules\finance\logic\OvdsTariffManager;
+use hipanel\modules\finance\logic\ServerTariffManager;
+use hipanel\modules\finance\logic\SvdsTariffManager;
 use hipanel\modules\finance\logic\TariffManagerFactory;
 use hipanel\modules\finance\models\CertificateResource;
 use Yii;
@@ -85,7 +89,7 @@ class TariffController extends \hipanel\base\CrudController
 
     public function actionCreateSvds($parent_id = null)
     {
-        /** @var DomainTariffManager $manager */
+        /** @var SvdsTariffManager $manager */
         $manager = TariffManagerFactory::createByType('svds', $parent_id);
 
         $form = $manager->form;
@@ -101,7 +105,7 @@ class TariffController extends \hipanel\base\CrudController
 
     public function actionCreateOvds($parent_id = null)
     {
-        /** @var DomainTariffManager $manager */
+        /** @var OvdsTariffManager $manager */
         $manager = TariffManagerFactory::createByType('ovds', $parent_id);
         $form = $manager->form;
 
@@ -116,7 +120,7 @@ class TariffController extends \hipanel\base\CrudController
 
     public function actionCreateCertificate($parent_id = null)
     {
-        /** @var CertificateResource $manager */
+        /** @var CertificateTariffManager $manager */
         $manager = TariffManagerFactory::createByType('certificate', $parent_id);
         $form = $manager->form;
 
@@ -131,7 +135,7 @@ class TariffController extends \hipanel\base\CrudController
 
     public function actionCreateServer($parent_id = null)
     {
-        /** @var CertificateResource $manager */
+        /** @var ServerTariffManager $manager */
         $manager = TariffManagerFactory::createByType('server', $parent_id);
         $form = $manager->form;
 
