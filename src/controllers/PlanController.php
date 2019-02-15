@@ -129,7 +129,7 @@ class PlanController extends CrudController
 
     public function actionCreatePrices(int $plan_id, int $template_plan_id)
     {
-        $plan = $this->findPlan($template_plan_id);
+        $plan = $this->findTemplatePlan($plan_id, $plan_id, $template_plan_id);
 
         $suggestions = (new Price)->batchQuery('suggest', [
             'object_id' => $plan_id,
@@ -137,11 +137,12 @@ class PlanController extends CrudController
             'template_plan_id' => $template_plan_id,
             'type' => $plan->type,
         ]);
-
         $this->populateWithPrices($plan, $suggestions);
+
         $parentPrices = $this->getParentPrices($plan_id);
 
         $targetPlan = Plan::findOne(['id' => $plan_id]);
+
         $grouper = new PlanInternalsGrouper($plan);
         [$plan->name, $plan->id] = [$targetPlan->name, $targetPlan->id];
         $action = ['@plan/update-prices', 'id' => $plan->id, 'scenario' => 'create'];
@@ -187,6 +188,24 @@ class PlanController extends CrudController
         ]);
 
         return $this->renderAjax('modals/suggestPrices', compact('plan', 'model'));
+    }
+
+    private function findTemplatePlan(int $targetPlan, int $object_id, int $expectedTemplateId): Plan
+    {
+        $result = Plan::perform( 'search-templates', [
+            'id' => $targetPlan,
+            'object_id' => $object_id,
+        ]);
+        $plans = ArrayHelper::index( $result, 'id');
+
+        if (!isset($plans[$expectedTemplateId])) {
+            throw new NotFoundHttpException('Requested template plan not found');
+        }
+
+        $plan = Plan::instantiate($plans[$expectedTemplateId]);
+        Plan::populateRecord($plan, $plans[$expectedTemplateId]);
+
+        return $plan;
     }
 
     /**
@@ -311,20 +330,13 @@ class PlanController extends CrudController
      */
     private function getParentPrices(int $plan_id)
     {
-        $parent_id = (new Plan())->query('get-parent-id', [
-            'id' => $plan_id,
-        ]);
-        $parent_id = $parent_id['parent_id'];
-        if ($parent_id === null) {
-            return null;
-        }
-
-        $parent = Plan::find()
-            ->byId($parent_id)
-            ->withPrices()
+        $plan = Plan::find()
+            ->addAction('get-parent')
+            ->where(['id' => $plan_id])
+            ->joinWithPrices()
             ->one();
 
-        return $parent ? (new PlanInternalsGrouper($parent))->group() : null;
+        return $plan ? (new PlanInternalsGrouper($plan))->group() : null;
     }
 
     /**

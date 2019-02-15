@@ -49,4 +49,16 @@ class PlanQuery extends \hiqdev\hiart\ActiveQuery
             },
         ]);
     }
+
+    public function joinWithPrices()
+    {
+        return $this->joinWith([
+            'prices' => function (ActiveQuery $query) {
+                $query
+                    ->addSelect('main_object_id')
+                    ->joinWith('object')
+                    ->limit(-1);
+            },
+        ]);
+    }
 }
