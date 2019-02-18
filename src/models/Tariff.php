@@ -34,7 +34,9 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
     public function rules()
     {
         return [
-            [['client_id', 'seller_id', 'id', 'parent_id'], 'integer'],
+            [['id'], 'filter', 'filter' => function($value) { return explode(",", $value);}, 'on' => ['search']],
+            [['id'], 'each', 'rule' => ['trim', 'integer'], 'on' => ['search']],
+            [['client_id', 'seller_id', 'id', 'parent_id'], 'integer', 'on' => ['create', 'update']],
             [['client', 'seller', 'bill', 'name'], 'safe'],
             [['domain', 'server'], 'safe'],
             [['tariff', 'tariff_id'], 'safe'],
