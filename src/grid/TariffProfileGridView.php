@@ -14,6 +14,7 @@ use hipanel\helpers\Url;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use hipanel\modules\finance\menus\ProfileActionsMenu;
 use hipanel\modules\finance\models\Tariff;
+use hipanel\modules\finance\models\TariffProfile;
 use yii\helpers\Html;
 
 use Yii;
@@ -27,7 +28,7 @@ class TariffProfileGridView extends \hipanel\grid\BoxedGridView
                 'class' => 'hipanel\grid\MainColumn',
                 'filterAttribute' => 'name_like',
                 'note' => null,
-                'value' => function ($model) {
+                'value' => function (TariffProfile $model) {
                     if (empty($model->name)) {
                         return Yii::t('hipanel.finance.tariffprofile', 'Default');
                     }
@@ -37,8 +38,12 @@ class TariffProfileGridView extends \hipanel\grid\BoxedGridView
             ],
             'tariff_names' => [
                 'filter' => false,
-                'format' => 'html',
-                'value' => function ($model) {
+                'format' => 'raw',
+                'value' => function (TariffProfile $model) {
+                    if (empty($model->tariffs)) {
+                        return '';
+                    }
+
                     foreach ($model->tariffs as $type => $values) {
                         if (empty($values)) {
                             continue;
@@ -56,25 +61,38 @@ class TariffProfileGridView extends \hipanel\grid\BoxedGridView
             ],
             'domain_tariff' => [
                 'attribute' => 'domain',
-                'format' => 'html',
-                'value' => function ($model) {
+                'format' => 'raw',
+                'value' => function (TariffProfile $model) {
+                    if (empty($model->domain)) {
+                        return '';
+                    }
+
                     return $this->tariffLink($model->domain, $model->tariff_names[$model->domain]);
                 },
             ],
             'certificate_tariff' => [
                 'attribute' => 'certificate',
-                'format' => 'html',
-                'value' => function ($model) {
+                'format' => 'raw',
+                'value' => function (TariffProfile $model) {
+                    if (empty($model->certificate)) {
+                        return '';
+                    }
+
                     return $this->tariffLink($model->certificate, $model->tariff_names[$model->certificate]);
                 },
             ],
             'svds_tariff' => [
                 'attribute' => 'svds',
-                'format' => 'html',
-                'value' => function ($model) {
+                'format' => 'raw',
+                'value' => function (TariffProfile $model) {
+                    if (empty($model->tariffs)) {
+                        return '';
+                    }
+
                     if (empty($model->tariffs[Tariff::TYPE_XEN])) {
                         return "";
                     }
+
                     foreach ($model->tariffs[Tariff::TYPE_XEN] as $id => $name) {
                          $links[$id] = $this->tariffLink($id, $name);
                     }
@@ -84,11 +102,16 @@ class TariffProfileGridView extends \hipanel\grid\BoxedGridView
             ],
             'ovds_tariff' => [
                 'attribute' => 'ovds',
-                'format' => 'html',
-                'value' => function ($model) {
+                'format' => 'raw',
+                'value' => function (TariffProfile $model) {
+                    if (empty($model->tariffs)) {
+                        return '';
+                    }
+
                     if (empty($model->tariffs[Tariff::TYPE_OPENVZ])) {
                         return "";
                     }
+
                     foreach ($model->tariffs[Tariff::TYPE_OPENVZ] as $id => $name) {
                          $links[$id] = $this->tariffLink($id, $name);
                     }
@@ -98,11 +121,16 @@ class TariffProfileGridView extends \hipanel\grid\BoxedGridView
             ],
             'server_tariff' => [
                 'attribute' => 'server',
-                'format' => 'html',
-                'value' => function ($model) {
+                'format' => 'raw',
+                'value' => function (TariffProfile $model) {
+                    if (empty($model->tariffs)) {
+                        return '';
+                    }
+
                     if (empty($model->tariffs[Tariff::TYPE_SERVER])) {
                         return "";
                     }
+
                     foreach ($model->tariffs[Tariff::TYPE_SERVER] as $id => $name) {
                          $links[$id] = $this->tariffLink($id, $name);
                     }
