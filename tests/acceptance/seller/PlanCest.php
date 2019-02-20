@@ -8,7 +8,7 @@ use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 
-class TariffCest
+class PlanCest
 {
     /**
      * @var IndexPage
@@ -23,8 +23,8 @@ class TariffCest
     public function ensureIndexPageWorks(Seller $I)
     {
         $I->login();
-        $I->needPage(Url::to('@tariff'));
-        $I->see('Tariffs', 'h1');
+        $I->needPage(Url::to('@plan/index'));
+        $I->see('Tariff plans', 'h1');
         $I->see('Create', 'a');
         $this->ensureICanSeeAdvancedSearchBox($I);
         $this->ensureICanSeeBulkBillSearchBox();
@@ -33,25 +33,27 @@ class TariffCest
     private function ensureICanSeeAdvancedSearchBox(Seller $I)
     {
         $this->index->containsFilters([
-            Input::asAdvancedSearch($I, 'Tariff'),
+            Input::asAdvancedSearch($I, 'Name'),
+            Input::asAdvancedSearch($I, 'Object name'),
             Input::asAdvancedSearch($I, 'Note'),
-            Select2::asAdvancedSearch($I, 'Type'),
             Select2::asAdvancedSearch($I, 'Client'),
-            Select2::asAdvancedSearch($I, 'Reseller'),
+            Select2::asAdvancedSearch($I, 'Buyer'),
+            Select2::asAdvancedSearch($I, 'Type'),
+            Select2::asAdvancedSearch($I, 'Statuses'),
         ]);
     }
 
     private function ensureICanSeeBulkBillSearchBox()
     {
         $this->index->containsBulkButtons([
-            'Copy',
+            'Restore',
             'Delete',
         ]);
         $this->index->containsColumns([
-            'Tariff',
-            'Used',
+            'Name',
+            'Seller',
             'Type',
-            'Client',
+            'Status',
         ]);
     }
 }

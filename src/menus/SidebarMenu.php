@@ -37,11 +37,6 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                         'url'     => ['/merchant/pay/deposit'],
                         'visible' => $user->can('deposit'),
                     ],
-                    'tariffs' => [
-                        'label'   => Yii::t('hipanel:finance', 'Tariffs'),
-                        'url'     => ['/finance/tariff/index'],
-                        'visible' => $user->can('plan.read'),
-                    ],
                     'requisites' => [
                         'label'   => Yii::t('hipanel:finance', 'Requisites'),
                         'url'     => ['/finance/bill/requisites'],
@@ -65,7 +60,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     'plans' => [
                         'label'   => Yii::t('hipanel:finance', 'Tariff plans'),
                         'url'     => ['@plan/index'],
-                        'visible' => $user->can('plan.read') && $user->can('test.beta'),
+                        'visible' => $user->can('plan.read'),
                     ],
                     'prices' => [
                         'label'   => Yii::t('hipanel:finance', 'Prices'),

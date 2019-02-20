@@ -15,7 +15,7 @@ use hipanel\widgets\IndexPage;
  * @var array $parentPrices
  */
 
-$this->title = Html::encode($model->name);
+$this->title = $model->name ? Html::encode($model->name) : '&nbsp;';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -84,6 +84,9 @@ CSS
                 Plan::TYPE_CERTIFICATE,
                 Plan::TYPE_DOMAIN,
                 Plan::TYPE_SWITCH,
+                Plan::TYPE_AVDS,
+                Plan::TYPE_OVDS,
+                Plan::TYPE_SVDS,
             ], true)): ?>
                 <?php $page->beginContent('show-actions') ?>
                     <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>
