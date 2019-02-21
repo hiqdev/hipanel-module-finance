@@ -16,7 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $page->setSearchFormData([]) ?>
 
         <?php $page->beginContent('main-actions') ?>
-            <?= Html::a(Yii::t('hipanel', 'Create'), ['/finance/plan/create'], ['class' => 'btn btn-sm btn-success']) ?>
+            <?php if (Yii::$app->user->can('plan.create')) : ?>
+                <?= Html::a(Yii::t('hipanel', 'Create'), ['/finance/plan/create'], ['class' => 'btn btn-sm btn-success']) ?>
+            <?php endif ?>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('sorter-actions') ?>
