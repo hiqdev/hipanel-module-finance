@@ -59,6 +59,9 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
                             <td><?= current($group)->object->label ?></td>
                             <?php foreach (CertificatePrice::getTypes() as $type => $name) : ?>
                                 <?php $price = $group[$type]; ?>
+                                <?php if ($price === null): ?>
+                                    <?= str_repeat('<td></td>', count(CertificatePrice::getPeriods())) ?>
+                                <?php continue; endif ?>
                                 <?php $price->plan_id = $plan_id ?? $price->plan_id; ?>
                                 <?= Html::activeHiddenInput($price, "[$i]id") ?>
                                 <?= Html::activeHiddenInput($price, "[$i]plan_id") ?>
