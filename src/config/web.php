@@ -179,6 +179,18 @@ return [
             \hipanel\modules\finance\models\factories\PriceModelFactory::class => \hipanel\modules\finance\models\factories\PriceModelFactory::class,
             \hipanel\modules\finance\grid\presenters\price\PricePresenterFactory::class => \hipanel\modules\finance\grid\presenters\price\PricePresenterFactory::class,
             \hipanel\modules\finance\widgets\FormulaHelpModal::class => \hipanel\modules\finance\widgets\FormulaHelpModal::class,
+
+            \Money\Currencies::class => function (\yii\di\Container $container) {
+                return new \Money\Currencies\AggregateCurrencies([
+                    new \Money\Currencies\ISOCurrencies(),
+                ]);
+            },
+            \Money\MoneyFormatter::class => function (\yii\di\Container $container) {
+                return new \Money\Formatter\IntlMoneyFormatter(
+                    new NumberFormatter(Yii::$app->language, \NumberFormatter::CURRENCY),
+                    $container->get(Money\Currencies::class)
+                );
+            }
         ],
     ],
 ];

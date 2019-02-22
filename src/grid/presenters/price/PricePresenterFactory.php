@@ -2,9 +2,13 @@
 
 namespace hipanel\modules\finance\grid\presenters\price;
 
+use hipanel\modules\finance\models\CertificatePrice;
+use hipanel\modules\finance\models\DomainServicePrice;
+use hipanel\modules\finance\models\DomainZonePrice;
 use hipanel\modules\finance\models\TemplatePrice;
 use hipanel\modules\finance\models\Price;
 use yii\base\InvalidConfigException;
+use yii\di\Container;
 
 /**
  * Class PricePresenterFactory
@@ -19,12 +23,23 @@ class PricePresenterFactory
     protected $map = [
         Price::class => PricePresenter::class,
         TemplatePrice::class => TemplatePricePresenter::class,
+        CertificatePrice::class => CertificatePricePresenter::class,
+        '*' => PricePresenter::class,
     ];
 
     /**
      * @var array
      */
     protected $cache = [];
+    /**
+     * @var Container
+     */
+    private $container;
+
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * @param string $name
@@ -33,12 +48,10 @@ class PricePresenterFactory
      */
     public function build($name)
     {
-        if (!isset($this->map[$name])) {
-            throw new InvalidConfigException('Can not create presenter for class ' . $name);
-        }
+        $className = $this->map[$name] ?? $this->map['*'];
 
         if (!isset($this->cache[$name])) {
-            $this->cache[$name] = new $this->map[$name]();
+            $this->cache[$name] = $this->container->get($className);
         }
 
         return $this->cache[$name];
