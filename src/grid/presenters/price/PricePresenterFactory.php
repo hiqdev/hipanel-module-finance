@@ -7,8 +7,8 @@ use hipanel\modules\finance\models\DomainServicePrice;
 use hipanel\modules\finance\models\DomainZonePrice;
 use hipanel\modules\finance\models\TemplatePrice;
 use hipanel\modules\finance\models\Price;
+use Psr\Container\ContainerInterface;
 use yii\base\InvalidConfigException;
-use yii\di\Container;
 
 /**
  * Class PricePresenterFactory
@@ -32,11 +32,11 @@ class PricePresenterFactory
      */
     protected $cache = [];
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
