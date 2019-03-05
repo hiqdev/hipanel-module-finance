@@ -10,13 +10,6 @@
 
 namespace hipanel\modules\finance\grid;
 
-use hipanel\widgets\ArraySpoiler;
-use hipanel\helpers\FontIcon;
-use hipanel\widgets\ModalButton;
-use Yii;
-use yii\base\InvalidConfigException;
-use yii\helpers\Html;
-
 class MonthlyDocumentsColumn extends DocumentsColumn
 {
     protected function getRouteForUpdate()
