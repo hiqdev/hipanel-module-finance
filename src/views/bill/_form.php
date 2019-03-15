@@ -98,7 +98,7 @@ $form = ActiveForm::begin([
                                     'currencyAttributeOptions' => [
                                         'items' => $this->context->getCurrencyTypes(),
                                     ],
-                                    'inputOptions' => [
+                                    'options' => [
                                         'data-bill-sum' => true,
                                     ],
                                 ]) ?>
