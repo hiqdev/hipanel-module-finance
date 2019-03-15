@@ -74,6 +74,7 @@ class PaymentsCest
         $page->addCharge([]);
         $I->pressButton('Save');
         $page->containsBlankFieldsError(['Sum', 'Quantity']);
+        $page->deleteLastCharge();
     }
 
     /**

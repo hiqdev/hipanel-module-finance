@@ -119,14 +119,18 @@ JS
         return $sum;
     }
 
-    public function deleteLastCharge()
+    public function deleteLastCharge(): void
     {
         $this->tester->click('div.bill-charges>div:last-child button');
     }
 
     public function deleteChargeByName(string $chargeName): void
     {
-        $this->tester->executeJS(';$("div.bill-charges :contains(\'" + arguments[0] + "\')").parents(".charge-item").find("button").click();', [$chargeName]);
+        $this->tester->executeJS(
+            ';let charge = $("div.bill-charges :contains(\'" + arguments[0] + "\')");
+            charge.parents(".charge-item").find("button").click();',
+            [$chargeName]
+        );
     }
 
     /**
