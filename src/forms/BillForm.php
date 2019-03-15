@@ -17,6 +17,7 @@ class BillForm extends Model
 
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
+    const SCENARIO_COPY   = 'copy';
 
     const EVENT_SHOW_FORM = 'showForm';
 
@@ -185,25 +186,33 @@ class BillForm extends Model
     {
         return [
             [['id', 'object_id'], 'integer', 'on' => [self::SCENARIO_UPDATE]],
-            [['sum', 'quantity'], 'number', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['sum', 'quantity'], 'number', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
             [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
-            [['label', 'currency', 'unit', 'type', 'object', 'class'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['label', 'currency', 'unit', 'type', 'object', 'class'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
             [['sum'], BillChargesSumValidator::class],
-            [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]], // TODO: should be probably replaced with input on client side
-            [['object_id'], 'integer', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]], // TODO: should be probably replaced with input on client side
+            [['object_id'], 'integer', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
             [['currency'], function ($attribute) {
                     if (!array_key_exists(mb_strtolower($this->{$attribute}), array_change_key_case(Currency::list(), CASE_LOWER))) {
                         $this->addError($attribute, Yii::t('hipanel:finance', 'Currency is invalid'));
                     }
-                }, 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE],
+                }, 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY],
             ],
             [['id'], 'required', 'on' => [self::SCENARIO_UPDATE]],
             [
                 ['client_id', 'sum', 'quantity', 'unit', 'time', 'currency', 'type'],
                 'required',
-                'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE],
+                'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY],
             ],
-            [['!charges'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['!charges'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
+
+            [['time', 'object_id', 'type'], function ($attribute) {
+                try {
+                    Bill::perform('check-unique', $this->attributes);
+                } catch (\exception $e) {
+                    $this->adderror($attribute, Yii::t('hipanel:finance', 'The bill is not unique'));
+                }
+            }, 'on' => self::SCENARIO_COPY],
         ];
     }
 
@@ -224,6 +233,12 @@ class BillForm extends Model
     public function getIsNewRecord()
     {
         return $this->id === null;
+    }
+
+    public function forceNewRecord(): void
+    {
+        $this->id = null;
+        $this->time = new \DateTime();
     }
 
     private function getChargesAsArray()

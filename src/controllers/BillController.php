@@ -98,6 +98,13 @@ class BillController extends \hipanel\base\CrudController
             'validate-form' => [
                 'class' => ValidateFormAction::class,
             ],
+            'validate-bill-form' => [
+                'class' => ValidateFormAction::class,
+                'collection' => [
+                    'class' => Collection::class,
+                    'model' => new BillForm(),
+                ],
+            ],
             'create' => [
                 'class' => BillManagementAction::class,
             ],
@@ -105,18 +112,9 @@ class BillController extends \hipanel\base\CrudController
                 'class' => BillManagementAction::class,
             ],
             'copy' => [
-                'class' => SmartUpdateAction::class,
-                'scenario' => 'create',
-                'data' => function ($action, $data) {
-                    foreach ($data['models'] as $model) {
-                        /** @var Bill $model */
-                        $model->prepareToCopy();
-                    }
-
-                    list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
-
-                    return compact('billTypes', 'billGroupLabels');
-                },
+                'class' => BillManagementAction::class,
+                'view' => 'create',
+                'forceNewRecord' => true,
             ],
             'delete' => [
                 'class' => SmartDeleteAction::class,

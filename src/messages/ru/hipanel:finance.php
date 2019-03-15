@@ -180,4 +180,5 @@ return [
     'Now it is in {objectLink}' => 'Сейчас уже в {objectLink}',
     'Total:' => 'Всего:',
     '{units, plural, one{# unit} other{# units}} &times; {quantity, plural, one{# day} other{# days}}' => '{units, plural, one{# юнит} few{# юнита} other{# юнитов}} &times; {quantity, plural, one{# день} few{# дня} other{# дней}}',
+    'The bill is not unique' => 'Платёж не уникальный',
 ];

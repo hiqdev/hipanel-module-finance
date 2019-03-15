@@ -2,6 +2,7 @@
 
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
+use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\DateTimePicker;
@@ -20,9 +21,10 @@ $form = ActiveForm::begin([
     'id' => 'bill-dynamic-form',
     'action' => $model->isNewRecord ? Url::to(['@bill/create']) : Url::to(['@bill/update', 'id' => $model->id]),
     'enableClientValidation' => true,
+    'enableAjaxValidation' => true,
     'validationUrl' => Url::toRoute([
-        'validate-form',
-        'scenario' => $model->isNewRecord ? $model->scenario : Bill::SCENARIO_UPDATE,
+        'validate-bill-form',
+        'scenario' => $model->scenario,
     ]),
 ]) ?>
 <?php DynamicFormWidget::begin([

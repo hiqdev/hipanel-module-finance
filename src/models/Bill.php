@@ -98,14 +98,6 @@ class Bill extends \hipanel\base\Model
         ]);
     }
 
-    public function prepareToCopy()
-    {
-        $this->id = null;
-        $this->setIsNewRecord(true);
-
-        return true;
-    }
-
     public function getCharges()
     {
         return $this->hasMany(Charge::class, ['bill_id' => 'id'])->inverseOf('bill');

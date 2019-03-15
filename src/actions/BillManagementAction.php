@@ -34,6 +34,16 @@ class BillManagementAction extends Action
      */
     public $scenario;
 
+    /**
+     * @var string The view that represents current update action
+     */
+    public $_view;
+
+    /**
+     * @var bool
+     */
+    public $forceNewRecord = false;
+
     public function __construct($id, Controller $controller, BillTypesProvider $billTypesProvider, array $config = [])
     {
         parent::__construct($id, $controller, $config);
@@ -46,7 +56,7 @@ class BillManagementAction extends Action
     {
         parent::init();
 
-        if (!isset($this->scenario)) {
+        if (!isset($this->scenario) || !in_array($this->scenario, [BillForm::SCENARIO_CREATE, BillForm::SCENARIO_UPDATE, BillForm::SCENARIO_COPY])) {
             $this->scenario = $this->id;
         }
     }
@@ -63,7 +73,7 @@ class BillManagementAction extends Action
 
         list($billTypes, $billGroupLabels) = $this->billTypesProvider->getGroupedList();
 
-        return $this->controller->render($this->scenario, [
+        return $this->controller->render($this->view, [
             'models' => $this->collection->getModels(),
             'billTypes' => $billTypes,
             'billGroupLabels' => $billGroupLabels
@@ -79,7 +89,12 @@ class BillManagementAction extends Action
         }
 
         $bills = Bill::find()->joinWith('charges')->where(['ids' => $ids, 'with_charges' => true])->all();
-        $billForms = BillForm::createMultipleFromBills($bills, BillForm::SCENARIO_UPDATE);
+        $billForms = BillForm::createMultipleFromBills($bills, $this->scenario);
+        if ($this->forceNewRecord === true) {
+            foreach ($billForms as $model) {
+                $model->forceNewRecord();
+            }
+        }
         $this->collection->set($billForms);
     }
 
@@ -160,5 +175,21 @@ class BillManagementAction extends Action
         if ($this->scenario === BillForm::SCENARIO_UPDATE) {
             return Yii::$app->session->addFlash('success', Yii::t('hipanel:finance', 'Bill was updated successfully'));
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getView()
+    {
+        return $this->_view ?: $this->scenario;
+    }
+
+    /**
+     * @param string $view
+     */
+    public function setView($view)
+    {
+        $this->_view = $view;
     }
 }
