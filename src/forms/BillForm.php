@@ -209,8 +209,8 @@ class BillForm extends Model
             [['time', 'object_id', 'type'], function ($attribute) {
                 try {
                     Bill::perform('check-unique', $this->attributes);
-                } catch (\exception $e) {
-                    $this->adderror($attribute, Yii::t('hipanel:finance', 'The bill is not unique'));
+                } catch (\Exception $e) {
+                    $this->addError($attribute, Yii::t('hipanel:finance', 'The bill is not unique'));
                 }
             }, 'on' => self::SCENARIO_COPY],
         ];
