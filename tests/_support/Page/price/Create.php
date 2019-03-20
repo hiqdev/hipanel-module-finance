@@ -33,7 +33,8 @@ class Create extends View
     {
         $I = $this->tester;
 
-        $I->click('Create');
+        $I->click("//div/a[contains(text(), 'Create prices')]");
+        $I->click("//li/a[contains(text(), 'Create prices')]");
         $I->waitForElement('#create-prices');
     }
 

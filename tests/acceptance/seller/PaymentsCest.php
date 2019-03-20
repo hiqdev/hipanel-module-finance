@@ -123,6 +123,9 @@ class PaymentsCest
 
         $I->needPage(Url::to('@bill/index'));
 
+        $indexPage->sortBy('Time');
+        $indexPage->sortBy('Time');
+
         $indexPage->openRowMenuById($this->billId);
         $indexPage->chooseRowMenuOption('Update');
 

@@ -61,7 +61,7 @@ use yii\bootstrap\Html;
             <div class="col-md-4">
                 <div class="<?= AmountWithCurrency::$widgetClass ?>">
                     <?= $form->field($model, "[$i]subprices")->widget(AmountWithCurrency::class, [
-                        'inputOptions' => [
+                        'options' => [
                             'id' => Html::getInputName($model, "[$i][subprices]$currCode"),
                             'name' => Html::getInputName($model, "[$i][subprices]$currCode"),
                             'value' => $model->subprices[$currCode] ?? 0

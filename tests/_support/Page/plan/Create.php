@@ -91,7 +91,7 @@ class Create extends Plan
     {
         $I = $this->tester;
 
-        $list = ['Name', 'Type', 'Client', 'Currency', 'Note', ];
+        $list = ['Name', 'Type', 'Seller', 'Currency', 'Note'];
         foreach ($list as $label) {
             $I->see($label, "//label[@class='control-label']");
         }
