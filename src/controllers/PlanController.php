@@ -94,10 +94,10 @@ class PlanController extends CrudController
                         ->withPrices();
                 },
                 'data' => function (Action $action, array $data) {
-                    return array_merge($data, [
+                    return array_merge($data, array_filter([
                         'grouper' => new PlanInternalsGrouper($data['model']),
-                        'parentPrices' => $this->getParentPrices($data['model']['id'])
-                    ]);
+                        'parentPrices' => Yii::$app->user->can('plan.update') ? $this->getParentPrices($data['model']['id']) : null,
+                    ]));
                 },
             ],
             'set-note' => [
