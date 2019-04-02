@@ -199,4 +199,16 @@ class Price extends \hipanel\base\Model
 
         return explode("\n", $this->formula);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function afterFind()
+    {
+        parent::afterFind();
+
+        if ($this->object && $this->object->type === 'zone') {
+            $this->object->name = '.' . idn_to_utf8(ltrim($this->object->name, '.'), IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46);
+        }
+    }
 }
