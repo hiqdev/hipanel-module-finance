@@ -77,7 +77,8 @@ use yii\helpers\Html;
     <?php else : ?>
         <?= $form->field($model, 'object_id')->widget(ServerCombo::class, [
             'primaryFilter' => 'name_like',
-            'filter' => ['type' => ['format' => $plan->type === Plan::TYPE_PCDN ? 'cdnpix' : 'cdn']],
+            /// XXX Looks like managers need CDN tariffs to be applicable to any servers
+            /// 'filter' => ['type' => ['format' => $plan->type === Plan::TYPE_PCDN ? 'cdnpix' : 'cdn']],
         ]) ?>
     <?php endif; ?>
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
