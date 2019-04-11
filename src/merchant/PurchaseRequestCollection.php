@@ -50,6 +50,7 @@ class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
         'twoco' => 1,
         'epayments' => 1,
         'ikajo' => 1,
+        'coingate' => 1,
     ];
 
     public function fetchMerchants(DepositRequest $depositRequest)
