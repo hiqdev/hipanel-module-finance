@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\cart\storage;
 
@@ -14,7 +22,7 @@ use yii\web\Session;
 use yii\web\User;
 
 /**
- * Class RemoteCartStorage
+ * Class RemoteCartStorage.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -84,6 +92,7 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
                 }
 
                 $localCartData = $this->session[$this->sessionCartId] ?? null;
+
                 return $this->mergedCartData($remoteCartData, $localCartData);
             }, self::CACHE_DURATION);
         } catch (\Exception $exception) {
@@ -92,13 +101,13 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
     }
 
     /**
-     * @param string $remoteData base64 encoded JSON of serialized remotely stored cart items.
+     * @param string $remoteData base64 encoded JSON of serialized remotely stored cart items
      * @param string $localData local cart items array. Defaults to `null`, meaning no local data exists
      * @return array
      */
     private function mergedCartData($remoteData, $localData = null)
     {
-        $decodedRemote = Json::decode(base64_decode($remoteData));
+        $decodedRemote = Json::decode(base64_decode($remoteData, true));
 
         $local = $localData ? unserialize($localData) : [];
         $remote = isset($decodedRemote[$this->sessionCartId])

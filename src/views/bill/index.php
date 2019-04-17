@@ -14,12 +14,10 @@ use yii\helpers\Html;
  * @var \hiqdev\hiart\ActiveRecord $model
  * @var \hipanel\modules\finance\models\ExchangeRate[] $rates
  */
-
 $this->title = Yii::t('hipanel:finance', 'Bills');
 $this->params['breadcrumbs'][] = $this->title;
 $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
 $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates' => $rates]);
-
 
 ?>
 

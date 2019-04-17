@@ -23,7 +23,7 @@ use yii\bootstrap\Html;
         <strong>
             <?= \hipanel\modules\finance\widgets\LinkToObjectResolver::widget([
                 'model' => $model->object,
-                'labelAttribute' => 'name'
+                'labelAttribute' => 'name',
             ]) ?>
         </strong>
         <br />
@@ -64,7 +64,7 @@ use yii\bootstrap\Html;
                         'options' => [
                             'id' => Html::getInputName($model, "[$i][subprices]$currCode"),
                             'name' => Html::getInputName($model, "[$i][subprices]$currCode"),
-                            'value' => $model->subprices[$currCode] ?? 0
+                            'value' => $model->subprices[$currCode] ?? 0,
                         ],
                         'selectedCurrencyCode' => $currCode,
                         'currencyAttributeName' => 'subprices',

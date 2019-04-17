@@ -4,7 +4,6 @@
  * @var \yii\web\View
  * @var $manager \hipanel\modules\finance\logic\AbstractTariffManager
  */
-
 use hipanel\modules\finance\menus\TariffDetailMenu;
 use hipanel\widgets\Box;
 use hipanel\widgets\ClientSellerLink;

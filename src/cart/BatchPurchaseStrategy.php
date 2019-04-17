@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\cart;
 
@@ -8,7 +16,7 @@ use Yii;
 use yii\base\InvalidParamException;
 
 /**
- * Class BatchPurchaseStrategy purchases positions in batch
+ * Class BatchPurchaseStrategy purchases positions in batch.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -80,8 +88,8 @@ class BatchPurchaseStrategy implements PurchaseStrategyInterface
         $result = [];
         foreach ($this->purchases as $id => $purchase) {
             if (!$purchase->validate()) {
-                Yii::error("Failed to validate purchase: " . reset($purchase->getFirstErrors()), __METHOD__);
-                $this->error[] = new ErrorPurchaseException("Failed to validate purchase. Contact support.", $purchase);
+                Yii::error('Failed to validate purchase: ' . reset($purchase->getFirstErrors()), __METHOD__);
+                $this->error[] = new ErrorPurchaseException('Failed to validate purchase. Contact support.', $purchase);
                 continue;
             }
 
@@ -103,7 +111,8 @@ class BatchPurchaseStrategy implements PurchaseStrategyInterface
         $this->analyzeResponse($data);
     }
 
-    protected function analyzeResponse($response) {
+    protected function analyzeResponse($response)
+    {
         foreach ($response as $key => $item) {
             $this->analyzeResponseItem($key, $item);
         }
@@ -128,7 +137,7 @@ class BatchPurchaseStrategy implements PurchaseStrategyInterface
     /**
      * @param AbstractPurchase $purchase
      * @param array $data
-     * @return null|string Error message or `null` when no errors found
+     * @return string|null Error message or `null` when no errors found
      */
     protected function getPurchaseErrorFromResponse(AbstractPurchase $purchase, $data)
     {
@@ -144,7 +153,7 @@ class BatchPurchaseStrategy implements PurchaseStrategyInterface
      *
      * @param AbstractPurchase $purchase
      * @param array $data
-     * @return null|string Pending reason or `null` when no errors found
+     * @return string|null Pending reason or `null` when no errors found
      */
     protected function getPurchasePendingFromResponse(AbstractPurchase $purchase, $data)
     {

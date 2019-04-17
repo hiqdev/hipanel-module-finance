@@ -1,13 +1,20 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\cart\storage;
 
 use Yii;
 use yii\web\User;
-use yii\di\Instance;
 
 /**
- * Class CartStorageFactory
+ * Class CartStorageFactory.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\models;
 
@@ -7,7 +15,7 @@ use hipanel\modules\finance\models\query\PlanQuery;
 use Yii;
 
 /**
- * Class Plan
+ * Class Plan.
  *
  * @property string $id
  * @property string $name
@@ -76,6 +84,7 @@ class Plan extends \hipanel\base\Model
         if ($this->type === Plan::TYPE_CERTIFICATE) {
             return $this->hasMany(CertificatePrice::class, ['plan_id' => 'id'])->inverseOf('plan');
         }
+
         return $this->hasMany(Price::class, ['plan_id' => 'id'])->indexBy('id')->inverseOf('plan');
     }
 

@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\logic;
@@ -13,10 +13,8 @@ namespace hipanel\modules\finance\logic;
 use hipanel\modules\finance\forms\DomainTariffForm;
 use hipanel\modules\finance\models\Tariff;
 use hiqdev\hiart\ConnectionInterface;
-use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\web\NotFoundHttpException;
-use yii\web\UnprocessableEntityHttpException;
 
 class DomainTariffManager extends AbstractTariffManager
 {
@@ -67,6 +65,7 @@ class DomainTariffManager extends AbstractTariffManager
     protected function getZones()
     {
         $command = $this->connection->createCommand();
+
         return $command->perform('getZones', '')->getData();
     }
 }

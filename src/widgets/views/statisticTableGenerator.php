@@ -2,7 +2,6 @@
 
 /** @var integer $id */
 /** @var array $statistic */
-
 ?>
 
 <div class="table-responsive">

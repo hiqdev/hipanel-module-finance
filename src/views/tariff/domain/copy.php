@@ -12,6 +12,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="tariff-create">
     <?= $this->render('_form', [
         'model' => $model,
-        'action' => ['@tariff/create-domain', 'parent_id' => $model->parentTariff->id]
+        'action' => ['@tariff/create-domain', 'parent_id' => $model->parentTariff->id],
     ]); ?>
 </div>

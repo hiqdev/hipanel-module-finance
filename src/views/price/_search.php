@@ -1,7 +1,6 @@
 <?php
 
 /** @var \hipanel\widgets\AdvancedSearch $search */
-
 use hipanel\helpers\StringHelper;
 
 ?>

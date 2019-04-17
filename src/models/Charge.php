@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\models;
 
@@ -6,7 +14,7 @@ use hipanel\modules\finance\logic\bill\QuantityTrait;
 use Yii;
 
 /**
- * Class Charge
+ * Class Charge.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  *
@@ -42,7 +50,7 @@ class Charge extends \hiqdev\hiart\ActiveRecord
             [['sum', 'quantity'], 'number'],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['object_id', 'sum', 'type', 'quantity', 'unit'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
-            [['id'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]]
+            [['id'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
         ];
     }
 

@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\grid;
@@ -28,7 +28,7 @@ use Yii;
 use yii\helpers\Html;
 
 /**
- * Class BillGridView
+ * Class BillGridView.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -109,7 +109,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'contentOptions' => ['class' => 'text-right text-bold'],
                 'value' => function (Bill $bill) {
                     return $this->formatQuantity($bill);
-                }
+                },
             ],
             'balance' => [
                 'attribute' => 'balance',
@@ -129,7 +129,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     }, array_keys($this->currencies)));
 
                     return Html::activeDropDownList($filterModel, 'currency_in', $currencies, ['class' => 'form-control', 'prompt' => '--']);
-                }
+                },
             ],
             'gtype' => [
                 'attribute' => 'gtype',
@@ -198,11 +198,12 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                         'idAttribute'    => 'id',
                         'typeAttribute'  => 'type',
                         'customLinks' => [
-                            'part' => '@server/view'
-                        ]
+                            'part' => '@server/view',
+                        ],
                     ]);
+
                     return $link;
-                }
+                },
             ],
         ]);
     }

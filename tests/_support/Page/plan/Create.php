@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\tests\_support\Page\plan;
 
@@ -11,7 +19,7 @@ class Create extends Plan
     {
         $I = $this->tester;
 
-        $I->needPage(Url::to("@plan/create"));
+        $I->needPage(Url::to('@plan/create'));
     }
 
     protected function savePlan()
@@ -19,7 +27,7 @@ class Create extends Plan
         $I = $this->tester;
 
         $I->click('Save');
-        $I->closeNotification("Plan was successfully created");
+        $I->closeNotification('Plan was successfully created');
 
         $this->id = $I->grabFromCurrentUrl('/id=(\d+)/');
     }

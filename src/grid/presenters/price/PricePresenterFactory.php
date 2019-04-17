@@ -1,17 +1,23 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\grid\presenters\price;
 
 use hipanel\modules\finance\models\CertificatePrice;
-use hipanel\modules\finance\models\DomainServicePrice;
-use hipanel\modules\finance\models\DomainZonePrice;
-use hipanel\modules\finance\models\TemplatePrice;
 use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\TemplatePrice;
 use Psr\Container\ContainerInterface;
 use yii\base\InvalidConfigException;
 
 /**
- * Class PricePresenterFactory
+ * Class PricePresenterFactory.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -43,8 +49,8 @@ class PricePresenterFactory
 
     /**
      * @param string $name
-     * @return PricePresenter
      * @throws InvalidConfigException
+     * @return PricePresenter
      */
     public function build($name)
     {
@@ -64,5 +70,4 @@ class PricePresenterFactory
     {
         return $this->map;
     }
-
 }

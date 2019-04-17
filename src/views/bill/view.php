@@ -1,9 +1,8 @@
 <?php
 
-use hipanel\modules\finance\models\Charge;
-use hipanel\modules\finance\helpers\ChargesGrouper;
 use hipanel\modules\finance\grid\BillGridView;
 use hipanel\modules\finance\menus\BillDetailMenu;
+use hipanel\modules\finance\models\Charge;
 use hipanel\widgets\ClientSellerLink;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\MainDetails;
@@ -17,8 +16,6 @@ use hipanel\widgets\Pjax;
  * @var Charge[] $idToNameObject
  * @var Charge[][] $chargesByMainObject
  */
-
-
 $this->title = sprintf(
     '%s: %s %s %s',
     $model->client,

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\grid;
 
@@ -7,11 +15,10 @@ use hipanel\grid\RefColumn;
 use hipanel\helpers\Url;
 use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\menus\PlanActionsMenu;
-use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Plan;
 use hiqdev\yii2\menus\grid\MenuColumn;
-use yii\helpers\Html;
 use Yii;
+use yii\helpers\Html;
 
 class PlanGridView extends \hipanel\grid\BoxedGridView
 {
@@ -78,6 +85,7 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
         if ($model->is_grouping) {
             return Html::tag('span', $localization, ['class' => 'label bg-olive', 'style' => 'float:right']);
         }
+
         return '';
     }
 }

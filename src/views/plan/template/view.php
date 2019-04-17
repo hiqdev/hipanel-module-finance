@@ -1,17 +1,16 @@
 <?php
 
 use hipanel\modules\finance\grid\PriceGridView;
+use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\widgets\CreatePricesButton;
 use hipanel\widgets\IndexPage;
 use yii\data\ArrayDataProvider;
-use hipanel\modules\finance\helpers\PriceSort;
 
 /**
  * @var \yii\web\View $this
  * @var \hipanel\modules\finance\models\Plan $model
  * @var IndexPage $page
  */
-
 ?>
 
 <?php $page->beginContent('bulk-actions') ?>

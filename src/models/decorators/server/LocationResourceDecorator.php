@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\models\decorators\server;
@@ -70,7 +70,7 @@ class LocationResourceDecorator extends AbstractServerResourceDecorator
 
     private function amountOptions()
     {
-        $data = Yii::$app->cache->getOrSet([__METHOD__ , 'serversGetLocations'], function() {
+        $data = Yii::$app->cache->getOrSet([__METHOD__, 'serversGetLocations'], function () {
             return \hipanel\modules\server\models\Server::Perform('getLocations',[
                 Tariff::TYPE_XEN => ['type' => Tariff::TYPE_XEN],
                 Tariff::TYPE_OPENVZ => ['type' => Tariff::TYPE_OPENVZ],

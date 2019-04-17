@@ -30,8 +30,8 @@ use yii\bootstrap\Html;
                         'model' => $model->object,
                         'labelAttribute' => 'name',
                         'linkOptions' => [
-                            'tabindex' => '-1'
-                        ]
+                            'tabindex' => '-1',
+                        ],
                     ]) ?>
                 </strong>
             <?php endif ?>
@@ -54,7 +54,7 @@ use yii\bootstrap\Html;
                         return $.Deferred().resolve();
                     }
 JS
-                )
+                ),
                 ],
             ]) ?>
         </div>
@@ -72,7 +72,7 @@ JS
     <div class="col-md-2">
         <div class="<?= AmountWithCurrency::$widgetClass ?>">
             <?= $form->field($model, "[$i]price")->widget(AmountWithCurrency::class, [
-                'currencyAttributeName' => "currency",
+                'currencyAttributeName' => 'currency',
                 'currencyAttributeOptions' => [
                     'items' => $this->context->getCurrencyTypes(),
                 ],

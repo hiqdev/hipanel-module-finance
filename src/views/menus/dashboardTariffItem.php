@@ -1,9 +1,9 @@
 <?php
 
 use hipanel\helpers\Url;
-use hipanel\modules\finance\models\PlanSearch;
 use hipanel\modules\dashboard\widgets\SearchForm;
 use hipanel\modules\dashboard\widgets\SmallBox;
+use hipanel\modules\finance\models\PlanSearch;
 use yii\helpers\Html;
 
 ?>

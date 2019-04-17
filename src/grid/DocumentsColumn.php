@@ -5,14 +5,14 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\helpers\FontIcon;
 use hipanel\modules\finance\widgets\DocumentByMonthButton;
 use hipanel\widgets\ArraySpoiler;
-use hipanel\helpers\FontIcon;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
@@ -43,7 +43,7 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
                     [
                         'target' => '_blank',
                         'class' => 'btn btn-app pull-left',
-                        'style' => 'width: 8em;'
+                        'style' => 'width: 8em;',
                     ]
                 );
             },
@@ -53,7 +53,7 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
                 'label' => FontIcon::i('fa-history') . ' ' . Yii::t('hipanel', 'Show all'),
                 'class' => 'btn btn-xs btn-default',
                 'data' => [
-                    'toggle' => 'button'
+                    'toggle' => 'button',
                 ],
             ],
         ]);

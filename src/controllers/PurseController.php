@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\controllers;
@@ -16,16 +16,15 @@ use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
-use hipanel\modules\finance\widgets\StatisticTableGenerator;
-use hipanel\modules\finance\models\Purse;
 use hipanel\filters\EasyAccessControl;
-use hiqdev\hiart\ResponseErrorException;
 use hipanel\modules\document\models\Statistic as DocumentStatisticModel;
+use hipanel\modules\finance\models\Purse;
+use hipanel\modules\finance\widgets\StatisticTableGenerator;
+use hiqdev\hiart\ResponseErrorException;
 use Yii;
 
 class PurseController extends \hipanel\base\CrudController
 {
-
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
@@ -38,7 +37,6 @@ class PurseController extends \hipanel\base\CrudController
             ],
         ]);
     }
-
 
     public function actions()
     {
@@ -86,7 +84,7 @@ class PurseController extends \hipanel\base\CrudController
         ]));
 
         $type = $request->post('type');
-        if ($request->isAjax && $type && in_array($type, explode(',', $model->types))) {
+        if ($request->isAjax && $type && in_array($type, explode(',', $model->types), true)) {
             return StatisticTableGenerator::widget(['type' => $type, 'statistic' => $statisticByTypes[$type]]);
         } else {
             if ($request->isPost) {
@@ -95,6 +93,7 @@ class PurseController extends \hipanel\base\CrudController
                     'client_types' => $type === 'acceptance' ? 'employee' : null,
                 ]);
             }
+
             return $this->render('generate-all', ['statisticByTypes' => $statisticByTypes]);
         }
     }

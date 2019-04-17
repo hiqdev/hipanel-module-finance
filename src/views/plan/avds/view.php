@@ -15,7 +15,6 @@ use yii\data\ArrayDataProvider;
  * @var Sale[] $salesByObject
  * @var Price[][] $pricesByMainObject
  */
-
 [$salesByObject, $pricesByMainObject] = $grouper->group();
 
 ?>
@@ -55,7 +54,7 @@ use yii\data\ArrayDataProvider;
             'buyer',
             'time',
             'price_related_actions',
-        ]
+        ],
     ]) ?>
 <?php $page->endBulkForm() ?>
 <?php $page->endContent() ?>

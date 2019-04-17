@@ -13,7 +13,6 @@ use yii\helpers\Html;
  * @var \hipanel\modules\finance\models\CertificatePrice[][] $parentPrices
  * @var IndexPage $page
  */
-
 $prices = $grouper->group();
 
 ?>

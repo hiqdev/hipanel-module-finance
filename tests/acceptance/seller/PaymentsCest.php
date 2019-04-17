@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\tests\acceptance\manager;
 
@@ -95,7 +103,7 @@ class PaymentsCest
         $page->fillMainBillFields($this->getBillData());
         $page->addCharges([
             $this->getChargeData('TEST-DS-01'),
-            $this->getChargeData('TEST-DS-02')
+            $this->getChargeData('TEST-DS-02'),
         ]);
         $page->containsCharges(2);
 
@@ -147,7 +155,7 @@ class PaymentsCest
      * @param Seller $I
      * @throws \Exception
      */
-    public function ensureBillWasSuccessfullyUpdated (Seller $I): void
+    public function ensureBillWasSuccessfullyUpdated(Seller $I): void
     {
         $indexPage  = new IndexPage($I);
         $updatePage = new Update($I);
@@ -175,7 +183,7 @@ class PaymentsCest
             'type'      => 'Monthly fee',
             'currency'  => '$',
             'sum'       =>  1000,
-            'quantity'  =>  1
+            'quantity'  =>  1,
         ];
     }
 
@@ -190,7 +198,7 @@ class PaymentsCest
             'objectId'  => $objectId,
             'type'      => 'Monthly fee',
             'sum'       => -250,
-            'quantity'  => 1
+            'quantity'  => 1,
         ];
     }
 }

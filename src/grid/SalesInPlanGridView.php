@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\grid;
 
@@ -13,7 +21,7 @@ use yii\data\ArrayDataProvider;
 use yii\helpers\Html;
 
 /**
- * Class SalesInPlanGridView
+ * Class SalesInPlanGridView.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -48,7 +56,7 @@ class SalesInPlanGridView extends SaleGridView
                     if ($sale instanceof FakeSale) {
                         return Label::widget([
                             'label' => Yii::t('hipanel:finance:sale', 'Not sold'),
-                            'color' => 'danger'
+                            'color' => 'danger',
                         ]);
                     }
 
@@ -67,8 +75,8 @@ class SalesInPlanGridView extends SaleGridView
                 'menuButtonOptions' => [
                     'icon' => '<i class="fa fa-plus"></i>&nbsp;'
                         . Yii::t('hipanel.finance.price', 'Prices')
-                        . '&nbsp;<span class="caret"></span>'
-                ]
+                        . '&nbsp;<span class="caret"></span>',
+                ],
             ],
             'estimate_placeholder' => [
                 'contentOptions' => [
@@ -79,7 +87,7 @@ class SalesInPlanGridView extends SaleGridView
                     return  Html::tag('span', Yii::t('hipanel:finance', 'Total:')) . '&nbsp;&nbsp;' .
                             Html::tag('span', '', ['class' => 'total-per-object']);
                 },
-            ]
+            ],
         ]);
     }
 

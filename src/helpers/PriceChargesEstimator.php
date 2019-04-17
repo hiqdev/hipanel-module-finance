@@ -1,18 +1,24 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\helpers;
 
-use hipanel\models\Ref;
 use hipanel\modules\finance\widgets\PriceChargesEstimationTable;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Formatter\DecimalMoneyFormatter;
 use Money\Money;
-use omnilight\assets\MomentLanguageAsset;
 use Yii;
 
 /**
- * Class PriceChargesEstimator
+ * Class PriceChargesEstimator.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */

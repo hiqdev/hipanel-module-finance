@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\controllers;
 
@@ -11,6 +19,7 @@ use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
+use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\collections\PricesCollection;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
@@ -18,10 +27,8 @@ use hipanel\modules\finance\helpers\PriceChargesEstimator;
 use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\Plan;
-use hipanel\modules\finance\models\PriceSuggestionRequestForm;
-use hipanel\modules\server\models\Server;
-use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\PriceSuggestionRequestForm;
 use hipanel\modules\finance\models\TargetObject;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
@@ -131,7 +138,7 @@ class PlanController extends CrudController
     {
         $plan = $this->findTemplatePlan($plan_id, $plan_id, $template_plan_id);
 
-        $suggestions = (new Price)->batchQuery('suggest', [
+        $suggestions = (new Price())->batchQuery('suggest', [
             'object_id' => $plan_id,
             'plan_id' => $plan_id,
             'template_plan_id' => $template_plan_id,
@@ -192,11 +199,11 @@ class PlanController extends CrudController
 
     private function findTemplatePlan(int $targetPlan, int $object_id, int $expectedTemplateId): Plan
     {
-        $result = Plan::perform( 'search-templates', [
+        $result = Plan::perform('search-templates', [
             'id' => $targetPlan,
             'object_id' => $object_id,
         ]);
-        $plans = ArrayHelper::index( $result, 'id');
+        $plans = ArrayHelper::index($result, 'id');
 
         if (!isset($plans[$expectedTemplateId])) {
             throw new NotFoundHttpException('Requested template plan not found');
@@ -210,8 +217,8 @@ class PlanController extends CrudController
 
     /**
      * @param $id integer
-     * @return Plan|null
      * @throws NotFoundHttpException
+     * @return Plan|null
      */
     private function findPlan(int $id): ?Plan
     {
@@ -235,7 +242,7 @@ class PlanController extends CrudController
         $templates = (new Plan())->query('search-templates', [
             'id' => $plan_id,
             'object_id' => $object_id ?? $plan_id,
-            'name_ilike' => $name_ilike
+            'name_ilike' => $name_ilike,
         ]);
 
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -261,8 +268,9 @@ class PlanController extends CrudController
             return $calculator->calculateForPeriods($periods);
         } catch (ResponseErrorException $exception) {
             Yii::$app->response->setStatusCode(412, $exception->getMessage());
+
             return [
-                'formula' => $exception->getResponse()->getData()['_error_ops']['formula'] ?? null
+                'formula' => $exception->getResponse()->getData()['_error_ops']['formula'] ?? null,
             ];
         }
     }
@@ -280,10 +288,9 @@ class PlanController extends CrudController
             Yii::$app->response->setStatusCode(412, $exception->getMessage());
 
             return [
-                'formula' => $exception->getResponse()->getData()['_error_ops']['formula'] ?? null
+                'formula' => $exception->getResponse()->getData()['_error_ops']['formula'] ?? null,
             ];
         }
-
     }
 
     public function actionUpdatePrices(int $id, string $scenario = 'update')
@@ -311,6 +318,7 @@ class PlanController extends CrudController
                         Yii::$app->session->addFlash('success', Yii::t('hipanel.finance.price', 'Prices were successfully updated'));
                     }
                 }
+
                 return $this->redirect(['@plan/view', 'id' => $id]);
             } catch (\Exception $e) {
                 throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);

@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\grid;
@@ -51,6 +51,7 @@ class HeldPaymentsGridView extends \hipanel\grid\BoxedGridView
                     $html = Yii::t('hipanel:finance:change', 'Full:') . '&nbsp;' . Yii::$app->formatter->asCurrency($model->params['sum'], $model->params['purse_currency']) . '<br />';
                     $html .= Yii::t('hipanel:finance:change', 'Fee:') . '&nbsp;' . Yii::$app->formatter->asCurrency($model->params['fee'], $model->params['purse_currency']) . '<br />';
                     $html .= Yii::t('hipanel:finance:change', 'Sum:') . '&nbsp;' . Yii::$app->formatter->asCurrency($model->params['sum'] - $model->params['fee'], $model->params['purse_currency']);
+
                     return $html;
                 },
             ],

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\grid;
 
@@ -32,7 +40,7 @@ class DomainServicePriceGridView extends PriceGridView
             'label' =>  DomainServicePrice::getOperations()[$type],
             'contentOptions' => ['class' => 'text-center'],
             'format' => 'raw',
-            'value' => function($prices) use ($type) {
+            'value' => function ($prices) use ($type) {
                 /** @var DomainServicePrice[] $prices */
                 if (!isset($prices[$type])) {
                     return '';
@@ -47,12 +55,13 @@ class DomainServicePriceGridView extends PriceGridView
                 (!floatval($price->price) && $parentValue) ?
                     ResourcePriceWidget::widget([
                         'price' => $price->price,
-                        'currency' => $price->currency
+                        'currency' => $price->currency,
                     ]) : '';
                 $options = ['class' => 'col-md-6'];
+
                 return Html::tag('div', $priceValue, $options) .
                     Html::tag('div', $parentValue, $options);
-            }
+            },
         ];
     }
 }

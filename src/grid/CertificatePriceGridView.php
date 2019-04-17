@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\grid;
 
@@ -26,7 +34,7 @@ class CertificatePriceGridView extends PriceGridView
                 'value' => function ($prices) {
                     /** @var CertificatePrice[] $prices */
                     return current($prices)->object->label;
-                }
+                },
             ],
         ]);
     }
@@ -44,7 +52,7 @@ class CertificatePriceGridView extends PriceGridView
             'headerOptions' => [
                 'class' => 'text-center',
             ],
-            'columns' => []
+            'columns' => [],
         ];
         foreach (CertificatePrice::getPeriods() as $period => $label) {
             $result['columns'][] = [
@@ -66,14 +74,16 @@ class CertificatePriceGridView extends PriceGridView
                     (!floatval($price->getPriceForPeriod($period)) && $parentValue) ?
                         ResourcePriceWidget::widget([
                             'price' => $price->getPriceForPeriod($period),
-                            'currency' => $price->currency
+                            'currency' => $price->currency,
                         ]) : '';
                     $options = ['class' => 'col-md-6'];
+
                     return Html::tag('div', $priceValue, $options) .
                         Html::tag('div', $parentValue, $options);
-                }
+                },
             ];
         }
+
         return $result;
     }
 }

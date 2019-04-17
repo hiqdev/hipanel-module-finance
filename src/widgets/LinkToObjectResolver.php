@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\widgets;
 
@@ -7,7 +15,7 @@ use yii\base\Widget;
 use yii\helpers\Html;
 
 /**
- * Class LinkToObjectResolver
+ * Class LinkToObjectResolver.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  * @author Andrey Klockok <tofid@hiqdev.com>
@@ -20,10 +28,10 @@ class LinkToObjectResolver extends Widget
     /** @var string */
     public $labelAttribute = 'object';
 
-    /** @var string  */
+    /** @var string */
     public $typeAttribute = 'type';
 
-    /** @var string  */
+    /** @var string */
     public $idAttribute = 'id';
 
     public $linkOptions = [
@@ -31,7 +39,7 @@ class LinkToObjectResolver extends Widget
     ];
 
     /**
-     * Custom links for $links. For example:
+     * Custom links for $links. For example:.
      *
      * ```php
      * 'customLinks' => [

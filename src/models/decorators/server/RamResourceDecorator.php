@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\models\decorators\server;
@@ -23,6 +23,7 @@ class RamResourceDecorator extends AbstractServerResourceDecorator
     {
         $part = $this->resource->part;
         preg_match('/((\d{1,5}) MB)$/i', $part->partno, $matches);
+
         return $matches[2] / 1024;
     }
 

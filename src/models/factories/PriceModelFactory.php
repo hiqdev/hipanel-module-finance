@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\models\factories;
 
@@ -6,8 +14,8 @@ use hipanel\helpers\StringHelper;
 use hipanel\modules\finance\models\CertificatePrice;
 use hipanel\modules\finance\models\DomainServicePrice;
 use hipanel\modules\finance\models\DomainZonePrice;
-use hipanel\modules\finance\models\TemplatePrice;
 use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\TemplatePrice;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 
@@ -28,7 +36,7 @@ class PriceModelFactory
         'SinglePrice' => [
             'domain,*' => DomainZonePrice::class,
             'feature,*' => DomainServicePrice::class,
-            '*' => Price::class
+            '*' => Price::class,
         ],
         'CertificatePrice' => CertificatePrice::class,
         'EnumPrice' => CertificatePrice::class,
@@ -38,9 +46,9 @@ class PriceModelFactory
 
     /**
      * @param string $className
-     * @param null|string $priceType
-     * @return Price
+     * @param string|null $priceType
      * @throws InvalidConfigException
+     * @return Price
      */
     public function build(string $className, ?string $priceType = null)
     {
@@ -50,7 +58,7 @@ class PriceModelFactory
 
         if (is_array($this->map[$className])) {
             foreach ($this->map[$className] as $type => $class) {
-                if (StringHelper::matchWildcard($type, (string)$priceType)) {
+                if (StringHelper::matchWildcard($type, (string) $priceType)) {
                     return new $class();
                 }
             }
@@ -69,6 +77,6 @@ class PriceModelFactory
 
     public function instantiate(string $className): Model
     {
-        return new $className;
+        return new $className();
     }
 }

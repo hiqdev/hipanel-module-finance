@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\controllers;
@@ -36,8 +36,8 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
                     if ($event->transaction instanceof Transaction) {
                         Yii::$app->session->set(self::SESSION_MERCHANT_LATEST_TRANSACTION_ID, $event->transaction->getId());
                     }
-                }
-            ]
+                },
+            ],
         ]);
     }
 
@@ -72,7 +72,8 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
         if (($input = file_get_contents('php://input')) !== null) {
             try {
                 $data['rawBody'] = Json::decode($input);
-            } catch (InvalidParamException $e) {}
+            } catch (InvalidParamException $e) {
+            }
         }
 
         try {
@@ -80,6 +81,7 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
                 $result = Merchant::perform('pay', $data);
 
                 $this->completeTransaction($transaction, $result);
+
                 return $transaction;
             });
         } catch (ResponseErrorException $e) {
@@ -98,14 +100,15 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
         });
 
         $this->layout = false;
+
         return $result;
     }
 
     /**
      * @param Transaction $transaction
      * @param string|array $response
-     * @return mixed
      * @throws \yii\base\ExitException
+     * @return mixed
      */
     protected function completeTransaction($transaction, $response)
     {

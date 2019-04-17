@@ -5,18 +5,17 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\forms;
 
 use hipanel\modules\finance\logic\IntegrityException;
 use hipanel\modules\finance\models\CertificateResource;
-use Yii;
 use yii\web\UnprocessableEntityHttpException;
 
 /**
- * Class CertificateTariffForm
+ * Class CertificateTariffForm.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -93,8 +92,8 @@ class CertificateTariffForm extends AbstractTariffForm
 
     /**
      * @param $type
-     * @return CertificateResource[]
      * @throws IntegrityException
+     * @return CertificateResource[]
      */
     public function getTypeResources($type)
     {
@@ -111,8 +110,8 @@ class CertificateTariffForm extends AbstractTariffForm
 
     /**
      * @param $type
-     * @return CertificateResource[]
      * @throws IntegrityException
+     * @return CertificateResource[]
      */
     public function getTypeParentResources($type)
     {

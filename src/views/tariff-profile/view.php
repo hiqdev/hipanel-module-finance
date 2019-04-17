@@ -4,11 +4,10 @@
  * @var \yii\web\View
  * @var $manager \hipanel\modules\finance\logic\AbstractTariffManager
  */
-
+use hipanel\modules\finance\grid\TariffProfileGridView;
 use hipanel\modules\finance\menus\ProfileDetailMenu;
 use hipanel\widgets\Box;
 use hipanel\widgets\ClientSellerLink;
-use hipanel\modules\finance\grid\TariffProfileGridView;
 use yii\helpers\Html;
 
 $this->title = Html::encode($model->name);

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\grid;
 
@@ -20,10 +28,10 @@ class DomainZonePriceGridView extends PriceGridView
             'name' => [
                 'label' => '',
                 'contentOptions'=> ['style' => 'font-weight:bold'],
-                'value' => function($prices) {
-                    /** @var DomainZonePrice[] $prices  */
+                'value' => function ($prices) {
+                    /** @var DomainZonePrice[] $prices */
                     return current($prices)->object->name;
-                }
+                },
             ],
             'registration' => $this->getPriceGrid('domain,dregistration'),
             'transfer' => $this->getPriceGrid('domain,dtransfer'),
@@ -44,7 +52,7 @@ class DomainZonePriceGridView extends PriceGridView
             'label' =>  DomainZonePrice::getTypes()[$type],
             'contentOptions' => ['class' => 'text-center'],
             'format' => 'raw',
-            'value' => function($prices) use ($type) {
+            'value' => function ($prices) use ($type) {
                 /** @var DomainZonePrice[] $prices */
                 if (!isset($prices[$type])) {
                     return '';
@@ -59,12 +67,13 @@ class DomainZonePriceGridView extends PriceGridView
                 (!floatval($price->price) && $parent) ?
                     ResourcePriceWidget::widget([
                         'price' => $price->price,
-                        'currency' => $price->currency
+                        'currency' => $price->currency,
                     ]) : '';
                 $options = ['class' => 'col-md-6'];
+
                 return Html::tag('div', $priceValue, $options) .
                     Html::tag('div', $parentValue, $options);
-            }
+            },
         ];
     }
 }

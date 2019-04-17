@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\logic\bill;
 
@@ -6,11 +14,10 @@ use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\server\models\Consumption;
-use hiqdev\php\units\Quantity;
 use Yii;
 
 /**
- * Class MonthlyQuantity
+ * Class MonthlyQuantity.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -20,7 +27,7 @@ class MonthlyQuantity extends DefaultQuantityFormatter implements ContextAwareQu
     protected $model;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function format(): string
     {
@@ -30,7 +37,7 @@ class MonthlyQuantity extends DefaultQuantityFormatter implements ContextAwareQu
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getValue(): string
     {
@@ -38,7 +45,7 @@ class MonthlyQuantity extends DefaultQuantityFormatter implements ContextAwareQu
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getClientValue(): string
     {

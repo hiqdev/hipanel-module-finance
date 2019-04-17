@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\models;
@@ -13,11 +13,10 @@ namespace hipanel\modules\finance\models;
 use hipanel\base\ModelTrait;
 use hipanel\modules\finance\models\decorators\server\AbstractServerResourceDecorator;
 use hipanel\modules\finance\models\decorators\server\ServerResourceDecoratorFactory;
-use hipanel\modules\server\models\Server;
 use Yii;
 
 /**
- * Class ServerResource
+ * Class ServerResource.
  *
  * @property float fee
  *

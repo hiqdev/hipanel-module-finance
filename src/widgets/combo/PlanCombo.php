@@ -1,12 +1,11 @@
 <?php
-
-/*
- * Stock Module for Hipanel
+/**
+ * Finance module for HiPanel
  *
- * @link      https://github.com/hiqdev/hipanel-module-stock
- * @package   hipanel-module-stock
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\widgets\combo;

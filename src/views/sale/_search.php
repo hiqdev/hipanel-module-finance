@@ -1,7 +1,6 @@
 <?php
 
 /** @var \hipanel\widgets\AdvancedSearch $search */
-
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\widgets\TariffCombo;

@@ -53,8 +53,8 @@
         "hiqdev/php-units": "*"
     },
     "require-dev": {
-        "hiqdev/hidev-php": "<2.0",
-        "hiqdev/hidev-hiqdev": "<2.0",
+        "hiqdev/hidev-php": "dev-master",
+        "hiqdev/hidev-hiqdev": "dev-master",
         "codeception/codeception": "*"
     },
     "autoload": {

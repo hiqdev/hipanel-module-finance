@@ -10,11 +10,11 @@ $this->title = Html::encode($model->object);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance:sale', 'Sales'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-$this->registerCss("
+$this->registerCss('
     .profile-block {
         text-align: center;
     }
-");
+');
 
 ?>
 <div class="row">
@@ -34,7 +34,7 @@ $this->registerCss("
                         'time',
                         'seller',
                         'buyer',
-                        'tariff'
+                        'tariff',
                     ],
                 ]) ?>
             </div>

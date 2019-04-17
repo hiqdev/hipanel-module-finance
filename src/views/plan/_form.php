@@ -12,7 +12,6 @@ use yii\helpers\Html;
  * @var \yii\web\View $this
  * @var Plan $model
  */
-
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -36,8 +35,8 @@ use yii\helpers\Html;
                     'findOptions' => [
                         'mapOptions' => ['to' => function (Ref $model) {
                             return strtoupper($model->name);
-                        }]
-                    ]
+                        }],
+                    ],
                 ]) ?>
                 <?= $form->field($model, 'is_grouping')->checkbox(); ?>
                 <?= $form->field($model, 'note') ?>

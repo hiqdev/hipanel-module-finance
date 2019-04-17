@@ -10,7 +10,6 @@
  * @var \hipanel\modules\finance\models\DomainZonePrice[][] $parentZonePrices
  * @var \hipanel\modules\finance\models\DomainServicePrice[] $parentServicePrices
  */
-
 $this->title = Yii::t('hipanel.finance.price', 'Create suggested prices');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $plan->name, 'url' => ['view', 'id' => $plan->id]];

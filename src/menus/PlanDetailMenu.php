@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\menus;
 
@@ -52,7 +60,7 @@ class PlanDetailMenu extends \hipanel\menus\AbstractDetailMenu
                     'data' => [
                         'method' => 'POST',
                         'pjax' => '0',
-                        'params' => ['selection[]' => $this->model->id]
+                        'params' => ['selection[]' => $this->model->id],
                     ],
                 ],
                 'visible' => $this->model->isDeleted() && Yii::$app->user->can('plan.update'),

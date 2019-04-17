@@ -17,7 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
  * @var Plan $plan
  * @var string $type
  */
-
 ?>
 
 <?php if (!empty($models)) : ?>

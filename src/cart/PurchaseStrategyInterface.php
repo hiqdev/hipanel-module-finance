@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\cart;
 
@@ -26,19 +34,19 @@ interface PurchaseStrategyInterface
     public function run();
 
     /**
-     * Returns array of success purchases
+     * Returns array of success purchases.
      * @return AbstractPurchase[]
      */
     public function getSuccessPurchases();
 
     /**
-     * Returns array of error purchases
+     * Returns array of error purchases.
      * @return ErrorPurchaseException[]
      */
     public function getErrorPurchaseExceptions();
 
     /**
-     * Returns array of pending purchases
+     * Returns array of pending purchases.
      * @return PendingPurchaseException[]
      */
     public function getPendingPurchaseExceptions();

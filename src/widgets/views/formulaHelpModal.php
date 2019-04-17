@@ -7,7 +7,6 @@ use yii\helpers\Html;
  * @var \yii\web\View $this
  * @var \hipanel\modules\finance\widgets\FormulaHelpModal $widget
  */
-
 $widget = $this->context;
 
 ?>
@@ -16,7 +15,7 @@ $widget = $this->context;
     'toggleButton' => false,
     'header' => Html::tag('h4', Yii::t('hipanel.finance.price', 'Formula usage examples')),
     'size' => Modal::SIZE_LARGE,
-    'id' => $widget->getId()
+    'id' => $widget->getId(),
 ]); ?>
 <?= Html::beginTag('div', ['class' => 'table-responsive']) ?>
 
@@ -51,9 +50,9 @@ HTML;
                     }
 
                     return $result;
-                }
-            ]
-        ]
+                },
+            ],
+        ],
     ]) ?>
 <?php endforeach; ?>
 

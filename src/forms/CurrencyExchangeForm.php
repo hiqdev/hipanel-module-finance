@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\forms;
 
@@ -35,7 +43,7 @@ class CurrencyExchangeForm extends Model
         return [
             [['client_id', 'from', 'to', 'sum'], 'required'],
             [['sum'], 'double'],
-            [['from', 'to'], 'string', 'length' => 3]
+            [['from', 'to'], 'string', 'length' => 3],
         ];
     }
 
@@ -45,6 +53,7 @@ class CurrencyExchangeForm extends Model
             $result = Bill::perform('create-exchange', $this->getAttributes());
         } catch (ResponseErrorException $e) {
             $this->addError('client_id', $e->getMessage());
+
             return false;
         }
 

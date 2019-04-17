@@ -1,15 +1,23 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\models\Ref;
+use hipanel\modules\finance\models\factories\PriceModelFactory;
 use Yii;
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
-use hipanel\models\Ref;
-use hipanel\modules\finance\models\factories\PriceModelFactory;
 
 /**
- * Class Price
+ * Class Price.
  *
  * @property int $id
  * @property int $plan_id
@@ -50,7 +58,7 @@ class Price extends \hipanel\base\Model
                 return (new \ReflectionClass($this))->getShortName();
             }],
             [['class'], 'string'],
-            [['formula'], 'string', 'on' => ['create', 'update']] // TODO syn check
+            [['formula'], 'string', 'on' => ['create', 'update']], // TODO syn check
         ]);
     }
 
@@ -178,6 +186,7 @@ class Price extends \hipanel\base\Model
     public function getSubtype()
     {
         [, $subtype] = explode(',', $this->type);
+
         return $subtype;
     }
 
@@ -188,6 +197,7 @@ class Price extends \hipanel\base\Model
     {
         /** @var PriceModelFactory $factory */
         $factory = Yii::$container->get(PriceModelFactory::class);
+
         return $factory->build($row['class'] ?? 'SinglePrice', $row['type']);
     }
 

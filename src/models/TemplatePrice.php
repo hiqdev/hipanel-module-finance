@@ -1,11 +1,19 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\models;
 
 use hipanel\base\ModelTrait;
 
 /**
- * Class TemplatePrice
+ * Class TemplatePrice.
  *
  * @property int[] $subprices
  *
@@ -18,7 +26,7 @@ class TemplatePrice extends Price
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['subprices'], 'each', 'rule' => ['number']]
+            [['subprices'], 'each', 'rule' => ['number']],
         ]);
     }
 }

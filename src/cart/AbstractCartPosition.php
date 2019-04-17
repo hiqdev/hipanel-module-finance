@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\cart;
@@ -25,7 +25,7 @@ use yii\base\InvalidConfigException;
  * - calculation object
  * - purchase object
  * - price for single item
- * - value for selected quantity
+ * - value for selected quantity.
  *
  * @property Calculation $actionCalcModel
  */
@@ -181,7 +181,7 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
      *
      * @return array key is the attribute name where the value should be extracted
      * In case when the value shoule be assigned in a special way, use [[unserializationMap]]
-     * to map key to a closure, that will set the value.
+     * to map key to a closure, that will set the value
      *
      * @see unserializationMap
      */

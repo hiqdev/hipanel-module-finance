@@ -1,9 +1,9 @@
 <?php
 
-use hipanel\widgets\IndexPage;
-use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\grid\GroupedByServerChargesGridView;
-use \yii\data\ArrayDataProvider;
+use hipanel\modules\finance\models\Charge;
+use hipanel\widgets\IndexPage;
+use yii\data\ArrayDataProvider;
 
 /**
  * @var \hipanel\modules\finance\models\Charge $model
@@ -12,7 +12,6 @@ use \yii\data\ArrayDataProvider;
  * @var Charge[] $idToNameObject
  * @var Charge[][] $chargesByMainObject
  */
-
 [$idToNameObject, $chargesByMainObject] = $grouper->group();
 
 ?>

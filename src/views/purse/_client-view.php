@@ -32,7 +32,7 @@ $documentType = $isEmployee ? 'acceptance' : 'invoice';
                 $user->can('document.read') && $user->can('bill.read') ? ($isEmployee ? 'acceptances' : 'invoices') : null,
                 $user->can('document.read') && $isEmployee ? 'contracts' : null,
                 $user->can('document.read') && $isEmployee ? 'probations' : null,
-                $user->can('document.read') && $isEmployee ? 'ndas' : null
+                $user->can('document.read') && $isEmployee ? 'ndas' : null,
             ]),
         ]) ?>
     <?php $box->endBody() ?>

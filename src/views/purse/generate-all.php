@@ -1,7 +1,6 @@
 <?php
 
 /** @var array $statisticByTypes */
-
 use hipanel\modules\finance\widgets\StatisticTableGenerator;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;

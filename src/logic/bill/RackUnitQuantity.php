@@ -1,16 +1,20 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\logic\bill;
 
-use hipanel\modules\finance\forms\BillForm;
-use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
-use hipanel\modules\server\models\Consumption;
-use hiqdev\php\units\Quantity;
 use Yii;
 
 /**
- * Class MonthlyQuantity
+ * Class MonthlyQuantity.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -20,13 +24,13 @@ class RackUnitQuantity extends MonthlyQuantity
     protected $model;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function format(): string
     {
         $text = Yii::t('hipanel:finance', '{units, plural, one{# unit} other{# units}} &times; {quantity, plural, one{# day} other{# days}}', [
             'units' => $this->model->quantity / $this->model->bill->quantity,
-            'quantity' => round($this->model->bill->quantity * $this->getNumberOfDays())
+            'quantity' => round($this->model->bill->quantity * $this->getNumberOfDays()),
         ]);
 
         return $text;

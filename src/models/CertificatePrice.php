@@ -1,14 +1,22 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\base\ModelTrait;
+use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Formatter\DecimalMoneyFormatter;
 use Money\Money;
-use Money\Currencies\ISOCurrencies;
 use Money\Parser\DecimalMoneyParser;
 use Yii;
-use hipanel\base\ModelTrait;
 use yii\behaviors\AttributeTypecastBehavior;
 use yii\validators\NumberValidator;
 
@@ -54,8 +62,9 @@ class CertificatePrice extends Price
                         foreach ($sums as $key => $value) {
                             $sums[$key] = new Money($value, new Currency(strtoupper($this->currency)));
                         }
+
                         return $sums;
-                    }],
+                    }, ],
                 'typecastAfterFind' => true,
                 'typecastAfterValidate' => false,
                 'typecastBeforeSave' => false,
@@ -69,8 +78,9 @@ class CertificatePrice extends Price
                                 ->parse($value, strtoupper($this->currency))
                                 ->getAmount();
                         }
+
                         return $sums;
-                    }],
+                    }, ],
                 'typecastAfterFind' => false,
                 'typecastAfterValidate' => false,
                 'typecastBeforeSave' => true,
@@ -136,7 +146,7 @@ class CertificatePrice extends Price
 
     /**
      * @param int $period
-     * @return null|string
+     * @return string|null
      */
     public function getPriceForPeriod(int $period)
     {

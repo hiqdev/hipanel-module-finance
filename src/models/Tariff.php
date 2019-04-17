@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\models;
@@ -34,7 +34,7 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
     public function rules()
     {
         return [
-            [['id'], 'filter', 'filter' => function($value) { return explode(",", $value);}, 'on' => ['search']],
+            [['id'], 'filter', 'filter' => function ($value) { return explode(',', $value); }, 'on' => ['search']],
             [['id'], 'each', 'rule' => ['trim', 'integer'], 'on' => ['search']],
             [['client_id', 'seller_id', 'id', 'parent_id'], 'integer', 'on' => ['create', 'update']],
             [['client', 'seller', 'bill', 'name'], 'safe'],
@@ -46,7 +46,7 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
             [['note', 'label'], 'safe'],
             [['is_personal'], 'boolean'],
             [['id'], 'required', 'on' => ['delete', 'set-note']],
-            [['note'], 'string', 'on' => ['set-note']]
+            [['note'], 'string', 'on' => ['set-note']],
         ];
     }
 
@@ -117,7 +117,7 @@ class Tariff extends \hipanel\base\Model implements CalculableModelInterface
     {
         if ($this->type === static::TYPE_DOMAIN) {
             return 'domain';
-        } else if ($this->type === static::TYPE_CERT) {
+        } elseif ($this->type === static::TYPE_CERT) {
             return 'certificate';
         } elseif (in_array($this->type, [static::TYPE_OPENVZ, static::TYPE_XEN, static::TYPE_SERVER], true)) {
             return 'server';

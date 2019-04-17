@@ -79,7 +79,7 @@ $i = 0;
                             ]) ?>
                         </td>
                     </tr>
-                    <?php $i++; ?>
+                    <?php ++$i; ?>
                 <?php endforeach ?>
                 </tbody>
             </table>
@@ -114,7 +114,7 @@ $i = 0;
                         <?= Html::activeHiddenInput($resource, "[$i]type") ?>
                         <?= \hipanel\modules\finance\widgets\ResourcePriceInput::widget([
                             'basePrice' => floatval($baseResource->fee),
-                            'activeField' => $form->field($resource, "[$i]fee")
+                            'activeField' => $form->field($resource, "[$i]fee"),
                         ]) ?>
                     </td>
                     <td>
@@ -131,7 +131,7 @@ $i = 0;
                             <div class="col-md-6">
                                 <?= Html::tag('span', '', [
                                     'class' => 'base-price text-bold',
-                                    'data-original-price' => 0//$baseResource->decorator()->getPrepaidQuantity(),
+                                    'data-original-price' => 0, //$baseResource->decorator()->getPrepaidQuantity(),
                                 ]); ?>
                             </div>
                         </div>
@@ -145,7 +145,7 @@ $i = 0;
                         ]) ?>
                     </td>
                 </tr>
-                <?php $i++; ?>
+                <?php ++$i; ?>
             <?php endforeach; ?>
             </tbody>
         </table>

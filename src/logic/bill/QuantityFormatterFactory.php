@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\logic\bill;
 
@@ -10,7 +18,7 @@ use hiqdev\php\units\Quantity;
 use hiqdev\php\units\yii2\formatters\IntlFormatter;
 
 /**
- * Class QuantityFormatterFactory
+ * Class QuantityFormatterFactory.
  */
 final class QuantityFormatterFactory implements QuantityFormatterFactoryInterface
 {
@@ -105,6 +113,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
     {
         if (strpos($type, ',') !== false) {
             $types = explode(',', $type);
+
             return end($types);
         }
 

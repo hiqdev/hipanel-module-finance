@@ -1,12 +1,11 @@
 <?php
 
-use hipanel\modules\finance\helpers\PlanInternalsGrouper;
-use hipanel\modules\finance\models\Plan;
-use yii\helpers\Html;
 use hipanel\modules\finance\grid\PlanGridView;
+use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\menus\PlanDetailMenu;
+use hipanel\modules\finance\models\Plan;
 use hipanel\widgets\IndexPage;
-
+use yii\helpers\Html;
 
 /**
  * @var \yii\web\View $this
@@ -14,11 +13,9 @@ use hipanel\widgets\IndexPage;
  * @var PlanInternalsGrouper $grouper
  * @var array $parentPrices
  */
-
 $this->title = $model->name ? Html::encode($model->name) : '&nbsp;';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-
 
 $this->registerCss(<<<'CSS'
 .profile-block {
@@ -35,7 +32,6 @@ $this->registerCss(<<<'CSS'
 
 CSS
 );
-
 
 ?>
 

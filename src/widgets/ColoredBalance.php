@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\widgets;
 
@@ -48,6 +56,7 @@ class ColoredBalance extends Widget
         $url = $this->url;
         $txt = Yii::$app->formatter->format($value, ['currency', $this->model->currency]);
         $ops = ['class' => 'text-nowrap text-' . $this->getColor($color), 'data-pjax' => 0];
+
         return $url ? Html::a($txt, $url, $ops) : Html::tag('span', $txt, $ops);
     }
 }

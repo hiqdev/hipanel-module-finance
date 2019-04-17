@@ -3,8 +3,6 @@
 use hipanel\modules\finance\grid\PriceGridView;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
-use yii\helpers\Html;
-use yii\helpers\Url;
 
 $this->title = Yii::t('hipanel:finance', 'Price');
 $this->params['breadcrumbs'][] = $this->title;
@@ -13,7 +11,6 @@ $this->params['breadcrumbs'][] = $this->title;
  * @var \hiqdev\hiart\ActiveDataProvider $dataProvider
  * @var \hipanel\modules\finance\models\Price $model
  */
-
 ?>
 
 <?php Pjax::begin(array_merge(Yii::$app->params['pjax'], ['enablePushState' => true])) ?>
@@ -47,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'price',
                         'type',
                         'note',
-                        'plan'
+                        'plan',
                     ],
                 ]) ?>
             <?php $page->endBulkForm() ?>

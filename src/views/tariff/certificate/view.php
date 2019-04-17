@@ -44,7 +44,7 @@ Box::begin() ?>
                                     <div class="col-md-6 <?= $textc ?>">
                                         <?= \hipanel\modules\finance\widgets\ResourcePriceWidget::widget([
                                             'price' => $price,
-                                            'currency' => $resource->currency
+                                            'currency' => $resource->currency,
                                         ]) ?>
                                     </div>
                                     <div class="col-md-6">

@@ -2,11 +2,11 @@
 
 use hipanel\modules\finance\grid\DomainServicePriceGridView;
 use hipanel\modules\finance\grid\DomainZonePriceGridView;
+use hipanel\modules\finance\models\DomainServicePrice;
 use hipanel\modules\finance\widgets\CreatePricesButton;
 use hipanel\widgets\IndexPage;
 use yii\data\ArrayDataProvider;
 use yii\helpers\Html;
-use hipanel\modules\finance\models\DomainServicePrice;
 
 /**
  * @var \yii\web\View $this
@@ -19,7 +19,6 @@ use hipanel\modules\finance\models\DomainServicePrice;
  * @var \hipanel\modules\finance\models\DomainServicePrice[] $parentServicePrices
  * @var IndexPage $page
  */
-
 [$zonePrices, $servicePrices] = $grouper->group();
 [$parentZonePrices, $parentServicePrices] = $parentPrices;
 

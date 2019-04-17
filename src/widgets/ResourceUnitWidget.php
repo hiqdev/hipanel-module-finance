@@ -5,13 +5,13 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\widgets;
 
-use yii\base\Widget;
 use Yii;
+use yii\base\Widget;
 
 final class ResourceUnitWidget extends Widget
 {
@@ -76,6 +76,5 @@ final class ResourceUnitWidget extends Widget
         ];
 
         return isset($resource[$this->resource->type]) ? $resource[$this->resource->type] : [];
-
     }
 }

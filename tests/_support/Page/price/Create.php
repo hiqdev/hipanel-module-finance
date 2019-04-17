@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\tests\_support\Page\price;
 
@@ -84,6 +92,7 @@ class Create extends View
             (new XEditable($this->tester, "div.price-item:nth-child($i)"))
                 ->setValue("$note $i");
         }
+
         return $how;
     }
 
@@ -94,8 +103,7 @@ class Create extends View
     public function seeNoteInTbodyRow(string $note, int $how): void
     {
         foreach (range(1, $how) as $i) {
-            $this->tester->see("$note $i", "//tbody");
+            $this->tester->see("$note $i", '//tbody');
         }
     }
 }
-

@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 return [
@@ -190,7 +190,7 @@ return [
                     new NumberFormatter(Yii::$app->language, \NumberFormatter::CURRENCY),
                     $container->get(Money\Currencies::class)
                 );
-            }
+            },
         ],
     ],
 ];

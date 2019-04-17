@@ -1,19 +1,15 @@
 <?php
 
 use hipanel\helpers\Url;
-use hipanel\models\Ref;
-use hipanel\modules\client\widgets\combo\ClientCombo;
+use hipanel\modules\finance\models\Tariff;
 use hipanel\modules\finance\models\Tariffprofile;
 use hipanel\modules\finance\widgets\combo\TariffCombo;
-use hipanel\modules\finance\models\Tariff;
-use hipanel\widgets\RefCombo;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
 /**
  * @var Tariffprofile $model
  */
-
 ?>
 
 <?php $form = ActiveForm::begin([

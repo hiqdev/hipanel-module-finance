@@ -4,7 +4,6 @@
  * @var \yii\web\View $this
  * @var \hipanel\modules\finance\models\ExchangeRate[] $rates
  */
-
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\widgets\Box;
 use yii\helpers\Html;

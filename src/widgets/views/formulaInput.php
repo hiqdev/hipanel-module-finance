@@ -6,7 +6,6 @@ use yii\helpers\Html;
  * @var \yii\web\View $this
  * @var \hipanel\modules\finance\widgets\FormulaInput $widget
  */
-
 $widget = $this->context;
 ?>
 

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\grid;
 
@@ -11,7 +19,7 @@ use Yii;
 use yii\helpers\Html;
 
 /**
- * Class ChargeGridView
+ * Class ChargeGridView.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -77,7 +85,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                                     'idAttribute'    => 'id',
                                     'labelAttribute' => 'name',
                                     'typeAttribute'  => 'type',
-                                ])
+                                ]),
                             ]),
                             ['class' => 'badge', 'style' => 'background-color: #f89406;']
                         );
@@ -91,7 +99,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'raw',
                 'value' => function (Charge $model) {
                     return $this->renderQuantity($model);
-                }
+                },
             ],
             'time' => [
                 'format' => 'raw',

@@ -1,19 +1,23 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\widgets;
 
 use hipanel\assets\AceEditorAsset;
 use hipanel\modules\finance\models\Price;
-use hiqdev\assets\autosize\AutosizeAsset;
 use Yii;
-use yii\helpers\BaseHtml;
 use yii\helpers\Html;
-use yii\web\NotAcceptableHttpException;
-use yii\web\View;
 use yii\widgets\InputWidget;
 
 /**
- * Class FormulaInput
+ * Class FormulaInput.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */

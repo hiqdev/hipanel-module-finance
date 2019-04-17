@@ -3,7 +3,6 @@
 use hipanel\helpers\Url;
 use hipanel\modules\finance\assets\PriceEstimator;
 use hipanel\modules\finance\models\Price;
-use hipanel\widgets\Box;
 use hipanel\widgets\DynamicFormWidget;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
@@ -11,7 +10,6 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var \hipanel\modules\finance\models\Price[] $models */
 /** @var \hipanel\modules\finance\models\Plan|null $plan */
-
 $model = reset($models);
 
 $form = ActiveForm::begin([
@@ -35,7 +33,7 @@ $form = ActiveForm::begin([
     'model' => $model,
     'formId' => 'prices-form',
     'formFields' => [
-        'id', 'quantity', 'type', 'unit', 'price', 'currency', 'note'
+        'id', 'quantity', 'type', 'unit', 'price', 'currency', 'note',
     ],
 ]) ?>
 
@@ -90,7 +88,7 @@ $form = ActiveForm::begin([
 
 <?= \hipanel\widgets\DynamicFormInputsValueInheritor::widget([
     'itemSelector' => '.price-item',
-    'inputSelectors' => ['input[ref=object_id]', 'input[ref=object]', 'input[ref=plan_id]', 'input[ref=currency]']
+    'inputSelectors' => ['input[ref=object_id]', 'input[ref=object]', 'input[ref=plan_id]', 'input[ref=currency]'],
 ]) ?>
 
 <?php

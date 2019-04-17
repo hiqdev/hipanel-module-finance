@@ -4,7 +4,6 @@
  * @var \yii\web\View $this
  * @var \hiqdev\yii2\merchant\models\PurchaseRequest[] $merchants
  */
-
 \hiqdev\paymenticons\yii2\PaymentIconsAsset::register($this);
 
 $methods = [];

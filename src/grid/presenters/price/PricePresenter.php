@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\grid\presenters\price;
 
@@ -27,8 +35,8 @@ class PricePresenter
 
     /**
      * @param Price $price
-     * @return string
      * @throws \yii\base\InvalidConfigException
+     * @return string
      */
     public function renderPrice(Price $price): string
     {
@@ -67,14 +75,14 @@ class PricePresenter
         if (!$price->isQuantityPredefined()) {
             return Yii::t('hipanel:finance', '{icon} Quantity: {quantity}', [
                 'icon' => Html::tag('i', '', ['class' => 'fa fa-calculator']),
-                'quantity' => Html::tag('b', '<i class="fa fa-spin fa-refresh"></i>', ['data-dynamic-quantity' => true])
+                'quantity' => Html::tag('b', '<i class="fa fa-spin fa-refresh"></i>', ['data-dynamic-quantity' => true]),
             ]);
         }
         if ($price->isOveruse()) {
             return Yii::t('hipanel:finance', '{coins}&nbsp;&nbsp;{amount,number} {unit}', [
                 'coins' => Html::tag('i', '', ['class' => 'fa fa-money', 'title' => Yii::t('hipanel.finance.price', 'Prepaid amount')]),
                 'amount' => $price->quantity,
-                'unit' => $price->getUnitLabel()
+                'unit' => $price->getUnitLabel(),
             ]);
         }
 

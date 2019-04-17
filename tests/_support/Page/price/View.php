@@ -1,10 +1,18 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\tests\_support\Page\price;
 
+use hipanel\helpers\Url;
 use hipanel\tests\_support\AcceptanceTester;
 use hipanel\tests\_support\Page\Authenticated;
-use hipanel\helpers\Url;
 
 class View extends Authenticated
 {

@@ -14,7 +14,7 @@ use yii\helpers\Url;
     'validationUrl' => Url::toRoute(['validate-single-form', 'scenario' => $model->scenario]),
 ]) ?>
 
-<?= Html::activeHiddenInput($model, "id") ?>
+<?= Html::activeHiddenInput($model, 'id') ?>
 
 <?= $form->field($model, 'server_ids')->widget(ServerCombo::class, ['inputOptions' => ['multiple' => true], 'hasId' => true]) ?>
 

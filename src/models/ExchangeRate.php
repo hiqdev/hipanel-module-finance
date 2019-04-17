@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\models;
 
@@ -7,7 +15,7 @@ use hiqdev\hiart\ActiveQuery;
 use hiqdev\hiart\ActiveRecord;
 
 /**
- * Class ExchangeRate
+ * Class ExchangeRate.
  *
  * @property string from
  * @property string to
@@ -35,7 +43,7 @@ class ExchangeRate extends ActiveRecord
     public function rules()
     {
         return [
-            [['from', 'to', 'rate'], 'safe']
+            [['from', 'to', 'rate'], 'safe'],
         ];
     }
 
@@ -49,7 +57,7 @@ class ExchangeRate extends ActiveRecord
         return [
             'from' => \Yii::t('hipanel:finance', 'From'),
             'to' => \Yii::t('hipanel:finance', 'To'),
-            'rate' => \Yii::t('hipanel:finance', 'Rate')
+            'rate' => \Yii::t('hipanel:finance', 'Rate'),
         ];
     }
 }

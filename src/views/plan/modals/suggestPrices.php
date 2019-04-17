@@ -3,8 +3,8 @@
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\PriceSuggestionRequestForm;
 use hipanel\modules\finance\widgets\combo\TemplatePlanCombo;
-use hipanel\modules\server\widgets\combo\ServerCombo;
 use hipanel\modules\server\widgets\combo\HubCombo;
+use hipanel\modules\server\widgets\combo\ServerCombo;
 use hiqdev\combo\StaticCombo;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
@@ -14,7 +14,6 @@ use yii\helpers\Html;
  * @var Plan $plan
  * @var PriceSuggestionRequestForm $model
  */
-
 ?>
 
 <?php $form = ActiveForm::begin(['id' => 'create-prices', 'action' => ['@price/suggest'], 'method' => 'GET']) ?>

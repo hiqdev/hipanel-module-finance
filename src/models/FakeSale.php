@@ -1,9 +1,17 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\models;
 
 /**
- * Class FakeSale is a stub to represent sale that did not happened yet
+ * Class FakeSale is a stub to represent sale that did not happened yet.
  *
  * {@inheritdoc}
  *
@@ -11,5 +19,4 @@ namespace hipanel\modules\finance\models;
  */
 class FakeSale extends Sale
 {
-
 }

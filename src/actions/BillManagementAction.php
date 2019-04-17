@@ -1,9 +1,16 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\actions;
 
 use hipanel\modules\finance\forms\BillForm;
-use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use hiqdev\hiart\Collection;
@@ -56,7 +63,7 @@ class BillManagementAction extends Action
     {
         parent::init();
 
-        if (!isset($this->scenario) || !in_array($this->scenario, [BillForm::SCENARIO_CREATE, BillForm::SCENARIO_UPDATE, BillForm::SCENARIO_COPY])) {
+        if (!isset($this->scenario) || !in_array($this->scenario, [BillForm::SCENARIO_CREATE, BillForm::SCENARIO_UPDATE, BillForm::SCENARIO_COPY], true)) {
             $this->scenario = $this->id;
         }
     }
@@ -76,7 +83,7 @@ class BillManagementAction extends Action
         return $this->controller->render($this->view, [
             'models' => $this->collection->getModels(),
             'billTypes' => $billTypes,
-            'billGroupLabels' => $billGroupLabels
+            'billGroupLabels' => $billGroupLabels,
         ]);
     }
 
@@ -116,6 +123,7 @@ class BillManagementAction extends Action
 
         if ($this->scenario === BillForm::SCENARIO_CREATE) {
             $this->collection->set([new BillForm(['scenario' => $this->scenario])]);
+
             return true;
         }
 
@@ -137,7 +145,7 @@ class BillManagementAction extends Action
             'dataCollector' => function ($model) {
                 /** @var BillForm $model */
                 return [$model->getPrimaryKey(), $model->toArray()];
-            }
+            },
         ]);
     }
 
@@ -159,6 +167,7 @@ class BillManagementAction extends Action
                 return $this->controller->redirect(['@bill', 'id_in' => $collection->getIds()]);
             } catch (ResponseErrorException $e) {
                 Yii::$app->session->addFlash('error', $e->getMessage());
+
                 return false;
             }
         }

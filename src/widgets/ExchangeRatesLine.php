@@ -1,11 +1,18 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\widgets;
 
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\widgets\ArraySpoiler;
 use Tuck\Sort\Sort;
-use Tuck\Sort\SortChain;
 use Yii;
 use yii\base\Widget;
 use yii\helpers\Html;
@@ -23,7 +30,7 @@ class ExchangeRatesLine extends Widget
     public $priorityPairCodes = [
         'USD/EUR',
         'EUR/USD',
-        'USB/BTC'
+        'USB/BTC',
     ];
 
     public function run()
@@ -66,7 +73,7 @@ class ExchangeRatesLine extends Widget
             'hiddenDelimiter' => '<br />',
             'formatter' => function (ExchangeRate $model) {
                 return Html::tag('span', $model->pairCode(), ['style' => 'font-weight: 400']) . ': ' . $model->rate;
-            }
+            },
         ]), ['style' => 'padding-left: 20px; color: #737272;']);
     }
 }

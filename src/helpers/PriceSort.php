@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\helpers;
 
@@ -77,7 +85,7 @@ class PriceSort
         ];
 
         return function (Price $price) use ($order) {
-            if (($key = array_search($price->getSubtype(), $order)) !== false) {
+            if (($key = array_search($price->getSubtype(), $order, true)) !== false) {
                 return $key;
             }
 
@@ -91,7 +99,7 @@ class PriceSort
 
         return function (Price $price) use ($order) {
             $type = substr($price->object->name, 0, strpos($price->object->name, ':'));
-            if (($key = array_search($type, $order)) !== false) {
+            if (($key = array_search($type, $order, true)) !== false) {
                 return $key;
             }
 

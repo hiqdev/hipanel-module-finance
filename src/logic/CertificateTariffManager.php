@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\logic;
@@ -14,14 +14,11 @@ use hipanel\models\Ref;
 use hipanel\modules\finance\forms\CertificateTariffForm;
 use hipanel\modules\finance\models\Tariff;
 use hiqdev\hiart\ConnectionInterface;
-use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\InvalidConfigException;
-use yii\web\NotFoundHttpException;
-use yii\web\UnprocessableEntityHttpException;
 
 /**
- * Class CertificateTariffManager
+ * Class CertificateTariffManager.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */

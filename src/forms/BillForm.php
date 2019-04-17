@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\forms;
 
@@ -106,7 +114,7 @@ class BillForm extends Model
     }
 
     /**
-     * Creates [[BillForm]] from [[Bill]]
+     * Creates [[BillForm]] from [[Bill]].
      *
      * @param Bill $bill
      * @param string $scenario
@@ -116,7 +124,7 @@ class BillForm extends Model
     {
         $attributes = $bill->getAttributes([
             'id', 'object_id', 'client_id', 'currency', 'type',
-            'gtype', 'sum', 'time', 'quantity', 'unit', 'label', 'object', 'class'
+            'gtype', 'sum', 'time', 'quantity', 'unit', 'label', 'object', 'class',
         ]);
 
         $form = new self(['scenario' => $scenario]);
@@ -147,7 +155,7 @@ class BillForm extends Model
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function load($data, $formName = null)
     {
@@ -170,7 +178,7 @@ class BillForm extends Model
     }
 
     /**
-     * Creates new charge
+     * Creates new charge.
      *
      * @return Charge
      */
@@ -193,10 +201,10 @@ class BillForm extends Model
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]], // TODO: should be probably replaced with input on client side
             [['object_id'], 'integer', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
             [['currency'], function ($attribute) {
-                    if (!array_key_exists(mb_strtolower($this->{$attribute}), array_change_key_case(Currency::list(), CASE_LOWER))) {
-                        $this->addError($attribute, Yii::t('hipanel:finance', 'Currency is invalid'));
-                    }
-                }, 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY],
+                if (!array_key_exists(mb_strtolower($this->{$attribute}), array_change_key_case(Currency::list(), CASE_LOWER))) {
+                    $this->addError($attribute, Yii::t('hipanel:finance', 'Currency is invalid'));
+                }
+            }, 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY],
             ],
             [['id'], 'required', 'on' => [self::SCENARIO_UPDATE]],
             [
@@ -277,7 +285,7 @@ class BillForm extends Model
     {
         $charges = [];
 
-        foreach ((array)$data as $datum) {
+        foreach ((array) $data as $datum) {
             $charge = $this->newCharge();
             if ($charge->load($datum, '')) {
                 $charge->markAsNotNew();
@@ -290,7 +298,6 @@ class BillForm extends Model
         return true;
     }
 
-
     public function getPrimaryKey()
     {
         return $this->id;
@@ -302,7 +309,7 @@ class BillForm extends Model
     }
 
     /**
-     * For compatibility with [[hiqdev\hiart\Collection]]
+     * For compatibility with [[hiqdev\hiart\Collection]].
      *
      * @param $defaultScenario
      * @param array $data
@@ -317,7 +324,7 @@ class BillForm extends Model
         ];
         $scenario = isset($map[$defaultScenario]) ? $map[$defaultScenario] : $defaultScenario;
 
-        return (new Bill)->batchQuery($scenario, $data, $options);
+        return (new Bill())->batchQuery($scenario, $data, $options);
     }
 
     public function getOldAttribute($attribute)

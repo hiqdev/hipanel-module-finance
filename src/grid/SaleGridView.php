@@ -1,14 +1,20 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\client\grid\ClientColumn;
-use hipanel\modules\finance\menus\SalePricesActionsMenu;
 use hipanel\modules\finance\models\FakeGroupingSale;
 use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
-use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\helpers\Html;
 
@@ -54,7 +60,7 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                     $html .= Html::endTag('div');
 
                     return $html;
-                }
+                },
             ],
             'object' => [
                 'format' => 'raw',
@@ -74,7 +80,7 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                     $html .= Html::endTag('div');
 
                     return $html;
-                }
+                },
             ],
             'object_link' => [
                 'attribute' => 'object',
@@ -91,7 +97,7 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                         'typeAttribute' => 'tariff_type',
                         'idAttribute' => 'object_id',
                     ]);
-                }
+                },
             ],
         ]);
     }

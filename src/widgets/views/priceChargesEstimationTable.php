@@ -4,7 +4,6 @@
  * @var \yii\web\View $this
  * @var array $charges
  */
-
 use yii\helpers\Html;
 
 $i = 1;
@@ -27,7 +26,7 @@ $i = 1;
                 'model' => new \yii\base\DynamicModel(['type' => $charge['type']]),
             ]);
             if ($charge['comment']) {
-               echo ' &mdash; ' . Html::tag('i', $charge['comment']);
+                echo ' &mdash; ' . Html::tag('i', $charge['comment']);
             }
             ?>
         </td>

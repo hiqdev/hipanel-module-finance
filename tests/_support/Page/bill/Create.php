@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\tests\_support\Page\bill;
 
@@ -89,7 +97,7 @@ class Create extends Authenticated
     }
 
     /**
-     * Checks whether a page contains the specified quantity of charges
+     * Checks whether a page contains the specified quantity of charges.
      *
      * @param int $n - quantity of charges
      */
@@ -116,6 +124,7 @@ class Create extends Authenticated
             return sum
 JS
         );
+
         return $sum;
     }
 
@@ -136,7 +145,7 @@ JS
     /**
      * Checks whether a bill was created successfully and returns its id.
      *
-     * @return string - id of created bill.
+     * @return string - id of created bill
      */
     public function seeActionSuccess(): ?string
     {

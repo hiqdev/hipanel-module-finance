@@ -14,6 +14,6 @@ $model->scenario = 'create-certificate';
 <div class="tariff-create">
     <?= $this->render('_form', [
         'model' => $model,
-        'action' => ['@tariff/create-certificate']
+        'action' => ['@tariff/create-certificate'],
     ]) ?>
 </div>

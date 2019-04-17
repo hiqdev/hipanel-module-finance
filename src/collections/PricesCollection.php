@@ -1,15 +1,23 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\collections;
 
-use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
+use hipanel\modules\finance\models\Price;
 use hiqdev\hiart\Collection;
 use Yii;
 
 /**
  * Class PricesCollection overrides loading behavior of parent class in order to:
- * make it possible to load all the models, specified in [[knownForms]] at once
+ * make it possible to load all the models, specified in [[knownForms]] at once.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */

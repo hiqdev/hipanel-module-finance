@@ -5,7 +5,6 @@ use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\widgets\CreatePricesButton;
 use hipanel\widgets\IndexPage;
 
-
 /**
  * @var \yii\web\View $this
  * @var \hipanel\modules\finance\models\Plan $model
@@ -14,7 +13,6 @@ use hipanel\widgets\IndexPage;
  * @var Sale[] $salesByObject
  * @var Price[][] $pricesByMainObject
  */
-
 [$salesByObject, $pricesByMainObject] = $grouper->group();
 
 ?>
@@ -55,7 +53,7 @@ use hipanel\widgets\IndexPage;
             'time',
             'price_related_actions',
             'estimate_placeholder',
-        ]
+        ],
     ]) ?>
 <?php $page->endBulkForm() ?>
 <?php $page->endContent() ?>

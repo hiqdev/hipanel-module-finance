@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\helpers;
 
@@ -7,7 +15,7 @@ use Tuck\Sort\Sort;
 use Tuck\Sort\SortChain;
 
 /**
- * Class ChargesGrouper can be used to group charges inside $charge by commonObject->id
+ * Class ChargesGrouper can be used to group charges inside $charge by commonObject->id.
  */
 class ChargesGrouper
 {
@@ -43,6 +51,7 @@ class ChargesGrouper
             $idToNameObject[$charge->commonObject->id] = $charge;
         }
         $idToNameObject = $this->sortByServerName()->values($idToNameObject);
+
         return [$idToNameObject, $chargesByMainObject];
     }
 

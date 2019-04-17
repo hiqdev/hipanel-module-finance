@@ -1,18 +1,25 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\grid;
 
-use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\helpers\ChargeSort;
+use hipanel\modules\finance\models\Charge;
 use Yii;
-use \yii\data\ArrayDataProvider;
+use yii\data\ArrayDataProvider;
 
 /**
- * Class GroupedChargesGridView
+ * Class GroupedChargesGridView.
  */
 class GroupedByServerChargesGridView extends BillGridView
 {
-
     /**
      * @var Charge[]
      */
@@ -63,10 +70,10 @@ class GroupedByServerChargesGridView extends BillGridView
                 'dataProvider' => new ArrayDataProvider([
                     'allModels'  => ChargeSort::anyCharges()->values($models, true),
                     'sort'       => false,
-                    'pagination' => false
+                    'pagination' => false,
                 ]),
                 'tableOptions' => [
-                    'class' => 'table table-striped table-bordered'
+                    'class' => 'table table-striped table-bordered',
                 ],
                 'columns'      => array_filter([
                     Yii::$app->user->can('bill.update') ? 'checkbox' : null,

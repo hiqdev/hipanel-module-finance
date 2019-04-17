@@ -11,7 +11,6 @@ use yii\helpers\Html;
 /** @var string $modalHeaderColor */
 /** @var DateTime $dt */
 /** @var \hipanel\modules\finance\models\Purse $model */
-
 ?>
 <?php $modalButton = ModalButton::begin([
     'id' => sprintf('modal-%s-%s-%s', $model->id, $type, uniqid()),
@@ -20,7 +19,7 @@ use yii\helpers\Html;
         'action' => $action,
         'options' => [
             'class' => 'text-left',
-        ]
+        ],
     ],
     'button' => [
         'label' => $buttonLabel,
@@ -44,7 +43,7 @@ use yii\helpers\Html;
         'id' => 'purse-month-' . uniqid(),
     ],
     'pluginOptions' => [
-        'format' => "yyyy-mm",
+        'format' => 'yyyy-mm',
         'viewMode' => 'months',
         'minViewMode' => 'months',
         'autoclose' => true,

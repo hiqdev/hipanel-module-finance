@@ -5,19 +5,17 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\grid;
 
-use hipanel\helpers\Url;
-use hiqdev\yii2\menus\grid\MenuColumn;
 use hipanel\modules\finance\menus\ProfileActionsMenu;
 use hipanel\modules\finance\models\Tariff;
 use hipanel\modules\finance\models\TariffProfile;
-use yii\helpers\Html;
-
+use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
+use yii\helpers\Html;
 
 class TariffProfileGridView extends \hipanel\grid\BoxedGridView
 {
@@ -34,7 +32,7 @@ class TariffProfileGridView extends \hipanel\grid\BoxedGridView
                     }
 
                     return $model->name;
-                }
+                },
             ],
             'tariff_names' => [
                 'filter' => false,
@@ -53,10 +51,10 @@ class TariffProfileGridView extends \hipanel\grid\BoxedGridView
                         foreach ($values as $id => $name) {
                             $links[$id] = $this->tariffLink($id, $name);
                         }
-                        $tariffs[$type] = $model->getAttributeLabel($type) . ": " . implode(", ", $links);
+                        $tariffs[$type] = $model->getAttributeLabel($type) . ': ' . implode(', ', $links);
                     }
 
-                    return implode("<br>", $tariffs);
+                    return implode('<br>', $tariffs);
                 },
             ],
             'domain_tariff' => [
@@ -90,15 +88,15 @@ class TariffProfileGridView extends \hipanel\grid\BoxedGridView
                     }
 
                     if (empty($model->tariffs[Tariff::TYPE_XEN])) {
-                        return "";
+                        return '';
                     }
 
                     foreach ($model->tariffs[Tariff::TYPE_XEN] as $id => $name) {
-                         $links[$id] = $this->tariffLink($id, $name);
+                        $links[$id] = $this->tariffLink($id, $name);
                     }
 
-                    return implode(", ", $links);
-                }
+                    return implode(', ', $links);
+                },
             ],
             'ovds_tariff' => [
                 'attribute' => 'ovds',
@@ -109,15 +107,15 @@ class TariffProfileGridView extends \hipanel\grid\BoxedGridView
                     }
 
                     if (empty($model->tariffs[Tariff::TYPE_OPENVZ])) {
-                        return "";
+                        return '';
                     }
 
                     foreach ($model->tariffs[Tariff::TYPE_OPENVZ] as $id => $name) {
-                         $links[$id] = $this->tariffLink($id, $name);
+                        $links[$id] = $this->tariffLink($id, $name);
                     }
 
-                    return implode(", ", $links);
-                }
+                    return implode(', ', $links);
+                },
             ],
             'server_tariff' => [
                 'attribute' => 'server',
@@ -128,15 +126,15 @@ class TariffProfileGridView extends \hipanel\grid\BoxedGridView
                     }
 
                     if (empty($model->tariffs[Tariff::TYPE_SERVER])) {
-                        return "";
+                        return '';
                     }
 
                     foreach ($model->tariffs[Tariff::TYPE_SERVER] as $id => $name) {
-                         $links[$id] = $this->tariffLink($id, $name);
+                        $links[$id] = $this->tariffLink($id, $name);
                     }
 
-                    return implode(", ", $links);
-                }
+                    return implode(', ', $links);
+                },
             ],
             'actions' => [
                 'class' => MenuColumn::class,

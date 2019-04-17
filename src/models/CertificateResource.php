@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\models;
@@ -16,7 +16,7 @@ use yii\base\InvalidConfigException;
 use yii\validators\NumberValidator;
 
 /**
- * Class CertificateResource
+ * Class CertificateResource.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  * @deprecated Is implemented in plan module
@@ -70,7 +70,7 @@ class CertificateResource extends Resource
     public function getAvailablePeriods()
     {
         $periods = [];
-        foreach ([1,2] as $period) {
+        foreach ([1, 2] as $period) {
             if ($this->hasPriceForPeriod($period)) {
                 $periods[$period] = Yii::t('hipanel:finance:tariff', '{n, plural, one{# year} other{# years}}', ['n' => $period]);
             }
@@ -86,7 +86,7 @@ class CertificateResource extends Resource
             /// XXX throw new InvalidConfigException('Period ' . $period . ' is not available');
         }
 
-        return (float)$this->data['sums'][$period];
+        return (float) $this->data['sums'][$period];
     }
 
     public function hasPriceForPeriod($period)

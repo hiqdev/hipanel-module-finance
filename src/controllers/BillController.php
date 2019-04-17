@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\controllers;
@@ -14,7 +14,6 @@ use hipanel\actions\Action;
 use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartDeleteAction;
-use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\filters\EasyAccessControl;
@@ -24,12 +23,11 @@ use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\forms\CurrencyExchangeForm;
 use hipanel\modules\finance\helpers\ChargesGrouper;
-use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\models\Resource;
-use hiqdev\hiart\Collection;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use hiqdev\hiart\ActiveQuery;
+use hiqdev\hiart\Collection;
 use Yii;
 use yii\base\Event;
 use yii\base\Module;
@@ -179,13 +177,14 @@ class BillController extends \hipanel\base\CrudController
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($id = $model->save()) {
                 Yii::$app->session->addFlash('success', Yii::t('hipanel:finance', 'Currency was exchanged successfully'));
+
                 return $this->redirect(['@bill']);
             }
         }
 
         return $this->render('create-exchange', [
             'model' => $model,
-            'rates' => $this->getExchangeRates()
+            'rates' => $this->getExchangeRates(),
         ]);
     }
 

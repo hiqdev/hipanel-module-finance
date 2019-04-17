@@ -1,17 +1,24 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\helpers;
 
 use hipanel\modules\finance\models\FakeGroupingSale;
 use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\FakeSharedSale;
-use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
 use Tuck\Sort\Sort;
 use Tuck\Sort\SortChain;
 
 /**
- * Class SaleSort
+ * Class SaleSort.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */

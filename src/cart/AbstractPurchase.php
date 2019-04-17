@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\cart;
@@ -15,7 +15,7 @@ use yii\base\InvalidConfigException;
 /**
  * Class Purchase.
  * Performs purchase action.
- * Holds cart position object and data needed to perform purchase:
+ * Holds cart position object and data needed to perform purchase:.
  *
  * @property int $amount
  * @property string $client
@@ -77,6 +77,7 @@ abstract class AbstractPurchase extends \hipanel\base\Model
     {
         if ($this->validate()) {
             $this->_result = static::perform(static::operation(), $this->getAttributes());
+
             return true;
         }
 

@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\models\decorators\server;
@@ -14,7 +14,6 @@ use hipanel\inputs\TextInput;
 use hipanel\modules\finance\models\decorators\AbstractResourceDecorator;
 use hipanel\modules\finance\models\decorators\ResourceDecoratorInterface;
 use hipanel\modules\finance\models\ServerResource;
-use NumberFormatter;
 use Yii;
 
 abstract class AbstractServerResourceDecorator extends AbstractResourceDecorator implements ResourceDecoratorInterface

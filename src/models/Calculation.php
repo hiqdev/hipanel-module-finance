@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\models;
@@ -60,6 +60,7 @@ class Calculation extends \hipanel\base\Model
     {
         if (!isset($this->value[$currency])) {
             Yii::warning('Value for currency $currency was not found. Using fake free value. Most probably, tariff is free', __METHOD__);
+
             return new Value(['value' => 0, 'price' => 0]);
         }
 

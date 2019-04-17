@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\tests\acceptance\manager;
 
@@ -6,8 +14,8 @@ use Codeception\Scenario;
 use hipanel\helpers\Url;
 use hipanel\modules\finance\tests\_support\Page\plan\Create as PlanCreatePage;
 use hipanel\modules\finance\tests\_support\Page\price\Create as PriceCreatePage;
-use hipanel\modules\finance\tests\_support\Page\price\Update as PriceUpdatePage;
 use hipanel\modules\finance\tests\_support\Page\price\Delete as PriceDeletePage;
+use hipanel\modules\finance\tests\_support\Page\price\Update as PriceUpdatePage;
 use hipanel\tests\_support\Step\Acceptance\Manager;
 
 abstract class PriceCest
@@ -42,7 +50,7 @@ abstract class PriceCest
                 $example['type'], $example['templateName'], implode(', ', $example['priceTypes']), $example['object']
             ));
 
-            $id = $this->createPlan($I, uniqid($example['type'].'Plan_Of_'.$example['templateName'], true), $example['type']);
+            $id = $this->createPlan($I, uniqid($example['type'] . 'Plan_Of_' . $example['templateName'], true), $example['type']);
             $I->needPage(Url::to(['@plan/view', 'id' => $id]));
             $I->see('No results found.');
 
@@ -70,6 +78,7 @@ abstract class PriceCest
         ];
 
         $page = new PlanCreatePage($I, $fields);
+
         return $page->createPlan();
     }
 

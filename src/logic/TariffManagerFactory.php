@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\logic;
@@ -21,9 +21,9 @@ class TariffManagerFactory
     /**
      * @param integer $id Tariff ID
      * @param array $options that will be passed to the object as configuration
-     * @return AbstractTariffManager|object
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
+     * @return AbstractTariffManager|object
      */
     public static function createById($id, $options = [])
     {

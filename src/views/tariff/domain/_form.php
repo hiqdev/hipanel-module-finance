@@ -45,8 +45,8 @@ use yii\helpers\Url;
                 <tr>
                     <th></th>
                     <?php foreach ($model->getResourceTypes() as $type) {
-                        echo Html::tag('th', $type);
-                    } ?>
+            echo Html::tag('th', $type);
+        } ?>
                 </tr>
                 </thead>
                 <tbody>

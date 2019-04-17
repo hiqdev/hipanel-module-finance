@@ -3,9 +3,7 @@
 use hipanel\modules\finance\grid\TariffProfileGridView;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
-use yii\bootstrap\Dropdown;
 use yii\helpers\Html;
-
 
 /**
  * @var \yii\web\View

@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\controllers;
@@ -24,7 +24,6 @@ use hipanel\modules\finance\logic\OvdsTariffManager;
 use hipanel\modules\finance\logic\ServerTariffManager;
 use hipanel\modules\finance\logic\SvdsTariffManager;
 use hipanel\modules\finance\logic\TariffManagerFactory;
-use hipanel\modules\finance\models\CertificateResource;
 use Yii;
 
 class TariffController extends \hipanel\base\CrudController

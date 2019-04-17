@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\controllers;
 
@@ -10,19 +18,19 @@ use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
+use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\actions\PriceUpdateAction;
 use hipanel\modules\finance\collections\PricesCollection;
 use hipanel\modules\finance\helpers\PriceSort;
-use hipanel\modules\finance\models\TargetObject;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
-use hipanel\filters\EasyAccessControl;
+use hipanel\modules\finance\models\TargetObject;
 use Yii;
 use yii\base\Event;
 
 /**
- * Class PriceController
+ * Class PriceController.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -70,7 +78,7 @@ class PriceController extends CrudController
 
                     return compact('plan');
                 },
-                'success' => Yii::t('hipanel.finance.price', 'Prices were successfully created')
+                'success' => Yii::t('hipanel.finance.price', 'Prices were successfully created'),
             ],
             'create-suggested' => [
                 'class' => SmartCreateAction::class,
@@ -85,7 +93,7 @@ class PriceController extends CrudController
                         },
                     ],
                 ],
-                'success' => Yii::t('hipanel.finance.price', 'Prices were successfully created')
+                'success' => Yii::t('hipanel.finance.price', 'Prices were successfully created'),
             ],
             'update' => [
                 'class' => PriceUpdateAction::class,
@@ -99,13 +107,14 @@ class PriceController extends CrudController
                     $dataProvider->query->joinWith('object');
                 },
                 'data' => function ($action, $data) {
-                     $data['models'] = PriceSort::anyPrices()->values($data['models'], true);
-                     return $data;
-                }
+                    $data['models'] = PriceSort::anyPrices()->values($data['models'], true);
+
+                    return $data;
+                },
             ],
             'delete' => [
                 'class' => SmartDeleteAction::class,
-                'success' => Yii::t('hipanel.finance.price', 'Prices were successfully deleted')
+                'success' => Yii::t('hipanel.finance.price', 'Prices were successfully deleted'),
             ],
             'set-note' => [
                 'class' => SmartUpdateAction::class,
@@ -122,7 +131,7 @@ class PriceController extends CrudController
     {
         $plan = Plan::findOne(['id' => $plan_id]);
 
-        $suggestions = (new Price)->batchQuery('suggest', [
+        $suggestions = (new Price())->batchQuery('suggest', [
             'plan_id' => $plan_id,
             'object_id' => $object_id,
             'template_plan_id' => $template_plan_id,

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\transaction;
 
@@ -22,16 +30,16 @@ class ApiTransactionRepository implements TransactionRepositoryInterface
      * ApiTransactionRepository constructor.
      * @param ConnectionInterface $connection
      */
-    function __construct(ConnectionInterface $connection)
+    public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
     }
 
     /**
      * @param string $id
-     * @return Transaction
      * @throws TransactionException when transaction with the specified ID
      * does not exists
+     * @return Transaction
      */
     public function findById($id)
     {
@@ -51,7 +59,7 @@ class ApiTransactionRepository implements TransactionRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function insert($transaction)
     {
@@ -59,7 +67,7 @@ class ApiTransactionRepository implements TransactionRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function create($id, $merchant, $parameters)
     {
@@ -77,7 +85,7 @@ class ApiTransactionRepository implements TransactionRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function save($transaction)
     {

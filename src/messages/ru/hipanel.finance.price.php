@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 return [
     'We could not suggest any new prices of type "{suggestionType}" for the selected object. Probably, they were already created earlier or this suggestion type is not compatible with this object type' => 'Мы не сможем предложить никаких новых цен типа "{suggestionType}" для выбранного объекта. Скорее всего, они уже были созданы раньше, или выбранный объект не поддерживает предложение цен этого типа.',
@@ -52,5 +60,4 @@ return [
     'Formula usage examples' => 'Примеры использования формул',
     'Applicable for overuse prices. The example will compensate up to 5 TB of overuse as discount. Make sure to use appropriate unit, such as <code>items</code>, <code>gbps</code> or <code>hours</code>.' => 'Применим для цен на перебор. Этот пример компенсирует до 5 Тб перебора в виде скидки. Убедитесь, что использете единицу измерения, которая соответствует типу цены, например <code>items</code>, <code>gbps</code> или <code>hours</code>.',
     'Applicable for overuse prices. Will compensate up to 5 TB of overuse as a separate Compensation bill. You can use any other bill type in option <code>.as()</code>, such as <code>deposit,creditnote</code> or <code>correction,positive</code>.' => 'Применим для цен на перебор. Этот пример компенсирует до 5 Тб перебора в виде отдельного счёта "Компенсация". Вы можете указывать любой другой тип счёта в опции <code>.as()</code>, например <code>deposit,creditnote</code> или <code>correction,positive</code>.',
-
 ];

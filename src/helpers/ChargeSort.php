@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\helpers;
 
@@ -29,7 +37,7 @@ class ChargeSort
         return function (Charge $charge) use ($order) {
             if ($charge->class === 'part') {
                 $type = substr($charge->name, 0, strpos($charge->name, ':'));
-                if (($key = array_search($type, $order)) !== false) {
+                if (($key = array_search($type, $order, true)) !== false) {
                     return $key;
                 }
             }

@@ -9,7 +9,6 @@ use yii\web\View;
  * @var float $originalPrice
  * @var \yii\widgets\ActiveField $activeField
  */
-
 ?>
 
 <div class="row">
@@ -20,7 +19,7 @@ use yii\web\View;
             'class' => 'form-control price-input',
             'autocomplete' => false,
             'step' => 'any',
-            'value' => $basePrice
+            'value' => $basePrice,
         ])->label(false); ?>
     </div>
     <div class="col-md-6">

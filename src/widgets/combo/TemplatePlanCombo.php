@@ -1,15 +1,22 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\widgets\combo;
 
 use hiqdev\combo\Combo;
 use yii\base\InvalidConfigException;
-use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\JsExpression;
 
 /**
- * Class TemplatePlanCombo
+ * Class TemplatePlanCombo.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -53,7 +60,7 @@ class TemplatePlanCombo extends Combo
         if (!empty($this->object_input_type)) {
             $this->_filter['object_id'] = [
                 'field' => $this->object_input_type,
-                'format' => 'id'
+                'format' => 'id',
             ];
         }
     }

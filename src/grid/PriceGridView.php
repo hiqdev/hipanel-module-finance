@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\grid;
 
@@ -13,7 +21,7 @@ use Yii;
 use yii\bootstrap\Html;
 
 /**
- * Class PriceGridView
+ * Class PriceGridView.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -46,7 +54,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'raw',
                 'value' => function (Price $model) {
                     return $this->presenterFactory->build(\get_class($model))->renderPrice($model);
-                }
+                },
             ],
             'object->name' => [
                 'label' => Yii::t('hipanel', 'Object'),
@@ -58,20 +66,20 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                     ]);
 
                     return $link ?: Yii::t('hipanel.finance.price', 'Any');
-                }
+                },
             ],
             'object->name-any' => [
                 'label' => Yii::t('hipanel', 'Object'),
                 'value' => function (Price $model) {
                     return Yii::t('hipanel.finance.price', 'Any');
-                }
+                },
             ],
             'object->label' => [
                 'format' => 'raw',
                 'label' => Yii::t('hipanel', 'Details'),
                 'value' => function (Price $model) {
                     return $model->object->label;
-                }
+                },
             ],
             'type' => [
                 'class' => RefColumn::class,
@@ -88,7 +96,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 ],
                 'value' => function ($model) {
                     return BillType::widget(['model' => $model]);
-                }
+                },
             ],
             'unit' => [
                 'class' => RefColumn::class,
@@ -105,7 +113,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 ],
                 'value' => function (Price $model) {
                     return $model->getUnitLabel();
-                }
+                },
             ],
             'currency' => [
                 'class' => RefColumn::class,
@@ -124,7 +132,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'label' => Yii::t('hipanel', 'Details'),
                 'value' => function (Price $model) {
                     return $this->presenterFactory->build(\get_class($model))->renderInfo($model);
-                }
+                },
             ],
             'value' => [
                 'class' => ValueColumn::class,

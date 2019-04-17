@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\forms;
@@ -14,7 +14,6 @@ use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\logic\ServerTariffCalculatorInterface;
 use hipanel\modules\finance\models\Resource;
 use hipanel\modules\finance\models\ServerResource;
-use hipanel\modules\server\models\Server;
 use Yii;
 use yii\web\UnprocessableEntityHttpException;
 
@@ -56,6 +55,7 @@ class ServerTariffForm extends AbstractTariffForm
         }
 
         $order = array_keys(reset($resources)->getHardwareTypes());
+
         return $this->sortResourcesByDefinedOrder($resources, $order, 'model_type');
     }
 

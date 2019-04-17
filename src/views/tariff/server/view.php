@@ -61,7 +61,7 @@ use hipanel\widgets\Box;
                     <td>
                         <?= \hipanel\modules\finance\widgets\ResourcePriceWidget::widget([
                             'price' => $resource->fee,
-                            'currency' => $resource->currency
+                            'currency' => $resource->currency,
                         ]) ?>
                         <?php if (Yii::$app->user->can('manage')) : ?>
                             <?= PriceDifferenceWidget::widget([
@@ -97,7 +97,7 @@ use hipanel\widgets\Box;
                     <td>
                         <?= \hipanel\modules\finance\widgets\ResourcePriceWidget::widget([
                             'price' => $resource->fee,
-                            'currency' => $resource->currency
+                            'currency' => $resource->currency,
                         ]) ?>
                         <?php if (Yii::$app->user->can('manage')) : ?>
                             <?= PriceDifferenceWidget::widget([
@@ -112,7 +112,7 @@ use hipanel\widgets\Box;
                     <td>
                         <?= \hipanel\modules\finance\widgets\ResourcePriceWidget::widget([
                             'price' => $resource->price,
-                            'currency' => $resource->currency
+                            'currency' => $resource->currency,
                         ]) ?>
                         <?php if (Yii::$app->user->can('manage')) : ?>
                             <?= PriceDifferenceWidget::widget([

@@ -5,12 +5,11 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\models;
 
-use hipanel\models\Ref;
 use Yii;
 
 /**
@@ -54,7 +53,7 @@ class TariffProfile extends \hipanel\base\Model
             if (in_array($type, [Tariff::TYPE_DOMAIN, Tariff::TYPE_CERT], true)) {
                 $main[] = [[$type], 'integer'];
             } else {
-                $main[] = [[$type], 'filter', 'filter' => function($value) { return explode(",", $value); }];
+                $main[] = [[$type], 'filter', 'filter' => function ($value) { return explode(',', $value); }];
                 $main[] = [[$type], 'each', 'rule' => ['trim'], 'on' => ['update', 'create']];
                 $main[] = [[$type], 'each', 'rule' => ['integer'], 'on' => ['update', 'create']];
             }
@@ -67,7 +66,7 @@ class TariffProfile extends \hipanel\base\Model
     {
         foreach ([Tariff::TYPE_XEN, Tariff::TYPE_OPENVZ, Tariff::TYPE_SERVER] as $attribute) {
             if (empty($this->$attribute)) {
-                continue ;
+                continue;
             }
             $this->$attribute = reset($this->$attribute);
         }
@@ -90,5 +89,4 @@ class TariffProfile extends \hipanel\base\Model
             'server' => Yii::t('hipanel.finance.tariffprofile', 'Server tariffs'),
         ]);
     }
-
 }

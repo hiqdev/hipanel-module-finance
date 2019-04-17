@@ -1,4 +1,12 @@
 <?php
+/**
+ * Finance module for HiPanel
+ *
+ * @link      https://github.com/hiqdev/hipanel-module-finance
+ * @package   hipanel-module-finance
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hipanel\modules\finance\helpers;
 
@@ -36,7 +44,7 @@ class PlanInternalsGrouper
      * - server
      * - sVDS
      * - oVDS
-     * - certificate
+     * - certificate.
      * @return array
      */
     public function group()
@@ -93,7 +101,7 @@ class PlanInternalsGrouper
             }
 
             foreach ($prices as $price) {
-                if ((int)$price->main_object_id === (int)$id) {
+                if ((int) $price->main_object_id === (int) $id) {
                     $salesByObject[$id] = new FakeSale([
                         'object' => $price->main_object_name,
                         'tariff_id' => $model->id,
@@ -103,7 +111,7 @@ class PlanInternalsGrouper
                     continue 2;
                 }
 
-                if ((int)$price->object_id === (int)$id) {
+                if ((int) $price->object_id === (int) $id) {
                     $salesByObject[$id] = new FakeSale([
                         'object' => $price->object->name,
                         'tariff_id' => $model->id,
