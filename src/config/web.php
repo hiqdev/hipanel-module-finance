@@ -54,6 +54,7 @@ return [
             'notifyPage' => '/finance/pay/notify',
             'finishPage' => '/finance/bill',
             'purchaseRequestCollectionClass' => \hipanel\modules\finance\merchant\PurchaseRequestCollection::class,
+            'currenciesCollectionClass' => \hipanel\modules\finance\merchant\CurrenciesCollection::class,
         ],
     ],
     'components' => [

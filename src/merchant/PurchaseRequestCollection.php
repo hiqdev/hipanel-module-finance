@@ -57,17 +57,18 @@ class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
     {
         $params = [
             'transactionId' => $depositRequest->id,
-            'sum' => floatval($depositRequest->amount),
+            'sum' => (float)$depositRequest->amount,
+            'currency' => $depositRequest->currency,
             'site' => Yii::$app->request->getHostInfo(),
         ];
 
         if (Yii::$app->user->getIsGuest()) {
             $params['seller'] = Yii::$app->params['user.seller'];
-        } elseif (isset($depositRequest->username)) {
+        } elseif ($depositRequest->username !== null) {
             $params['username'] = $depositRequest->username;
         }
 
-        if (isset($depositRequest->merchant)) {
+        if ($depositRequest->merchant !== null) {
             // When the Request contains concrete merchant name,
             // parameters `finishUrl`, `cancelUrl`, `notifyUrl` contain
             // correct URLs, adjusted by [[hiqdev\yii2-merchant\Module::prepareRequestData()]]
@@ -104,7 +105,7 @@ class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
 
         return Yii::$app->getCache()->getOrSet([__METHOD__, $params, $userId], function () use ($params) {
             return Merchant::perform('prepare-info', $params, ['batch' => true]);
-        }, 3600*1);
+        }, 3600);
     }
 
     public function convertMerchant($data)
