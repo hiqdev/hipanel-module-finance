@@ -21,6 +21,7 @@ use yii\helpers\Json;
 
 /**
  * Class PayController.
+ *
  * @property \hipanel\modules\finance\Module $module
  */
 class PayController extends \hiqdev\yii2\merchant\controllers\PayController
@@ -78,16 +79,26 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 
         try {
             return Yii::$app->get('hiart')->callWithDisabledAuth(function () use ($transaction, $data) {
-                $result = Merchant::perform('pay', $data);
-
+                $result = Merchant::perform('pay-transaction', $data);
                 $this->completeTransaction($transaction, $result);
 
                 return $transaction;
             });
         } catch (ResponseErrorException $e) {
-            // Does not matter
-            return $transaction;
-        }
+        } // Does not matter, let's try the old way then.
+
+        try {
+            return Yii::$app->get('hiart')->callWithDisabledAuth(function () use ($transaction, $data) {
+                $result = Merchant::perform('pay', $data);
+                $this->completeTransaction($transaction, $result);
+
+                return $transaction;
+            });
+        } catch (ResponseErrorException $e) {
+        } // Still no luck? Then it's not the right request.
+
+
+        return $transaction;
     }
 
     public function actionProxyNotification()
@@ -107,8 +118,8 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
     /**
      * @param Transaction $transaction
      * @param string|array $response
-     * @throws \yii\base\ExitException
      * @return mixed
+     * @throws \yii\base\ExitException
      */
     protected function completeTransaction($transaction, $response)
     {
