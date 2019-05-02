@@ -31,7 +31,7 @@ class AccountRechargingCest
         $form = "//form[@action='$url']";
         $I->see('Amount', "$form/label");
         $I->seeElement('input', ['id' => 'depositform-amount']);
-        $text = 'Enter the amount of the replenishment in dollars. For example: 8.79';
+        $text = 'Enter the amount of the replenishment in USD. For example: 8.79';
         $I->see($text, $form);
         $I->see('Proceed', "$form/button[@type='submit']");
     }
