@@ -38,6 +38,8 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
         'server_du'         => DefaultQuantityFormatter::class,
         'win_license'       => DefaultQuantityFormatter::class,
         'hw_purchase'       => DefaultQuantityFormatter::class,
+        'server_ssd'        => DefaultQuantityFormatter::class,
+        'server_sata'       => DefaultQuantityFormatter::class,
 
         'drenewal'          => DomainRenewalQuantity::class,
     ];
