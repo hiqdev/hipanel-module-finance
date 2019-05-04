@@ -42,12 +42,17 @@ class CartController extends \yii\web\Controller
 
     /**
      * @param float $amount
+     * @param string $currency
      * @return \yii\web\Response
      */
-    public function renderDeposit($amount)
+    private function renderDeposit(float $amount, string $currency)
     {
-        $form = new DepositForm(['amount' => $amount]);
-        $form->finishUrl = '/finance/cart/finish';
+        $form = new DepositForm([
+            'amount' => $amount,
+            'currency' => $currency,
+            'finishUrl' => '/finance/cart/finish',
+        ]);
+        $form->validate();
 
         return $this->module->getMerchant()->renderDeposit($form);
     }
@@ -60,7 +65,7 @@ class CartController extends \yii\web\Controller
         $budget = $client->balance + $client->credit;
 
         if ($budget <= 0 && $total > 0) {
-            return $this->renderDeposit($total);
+            return $this->renderDeposit($total, $cart->currency);
         }
 
         return $this->render('select', [
@@ -72,7 +77,9 @@ class CartController extends \yii\web\Controller
 
     public function actionFull()
     {
-        return $this->renderDeposit($this->module->getCart()->getTotal());
+        $cart = $this->module->getCart();
+
+        return $this->renderDeposit($cart->getTotal(), $cart->currency);
     }
 
     public function actionPartial()
@@ -80,7 +87,7 @@ class CartController extends \yii\web\Controller
         $client = Client::findOne(['id' => Yii::$app->user->identity->id]);
         $cart = $this->module->getCart();
 
-        return $this->renderDeposit($cart->total - $client->balance - $client->credit);
+        return $this->renderDeposit($cart->total - $client->balance - $client->credit, $cart->currency);
     }
 
     public function actionFinish()
