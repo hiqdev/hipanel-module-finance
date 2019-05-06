@@ -34,7 +34,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
         'support_time'      => SupportTimeQuantity::class,
         'server_traf_max'   => DefaultQuantityFormatter::class,
         'server_traf95_max' => DefaultQuantityFormatter::class,
-        'backup_du'         => DefaultQuantityFormatter::class,
+        'backup_du'         => BackupDuQuantityFormatter::class,
         'server_du'         => DefaultQuantityFormatter::class,
         'win_license'       => DefaultQuantityFormatter::class,
         'hw_purchase'       => DefaultQuantityFormatter::class,
