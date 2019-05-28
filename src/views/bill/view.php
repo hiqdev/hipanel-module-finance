@@ -26,6 +26,8 @@ $this->title = sprintf(
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Payments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
+$detalizationAllowed = Yii::$app->params['module.finance.bill.detalization.allowed'];
+
 Pjax::begin(Yii::$app->params['pjax']) ?>
 <div class="row">
 
@@ -53,19 +55,20 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
         ]) ?>
     </div>
 
-    <div class="col-md-9">
-        <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
-            <?php $page->beginContent('show-actions') ?>
-                <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Detalization') ?></h4>
-            <?php $page->endContent() ?>
-            <?php $page->beginContent('bulk-actions') ?>
-                <?php if (Yii::$app->user->can('bill.update')) : ?>
-                    <?= $page->renderBulkDeleteButton('charge-delete') ?>
-                <?php endif ?>
-            <?php $page->endContent() ?>
-            <?= $this->render('_grouping', compact('model', 'grouper', 'page')) ?>
-        <?php $page->end() ?>
-    </div>
-
+    <?php if ($detalizationAllowed || Yii::$app->user->can('support')): ?>
+        <div class="col-md-9">
+            <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
+                <?php $page->beginContent('show-actions') ?>
+                    <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Detalization') ?></h4>
+                <?php $page->endContent() ?>
+                <?php $page->beginContent('bulk-actions') ?>
+                    <?php if (Yii::$app->user->can('bill.update')) : ?>
+                        <?= $page->renderBulkDeleteButton('charge-delete') ?>
+                    <?php endif ?>
+                <?php $page->endContent() ?>
+                <?= $this->render('_grouping', compact('model', 'grouper', 'page')) ?>
+            <?php $page->end() ?>
+        </div>
+    <?php endif; ?>
 </div>
 <?php Pjax::end() ?>
