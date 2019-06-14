@@ -58,13 +58,16 @@ class Calculation extends \hipanel\base\Model
      */
     public function forCurrency($currency)
     {
-        if (!isset($this->value[$currency])) {
-            Yii::warning('Value for currency $currency was not found. Using fake free value. Most probably, tariff is free', __METHOD__);
-
-            return new Value(['value' => 0, 'price' => 0]);
+        if (isset($this->value[$currency])) {
+            return $this->value[$currency];
         }
+        if (!empty($this->value)) {
+            return reset($this->value);
+        }
+        Yii::warning('Value for currency $currency was not found. Using fake free value. Most probably, tariff is free', __METHOD__);
 
-        return $this->value[$currency];
+        return new Value(['value' => 0, 'price' => 0]);
+
     }
 
     /** {@inheritdoc} */
