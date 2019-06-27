@@ -59,6 +59,11 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
     protected $_value;
 
     /**
+     * @var string
+     */
+    protected $_currency;
+
+    /**
      * {@inheritdoc}
      */
     public function init()
@@ -189,6 +194,7 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
     {
         return [
             'attributes' => $this->getAttributes(),
+            '_currency' => $this->_currency,
             '_quantity' => $this->_quantity,
             '_price' => $this->_price,
             '_value' => $this->_value,
@@ -223,5 +229,21 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
                 $map[$key]($value);
             }
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency(): ?string
+    {
+        return $this->_currency;
+    }
+
+    /**
+     * @param string $currency
+     */
+    public function setCurrency(string $currency): void
+    {
+        $this->_currency = $currency;
     }
 }
