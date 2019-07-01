@@ -25,6 +25,11 @@ class BillTypesProvider
      */
     private $app;
 
+    /**
+     * @var bool
+     */
+    private $showUnusedTypes = false;
+
     public function __construct(Application $app)
     {
         $this->app = $app;
@@ -64,6 +69,9 @@ class BillTypesProvider
      */
     private function removeUnusedTypes($types)
     {
+        if ($this->showUnusedTypes) {
+            return $types;
+        }
         $ids = $this->app->cache->getOrSet([__METHOD__, $this->app->user->id], function () use ($types) {
             return ArrayHelper::getColumn(Bill::perform('get-used-types', [], ['batch' => true]), 'id');
         }, 3600);
@@ -101,5 +109,13 @@ class BillTypesProvider
         }
 
         return [$billTypes, $billGroupLabels];
+    }
+
+    /**
+     * This method prevents removing unused user types of payments.
+     */
+    public function keepUnusedTypes(): void
+    {
+        $this->showUnusedTypes = true;
     }
 }
