@@ -69,7 +69,7 @@ class BillTypesProvider
      */
     private function removeUnusedTypes($types)
     {
-        if ($this->showUnusedTypes === true) {
+        if ($this->showUnusedTypes) {
             return $types;
         }
         $ids = $this->app->cache->getOrSet([__METHOD__, $this->app->user->id], function () use ($types) {
@@ -111,7 +111,10 @@ class BillTypesProvider
         return [$billTypes, $billGroupLabels];
     }
 
-    public function alwaysShowUnusedTypes(): void
+    /**
+     * This method does not remove unused user types of payments.
+     */
+    public function keepUnusedTypes(): void
     {
         $this->showUnusedTypes = true;
     }
