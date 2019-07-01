@@ -112,7 +112,7 @@ class BillTypesProvider
     }
 
     /**
-     * This method does not remove unused user types of payments.
+     * This method prevents removing unused user types of payments.
      */
     public function keepUnusedTypes(): void
     {
