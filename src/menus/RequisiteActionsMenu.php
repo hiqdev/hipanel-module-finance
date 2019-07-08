@@ -42,25 +42,6 @@ class RequisiteActionsMenu extends Menu
                 'url' => ['@requisite/copy', 'id' => $this->model->id],
                 'encode' => false,
             ],
-            'reserve-number' => [
-                'label' => Yii::t('hipanel:client', 'Reserve number'),
-                'icon' => 'fa-ticket',
-                'url' => ['@requisite/reserve-number', 'id' => $this->model->id],
-                'linkOptions' => [
-                    'data' => [
-                        'confirm' => Yii::t('hipanel:client', 'Are you sure you want reserve document number for this requisite?'),
-                        'method' => 'POST',
-                        'pjax' => '0',
-                        'params' => [
-                            'Requisite[id]' => $this->model->id,
-                            'Requisite[client_id]' => $this->model->client_id,
-                            'Requisite[client]' => $this->model->client,
-                        ],
-                    ],
-                ],
-                'encode' => false,
-                'visible' => Yii::$app->user->can('requisites.update') && $this->model->isRequisite(),
-            ],
             [
                 'label' => AjaxModalWithTemplatedButton::widget([
                     'ajaxModalOptions' => [
