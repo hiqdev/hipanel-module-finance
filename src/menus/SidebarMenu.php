@@ -37,9 +37,9 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                         'url'     => ['/merchant/pay/deposit'],
                         'visible' => $user->can('deposit'),
                     ],
-                    'requisites' => [
+                    'requisite' => [
                         'label'   => Yii::t('hipanel:finance', 'Requisites'),
-                        'url'     => ['/finance/bill/requisites'],
+                        'url'     => ['/finance/requisite/index'],
                         'visible' => $user->can('requisites.read'),
                     ],
                     'holds' => [
