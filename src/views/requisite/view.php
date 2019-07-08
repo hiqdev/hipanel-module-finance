@@ -1,7 +1,7 @@
 <?php
 
 use hipanel\modules\client\grid\ContactGridView;
-use hipanel\modules\client\menus\ContactDetailMenu;
+use hipanel\modules\finance\menus\RequisiteDetailMenu;
 use hipanel\modules\client\widgets\ForceVerificationBlock;
 use hipanel\modules\document\widgets\StackedDocumentsView;
 use hipanel\widgets\Box;
@@ -15,8 +15,8 @@ use yii\helpers\Inflector;
  * @var \hipanel\modules\client\models\Contact
  */
 $this->title = Inflector::titleize($model->name, true);
-$this->params['subtitle'] = Yii::t('hipanel:client', 'Contact detailed information') . ' #' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:client', 'Contacts'), 'url' => ['index']];
+$this->params['subtitle'] = Yii::t('hipanel:client', 'Requisite detailed information') . ' #' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:client', 'Requisites'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 FlagIconCssAsset::register($this);
@@ -50,7 +50,7 @@ FlagIconCssAsset::register($this);
             </p>
 
             <div class="profile-usermenu">
-                <?= ContactDetailMenu::widget(['model' => $model]) ?>
+                <?= RequisiteDetailMenu::widget(['model' => $model]) ?>
             </div>
         <?php Box::end() ?>
         <?= ForceVerificationBlock::widget([

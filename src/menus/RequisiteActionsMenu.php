@@ -46,7 +46,7 @@ class RequisiteActionsMenu extends Menu
                 'label' => AjaxModalWithTemplatedButton::widget([
                     'ajaxModalOptions' => [
                         'id' => 'reserve-number-modal-' . $this->model->id,
-                        'bulkPage' => true,
+                        'bulkPage' => false,
                         'header' => Html::tag('h4', $item['label'], ['class' => 'modal-title']),
                         'scenario' => 'default',
                         'actionUrl' => ['reserve-number', 'id' => $this->model->id],
