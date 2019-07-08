@@ -36,8 +36,13 @@ use yz\shoppingcart\CartActionEvent;
  * $cart->on(Cart::EVENT_UPDATE, [CartCalculator::class, 'handle']);
  * ```
  */
-class CartCalculator extends Calculator
+final class CartCalculator extends Calculator
 {
+    /**
+     * @var array
+     */
+    private static $ignoreIds = [];
+
     /**
      * @var AbstractCartPosition[]
      */
@@ -100,6 +105,9 @@ class CartCalculator extends Calculator
 
         foreach ($this->models as $position) {
             $id = $position->id;
+            if (in_array($id, array_values(self::$ignoreIds))) {
+                throw new ErrorMultiCurrencyException(Yii::t('cart', 'Sorry, but now it is impossible to add the position with different currencies to the cart. Pay the current order to add this item to the cart.'), $position->getPurchaseModel());
+            }
 
             $calculation = $this->getCalculation($id);
             if (!$calculation instanceof Calculation) {
@@ -108,15 +116,23 @@ class CartCalculator extends Calculator
                 break;
             }
 
+            /** @var Value $value */
             $value = $calculation->forCurrency($currency);
             if (!$value instanceof Value) {
-                Yii::error('Cart position "' . $position->getName() . '" was removed from the cart because calculation for currency "' . $currency . '" is not available', 'hipanel.cart');
+                Yii::error('Cart position "' . $position->getName() . '" was removed from the cart because calculation for currency "' . $value->currency . '" is not available', 'hipanel.cart');
                 $this->cart->removeById($position->id);
+                break;
+            }
+            if ($this->cart->getCurrency() && $value->currency !== $this->cart->getCurrency()) {
+                self::$ignoreIds[] = $id;
+                $this->cart->removeById($id);
+                Yii::error('Cart position "' . $position->getName() . '" was removed from the cart because multi-currency cart is not available for now', 'hipanel.cart');
                 break;
             }
 
             $position->setPrice($value->price);
             $position->setValue($value->value);
+            $position->setCurrency($value->currency);
         }
     }
 }

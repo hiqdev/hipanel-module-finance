@@ -15,6 +15,7 @@ use hiqdev\hiart\ResponseErrorException;
 use hiqdev\yii2\merchant\actions\RequestAction;
 use hiqdev\yii2\merchant\events\TransactionInsertEvent;
 use hiqdev\yii2\merchant\transactions\Transaction;
+use function is_array;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\helpers\Json;
@@ -54,13 +55,22 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 
     public function checkNotify(string $transactionId = null): ?Transaction
     {
-        $id = $transactionId
-            ?? Yii::$app->request->get('transactionId')
-            ?? Yii::$app->request->post('transactionId')
-            ?? Yii::$app->session->get(self::SESSION_MERCHANT_LATEST_TRANSACTION_ID);
+        $transactionIdSources = [
+            $transactionId,
+            Yii::$app->request->get('transactionId'),
+            Yii::$app->request->post('transactionId'),
+            Yii::$app->session->get(self::SESSION_MERCHANT_LATEST_TRANSACTION_ID),
+        ];
 
-        $transaction = $this->getMerchantModule()->findTransaction($id);
-        if ($transaction === null) {
+        foreach (array_filter($transactionIdSources) as $possibleTransactionId) {
+            $transaction = $this->getMerchantModule()->findTransaction($possibleTransactionId);
+            if ($transaction !== null) {
+                break;
+            }
+        }
+
+        /** @noinspection UnSafeIsSetOverArrayInspection */
+        if (!isset($transaction)) {
             return null;
         }
 
@@ -118,7 +128,7 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
     /**
      * @param Transaction $transaction
      * @param string|array $response
-     * @return mixed
+     * @return Transaction
      * @throws \yii\base\ExitException
      */
     protected function completeTransaction($transaction, $response)
@@ -130,6 +140,10 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
         if ($response === '"OK"') {
             echo $response;
             Yii::$app->end();
+        }
+
+        if (!is_array($response)) {
+            return $transaction;
         }
 
         $transaction->complete();
