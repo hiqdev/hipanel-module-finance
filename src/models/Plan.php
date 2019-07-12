@@ -44,6 +44,7 @@ class Plan extends \hipanel\base\Model
     public const TYPE_OVDS = 'ovds';
     public const TYPE_SVDS = 'svds';
     public const TYPE_CLIENT = 'client';
+    public const TYPE_HARDWARE = 'hardware';
 
     use \hipanel\base\ModelTrait;
 
