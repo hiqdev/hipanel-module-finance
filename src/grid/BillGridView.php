@@ -163,8 +163,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     $descr = $model->descr ?: $model->label;
                     $text = mb_strlen($descr) > 70 ? ArraySpoiler::widget(['data' => $descr]) : $descr;
                     $tariff = $model->tariff ? Html::tag('span',
-                        Yii::t('hipanel', 'Tariff') . ': ' . Html::a($model->tariff,
-                            ['@plan/view', 'id' => $model->tariff_id]), ['class' => 'pull-right']) : '';
+                        Yii::t('hipanel', 'Tariff') . ': ' . $this->tariffLink($model), ['class' => 'pull-right']) : '';
                     $amount = $this->formatQuantity($model);
                     $object = $this->objectTag($model);
 
@@ -208,9 +207,11 @@ class BillGridView extends \hipanel\grid\BoxedGridView
         ]);
     }
 
-    public function tariffLink($model): string
+    public function tariffLink(Bill $model): string
     {
-        return Html::a($model->tariff, ['@plan/view', 'id' => $model->tariff_id]);
+        $canSeeLink = Yii::$app->user->can('plan.create');
+
+        return $canSeeLink ? Html::a($model->tariff, ['@plan/view', 'id' => $model->tariff_id]) : $model->tariff;
     }
 
     public function objectTag($model): string
