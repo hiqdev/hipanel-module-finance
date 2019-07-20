@@ -207,7 +207,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
         ]);
     }
 
-    public function tariffLink(Bill $model): string
+    public function tariffLink(Bill $model): ?string
     {
         $canSeeLink = Yii::$app->user->can('plan.create');
 
