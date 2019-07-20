@@ -61,7 +61,7 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
                         <tr>
                             <td><?= current($group)->object->name ?></td>
                             <?php foreach (DomainZonePrice::getTypes() as $type => $name) : ?>
-                                <?php $originalPrice = $parentZonePrices[$zone][$type] ?? null; ?>
+                                <?php $originalPrice = $parentZonePrices[$zone][$type] ?? new DomainZonePrice; ?>
                                 <?php $price = $group[$type] ?? $originalPrice; ?>
                                 <?php $price->plan_id = $plan_id ?? $price->plan_id; ?>
                                 <?= Html::activeHiddenInput($price, "[$i]id") ?>
