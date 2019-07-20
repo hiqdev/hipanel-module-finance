@@ -42,7 +42,7 @@ class Purse extends \hipanel\base\Model
             [['contact_id', 'requisite_id'], 'integer'],
             [['currency_id'], 'integer'],
             [['currency'], 'safe'],
-            [['no'], 'integer'],
+            [['no', 'count'], 'integer'],
             [['credit', 'balance'], 'number'],
 
             [['id', 'contact_id'], 'required', 'on' => ['update-contact']],
