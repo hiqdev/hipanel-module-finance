@@ -39,6 +39,7 @@ class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
         'webmoney' => 1,
         'paypal' => 1,
         'yandex' => 1,
+        'yandexmoney' => 1,
         'interkassa' => 1,
         'paxum' => 1,
         'ecoin' => 1,
