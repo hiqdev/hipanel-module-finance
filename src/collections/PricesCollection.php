@@ -99,6 +99,9 @@ class PricesCollection extends Collection
 
             $data = $request[$formName];
             foreach ($data as $key => $modelData) {
+                if (empty(array_filter($modelData))) {
+                    continue;
+                }
                 $models[$key] = clone $modelPrototype;
                 $modelsData[$modelPrototype->formName()][$key] = $modelData;
             }
