@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\widgets;
 
+use Yii;
 use yii\base\Model;
 use yii\base\Widget;
 use yii\helpers\Html;
@@ -98,6 +99,9 @@ class LinkToObjectResolver extends Widget
     private function getLink()
     {
         $type = $this->model->{$this->typeAttribute};
+        if (!Yii::getAlias($this->links[$type], false)) {
+            return null;
+        }
         if (!isset($this->links[$type])) {
             return null;
         }
