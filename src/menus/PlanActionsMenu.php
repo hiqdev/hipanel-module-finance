@@ -32,11 +32,10 @@ class PlanActionsMenu extends \hiqdev\yii2\menus\Menu
                 'label' => Yii::t('hipanel', 'Update'),
                 'icon' => 'fa-pencil',
                 'url' => ['@plan/update', 'id' => $this->model->id],
-                'visible' => true,
                 'linkOptions' => [
                     'data-pjax' => 0,
                 ],
-                'visible' => Yii::$app->user->can('plan.update'),
+                'visible' => Yii::$app->user->can('plan.update') && !$this->model->your_tariff,
             ],
         ];
     }

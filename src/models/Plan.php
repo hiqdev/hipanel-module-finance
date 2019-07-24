@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\base\ModelTrait;
 use hipanel\models\Ref;
 use hipanel\modules\finance\models\query\PlanQuery;
 use Yii;
@@ -46,7 +47,7 @@ class Plan extends \hipanel\base\Model
     public const TYPE_CLIENT = 'client';
     public const TYPE_HARDWARE = 'hardware';
 
-    use \hipanel\base\ModelTrait;
+    use ModelTrait;
 
     /**
      * @var string
@@ -65,6 +66,7 @@ class Plan extends \hipanel\base\Model
             [['id'], 'required', 'on' => ['update', 'delete', 'set-note']],
             [['id'], 'required', 'on' => ['delete', 'restore']],
             [['id', 'server_ids'], 'safe', 'on' => ['copy']],
+            [['your_tariff'], 'boolean'],
         ]);
     }
 
