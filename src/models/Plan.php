@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\base\Model;
 use hipanel\base\ModelTrait;
 use hipanel\models\Ref;
 use hipanel\modules\finance\models\query\PlanQuery;
@@ -25,6 +26,7 @@ use Yii;
  * @property string $state
  * @property int $currency_id
  * @property bool $is_grouping
+ * @property bool $your_tariff
  *
  * @property Sale[] $sales
  * @property Price[]|CertificatePrice[] $prices
@@ -32,7 +34,7 @@ use Yii;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class Plan extends \hipanel\base\Model
+class Plan extends Model
 {
     public const TYPE_SERVER = 'server';
     public const TYPE_PCDN = 'pcdn';

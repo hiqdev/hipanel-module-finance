@@ -1,9 +1,11 @@
 <?php
 
+use hipanel\modules\finance\grid\SalesInPlanGridView;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\widgets\CreatePricesButton;
 use hipanel\widgets\IndexPage;
+use yii\data\ArrayDataProvider;
 
 /**
  * @var \yii\web\View $this
@@ -17,28 +19,30 @@ use hipanel\widgets\IndexPage;
 
 ?>
 
-<?php $page->beginContent('bulk-actions') ?>
-    <?php if (Yii::$app->user->can('price.update')) : ?>
-        <?= $page->renderBulkButton('@price/update', Yii::t('hipanel', 'Update'), ['color' => 'warning']) ?>
-    <?php endif ?>
-    <?php if (Yii::$app->user->can('price.delete')) : ?>
-        <?= $page->renderBulkDeleteButton('@price/delete') ?>
-    <?php endif ?>
-<?php $page->endContent() ?>
+<?php if (!$model->your_tariff) : ?>
+    <?php $page->beginContent('bulk-actions') ?>
+        <?php if (Yii::$app->user->can('price.update')) : ?>
+            <?= $page->renderBulkButton('@price/update', Yii::t('hipanel', 'Update'), ['color' => 'warning']) ?>
+        <?php endif ?>
+        <?php if (Yii::$app->user->can('price.delete')) : ?>
+            <?= $page->renderBulkDeleteButton('@price/delete') ?>
+        <?php endif ?>
+    <?php $page->endContent() ?>
 
-<?php $page->beginContent('main-actions') ?>
-    <?php if (Yii::$app->user->can('plan.create')) : ?>
-        <?= CreatePricesButton::widget(compact('model')) ?>
-    <?php endif ?>
-<?php $page->endContent() ?>
+    <?php $page->beginContent('main-actions') ?>
+        <?php if (Yii::$app->user->can('plan.create')) : ?>
+            <?= CreatePricesButton::widget(compact('model')) ?>
+        <?php endif ?>
+    <?php $page->endContent() ?>
+<?php endif ?>
 
 <?php $page->beginContent('table') ?>
 <?php $page->beginBulkForm() ?>
-    <?= \hipanel\modules\finance\grid\SalesInPlanGridView::widget([
+    <?= SalesInPlanGridView::widget([
         'boxed' => false,
         'showHeader' => false,
         'pricesBySoldObject' => $pricesByMainObject,
-        'dataProvider' => new \yii\data\ArrayDataProvider([
+        'dataProvider' => new ArrayDataProvider([
             'allModels' => $salesByObject,
             'pagination' => false,
         ]),
