@@ -62,7 +62,7 @@ class TariffProfileController extends \hipanel\base\CrudController
             'update' => [
                 'class' => SmartUpdateAction::class,
                 'data' => function(\hipanel\actions\RenderAction $action) : array {
-                    $model = $action->model;
+                    $model = $action->collection->model;
                     return [
                         'client' => $model->seller,
                         'client_id' => $model->seller_id,
