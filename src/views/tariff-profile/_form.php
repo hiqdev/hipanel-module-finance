@@ -17,13 +17,7 @@ use yii\helpers\Html;
     'validationUrl' => Url::toRoute(['validate-form', 'scenario' => $model->scenario]),
 ]) ?>
 
-<?php if ($model->scenario === 'create') : ?>
-    <?php $user = Yii::$app->user->identity ?>
-    <?php $client = $user->type === 'reseller' ? $user->username : $user->seller ?>
-    <?php $model->client_id = $user->type === 'reseller' ? $user->id : $user->seller_id ?>
-<?php else : ?>
-    <?php $client = $model->seller ?>
-<?php endif ?>
+<?php $model->client_id = $client_id ?>
 
 <div class="row">
     <div class="col-md-4">
@@ -32,7 +26,7 @@ use yii\helpers\Html;
                 <?php if (!$model->isNewRecord) : ?>
                     <?= Html::activeHiddenInput($model, 'id') ?>
                 <?php endif ?>
-                <?php if ($model->isNewRecord || (int) $model->id !== (int) $model->client_id) : ?>
+                <?php if ($model->isNewRecord) : ?>
                     <?= $form->field($model, 'name') ?>
                 <?php endif ?>
                 <?= Html::activeHiddenInput($model, 'client_id') ?>

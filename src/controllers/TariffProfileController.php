@@ -45,9 +45,29 @@ class TariffProfileController extends \hipanel\base\CrudController
             ],
             'create' => [
                 'class' => SmartCreateAction::class,
+                'data' => function(\hipanel\actions\RenderAction $action) : array {
+                    $user = Yii::$app->user->identity;
+                    if ($user->type === 'reseller') {
+                        return [
+                            'client' => $user->username,
+                            'client_id' => $user->id,
+                        ];
+                    }
+                    return [
+                        'client' => $user->seller,
+                        'client_id' => $user->seller_id,
+                    ];
+                }
             ],
             'update' => [
                 'class' => SmartUpdateAction::class,
+                'data' => function(\hipanel\actions\RenderAction $action) : array {
+                    $model = $action->model;
+                    return [
+                        'client' => $model->seller,
+                        'client_id' => $model->seller_id,
+                    ];
+                },
             ],
             'search' => [
                 'class' => ComboSearchAction::class,
