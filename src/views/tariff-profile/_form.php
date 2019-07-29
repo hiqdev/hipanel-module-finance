@@ -17,10 +17,13 @@ use yii\helpers\Html;
     'validationUrl' => Url::toRoute(['validate-form', 'scenario' => $model->scenario]),
 ]) ?>
 
-<?php $user = Yii::$app->user->identity ?>
-
-<?php $client = $user->type === 'reseller' ? $user->username : $user->seller ?>
-<?php $model->client_id = $user->type === 'reseller' ? $user->id : $user->seller_id ?>
+<?php if ($model->scenario === 'create') : ?>
+    <?php $user = Yii::$app->user->identity ?>
+    <?php $client = $user->type === 'reseller' ? $user->username : $user->seller ?>
+    <?php $model->client_id = $user->type === 'reseller' ? $user->id : $user->seller_id ?>
+<?php else : ?>
+    <?php $client = $model->seller ?>
+<?php endif ?>
 
 <div class="row">
     <div class="col-md-4">
@@ -35,6 +38,9 @@ use yii\helpers\Html;
                 <?= Html::activeHiddenInput($model, 'client_id') ?>
 
                 <?php foreach ([Tariff::TYPE_DOMAIN, Tariff::TYPE_CERT] as $type) : ?>
+                <?php if (Yii::getALias("@{$type}", false) === false) : ?>
+                    <?php continue ?>
+                <?php endif ?>
                     <?= $form->field($model, $type)->widget(TariffCombo::class, [
                         'tariffType' => $type,
                         'hasId' => true,
@@ -42,14 +48,16 @@ use yii\helpers\Html;
                         'client' => $client,
                     ]) ?>
                 <?php endforeach ?>
-                <?php foreach ([Tariff::TYPE_XEN, Tariff::TYPE_OPENVZ, Tariff::TYPE_SERVER] as $type) : ?>
-                    <?= $form->field($model, $type)->widget(TariffCombo::class, [
-                        'tariffType' => $type,
-                        'client' => $client,
-                        'hasId' => true,
-                        'multiple' => true,
-                    ]) ?>
-                <?php endforeach ?>
+                <?php  if (Yii::getAlias('@server', false) !== false) : ?>
+                    <?php foreach ([Tariff::TYPE_XEN, Tariff::TYPE_OPENVZ, Tariff::TYPE_SERVER] as $type) : ?>
+                        <?= $form->field($model, $type)->widget(TariffCombo::class, [
+                            'tariffType' => $type,
+                            'client' => $client,
+                            'hasId' => true,
+                            'multiple' => true,
+                        ]) ?>
+                    <?php endforeach ?>
+                <?php endif ?>
             </div>
         </div>
 
