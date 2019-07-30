@@ -41,21 +41,20 @@ class PriceDifferenceWidget extends Widget
         ]);
     }
 
-    private function renderDifferenceWidget()
+    private function renderDifferenceWidget(): string
     {
-        $widget = '';
         $diff = floatval($this->new - $this->old);
-        if ($diff !== (float) 0) {
-            $widget = Html::tag(
-                'span',
-                ($diff > 0 ? '+' : '') . Yii::$app->formatter->asDecimal($diff, 2),
-                ['class' => $diff > 0 ? 'text-success' : 'text-danger']
-            );
+        if ($diff === (float) 0) {
+            return '';
         }
-        return $widget;
+        return Html::tag(
+            'span',
+            ($diff > 0 ? '+' : '') . Yii::$app->formatter->asDecimal($diff, 2),
+            ['class' => $diff > 0 ? 'text-success' : 'text-danger']
+        );
     }
 
-    private function checkCurrencies()
+    private function checkCurrencies(): bool
     {
         return $this->oldCurrency === $this->newCurrency;
     }
