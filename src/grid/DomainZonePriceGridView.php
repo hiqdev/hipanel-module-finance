@@ -73,12 +73,14 @@ class DomainZonePriceGridView extends PriceGridView
                         ]);
                     }
                 }
-                $priceValue = floatval($price->price) || (!floatval($price->price) && $parent) ?
+                $priceValue = floatval($price->price) ||
+                (!floatval($price->price) && $parent) ?
                     ResourcePriceWidget::widget([
-                        'price' => $price->getMoney(),
+                        'price' => $price->price,
+                        'currency' => $price->currency,
                     ]) : '';
-
                 $options = ['class' => 'col-md-6'];
+
                 return Html::tag('div', $priceValue, $options) .
                     Html::tag('div', $parentValue, $options);
             },
