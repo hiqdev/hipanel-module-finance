@@ -10,8 +10,6 @@
 
 namespace hipanel\modules\finance\widgets;
 
-use hiqdev\hiart\Exception;
-use Money\Money;
 use Yii;
 use yii\base\Widget;
 use yii\helpers\Html;
