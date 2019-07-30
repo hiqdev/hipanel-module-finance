@@ -36,7 +36,7 @@ class PriceDifferenceWidget extends Widget
             return $this->renderDifferenceWidget();
         }
         return ResourcePriceWidget::widget([
-            'price' => $this->oldPrice,
+            'price' => $this->old,
             'currency' => $this->oldCurrency,
         ]);
     }
