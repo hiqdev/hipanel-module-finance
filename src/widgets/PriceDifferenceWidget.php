@@ -32,7 +32,7 @@ class PriceDifferenceWidget extends Widget
 
     public function run()
     {
-        if (!$this->oldCurrency || !$this->newCurrency || $this->checkCurrencies()) {
+        if ($this->oldCurrency === null || $this->newCurrency === null || $this->checkCurrencies()) {
             return $this->renderDifferenceWidget();
         }
         return ResourcePriceWidget::widget([
