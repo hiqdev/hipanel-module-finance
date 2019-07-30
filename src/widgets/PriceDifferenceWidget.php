@@ -24,10 +24,10 @@ class PriceDifferenceWidget extends Widget
     /** @var float */
     public $old;
 
-    /** @var float */
+    /** @var string|null */
     public $newCurrency;
 
-    /** @var float */
+    /** @var string|null */
     public $oldCurrency;
 
     public function run()
