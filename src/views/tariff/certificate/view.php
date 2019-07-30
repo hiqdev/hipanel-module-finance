@@ -1,6 +1,7 @@
 <?php
 
 use hipanel\modules\finance\widgets\PriceDifferenceWidget;
+use hipanel\modules\finance\widgets\ResourcePriceWidget;
 use hipanel\widgets\Box;
 use yii\helpers\Html;
 
@@ -39,18 +40,16 @@ Box::begin() ?>
                         <?php foreach ($model->getPeriods() as $period => $periodLabel) : ?>
                             <td>
                                 <div class="row">
-                                    <?php $price = $resource->getPriceForPeriod($period) ?>
                                     <?php $textc = $price > 0 ? '' : ' text-warning' ?>
                                     <div class="col-md-6 <?= $textc ?>">
-                                        <?= \hipanel\modules\finance\widgets\ResourcePriceWidget::widget([
-                                            'price' => $price,
-                                            'currency' => $resource->currency,
+                                        <?= ResourcePriceWidget::widget([
+                                            'price' => $resource->getMoneyForPeriod($period),
                                         ]) ?>
                                     </div>
                                     <div class="col-md-6">
                                         <?= PriceDifferenceWidget::widget([
-                                            'new' => $resource->getPriceForPeriod($period),
-                                            'old' => $baseResources[$type]->getPriceForPeriod($period),
+                                            'new' => $resource->getMoneyForPeriod($period),
+                                            'old' => $baseResources[$type]->getMoneyForPeriod($period),
                                         ]) ?>
                                     </div>
                                 </div>

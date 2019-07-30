@@ -10,9 +10,8 @@
 
 namespace hipanel\modules\finance\widgets;
 
-use hiqdev\hiart\Exception;
 use Money\Money;
-use Yii;
+use Money\MoneyFormatter;
 use yii\base\Widget;
 use yii\helpers\Html;
 
@@ -27,39 +26,44 @@ class PriceDifferenceWidget extends Widget
      * @var Money
      */
     public $new;
+    /**
+     * @var MoneyFormatter
+     */
+    private $formatter;
+
+    public function __construct(MoneyFormatter $formatter, $config = [])
+    {
+        parent::__construct($config);
+        $this->formatter = $formatter;
+    }
 
     public function run()
     {
         if (!$this->checkCurrencies()) {
-            echo ResourcePriceWidget::widget([
+            return ResourcePriceWidget::widget([
                 'price' => $this->old,
             ]);
         }
-        echo $this->renderDifferenceWidget();
+        return $this->renderDifferenceWidget();
     }
 
     private function renderDifferenceWidget()
     {
-        $widget = '';
-        $diff = floatval($this->new->getAmount() - $this->old->getAmount());
-        if ($diff !== (float) 0) {
-            $widget = Html::tag(
-                'span',
-                ($diff > 0 ? '+' : '') . Yii::$app->formatter->asDecimal($diff, 2),
-                ['class' => $diff > 0 ? 'text-success' : 'text-danger']
-            );
+        $diff = $this->new->subtract($this->old);
+        $diffAmount = $diff->getAmount();
+        if ($diffAmount === 0) {
+            return '';
         }
-        return $widget;
+
+        return Html::tag(
+            'span',
+            ($diffAmount > 0 ? '+' : '') . $this->formatter->format($diff),
+            ['class' => $diffAmount > 0 ? 'text-success' : 'text-danger']
+        );
     }
 
-    private function checkCurrencies()
+    private function checkCurrencies(): bool
     {
-        try {
-            $res = $this->old->getCurrency() === $this->new->getCurrency();
-        } catch (Exception $e) {
-            $res = 1;
-        }
-        return $res;
-//        return $this->old->getCurrency() === $this->new->getCurrency();
+        return $this->old->getCurrency()->equals($this->new->getCurrency());
     }
 }
