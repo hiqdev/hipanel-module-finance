@@ -62,7 +62,10 @@ class DomainZonePriceGridView extends PriceGridView
 
                 $parentValue = '';
                 if ($parent) {
-                    $parentValue = $parent->price;
+                    $parentValue = ResourcePriceWidget::widget([
+                        'price' => $parent->price,
+                        'currency' => $parent->currency,
+                    ]);
                     if ($parent->currency === $price->currency) {
                         $parentValue = PriceDifferenceWidget::widget([
                             'new' => $price->price,
@@ -70,14 +73,12 @@ class DomainZonePriceGridView extends PriceGridView
                         ]);
                     }
                 }
-                $priceValue = floatval($price->price) ||
-                (!floatval($price->price) && $parent) ?
+                $priceValue = floatval($price->price) || (!floatval($price->price) && $parent) ?
                     ResourcePriceWidget::widget([
-                        'price' => $price->price,
-                        'currency' => $price->currency,
+                        'price' => $price->getMoney(),
                     ]) : '';
-                $options = ['class' => 'col-md-6'];
 
+                $options = ['class' => 'col-md-6'];
                 return Html::tag('div', $priceValue, $options) .
                     Html::tag('div', $parentValue, $options);
             },
