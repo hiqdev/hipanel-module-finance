@@ -10,6 +10,8 @@
 
 namespace hipanel\modules\finance\widgets;
 
+use hiqdev\hiart\Exception;
+use Money\Money;
 use Yii;
 use yii\base\Widget;
 use yii\helpers\Html;
@@ -17,26 +19,47 @@ use yii\helpers\Html;
 class PriceDifferenceWidget extends Widget
 {
     /**
-     * @var float
+     * @var Money
      */
     public $old;
 
     /**
-     * @var float
+     * @var Money
      */
     public $new;
 
     public function run()
     {
-        $diff = floatval($this->new - $this->old);
+        if (!$this->checkCurrencies()) {
+            echo ResourcePriceWidget::widget([
+                'price' => $this->old,
+            ]);
+        }
+        echo $this->renderDifferenceWidget();
+    }
+
+    private function renderDifferenceWidget()
+    {
+        $widget = '';
+        $diff = floatval($this->new->getAmount() - $this->old->getAmount());
         if ($diff !== (float) 0) {
-            echo Html::tag(
+            $widget = Html::tag(
                 'span',
                 ($diff > 0 ? '+' : '') . Yii::$app->formatter->asDecimal($diff, 2),
                 ['class' => $diff > 0 ? 'text-success' : 'text-danger']
             );
         }
+        return $widget;
+    }
 
-        return;
+    private function checkCurrencies()
+    {
+        try {
+            $res = $this->old->getCurrency() === $this->new->getCurrency();
+        } catch (Exception $e) {
+            $res = 1;
+        }
+        return $res;
+//        return $this->old->getCurrency() === $this->new->getCurrency();
     }
 }

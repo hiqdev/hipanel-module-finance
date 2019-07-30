@@ -11,7 +11,13 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\base\ModelTrait;
+use Money\Currencies\ISOCurrencies;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\Money;
+use Money\Currency;
+use Money\Parser\DecimalMoneyParser;
 use Yii;
+use yii\behaviors\AttributeTypecastBehavior;
 
 /**
  * Class DomainZonePrice.
@@ -32,6 +38,24 @@ class DomainZonePrice extends Price
     public const TYPE_DOMAIN_RESTORE_EXPIRED = 'domain,drestore_expired';
     public const TYPE_DOMAIN_RESTORE_DELETED = 'domain,drestore_deleted';
 
+
+    /**
+     * @var DecimalMoneyFormatter
+     */
+    private $moneyFormatter;
+
+    /**
+     * @var DecimalMoneyParser
+     */
+    private $moneyParser;
+
+    public function __construct(array $config = [])
+    {
+        parent::__construct($config);
+        $this->moneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
+        $this->moneyParser = new DecimalMoneyParser(new ISOCurrencies());
+    }
+
     public function rules()
     {
         $rules = parent::rules();
@@ -40,7 +64,7 @@ class DomainZonePrice extends Price
             'required',
             'on' => ['create', 'update'],
             'when' => function ($model) {
-                /** @var DomainZonePrice $model */
+                /** @var parent $model */
                 return $model->isTypeCorrect();
             },
         ];
@@ -56,6 +80,14 @@ class DomainZonePrice extends Price
     public function isTypeCorrect(): bool
     {
         return isset($this->getTypes()[$this->type]);
+    }
+
+    /**
+     * @return Money
+     */
+    public function getMoney(): Money
+    {
+        return $this->moneyParser->parse($this->price, new Currency(strtoupper($this->currency)));
     }
 
     /**

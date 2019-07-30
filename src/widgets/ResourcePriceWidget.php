@@ -10,18 +10,22 @@
 
 namespace hipanel\modules\finance\widgets;
 
+use Money\Money;
 use NumberFormatter;
 use Yii;
 use yii\base\Widget;
 
 class ResourcePriceWidget extends Widget
 {
+    /**
+     * @var Money
+     */
     public $price;
-    public $currency;
 
     public function run()
     {
-        return Yii::$app->formatter->asCurrency($this->price, $this->currency, [
+        $price = $this->price;
+        return Yii::$app->formatter->asCurrency($price->getAmount(), $price->getCurrency(), [
             NumberFormatter::MAX_FRACTION_DIGITS => 4,
         ]);
     }
