@@ -39,7 +39,7 @@ class PriceDifferenceWidget extends Widget
 
     public function run()
     {
-        if (!$this->checkCurrencies()) {
+        if (!$this->areCurrenciesSame()) {
             return ResourcePriceWidget::widget([
                 'price' => $this->old,
             ]);
@@ -62,7 +62,7 @@ class PriceDifferenceWidget extends Widget
         );
     }
 
-    private function checkCurrencies(): bool
+    private function areCurrenciesSame(): bool
     {
         return $this->old->getCurrency()->equals($this->new->getCurrency());
     }
