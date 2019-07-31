@@ -37,7 +37,7 @@ class TariffProfile extends \hipanel\base\Model
                 'required',
                 'on' => ['update', 'create'],
                 'when' => function ($model) {
-                    return (int) $model->id !== (int) $model->client_id;
+                    return !$model->isDefault();
                 },
             ],
             [['id'], 'integer'],
@@ -88,5 +88,15 @@ class TariffProfile extends \hipanel\base\Model
             'ovds' => Yii::t('hipanel.finance.tariffprofile', 'Open-VZ tariffs'),
             'server' => Yii::t('hipanel.finance.tariffprofile', 'Server tariffs'),
         ]);
+    }
+
+    /**
+     * Check is model is default profile
+     *
+     * @return bool
+     */
+    public function isDefault() : bool
+    {
+        return (bool) ((string) $this->id === (string) $this->client_id);
     }
 }
