@@ -43,7 +43,7 @@ class ProfileActionsMenu extends \hiqdev\yii2\menus\Menu
                         ],
                     ],
                 ]),
-                'visible' => Yii::$app->user->can('plan.delete'),
+                'visible' => Yii::$app->user->can('plan.delete') && (int) $this->model->id !== (int) $this->model->client_id,
                 'encode' => false,
             ],
             'view' => [

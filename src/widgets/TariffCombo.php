@@ -35,7 +35,7 @@ class TariffCombo extends Combo
     /**
      * @var string tariff owner
      */
-    public $seller = null;
+    public $client = null;
 
     /**
      * @var string the type of tariff
@@ -48,7 +48,7 @@ class TariffCombo extends Combo
     {
         return ArrayHelper::merge(parent::getFilter(), [
             'type_in' => ['format' => $this->tariffType],
-            'client' => ['format' => $this->seller],
+            'client' => ['format' => $this->client],
         ]);
     }
 }
