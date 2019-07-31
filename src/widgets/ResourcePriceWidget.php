@@ -25,10 +25,10 @@ class ResourcePriceWidget extends Widget
      */
     private $moneyFormatter;
 
-    public function __construct(MoneyFormatter $decimalMoneyFormatter, $config = [])
+    public function __construct(MoneyFormatter $moneyFormatter, $config = [])
     {
         parent::__construct($config);
-        $this->moneyFormatter = $decimalMoneyFormatter;
+        $this->moneyFormatter = $moneyFormatter;
     }
 
     public function run()
