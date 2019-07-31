@@ -7,7 +7,7 @@ use yii\web\View;
  * @var View $this
  * @var float $basePrice
  * @var float $originalPrice
- * @var bool $currency
+ * @var string $currency
  * @var \yii\widgets\ActiveField $activeField
  */
 ?>
