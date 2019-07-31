@@ -17,7 +17,6 @@ use yii\helpers\Html;
     'validationUrl' => Url::toRoute(['validate-form', 'scenario' => $model->scenario]),
 ]) ?>
 
-<?php $model->client_id = $client_id ?>
 
 <div class="row">
     <div class="col-md-4">
@@ -29,6 +28,8 @@ use yii\helpers\Html;
                 <?php if ($model->isNewRecord || ($model->id != $model->client_id)) : ?>
                     <?= $form->field($model, 'name') ?>
                 <?php endif ?>
+                <?php $model->client_id = $client_id ?>
+
                 <?= Html::activeHiddenInput($model, 'client_id') ?>
 
                 <?php foreach ([Tariff::TYPE_DOMAIN, Tariff::TYPE_CERT] as $type) : ?>
