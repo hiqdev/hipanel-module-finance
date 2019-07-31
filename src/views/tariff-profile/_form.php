@@ -33,7 +33,7 @@ use yii\helpers\Html;
                 <?= Html::activeHiddenInput($model, 'client_id') ?>
 
                 <?php foreach ([Tariff::TYPE_DOMAIN, Tariff::TYPE_CERT] as $type) : ?>
-                <?php if (Yii::getALias("@{$type}", false) === false) : ?>
+                <?php if (Yii::getALias("@{$type}", false )) : ?>
                     <?php continue ?>
                 <?php endif ?>
                     <?= $form->field($model, $type)->widget(TariffCombo::class, [
@@ -43,7 +43,7 @@ use yii\helpers\Html;
                         'client' => $client,
                     ]) ?>
                 <?php endforeach ?>
-                <?php  if (Yii::getAlias('@server', false) !== false) : ?>
+                <?php  if (Yii::getAlias('@server', false)) : ?>
                     <?php foreach ([Tariff::TYPE_XEN, Tariff::TYPE_OPENVZ, Tariff::TYPE_SERVER] as $type) : ?>
                         <?= $form->field($model, $type)->widget(TariffCombo::class, [
                             'tariffType' => $type,
