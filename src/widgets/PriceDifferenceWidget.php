@@ -40,9 +40,10 @@ class PriceDifferenceWidget extends Widget
     public function run()
     {
         if (!$this->areCurrenciesSame()) {
-            return ResourcePriceWidget::widget([
+            $widget = ResourcePriceWidget::widget([
                 'price' => $this->old,
             ]);
+            return Html::tag('span', $widget, ['class' => 'text-gray']);
         }
         return $this->renderDifferenceWidget();
     }

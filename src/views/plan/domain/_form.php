@@ -27,6 +27,12 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
 });
 ");
 
+$this->registerCss(<<<'CSS'
+.text-gray {
+    color: gray !important;
+}
+CSS
+);
 ?>
 <?php if (!empty($zonePrices)) : ?>
     <div class="tariff-create">
@@ -78,8 +84,8 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
                                 <?= Html::activeHiddenInput($price, "[$i]unit") ?>
                                 <td>
                                     <?= PriceInput::widget([
-                                        'basePrice' => $price->price,
-                                        'originalPrice' => $originalPrice ? $originalPrice->price : $price->price,
+                                        'basePrice' => $price->getMoney(),
+                                        'originalPrice' => ($originalPrice ?? $price)->getMoney(),
                                         'activeField' => $form->field($price, "[$i]price")]) ?>
                                 </td>
                                 <?php ++$i; ?>
@@ -116,8 +122,8 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
                             <?= Html::activeHiddenInput($price, "[$i]unit") ?>
                             <td>
                                 <?= PriceInput::widget([
-                                    'basePrice' => $price->price,
-                                    'originalPrice' => $originalPrice ? $originalPrice->price : $price->price,
+                                    'basePrice' => $price->getMoney(),
+                                    'originalPrice' => ($originalPrice ?? $price)->getMoney(),
                                     'activeField' => $form->field($price, "[$i]price")]) ?>
                             </td>
                             <?php ++$i; ?>

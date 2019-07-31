@@ -30,6 +30,23 @@ $this->registerCss(<<<'CSS'
     display: block;
 }
 
+.text-gray {
+    color: gray !important;
+}
+
+.prices-cell {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.left-table-item {
+    text-align: left
+}
+.right-table-item {
+    text-align: right;
+    padding-left: 6px;
+}
+
 CSS
 );
 

@@ -75,10 +75,9 @@ class CertificatePriceGridView extends PriceGridView
                         ResourcePriceWidget::widget([
                             'price' => $price->getMoneyForPeriod($period),
                         ]) : '';
-                    $options = ['class' => 'col-md-6'];
+                    $options = ['class' => 'prices-cell'];
 
-                    return Html::tag('div', $priceValue, $options) .
-                        Html::tag('div', $parentValue, $options);
+                    return Html::tag('div', "<div class='left-table-item'>$priceValue</div><div class='right-table-item'>$parentValue</div>", $options);
                 },
             ];
         }
