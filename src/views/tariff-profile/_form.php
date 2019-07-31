@@ -26,7 +26,7 @@ use yii\helpers\Html;
                 <?php if (!$model->isNewRecord) : ?>
                     <?= Html::activeHiddenInput($model, 'id') ?>
                 <?php endif ?>
-                <?php if ($model->isNewRecord || ((int) $model->id !==  (int) $model->client_id)) : ?>
+                <?php if ($model->isNewRecord || ((int) $model->id !== (int) $model->client_id)) : ?>
                     <?= $form->field($model, 'name') ?>
                 <?php endif ?>
 

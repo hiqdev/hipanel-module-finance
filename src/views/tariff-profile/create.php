@@ -6,4 +6,4 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<?= $this->render('_form', compact('model', 'client', 'client_id')) ?>
+<?= $this->render('_form', compact('model', 'client_id', 'client')) ?>

@@ -32,10 +32,8 @@ class TariffCombo extends Combo
 
     public $_primaryFilter = 'tariff_ilike';
 
-    /**
-     * @var string tariff owner
-     */
-    public $client = null;
+    /** @var string|null tariff owner */
+    public $client;
 
     /**
      * @var string the type of tariff
