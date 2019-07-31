@@ -59,15 +59,18 @@ class DomainZonePriceGridView extends PriceGridView
                 }
                 $price = $prices[$type];
                 $parent = $this->parentPrices[$price->object_id][$type] ?? null;
-                $parentValue = $parent ? PriceDifferenceWidget::widget([
-                    'new' => $price->price,
-                    'old' => $parent->price,
-                ]) : '';
+
+                $parentValue = '';
+                if ($parent) {
+                    $parentValue = PriceDifferenceWidget::widget([
+                        'new'         => $price->getMoney(),
+                        'old'         => $parent->getMoney(),
+                    ]);
+                }
                 $priceValue = floatval($price->price) ||
                 (!floatval($price->price) && $parent) ?
                     ResourcePriceWidget::widget([
-                        'price' => $price->price,
-                        'currency' => $price->currency,
+                        'price' => $price->getMoney(),
                     ]) : '';
                 $options = ['class' => 'col-md-6'];
 

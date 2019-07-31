@@ -150,11 +150,16 @@ class CertificatePrice extends Price
      */
     public function getPriceForPeriod(int $period)
     {
+        return $this->moneyFormatter->format($this->getMoneyForPeriod($period));
+    }
+
+    public function getMoneyForPeriod(int $period): ?Money
+    {
         if (!$this->hasPriceForPeriod($period)) {
             return null;
         }
 
-        return $this->moneyFormatter->format($this->sums[$period]);
+        return $this->sums[$period];
     }
 
     /**

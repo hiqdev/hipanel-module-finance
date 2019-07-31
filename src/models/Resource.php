@@ -12,6 +12,8 @@ namespace hipanel\modules\finance\models;
 
 use hipanel\modules\finance\models\decorators\AbstractResourceDecorator;
 use hipanel\modules\stock\models\Part;
+use Money\Money;
+use Money\MoneyParser;
 use Yii;
 use yii\base\InvalidConfigException;
 
@@ -93,5 +95,15 @@ class Resource extends \hipanel\base\Model
     public function decorator()
     {
         throw new InvalidConfigException('Method "decorator" is not available for class Resource');
+    }
+
+    /**
+     * @return Money
+     */
+    public function getMoney(): Money
+    {
+        // TODO: decide how to get MoneyParser correctly
+        return Yii::$container->get(MoneyParser::class)
+            ->parse((string)$this->price, strtoupper($this->currency));
     }
 }

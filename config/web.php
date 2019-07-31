@@ -192,6 +192,7 @@ return [
                     $container->get(Money\Currencies::class)
                 );
             },
+            \Money\MoneyParser::class => \Money\Parser\DecimalMoneyParser::class,
         ],
     ],
 ];
