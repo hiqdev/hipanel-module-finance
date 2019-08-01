@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\widgets;
 use Money\Formatter\DecimalMoneyFormatter;
 use Money\Money;
 use Money\MoneyFormatter;
+use Yii;
 use yii\base\Widget;
 use yii\bootstrap\ActiveField;
 
@@ -39,12 +40,14 @@ class PriceInput extends Widget
     public function run()
     {
         $this->registerClientScript();
+        $lang = Yii::$app->language;
 
         return $this->render('PriceInput', [
-            'basePrice' => $this->moneyFormatter->format($this->basePrice),
+            'basePrice'     => $this->moneyFormatter->format($this->basePrice),
             'originalPrice' => $this->moneyFormatter->format($this->originalPrice),
-            'activeField' => $this->activeField,
-            'currency' => !$this->areCurrenciesSame() ? $this->originalPrice->getCurrency() : '',
+            'activeField'   => $this->activeField,
+            'currency'      => !$this->areCurrenciesSame() ? $this->originalPrice->getCurrency() : '',
+            'lang'          => $lang . '-' . strtoupper($lang),
         ]);
     }
 
@@ -57,18 +60,22 @@ class PriceInput extends Widget
     {
         $this->view->registerJs(<<<'JS'
             $('.price-input').on('change mouseup', function () {
-                var price = parseFloat($(this).val());
-                if (isNaN(price)) return false;
-                var base = $(this).closest('td').find('.base-price'),
-                    basePrice = parseFloat(base.attr('data-original-price')),
-                    currency = base.attr('data-currency'),
-                    delta = price - basePrice;
+                var basePrice = parseFloat($(this).val());
+                if (isNaN(basePrice)) {
+                    return false;
+                }
+                var originalObj = $(this).closest('td').find('.base-price'),
+                    originalPrice = parseFloat(originalObj.attr('data-original-price')),
+                    lang = originalObj.attr('data-lang'),
+                    currency = originalObj.attr('data-currency'),
+                    delta = basePrice - originalPrice;
                 if (currency !== '') {
-                    base.text(delta.toFixed(2) + currency).addClass('text-gray');
+                    var originalPrice = new Intl.NumberFormat(lang, {style: 'currency', currency: currency}).format(originalPrice); 
+                    originalObj.text(originalPrice).addClass('text-gray');
                     return;
                 }
-                base.removeClass('text-success text-danger');
-                base.text(delta.toFixed(2)).addClass(delta >= 0 ? 'text-success' : 'text-danger');
+                originalObj.removeClass('text-success text-danger');
+                originalObj.text(delta.toFixed(2)).addClass(delta >= 0 ? 'text-success' : 'text-danger');
             });
         
             $('.price-input').trigger('change');
