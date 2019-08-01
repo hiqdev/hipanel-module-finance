@@ -10,10 +10,7 @@
 
 namespace hipanel\modules\finance\widgets;
 
-use hipanel\modules\finance\models\DomainZonePrice;
 use Money\Formatter\DecimalMoneyFormatter;
-use Money\Formatter\IntlLocalizedDecimalFormatter;
-use Money\Formatter\IntlMoneyFormatter;
 use Money\Money;
 use Money\MoneyFormatter;
 use yii\base\Widget;
