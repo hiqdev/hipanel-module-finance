@@ -27,7 +27,7 @@ class TariffProfileGridView extends \hipanel\grid\BoxedGridView
                 'filterAttribute' => 'name_like',
                 'note' => null,
                 'value' => function (TariffProfile $model) {
-                    if (empty($model->name)) {
+                    if (empty($model->name) || $model->isDefault()) {
                         return Yii::t('hipanel.finance.tariffprofile', 'Default');
                     }
 

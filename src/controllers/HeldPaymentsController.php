@@ -16,7 +16,7 @@ use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
-use hipanel\modules\server\models\Change;
+use hipanel\modules\finance\models\Change;
 use Yii;
 use yii\base\Event;
 

@@ -32,6 +32,9 @@ class TariffCombo extends Combo
 
     public $_primaryFilter = 'tariff_ilike';
 
+    /** @var string|null tariff owner */
+    public $client;
+
     /**
      * @var string the type of tariff
      * @see getFilter()
@@ -43,6 +46,7 @@ class TariffCombo extends Combo
     {
         return ArrayHelper::merge(parent::getFilter(), [
             'type_in' => ['format' => $this->tariffType],
+            'client' => ['format' => $this->client],
         ]);
     }
 }
