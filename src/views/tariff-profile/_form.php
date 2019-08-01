@@ -33,9 +33,9 @@ use yii\helpers\Html;
                 <?= Html::activeHiddenInput($model, 'client_id') ?>
 
                 <?php foreach ([Tariff::TYPE_DOMAIN, Tariff::TYPE_CERT] as $type) : ?>
-                <?php if (Yii::getALias("@{$type}", false )) : ?>
-                    <?php continue ?>
-                <?php endif ?>
+                    <?php if (!Yii::getAlias("@{$type}", false)) : ?>
+                        <?php continue ?>
+                    <?php endif ?>
                     <?= $form->field($model, $type)->widget(TariffCombo::class, [
                         'tariffType' => $type,
                         'hasId' => true,
