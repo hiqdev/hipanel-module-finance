@@ -74,8 +74,8 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
                                 <?php foreach (CertificatePrice::getPeriods() as $period => $periodLabel) : ?>
                                     <td>
                                         <?= PriceInput::widget([
-                                            'basePrice' => $price->getPriceForPeriod($period),
-                                            'originalPrice' => $originalPrice ? $originalPrice->getPriceForPeriod($period) : $price->getPriceForPeriod($period),
+                                            'basePrice' => $price->getMoneyForPeriod($period),
+                                            'originalPrice' => ($originalPrice ?? $price)->getMoneyForPeriod($period),
                                             'activeField' => $form->field($price, "[$i]sums[$period]")]) ?>
                                     </td>
                                 <?php endforeach; ?>
