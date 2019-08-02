@@ -126,7 +126,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'filterAttribute' => 'currency_in',
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'filter' => function ($column, $filterModel) {
-                    $currencies = CurrencyFilter::filter($this->currencies);
+                    $currencies = CurrencyFilter::addSymbolAndFilter($this->currencies);
                     return Html::activeDropDownList($filterModel, 'currency_in', $currencies, ['class' => 'form-control', 'prompt' => '--']);
                 },
             ],

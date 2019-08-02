@@ -26,7 +26,7 @@ use yii\helpers\Html;
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?php
     $currencies = $this->context->getCurrencyTypes();
-    $currencies = CurrencyFilter::filter($currencies);
+    $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 
     echo $search->field('currency_in')->widget(StaticCombo::class, [
         'data' => $currencies,
