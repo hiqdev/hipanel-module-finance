@@ -57,25 +57,26 @@ class DomainZonePriceGridView extends PriceGridView
                 if (!isset($prices[$type])) {
                     return '';
                 }
-                $price = $prices[$type];
-                $parent = $this->parentPrices[$price->object_id][$type] ?? null;
+                $current = $prices[$type];
+                $parent = $this->parentPrices[$current->object_id][$type] ?? null;
 
+                $currentPrice =  $current->getMoney();
                 $parentValue = '';
                 if ($parent) {
+                    $parentPrice = $parent->getMoney();
                     $parentValue = PriceDifferenceWidget::widget([
-                        'new'         => $price->getMoney(),
-                        'old'         => $parent->getMoney(),
+                        'new'         => $currentPrice,
+                        'old'         => $parentPrice,
                     ]);
                 }
-                $priceValue = floatval($price->price) ||
-                (!floatval($price->price) && $parent) ?
+                $currentValue = floatval($current->price) ||
+                (!floatval($current->price) && $parent) ?
                     ResourcePriceWidget::widget([
-                        'price' => $price->getMoney(),
+                        'price' => $currentPrice,
                     ]) : '';
-                $options = ['class' => 'col-md-6'];
+                $options = ['class' => 'prices-cell'];
 
-                return Html::tag('div', $priceValue, $options) .
-                    Html::tag('div', $parentValue, $options);
+                return Html::tag('div', "<div class='left-table-item'>$currentValue</div><div class='right-table-item'>$parentValue</div>", $options);
             },
         ];
     }

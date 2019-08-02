@@ -7,6 +7,8 @@ use yii\web\View;
  * @var View $this
  * @var float $basePrice
  * @var float $originalPrice
+ * @var string $currency
+ * @var string $lang
  * @var \yii\widgets\ActiveField $activeField
  */
 ?>
@@ -26,6 +28,8 @@ use yii\web\View;
         <?= Html::tag('span', '', [
             'class' => 'base-price text-bold',
             'data-original-price' => $originalPrice,
+            'data-currency' => $currency,
+            'data-lang' => $lang,
         ]); ?>
     </div>
 </div>
