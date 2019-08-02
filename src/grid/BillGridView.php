@@ -12,6 +12,7 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\CurrencyColumn;
 use hipanel\grid\MainColumn;
+use hipanel\helpers\ArrayHelper;
 use hipanel\helpers\StringHelper;
 use hipanel\helpers\Url;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
@@ -128,6 +129,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                         return StringHelper::getCurrencySymbol($k);
                     }, array_keys($this->currencies)));
 
+                    $currencies = $this->getUsedCurrencies($currencies);
                     return Html::activeDropDownList($filterModel, 'currency_in', $currencies, ['class' => 'form-control', 'prompt' => '--']);
                 },
             ],
@@ -241,5 +243,14 @@ class BillGridView extends \hipanel\grid\BoxedGridView
         }
 
         return '';
+    }
+
+    private function getUsedCurrencies($currencies): array
+    {
+        $filterCurrencies = ArrayHelper::getColumn(Bill::perform('get-used-currencies', [], ['batch' => true]), 'name');
+
+        return array_filter($currencies, function ($cur) use ($filterCurrencies) {
+            return in_array($cur, $filterCurrencies);
+        }, ARRAY_FILTER_USE_KEY);
     }
 }
