@@ -21,12 +21,12 @@ class CurrencyFilter
 {
     /**
      * Adds currency symbols to each of element and filters it
-     * @param array $currencies Need to filter currencies list
-     * @return array Filtered currencies list
+     * @param string[] $currencies Need to filter currencies list
+     * @return string[] Filtered currencies list with symbols
      */
     public static function addSymbolAndFilter(array $currencies): array
     {
-        $currencies = array_combine(array_keys($currencies), array_map(function ($k) {
+        $currencies = array_combine(array_keys($currencies), array_map(function (string $k) {
             return StringHelper::getCurrencySymbol($k);
         }, array_keys($currencies)));
 
@@ -35,14 +35,14 @@ class CurrencyFilter
 
     /**
      * Filters input array of currencies
-     * @param array $currencies
-     * @return array
+     * @param string[] $currencies
+     * @return string[]
      */
     private static function getUsedCurrencies(array $currencies): array
     {
         $filterCurrencies = ArrayHelper::getColumn(Bill::perform('get-used-currencies', [], ['batch' => true]), 'name');
 
-        return array_filter($currencies, function ($cur) use ($filterCurrencies) {
+        return array_filter($currencies, function (string $cur) use ($filterCurrencies) {
             return in_array($cur, $filterCurrencies);
         }, ARRAY_FILTER_USE_KEY);
     }
