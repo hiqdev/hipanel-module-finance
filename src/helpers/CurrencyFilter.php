@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\helpers;
 use hipanel\helpers\ArrayHelper;
 use hipanel\helpers\StringHelper;
 use hipanel\modules\finance\models\Bill;
+use Yii;
 
 /**
  * Class CurrencyFilter can be used to filter currencies array in finance module
@@ -40,7 +41,9 @@ class CurrencyFilter
      */
     private static function getUsedCurrencies(array $currencies): array
     {
-        $filterCurrencies = ArrayHelper::getColumn(Bill::perform('get-used-currencies', [], ['batch' => true]), 'name');
+        $filterCurrencies = Yii::$app->cache->getOrSet([__METHOD__, Yii::$app->user->id], function () {
+            return ArrayHelper::getColumn(Bill::perform('get-used-currencies', [], ['batch' => true]), 'name');
+        }, 3600);
 
         return array_filter($currencies, function (string $cur) use ($filterCurrencies) {
             return in_array($cur, $filterCurrencies);
