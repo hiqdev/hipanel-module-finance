@@ -12,8 +12,6 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\CurrencyColumn;
 use hipanel\grid\MainColumn;
-use hipanel\helpers\ArrayHelper;
-use hipanel\helpers\StringHelper;
 use hipanel\helpers\Url;
 use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;

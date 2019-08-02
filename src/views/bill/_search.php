@@ -1,6 +1,5 @@
 <?php
 
-use hipanel\helpers\StringHelper;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\helpers\CurrencyFilter;
