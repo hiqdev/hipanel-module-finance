@@ -15,6 +15,7 @@ use hipanel\grid\MainColumn;
 use hipanel\helpers\ArrayHelper;
 use hipanel\helpers\StringHelper;
 use hipanel\helpers\Url;
+use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\menus\BillActionsMenu;
 use hipanel\modules\finance\models\Bill;
@@ -125,11 +126,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'filterAttribute' => 'currency_in',
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'filter' => function ($column, $filterModel) {
-                    $currencies = array_combine(array_keys($this->currencies), array_map(function ($k) {
-                        return StringHelper::getCurrencySymbol($k);
-                    }, array_keys($this->currencies)));
-
-                    $currencies = $this->getUsedCurrencies($currencies);
+                    $currencies = CurrencyFilter::filter($this->currencies);
                     return Html::activeDropDownList($filterModel, 'currency_in', $currencies, ['class' => 'form-control', 'prompt' => '--']);
                 },
             ],
@@ -243,14 +240,5 @@ class BillGridView extends \hipanel\grid\BoxedGridView
         }
 
         return '';
-    }
-
-    private function getUsedCurrencies($currencies): array
-    {
-        $filterCurrencies = ArrayHelper::getColumn(Bill::perform('get-used-currencies', [], ['batch' => true]), 'name');
-
-        return array_filter($currencies, function ($cur) use ($filterCurrencies) {
-            return in_array($cur, $filterCurrencies);
-        }, ARRAY_FILTER_USE_KEY);
     }
 }

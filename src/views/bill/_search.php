@@ -3,6 +3,7 @@
 use hipanel\helpers\StringHelper;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
+use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
 use hiqdev\combo\StaticCombo;
 use hiqdev\yii2\daterangepicker\DateRangePicker;
@@ -25,9 +26,7 @@ use yii\helpers\Html;
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?php
     $currencies = $this->context->getCurrencyTypes();
-    $currencies = array_combine(array_keys($currencies), array_map(function ($k) {
-        return StringHelper::getCurrencySymbol($k);
-    }, array_keys($currencies)));
+    $currencies = CurrencyFilter::filter($currencies);
 
     echo $search->field('currency_in')->widget(StaticCombo::class, [
         'data' => $currencies,
