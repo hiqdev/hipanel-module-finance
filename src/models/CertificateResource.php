@@ -123,6 +123,15 @@ class CertificateResource extends Resource
     }
 
     /**
+     * @param int $period
+     * @return bool
+     */
+    public function hasPriceForPeriod(int $period)
+    {
+        return !empty($this->sums[$period]);
+    }
+
+    /**
      * @return array
      */
     public function getTypes()
