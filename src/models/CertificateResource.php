@@ -85,7 +85,7 @@ class CertificateResource extends Resource
     public function getPriceForPeriod($period)
     {
         $sums = $this->data['sums'][$period];
-        if (!empty($sums)) {
+        if (empty($sums)) {
             return null;
             /// XXX throw new InvalidConfigException('Period ' . $period . ' is not available');
         }
@@ -128,7 +128,7 @@ class CertificateResource extends Resource
      */
     public function hasPriceForPeriod(int $period)
     {
-        return !empty($this->sums[$period]);
+        return !empty($this->data['sums'][$period]);
     }
 
     /**
