@@ -115,7 +115,7 @@ class CartFinisher extends BaseObject
             foreach ($validators as $validator) {
                 $validator->validate($this->cart->positions);
             }
-        } catch (NotPurchasablePositionException $e) {
+        } catch (NotPurchasableException $e) {
             $e->resolve();
         }
     }

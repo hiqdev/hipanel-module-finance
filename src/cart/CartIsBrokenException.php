@@ -10,20 +10,15 @@
 
 namespace hipanel\modules\finance\cart;
 
-use yii\base\Exception;
-
 /**
- * Interface PositionPurchasabilityValidatorInterface.
+ * Class CartIsBrokenException
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class NotPurchasablePositionException extends Exception
+class CartIsBrokenException extends NotPurchasableException
 {
     public function getName()
     {
-        return 'Position is not purchasable';
-    }
-
-    public function resolve()
-    {
-        return;
+        return 'Something is badly broken in the cart';
     }
 }
