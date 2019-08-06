@@ -10,6 +10,8 @@
 
 namespace hipanel\modules\finance\cart;
 
+use hiqdev\yii2\cart\NotPurchasableException;
+
 /**
  * Class CartIsBrokenException
  *

@@ -2,7 +2,7 @@
 
 namespace hipanel\modules\finance\cart;
 
-use hiqdev\yii2\cart\ShoppingCart;
+use hiqdev\yii2\cart\NotPurchasableException;
 use Yii;
 
 final class MultiCurrencyException extends NotPurchasableException

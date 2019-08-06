@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\cart;
 
+use hiqdev\yii2\cart\NotPurchasableException;
 use hiqdev\yii2\cart\ShoppingCart;
 use Yii;
 use yii\base\BaseObject;
