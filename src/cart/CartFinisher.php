@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\cart;
 
+use hiqdev\yii2\cart\NotPurchasableException;
 use hiqdev\yii2\cart\ShoppingCart;
 use Yii;
 use yii\base\BaseObject;
@@ -115,7 +116,7 @@ class CartFinisher extends BaseObject
             foreach ($validators as $validator) {
                 $validator->validate($this->cart->positions);
             }
-        } catch (NotPurchasablePositionException $e) {
+        } catch (NotPurchasableException $e) {
             $e->resolve();
         }
     }

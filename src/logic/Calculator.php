@@ -53,7 +53,7 @@ class Calculator implements CalculatorInterface, ServerTariffCalculatorInterface
             $this->execute();
         }
 
-        return isset($this->calculations[$id]) ? $this->calculations[$id] : null;
+        return $this->calculations[$id] ?? null;
     }
 
     /**
