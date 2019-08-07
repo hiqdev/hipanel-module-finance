@@ -17,7 +17,7 @@ use yii\web\View;
     <div class="col-md-6">
         <?php
         Html::addCssClass($activeField->options, 'form-group-sm');
-        echo $activeField->input('number', [
+        echo $activeField->input('text', [
             'class' => 'form-control price-input',
             'autocomplete' => false,
             'step' => 'any',
