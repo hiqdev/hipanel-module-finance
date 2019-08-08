@@ -39,6 +39,12 @@ input::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance:textfield;
 }
+#main-table input {
+    padding: 5px 3px !important;
+}
+#main-table div.col-md-6 {
+    padding-left: 4px !important;
+}
 CSS
 );
 ?>
@@ -53,7 +59,7 @@ CSS
         <?php Box::begin() ?>
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-condensed">
+                <table id="main-table" class="table table-condensed">
                     <thead>
                     <tr>
                         <th>
