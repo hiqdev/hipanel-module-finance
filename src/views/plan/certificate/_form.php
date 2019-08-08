@@ -29,13 +29,13 @@ $this->registerCss(<<<CSS
 .text-gray {
     color: gray !important;
 }
-table input::-webkit-outer-spin-button,
-table input::-webkit-inner-spin-button {
+.price-table input::-webkit-outer-spin-button,
+.price-table input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-table input[type=number] {
-    -moz-appearance:textfield;
+.price-table input[type=number] {
+    -moz-appearance: textfield;
 }
 #main-table input {
     padding: 5px 3px !important;
@@ -57,7 +57,7 @@ CSS
         <?php Box::begin() ?>
         <div class="row">
             <div class="col-md-12">
-                <table id="main-table" class="table table-condensed">
+                <table id="main-table" class="table table-condensed price-table">
                     <thead>
                     <tr>
                         <?= Html::tag('th', Yii::t('hipanel:finance:tariff', 'Name')); ?>
