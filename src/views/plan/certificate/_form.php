@@ -29,12 +29,12 @@ $this->registerCss(<<<CSS
 .text-gray {
     color: gray !important;
 }
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+table input::-webkit-outer-spin-button,
+table input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-input[type=number] {
+table input[type=number] {
     -moz-appearance:textfield;
 }
 #main-table input {
