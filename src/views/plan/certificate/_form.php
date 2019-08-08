@@ -25,6 +25,21 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
 });
 ");
 
+$this->registerCss(<<<CSS
+.text-gray {
+    color: gray !important;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance:textfield;
+}
+CSS
+);
+
 ?>
 <?php if (!empty($prices)) : ?>
     <div class="tariff-create">
