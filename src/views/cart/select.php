@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var float client's balance + credit
+ * @var float $budget client's balance + credit
  * @var \hipanel\modules\client\models\Client $client
  * @var \hiqdev\yii2\cart\ShoppingCart $cart
  * @var \yii\web\View $this
@@ -18,8 +18,8 @@ $this->title = Yii::t('hipanel:finance', 'Select payment option');
             <div class="box-header with-border text-center">
                 <h3 class="box-title">
                     <?= Yii::t('hipanel:finance', 'You balance: {balance} {formattedCredit}', [
-                        'balance' => $cart->formatCurrency($client->balance),
-                        'formattedCredit' => $client->credit > 0 ? Yii::t('hipanel:finance', '(+{amount} of credit)', ['amount' => $cart->formatCurrency($client->credit)]) : '',
+                        'balance' => $cart->formatCurrency($client->balance, $client->currency),
+                        'formattedCredit' => $client->credit > 0 ? Yii::t('hipanel:finance', '(+{amount} of credit)', ['amount' => $cart->formatCurrency($client->credit, $client->currency)]) : '',
                     ]) ?>:
                 </h3>
             </div>
@@ -34,17 +34,20 @@ $this->title = Yii::t('hipanel:finance', 'Select payment option');
                         ]) ?>
                     </p>
                 <?php else : ?>
-                    <h3><?= Yii::t('hipanel:finance', 'You can pay your cart partially') ?>:</h3>
+                    <h3><?= Yii::t('hipanel:finance', 'It\'s not enough to pay your cart') ?></h3>
                     <br>
-                    <p>
-                        <?php $text = Yii::t('hipanel:finance', 'Use credit funds and pay the difference {amount}', [
-                            'amount' => $cart->formatCurrency($cart->total - $budget),
-                        ]) ?>
-                        <?= Html::a($text, '@finance/cart/partial', [
-                            'class' => 'btn btn-lg btn-primary btn-block lock-on-click',
-                            'data-loading-text' => Yii::t('hipanel:finance', 'Processing your cart...'),
-                        ]) ?>
-                    </p>
+                    <?php if (strtolower($client->currency) !== strtolower($cart->currency)
+                                && Yii::$app->user->can('resel')) : ?>
+                        <p>
+                            <?php $text = Yii::t('hipanel:finance', 'Use credit funds and pay the difference {amount}', [
+                                'amount' => $cart->formatCurrency($cart->total - $budget),
+                            ]) ?>
+                            <?= Html::a($text, '@finance/cart/partial', [
+                                'class' => 'btn btn-lg btn-primary btn-block lock-on-click',
+                                'data-loading-text' => Yii::t('hipanel:finance', 'Processing your cart...'),
+                            ]) ?>
+                        </p>
+                    <?php endif ?>
                 <?php endif ?>
                 <?php if ($cart->total > 0) : ?>
                     <p>
