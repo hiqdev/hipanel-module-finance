@@ -25,6 +25,27 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
 });
 ");
 
+$this->registerCss(<<<CSS
+.text-gray {
+    color: gray !important;
+}
+.price-table input::-webkit-outer-spin-button,
+.price-table input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.price-table input[type=number] {
+    -moz-appearance: textfield;
+}
+#main-table input {
+    padding: 5px 3px !important;
+}
+#main-table div.col-md-6 {
+    padding-left: 4px !important;
+}
+CSS
+);
+
 ?>
 <?php if (!empty($prices)) : ?>
     <div class="tariff-create">
@@ -36,7 +57,7 @@ $('#tariff-create-form').on('afterValidate', function (event, messages) {
         <?php Box::begin() ?>
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-condensed">
+                <table id="main-table" class="table table-condensed price-table">
                     <thead>
                     <tr>
                         <?= Html::tag('th', Yii::t('hipanel:finance:tariff', 'Name')); ?>
