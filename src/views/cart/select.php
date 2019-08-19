@@ -37,7 +37,7 @@ $this->title = Yii::t('hipanel:finance', 'Select payment option');
                     <h3><?= Yii::t('hipanel:finance', 'It\'s not enough to pay your cart') ?></h3>
                     <br>
                     <?php if (strtolower($client->currency) !== strtolower($cart->currency)
-                                && Yii::$app->user->can('resel')) : ?>
+                                && !Yii::$app->user->can('resel')) : ?>
                         <p>
                             <?php $text = Yii::t('hipanel:finance', 'Use credit funds and pay the difference {amount}', [
                                 'amount' => $cart->formatCurrency($cart->total - $budget),
