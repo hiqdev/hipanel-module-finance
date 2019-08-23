@@ -44,7 +44,7 @@ class TariffProfile extends \hipanel\base\Model
             [['id'], 'required', 'on' => ['update', 'delete']],
             [['tariff_names'], 'safe'],
             [['seller_id', 'client_id'], 'integer'],
-            [['seller', 'client'], 'safe'],
+            [['seller', 'client', 'items'], 'safe'],
             [['tariffs'], 'safe'],
         ];
 
@@ -98,5 +98,15 @@ class TariffProfile extends \hipanel\base\Model
     public function isDefault() : bool
     {
         return (bool) ((string) $this->id === (string) $this->client_id);
+    }
+
+    /**
+     * Human readable title
+     *
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->isDefault() ? Yii::t('hipanel.finance.tariffprofile', 'Default') : $this->name;
     }
 }
