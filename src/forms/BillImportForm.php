@@ -150,7 +150,7 @@ class BillImportForm extends \yii\base\Model
      */
     private function resolveClients($logins)
     {
-        $clients = Client::find()->where(['logins' => $logins])->all();
+        $clients = Client::find()->where(['logins' => $logins])->limit(-1)->all();
         $this->clientsMap = array_combine(ArrayHelper::getColumn($clients, 'login'),
             ArrayHelper::getColumn($clients, 'id'));
     }
