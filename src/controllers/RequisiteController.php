@@ -10,31 +10,16 @@
 
 namespace hipanel\modules\finance\controllers;
 
-use hipanel\actions\ComboSearchAction;
-use hipanel\actions\IndexAction;
-use hipanel\actions\SmartDeleteAction;
-use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
-use hipanel\actions\ValidateFormAction;
 use hipanel\actions\RedirectAction;
-use hipanel\actions\ViewAction;
-use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\models\Requisite;
-use hipanel\modules\client\models\DocumentUploadForm;
-use hipanel\modules\client\models\query\ContactQuery;
-use hipanel\modules\client\actions\ContactUpdateAction;
-use hipanel\modules\client\models\Verification;
-use hipanel\modules\client\repositories\NotifyTriesRepository;
-use hipanel\modules\client\helpers\HasPINCode;
-use Yii;
 use yii\base\Event;
 use yii\filters\VerbFilter;
-use yii\web\NotFoundHttpException;
-use yii\web\Response;
+use Yii;
 
-class RequisiteController extends CrudController
+class RequisiteController extends \hipanel\modules\client\controllers\ContactController
 {
     /**
      * @var NotifyTriesRepository
@@ -44,14 +29,6 @@ class RequisiteController extends CrudController
      * @var HasPINCode
      */
     private $hasPINCode;
-
-    public function __construct($id, $module, NotifyTriesRepository $notifyTriesRepository, HasPINCode $hasPINCode, $config = [])
-    {
-        parent::__construct($id, $module, $config);
-
-        $this->notifyTriesRepository = $notifyTriesRepository;
-        $this->hasPINCode = $hasPINCode;
-    }
 
     /**
      * {@inheritdoc}
@@ -85,51 +62,6 @@ class RequisiteController extends CrudController
     public function actions()
     {
         return array_merge(parent::actions(), [
-            'index' => [
-                'class' => IndexAction::class,
-            ],
-            'search' => [
-                'class' => ComboSearchAction::class,
-            ],
-            'view' => [
-                'class' => ViewAction::class,
-                'findOptions' => ['with_counters' => 1],
-                'on beforePerform' => function ($event) {
-                    /** @var ViewAction $action */
-                    $action = $event->sender;
-
-                    /** @var ContactQuery $query */
-                    $query = $action->getDataProvider()->query;
-
-                    if (Yii::getAlias('@document', false)) {
-                        $query->withDocuments();
-                    }
-                    $query->withLocalizations();
-                },
-            ],
-            'validate-form' => [
-                'class' => ValidateFormAction::class,
-            ],
-            'create' => [
-                'class' => ContactCreateAction::class,
-            ],
-            'delete' => [
-                'class' => SmartDeleteAction::class,
-                'success' => Yii::t('hipanel:client', 'Contact was deleted'),
-            ],
-            'update' => [
-                'class' => ContactUpdateAction::class,
-            ],
-            'copy' => [
-                'class' => SmartUpdateAction::class,
-                'scenario' => 'create',
-                'data' => function ($action) {
-                    return [
-                        'countries' => $action->controller->getRefs('country_code'),
-                        'action' => 'create',
-                    ];
-                },
-            ],
             'reserve-number' => [
                 'class' => SmartUpdateAction::class,
                 'success' => Yii::t('hipanel:client', 'Document number was reserved'),
@@ -156,32 +88,6 @@ class RequisiteController extends CrudController
                     ],
                 ],
             ],
-        ]);
-    }
-
-    public function actionAttachDocuments($id)
-    {
-        $contact = Contact::findOne($id);
-
-        if ($contact === null) {
-            throw new NotFoundHttpException();
-        }
-
-        $model = new DocumentUploadForm(['id' => $contact->id]);
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $session = Yii::$app->session;
-            if ($model->save()) {
-                $session->addFlash('success', Yii::t('hipanel:client', 'Documents were saved'));
-
-                return $this->redirect(['attach-documents', 'id' => $id]);
-            }
-
-            $session->addFlash('error', $model->getFirstError('title'));
-        }
-
-        return $this->render('attach-documents', [
-            'contact' => $contact,
-            'model' => $model,
         ]);
     }
 }
