@@ -41,7 +41,7 @@ $this->title = Yii::t('cart', 'Order execution');
                                 <td class="text-center text-bold"><?= $no++ ?></td>
                                 <td>
                                     <?= $item->renderDescription() ?><br>
-                                    <?= $exception->getMessage() ?>
+                                    <?= Html::tag('p', $exception->getMessage(), ['class' => 'bg-danger', 'style' => 'padding: 1em;']) ?>
                                 </td>
                                 <td align="right" class="text-bold"><?= Yii::$app->formatter->asCurrency($item->cost, $item->getCurrency()) ?></td>
                                 <td></td>
@@ -138,14 +138,8 @@ $this->title = Yii::t('cart', 'Order execution');
     </div>
 <?php endif ?>
 
-<?php if (count($remarks)) : ?>
-    <?php foreach ($remarks as $remark) : ?>
-        <?= $remark ?>
-    <?php endforeach ?>
-<?php endif ?>
-
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-12">
         <div class="box box-solid">
             <div class="box-header with-border">
                 <h3 class="box-title">
@@ -154,13 +148,12 @@ $this->title = Yii::t('cart', 'Order execution');
                     ]) ?>
                 </h3>
             </div>
-            <!-- /.box-header -->
             <div class="box-body text-center">
                 <p class="text-muted well well-sm no-shadow">
                     <?php
                     if (Yii::$app->user->isGuest) {
                         echo Yii::t('hipanel:finance', 'If you have any further questions, please, contact us {emailLink}', [
-                            'emailLink' => Html::a(Yii::$app->params['supportEmail'], 'mailto:' . Yii::$app->params['supportEmail']),
+                            'emailLink' => Html::mailto(Yii::$app->params['supportEmail'], Yii::$app->params['supportEmail']),
                         ]);
                     } else {
                         echo Yii::t('hipanel:finance', 'If you have any further questions, please, {ticketCreationLink}.', [
@@ -169,7 +162,12 @@ $this->title = Yii::t('cart', 'Order execution');
                     } ?>
                 </p>
             </div>
-            <!-- /.box-body -->
         </div>
     </div>
 </div>
+
+<?php if (count($remarks)) : ?>
+    <?php foreach ($remarks as $remark) : ?>
+        <?= $remark ?>
+    <?php endforeach ?>
+<?php endif ?>
