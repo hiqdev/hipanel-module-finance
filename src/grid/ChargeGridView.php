@@ -70,6 +70,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             'sum' => [
                 'class' => CurrencyColumn::class,
                 'attribute' => 'sum',
+                'sortAttribute' => 'sum',
                 'colors' => ['danger' => 'warning'],
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => function ($model) {
@@ -115,7 +116,6 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             'time' => [
                 'format' => 'raw',
                 'filter' => false,
-                'enableSorting' => false,
                 'contentOptions' => ['class' => 'text-nowrap'],
                 'value' => function ($model) {
                     list($date, $time) = explode(' ', $model->time, 2);
