@@ -72,6 +72,11 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                         'url'     => ['@tariffprofile/index'],
                         'visible' => $user->can('plan.create'),
                     ],
+                    'charge' => [
+                        'label'   => Yii::t('hipanel:finance', 'Charges'),
+                        'url'     => ['/finance/charge/index'],
+                        'visible' => true, //$user->can('plan.create'),
+                    ],
                 ],
             ],
         ];

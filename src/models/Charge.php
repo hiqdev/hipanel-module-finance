@@ -11,6 +11,8 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\modules\finance\logic\bill\QuantityTrait;
+use hipanel\modules\finance\models\query\ChargeQuery;
+use hipanel\modules\stock\models\query\OrderQuery;
 use Yii;
 
 /**
@@ -32,14 +34,19 @@ use Yii;
  * @property TargetObject $latestCommonObject
  * @property Bill $bill
  */
-class Charge extends \hiqdev\hiart\ActiveRecord
+class Charge extends Resource
 {
-    use QuantityTrait;
+    use \hipanel\base\ModelTrait;
 
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
 
     private $isNewRecord;
+
+    public static function tableName()
+    {
+        return 'resource';
+    }
 
     public function rules()
     {
@@ -94,5 +101,16 @@ class Charge extends \hiqdev\hiart\ActiveRecord
     public function isMonthly(): bool
     {
         return strpos($this->ftype, 'monthly,') === 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return ChargeQuery
+     */
+    public static function find($options = [])
+    {
+        return new ChargeQuery(get_called_class(), [
+            'options' => $options,
+        ]);
     }
 }
