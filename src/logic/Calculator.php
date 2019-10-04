@@ -111,7 +111,10 @@ class Calculator implements CalculatorInterface, ServerTariffCalculatorInterface
      */
     private function createCalculations($rows)
     {
-        $query = Calculation::find()->joinWith(['value'])->indexBy('calculation_id');
+        $query = Calculation::find()
+            ->joinWith(['value', 'valueConverted'])
+            ->indexBy('calculation_id');
+
         $query->prepare();
 
         return $query->populate($rows);

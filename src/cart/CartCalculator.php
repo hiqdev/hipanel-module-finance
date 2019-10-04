@@ -24,9 +24,7 @@ use yz\shoppingcart\CartActionEvent;
  * Usage:
  *
  * ```php
- * $calculator = new CartCalculator([
- *     'cart' => $this->cart
- * ]);
+ * $calculator = new CartCalculator($this->cart);
  *
  * $calculator->run(); // will calculate prices for all cart positions and update them
  * ```

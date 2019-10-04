@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\cart;
 
+use hipanel\modules\finance\models\Bill;
 use hiqdev\yii2\cart\NotPurchasableException;
 use hiqdev\yii2\cart\ShoppingCart;
 use Yii;
@@ -21,6 +22,11 @@ class CartFinisher extends BaseObject
      * @var ShoppingCart
      */
     public $cart;
+
+    /**
+     * @var string|null
+     */
+    public $exchangeFromCurrency;
 
     /**
      * @var PurchaseStrategyInterface[]
@@ -81,6 +87,7 @@ class CartFinisher extends BaseObject
 
         $this->ensureCanBeFinished();
         $this->createPurchasers();
+        $this->exchangeMoney();
 
         foreach ($this->purchasers as $purchaser) {
             $purchaser->run();
@@ -146,5 +153,18 @@ class CartFinisher extends BaseObject
         }
 
         return $this->purchasers[$positionClass];
+    }
+
+    private function exchangeMoney(): void
+    {
+        if ($this->exchangeFromCurrency === null) {
+            return;
+        }
+
+        Bill::perform('create-exchange', [
+            'from' => $this->exchangeFromCurrency,
+            'to' => $this->cart->getCurrency(),
+            'buySum' => $this->cart->getTotal(),
+        ]);
     }
 }

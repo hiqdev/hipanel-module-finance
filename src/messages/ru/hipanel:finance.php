@@ -43,7 +43,7 @@ return [
     'Do not use credit funds, pay the whole cart: {amount}' => 'Не использовать доступные средства, оплатить всю корзину: {amount}',
     'It\'s enough to pay your cart' => 'Этого достаточно для оплаты корзины',
     'Processing your cart...' => 'Обрабатываем корзину...',
-    'You balance: {balance} {formattedCredit}' => 'Ваш баланс: {balance} {formattedCredit}',
+    'Your balance' => 'Ваш баланс',
     '(+{amount} of credit)' => '(+{amount} кредит)',
     'You can pay your cart partially' => 'Вы можете оплатить часть корзины',
     'Failed to calculate cart: {reason}' => 'Не удалось просчитать стоимость корзины: {reason}',
@@ -182,4 +182,9 @@ return [
     'Total:' => 'Всего:',
     '{units, plural, one{# unit} other{# units}} &times; {quantity, plural, one{# day} other{# days}}' => '{units, plural, one{# юнит} few{# юнита} other{# юнитов}} &times; {quantity, plural, one{# день} few{# дня} other{# дней}}',
     'The bill is not unique' => 'Платёж не уникальный',
+    'Pay the whole cart: {amount}' => 'Оплатить всю корзину: {amount}',
+    'Checkout total: {amount}' => 'Сумма к оплате: {amount}',
+    'Pay {amount} from your balance' => 'Списать {amount} с баланса',
+    'Pay the whole cart: {amount}, including debt {debt}' => 'Оплатить всю корзину: {amount}, включая задолженность {debt}',
+    'Use {balance} from the balance and pay the difference {amount}' => 'Списать {balance} с баланса и доплатить остаток {amount}',
 ];
