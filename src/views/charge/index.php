@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $page->beginContent('sorter-actions') ?>
             <?= $page->renderSorter([
                 'attributes' => [
+                    'time',
                 ],
             ]) ?>
         <?php $page->endContent() ?>
