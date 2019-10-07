@@ -6,8 +6,15 @@ namespace hipanel\modules\finance\models\query;
 
 use hiqdev\hiart\ActiveQuery;
 
+/**
+ * Class ChargeQuery
+ * @package hipanel\modules\finance\models\query
+ */
 class ChargeQuery extends ActiveQuery
 {
+    /**
+     * @return $this
+     */
     public function withCommonObject(): self
     {
         $this->joinWith('commonObject');
@@ -16,6 +23,9 @@ class ChargeQuery extends ActiveQuery
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function withLatestCommonObject(): self
     {
         $this->joinWith('latestCommonObject');

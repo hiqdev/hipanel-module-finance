@@ -13,12 +13,19 @@ namespace hipanel\modules\finance\models;
 use hipanel\base\SearchModelTrait;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Class ChargeSearch
+ * @package hipanel\modules\finance\models
+ */
 class ChargeSearch extends Charge
 {
     use SearchModelTrait {
         searchAttributes as defaultSearchAttributes;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function searchAttributes()
     {
         return ArrayHelper::merge($this->defaultSearchAttributes(), [

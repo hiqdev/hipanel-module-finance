@@ -10,9 +10,7 @@
 
 namespace hipanel\modules\finance\models;
 
-use hipanel\modules\finance\logic\bill\QuantityTrait;
 use hipanel\modules\finance\models\query\ChargeQuery;
-use hipanel\modules\stock\models\query\OrderQuery;
 use Yii;
 
 /**
@@ -43,6 +41,9 @@ class Charge extends Resource
 
     private $isNewRecord;
 
+    /**
+     * @inheritDoc
+     */
     public static function tableName()
     {
         return 'resource';

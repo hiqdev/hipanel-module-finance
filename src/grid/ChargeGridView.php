@@ -11,16 +11,14 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\CurrencyColumn;
-use hipanel\helpers\StringHelper;
-use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\models\ChargeSearch;
 use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\BillTypeFilter;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
+use hiqdev\higrid\DataColumn;
 use Yii;
-use yii\grid\DataColumn;
 use yii\helpers\Html;
 
 /**
@@ -61,7 +59,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                     ]);
                 },
                 'filterAttribute' => 'type',
-                'filter' => function ($column, $filterModel) {
+                'filter' => function (DataColumn $column, ChargeSearch $filterModel): string {
                     return BillTypeFilter::widget([
                         'options' => ['class' => 'form-control text-right', 'style' => 'max-width: 12em'],
                         'attribute' => 'ftype',
@@ -81,6 +79,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 },
             ],
             'label' => [
+                'attribute' => 'label',
                 'format' => 'raw',
                 'value' => function (Charge $model) {
                     $result = LinkToObjectResolver::widget([

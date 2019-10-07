@@ -17,21 +17,30 @@ use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\query\ChargeQuery;
 use yii\base\Event;
 
+/**
+ * Class ChargeController
+ * @package hipanel\modules\finance\controllers
+ */
 class ChargeController extends CrudController
 {
+    /**
+     * @inheritDoc
+     */
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            'access-bill' => [
+                'class' => EasyAccessControl::class,
+                'actions' => [
+                    '*' => 'bill.charges.read',
+                ],
+            ],
+        ]);
+    }
 
-//    public function behaviors()
-//    {
-//        return array_merge(parent::behaviors(), [
-//            'access-bill' => [
-//                'class' => EasyAccessControl::class,
-//                'actions' => [
-////                    '*'                     => 'bill.read',
-//                ],
-//            ],
-//        ]);
-//    }
-
+    /**
+     * @inheritDoc
+     */
     public function actions()
     {
         return array_merge(parent::actions(), [
