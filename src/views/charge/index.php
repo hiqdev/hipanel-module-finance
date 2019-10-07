@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @var \yii\data\ActiveDataProvider $dataProvider
+ * @var \yii\web\View $this
+ * @var \hipanel\modules\finance\models\ChargeSearch $model
+ */
+
 use hipanel\modules\finance\grid\ChargeGridView;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;

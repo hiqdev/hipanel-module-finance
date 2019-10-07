@@ -21,11 +21,9 @@ class ChargeSearch extends Charge
 
     public function searchAttributes()
     {
-        return ArrayHelper::merge($this->defaultSearchAttributes(), []);
-    }
-
-    public function attributeLabels()
-    {
-        return array_merge(parent::attributeLabels(), []);
+        return ArrayHelper::merge($this->defaultSearchAttributes(), [
+            'time_from',
+            'time_till',
+        ]);
     }
 }

@@ -11,6 +11,8 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\CurrencyColumn;
+use hipanel\helpers\StringHelper;
+use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\models\ChargeSearch;
@@ -73,12 +75,12 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 'sortAttribute' => 'sum',
                 'colors' => ['danger' => 'warning'],
                 'headerOptions' => ['class' => 'text-right'],
+                'filter' => false,
                 'contentOptions' => function ($model) {
                     return ['class' => 'text-right' . ($model->sum > 0 ? ' text-bold' : '')];
                 },
             ],
             'label' => [
-                'attribute' => 'label',
                 'format' => 'raw',
                 'value' => function (Charge $model) {
                     $result = LinkToObjectResolver::widget([
@@ -109,6 +111,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             'quantity' => [
                 'attribute' => 'quantity',
                 'format' => 'raw',
+                'filter' => false,
                 'value' => function (Charge $model) {
                     return $this->renderQuantity($model);
                 },
