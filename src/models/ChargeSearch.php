@@ -35,6 +35,9 @@ class ChargeSearch extends Charge
         ]);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function attributeLabels()
     {
         return ArrayHelper::merge(parent::attributeLabels(), [
