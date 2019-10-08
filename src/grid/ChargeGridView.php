@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\CurrencyColumn;
+use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\models\ChargeSearch;
@@ -48,6 +49,19 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
     public function columns()
     {
         return array_merge(parent::columns(), [
+            'label' => [
+                'attribute' => 'label_ilike',
+                'label' => Yii::t('hipanel', 'Description'),
+                'value' => function (Charge $model): string {
+                    return $model->label;
+                },
+            ],
+            'client' => [
+                'attribute' => 'client_id',
+                'class' => ClientColumn::class,
+                'nameAttribute' => 'client',
+                'idAttribute' => 'client_id',
+            ],
             'type_label' => [
                 'label' => Yii::t('hipanel', 'Type'),
                 'format' => 'raw',
@@ -78,7 +92,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                     return ['class' => 'text-right' . ($model->sum > 0 ? ' text-bold' : '')];
                 },
             ],
-            'label' => [
+            'name' => [
                 'attribute' => 'name_ilike',
                 'label' => Yii::t('hipanel', 'Object'),
                 'format' => 'raw',

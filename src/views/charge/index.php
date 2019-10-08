@@ -36,9 +36,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filterModel' => $model,
                     'boxed' => false,
                     'columns' => [
+                        'object_id',
+                        'client_id',
+                        'label',
                         'type_label',
                         'sum',
-                        'label',
+                        'name',
                         'quantity',
                         'time',
                     ],
