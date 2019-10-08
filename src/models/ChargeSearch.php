@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\base\SearchModelTrait;
+use Yii;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -31,6 +32,13 @@ class ChargeSearch extends Charge
         return ArrayHelper::merge($this->defaultSearchAttributes(), [
             'time_from',
             'time_till',
+        ]);
+    }
+
+    public function attributeLabels()
+    {
+        return ArrayHelper::merge(parent::attributeLabels(), [
+            'name_ilike' => Yii::t('hipanel', 'Object'),
         ]);
     }
 }
