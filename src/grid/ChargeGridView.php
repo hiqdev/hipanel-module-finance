@@ -79,7 +79,8 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 },
             ],
             'label' => [
-                'attribute' => 'label',
+                'attribute' => 'name_ilike',
+                'label' => Yii::t('hipanel', 'Object'),
                 'format' => 'raw',
                 'value' => function (Charge $model) {
                     $result = LinkToObjectResolver::widget([
