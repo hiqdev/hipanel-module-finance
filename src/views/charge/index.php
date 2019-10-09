@@ -37,7 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'boxed' => false,
                     'columns' => [
                         'object_id',
-                        'client_id',
+                        'order',
+                        'client',
+                        'seller',
+                        'tariff',
                         'label',
                         'type_label',
                         'sum',

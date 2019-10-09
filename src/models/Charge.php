@@ -52,8 +52,8 @@ class Charge extends Resource
     public function rules()
     {
         return [
-            [['id', 'type_id', 'object_id', 'bill_id', 'parent_id', 'client_id', 'tariff_id'], 'integer'],
-            [['class', 'name', 'unit'], 'string'],
+            [['id', 'type_id', 'object_id', 'bill_id', 'parent_id', 'client_id', 'tariff_id', 'seller_id', 'order_id'], 'integer'],
+            [['class', 'name', 'unit', 'tariff', 'order_name'], 'string'],
             [['type', 'label', 'ftype', 'time', 'type_label', 'currency'], 'safe'],
             [['sum', 'quantity'], 'number'],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
@@ -71,6 +71,7 @@ class Charge extends Resource
             'label' => Yii::t('hipanel', 'Description'),
             'time' => Yii::t('hipanel', 'Time'),
             'object_id' => Yii::t('hipanel', 'Object Id'),
+            'order_id' => Yii::t('hipanel', 'Order'),
         ]);
     }
 

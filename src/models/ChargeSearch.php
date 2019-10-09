@@ -34,7 +34,7 @@ class ChargeSearch extends Charge
             'time_till',
             'object_ids',
             'label_ilike',
-            'tariff_id_in',
+            'tariff_id',
         ]);
     }
 
@@ -46,6 +46,7 @@ class ChargeSearch extends Charge
         return ArrayHelper::merge(parent::attributeLabels(), [
             'name_ilike' => Yii::t('hipanel', 'Object'),
             'ftype' => Yii::t('hipanel', 'Type'),
+            'tariff_id' => Yii::t('hipanel', 'Tariff'),
         ]);
     }
 }
