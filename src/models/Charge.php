@@ -10,7 +10,7 @@
 
 namespace hipanel\modules\finance\models;
 
-use hipanel\modules\finance\logic\bill\QuantityTrait;
+use hipanel\modules\finance\models\query\ChargeQuery;
 use Yii;
 
 /**
@@ -32,20 +32,28 @@ use Yii;
  * @property TargetObject $latestCommonObject
  * @property Bill $bill
  */
-class Charge extends \hiqdev\hiart\ActiveRecord
+class Charge extends Resource
 {
-    use QuantityTrait;
+    use \hipanel\base\ModelTrait;
 
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
 
     private $isNewRecord;
 
+    /**
+     * @inheritDoc
+     */
+    public static function tableName()
+    {
+        return 'resource';
+    }
+
     public function rules()
     {
         return [
-            [['id', 'type_id', 'object_id', 'bill_id', 'parent_id'], 'integer'],
-            [['class', 'name', 'unit'], 'string'],
+            [['id', 'type_id', 'object_id', 'bill_id', 'parent_id', 'client_id', 'tariff_id', 'seller_id', 'order_id'], 'integer'],
+            [['class', 'name', 'unit', 'tariff', 'order_name', 'client', 'seller'], 'string'],
             [['type', 'label', 'ftype', 'time', 'type_label', 'currency'], 'safe'],
             [['sum', 'quantity'], 'number'],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
@@ -62,7 +70,8 @@ class Charge extends \hiqdev\hiart\ActiveRecord
             'quantity' => Yii::t('hipanel', 'Quantity'),
             'label' => Yii::t('hipanel', 'Description'),
             'time' => Yii::t('hipanel', 'Time'),
-            'object_id' => Yii::t('hipanel', 'Object'),
+            'object_id' => Yii::t('hipanel', 'Object Id'),
+            'order_id' => Yii::t('hipanel', 'Order'),
         ]);
     }
 
@@ -94,5 +103,16 @@ class Charge extends \hiqdev\hiart\ActiveRecord
     public function isMonthly(): bool
     {
         return strpos($this->ftype, 'monthly,') === 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return ChargeQuery
+     */
+    public static function find($options = [])
+    {
+        return new ChargeQuery(get_called_class(), [
+            'options' => $options,
+        ]);
     }
 }

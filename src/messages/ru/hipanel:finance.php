@@ -20,6 +20,7 @@ return [
     'Tariff' => 'Тариф',
     'Tariffs' => 'Тарифы',
     'Servers' => 'Сервера',
+    'Charges' => 'Списания',
 
     '<b>{currency}</b> account' => '<b>{currency}</b> счёт',
     'Are you sure you want to update invoice?' => 'Вы уверены что хотите обновить инвойс',
