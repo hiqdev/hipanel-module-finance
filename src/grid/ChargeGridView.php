@@ -62,7 +62,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'tariff_id',
                 'label' => Yii::t('hipanel', 'Tariff'),
                 'filter' => false,
-                'value' => function ($model) {
+                'value' => function (Charge $model): string {
                     return $model->tariff;
                 },
             ],
@@ -70,7 +70,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'order_id',
                 'label' => Yii::t('hipanel', 'Order'),
                 'filter' => false,
-                'value' => function ($model) {
+                'value' => function (Charge $model): string {
                     return $model->order_name;
                 },
             ],
