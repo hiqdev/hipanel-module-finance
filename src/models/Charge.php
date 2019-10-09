@@ -53,7 +53,7 @@ class Charge extends Resource
     {
         return [
             [['id', 'type_id', 'object_id', 'bill_id', 'parent_id', 'client_id', 'tariff_id', 'seller_id', 'order_id'], 'integer'],
-            [['class', 'name', 'unit', 'tariff', 'order_name'], 'string'],
+            [['class', 'name', 'unit', 'tariff', 'order_name', 'client', 'seller'], 'string'],
             [['type', 'label', 'ftype', 'time', 'type_label', 'currency'], 'safe'],
             [['sum', 'quantity'], 'number'],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],

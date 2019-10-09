@@ -46,7 +46,7 @@ class ChargeSearch extends Charge
         return ArrayHelper::merge(parent::attributeLabels(), [
             'name_ilike' => Yii::t('hipanel', 'Object'),
             'ftype' => Yii::t('hipanel', 'Type'),
-            'tariff_id' => Yii::t('hipanel', 'Tariff'),
+            'tariff_id' => Yii::t('hipanel', 'Plan'),
         ]);
     }
 }

@@ -36,17 +36,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filterModel' => $model,
                     'boxed' => false,
                     'columns' => [
-                        'object_id',
-                        'order',
                         'client',
                         'seller',
                         'tariff',
-                        'label',
                         'type_label',
                         'sum',
                         'name',
                         'quantity',
                         'time',
+                        'label',
                     ],
                 ]) ?>
             <?php $page->endBulkForm() ?>

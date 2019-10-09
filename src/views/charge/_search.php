@@ -6,9 +6,10 @@
  */
 
 use hipanel\modules\client\widgets\combo\ClientCombo;
+use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\widgets\BillTypeFilter;
-use hipanel\modules\finance\widgets\combo\TariffCombo;
+use hipanel\modules\finance\widgets\combo\PlanCombo;
 use hipanel\modules\stock\widgets\combo\OrderCombo;
 use hiqdev\combo\StaticCombo;
 use hiqdev\yii2\daterangepicker\DateRangePicker;
@@ -49,11 +50,11 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('seller_id')->widget(ClientCombo::class, ['clientType' => 'reseller']) ?>
+    <?= $search->field('seller_id')->widget(SellerCombo::class) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('tariff_id')->widget(TariffCombo::class) ?>
+    <?= $search->field('tariff_id')->widget(PlanCombo::class) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
