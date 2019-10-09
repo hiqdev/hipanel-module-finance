@@ -50,7 +50,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     'sale' => [
                         'label'   => Yii::t('hipanel:finance:sale', 'Sales'),
                         'url'     => ['/finance/sale/index'],
-                        'visible' => $user->can('sale.read'),
+                        'visible' => $user->can('sale.read') && Yii::getAlias('@stock', false),
                     ],
                     'generate' => [
                         'label'   => Yii::t('hipanel:finance', 'Generate documents'),
