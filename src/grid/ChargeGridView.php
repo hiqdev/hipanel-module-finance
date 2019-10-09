@@ -55,7 +55,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 'sortAttribute' => 'label_ilike',
                 'label' => Yii::t('hipanel', 'Description'),
                 'value' => function (Charge $model): string {
-                    return $model->label;
+                    return $model->label ?? '';
                 },
             ],
             'tariff' => [
@@ -71,7 +71,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 'label' => Yii::t('hipanel', 'Order'),
                 'filter' => false,
                 'value' => function (Charge $model): string {
-                    return $model->order_name;
+                    return $model->order_name ?? '';
                 },
             ],
             'type_label' => [
