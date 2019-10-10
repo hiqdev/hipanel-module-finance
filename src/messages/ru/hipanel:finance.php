@@ -183,9 +183,9 @@ return [
     'Total:' => 'Всего:',
     '{units, plural, one{# unit} other{# units}} &times; {quantity, plural, one{# day} other{# days}}' => '{units, plural, one{# юнит} few{# юнита} other{# юнитов}} &times; {quantity, plural, one{# день} few{# дня} other{# дней}}',
     'The bill is not unique' => 'Платёж не уникальный',
-    'Pay the whole cart: {amount}' => 'Оплатить всю корзину: {amount}',
+    'Recharge account to pay the whole cart: {amount}' => 'Пополнить счёт, чтобы оплатить всю корзину: {amount}',
     'Checkout total: {amount}' => 'Сумма к оплате: {amount}',
     'Pay {amount} from your balance' => 'Списать {amount} с баланса',
-    'Pay the whole cart: {amount}, including debt {debt}' => 'Оплатить всю корзину: {amount}, включая задолженность {debt}',
+    'Recharge account to pay the whole cart: {amount}, including debt {debt}' => 'Пополнить счёт, чтобы оплатить всю корзину: {amount}, включая задолженность {debt}',
     'Use {balance} from the balance and pay the difference {amount}' => 'Списать {balance} с баланса и доплатить остаток {amount}',
 ];

@@ -170,7 +170,7 @@ final class CartCurrencyNegotiator extends Widget
             'currency' => $currency,
         ];
 
-        if ($purse->getBudget() >= $amount) {
+        if ($purse->getBudget() >= $amount || Yii::$app->user->can('manage')) {
             echo $this->render('enough', $options);
         } elseif ($purse->getBudget() > 0) {
             echo $this->render('partial', array_merge($options, [

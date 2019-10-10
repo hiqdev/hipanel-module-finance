@@ -12,12 +12,12 @@ use yii\helpers\Html;
  */
 
 if (isset($debt)) {
-    $text = Yii::t('hipanel:finance', 'Pay the whole cart: {amount}, including debt {debt}', [
+    $text = Yii::t('hipanel:finance', 'Recharge account to pay the whole cart: {amount}, including debt {debt}', [
         'amount' => Yii::$app->formatter->asCurrency($amount, $currency),
         'debt' => Yii::$app->formatter->asCurrency($debt, $currency),
     ]);
 } else {
-    $text = Yii::t('hipanel:finance', 'Pay the whole cart: {amount}', [
+    $text = Yii::t('hipanel:finance', 'Recharge account to pay the whole cart: {amount}', [
         'amount' => Yii::$app->formatter->asCurrency($amount, $currency)
     ]);
 }
