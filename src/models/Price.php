@@ -10,6 +10,8 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\base\Model;
+use hipanel\base\ModelTrait;
 use hipanel\models\Ref;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
 use Money\Money;
@@ -32,15 +34,16 @@ use yii\helpers\StringHelper;
  * @property string $type
  * @property string $quantity
  * @property string $formula
+ * @property int|null parent_id
  *
  * @property TargetObject $object
  * @property Plan $plan
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class Price extends \hipanel\base\Model
+class Price extends Model
 {
-    use \hipanel\base\ModelTrait;
+    use ModelTrait;
 
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
@@ -61,6 +64,7 @@ class Price extends \hipanel\base\Model
             }],
             [['class'], 'string'],
             [['formula'], 'string', 'on' => ['create', 'update']], // TODO syn check
+            [['count_aggregated_traffic'], 'boolean'],
         ]);
     }
 
@@ -75,6 +79,7 @@ class Price extends \hipanel\base\Model
             'formula' => Yii::t('hipanel.finance.price', 'Formula'),
             'note' => Yii::t('hipanel', 'Note'),
             'type' => Yii::t('hipanel', 'Type'),
+            'count_aggregated_traffic' => Yii::t('hipanel', 'Calculate aggregated traffic'),
         ];
     }
 
@@ -153,6 +158,11 @@ class Price extends \hipanel\base\Model
     public function isShared(): bool
     {
         return $this->object_id === null;
+    }
+
+    public function canCountAggregatedTraffic(): bool
+    {
+        return $this->type === 'overuse,server_traf95_max' && $this->parent_id;
     }
 
     public function getUnitLabel()

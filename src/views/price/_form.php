@@ -2,14 +2,17 @@
 
 use hipanel\helpers\Url;
 use hipanel\modules\finance\assets\PriceEstimator;
+use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\TemplatePrice;
+use hipanel\widgets\DynamicFormInputsValueInheritor;
 use hipanel\widgets\DynamicFormWidget;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var \hipanel\modules\finance\models\Price[] $models */
-/** @var \hipanel\modules\finance\models\Plan|null $plan */
+/** @var Price[] $models */
+/** @var Plan|null $plan */
 $model = reset($models);
 
 $form = ActiveForm::begin([
@@ -53,7 +56,7 @@ $form = ActiveForm::begin([
                 <?php endif ?>
                 <?= Html::activeHiddenInput($model, "[$i]plan_id", ['ref' => 'plan_id']) ?>
                 <div class="row input-row">
-                    <?php if ($model instanceof \hipanel\modules\finance\models\TemplatePrice): ?>
+                    <?php if ($model instanceof TemplatePrice): ?>
                         <?= $this->render('formRow/template', compact('plan', 'model', 'form', 'i')) ?>
                     <?php else: ?>
                         <?= $this->render('formRow/simple', compact('plan', 'model', 'form', 'i')) ?>
@@ -86,7 +89,7 @@ $form = ActiveForm::begin([
 </div>
 <?php ActiveForm::end() ?>
 
-<?= \hipanel\widgets\DynamicFormInputsValueInheritor::widget([
+<?= DynamicFormInputsValueInheritor::widget([
     'itemSelector' => '.price-item',
     'inputSelectors' => ['input[ref=object_id]', 'input[ref=object]', 'input[ref=plan_id]', 'input[ref=currency]'],
 ]) ?>
@@ -104,7 +107,7 @@ $('#prices-form').priceEstimator({
 $('#update-estimates').click(function() {
     $('#total-label').css({display: 'inline-block'});
     $('#prices-form').priceEstimator().update();
-})
+});
 
 hipanel.form.preventSubmitWithEnter('#prices-form')
 JS

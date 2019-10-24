@@ -1,19 +1,27 @@
 <?php
 
+use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\FormulaInput;
+use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\widgets\AmountWithCurrency;
+use hipanel\widgets\XEditable;
 use yii\bootstrap\Html;
+use yii\web\JsExpression;
+use yii\widgets\ActiveForm;
 
 /**
- * @var \hipanel\modules\finance\models\Plan|null $plan
- * @var \hipanel\modules\finance\models\Price $model
- * @var \yii\widgets\ActiveForm $form
+ * @var Plan|null $plan
+ * @var Price $model
+ * @var ActiveForm $form
  */
 ?>
 
 <div class="form-instance">
     <div class="col-md-2" style="white-space: normal">
         <?= Html::activeHiddenInput($model, "[$i]object_id", ['ref' => 'object_id']) ?>
+        <?= Html::activeHiddenInput($model, "[$i]plan_id") ?>
         <?= Html::activeHiddenInput($model, "[$i]type") ?>
         <?= Html::activeHiddenInput($model, "[$i]class") ?>
         <?= Html::activeHiddenInput($model, "[$i]object", ['value' => $model->object->name]) ?>
@@ -26,7 +34,7 @@ use yii\bootstrap\Html;
                 <i><?= Yii::t('hipanel.finance.price', 'Any object') ?></i>
             <?php else: ?>
                 <strong>
-                    <?= \hipanel\modules\finance\widgets\LinkToObjectResolver::widget([
+                    <?= LinkToObjectResolver::widget([
                         'model' => $model->object,
                         'labelAttribute' => 'name',
                         'linkOptions' => [
@@ -36,25 +44,25 @@ use yii\bootstrap\Html;
                 </strong>
             <?php endif ?>
             <?php if (!empty($model->object->label)) : ?>
-                <br /><?= Html::encode($model->object->label) ?>
+                <br/><?= Html::encode($model->object->label) ?>
             <?php endif; ?>
-            <br />
-            <?= \hipanel\modules\finance\widgets\BillType::widget([
+            <br/>
+            <?= BillType::widget([
                 'model' => $model,
                 'field' => 'type',
-            ])?>
-            <br />
-            <?= \hipanel\widgets\XEditable::widget([
+            ]) ?>
+            <br/>
+            <?= XEditable::widget([
                 'model' => $model,
                 'attribute' => 'note',
                 'pluginOptions' => [
-                    'url' => new \yii\web\JsExpression(<<<'JS'
+                    'url' => new JsExpression(<<<'JS'
                     function(params) {
                         $(this).closest('.form-instance').find('input[data-attribute=note]').val(params.value);
                         return $.Deferred().resolve();
                     }
 JS
-                ),
+                    ),
                 ],
             ]) ?>
         </div>
@@ -93,4 +101,9 @@ JS
             <i class="glyphicon glyphicon-minus"></i>
         </button>
     </div>
+    <?php if ($model->canCountAggregatedTraffic()) : ?>
+        <div class="col-md-12 col-md-offset-2" style="margin-top: -1em">
+            <?= $form->field($model, "[$i]count_aggregated_traffic")->checkbox()->hint(Yii::t('hipanel.finance.price', '(reasonable for grouping tariffs only)')) ?>
+        </div>
+    <?php endif ?>
 </div>
