@@ -14,6 +14,7 @@ use hipanel\helpers\StringHelper;
 use hipanel\modules\finance\models\CertificatePrice;
 use hipanel\modules\finance\models\DomainServicePrice;
 use hipanel\modules\finance\models\DomainZonePrice;
+use hipanel\modules\finance\models\OveruseServerPrice;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\TemplatePrice;
 use yii\base\InvalidConfigException;
@@ -36,6 +37,7 @@ class PriceModelFactory
         'SinglePrice' => [
             'domain,*' => DomainZonePrice::class,
             'feature,*' => DomainServicePrice::class,
+            'overuse,server_traf95_max' => OveruseServerPrice::class,
             '*' => Price::class,
         ],
         'CertificatePrice' => CertificatePrice::class,

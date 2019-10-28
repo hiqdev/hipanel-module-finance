@@ -64,7 +64,6 @@ class Price extends Model
             }],
             [['class'], 'string'],
             [['formula'], 'string', 'on' => ['create', 'update']], // TODO syn check
-            [['count_aggregated_traffic'], 'boolean'],
         ]);
     }
 
@@ -158,11 +157,6 @@ class Price extends Model
     public function isShared(): bool
     {
         return $this->object_id === null;
-    }
-
-    public function canCountAggregatedTraffic(): bool
-    {
-        return $this->type === 'overuse,server_traf95_max';
     }
 
     public function getUnitLabel()
