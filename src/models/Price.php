@@ -78,7 +78,6 @@ class Price extends Model
             'formula' => Yii::t('hipanel.finance.price', 'Formula'),
             'note' => Yii::t('hipanel', 'Note'),
             'type' => Yii::t('hipanel', 'Type'),
-            'count_aggregated_traffic' => Yii::t('hipanel', 'Calculate aggregated traffic'),
         ];
     }
 
