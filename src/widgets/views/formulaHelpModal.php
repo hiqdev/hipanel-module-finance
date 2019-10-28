@@ -34,14 +34,15 @@ $widget = $this->context;
             [
                 'format' => 'raw',
                 'value' => function ($description, $formula) {
+                    $copy = Yii::t('hipanel', 'Copy');
                     if (is_numeric($formula)) {
                         $formula = $description;
                         $description = null;
                     }
 
                     $result = '<kbd class="javascript">' . $formula . '</kbd>';
-                    $result .= <<<'HTML'
-<button class="btn btn-small" onClick="$(this).closest('.modal').data('onPasteRequested').call(this)">
+                    $result .= <<<"HTML"
+<button class="btn btn-xs" onClick="$(this).closest('.modal').data('onPasteRequested').call(this)" title="{$copy}">
     <i class="fa fa-paste"></i>
 </button>
 HTML;
