@@ -162,7 +162,7 @@ class Price extends Model
 
     public function canCountAggregatedTraffic(): bool
     {
-        return $this->type === 'overuse,server_traf95_max' && $this->parent_id;
+        return $this->type === 'overuse,server_traf95_max';
     }
 
     public function getUnitLabel()
