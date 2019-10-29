@@ -14,8 +14,8 @@ use Yii;
 
 class DomainServicePrice extends Price
 {
-    const SERVICE_OPERATION_PURCHASE = 'feature,premium_dns_purchase';
-    const SERVICE_OPERATION_RENEW = 'feature,premium_dns_renew';
+    const FEATURE_PREMIUM_DNS_PURCHASE = 'feature,premium_dns_purchase';
+    const FEATURE_PREMIUM_DNS_RENEW    = 'feature,premium_dns_renew';
 
     public static function tableName()
     {
@@ -37,8 +37,8 @@ class DomainServicePrice extends Price
     public static function getOperations(): array
     {
         return [
-            static::SERVICE_OPERATION_PURCHASE => Yii::t('hipanel:finance:tariff', 'Purchase'),
-            static::SERVICE_OPERATION_RENEW => Yii::t('hipanel:finance:tariff', 'Renewal'),
+            static::FEATURE_PREMIUM_DNS_PURCHASE => Yii::t('hipanel:finance:tariff', 'Purchase'),
+            static::FEATURE_PREMIUM_DNS_RENEW => Yii::t('hipanel:finance:tariff', 'Renewal'),
         ];
     }
 
