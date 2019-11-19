@@ -14,8 +14,10 @@ use Yii;
 
 class DomainServicePrice extends Price
 {
-    const FEATURE_PREMIUM_DNS_PURCHASE = 'feature,premium_dns_purchase';
-    const FEATURE_PREMIUM_DNS_RENEW    = 'feature,premium_dns_renew';
+    const FEATURE_PREMIUM_DNS_PURCHASE   = 'feature,premium_dns_purchase';
+    const FEATURE_PREMIUM_DNS_RENEW      = 'feature,premium_dns_renew';
+    const FEATURE_WHOIS_PROTECT_PURCHASE = 'feature,whois_protect_purchase';
+    const FEATURE_WHOIS_PROTECT_RENEW    = 'feature,whois_protect_renew';
 
     public static function tableName()
     {
@@ -39,14 +41,21 @@ class DomainServicePrice extends Price
         return [
             static::FEATURE_PREMIUM_DNS_PURCHASE => Yii::t('hipanel:finance:tariff', 'Purchase'),
             static::FEATURE_PREMIUM_DNS_RENEW => Yii::t('hipanel:finance:tariff', 'Renewal'),
+            static::FEATURE_WHOIS_PROTECT_PURCHASE => Yii::t('hipanel:finance:tariff', 'Purchase'),
+            static::FEATURE_WHOIS_PROTECT_RENEW => Yii::t('hipanel:finance:tariff', 'Renewal'),
         ];
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public static function getLabel(): string
+    public static function getLabel(string $labelType): ?string
     {
-        return Yii::t('hipanel:finance:tariff', 'Premium DNS');
+        $variants = [
+            'premium_dns' => Yii::t('hipanel:finance:tariff', 'Premium DNS'),
+            'whois_protect' => Yii::t('hipanel:finance:tariff', 'WHOIS Protect'),
+        ];
+
+        return $variants[$labelType];
     }
 }
