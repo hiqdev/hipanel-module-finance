@@ -88,32 +88,41 @@ CSS
         </div>
     </div>
     <div class="col-md-9">
-        <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
-            <?php if (in_array($model->type, [
-                Plan::TYPE_SERVER,
-                Plan::TYPE_VCDN,
-                Plan::TYPE_PCDN,
-                Plan::TYPE_TEMPLATE,
-                Plan::TYPE_CERTIFICATE,
-                Plan::TYPE_DOMAIN,
-                Plan::TYPE_SWITCH,
-                Plan::TYPE_AVDS,
-                Plan::TYPE_OVDS,
-                Plan::TYPE_SVDS,
-                Plan::TYPE_CLIENT,
-                Plan::TYPE_HARDWARE,
-            ], true)): ?>
-                <?php $page->beginContent('show-actions') ?>
+        <div class="col">
+            <div class="row-md-12">
+                <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
+                <?php if (in_array($model->type, [
+                    Plan::TYPE_SERVER,
+                    Plan::TYPE_VCDN,
+                    Plan::TYPE_PCDN,
+                    Plan::TYPE_TEMPLATE,
+                    Plan::TYPE_CERTIFICATE,
+                    Plan::TYPE_DOMAIN,
+                    Plan::TYPE_SWITCH,
+                    Plan::TYPE_AVDS,
+                    Plan::TYPE_OVDS,
+                    Plan::TYPE_SVDS,
+                    Plan::TYPE_CLIENT,
+                    Plan::TYPE_HARDWARE,
+                ], true)): ?>
+                    <?php $page->beginContent('show-actions') ?>
                     <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>
-                <?php $page->endContent() ?>
-                <?= $this->render($model->type . '/view', compact('model', 'grouper', 'page', 'parentPrices')) ?>
-            <?php else: ?>
-                <?php $page->beginContent('table') ?>
+                    <?php $page->endContent() ?>
+                    <?= $this->render($model->type . '/view', compact('model', 'grouper', 'page', 'parentPrices')) ?>
+                <?php else: ?>
+                    <?php $page->beginContent('table') ?>
                     <div class="col-md-12">
                         <h2><?= Yii::t('hipanel:finance', 'This plan type viewing is not implemented yet') ?></h2>
                     </div>
-                <?php $page->endContent() ?>
-            <?php endif; ?>
-        <?php $page->end() ?>
+                    <?php $page->endContent() ?>
+                <?php endif; ?>
+                <?php $page->end() ?>
+            </div>
+            <div class="row-md-12">
+                <?= \hipanel\modules\finance\widgets\TariffHistoryWidget::widget([
+                    'models' => $models,
+                ]) ?>
+            </div>
+        </div>
     </div>
 </div>
