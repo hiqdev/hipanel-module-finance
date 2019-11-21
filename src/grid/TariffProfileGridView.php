@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\grid\BoxedGridView;
 use hipanel\modules\finance\menus\ProfileActionsMenu;
 use hipanel\modules\finance\models\Tariff;
 use hipanel\modules\finance\models\TariffProfile;
@@ -17,7 +18,7 @@ use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\helpers\Html;
 
-class TariffProfileGridView extends \hipanel\grid\BoxedGridView
+class TariffProfileGridView extends BoxedGridView
 {
     public function columns()
     {
@@ -145,6 +146,6 @@ class TariffProfileGridView extends \hipanel\grid\BoxedGridView
 
     protected function tariffLink($id, $name)
     {
-        return Html::a($name, ['@tariff/view', 'id' => $id]);
+        return Html::a($name, ['@plan/view', 'id' => $id]);
     }
 }
