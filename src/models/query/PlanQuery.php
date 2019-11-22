@@ -61,4 +61,21 @@ class PlanQuery extends \hiqdev\hiart\ActiveQuery
             },
         ]);
     }
+
+    public function withSales()
+    {
+        $this
+            ->joinWith('sales')
+            ->andWhere(['state' => ['ok', 'deleted']]);
+
+        return $this;
+    }
+
+    public function withPlanHistory()
+    {
+        $this
+            ->joinWith('PlanHistory')
+            ->andWhere(['planHistory' => true]);
+        return $this;
+    }
 }

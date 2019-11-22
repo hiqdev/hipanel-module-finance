@@ -7,7 +7,7 @@ use yii\bootstrap\Html;
 
 /**
  * @var \yii\web\View $this
- * @var \hipanel\modules\finance\widgets\TariffHistoryWidget $widget
+ * @var \hipanel\modules\finance\widgets\PlanHistoryWidget $widget
  * @var array $models
  */
 

@@ -4,6 +4,7 @@ use hipanel\modules\finance\grid\PlanGridView;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\menus\PlanDetailMenu;
 use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\widgets\PlanHistoryWidget;
 use hipanel\widgets\IndexPage;
 use yii\helpers\Html;
 
@@ -119,7 +120,7 @@ CSS
                 <?php $page->end() ?>
             </div>
             <div class="row-md-12">
-                <?= \hipanel\modules\finance\widgets\TariffHistoryWidget::widget([
+                <?= PlanHistoryWidget::widget([
                     'models' => $models,
                 ]) ?>
             </div>

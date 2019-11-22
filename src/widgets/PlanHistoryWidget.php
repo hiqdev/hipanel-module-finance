@@ -14,7 +14,7 @@ use Yii;
 use yii\base\InvalidArgumentException;
 use yii\base\Widget;
 
-class TariffHistoryWidget extends Widget
+class PlanHistoryWidget extends Widget
 {
     public $model;
 
@@ -30,7 +30,7 @@ class TariffHistoryWidget extends Widget
             throw new InvalidArgumentException('Model or models must be set');
         }
 
-        return $this->render('TariffHistoryWidget', [
+        return $this->render('PlanHistoryWidget', [
             'models' => $models,
             'widget' => $this,
         ]);

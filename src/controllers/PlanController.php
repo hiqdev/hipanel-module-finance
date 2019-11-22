@@ -29,6 +29,7 @@ use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\PriceSuggestionRequestForm;
+use hipanel\modules\finance\models\query\PlanQuery;
 use hipanel\modules\finance\models\TargetObject;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
@@ -94,11 +95,12 @@ class PlanController extends CrudController
             'view' => [
                 'class' => ViewAction::class,
                 'on beforePerform' => function (Event $event) {
-                    $action = $event->sender;
-                    $action->getDataProvider()->query
-                        ->joinWith('sales')
-                        ->andWhere(['state' => ['ok', 'deleted']])
-                        ->withPrices();
+                    /** @var PlanQuery $query */
+                    $query = $event->sender->getDataProvider()->query;
+                    $query
+                        ->withSales()
+                        ->withPrices()
+                        ->withPlanHistory();
                 },
                 'data' => function (Action $action, array $data) {
                     return array_merge($data, array_filter([

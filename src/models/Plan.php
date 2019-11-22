@@ -93,6 +93,11 @@ class Plan extends Model
         return $this->hasMany(Price::class, ['plan_id' => 'id'])->indexBy('id')->inverseOf('plan');
     }
 
+    public function getPlanHistory()
+    {
+        return $this->hasMany(PlanHistory::class, ['id' => 'tariff_id']);
+    }
+
     public function getDesiredPriceClass()
     {
         if ($this->type === Plan::TYPE_CERTIFICATE) {
