@@ -22,9 +22,9 @@ class PlanHistoryWidget extends Widget
 
     public function run()
     {
-        if (empty($this->model)) {
+        if (!empty($this->model)) {
             $models = [$this->model];
-        } elseif (empty($this->model)) {
+        } elseif (!empty($this->models)) {
             $models = $this->models;
         } else {
             throw new InvalidArgumentException('Model or models must be set');

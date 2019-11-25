@@ -13,6 +13,16 @@ namespace hipanel\modules\finance\models;
 use hipanel\base\Model;
 use hipanel\base\ModelTrait;
 
+/**
+ * Class PlanHistory
+ * @package hipanel\modules\finance\models
+ *
+ * @property int $tariff_id
+ * @property int $type_id
+ * @property int|float $old_price
+ * @property string $type_name
+ * @property \DateTime $time
+ */
 class PlanHistory extends Model
 {
     use ModelTrait;
@@ -23,6 +33,7 @@ class PlanHistory extends Model
             [['id', 'tariff_id', 'type_id'], 'integer'],
             [['old_price'], 'number'],
             [['type_name'], 'string'],
+            [['time'], 'date'],
         ]);
     }
 
