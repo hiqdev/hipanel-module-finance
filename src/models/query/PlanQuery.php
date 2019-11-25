@@ -74,7 +74,7 @@ class PlanQuery extends \hiqdev\hiart\ActiveQuery
     public function withPlanHistory()
     {
         $this
-            ->joinWith('PlanHistory')
+            ->joinWith('planHistory')
             ->andWhere(['planHistory' => true]);
         return $this;
     }

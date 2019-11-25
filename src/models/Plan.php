@@ -95,7 +95,7 @@ class Plan extends Model
 
     public function getPlanHistory()
     {
-        return $this->hasMany(PlanHistory::class, ['id' => 'tariff_id']);
+        return $this->hasMany(PlanHistory::class, ['tariff_id' => 'id']);
     }
 
     public function getDesiredPriceClass()
