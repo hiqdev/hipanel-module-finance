@@ -10,16 +10,19 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\base\Model;
 use hipanel\base\ModelTrait;
 
-class PlanHistory extends Plan
+class PlanHistory extends Model
 {
     use ModelTrait;
 
     public function rules()
     {
         return array_merge(parent::rules(), [
-
+            [['id', 'tariff_id', 'type_id'], 'integer'],
+            [['old_price'], 'number'],
+            [['type_name'], 'string'],
         ]);
     }
 

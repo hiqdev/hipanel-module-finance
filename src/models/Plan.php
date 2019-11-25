@@ -28,6 +28,7 @@ use Yii;
  * @property bool $is_grouping
  * @property bool $your_tariff
  *
+ * @property PlanHistory[] $planHistory
  * @property Sale[] $sales
  * @property Price[]|CertificatePrice[] $prices
  * @property-read string[] typeOptions
