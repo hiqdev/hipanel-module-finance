@@ -21,6 +21,7 @@ use hipanel\base\ModelTrait;
  * @property int $type_id
  * @property int|float $old_price
  * @property string $type_name
+ * @property string $name
  * @property \DateTime $time
  */
 class PlanHistory extends Model
@@ -32,7 +33,7 @@ class PlanHistory extends Model
         return array_merge(parent::rules(), [
             [['id', 'tariff_id', 'type_id'], 'integer'],
             [['old_price'], 'number'],
-            [['type_name'], 'string'],
+            [['type_name', 'name'], 'string'],
             [['time'], 'date'],
         ]);
     }

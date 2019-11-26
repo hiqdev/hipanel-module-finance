@@ -103,15 +103,6 @@ class PlanController extends CrudController
                         ->withPlanHistory();
                 },
                 'data' => function (Action $action, array $data) {
-                    foreach ($data['models'] as $model) {
-                        $tmp = $model->planHistory;
-//                        $kek = ArrayHelper::index($model->planHistory, function ($p1, $p2) {
-//                            return $p1->time;
-//                        });
-                    }
-
-
-
                     return array_merge($data, array_filter([
                         'grouper' => new PlanInternalsGrouper($data['model']),
                         'parentPrices' => Yii::$app->user->can('plan.update') ? $this->getParentPrices($data['model']['id']) : null,

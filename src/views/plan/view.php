@@ -13,6 +13,7 @@ use yii\helpers\Html;
  * @var Plan $model
  * @var PlanInternalsGrouper $grouper
  * @var array $parentPrices
+ * @var \hipanel\modules\finance\models\PlanHistory[] $plansHistory
  */
 $this->title = $model->name ? Html::encode($model->name) : '&nbsp;';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
@@ -121,7 +122,7 @@ CSS
             </div>
             <div class="row-md-12">
                 <?= PlanHistoryWidget::widget([
-                    'models' => $models,
+                    'model' => $model,
                 ]) ?>
             </div>
         </div>

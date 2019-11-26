@@ -7,6 +7,7 @@ use hipanel\modules\finance\models\PlanHistory;
 use hipanel\modules\finance\widgets\PlanHistoryWidget;
 use hipanel\widgets\ArraySpoiler;
 use yii\bootstrap\Html;
+use yii\helpers\Url;
 use yii\web\View;
 
 /**
@@ -22,21 +23,29 @@ use yii\web\View;
 <div class="row-md-12">
     <div class="col-md-12"><?= Yii::t('hipanel:finance', 'Tarriffs history') ?></div>
 
-    <?php foreach ($models as $key => $model): ?>
-        <?php $history = $model->planHistory ?>
+    <?php foreach ($models as $date => $dateModels): ?>
         <?= ArraySpoiler::widget([
-            'data' => $history,
-            'delimiter' => '<br />',
+            'data' => $dateModels,
+            'delimiter' => '<hr />',
             'visibleCount' => 0,
             'formatter' => function ($model, $idx) {
-                return 'some';
-    //        return Html::a($part->title, Url::toRoute(['@part/view', 'id' => $part->id]), [
-    //            'class' => 'text-bold',
-    //            'target' => '_blank',
-    //        ]);
+                /** @var PlanHistory $model */
+                return "
+                    <div>
+                        <div>
+                            Name: {$model->name}               
+                        </div>
+                        <div>
+                            Old price: {$model->old_price}               
+                        </div>
+                        <div>
+                            Type: {$model->type_name}               
+                        </div>
+                    </div>
+                ";
             },
             'button' => [
-                'label' => $history->time,
+                'label' => $date,
                 'tag' => 'button',
                 'type' => 'button',
                 'class' => 'btn btn-xs btn-flat',
@@ -44,7 +53,7 @@ use yii\web\View;
                 'popoverOptions' => [
                     'html' => true,
                     'placement' => 'bottom',
-                    'title' => Html::a(Yii::t('hipanel:finance', 'Show all items'), TariffController::getSearchUrl(['tariff_id' => 'id'])),
+                    'title' => Html::a(Yii::t('hipanel:finance', 'Show detailed history'), TariffController::getSearchUrl(['tariff_id' => 'id'])),
                     'template' => '
                     <div class="popover" role="tooltip">
                         <div class="arrow"></div>

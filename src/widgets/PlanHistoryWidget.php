@@ -10,28 +10,21 @@
 
 namespace hipanel\modules\finance\widgets;
 
-use Yii;
-use yii\base\InvalidArgumentException;
+use hipanel\helpers\ArrayHelper;
 use yii\base\Widget;
 
 class PlanHistoryWidget extends Widget
 {
     public $model;
 
-    public $models;
-
     public function run()
     {
-        if (!empty($this->model)) {
-            $models = [$this->model];
-        } elseif (!empty($this->models)) {
-            $models = $this->models;
-        } else {
-            throw new InvalidArgumentException('Model or models must be set');
-        }
+        $planHistory = ArrayHelper::index($this->model->planHistory, 'id', [function ($el) {
+            return $el->time;
+        }]);
 
         return $this->render('PlanHistoryWidget', [
-            'models' => $models,
+            'models' => array_filter($planHistory),
             'widget' => $this,
         ]);
     }
