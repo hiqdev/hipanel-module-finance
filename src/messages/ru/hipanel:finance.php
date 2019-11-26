@@ -188,4 +188,7 @@ return [
     'Pay {amount} from your balance' => 'Списать {amount} с баланса',
     'Recharge account to pay the whole cart: {amount}, including debt {debt}' => 'Пополнить счёт, чтобы оплатить всю корзину: {amount}, включая задолженность {debt}',
     'Use {balance} from the balance and pay the difference {amount}' => 'Списать {balance} с баланса и доплатить остаток {amount}',
+    'Is payed?' => 'Оплачено?',
+    'Charge paid' => 'Да, оплачено',
+    'Charge not paid' => 'Нет, не оплачено',
 ];

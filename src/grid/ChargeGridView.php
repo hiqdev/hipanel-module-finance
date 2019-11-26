@@ -19,6 +19,7 @@ use hipanel\modules\finance\models\ChargeSearch;
 use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\BillTypeFilter;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
+use hipanel\widgets\IconStateLabel;
 use hiqdev\higrid\DataColumn;
 use Yii;
 use yii\helpers\Html;
@@ -147,6 +148,25 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                         : Yii::$app->formatter->asDateTime($model->time);
                 },
             ],
+            'is_payed' => [
+                'attribute' => 'is_payed',
+                'format' => 'raw',
+                'filter' => false,
+                'contentOptions' => ['class' => 'text-center'],
+                'headerOptions' => ['class' => 'text-center'],
+                'value' => static function (Charge $model) {
+                    return IconStateLabel::widget([
+                        'model' => $model,
+                        'attribute' => 'is_payed',
+                        'icons' => ['fa-check', 'fa-times'],
+                        'colors' => ['#00a65a', '#dd4b39'],
+                        'messages' => [
+                            Yii::t('hipanel:finance', 'Charge paid'),
+                            Yii::t('hipanel:finance', 'Charge not paid'),
+                        ],
+                    ]);
+                }
+            ]
         ]);
     }
 
