@@ -27,6 +27,7 @@ use Yii;
  * @property string $ftype
  * @property string $currency
  * @property float $sum
+ * @property float $is_payed
  * @property int object_id
  * @property TargetObject $commonObject
  * @property TargetObject $latestCommonObject
@@ -55,6 +56,7 @@ class Charge extends Resource
             [['id', 'type_id', 'object_id', 'bill_id', 'parent_id', 'client_id', 'tariff_id', 'seller_id', 'order_id'], 'integer'],
             [['class', 'name', 'unit', 'tariff', 'order_name', 'client', 'seller'], 'string'],
             [['type', 'label', 'ftype', 'time', 'type_label', 'currency'], 'safe'],
+            [['is_payed'], 'boolean'],
             [['sum', 'quantity'], 'number'],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['object_id', 'sum', 'type', 'quantity', 'unit'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
@@ -72,6 +74,7 @@ class Charge extends Resource
             'time' => Yii::t('hipanel', 'Time'),
             'object_id' => Yii::t('hipanel', 'Object Id'),
             'order_id' => Yii::t('hipanel', 'Order'),
+            'is_payed' => Yii::t('hipanel:finance', 'Is payed?'),
         ]);
     }
 
