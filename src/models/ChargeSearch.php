@@ -27,7 +27,7 @@ class ChargeSearch extends Charge
     /**
      * @inheritDoc
      */
-    public function searchAttributes()
+    public function searchAttributes(): array
     {
         return ArrayHelper::merge($this->defaultSearchAttributes(), [
             'time_from',
@@ -35,6 +35,7 @@ class ChargeSearch extends Charge
             'object_ids',
             'label_ilike',
             'tariff_id',
+            'is_payed',
         ]);
     }
 

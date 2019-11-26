@@ -20,6 +20,7 @@ use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\BillTypeFilter;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\widgets\IconStateLabel;
+use hiqdev\combo\StaticCombo;
 use hiqdev\higrid\DataColumn;
 use Yii;
 use yii\helpers\Html;
@@ -151,7 +152,17 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             'is_payed' => [
                 'attribute' => 'is_payed',
                 'format' => 'raw',
-                'filter' => false,
+                'enableSorting' => false,
+                'filter' => StaticCombo::widget([
+                    'attribute' => 'is_payed',
+                    'model' => $this->filterModel,
+                    'data' => [
+                        0 => Yii::t('hipanel:finance', 'Charge not paid'),
+                        1 => Yii::t('hipanel:finance', 'Charge paid'),
+                    ],
+                    'hasId' => true,
+                    'inputOptions' => ['id' => 'is_payed'],
+                ]),
                 'contentOptions' => ['class' => 'text-center'],
                 'headerOptions' => ['class' => 'text-center'],
                 'value' => static function (Charge $model) {
