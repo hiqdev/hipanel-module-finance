@@ -30,7 +30,7 @@ class ValueColumn extends Column
         parent::init();
         $this->header = Yii::t('hipanel.finance.plan', 'Estimated value');
         $this->planId = $this->findPlanId();
-        $this->regesterClientScript();
+        $this->registerClientScript();
     }
 
     protected function renderDataCellContent($model, $key, $index)
@@ -44,7 +44,7 @@ class ValueColumn extends Column
         ]), ['class' => 'price-estimates']), ['class' => 'price-item', 'data' => ['id' => $model->id]]);
     }
 
-    private function regesterClientScript()
+    private function registerClientScript()
     {
         $calculateValueUrl = Url::toRoute(['@plan/calculate-values', 'planId' => $this->planId]);
         $view = Yii::$app->view;
