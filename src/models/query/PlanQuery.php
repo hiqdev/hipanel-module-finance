@@ -71,11 +71,11 @@ class PlanQuery extends \hiqdev\hiart\ActiveQuery
         return $this;
     }
 
-    public function withPlanHistory()
+    public function withPriceHistory()
     {
         $this
-            ->joinWith('planHistory')
-            ->andWhere(['planHistory' => true]);
+            ->joinWith('priceHistory')
+            ->andWhere(['priceHistory' => true]);
         return $this;
     }
 }

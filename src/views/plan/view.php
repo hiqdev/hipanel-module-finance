@@ -118,13 +118,16 @@ CSS
                     </div>
                     <?php $page->endContent() ?>
                 <?php endif; ?>
+
                 <?php $page->end() ?>
             </div>
-            <div class="row-md-12">
-                <?= PlanHistoryWidget::widget([
-                    'model' => $model,
-                ]) ?>
-            </div>
+<!--            <div class="row-md-12">-->
+<!--                --><?//= PlanHistoryWidget::widget([
+//                    'model' => $model,
+//                    'grouper' => $grouper,
+//                    'parentPrices' => $parentPrices,
+//                ]) ?>
+<!--            </div>-->
         </div>
     </div>
 </div>

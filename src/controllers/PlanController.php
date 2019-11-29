@@ -22,19 +22,23 @@ use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\collections\PricesCollection;
+use hipanel\modules\finance\grid\SalesInPlanGridView;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\helpers\PriceChargesEstimator;
 use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\PriceHistory;
 use hipanel\modules\finance\models\PriceSuggestionRequestForm;
 use hipanel\modules\finance\models\query\PlanQuery;
 use hipanel\modules\finance\models\TargetObject;
+use hipanel\modules\finance\widgets\PlanHistoryWidget;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\Event;
 use yii\base\Module;
+use yii\data\ArrayDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\UnprocessableEntityHttpException;
@@ -100,7 +104,7 @@ class PlanController extends CrudController
                     $query
                         ->withSales()
                         ->withPrices()
-                        ->withPlanHistory();
+                        ->withPriceHistory();
                 },
                 'data' => function (Action $action, array $data) {
                     return array_merge($data, array_filter([
@@ -158,6 +162,56 @@ class PlanController extends CrudController
 
         return $this->render($plan->type . '/' . 'createPrices',
             compact('plan', 'grouper', 'parentPrices', 'action', 'plan_id'));
+    }
+
+    public function actionGetPlanHistory(int $plan_id, string $date)
+    {
+        $plan = Plan::find()
+                    ->where(['id' => $plan_id])
+                    ->withSales()
+                    ->withPriceHistory()
+                    ->one();
+
+//        $priceHistory = PriceHistory::find()
+//                            ->where(['tariff_id' => $plan_id])
+//                            ->andWhere(['time' => $date])
+//                            ->all();
+
+        $plan->populateRelation('prices',  $plan->priceHistory);
+
+
+        $grouper = new PlanInternalsGrouper($plan);
+//        $parentPrices = $this->getParentPrices($plan_id);
+
+        [$salesByObject, $pricesByMainObject] = $grouper->group();
+
+//        $saleId = reset($salesByObject)->object_id;
+//        $pricesByMainObject[$saleId] = $priceHistory;
+
+        return SalesInPlanGridView::widget([
+            'options' => [
+                'data-time' => $date,
+            ],
+            'boxed' => false,
+            'showHeader' => false,
+            'pricesBySoldObject' => $pricesByMainObject,
+            'dataProvider' => new ArrayDataProvider([
+                'allModels' => $salesByObject,
+                'pagination' => false,
+            ]),
+            'summaryRenderer' => function () {
+                return ''; // remove unnecessary summary
+            },
+            'columns' => [
+                'object_link',
+                'object_label',
+                'seller',
+                'buyer',
+                'time',
+                'price_related_actions',
+                'estimate_placeholder',
+            ],
+        ]);
     }
 
     public function actionSuggestPricesModal($id)
