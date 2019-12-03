@@ -175,7 +175,7 @@ class PlanController extends CrudController
             'boxed' => false,
             'showHeader' => true,
             'showFooter' => false,
-            'summaryRenderer' => function () {
+            'summaryRenderer' => function (): string {
                 return '';
             },
             'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),

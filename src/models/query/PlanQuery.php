@@ -81,7 +81,7 @@ class PlanQuery extends \hiqdev\hiart\ActiveQuery
     {
         $this
             ->joinWith([
-                'priceHistory' => function (ActiveQuery $query) {
+                'priceHistory' => function (ActiveQuery $query): void {
                     $query
                         ->addSelect('main_object_id')
                         ->joinWith('object');
