@@ -11,14 +11,15 @@
 namespace hipanel\modules\finance\widgets;
 
 use hipanel\helpers\ArrayHelper;
-use hipanel\modules\finance\grid\PriceGridView;
-use hipanel\modules\finance\grid\SalesInPlanGridView;
-use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\models\PriceHistory;
 use yii\base\Widget;
-use yii\data\ArrayDataProvider;
 use yii\helpers\Url;
 
+/**
+ * Class PriceHistoryWidget
+ * @package hipanel\modules\finance\widgets
+ */
 class PriceHistoryWidget extends Widget
 {
     /**
@@ -26,24 +27,31 @@ class PriceHistoryWidget extends Widget
      */
     public $model;
 
+    /**
+     * @inheritDoc
+     */
     public function run()
     {
-        $planHistory = ArrayHelper::index($this->model->priceHistory, 'id', [function ($el) {
+        $historyDates = array_unique(ArrayHelper::getColumn($this->model->priceHistory, function (PriceHistory $el): string {
             return $el->time;
-        }]);
+        }));
 
         $this->registerJsScript();
 
         return $this->render('PriceHistoryWidget', [
-            'collapseItems' => $this->renderCollapseItems($planHistory),
+            'collapseItems' => $this->renderCollapseItems($historyDates),
             'widget' => $this,
         ]);
     }
 
-    private function renderCollapseItems($planHistory)
+    /**
+     * @param string[] $historyDates
+     * @return string[]
+     */
+    private function renderCollapseItems(array $historyDates): array
     {
         $res = [];
-        foreach ($planHistory as $date => $models) {
+        foreach ($historyDates as $date) {
             $res[] = [
                 'label' => $date,
                 'content' => '',
@@ -58,7 +66,7 @@ class PriceHistoryWidget extends Widget
         ]);
     }
 
-    private function registerJsScript()
+    private function registerJsScript(): void
     {
         $calculateValueUrl = Url::toRoute(['@plan/get-plan-history', 'plan_id' => $this->model->id]);
 

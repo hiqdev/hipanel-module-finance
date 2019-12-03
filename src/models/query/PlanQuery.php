@@ -62,6 +62,9 @@ class PlanQuery extends \hiqdev\hiart\ActiveQuery
         ]);
     }
 
+    /**
+     * @return $this
+     */
     public function withSales()
     {
         $this
@@ -71,6 +74,9 @@ class PlanQuery extends \hiqdev\hiart\ActiveQuery
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function withPriceHistory()
     {
         $this
@@ -82,6 +88,7 @@ class PlanQuery extends \hiqdev\hiart\ActiveQuery
                 },
             ])
             ->andWhere(['priceHistory' => true]);
+
         return $this;
     }
 }

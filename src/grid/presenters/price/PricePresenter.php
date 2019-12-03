@@ -38,6 +38,10 @@ class PricePresenter
         $this->formatter = Yii::$app->formatter;
     }
 
+    /**
+     * @param string $priceAttribute
+     * @return $this
+     */
     public function setPriceAttribute(string $priceAttribute): self
     {
         $this->priceAttribute = $priceAttribute;

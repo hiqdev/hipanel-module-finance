@@ -23,18 +23,15 @@ use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\collections\PricesCollection;
 use hipanel\modules\finance\grid\PriceGridView;
-use hipanel\modules\finance\grid\SalesInPlanGridView;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\helpers\PriceChargesEstimator;
 use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
-use hipanel\modules\finance\models\PriceHistory;
 use hipanel\modules\finance\models\PriceSuggestionRequestForm;
 use hipanel\modules\finance\models\query\PlanQuery;
 use hipanel\modules\finance\models\TargetObject;
-use hipanel\modules\finance\widgets\PlanHistoryWidget;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\Event;
@@ -174,10 +171,6 @@ class PlanController extends CrudController
                     ->withPriceHistory()
                     ->one();
 
-//        $plan->populateRelation('prices',  $plan->priceHistory);
-//        $grouper = new PlanInternalsGrouper($plan);
-//        [$salesByObject, $pricesByMainObject] = $grouper->group();
-
         return PriceGridView::widget([
             'boxed' => false,
             'showHeader' => true,
@@ -195,34 +188,9 @@ class PlanController extends CrudController
                 'type',
                 'info',
                 'old_price',
-                'value',
                 'note',
             ],
         ]);
-//        return SalesInPlanGridView::widget([
-//            'options' => [
-//                'data-time' => $date,
-//            ],
-//            'boxed' => false,
-//            'showHeader' => false,
-//            'pricesBySoldObject' => $pricesByMainObject,
-//            'dataProvider' => new ArrayDataProvider([
-//                'allModels' => $salesByObject,
-//                'pagination' => false,
-//            ]),
-//            'summaryRenderer' => function () {
-//                return ''; // remove unnecessary summary
-//            },
-//            'columns' => [
-//                'object_link',
-//                'object_label',
-//                'seller',
-//                'buyer',
-//                'time',
-//                'price_related_actions',
-//                'estimate_placeholder',
-//            ],
-//        ]);
     }
 
     public function actionSuggestPricesModal($id)
