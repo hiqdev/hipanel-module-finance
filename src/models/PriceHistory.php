@@ -23,34 +23,6 @@ class PriceHistory extends Price
     use ModelTrait;
 
     /**
-     * @var Price
-     */
-    private $_price;
-
-    /**
-     * PriceHistory constructor.
-     * @param Price $price
-     * @param array $config
-     */
-    public function __construct(Price $price, $config = [])
-    {
-        parent::__construct($config);
-        $this->_price = $price;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function __get($name)
-    {
-        try {
-            return parent::__get($name);
-        } catch (\Throwable $e) {
-            return $this->_price->$name;
-        }
-    }
-
-    /**
      * @inheritDoc
      */
     public function rules()
@@ -72,21 +44,11 @@ class PriceHistory extends Price
     }
 
     /**
-     * @inheritDoc
-     */
-    public static function tableName()
-    {
-        return 'price-history';
-    }
-
-    /**
      * @inheritdoc
      */
     public static function instantiate($row)
     {
-        $price = parent::instantiate($row);
-
-        return new self($price, [
+        return new self([
             'time' => $row['time'],
             'old_price' => $row['old_price'],
         ]);

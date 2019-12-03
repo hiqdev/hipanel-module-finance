@@ -174,11 +174,9 @@ class PlanController extends CrudController
                     ->withPriceHistory()
                     ->one();
 
-        $plan->populateRelation('prices',  $plan->priceHistory);
-
+//        $plan->populateRelation('prices',  $plan->priceHistory);
 //        $grouper = new PlanInternalsGrouper($plan);
 //        [$salesByObject, $pricesByMainObject] = $grouper->group();
-
 
         return PriceGridView::widget([
             'boxed' => false,
