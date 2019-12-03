@@ -28,9 +28,21 @@ class PricePresenter
      */
     private $formatter;
 
+    /**
+     * @var string
+     */
+    private $priceAttribute = 'price';
+
     public function __construct()
     {
         $this->formatter = Yii::$app->formatter;
+    }
+
+    public function setPriceAttribute(string $priceAttribute): self
+    {
+        $this->priceAttribute = $priceAttribute;
+
+        return $this;
     }
 
     /**
@@ -63,7 +75,7 @@ class PricePresenter
             ]);
         }
 
-        return Html::tag('strong', $this->formatter->asCurrency($price->price, $price->currency)) . $unit . $formula;
+        return Html::tag('strong', $this->formatter->asCurrency($price->{$this->priceAttribute}, $price->currency)) . $unit . $formula;
     }
 
     /**

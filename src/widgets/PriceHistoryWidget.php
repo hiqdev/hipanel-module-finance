@@ -19,29 +19,22 @@ use yii\base\Widget;
 use yii\data\ArrayDataProvider;
 use yii\helpers\Url;
 
-class PlanHistoryWidget extends Widget
+class PriceHistoryWidget extends Widget
 {
     /**
      * @var Plan
      */
     public $model;
 
-    public $grouper;
-
-    public $parentPrices;
-
     public function run()
     {
-        $tmp = $this->model->priceHistory;
-
         $planHistory = ArrayHelper::index($this->model->priceHistory, 'id', [function ($el) {
             return $el->time;
         }]);
 
         $this->registerJsScript();
 
-        return $this->render('PlanHistoryWidget', [
-            'models' => array_filter($planHistory),
+        return $this->render('PriceHistoryWidget', [
             'collapseItems' => $this->renderCollapseItems($planHistory),
             'widget' => $this,
         ]);
@@ -60,9 +53,9 @@ class PlanHistoryWidget extends Widget
             ];
         }
 
-        return [
-            'items' => array_filter($res),
-        ];
+        return array_filter([
+            'items' => $res,
+        ]);
     }
 
     private function registerJsScript()

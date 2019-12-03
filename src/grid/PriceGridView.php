@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\RefColumn;
+use hipanel\modules\finance\grid\presenters\price\PricePresenter;
 use hipanel\modules\finance\grid\presenters\price\PricePresenterFactory;
 use hipanel\modules\finance\menus\PriceActionsMenu;
 use hipanel\modules\finance\models\Price;
@@ -54,6 +55,17 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'raw',
                 'value' => function (Price $model) {
                     return $this->presenterFactory->build(\get_class($model))->renderPrice($model);
+                },
+            ],
+            'old_price' => [
+                'label' => Yii::t('hipanel.finance.price', 'Old price'),
+                'format' => 'raw',
+                'value' => function (Price $model): string {
+                    /** @var PricePresenter $presenter */
+                    $presenter = $this->presenterFactory->build(\get_class($model));
+                    return $presenter
+                            ->setPriceAttribute('old_price')
+                            ->renderPrice($model);
                 },
             ],
             'object->name' => [

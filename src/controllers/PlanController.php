@@ -22,6 +22,7 @@ use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\collections\PricesCollection;
+use hipanel\modules\finance\grid\PriceGridView;
 use hipanel\modules\finance\grid\SalesInPlanGridView;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\helpers\PriceChargesEstimator;
@@ -168,50 +169,62 @@ class PlanController extends CrudController
     {
         $plan = Plan::find()
                     ->where(['id' => $plan_id])
+                    ->andWhere(['history_time' => $date])
                     ->withSales()
                     ->withPriceHistory()
                     ->one();
 
-//        $priceHistory = PriceHistory::find()
-//                            ->where(['tariff_id' => $plan_id])
-//                            ->andWhere(['time' => $date])
-//                            ->all();
-
         $plan->populateRelation('prices',  $plan->priceHistory);
 
+//        $grouper = new PlanInternalsGrouper($plan);
+//        [$salesByObject, $pricesByMainObject] = $grouper->group();
 
-        $grouper = new PlanInternalsGrouper($plan);
-//        $parentPrices = $this->getParentPrices($plan_id);
 
-        [$salesByObject, $pricesByMainObject] = $grouper->group();
-
-//        $saleId = reset($salesByObject)->object_id;
-//        $pricesByMainObject[$saleId] = $priceHistory;
-
-        return SalesInPlanGridView::widget([
-            'options' => [
-                'data-time' => $date,
-            ],
+        return PriceGridView::widget([
             'boxed' => false,
-            'showHeader' => false,
-            'pricesBySoldObject' => $pricesByMainObject,
+            'showHeader' => true,
+            'showFooter' => false,
+            'summaryRenderer' => function () {
+                return '';
+            },
+            'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
             'dataProvider' => new ArrayDataProvider([
-                'allModels' => $salesByObject,
+                'allModels' => $plan->priceHistory,
                 'pagination' => false,
             ]),
-            'summaryRenderer' => function () {
-                return ''; // remove unnecessary summary
-            },
             'columns' => [
-                'object_link',
-                'object_label',
-                'seller',
-                'buyer',
-                'time',
-                'price_related_actions',
-                'estimate_placeholder',
+                'object->name',
+                'type',
+                'info',
+                'old_price',
+                'value',
+                'note',
             ],
         ]);
+//        return SalesInPlanGridView::widget([
+//            'options' => [
+//                'data-time' => $date,
+//            ],
+//            'boxed' => false,
+//            'showHeader' => false,
+//            'pricesBySoldObject' => $pricesByMainObject,
+//            'dataProvider' => new ArrayDataProvider([
+//                'allModels' => $salesByObject,
+//                'pagination' => false,
+//            ]),
+//            'summaryRenderer' => function () {
+//                return ''; // remove unnecessary summary
+//            },
+//            'columns' => [
+//                'object_link',
+//                'object_label',
+//                'seller',
+//                'buyer',
+//                'time',
+//                'price_related_actions',
+//                'estimate_placeholder',
+//            ],
+//        ]);
     }
 
     public function actionSuggestPricesModal($id)

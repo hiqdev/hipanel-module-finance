@@ -6,7 +6,8 @@ use yii\helpers\Html;
 
 /**
  * @var \yii\web\View $this
- * @var array $collapseItems
+ * @var \hipanel\modules\finance\widgets\PriceHistoryWidget $widget
+ * @var string[] $collapseItems
  */
 
 $this->registerCss(<<<CSS
@@ -29,6 +30,10 @@ CSS
         <div class="mailbox-controls">
             <?= HTML::tag('h4', '&nbsp;' . Yii::t('hipanel', 'Tariff history')) ?>
         </div>
-        <?= Collapse::widget($collapseItems) ?>
+        <?php if (empty($collapseItems)): ?>
+            <?= Html::tag('p', '&nbsp;' . Yii::t('hipanel.finance.price', 'Tariff history is empty')) ?>
+        <? else: ?>
+            <?= Collapse::widget($collapseItems) ?>
+        <? endif; ?>
     </div>
 </div>

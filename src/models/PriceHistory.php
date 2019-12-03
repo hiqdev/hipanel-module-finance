@@ -10,20 +10,13 @@
 
 namespace hipanel\modules\finance\models;
 
-use hipanel\base\Model;
 use hipanel\base\ModelTrait;
-use hipanel\modules\finance\models\factories\PriceModelFactory;
-use Yii;
-use yii\helpers\Inflector;
-use yii\helpers\StringHelper;
-
-//use yii\base\Model;
 
 /**
  * Class PlanHistory
  *
-
  * @property \DateTime $time
+ * @property float $old_price
  */
 class PriceHistory extends Price
 {
@@ -63,7 +56,18 @@ class PriceHistory extends Price
     public function rules()
     {
         return array_merge(parent::rules(), [
+            [['old_price'], 'number'],
             [['time'], 'date'],
+        ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(), [
+            'old_price' => \Yii::t('hipanel.finance.price', 'Old price'),
         ]);
     }
 
@@ -82,6 +86,9 @@ class PriceHistory extends Price
     {
         $price = parent::instantiate($row);
 
-        return new self($price, ['time' => $row['time']]);
+        return new self($price, [
+            'time' => $row['time'],
+            'old_price' => $row['old_price'],
+        ]);
     }
 }

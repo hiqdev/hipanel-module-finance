@@ -4,7 +4,7 @@ use hipanel\modules\finance\grid\PlanGridView;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\menus\PlanDetailMenu;
 use hipanel\modules\finance\models\Plan;
-use hipanel\modules\finance\widgets\PlanHistoryWidget;
+use hipanel\modules\finance\widgets\PriceHistoryWidget;
 use hipanel\widgets\IndexPage;
 use yii\helpers\Html;
 
@@ -13,7 +13,7 @@ use yii\helpers\Html;
  * @var Plan $model
  * @var PlanInternalsGrouper $grouper
  * @var array $parentPrices
- * @var \hipanel\modules\finance\models\PlanHistory[] $plansHistory
+ * @var \hipanel\modules\finance\models\PriceHistory[] $plansHistory
  */
 $this->title = $model->name ? Html::encode($model->name) : '&nbsp;';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
@@ -121,13 +121,11 @@ CSS
 
                 <?php $page->end() ?>
             </div>
-<!--            <div class="row-md-12">-->
-<!--                --><?//= PlanHistoryWidget::widget([
-//                    'model' => $model,
-//                    'grouper' => $grouper,
-//                    'parentPrices' => $parentPrices,
-//                ]) ?>
-<!--            </div>-->
+            <div class="row-md-12">
+                <?= PriceHistoryWidget::widget([
+                    'model' => $model,
+                ]) ?>
+            </div>
         </div>
     </div>
 </div>
