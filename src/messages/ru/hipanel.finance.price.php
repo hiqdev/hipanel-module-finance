@@ -42,8 +42,8 @@ return [
     'Price in {currency}' => 'Цена в {currency}',
     'Price' => 'Цена',
     'Formula' => 'Формула',
-    'Tariff history is empty' => 'История тарифов пуста',
-    'Tariff history' => 'История тарифов',
+    'Prices history is empty' => 'История цен пуста',
+    'Prices history' => 'История цен',
     'Old price' => 'Старая цена',
 
     'minutes' => 'минут',

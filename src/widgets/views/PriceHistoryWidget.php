@@ -28,11 +28,11 @@ CSS
 <div class="box box-solid">
     <div class="box-body no-padding">
         <div class="mailbox-controls">
-            <?= HTML::tag('h4', '&nbsp;' . Yii::t('hipanel.finance.price', 'Tariff history')) ?>
+            <?= HTML::tag('h4', '&nbsp;' . Yii::t('hipanel.finance.price', 'Prices history')) ?>
         </div>
         <?php if (empty($collapseItems)): ?>
             <div class="mailbox-controls">
-                <?= Html::tag('p', '&nbsp;' . Yii::t('hipanel.finance.price', 'Tariff history is empty')) ?>
+                <?= Html::tag('p', '&nbsp;' . Yii::t('hipanel.finance.price', 'Prices history is empty')) ?>
             </div>
         <? else: ?>
             <?= Collapse::widget($collapseItems) ?>
