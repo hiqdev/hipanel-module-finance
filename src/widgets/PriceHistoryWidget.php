@@ -32,26 +32,34 @@ class PriceHistoryWidget extends Widget
      */
     public function run()
     {
-        $historyDates = array_unique(ArrayHelper::getColumn($this->model->priceHistory, function (PriceHistory $el): string {
-            return $el->time;
-        }));
-
         $this->registerJsScript();
 
         return $this->render('PriceHistoryWidget', [
-            'collapseItems' => $this->renderCollapseItems($historyDates),
+            'collapseItems' => $this->renderCollapseItems(),
             'widget' => $this,
         ]);
     }
 
     /**
-     * @param string[] $historyDates
      * @return string[]
      */
-    private function renderCollapseItems(array $historyDates): array
+    private function getSortedTimesArray(): array
+    {
+        $dates = array_unique(ArrayHelper::getColumn($this->model->priceHistory, function (PriceHistory $el): string {
+            return $el->time;
+        }));
+        rsort($dates);
+
+        return $dates;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function renderCollapseItems(): array
     {
         $res = [];
-        foreach ($historyDates as $date) {
+        foreach ($this->getSortedTimesArray() as $date) {
             $res[] = [
                 'label' => $date,
                 'content' => '',
@@ -79,6 +87,11 @@ class PriceHistoryWidget extends Widget
             success: (res) => {
                 const collapsBody = $(this).attr('href') + ' .panel-body';
                 $(collapsBody).html(res);
+
+                //Initialize ArraySpoiler onclick
+                $('a[id*=w][class*=badge]').popover({"placement":"bottom","html":true}).on('show.bs.popover', function(e) {
+                    $('[data-popover-group="main"]').not(e.target).popover('hide');
+                });
             },
             error: function (xhr) {
                 hipanel.notify.error(xhr.statusText);
