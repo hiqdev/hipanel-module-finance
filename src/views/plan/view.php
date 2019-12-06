@@ -30,6 +30,23 @@ $this->registerCss(<<<'CSS'
     display: block;
 }
 
+.text-gray {
+    color: gray !important;
+}
+
+.prices-cell {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.left-table-item {
+    text-align: left
+}
+.right-table-item {
+    text-align: right;
+    padding-left: 6px;
+}
+
 CSS
 );
 
@@ -84,6 +101,7 @@ CSS
                 Plan::TYPE_OVDS,
                 Plan::TYPE_SVDS,
                 Plan::TYPE_CLIENT,
+                Plan::TYPE_HARDWARE,
             ], true)): ?>
                 <?php $page->beginContent('show-actions') ?>
                     <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>

@@ -39,11 +39,12 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
 
         <?php $page->beginContent('sorter-actions') ?>
             <?= $page->renderSorter([
-                'attributes' => [
-                    'seller', 'client',
+                'attributes' => array_filter([
                     'sum', 'balance',
                     'type', 'descr',
-                ],
+                     Yii::$app->user->can('resell') ? 'client' : null,
+                     Yii::$app->user->can('support') ? 'seller' : null
+                ]),
             ]) ?>
         <?php $page->endContent() ?>
 

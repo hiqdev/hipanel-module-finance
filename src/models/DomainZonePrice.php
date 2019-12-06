@@ -40,7 +40,7 @@ class DomainZonePrice extends Price
             'required',
             'on' => ['create', 'update'],
             'when' => function ($model) {
-                /** @var DomainZonePrice $model */
+                /** @var parent $model */
                 return $model->isTypeCorrect();
             },
         ];

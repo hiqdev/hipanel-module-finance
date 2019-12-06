@@ -26,7 +26,7 @@ $this->title = sprintf(
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Payments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-$detalizationAllowed = Yii::$app->params['module.finance.bill.detalization.allowed'];
+$detalizationAllowed = Yii::$app->params['module.finance.bill.detalization.allowed'] || Yii::$app->user->can('bill.charges.read');
 
 Pjax::begin(Yii::$app->params['pjax']) ?>
 <div class="row">

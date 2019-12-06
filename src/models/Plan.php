@@ -10,6 +10,8 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\base\Model;
+use hipanel\base\ModelTrait;
 use hipanel\models\Ref;
 use hipanel\modules\finance\models\query\PlanQuery;
 use Yii;
@@ -24,6 +26,7 @@ use Yii;
  * @property string $state
  * @property int $currency_id
  * @property bool $is_grouping
+ * @property bool $your_tariff
  *
  * @property Sale[] $sales
  * @property Price[]|CertificatePrice[] $prices
@@ -31,7 +34,7 @@ use Yii;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class Plan extends \hipanel\base\Model
+class Plan extends Model
 {
     public const TYPE_SERVER = 'server';
     public const TYPE_PCDN = 'pcdn';
@@ -44,8 +47,9 @@ class Plan extends \hipanel\base\Model
     public const TYPE_OVDS = 'ovds';
     public const TYPE_SVDS = 'svds';
     public const TYPE_CLIENT = 'client';
+    public const TYPE_HARDWARE = 'hardware';
 
-    use \hipanel\base\ModelTrait;
+    use ModelTrait;
 
     /**
      * @var string
@@ -64,6 +68,7 @@ class Plan extends \hipanel\base\Model
             [['id'], 'required', 'on' => ['update', 'delete', 'set-note']],
             [['id'], 'required', 'on' => ['delete', 'restore']],
             [['id', 'server_ids'], 'safe', 'on' => ['copy']],
+            [['your_tariff'], 'boolean'],
         ]);
     }
 

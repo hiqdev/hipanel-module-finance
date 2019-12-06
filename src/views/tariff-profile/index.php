@@ -41,6 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 'checkbox',
                 'name',
+                'client',
                 'tariff_names',
                 'actions',
             ],

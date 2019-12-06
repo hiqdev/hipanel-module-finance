@@ -12,6 +12,8 @@ namespace hipanel\modules\finance\models;
 
 use hipanel\models\Ref;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
+use Money\Money;
+use Money\MoneyParser;
 use Yii;
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
@@ -208,5 +210,12 @@ class Price extends \hipanel\base\Model
         }
 
         return explode("\n", $this->formula);
+    }
+
+    public function getMoney(): Money
+    {
+        // TODO: decide how to get MoneyParser correctly
+        return Yii::$container->get(MoneyParser::class)
+            ->parse((string)$this->price, strtoupper($this->currency));
     }
 }

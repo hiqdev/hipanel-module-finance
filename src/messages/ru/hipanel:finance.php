@@ -46,6 +46,7 @@ return [
     'You balance: {balance} {formattedCredit}' => 'Ваш баланс: {balance} {formattedCredit}',
     '(+{amount} of credit)' => '(+{amount} кредит)',
     'You can pay your cart partially' => 'Вы можете оплатить часть корзины',
+    'Failed to calculate cart: {reason}' => 'Не удалось просчитать стоимость корзины: {reason}',
     'Your balance after all operations: {amount}' => 'Ваш баланс после выполнения всех операций: {amount}',
     'If you have any further questions, please, {ticketCreationLink}.' => 'Если у вас есть вопросы, пожалуйста, {ticketCreationLink}.',
     'create a ticket' => 'создайте тикет',

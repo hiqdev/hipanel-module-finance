@@ -24,14 +24,16 @@ use yii\helpers\Html;
 
 ?>
 
-<?php $page->beginContent('main-actions') ?>
-    <?php if (Yii::$app->user->can('plan.create')) : ?>
-        <?= CreatePricesButton::widget(compact('model')) ?>
-    <?php endif ?>
-    <?php if (Yii::$app->user->can('plan.update')) : ?>
-        <?= Html::a(Yii::t('hipanel', 'Update'), ['@plan/update-prices', 'id' => $model->id], ['class' => 'btn btn-sm btn-warning']) ?>
-    <?php endif ?>
-<?php $page->endContent() ?>
+<?php if (!$model->your_tariff) : ?>
+    <?php $page->beginContent('main-actions') ?>
+        <?php if (Yii::$app->user->can('plan.create')) : ?>
+            <?= CreatePricesButton::widget(compact('model')) ?>
+        <?php endif ?>
+        <?php if (Yii::$app->user->can('plan.update')) : ?>
+            <?= Html::a(Yii::t('hipanel', 'Update'), ['@plan/update-prices', 'id' => $model->id], ['class' => 'btn btn-sm btn-warning']) ?>
+        <?php endif ?>
+    <?php $page->endContent() ?>
+<?php endif ?>
 
 <?php $page->beginContent('table') ?>
     <?php $page->beginBulkForm() ?>

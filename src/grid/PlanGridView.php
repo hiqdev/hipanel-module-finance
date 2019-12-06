@@ -81,11 +81,15 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
      */
     protected function prepareBadges(Plan $model): string
     {
-        $localization = Yii::t('hipanel.finance.plan', 'Grouping');
+        $html = '';
+        if ($model->your_tariff) {
+            $html .=  Html::tag('span', Html::tag('i', null, ['class' => 'fa fa-lock']), ['class' => 'label bg-red pull-right', 'style' => 'margin-left: .1em;']);
+        }
         if ($model->is_grouping) {
-            return Html::tag('span', $localization, ['class' => 'label bg-olive', 'style' => 'float:right']);
+            $localization = Yii::t('hipanel.finance.plan', 'Grouping');
+            $html .= Html::tag('span', $localization, ['class' => 'label bg-olive pull-right']);
         }
 
-        return '';
+        return $html;
     }
 }

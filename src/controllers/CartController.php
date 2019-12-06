@@ -101,6 +101,7 @@ class CartController extends \yii\web\Controller
 
         return $this->render('finish', [
             'balance' => $client->balance,
+            'currency' => $client->currency,
             'success' => $finisher->getSuccess(),
             'error' => $finisher->getError(),
             'pending' => $finisher->getPending(),

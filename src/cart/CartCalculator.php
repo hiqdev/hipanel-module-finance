@@ -15,6 +15,7 @@ use hipanel\modules\finance\models\Calculation;
 use hipanel\modules\finance\models\Value;
 use hiqdev\yii2\cart\ShoppingCart;
 use Yii;
+use yii\web\UnprocessableEntityHttpException;
 use yz\shoppingcart\CartActionEvent;
 
 /**
@@ -39,11 +40,6 @@ use yz\shoppingcart\CartActionEvent;
 final class CartCalculator extends Calculator
 {
     /**
-     * @var array
-     */
-    private static $ignoreIds = [];
-
-    /**
      * @var AbstractCartPosition[]
      */
     protected $models;
@@ -57,6 +53,10 @@ final class CartCalculator extends Calculator
      * @var CartActionEvent
      */
     public $event;
+    /**
+     * @var string[]
+     */
+    private $positionsBeingRemoved = [];
 
     /**
      * Creates the instance of the object and runs the calculation.
@@ -70,8 +70,12 @@ final class CartCalculator extends Calculator
         $cart = $event->sender;
 
         $calculator = new static($cart);
+        if ($event->action === CartActionEvent::ACTION_BEFORE_REMOVE) {
+            $calculator->positionsBeingRemoved[] = $event->position->getId();
+        }
 
-        return $calculator->execute();
+        /** @noinspection UnusedFunctionResultInspection */
+        $calculator->execute();
     }
 
     /**
@@ -89,10 +93,21 @@ final class CartCalculator extends Calculator
      */
     public function execute()
     {
-        parent::execute();
+        // Do not try to calculate position that is being removed
+        foreach ($this->positionsBeingRemoved as $id) {
+            unset($this->models[$id]);
+        }
+
+        try {
+            parent::execute();
+        } catch (UnprocessableEntityHttpException $e) {
+            throw CartIsBrokenException::forCart(
+                $this->cart,
+                Yii::t('hipanel:finance', 'Failed to calculate cart: {reason}', ['reason' => $e->getMessage()])
+            );
+        }
 
         $this->applyCalculations();
-
         return $this->calculations;
     }
 
@@ -101,14 +116,8 @@ final class CartCalculator extends Calculator
      */
     private function applyCalculations()
     {
-        $currency = Yii::$app->params['currency'];
-
         foreach ($this->models as $position) {
             $id = $position->id;
-            if (in_array($id, array_values(self::$ignoreIds))) {
-                throw new ErrorMultiCurrencyException(Yii::t('cart', 'Sorry, but now it is impossible to add the position with different currencies to the cart. Pay the current order to add this item to the cart.'), $position->getPurchaseModel());
-            }
-
             $calculation = $this->getCalculation($id);
             if (!$calculation instanceof Calculation) {
                 Yii::error('Cart position "' . $position->getName() . '" was removed from the cart because of failed value calculation. Normally this should never happen.', 'hipanel.cart');
@@ -116,23 +125,33 @@ final class CartCalculator extends Calculator
                 break;
             }
 
-            /** @var Value $value */
-            $value = $calculation->forCurrency($currency);
-            if (!$value instanceof Value) {
-                Yii::error('Cart position "' . $position->getName() . '" was removed from the cart because calculation for currency "' . $value->currency . '" is not available', 'hipanel.cart');
-                $this->cart->removeById($position->id);
-                break;
-            }
-            if ($this->cart->getCurrency() && $value->currency !== $this->cart->getCurrency()) {
-                self::$ignoreIds[] = $id;
-                $this->cart->removeById($id);
-                Yii::error('Cart position "' . $position->getName() . '" was removed from the cart because multi-currency cart is not available for now', 'hipanel.cart');
-                break;
-            }
+            $value = $this->getValue($position, $calculation);
+            $this->ensureCurrencyIsNotConflictingWithCart($position, $value);
 
             $position->setPrice($value->price);
             $position->setValue($value->value);
             $position->setCurrency($value->currency);
+        }
+    }
+
+    private function getValue(AbstractCartPosition $position, Calculation $calculation): Value
+    {
+        $currency = Yii::$app->params['currency'];
+
+        /** @var Value $value */
+        $value = $calculation->forCurrency($currency);
+        if (!$value instanceof Value) {
+            Yii::error('Cart position "' . $position->getName() . '" was removed from the cart because calculation for currency "' . $value->currency . '" is not available', 'hipanel.cart');
+            $this->cart->removeById($position->id);
+        }
+
+        return $value;
+    }
+
+    private function ensureCurrencyIsNotConflictingWithCart(AbstractCartPosition $position, Value $value): void
+    {
+        if ($this->cart->getCurrency() && $value->currency !== $this->cart->getCurrency()) {
+            throw MultiCurrencyException::forPosition($position, $this->cart, Yii::t('cart', 'Sorry, but now it is impossible to add the position with different currencies to the cart. Pay the current order to add this item to the cart.'));
         }
     }
 }

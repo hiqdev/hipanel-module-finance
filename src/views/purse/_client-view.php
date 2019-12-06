@@ -16,7 +16,7 @@ $documentType = $isEmployee ? 'acceptance' : 'invoice';
         <?= $box->renderTitle(Yii::t('hipanel:finance', '<b>{currency}</b> account', ['currency' => strtoupper($model->currency)]), '&nbsp;') ?>
         <?php $box->beginTools() ?>
             <?php if ($user->can('deposit')) : ?>
-                <?= Html::a(Yii::t('hipanel', 'Recharge account'), '#', ['class' => 'btn btn-default btn-xs']) ?>
+                <?= Html::a(Yii::t('hipanel', 'Recharge account'), ['@pay/deposit'], ['class' => 'btn btn-default btn-xs']) ?>
             <?php endif ?>
         <?php $box->endTools() ?>
     <?php $box->endHeader() ?>

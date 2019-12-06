@@ -15,6 +15,11 @@ use hiqdev\hiart\ActiveRecord;
 /**
  * Value.
  * API returns this object as result of billing cost calculation.
+ *
+ * @property string $currency
+ * @property string $value
+ * @property string $price
+ * @property string $discounted_price
  */
 class Value extends ActiveRecord
 {

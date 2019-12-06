@@ -11,6 +11,9 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\base\ModelTrait;
+use Money\Formatter\IntlMoneyFormatter;
+use Money\Money;
+use Money\MoneyParser;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\validators\NumberValidator;
@@ -81,17 +84,25 @@ class CertificateResource extends Resource
 
     public function getPriceForPeriod($period)
     {
-        if (!$this->hasPriceForPeriod($period)) {
+        $sums = $this->data['sums'][$period];
+        if (empty($sums)) {
             return null;
             /// XXX throw new InvalidConfigException('Period ' . $period . ' is not available');
         }
 
-        return (float) $this->data['sums'][$period];
+        return (float) $sums;
     }
 
-    public function hasPriceForPeriod($period)
+    /**
+     * @param int $period
+     * @return string|null
+     */
+    public function getMoneyForPeriod(int $period)
     {
-        return !empty($this->data['sums'][$period]);
+        $this->price = $this->getPriceForPeriod($period);
+        if (empty($this->currency))
+            return null;
+        return $this->getMoney();
     }
 
     public function validatePrices()
@@ -109,6 +120,15 @@ class CertificateResource extends Resource
         $this->data = ['sums' => $this->data['sums']];
 
         return true;
+    }
+
+    /**
+     * @param int $period
+     * @return bool
+     */
+    public function hasPriceForPeriod(int $period)
+    {
+        return !empty($this->data['sums'][$period]);
     }
 
     /**

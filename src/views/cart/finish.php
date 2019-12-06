@@ -4,11 +4,12 @@ use yii\helpers\Html;
 
 /**
  * @var \yii\web\View
- * @var \hipanel\modules\finance\cart\AbstractCartPosition[] $success
+ * @var \hipanel\modules\finance\cart\AbstractPurchase[] $success
  * @var \hipanel\modules\finance\cart\ErrorPurchaseException[] $error
  * @var \hipanel\modules\finance\cart\PendingPurchaseException[] $pending
  * @var array $remarks
  * @var float $balance
+ * @var string $currency
  */
 $this->title = Yii::t('cart', 'Order execution');
 ?>
@@ -42,7 +43,7 @@ $this->title = Yii::t('cart', 'Order execution');
                                     <?= $item->renderDescription() ?><br>
                                     <?= $exception->getMessage() ?>
                                 </td>
-                                <td align="right" class="text-bold"><?= Yii::$app->formatter->asCurrency($item->cost, Yii::$app->params['currency']) ?></td>
+                                <td align="right" class="text-bold"><?= Yii::$app->formatter->asCurrency($item->cost, $item->getCurrency()) ?></td>
                                 <td></td>
                             </tr>
                         <?php endforeach; ?>
@@ -84,7 +85,7 @@ $this->title = Yii::t('cart', 'Order execution');
                                     <?= $item->renderDescription() ?><br>
                                     <?= $exception->getMessage() ?>
                                 </td>
-                                <td align="right" class="text-bold"><?= Yii::$app->formatter->asCurrency($item->cost, Yii::$app->params['currency']) ?></td>
+                                <td align="right" class="text-bold"><?= Yii::$app->formatter->asCurrency($item->cost, $item->getCurrency()) ?></td>
                                 <td></td>
                             </tr>
                         <?php endforeach; ?>
@@ -125,7 +126,7 @@ $this->title = Yii::t('cart', 'Order execution');
                                 <td class="text-center text-bold"><?= $no++ ?></td>
                                 <td><?= $item->renderDescription() ?></td>
                                 <td><?= $purchase->renderNotes() ?></td>
-                                <td align="right" class="text-bold"><?= Yii::$app->formatter->asCurrency($item->cost, Yii::$app->params['currency']) ?></td>
+                                <td align="right" class="text-bold"><?= Yii::$app->formatter->asCurrency($item->cost, $item->getCurrency()) ?></td>
                                 <td></td>
                             </tr>
                         <?php endforeach; ?>
@@ -149,7 +150,7 @@ $this->title = Yii::t('cart', 'Order execution');
             <div class="box-header with-border">
                 <h3 class="box-title">
                     <?= Yii::t('hipanel:finance', 'Your balance after all operations: {amount}', [
-                        'amount' => Yii::$app->formatter->asCurrency($balance, Yii::$app->params['currency']),
+                        'amount' => Yii::$app->formatter->asCurrency($balance, $currency),
                     ]) ?>
                 </h3>
             </div>
