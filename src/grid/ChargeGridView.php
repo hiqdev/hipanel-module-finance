@@ -153,16 +153,18 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'is_payed',
                 'format' => 'raw',
                 'enableSorting' => false,
-                'filter' => StaticCombo::widget([
-                    'attribute' => 'is_payed',
-                    'model' => $this->filterModel,
-                    'data' => [
-                        0 => Yii::t('hipanel:finance', 'Charge not paid'),
-                        1 => Yii::t('hipanel:finance', 'Charge paid'),
-                    ],
-                    'hasId' => true,
-                    'inputOptions' => ['id' => 'is_payed'],
-                ]),
+                'filter' => $this->filterModel !== null
+                    ? StaticCombo::widget([
+                          'attribute' => 'is_payed',
+                          'model' => $this->filterModel,
+                          'data' => [
+                              0 => Yii::t('hipanel:finance', 'Charge not paid'),
+                              1 => Yii::t('hipanel:finance', 'Charge paid'),
+                          ],
+                          'hasId' => true,
+                          'inputOptions' => ['id' => 'is_payed'],
+                      ])
+                    : false,
                 'contentOptions' => ['class' => 'text-center'],
                 'headerOptions' => ['class' => 'text-center'],
                 'value' => static function (Charge $model) {
