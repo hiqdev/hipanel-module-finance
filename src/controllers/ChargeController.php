@@ -12,9 +12,11 @@
 namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
+use hipanel\actions\RenderAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\query\ChargeQuery;
+use hipanel\modules\finance\providers\BillTypesProvider;
 use yii\base\Event;
 
 /**
@@ -23,6 +25,18 @@ use yii\base\Event;
  */
 class ChargeController extends CrudController
 {
+    /**
+     * @var BillTypesProvider
+     */
+    private $billTypesProvider;
+
+    public function __construct($id, $module, BillTypesProvider $billTypesProvider, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+
+        $this->billTypesProvider = $billTypesProvider;
+    }
+
     /**
      * @inheritDoc
      */
@@ -51,7 +65,20 @@ class ChargeController extends CrudController
                     $query = $event->sender->getDataProvider()->query;
                     $query->withCommonObject()->withLatestCommonObject();
                 },
+                'data' => function (RenderAction $action, array $data): array {
+                    [$billTypes, $billGroupLabels] = $this->getTypesAndGroups();
+
+                    return compact('billTypes', 'billGroupLabels');
+                },
             ],
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    private function getTypesAndGroups()
+    {
+        return $this->billTypesProvider->getGroupedList();
     }
 }

@@ -4,6 +4,8 @@
  * @var \yii\data\ActiveDataProvider $dataProvider
  * @var \yii\web\View $this
  * @var \hipanel\modules\finance\models\ChargeSearch $model
+ * @var array $billTypes
+ * @var array $billGroupLabels
  */
 
 use hipanel\modules\finance\grid\ChargeGridView;
@@ -19,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php Pjax::begin(array_merge(Yii::$app->params['pjax'], ['enablePushState' => true])) ?>
     <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
 
-        <?= $page->setSearchFormData(compact(['types', 'brands', 'states'])) ?>
+        <?= $page->setSearchFormData(compact(['billTypes', 'billGroupLabels'])) ?>
 
         <?php $page->beginContent('sorter-actions') ?>
             <?= $page->renderSorter([
