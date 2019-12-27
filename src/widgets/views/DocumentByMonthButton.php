@@ -43,10 +43,8 @@ use yii\helpers\Html;
         'id' => 'purse-month-' . uniqid(),
     ],
     'clientOptions' => [
-        'todayBtn' => true,
         'format' => 'yyyy-mm',
-        'viewMode' => 'months',
-        'minViewMode' => 'months',
+        'minView' => 3,
         'startView' => 'year',
         'autoclose' => true,
         'endDate' => $dt->modify('next month')->format('Y-m'),
