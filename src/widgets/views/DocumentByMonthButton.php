@@ -1,7 +1,7 @@
 <?php
 
 use hipanel\widgets\ModalButton;
-use kartik\date\DatePicker;
+use hipanel\widgets\DateTimePicker;
 use yii\helpers\Html;
 
 /** @var string $prepend */
@@ -38,14 +38,16 @@ use yii\helpers\Html;
 
 <?= $prepend ?>
 
-<?= $modalButton->form->field($model, 'month')->widget(DatePicker::class, [
+<?= $modalButton->form->field($model, 'month')->widget(DateTimePicker::class, [
     'options' => [
         'id' => 'purse-month-' . uniqid(),
     ],
-    'pluginOptions' => [
+    'clientOptions' => [
+        'todayBtn' => true,
         'format' => 'yyyy-mm',
         'viewMode' => 'months',
         'minViewMode' => 'months',
+        'startView' => 'year',
         'autoclose' => true,
         'endDate' => $dt->modify('next month')->format('Y-m'),
     ],
