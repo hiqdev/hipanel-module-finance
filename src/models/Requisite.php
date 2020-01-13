@@ -14,11 +14,6 @@ use hipanel\modules\client\models\Contact;
 
 /**
  * Class Requisite.
- *
- * @property Requisite[] $localizations
- * @property int|string $id
- * @property bool $gdpr_consent
- * @property bool $policy_consent
  */
 class Requisite extends Contact
 {
