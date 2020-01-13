@@ -51,7 +51,7 @@ final class CartCurrencyNegotiator extends Widget
     public function run()
     {
         $cartCurrency = $this->cart->getCurrency();
-        $this->renderCurrencyOptions($this->cart->getTotal(), $cartCurrency);
+        $this->renderCurrencyOptions(number_format($this->cart->getTotal(), 2), $cartCurrency);
 
         $convertibleCurrencies = $this->convertibleCurrencies(
             ArrayHelper::getColumn($this->client->purses, 'currency'),
@@ -80,7 +80,7 @@ final class CartCurrencyNegotiator extends Widget
     {
         $cartCurrency = $this->cart->getCurrency();
         if ($cartCurrency === $currency) {
-            return $this->cart->getTotal();
+            return number_format($this->cart->getTotal(), 2);
         }
 
         $convertibleCurrencies = $this->convertibleCurrencies(
@@ -90,7 +90,7 @@ final class CartCurrencyNegotiator extends Widget
 
         foreach ($convertibleCurrencies as $rate) {
             if ($rate->from === strtoupper($currency)) {
-                return $this->cart->getTotal() / $rate->rate;
+                return number_format($this->cart->getTotal() / $rate->rate, 2);
             }
         }
 
