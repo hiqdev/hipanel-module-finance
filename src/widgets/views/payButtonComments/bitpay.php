@@ -28,4 +28,3 @@ use yii\web\View;
     <br>
      <?= Yii::t('hipanel:finance:deposit', 'We apologize for inconveniences and hope for your understanding.') ?>
 <?php endif; ?>
-
