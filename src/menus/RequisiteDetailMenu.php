@@ -27,16 +27,9 @@ class RequisiteDetailMenu extends \hipanel\menus\AbstractDetailMenu
             $items[] = [
                 'label' => Yii::t('hipanel:client', 'Documents'),
                 'icon' => 'fa-paperclip',
-                'url' => ['attach-documents', 'id' => $this->model->id],
+                'url' => ['@contact/attach-documents', 'id' => $this->model->id],
             ];
         }
-
-        $items[] = [
-            'label' => Yii::t('hipanel:client', 'Used for {n, plural, one{# domain} other{# domains}}', ['n' => (int) $this->model->used_count]),
-            'icon' => 'fa-globe',
-            'url' => Url::toSearch('domain', ['contacts' => $this->model->id]),
-            'visible' => Yii::getAlias('@domain', false) && (int) $this->model->used_count > 0,
-        ];
 
         unset($items['view']);
 

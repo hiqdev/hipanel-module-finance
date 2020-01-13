@@ -53,9 +53,6 @@ FlagIconCssAsset::register($this);
                 <?= RequisiteDetailMenu::widget(['model' => $model]) ?>
             </div>
         <?php Box::end() ?>
-        <?= ForceVerificationBlock::widget([
-            'contact' => $model,
-        ]) ?>
     </div>
 
     <div class="col-md-9">
@@ -65,7 +62,7 @@ FlagIconCssAsset::register($this);
                     <?php $box->beginHeader() ?>
                         <?= $box->renderTitle(Yii::t('hipanel:client', 'Contact information')) ?>
                         <?php $box->beginTools() ?>
-                            <?= Html::a(Yii::t('hipanel', 'Edit'), ['update', 'id' => $model->id], ['class' => 'btn btn-default btn-xs']) ?>
+                            <?= Html::a(Yii::t('hipanel', 'Edit'), ['@contact/update', 'id' => $model->id], ['class' => 'btn btn-default btn-xs']) ?>
                         <?php $box->endTools() ?>
                     <?php $box->endHeader() ?>
                     <?php $box->beginBody() ?>
@@ -78,44 +75,11 @@ FlagIconCssAsset::register($this);
                                 'birth_date',
                                 'email_with_verification', 'abuse_email',
                                 'voice_phone', 'fax_phone',
-                                'messengers', 'other', 'social_net',
-                                'xxx_token',
                             ],
                         ]) ?>
                     <?php $box->endBody() ?>
                 <?php $box->end() ?>
 
-                <?php $box = Box::begin([
-                    'renderBody' => false,
-                    'collapsed' => empty($model->reg_data) && empty($model->vat_number) && empty($model->vat_rate),
-                    'collapsable' => true,
-                    'title' => Yii::t('hipanel:client', 'Registration data'),
-                ]) ?>
-                    <?php $box->beginBody() ?>
-                        <?= ContactGridView::detailView([
-                            'boxed'   => false,
-                            'model'   => $model,
-                            'columns' => ['reg_data', 'vat_rate', 'invoice_last_no'],
-                        ]) ?>
-                    <?php $box->endBody() ?>
-                <?php $box->end() ?>
-
-                <?php $box = Box::begin([
-                    'renderBody' => false,
-                    'collapsed' => empty($model->bank_details),
-                    'collapsable' => true,
-                    'title' => Yii::t('hipanel:client', 'Bank details'),
-                ]) ?>
-                    <?php $box->beginBody() ?>
-                        <?= ContactGridView::detailView([
-                            'boxed'   => false,
-                            'model'   => $model,
-                            'columns' => ['bank_account', 'bank_name', 'bank_address', 'bank_swift'],
-                        ]) ?>
-                    <?php $box->endBody() ?>
-                <?php $box->end() ?>
-            </div>
-            <div class="col-md-6">
                 <?php $box = Box::begin(['renderBody' => false]) ?>
                     <?php $box->beginHeader() ?>
                         <?= $box->renderTitle(Yii::t('hipanel:client', 'Postal information')) ?>
@@ -132,22 +96,36 @@ FlagIconCssAsset::register($this);
                     <?php $box->endBody() ?>
                 <?php $box->end() ?>
 
-                <?php if (Yii::getAlias('@document', false) !== false && Yii::$app->user->can('document.read')) : ?>
-                    <?php $box = Box::begin(['renderBody' => false]) ?>
-                        <?php $box->beginHeader() ?>
-                            <?= $box->renderTitle(Yii::t('hipanel:client', 'Documents')) ?>
-                            <?php $box->beginTools() ?>
-                                <?= Html::a(Yii::t('hipanel', 'Details'), ['@contact/attach-documents', 'id' => $model->id], ['class' => 'btn btn-default btn-xs']) ?>
-                                <?= Html::a(Yii::t('hipanel', 'Upload'), ['@contact/attach-documents', 'id' => $model->id], ['class' => 'btn btn-default btn-xs']) ?>
-                            <?php $box->endTools() ?>
-                        <?php $box->endHeader() ?>
-                        <?php $box->beginBody() ?>
-                            <?= StackedDocumentsView::widget([
-                                'models' => $model->documents,
-                            ]); ?>
-                        <?php $box->endBody() ?>
-                    <?php $box->end() ?>
-                <?php endif; ?>
+
+                <?php $box = Box::begin([
+                    'renderBody' => false,
+                    'collapsed' => $model->isEmpty(['reg_data', 'vat_number', 'vat_rate', 'invoice_last_no']),
+                    'collapsable' => true,
+                    'title' => Yii::t('hipanel:client', 'Registration data'),
+                ]) ?>
+                    <?php $box->beginBody() ?>
+                        <?= ContactGridView::detailView([
+                            'boxed'   => false,
+                            'model'   => $model,
+                            'columns' => ['reg_data', 'vat_rate', 'invoice_last_no'],
+                        ]) ?>
+                    <?php $box->endBody() ?>
+                <?php $box->end() ?>
+
+                <?php $box = Box::begin([
+                    'renderBody' => false,
+                    'collapsed' => $model->isEmpty('bank_details'),
+                    'collapsable' => true,
+                    'title' => Yii::t('hipanel:client', 'Bank details'),
+                ]) ?>
+                    <?php $box->beginBody() ?>
+                        <?= ContactGridView::detailView([
+                            'boxed'   => false,
+                            'model'   => $model,
+                            'columns' => ['bank_account', 'bank_name', 'bank_address', 'bank_swift'],
+                        ]) ?>
+                    <?php $box->endBody() ?>
+                <?php $box->end() ?>
 
                 <?php $box = Box::begin([
                     'renderBody' => false,
@@ -165,6 +143,26 @@ FlagIconCssAsset::register($this);
                         ]) ?>
                     <?php $box->endBody() ?>
                 <?php $box->end() ?>
+            </div>
+
+            <div class="col-md-6">
+                <?php if (Yii::getAlias('@document', false) !== false && Yii::$app->user->can('document.read')) : ?>
+                    <?php $box = Box::begin(['renderBody' => false]) ?>
+                        <?php $box->beginHeader() ?>
+                            <?= $box->renderTitle(Yii::t('hipanel:client', 'Documents')) ?>
+                            <?php $box->beginTools() ?>
+                                <?= Html::a(Yii::t('hipanel', 'Details'), ['@contact/attach-documents', 'id' => $model->id], ['class' => 'btn btn-default btn-xs']) ?>
+                                <?= Html::a(Yii::t('hipanel', 'Upload'), ['@contact/attach-documents', 'id' => $model->id], ['class' => 'btn btn-default btn-xs']) ?>
+                            <?php $box->endTools() ?>
+                        <?php $box->endHeader() ?>
+                        <?php $box->beginBody() ?>
+                            <?= StackedDocumentsView::widget([
+                                'models' => $model->documents,
+                            ]); ?>
+                        <?php $box->endBody() ?>
+                    <?php $box->end() ?>
+                <?php endif; ?>
+
             </div>
         </div>
     </div>

@@ -33,13 +33,7 @@ class RequisiteActionsMenu extends Menu
             'edit' => [
                 'label' => Yii::t('hipanel', 'Edit'),
                 'icon' => 'fa-pencil',
-                'url' => ['@requisite/update', 'id' => $this->model->id],
-                'encode' => false,
-            ],
-            'copy' => [
-                'label' => Yii::t('hipanel', 'Copy'),
-                'icon' => 'fa-copy',
-                'url' => ['@requisite/copy', 'id' => $this->model->id],
+                'url' => ['@contact/update', 'id' => $this->model->id],
                 'encode' => false,
             ],
             [

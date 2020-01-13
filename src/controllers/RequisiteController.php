@@ -10,26 +10,21 @@
 
 namespace hipanel\modules\finance\controllers;
 
+use hipanel\actions\IndexAction;
+use hipanel\actions\ViewAction;
+use hipanel\actions\ComboSearchAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\RedirectAction;
 use hipanel\filters\EasyAccessControl;
+use hipanel\base\CrudController;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\models\Requisite;
 use yii\base\Event;
 use yii\filters\VerbFilter;
 use Yii;
 
-class RequisiteController extends \hipanel\modules\client\controllers\ContactController
+class RequisiteController extends CrudController
 {
-    /**
-     * @var NotifyTriesRepository
-     */
-    private $notifyTriesRepository;
-    /**
-     * @var HasPINCode
-     */
-    private $hasPINCode;
-
     /**
      * {@inheritdoc}
      */
@@ -40,20 +35,10 @@ class RequisiteController extends \hipanel\modules\client\controllers\ContactCon
                 'class' => EasyAccessControl::class,
                 'actions' => [
                     'reserve-number' => 'requisites.update',
-                    'delete' => 'requisites.delete',
                     'create' => 'requisites.create',
                     'copy' => 'requisites.create',
                     'update' => 'requisites.update',
                     '*' => 'requisites.read',
-                ],
-            ],
-            [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'set-confirmation' => ['post'],
-                    'request-email-verification' => ['post'],
-                    'request-phone-confirmation-code' => ['post'],
-                    'confirm-phone' => ['post'],
                 ],
             ],
         ]);
@@ -62,20 +47,32 @@ class RequisiteController extends \hipanel\modules\client\controllers\ContactCon
     public function actions()
     {
         return array_merge(parent::actions(), [
+            'index' => [
+                'class' => IndexAction::class,
+            ],
+            'search' => [
+                'class' => ComboSearchAction::class,
+            ],
+            'view' => [
+                'class' => ViewAction::class,
+                'findOptions' => ['with_counters' => 1],
+                'on beforePerform' => function ($event) {
+                    /** @var ViewAction $action */
+                    $action = $event->sender;
+
+                    /** @var ContactQuery $query */
+                    $query = $action->getDataProvider()->query;
+
+                    if (Yii::getAlias('@document', false)) {
+                        $query->withDocuments();
+                    }
+                    $query->withLocalizations();
+                },
+            ],
             'reserve-number' => [
                 'class' => SmartUpdateAction::class,
                 'success' => Yii::t('hipanel:client', 'Document number was reserved'),
                 'view' => 'modal/reserveNumber',
-                'on beforeFetch' => function (Event $event) {
-                    /** @var \hipanel\actions\SearchAction $action */
-                    $action = $event->sender;
-                    /** @var RequisiteQuery $query */
-                    $query = $action->getDataProvider()->query;
-                },
-                'on beforeLoad' => function (Event $event) {
-                    /** @var Action $action */
-                    $action = $event->sender;
-                },
                 'POST html' => [
                     'save' => true,
                     'success' => [

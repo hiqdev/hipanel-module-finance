@@ -27,6 +27,11 @@ class Requisite extends Contact
      */
     use \hipanel\base\ModelTrait;
 
+    public static function tableName()
+    {
+        return 'requisite';
+    }
+
     public function rules()
     {
         return array_merge(parent::rules(), [
@@ -37,5 +42,20 @@ class Requisite extends Contact
     public function isRequisite()
     {
         return (boolean) $this->is_requisite;
+    }
+
+    public function isEmpty($fields) : bool
+    {
+        $fields = is_string($fields) ? array_map(function($v) {
+            return trim($v);
+        },  explode(",", $fields)) : $fields;
+
+        foreach ($fields as $field) {
+            if (!empty($this->$field)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
