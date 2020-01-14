@@ -19,8 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
     'enableClientValidation' => true,
     'validateOnBlur' => true,
     'enableAjaxValidation' => true,
+    'validateOnChange' => true,
     'layout' => 'horizontal',
-    'validationUrl' => Url::toRoute(['validate-form', 'scenario' => $model->scenario]),
+    'validationUrl' => Url::toRoute(['@requisite/validate-form', 'scenario' => $model->scenario]),
 ]) ?>
 
     <?= $form->field($model, 'id')->hiddenInput()->label(false); ?>

@@ -51,7 +51,7 @@ use hipanel\widgets\RefCombo;
             <?php $form = ActiveForm::begin([
                 'id' => 'bulk-set-templates',
                 'action' => Url::toRoute('set-templates'),
-                'enableAjaxValidation' => false,
+                'enableAjaxValidation' => true,
                 'validateOnBlur' => true,
                 'validationUrl' => Url::toRoute(['validate-form', 'scenario' => 'set-templates']),
             ]) ?>

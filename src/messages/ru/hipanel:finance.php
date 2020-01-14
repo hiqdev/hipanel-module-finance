@@ -184,7 +184,7 @@ return [
     'The bill is not unique' => 'Платёж не уникальный',
 
     // Requisites
-    'Reserve number' => 'Зарезервировать томер',
+    'Reserve number' => 'Зарезервировать номер',
     'Document number was reserved' => 'Номер был зарезервирован',
     'Set templates' => 'Назначить шаблоны',
     'Set serie' => 'Установить серию',
@@ -196,4 +196,5 @@ return [
     'Probation template' => 'Шаблон для испытательного срока',
     'Requisite detailed information' => 'Детальная информция о реквизите',
     'Requisite templates' => 'Шаблоны реквизита',
+    'Recipient' => 'Получатель',
 ];
