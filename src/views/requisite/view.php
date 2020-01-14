@@ -58,6 +58,7 @@ FlagIconCssAsset::register($this);
     <div class="col-md-9">
         <div class="row">
             <div class="col-md-6">
+                <?php /***
                 <?php $box = Box::begin(['renderBody' => false]) ?>
                     <?php $box->beginHeader() ?>
                         <?= $box->renderTitle(Yii::t('hipanel:client', 'Contact information')) ?>
@@ -79,23 +80,7 @@ FlagIconCssAsset::register($this);
                         ]) ?>
                     <?php $box->endBody() ?>
                 <?php $box->end() ?>
-
-                <?php $box = Box::begin(['renderBody' => false]) ?>
-                    <?php $box->beginHeader() ?>
-                        <?= $box->renderTitle(Yii::t('hipanel:client', 'Postal information')) ?>
-                    <?php $box->endHeader() ?>
-                    <?php $box->beginBody() ?>
-                        <?= RequisiteGridView::detailView([
-                            'boxed'   => false,
-                            'model'   => $model,
-                            'columns' => [
-                                'first_name', 'last_name', 'organization',
-                                'street', 'city', 'province', 'postal_code', 'country',
-                            ],
-                        ]) ?>
-                    <?php $box->endBody() ?>
-                <?php $box->end() ?>
-
+                **/ ?>
 
                 <?php $box = Box::begin([
                     'renderBody' => false,
@@ -134,16 +119,34 @@ FlagIconCssAsset::register($this);
 
                 <?php $box = Box::begin([
                     'renderBody' => false,
-                    'collapsed' => true,
-                    'title' => Yii::t('hipanel:client', 'Additional information'),
+                    'collapsed' => false,
+                    'title' => Yii::t('hipanel:finance', 'Requisite templates'),
                 ]) ?>
                     <?php $box->beginBody() ?>
                         <?= RequisiteGridView::detailView([
                             'boxed'   => false,
                             'model'   => $model,
                             'columns' => [
-                                'passport_date', 'passport_no', 'passport_by',
-                                'organization_ru', 'inn', 'kpp', 'director_name', 'isresident',
+                                'invoice_name',
+                                'acceptance_name',
+                                'contract_name',
+                                'probation_name',
+                            ],
+                        ]) ?>
+                    <?php $box->endBody() ?>
+                <?php $box->end() ?>
+
+                <?php $box = Box::begin(['renderBody' => false]) ?>
+                    <?php $box->beginHeader() ?>
+                        <?= $box->renderTitle(Yii::t('hipanel:client', 'Postal information')) ?>
+                    <?php $box->endHeader() ?>
+                    <?php $box->beginBody() ?>
+                        <?= RequisiteGridView::detailView([
+                            'boxed'   => false,
+                            'model'   => $model,
+                            'columns' => [
+                                'first_name', 'last_name', 'organization',
+                                'street', 'city', 'province', 'postal_code', 'country',
                             ],
                         ]) ?>
                     <?php $box->endBody() ?>

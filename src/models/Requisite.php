@@ -37,6 +37,7 @@ class Requisite extends Contact
             [['invoice_id', 'acceptance_id', 'contract_id', 'probation_id'], 'safe'],
             [['serie'], 'safe'],
             [['serie'], 'required', 'on' => ['set-serie', 'update']],
+            [['invoice_name', 'acceptance_name', 'contract_name', 'probation_name'], 'safe'],
         ]);
     }
 
@@ -69,6 +70,10 @@ class Requisite extends Contact
             'contract_id' => Yii::t('hipanel:finance', 'Contract template'),
             'probation_id' => Yii::t('hipanel:finance', 'Probation template'),
             'requisites' => Yii::t('hipanel:finance', 'Requisites'),
+            'invoice_name' => Yii::t('hipanel:finance', 'Invoice template'),
+            'acceptance_name' => Yii::t('hipanel:finance', 'Acceptance template'),
+            'contract_name' => Yii::t('hipanel:finance', 'Contract template'),
+            'probation_name' => Yii::t('hipanel:finance', 'Probation template'),
         ]);
     }
 }

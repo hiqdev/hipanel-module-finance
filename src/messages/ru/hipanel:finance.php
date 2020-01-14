@@ -190,9 +190,10 @@ return [
     'Set serie' => 'Установить серию',
     'Serie' => 'Серия',
     'Affected requisites' => 'Задействованные реквизиты (контакты)',
-    'Invoice template' => 'Шаблон для инвоисв',
+    'Invoice template' => 'Шаблон для инвоисов',
     'Acceptance template' => 'Шаблон для актов',
     'Contract template' => 'Шаблон для контрактов',
     'Probation template' => 'Шаблон для испытательного срока',
     'Requisite detailed information' => 'Детальная информция о реквизите',
+    'Requisite templates' => 'Шаблоны реквизита',
 ];
