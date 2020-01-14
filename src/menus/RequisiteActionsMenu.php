@@ -48,7 +48,7 @@ class RequisiteActionsMenu extends Menu
                         'handleSubmit' => ['reserve-number', 'id' => $this->model->id],
                         'toggleButton' => [
                             'tag' => 'a',
-                            'label' => Html::tag('i', null, ['class' => 'fa fa-ticket']) . " " . Yii::t('hipanel:client', 'Reserve number'),
+                            'label' => Html::tag('i', null, ['class' => 'fa fa-ticket']) . " " . Yii::t('hipanel:finance', 'Reserve number'),
                             'style' => 'cursor: pointer;',
                         ],
                     ],

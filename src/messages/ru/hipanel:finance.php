@@ -182,4 +182,10 @@ return [
     'Total:' => 'Всего:',
     '{units, plural, one{# unit} other{# units}} &times; {quantity, plural, one{# day} other{# days}}' => '{units, plural, one{# юнит} few{# юнита} other{# юнитов}} &times; {quantity, plural, one{# день} few{# дня} other{# дней}}',
     'The bill is not unique' => 'Платёж не уникальный',
+
+    // Requisites
+    'Reserve number' => 'Зарезервировать томер',
+    'Document number was reserved' => 'Номер был зарезервирован',
+    'Set templates' => 'Назначить темплейты',
+    'Set serie' => 'Установить серию',
 ];

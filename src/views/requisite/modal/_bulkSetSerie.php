@@ -1,7 +1,7 @@
 <?php
 
 use hipanel\helpers\Url;
-use hipanel\modules\finance\widgets\RequisiteTemplatesWidget;
+use hipanel\modules\finance\widgets\RequisiteSerieWidget;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use hipanel\widgets\RefCombo;
@@ -22,9 +22,9 @@ use hipanel\widgets\RefCombo;
             <div class="row" style="margin-top: 15pt;">
                 <div class="col-md-12">
                     <?php if (!empty($models)) : ?>
-                        <?= RequisiteTemplatesWidget::widget([
+                        <?= RequisiteSerieWidget::widget([
                             'model' => $models,
-                            'actionUrl' => 'bulk-set-templates',
+                            'actionUrl' => 'bulk-set-serie',
                         ]) ?>
                         <br>
                         <div class="panel panel-default">
@@ -47,24 +47,20 @@ use hipanel\widgets\RefCombo;
         <div role="tabpanel" class="tab-pane" id="by-one">
             <?php $form = ActiveForm::begin([
                 'id' => 'bulk-set-templates',
-                'action' => Url::toRoute('set-templates'),
+                'action' => Url::toRoute('@requisite/set-serie'),
                 'enableAjaxValidation' => false,
                 'validateOnBlur' => true,
-                'validationUrl' => Url::toRoute(['validate-form', 'scenario' => 'set-templates']),
+                'validationUrl' => Url::toRoute(['validate-form', 'scenario' => 'set-serie']),
             ]) ?>
             <div class="row" style="margin-top: 15pt;">
                 <?php foreach ($models as $model) : ?>
-                    <div class="col-md-12" style="line-height: 34px;">
+                    <div class="col-md-8" style="line-height: 34px;">
                         <b><?= "{$model->name} / {$model->organization}" ?></b>
                     </div>
                     <?= Html::activeHiddenInput($model, "[$model->id]id") ?>
-                    <?php foreach (['invoice', 'acceptance', 'contract', 'probation'] as $template) : ?>
-                        <div class="col-md-6">
-                            <?= $form->field($model, "[$model->id]{$template}_id")->widget(RefCombo::class, [
-                                'gtype' => "type,document,{$template}",
-                            ]) ?>
-                        </div>
-                    <?php endforeach ?>
+                    <div class="col-md-4">
+                        <?= $form->field($model, "[$model->id]serie") ?>
+                    </div>
                     <hr>
                 <?php endforeach ?>
             </div>

@@ -16,9 +16,9 @@ use hipanel\widgets\RefCombo;
     <?php $form = ActiveForm::begin([
         'id' => 'nss-form-pjax',
         'action' => $actionUrl,
-        'enableAjaxValidation' => true,
+        'enableAjaxValidation' => false,
         'enableClientValidation' => true,
-        'validationUrl' => Url::toRoute(['@requisite/validate-templates', 'scenario' => 'default']),
+        'validationUrl' => Url::toRoute(['@requisite/validate-form', 'scenario' => 'set-serie']),
         'options' => [
             'data-pjax' => true,
             'data-pjaxPush' => false,
@@ -37,13 +37,9 @@ use hipanel\widgets\RefCombo;
         <div class="row" style="margin-top: 15pt;">
             <div class="col-md-10 inline-form-selector">
                 <?php $model = is_array($model) ? reset($model) : $model ?>
-                <?php foreach (['invoice', 'acceptance', 'contract', 'probation'] as $reqtemplate) : ?>
                     <div class="col-md-6">
-                        <?= $form->field($model, "{$reqtemplate}_id")->widget(RefCombo::class, [
-                            'gtype' => "type,document,{$reqtemplate}",
-                        ]) ?>
+                        <?= $form->field($model, "serie") ?>
                     </div>
-                <?php endforeach ?>
             </div>
             <div class="col-md-2 text-right">
                 <?= Html::submitButton(Yii::t('hipanel', 'Save'), [

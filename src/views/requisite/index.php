@@ -8,7 +8,7 @@ use hipanel\widgets\AjaxModal;
 use yii\bootstrap\Modal;
 
 
-$this->title = Yii::t('hipanel', 'Requiites');
+$this->title = Yii::t('hipanel:finance', 'Requisites');
 $this->params['subtitle'] = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -37,6 +37,16 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('bulk-actions') ?>
+            <?= AjaxModal::widget([
+                    'id' => 'bulk-set-serie-modal',
+                    'bulkPage' => true,
+                    'header' => Html::tag('h4', Yii::t('hipanel:finance', 'Set serie'), ['class' => 'modal-title']),
+                    'scenario' => 'bulk-set-serie',
+                    'actionUrl' => ['@requisite/bulk-set-serie'],
+                    'size' => Modal::SIZE_LARGE,
+                    'toggleButton' => ['label' => Yii::t('hipanel:finance', 'Set serie'), 'class' => 'btn btn-sm btn-default'],
+            ]) ?>
+
             <?= AjaxModal::widget([
                     'id' => 'bulk-set-templates-modal',
                     'bulkPage' => true,

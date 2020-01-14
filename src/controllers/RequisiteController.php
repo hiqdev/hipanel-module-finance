@@ -16,6 +16,7 @@ use hipanel\actions\ComboSearchAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\RedirectAction;
 use hipanel\filters\EasyAccessControl;
+use hipanel\actions\ValidateFormAction;
 use hipanel\base\CrudController;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\models\Requisite;
@@ -71,7 +72,7 @@ class RequisiteController extends CrudController
             ],
             'reserve-number' => [
                 'class' => SmartUpdateAction::class,
-                'success' => Yii::t('hipanel:client', 'Document number was reserved'),
+                'success' => Yii::t('hipanel:finance', 'Document number was reserved'),
                 'view' => 'modal/reserveNumber',
                 'POST html' => [
                     'save' => true,
@@ -134,6 +135,43 @@ class RequisiteController extends CrudController
                         $model->attributes = $attributes;
                     }
                 },
+            ],
+            'set-serie' => [
+                'class' => SmartUpdateAction::class,
+                'success' => Yii::t('hipanel:finance', 'Serie changed'),
+                'error' => Yii::t('hipanel:finance', 'Failed to change requisite serie'),
+            ],
+            'bulk-set-serie' => [
+                'class' => SmartUpdateAction::class,
+                'scenario' => 'set-serie',
+                'view' => 'modal/_bulkSetSerie',
+                'success' => Yii::t('hipanel:finance', 'Series changed'),
+                'POST pjax' => [
+                    'save' => true,
+                    'success' => [
+                        'class' => ProxyAction::class,
+                        'action' => 'index',
+                    ],
+                ],
+                'on beforeFetch' => function (Event $event) {
+                    /** @var \hipanel\actions\SearchAction $action */
+                    $action = $event->sender;
+                    $dataProvider = $action->getDataProvider();
+                    $dataProvider->query
+                        ->select(['*']);
+                },
+                'on beforeSave' => function (Event $event) {
+                    /** @var \hipanel\actions\Action $action */
+                    $action = $event->sender;
+                    $serie = Yii::$app->request->post('serie');
+
+                    foreach ($action->collection->models as $model) {
+                        $model->serie = $serie;
+                    }
+                },
+            ],
+            'validate-form' => [
+                'class' => ValidateFormAction::class,
             ],
         ]);
     }

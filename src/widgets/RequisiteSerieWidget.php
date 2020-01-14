@@ -12,7 +12,7 @@ namespace hipanel\modules\finance\widgets;
 
 use yii\base\Widget;
 
-class TemplatesWidget extends Widget
+class RequisiteSerieWidget extends Widget
 {
     public $model;
 
@@ -31,14 +31,14 @@ class TemplatesWidget extends Widget
     /**
      * @var array|string url to send the form
      */
-    public $actionUrl = '@requisite/set-templates';
+    public $actionUrl = '@requisite/set-serie';
 
     /**
      * {@inheritdoc}
      */
     public function run()
     {
-        return $this->render('templates', [
+        return $this->render('requisite-serie', [
             'model' => $this->model,
             'actionUrl' => $this->actionUrl,
         ]);
