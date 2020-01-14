@@ -186,7 +186,7 @@ return [
     // Requisites
     'Reserve number' => 'Зарезервировать томер',
     'Document number was reserved' => 'Номер был зарезервирован',
-    'Set templates' => 'Назначить темплейты',
+    'Set templates' => 'Назначить шаблоны',
     'Set serie' => 'Установить серию',
     'Serie' => 'Серия',
     'Affected requisites' => 'Задействованные реквизиты (контакты)',
