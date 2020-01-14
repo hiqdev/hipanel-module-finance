@@ -85,6 +85,56 @@ class RequisiteController extends CrudController
                     ],
                 ],
             ],
+            'set-templates' => [
+                'class' => SmartUpdateAction::class,
+                'success' => Yii::t('hipanel:finance', 'Templates changed'),
+                'POST html' => [
+                    'save' => true,
+                    'success' => [
+                        'class' => RedirectAction::class,
+                        'url' => function ($action) {
+                            return Yii::$app->request->referrer;
+                        },
+                    ],
+                ],
+            ],
+            'bulk-set-templates' => [
+                'class' => SmartUpdateAction::class,
+                'scenario' => 'set-templates',
+                'view' => 'modal/_bulkSetTemplates',
+                'success' => Yii::t('hipanel:finance', 'Templates changed'),
+                'POST pjax' => [
+                    'save' => true,
+                    'success' => [
+                        'class' => ProxyAction::class,
+                        'action' => 'index',
+                    ],
+                ],
+                'on beforeFetch' => function (Event $event) {
+                    /** @var \hipanel\actions\SearchAction $action */
+                    $action = $event->sender;
+                    $dataProvider = $action->getDataProvider();
+                    $dataProvider->query
+                        ->select(['*'])
+                        ->addSelect(['templates'])
+                        ->andWhere(['show_nonrequisite' => 1]);
+                },
+                'on beforeSave' => function (Event $event) {
+                    /** @var \hipanel\actions\Action $action */
+                    $action = $event->sender;
+
+                    $attributes = [
+                        'invoice_id' => Yii::$app->request->post('invoice_id'),
+                        'acceptance_id' => Yii::$app->request->post('acceptance_id'),
+                        'contract_id' => Yii::$app->request->post('contract_id'),
+                        'probation_id' => Yii::$app->request->post('probation_id'),
+                    ];
+
+                    foreach ($action->collection->models as $model) {
+                        $model->attributes = $attributes;
+                    }
+                },
+            ],
         ]);
     }
 }

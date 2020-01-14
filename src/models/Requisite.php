@@ -30,7 +30,10 @@ class Requisite extends Contact
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['id', 'client_id', 'recipient_id'], 'required', 'on' => ['reserve-number']],
+            [['id', 'client_id', 'recipient_id'], 'integer'],
+            [['id'], 'required', 'on' => ['reserve-number', 'set-templates']],
+            [['client_id', 'recipient_id'], 'required', 'on' => ['reserve-number']],
+            [['invoice_id', 'acceptance_id', 'contract_id', 'probation_id'], 'safe'],
         ]);
     }
 
