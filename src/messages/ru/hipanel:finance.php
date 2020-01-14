@@ -188,4 +188,10 @@ return [
     'Document number was reserved' => 'Номер был зарезервирован',
     'Set templates' => 'Назначить темплейты',
     'Set serie' => 'Установить серию',
+    'Serie' => 'Серия',
+    'Affected requisites' => 'Задействованные реквизиты (контакты)',
+    'Invoice template' => 'Шаблон для инвоисв',
+    'Acceptance template' => 'Шаблон для актов',
+    'Contract template' => 'Шаблон для контрактов',
+    'Probation template' => 'Шаблон для испытательного срока',
 ];

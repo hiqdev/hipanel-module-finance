@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\modules\client\models\Contact;
+use Yii;
 
 /**
  * Class Requisite.
@@ -57,5 +58,17 @@ class Requisite extends Contact
         }
 
         return true;
+    }
+
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(), [
+            'serie' => Yii::t('hipanel:finance', 'Serie'),
+            'invoice_id' => Yii::t('hipanel:finance', 'Invoice template'),
+            'acceptance_id' => Yii::t('hipanel:finance', 'Acceptance template'),
+            'contract_id' => Yii::t('hipanel:finance', 'Contract template'),
+            'probation_id' => Yii::t('hipanel:finance', 'Probation template'),
+            'requisites' => Yii::t('hipanel:finance', 'Requisites'),
+        ]);
     }
 }
