@@ -15,6 +15,7 @@ use hipanel\actions\ViewAction;
 use hipanel\actions\ComboSearchAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\RedirectAction;
+use hipanel\actions\ProxyAction;
 use hipanel\filters\EasyAccessControl;
 use hipanel\actions\ValidateFormAction;
 use hipanel\base\CrudController;
@@ -111,6 +112,21 @@ class RequisiteController extends CrudController
                         'action' => 'index',
                     ],
                 ],
+                'collectionLoader' => function ($action) {
+                    /** @var SmartPerformAction $action */
+                    $data = Yii::$app->request->post($action->collection->getModel()->formName());
+                    $attributes = [];
+                    foreach (['invoice_id', 'acceptance_id', 'contract_id', 'probation_id', 'nda_id'] as $attribute) {
+                        $attributes[$attribute] = $data[$attribute];
+                        unset($data[$attribute]);
+                    }
+
+                    foreach ($data as &$item) {
+                        $item = array_merge($item, $attributes);
+                    }
+
+                    $action->collection->load($data);
+                },
                 'on beforeFetch' => function (Event $event) {
                     /** @var \hipanel\actions\SearchAction $action */
                     $action = $event->sender;
@@ -119,21 +135,6 @@ class RequisiteController extends CrudController
                         ->select(['*'])
                         ->addSelect(['templates'])
                         ->andWhere(['show_nonrequisite' => 1]);
-                },
-                'on beforeSave' => function (Event $event) {
-                    /** @var \hipanel\actions\Action $action */
-                    $action = $event->sender;
-
-                    $attributes = [
-                        'invoice_id' => Yii::$app->request->post('invoice_id'),
-                        'acceptance_id' => Yii::$app->request->post('acceptance_id'),
-                        'contract_id' => Yii::$app->request->post('contract_id'),
-                        'probation_id' => Yii::$app->request->post('probation_id'),
-                    ];
-
-                    foreach ($action->collection->models as $model) {
-                        $model->attributes = $attributes;
-                    }
                 },
             ],
             'set-serie' => [
@@ -146,6 +147,17 @@ class RequisiteController extends CrudController
                 'scenario' => 'set-serie',
                 'view' => 'modal/_bulkSetSerie',
                 'success' => Yii::t('hipanel:finance', 'Series changed'),
+                'collectionLoader' => function ($action) {
+                    /** @var SmartPerformAction $action */
+                    $data = Yii::$app->request->post($action->collection->getModel()->formName());
+                    $serie = $data['serie'];
+                    unset($data['serie']);
+                    foreach ($data as &$item) {
+                        $item['serie'] = $serie;
+                    }
+
+                    $action->collection->load($data);
+                },
                 'POST pjax' => [
                     'save' => true,
                     'success' => [
@@ -159,15 +171,6 @@ class RequisiteController extends CrudController
                     $dataProvider = $action->getDataProvider();
                     $dataProvider->query
                         ->select(['*']);
-                },
-                'on beforeSave' => function (Event $event) {
-                    /** @var \hipanel\actions\Action $action */
-                    $action = $event->sender;
-                    $serie = Yii::$app->request->post('serie');
-
-                    foreach ($action->collection->models as $model) {
-                        $model->serie = $serie;
-                    }
                 },
             ],
             'validate-form' => [

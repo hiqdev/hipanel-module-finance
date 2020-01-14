@@ -1,6 +1,6 @@
 <?php
 
-use hipanel\modules\client\grid\ContactGridView;
+use hipanel\modules\finance\grid\RequisiteGridView;
 use hipanel\modules\finance\menus\RequisiteDetailMenu;
 use hipanel\modules\client\widgets\ForceVerificationBlock;
 use hipanel\modules\document\widgets\StackedDocumentsView;
@@ -15,8 +15,8 @@ use yii\helpers\Inflector;
  * @var \hipanel\modules\client\models\Contact
  */
 $this->title = Inflector::titleize($model->name, true);
-$this->params['subtitle'] = Yii::t('hipanel:client', 'Requisite detailed information') . ' #' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:client', 'Requisites'), 'url' => ['index']];
+$this->params['subtitle'] = Yii::t('hipanel:finance', 'Requisite detailed information') . ' #' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Requisites'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 FlagIconCssAsset::register($this);
@@ -66,14 +66,14 @@ FlagIconCssAsset::register($this);
                         <?php $box->endTools() ?>
                     <?php $box->endHeader() ?>
                     <?php $box->beginBody() ?>
-                        <?= ContactGridView::detailView([
+                        <?= RequisiteGridView::detailView([
                             'boxed'   => false,
                             'model'   => $model,
                             'columns' => [
                                 'seller_id', 'client_id',
                                 'name_with_verification',
                                 'birth_date',
-                                'email_with_verification', 'abuse_email',
+                                'email', 'abuse_email',
                                 'voice_phone', 'fax_phone',
                             ],
                         ]) ?>
@@ -85,7 +85,7 @@ FlagIconCssAsset::register($this);
                         <?= $box->renderTitle(Yii::t('hipanel:client', 'Postal information')) ?>
                     <?php $box->endHeader() ?>
                     <?php $box->beginBody() ?>
-                        <?= ContactGridView::detailView([
+                        <?= RequisiteGridView::detailView([
                             'boxed'   => false,
                             'model'   => $model,
                             'columns' => [
@@ -104,10 +104,13 @@ FlagIconCssAsset::register($this);
                     'title' => Yii::t('hipanel:client', 'Registration data'),
                 ]) ?>
                     <?php $box->beginBody() ?>
-                        <?= ContactGridView::detailView([
+                        <?= RequisiteGridView::detailView([
                             'boxed'   => false,
                             'model'   => $model,
-                            'columns' => ['reg_data', 'vat_rate', 'invoice_last_no'],
+                            'columns' => [
+                                'reg_data', 'vat_rate', 'invoice_last_no',
+                                'serie',
+                            ],
                         ]) ?>
                     <?php $box->endBody() ?>
                 <?php $box->end() ?>
@@ -119,10 +122,12 @@ FlagIconCssAsset::register($this);
                     'title' => Yii::t('hipanel:client', 'Bank details'),
                 ]) ?>
                     <?php $box->beginBody() ?>
-                        <?= ContactGridView::detailView([
+                        <?= RequisiteGridView::detailView([
                             'boxed'   => false,
                             'model'   => $model,
-                            'columns' => ['bank_account', 'bank_name', 'bank_address', 'bank_swift'],
+                            'columns' => [
+                                'bank_account', 'bank_name', 'bank_address', 'bank_swift',
+                            ],
                         ]) ?>
                     <?php $box->endBody() ?>
                 <?php $box->end() ?>
@@ -133,7 +138,7 @@ FlagIconCssAsset::register($this);
                     'title' => Yii::t('hipanel:client', 'Additional information'),
                 ]) ?>
                     <?php $box->beginBody() ?>
-                        <?= ContactGridView::detailView([
+                        <?= RequisiteGridView::detailView([
                             'boxed'   => false,
                             'model'   => $model,
                             'columns' => [

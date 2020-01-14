@@ -194,4 +194,5 @@ return [
     'Acceptance template' => 'Шаблон для актов',
     'Contract template' => 'Шаблон для контрактов',
     'Probation template' => 'Шаблон для испытательного срока',
+    'Requisite detailed information' => 'Детальная информция о реквизите',
 ];
