@@ -25,9 +25,7 @@ use hipanel\widgets\RefCombo;
         ],
     ]) ?>
         <?php if (!is_array($model)) : ?>
-            <?php if ($model->isSetNSable()) : ?>
-                <?= Html::activeHiddenInput($model, 'id') ?>
-            <?php endif ?>
+            <?= Html::activeHiddenInput($model, 'id') ?>
         <?php else : ?>
             <?php foreach ($model as $item) : ?>
                 <?= Html::activeHiddenInput($item, "[$item->id]id") ?>
@@ -41,6 +39,8 @@ use hipanel\widgets\RefCombo;
                         <?= $form->field($model, "serie") ?>
                     </div>
             </div>
+        </div>
+        <div class="row" style="margin-top: 15pt;">
             <div class="col-md-2 text-right">
                 <?= Html::submitButton(Yii::t('hipanel', 'Save'), [
                     'class' => 'btn btn-success',

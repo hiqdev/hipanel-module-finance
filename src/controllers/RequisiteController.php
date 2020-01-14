@@ -14,6 +14,7 @@ use hipanel\actions\IndexAction;
 use hipanel\actions\ViewAction;
 use hipanel\actions\ComboSearchAction;
 use hipanel\actions\SmartUpdateAction;
+use hipanel\actions\PrepareBulkAction;
 use hipanel\actions\RedirectAction;
 use hipanel\actions\ProxyAction;
 use hipanel\filters\EasyAccessControl;
@@ -135,6 +136,18 @@ class RequisiteController extends CrudController
                         ->select(['*'])
                         ->addSelect(['templates'])
                         ->andWhere(['show_nonrequisite' => 1]);
+                },
+            ],
+            'set-templates-modal' => [
+                'class' => PrepareBulkAction::class,
+                'view' => 'modal/_bulkSetTemplates',
+                'on beforePerform' => function (Event $event) {
+                    /** @var \hipanel\actions\SearchAction $action */
+                    $action = $event->sender;
+                    $dataProvider = $action->getDataProvider();
+                    $dataProvider->query
+                        ->select(['*'])
+                        ->addSelect(['templates']);
                 },
             ],
             'set-serie' => [

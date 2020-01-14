@@ -11,10 +11,12 @@ use hipanel\widgets\RefCombo;
 <div>
 
     <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#bulk" aria-controls="home" role="tab" data-toggle="tab"><?= Yii::t('hipanel', 'Set for all') ?></a></li>
-        <li role="presentation"><a href="#by-one" aria-controls="profile" role="tab" data-toggle="tab"><?= Yii::t('hipanel', 'Set by one') ?></a></li>
-    </ul>
+    <?php if (count($models) > 1) : ?>
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#bulk" aria-controls="home" role="tab" data-toggle="tab"><?= Yii::t('hipanel', 'Set for all') ?></a></li>
+            <li role="presentation"><a href="#by-one" aria-controls="profile" role="tab" data-toggle="tab"><?= Yii::t('hipanel', 'Set by one') ?></a></li>
+        </ul>
+    <?php endif ?>
 
     <!-- Tab panes -->
     <div class="tab-content">
@@ -22,11 +24,6 @@ use hipanel\widgets\RefCombo;
             <div class="row" style="margin-top: 15pt;">
                 <div class="col-md-12">
                     <?php if (!empty($models)) : ?>
-                        <?= RequisiteTemplatesWidget::widget([
-                            'model' => $models,
-                            'actionUrl' => 'bulk-set-templates',
-                        ]) ?>
-                        <br>
                         <div class="panel panel-default">
                             <div class="panel-heading"><?= Yii::t('hipanel:finance', 'Affected requisites') ?></div>
                             <div class="panel-body">
@@ -40,6 +37,12 @@ use hipanel\widgets\RefCombo;
                                 ]); ?>
                             </div>
                         </div>
+
+                        <?= RequisiteTemplatesWidget::widget([
+                            'model' => $models,
+                            'actionUrl' => 'bulk-set-templates',
+                        ]) ?>
+                        <br>
                     <?php endif ?>
                 </div>
             </div>
