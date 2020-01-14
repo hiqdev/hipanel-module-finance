@@ -1,7 +1,7 @@
 <?php
 
 use hipanel\helpers\Url;
-use hipanel\modules\domain\widgets\NsWidget;
+use hipanel\modules\finance\widgets\TemplatesWidget;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use hipanel\widgets\RefCombo;
@@ -22,14 +22,11 @@ use hipanel\widgets\RefCombo;
             <div class="row" style="margin-top: 15pt;">
                 <div class="col-md-12">
                     <?php if (!empty($models)) : ?>
-                        <?php /***
-                        <?= NsWidget::widget([
+                        <?= TemplatesWidget::widget([
                             'model' => $models,
-                            'attribute' => 'nsips',
                             'actionUrl' => 'bulk-set-templates',
                         ]) ?>
                         <br>
-                        **/ ?>
                         <div class="panel panel-default">
                             <div class="panel-heading"><?= Yii::t('hipanel:finance', 'Affected requisites') ?></div>
                             <div class="panel-body">
