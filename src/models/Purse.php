@@ -19,6 +19,10 @@ use Yii;
 /**
  * Class Purse.
  *
+ * @property string|int id
+ * @property string|float currency
+ * @property string|float balance
+ * @property string credit
  * @property Client clientModel
  * @property Document[] contracts
  * @property Document[] probations
@@ -145,5 +149,13 @@ class Purse extends \hipanel\base\Model
             'update-contact' => 'update',
             'update-requisite' => 'update',
         ];
+    }
+
+    /**
+     * Full available budget, including the credit
+     */
+    public function getBudget(): float
+    {
+        return (float)$this->balance + (float)$this->credit;
     }
 }

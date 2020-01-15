@@ -50,7 +50,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     'sale' => [
                         'label'   => Yii::t('hipanel:finance:sale', 'Sales'),
                         'url'     => ['/finance/sale/index'],
-                        'visible' => $user->can('sale.read'),
+                        'visible' => $user->can('sale.read') && Yii::getAlias('@model', false),
                     ],
                     'generate' => [
                         'label'   => Yii::t('hipanel:finance', 'Generate documents'),
@@ -71,6 +71,11 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                         'label'   => Yii::t('hipanel.finance.tariffprofile', 'Tariff profiles'),
                         'url'     => ['@tariffprofile/index'],
                         'visible' => $user->can('plan.create'),
+                    ],
+                    'charge' => [
+                        'label'   => Yii::t('hipanel:finance', 'Charges'),
+                        'url'     => ['/finance/charge/index'],
+                        'visible' => $user->can('bill.charges.read'),
                     ],
                 ],
             ],

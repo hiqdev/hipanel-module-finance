@@ -22,12 +22,12 @@ class PayControllerTest extends \PHPUnit\Framework\TestCase
      */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new PayController('test', null);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
     }
 

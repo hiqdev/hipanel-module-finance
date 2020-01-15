@@ -20,6 +20,7 @@ return [
     'Tariff' => 'Тариф',
     'Tariffs' => 'Тарифы',
     'Servers' => 'Сервера',
+    'Charges' => 'Списания',
 
     '<b>{currency}</b> account' => '<b>{currency}</b> счёт',
     'Are you sure you want to update invoice?' => 'Вы уверены что хотите обновить инвойс',
@@ -43,7 +44,7 @@ return [
     'Do not use credit funds, pay the whole cart: {amount}' => 'Не использовать доступные средства, оплатить всю корзину: {amount}',
     'It\'s enough to pay your cart' => 'Этого достаточно для оплаты корзины',
     'Processing your cart...' => 'Обрабатываем корзину...',
-    'You balance: {balance} {formattedCredit}' => 'Ваш баланс: {balance} {formattedCredit}',
+    'Your balance' => 'Ваш баланс',
     '(+{amount} of credit)' => '(+{amount} кредит)',
     'You can pay your cart partially' => 'Вы можете оплатить часть корзины',
     'Failed to calculate cart: {reason}' => 'Не удалось просчитать стоимость корзины: {reason}',
@@ -182,7 +183,7 @@ return [
     'Total:' => 'Всего:',
     '{units, plural, one{# unit} other{# units}} &times; {quantity, plural, one{# day} other{# days}}' => '{units, plural, one{# юнит} few{# юнита} other{# юнитов}} &times; {quantity, plural, one{# день} few{# дня} other{# дней}}',
     'The bill is not unique' => 'Платёж не уникальный',
-
+  
     // Requisites
     'Reserve number' => 'Зарезервировать номер',
     'Document number was reserved' => 'Номер был зарезервирован',
@@ -197,4 +198,14 @@ return [
     'Requisite detailed information' => 'Детальная информция о реквизите',
     'Requisite templates' => 'Шаблоны реквизита',
     'Recipient' => 'Получатель',
+  
+
+    'Recharge account to pay the whole cart: {amount}' => 'Пополнить счёт, чтобы оплатить всю корзину: {amount}',
+    'Checkout total: {amount}' => 'Сумма к оплате: {amount}',
+    'Pay {amount} from your balance' => 'Списать {amount} с баланса',
+    'Recharge account to pay the whole cart: {amount}, including debt {debt}' => 'Пополнить счёт, чтобы оплатить всю корзину: {amount}, включая задолженность {debt}',
+    'Use {balance} from the balance and pay the difference {amount}' => 'Списать {balance} с баланса и доплатить остаток {amount}',
+    'Is payed?' => 'Оплачено?',
+    'Charge paid' => 'Да, оплачено',
+    'Charge not paid' => 'Нет, не оплачено',
 ];

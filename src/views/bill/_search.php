@@ -3,6 +3,7 @@
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\helpers\CurrencyFilter;
+use hipanel\modules\finance\widgets\combo\MultipleBillTypeCombo;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
 use hiqdev\combo\StaticCombo;
 use hiqdev\yii2\daterangepicker\DateRangePicker;
@@ -50,24 +51,7 @@ use yii\helpers\Html;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?php
-    $types = [];
-    foreach ($billTypes as $gtype => $category) {
-        $item = [];
-        foreach ($category as $key => $label) {
-            $item[substr($key, strpos($key, ',') + 1)] = $label;
-        }
-        $types[$gtype] = $item;
-    }
-
-    echo $search->field('type_in')->widget(StaticCombo::class, [
-        'data' => $types,
-        'hasId' => true,
-        'multiple' => true,
-        'inputOptions' => [
-            'groups' => $billGroupLabels,
-        ],
-    ]) ?>
+    <?= $search->field('type_in')->widget(MultipleBillTypeCombo::class, compact('billTypes', 'billGroupLabels')) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">

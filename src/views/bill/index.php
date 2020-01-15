@@ -42,6 +42,7 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
                 'attributes' => array_filter([
                     'sum', 'balance',
                     'type', 'descr',
+                    'time', 'no',
                      Yii::$app->user->can('resell') ? 'client' : null,
                      Yii::$app->user->can('support') ? 'seller' : null
                 ]),

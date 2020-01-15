@@ -29,9 +29,9 @@ return [
     'Number of domains' => 'Кол-во доменов',
     'CDN disk usage monthly fee' => 'Диск',
     'CDN cache SSD monthly fee' => 'SSD кэш',
-    'CDN cache SATA monthly fee' => 'SATA кэш',
+    'CDN cache HDD monthly fee' => 'HDD кэш',
     'CDN cache SSD' => 'SSD кэш',
-    'CDN cache SATA' => 'SATA кэш',
+    'CDN cache HDD' => 'HDD кэш',
     'Rack monthly fee' => 'Стойка',
     'Domain traffic overuse' => 'Траффик домена',
 

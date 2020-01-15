@@ -11,10 +11,17 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\CurrencyColumn;
+use hipanel\grid\MainColumn;
+use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\models\Charge;
+use hipanel\modules\finance\models\ChargeSearch;
 use hipanel\modules\finance\widgets\BillType;
+use hipanel\modules\finance\widgets\BillTypeFilter;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
+use hipanel\widgets\IconStateLabel;
+use hiqdev\combo\StaticCombo;
+use hiqdev\higrid\DataColumn;
 use Yii;
 use yii\helpers\Html;
 
@@ -45,6 +52,23 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
     public function columns()
     {
         return array_merge(parent::columns(), [
+            'label' => [
+                'attribute' => 'label_ilike',
+                'sortAttribute' => 'label_ilike',
+                'label' => Yii::t('hipanel', 'Description'),
+                'value' => function (Charge $model): string {
+                    return $model->label ?? '';
+                },
+            ],
+            'tariff' => [
+                'attribute' => 'tariff_id',
+                'label' => Yii::t('hipanel', 'Plan'),
+                'filter' => false,
+                'format' => 'html',
+                'value' => function (Charge $model): string {
+                    return $this->tariffLink($model);
+                },
+            ],
             'type_label' => [
                 'label' => Yii::t('hipanel', 'Type'),
                 'format' => 'raw',
@@ -55,18 +79,29 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                         'labelField' => 'type_label',
                     ]);
                 },
+                'filterAttribute' => 'type',
+                'filter' => function (DataColumn $column, ChargeSearch $filterModel): string {
+                    return BillTypeFilter::widget([
+                        'options' => ['class' => 'form-control text-right', 'style' => 'max-width: 12em'],
+                        'attribute' => 'ftype',
+                        'model' => $filterModel,
+                    ]);
+                },
             ],
             'sum' => [
                 'class' => CurrencyColumn::class,
                 'attribute' => 'sum',
+                'sortAttribute' => 'sum',
                 'colors' => ['danger' => 'warning'],
                 'headerOptions' => ['class' => 'text-right'],
+                'filter' => false,
                 'contentOptions' => function ($model) {
                     return ['class' => 'text-right' . ($model->sum > 0 ? ' text-bold' : '')];
                 },
             ],
-            'label' => [
-                'attribute' => 'label',
+            'name' => [
+                'attribute' => 'name_ilike',
+                'label' => Yii::t('hipanel', 'Object'),
                 'format' => 'raw',
                 'value' => function (Charge $model) {
                     $result = LinkToObjectResolver::widget([
@@ -97,6 +132,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             'quantity' => [
                 'attribute' => 'quantity',
                 'format' => 'raw',
+                'filter' => false,
                 'value' => function (Charge $model) {
                     return $this->renderQuantity($model);
                 },
@@ -104,7 +140,6 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             'time' => [
                 'format' => 'raw',
                 'filter' => false,
-                'enableSorting' => false,
                 'contentOptions' => ['class' => 'text-nowrap'],
                 'value' => function ($model) {
                     list($date, $time) = explode(' ', $model->time, 2);
@@ -114,7 +149,49 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                         : Yii::$app->formatter->asDateTime($model->time);
                 },
             ],
+            'is_payed' => [
+                'attribute' => 'is_payed',
+                'format' => 'raw',
+                'enableSorting' => false,
+                'filter' => $this->filterModel !== null
+                    ? StaticCombo::widget([
+                          'attribute' => 'is_payed',
+                          'model' => $this->filterModel,
+                          'data' => [
+                              0 => Yii::t('hipanel:finance', 'Charge not paid'),
+                              1 => Yii::t('hipanel:finance', 'Charge paid'),
+                          ],
+                          'hasId' => true,
+                          'inputOptions' => ['id' => 'is_payed'],
+                      ])
+                    : false,
+                'contentOptions' => ['class' => 'text-center'],
+                'headerOptions' => ['class' => 'text-center'],
+                'value' => static function (Charge $model) {
+                    return IconStateLabel::widget([
+                        'model' => $model,
+                        'attribute' => 'is_payed',
+                        'icons' => ['fa-check', 'fa-times'],
+                        'colors' => ['#00a65a', '#dd4b39'],
+                        'messages' => [
+                            Yii::t('hipanel:finance', 'Charge paid'),
+                            Yii::t('hipanel:finance', 'Charge not paid'),
+                        ],
+                    ]);
+                }
+            ]
         ]);
+    }
+
+    /**
+     * @param Charge $model
+     * @return string|null
+     */
+    public function tariffLink(Charge $model): ?string
+    {
+        $canSeeLink = Yii::$app->user->can('plan.create');
+
+        return $canSeeLink ? Html::a($model->tariff, ['@plan/view', 'id' => $model->tariff_id]) : $model->tariff;
     }
 
     /**
