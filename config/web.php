@@ -20,6 +20,7 @@ return [
         '@plan' => '/finance/plan',
         '@price' => '/finance/price',
         '@tariffprofile' => '/finance/tariff-profile',
+        '@requisite' => '/finance/requisite',
     ],
     'modules' => [
         'finance' => [

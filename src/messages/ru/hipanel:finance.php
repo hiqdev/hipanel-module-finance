@@ -183,6 +183,23 @@ return [
     'Total:' => 'Всего:',
     '{units, plural, one{# unit} other{# units}} &times; {quantity, plural, one{# day} other{# days}}' => '{units, plural, one{# юнит} few{# юнита} other{# юнитов}} &times; {quantity, plural, one{# день} few{# дня} other{# дней}}',
     'The bill is not unique' => 'Платёж не уникальный',
+  
+    // Requisites
+    'Reserve number' => 'Зарезервировать номер',
+    'Document number was reserved' => 'Номер был зарезервирован',
+    'Set templates' => 'Назначить шаблоны',
+    'Set serie' => 'Установить серию',
+    'Serie' => 'Серия',
+    'Affected requisites' => 'Задействованные реквизиты (контакты)',
+    'Invoice template' => 'Шаблон для инвоисов',
+    'Acceptance template' => 'Шаблон для актов',
+    'Contract template' => 'Шаблон для контрактов',
+    'Probation template' => 'Шаблон для испытательного срока',
+    'Requisite detailed information' => 'Детальная информция о реквизите',
+    'Requisite templates' => 'Шаблоны реквизита',
+    'Recipient' => 'Получатель',
+  
+
     'Recharge account to pay the whole cart: {amount}' => 'Пополнить счёт, чтобы оплатить всю корзину: {amount}',
     'Checkout total: {amount}' => 'Сумма к оплате: {amount}',
     'Pay {amount} from your balance' => 'Списать {amount} с баланса',
