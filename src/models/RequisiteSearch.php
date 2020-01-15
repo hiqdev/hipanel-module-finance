@@ -14,7 +14,7 @@ use hipanel\base\SearchModelTrait;
 use yii\helpers\ArrayHelper;
 
 /**
- * GallerySearch represents the model behind the search form about `app\models\Gallery`.
+ * RequisiteSearch represents the model behind the search form about `hipanel\modules\finance\models\Requisite`.
  */
 class RequisiteSearch extends Requisite
 {

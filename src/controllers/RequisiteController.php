@@ -41,6 +41,8 @@ class RequisiteController extends CrudController
                     'create' => 'requisites.create',
                     'copy' => 'requisites.create',
                     'update' => 'requisites.update',
+                    'set-templates' => 'requisites.update',
+                    'set-serie' => 'requisites.update',
                     '*' => 'requisites.read',
                 ],
             ],

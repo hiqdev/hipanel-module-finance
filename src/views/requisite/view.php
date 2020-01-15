@@ -12,7 +12,7 @@ use yii\helpers\Html;
 use yii\helpers\Inflector;
 
 /**
- * @var \hipanel\modules\client\models\Contact
+ * @var \hipanel\modules\finance\models\Requisite
  */
 $this->title = Inflector::titleize($model->name, true);
 $this->params['subtitle'] = Yii::t('hipanel:finance', 'Requisite detailed information') . ' #' . $model->id;
