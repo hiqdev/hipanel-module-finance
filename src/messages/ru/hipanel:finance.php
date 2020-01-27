@@ -28,6 +28,8 @@ return [
     'Confirm invoice updating' => 'Подтвердите обновление инвойса',
     'Invoice' => 'Инвойс',
     'Invoices' => 'Инвойсы',
+    'Service Invoices' => 'Инвойсы за услуги',
+    'Purchase Invoices' => 'Инвойсы за покупки',
     'Acceptance reports' => 'Акты выполненных работ',
     'Document' => 'Документ',
     'Documents' => 'Документы',
