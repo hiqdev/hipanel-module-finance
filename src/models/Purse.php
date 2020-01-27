@@ -23,11 +23,14 @@ use Yii;
  * @property string|float currency
  * @property string|float balance
  * @property string credit
+ * @property string month
  * @property Client clientModel
  * @property Document[] contracts
  * @property Document[] probations
  * @property Document[] acceptances
  * @property Document[] invoices
+ * @property Document[] purchase_invoices
+ * @property Document[] service_invoices
  * @property Document[] ndas
  */
 class Purse extends \hipanel\base\Model
@@ -71,6 +74,16 @@ class Purse extends \hipanel\base\Model
     public function getInvoices()
     {
         return $this->getDocumentsOfType('invoice');
+    }
+
+    public function getServiceInvoices()
+    {
+        return $this->getDocumentsOfType('service_invoice');
+    }
+
+    public function getPurchaseInvoices()
+    {
+        return $this->getDocumentsOfType('purchase_invoice');
     }
 
     public function getContracts()
@@ -133,6 +146,8 @@ class Purse extends \hipanel\base\Model
             'provided_services' => Yii::t('hipanel:finance', 'Provided services'),
             'currency' => Yii::t('hipanel:finance', 'Currency'),
             'invoices' => Yii::t('hipanel:finance', 'Invoices'),
+            'serviceInvoices' => Yii::t('hipanel:finance', 'Service Invoices'),
+            'purchaseInvoices' => Yii::t('hipanel:finance', 'Purchase Invoices'),
             'acceptances' => Yii::t('hipanel:finance', 'Acceptance reports'),
             'contracts' => Yii::t('hipanel:finance', 'Contracts'),
             'probations' => Yii::t('hipanel:finance', 'Probation'),
