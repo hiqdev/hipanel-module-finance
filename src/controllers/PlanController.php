@@ -22,6 +22,7 @@ use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\collections\PricesCollection;
+use hipanel\modules\finance\grid\PriceGridView;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\helpers\PriceChargesEstimator;
 use hipanel\modules\finance\helpers\PriceSort;
@@ -29,11 +30,13 @@ use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\PriceSuggestionRequestForm;
+use hipanel\modules\finance\models\query\PlanQuery;
 use hipanel\modules\finance\models\TargetObject;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\Event;
 use yii\base\Module;
+use yii\data\ArrayDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\UnprocessableEntityHttpException;
@@ -94,11 +97,12 @@ class PlanController extends CrudController
             'view' => [
                 'class' => ViewAction::class,
                 'on beforePerform' => function (Event $event) {
-                    $action = $event->sender;
-                    $action->getDataProvider()->query
-                        ->joinWith('sales')
-                        ->andWhere(['state' => ['ok', 'deleted']])
-                        ->withPrices();
+                    /** @var PlanQuery $query */
+                    $query = $event->sender->getDataProvider()->query;
+                    $query
+                        ->withSales()
+                        ->withPrices()
+                        ->withPriceHistory();
                 },
                 'data' => function (Action $action, array $data) {
                     return array_merge($data, array_filter([
@@ -156,6 +160,36 @@ class PlanController extends CrudController
 
         return $this->render($plan->type . '/' . 'createPrices',
             compact('plan', 'grouper', 'parentPrices', 'action', 'plan_id'));
+    }
+
+    public function actionGetPlanHistory(int $plan_id, string $date)
+    {
+        $plan = Plan::find()
+                    ->where(['id' => $plan_id])
+                    ->andWhere(['history_time' => $date])
+                    ->withSales()
+                    ->withPriceHistory()
+                    ->one();
+
+        return PriceGridView::widget([
+            'boxed' => false,
+            'showHeader' => true,
+            'showFooter' => false,
+            'summaryRenderer' => function (): string {
+                return '';
+            },
+            'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
+            'dataProvider' => new ArrayDataProvider([
+                'allModels' => $plan->priceHistory,
+                'pagination' => false,
+            ]),
+            'columns' => [
+                'object->name',
+                'type',
+                'old_price',
+                'note',
+            ],
+        ]);
     }
 
     public function actionSuggestPricesModal($id)
