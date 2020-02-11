@@ -76,8 +76,7 @@ class Calculation extends \hipanel\base\Model
         }
         Yii::warning('Value for currency $currency was not found. Using fake free value. Most probably, tariff is free', __METHOD__);
 
-        return new Value(['value' => 0, 'price' => 0]);
-
+        return new Value(['value' => 0, 'price' => 0, 'currency' => $currency]);
     }
 
     /** {@inheritdoc} */
