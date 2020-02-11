@@ -60,6 +60,8 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
             Yii::$app->request->get('transactionId'),
             Yii::$app->request->post('transactionId'),
             Yii::$app->session->get(self::SESSION_MERCHANT_LATEST_TRANSACTION_ID),
+            Yii::$app->request->get('orderId'),
+            Yii::$app->request->post('orderId'),
         ];
 
         foreach (array_filter($transactionIdSources) as $possibleTransactionId) {
