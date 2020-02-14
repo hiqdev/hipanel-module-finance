@@ -5,6 +5,7 @@ use hipanel\modules\finance\assets\PriceEstimator;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\TemplatePrice;
+use hipanel\modules\finance\widgets\ChangeFormulaButton;
 use hipanel\widgets\DynamicFormInputsValueInheritor;
 use hipanel\widgets\DynamicFormWidget;
 use yii\bootstrap\ActiveForm;
@@ -45,6 +46,10 @@ $form = ActiveForm::begin([
         <h3 class="box-title">
             <?= $plan ? Yii::t('hipanel.finance.price', 'Tariff: {name}', ['name' => $plan->name]) : '' ?>
         </h3>
+        <div class="box-tools pull-right">
+            <?= ChangeFormulaButton::widget(['mod' => ChangeFormulaButton::MOD_ADD]) ?>
+            <?= ChangeFormulaButton::widget(['mod' => ChangeFormulaButton::MOD_REPLACE]) ?>
+        </div>
     </div>
     <div class="container-items">
         <?php $i = 0; ?>

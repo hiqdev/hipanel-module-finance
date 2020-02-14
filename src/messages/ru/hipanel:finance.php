@@ -185,7 +185,7 @@ return [
     'Total:' => 'Всего:',
     '{units, plural, one{# unit} other{# units}} &times; {quantity, plural, one{# day} other{# days}}' => '{units, plural, one{# юнит} few{# юнита} other{# юнитов}} &times; {quantity, plural, one{# день} few{# дня} other{# дней}}',
     'The bill is not unique' => 'Платёж не уникальный',
-  
+
     // Requisites
     'Reserve number' => 'Зарезервировать номер',
     'Document number was reserved' => 'Номер был зарезервирован',
@@ -200,7 +200,7 @@ return [
     'Requisite detailed information' => 'Детальная информция о реквизите',
     'Requisite templates' => 'Шаблоны реквизита',
     'Recipient' => 'Получатель',
-  
+
 
     'Recharge account to pay the whole cart: {amount}' => 'Пополнить счёт, чтобы оплатить всю корзину: {amount}',
     'Checkout total: {amount}' => 'Сумма к оплате: {amount}',
@@ -210,4 +210,6 @@ return [
     'Is payed?' => 'Оплачено?',
     'Charge paid' => 'Да, оплачено',
     'Charge not paid' => 'Нет, не оплачено',
+    'Add formula' => 'Добавить формулу',
+    'Replace formulas' => 'Заменить формулы',
 ];
