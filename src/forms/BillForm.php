@@ -10,11 +10,12 @@
 
 namespace hipanel\modules\finance\forms;
 
+use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\behaviors\BillQuantity;
 use hipanel\modules\finance\logic\bill\QuantityTrait;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
-use hipanel\modules\finance\models\Currency;
+use hipanel\modules\finance\models\Purse;
 use hipanel\modules\finance\validation\BillChargesSumValidator;
 use Yii;
 use yii\base\Model;
@@ -200,12 +201,7 @@ class BillForm extends Model
             [['sum'], BillChargesSumValidator::class],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]], // TODO: should be probably replaced with input on client side
             [['object_id'], 'integer', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
-            [['currency'], function ($attribute) {
-                if (!array_key_exists(mb_strtolower($this->{$attribute}), array_change_key_case(Currency::list(), CASE_LOWER))) {
-                    $this->addError($attribute, Yii::t('hipanel:finance', 'Currency is invalid'));
-                }
-            }, 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY],
-            ],
+            [['currency'], 'currencyValidate', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
             [['id'], 'required', 'on' => [self::SCENARIO_UPDATE]],
             [
                 ['client_id', 'sum', 'quantity', 'unit', 'time', 'currency', 'type'],
@@ -222,6 +218,22 @@ class BillForm extends Model
                 }
             }, 'on' => self::SCENARIO_COPY],
         ];
+    }
+
+    public function currencyValidate($attribute, $params, $validator)
+    {
+        if (empty($this->client_id)) {
+            return;
+        }
+        $clientCurrencies = Yii::$app->cache->getOrSet('clientCurrencies' . $this->client_id, function (): array {
+            $purses = Purse::find()
+                        ->where(['id' => $this->client_id])
+                        ->all();
+            return ArrayHelper::getColumn($purses, 'currency');
+        }, 3600);
+        if (!in_array($this->currency, $clientCurrencies)) {
+            $this->addError($attribute, Yii::t('hipanel:finance', 'Client hasn\'t purse with this currency'));
+        }
     }
 
     public function attributeLabels()
