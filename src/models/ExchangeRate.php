@@ -17,9 +17,9 @@ use hiqdev\hiart\ActiveRecord;
 /**
  * Class ExchangeRate.
  *
- * @property string from
- * @property string to
- * @property float rate
+ * @property string $from
+ * @property string $to
+ * @property float $rate
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
 class ExchangeRate extends ActiveRecord

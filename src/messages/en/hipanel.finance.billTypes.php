@@ -29,9 +29,9 @@ return [
     'Number of domains' => 'Domains count',
     'CDN disk usage monthly fee' => 'Disk',
     'CDN cache SSD monthly fee' => 'SSD cache',
-    'CDN cache SATA monthly fee' => 'SATA cache',
+    'CDN cache HDD monthly fee' => 'HDD cache',
     'CDN cache SSD' => 'SSD cache',
-    'CDN cache SATA' => 'SATA cache',
+    'CDN cache HDD' => 'HDD cache',
     'Rack monthly fee' => 'Rack price',
     'Domain traffic overuse' => 'Domain traffic overuse',
 ];

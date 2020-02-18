@@ -53,7 +53,7 @@ class Calculator implements CalculatorInterface, ServerTariffCalculatorInterface
             $this->execute();
         }
 
-        return isset($this->calculations[$id]) ? $this->calculations[$id] : null;
+        return $this->calculations[$id] ?? null;
     }
 
     /**
@@ -111,7 +111,10 @@ class Calculator implements CalculatorInterface, ServerTariffCalculatorInterface
      */
     private function createCalculations($rows)
     {
-        $query = Calculation::find()->joinWith(['value'])->indexBy('calculation_id');
+        $query = Calculation::find()
+            ->joinWith(['value', 'valueConverted'])
+            ->indexBy('calculation_id');
+
         $query->prepare();
 
         return $query->populate($rows);

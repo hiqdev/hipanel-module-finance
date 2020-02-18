@@ -29,7 +29,7 @@ class RackUnitQuantity extends MonthlyQuantity
     public function format(): string
     {
         $text = Yii::t('hipanel:finance', '{units, plural, one{# unit} other{# units}} &times; {quantity, plural, one{# day} other{# days}}', [
-            'units' => $this->model->quantity / $this->model->bill->quantity,
+            'units' => $this->model->quantity / ($this->model->bill->quantity ?: 1),
             'quantity' => round($this->model->bill->quantity * $this->getNumberOfDays()),
         ]);
 

@@ -15,6 +15,10 @@ use yii\base\InvalidParamException;
 
 /**
  * Class Calculation.
+ *
+ *
+ * @property-read Value[] value
+ * @property-read Value[] valueConverted
  */
 class Calculation extends \hipanel\base\Model
 {
@@ -50,6 +54,12 @@ class Calculation extends \hipanel\base\Model
         return $this->hasMany(Value::class, ['tariff_id' => 'currency'])->indexBy('currency');
     }
 
+    public function getValueConverted()
+    {
+        // ['tariff_id' => 'currency'] is a dumb relation condition and does not make any sense
+        return $this->hasMany(Value::class, ['tariff_id' => 'currency'])->indexBy('currency');
+    }
+
     /**
      * @param string $currency
      *
@@ -66,8 +76,7 @@ class Calculation extends \hipanel\base\Model
         }
         Yii::warning('Value for currency $currency was not found. Using fake free value. Most probably, tariff is free', __METHOD__);
 
-        return new Value(['value' => 0, 'price' => 0]);
-
+        return new Value(['value' => 0, 'price' => 0, 'currency' => $currency]);
     }
 
     /** {@inheritdoc} */

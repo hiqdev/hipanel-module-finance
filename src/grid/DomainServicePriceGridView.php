@@ -24,10 +24,19 @@ class DomainServicePriceGridView extends PriceGridView
 
     public function columns()
     {
-        return array_merge(parent::columns(), [
-            'purchase' => $this->getPriceGrid('feature,premium_dns_purchase'),
-            'renewal' => $this->getPriceGrid('feature,premium_dns_renew'),
-        ]);
+        $columns = parent::columns();
+        foreach ($this->dataProvider->getModels() as $models) {
+            foreach ($models as $model) {
+                if (strpos($model->type, 'purchase') !== false) {
+                    $columns['purchase'] = $this->getPriceGrid($model->type);
+                }
+                if (strpos($model->type, 'renew') !== false) {
+                    $columns['renewal'] = $this->getPriceGrid($model->type);
+                }
+            }
+        }
+
+        return $columns;
     }
 
     /**
@@ -48,14 +57,13 @@ class DomainServicePriceGridView extends PriceGridView
                 $price = $prices[$type];
                 $parent = $this->parentPrices[$type] ?? null;
                 $parentValue = $parent ? PriceDifferenceWidget::widget([
-                    'new' => $price->price,
-                    'old' => $parent->price,
+                    'new' => $price->getMoney(),
+                    'old' => $parent->getMoney(),
                 ]) : '';
                 $priceValue = floatval($price->price) ||
                 (!floatval($price->price) && $parentValue) ?
                     ResourcePriceWidget::widget([
-                        'price' => $price->price,
-                        'currency' => $price->currency,
+                        'price' => $price->getMoney(),
                     ]) : '';
                 $options = ['class' => 'col-md-6'];
 

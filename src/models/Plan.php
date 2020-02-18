@@ -28,6 +28,7 @@ use Yii;
  * @property bool $is_grouping
  * @property bool $your_tariff
  *
+ * @property PriceHistory[] $priceHistory
  * @property Sale[] $sales
  * @property Price[]|CertificatePrice[] $prices
  * @property-read string[] typeOptions
@@ -91,6 +92,11 @@ class Plan extends Model
         }
 
         return $this->hasMany(Price::class, ['plan_id' => 'id'])->indexBy('id')->inverseOf('plan');
+    }
+
+    public function getPriceHistory()
+    {
+        return $this->hasMany(PriceHistory::class, ['tariff_id' => 'id']);
     }
 
     public function getDesiredPriceClass()

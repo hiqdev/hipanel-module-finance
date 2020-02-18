@@ -27,6 +27,14 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                 'class' => MonthlyDocumentsColumn::class,
                 'type' => 'invoice',
             ],
+            'serviceInvoices' => [
+                'class' => MonthlyDocumentsColumn::class,
+                'type' => 'service_invoice',
+            ],
+            'purchaseInvoices' => [
+                'class' => MonthlyDocumentsColumn::class,
+                'type' => 'purchase_invoice',
+            ],
             'acceptances' => [
                 'class' => MonthlyDocumentsColumn::class,
                 'type' => 'acceptance',

@@ -10,6 +10,8 @@
 
 namespace hipanel\modules\finance\cart;
 
+use hipanel\modules\finance\models\Bill;
+use hiqdev\yii2\cart\NotPurchasableException;
 use hiqdev\yii2\cart\ShoppingCart;
 use Yii;
 use yii\base\BaseObject;
@@ -20,6 +22,11 @@ class CartFinisher extends BaseObject
      * @var ShoppingCart
      */
     public $cart;
+
+    /**
+     * @var string|null
+     */
+    public $exchangeFromCurrency;
 
     /**
      * @var PurchaseStrategyInterface[]
@@ -80,18 +87,21 @@ class CartFinisher extends BaseObject
 
         $this->ensureCanBeFinished();
         $this->createPurchasers();
+        $this->exchangeMoney();
 
         foreach ($this->purchasers as $purchaser) {
             $purchaser->run();
 
-            $this->_success = array_merge($this->_success, $purchaser->getSuccessPurchases());
-            foreach ($purchaser->getSuccessPurchases() as $purchase) {
-                $this->cart->remove($purchase->position);
-            }
-            $this->_pending = array_merge($this->_pending, $purchaser->getPendingPurchaseExceptions());
-            foreach ($purchaser->getPendingPurchaseExceptions() as $exception) {
-                $this->cart->remove($exception->position);
-            }
+            $this->cart->accumulateEvents(function () use ($purchaser) {
+                $this->_success = array_merge($this->_success, $purchaser->getSuccessPurchases());
+                foreach ($purchaser->getSuccessPurchases() as $purchase) {
+                    $this->cart->remove($purchase->position);
+                }
+                $this->_pending = array_merge($this->_pending, $purchaser->getPendingPurchaseExceptions());
+                foreach ($purchaser->getPendingPurchaseExceptions() as $exception) {
+                    $this->cart->remove($exception->position);
+                }
+            });
             $this->_error = array_merge($this->_error, $purchaser->getErrorPurchaseExceptions());
         }
     }
@@ -115,7 +125,7 @@ class CartFinisher extends BaseObject
             foreach ($validators as $validator) {
                 $validator->validate($this->cart->positions);
             }
-        } catch (NotPurchasablePositionException $e) {
+        } catch (NotPurchasableException $e) {
             $e->resolve();
         }
     }
@@ -145,5 +155,18 @@ class CartFinisher extends BaseObject
         }
 
         return $this->purchasers[$positionClass];
+    }
+
+    private function exchangeMoney(): void
+    {
+        if ($this->exchangeFromCurrency === null) {
+            return;
+        }
+
+        Bill::perform('create-exchange', [
+            'from' => $this->exchangeFromCurrency,
+            'to' => $this->cart->getCurrency(),
+            'buySum' => $this->cart->getTotal(),
+        ]);
     }
 }

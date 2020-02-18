@@ -11,8 +11,10 @@
 namespace hipanel\modules\finance\controllers;
 
 use hipanel\filters\EasyAccessControl;
+use hipanel\helpers\Url;
 use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\cart\CartFinisher;
+use hipanel\modules\finance\widgets\CartCurrencyNegotiator;
 use hipanel\modules\finance\Module;
 use hiqdev\yii2\merchant\models\DepositForm;
 use Yii;
@@ -47,10 +49,14 @@ class CartController extends \yii\web\Controller
      */
     private function renderDeposit(float $amount, string $currency)
     {
+        $cart = $this->module->getCart();
+
         $form = new DepositForm([
             'amount' => $amount,
             'currency' => $currency,
-            'finishUrl' => '/finance/cart/finish',
+            'finishUrl' => $cart->getCurrency() === $currency
+                ? Url::to(['@finance/cart/finish'])
+                : Url::to(['@finance/cart/finish', 'exchangeFromCurrency' => $currency])
         ]);
         $form->validate();
 
@@ -59,52 +65,69 @@ class CartController extends \yii\web\Controller
 
     public function actionSelect()
     {
-        $client = Client::findOne(['id' => Yii::$app->user->identity->id]);
-        $cart = $this->module->getCart();
-        $total = $cart->getTotal();
-        $budget = $client->balance + $client->credit;
-
-        if ($budget <= 0 && $total > 0) {
-            return $this->renderDeposit($total, $cart->currency);
-        }
-
         return $this->render('select', [
-            'cart' => $cart,
-            'client' => $client,
-            'budget' => $budget,
+            'negotiator' => $this->getNegotiator()
         ]);
     }
 
-    public function actionFull()
+    /** @var \hipanel\modules\finance\widgets\CartCurrencyNegotiator */
+    private $negotiator;
+    private function getNegotiator(): CartCurrencyNegotiator
     {
-        $cart = $this->module->getCart();
+        if ($this->negotiator === null) {
+            $this->negotiator = new CartCurrencyNegotiator([
+                'cart' => $this->module->getCart(),
+                'client' => $this->getClient(),
+                'merchantModule' => $this->module->getMerchant(),
+            ]);
+        }
 
-        return $this->renderDeposit($cart->getTotal(), $cart->currency);
+        return $this->negotiator;
     }
 
-    public function actionPartial()
+    public function actionFull(string $currency = null)
     {
-        $client = Client::findOne(['id' => Yii::$app->user->identity->id]);
-        $cart = $this->module->getCart();
+        $negotiator = $this->getNegotiator();
+        $currency = $currency ?? $this->module->getCart()->getCurrency();
 
-        return $this->renderDeposit($cart->total - $client->balance - $client->credit, $cart->currency);
+        return $this->renderDeposit($negotiator->getFullAmount($currency), $currency);
     }
 
-    public function actionFinish()
+    public function actionPartial(string $currency = null)
+    {
+        $negotiator = $this->getNegotiator();
+        $currency = $currency ?? $this->module->getCart()->getCurrency();
+
+        return $this->renderDeposit($negotiator->getPartialAmount($currency), $currency);
+    }
+
+    public function actionFinish(string $exchangeFromCurrency = null)
     {
         $cart = $this->module->getCart();
 
-        $finisher = new CartFinisher(['cart' => $cart]);
+        $finisher = new CartFinisher([
+            'cart' => $cart,
+            'exchangeFromCurrency' => $exchangeFromCurrency
+        ]);
         $finisher->run();
 
-        $client = Client::findOne(['id' => Yii::$app->user->identity->id]);
+        $client = $this->getClient();
 
         return $this->render('finish', [
             'balance' => $client->balance,
+            'currency' => $client->currency,
             'success' => $finisher->getSuccess(),
             'error' => $finisher->getError(),
             'pending' => $finisher->getPending(),
             'remarks' => (array) Yii::$app->getView()->params['remarks'],
         ]);
+    }
+
+    private function getClient(): Client
+    {
+         return Client::find()
+            ->withPurses()
+            ->where(['id' => Yii::$app->user->identity->id])
+            ->one();
     }
 }

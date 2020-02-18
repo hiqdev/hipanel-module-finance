@@ -1,6 +1,8 @@
 <?php
 
+use hipanel\modules\finance\models\DomainResource;
 use hipanel\modules\finance\widgets\PriceDifferenceWidget;
+use hipanel\modules\finance\widgets\ResourcePriceWidget;
 use hipanel\widgets\Box;
 use yii\helpers\Html;
 
@@ -25,20 +27,21 @@ Box::begin() ?>
             <?php foreach ($model->getZones() as $zone => $id) : ?>
                 <tr>
                     <td><strong><?= $zone ?></strong></td>
+                    <?php /** @var DomainResource[] $baseResources */?>
                     <?php $baseResources = $model->getZoneParentResources($zone); ?>
                     <?php foreach ($model->getZoneResources($zone) as $type => $resource) : ?>
+                        <?php /** @var DomainResource $resource */?>
                         <td>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <?= \hipanel\modules\finance\widgets\ResourcePriceWidget::widget([
-                                        'price' => $resource->price,
-                                        'currency' => $resource->currency
+                                    <?= ResourcePriceWidget::widget([
+                                        'price' => $resource->getMoney(),
                                     ]) ?>
                                 </div>
                                 <div class="col-md-6">
                                     <?= PriceDifferenceWidget::widget([
-                                        'new' => $resource->price,
-                                        'old' => $baseResources[$type]->price,
+                                        'new' => $resource->getMoney(),
+                                        'old' => $baseResources[$type]->getMoney(),
                                     ]) ?>
                                 </div>
                             </div>
@@ -74,14 +77,16 @@ Box::begin() ?>
                         <td>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <?= Yii::$app->formatter->asCurrency($resource->price, $resource->currency, [
-                                        NumberFormatter::MAX_FRACTION_DIGITS => 4
+                                    <?= ResourcePriceWidget::widget([
+                                        'price' => $resource->getMoney(),
                                     ]) ?>
                                 </div>
                                 <div class="col-md-6">
                                     <?= PriceDifferenceWidget::widget([
-                                        'new' => $resource->price,
-                                        'old' => $baseServices[$service->type]->getResource($operation)->price,
+                                        'new' => $resource->getMoney(),
+                                        'old' => $baseServices[$service->type]
+                                            ->getResource($operation)
+                                            ->getMoney(),
                                     ]) ?>
                                 </div>
                             </div>

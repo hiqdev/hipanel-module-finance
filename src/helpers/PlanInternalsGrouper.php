@@ -20,6 +20,7 @@ use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class PlanInternalsGrouper can be used to group prices inside $plan depending on
@@ -53,7 +54,19 @@ class PlanInternalsGrouper
             case Plan::TYPE_CERTIFICATE:
                 return $this->groupCertificatePrices();
             case Plan::TYPE_DOMAIN:
-                return $this->groupDomainPrices();
+                $byType = static function (array $servicePrices) {
+                    return ArrayHelper::index($servicePrices, 'type', static function ($servicePrice) {
+                        if (strpos($servicePrice->type, 'premium_dns') !== false) {
+                            return 'premium_dns';
+                        }
+                        if (strpos($servicePrice->type, 'whois_protect') !== false) {
+                            return 'whois_protect';
+                        }
+                    });
+                };
+                [$zonePrices, $servicePrices] = $this->groupDomainPrices();
+
+                return [$zonePrices, $byType($servicePrices)];
             default:
                 return $this->groupServerPrices();
         }

@@ -12,8 +12,8 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\CurrencyColumn;
 use hipanel\grid\MainColumn;
-use hipanel\helpers\StringHelper;
 use hipanel\helpers\Url;
+use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\menus\BillActionsMenu;
 use hipanel\modules\finance\models\Bill;
@@ -60,7 +60,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'html',
                 'filter' => false,
                 'label' => Yii::t('hipanel', 'Time'),
-                'sortAttribute' => 'no',
+                'sortAttribute' => 'time',
                 'contentOptions' => ['class' => 'text-nowrap'],
                 'value' => function (Bill $model) {
                     list($date, $time) = explode(' ', $model->time, 2);
@@ -124,10 +124,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'filterAttribute' => 'currency_in',
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'filter' => function ($column, $filterModel) {
-                    $currencies = array_combine(array_keys($this->currencies), array_map(function ($k) {
-                        return StringHelper::getCurrencySymbol($k);
-                    }, array_keys($this->currencies)));
-
+                    $currencies = CurrencyFilter::addSymbolAndFilter($this->currencies);
                     return Html::activeDropDownList($filterModel, 'currency_in', $currencies, ['class' => 'form-control', 'prompt' => '--']);
                 },
             ],

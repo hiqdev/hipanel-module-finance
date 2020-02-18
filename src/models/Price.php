@@ -10,8 +10,12 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\base\Model;
+use hipanel\base\ModelTrait;
 use hipanel\models\Ref;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
+use Money\Money;
+use Money\MoneyParser;
 use Yii;
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
@@ -30,15 +34,16 @@ use yii\helpers\StringHelper;
  * @property string $type
  * @property string $quantity
  * @property string $formula
+ * @property int|null parent_id
  *
  * @property TargetObject $object
  * @property Plan $plan
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class Price extends \hipanel\base\Model
+class Price extends Model
 {
-    use \hipanel\base\ModelTrait;
+    use ModelTrait;
 
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
@@ -208,5 +213,12 @@ class Price extends \hipanel\base\Model
         }
 
         return explode("\n", $this->formula);
+    }
+
+    public function getMoney(): Money
+    {
+        // TODO: decide how to get MoneyParser correctly
+        return Yii::$container->get(MoneyParser::class)
+            ->parse((string)$this->price, strtoupper($this->currency));
     }
 }
