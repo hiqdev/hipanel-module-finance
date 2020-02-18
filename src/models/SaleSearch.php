@@ -30,7 +30,7 @@ class SaleSearch extends Sale
     public function attributeLabels()
     {
         return array_merge(parent::attributeLabels(), [
-            'object_inilike' => Yii::t('hipanel:stock', 'Object'),
+            'object_inilike' => Yii::t('hipanel:finance:sale', 'Object'),
         ]);
     }
 }

@@ -84,7 +84,7 @@ class Sale extends \hipanel\base\Model
             self::SALE_TYPE_IP => 'IP',
             self::SALE_TYPE_ACCOUNT => Yii::t('hipanel:hosting', 'Accounts'),
             self::SALE_TYPE_CLIENT => Yii::t('hipanel', 'Clients'),
-            self::SALE_TYPE_PART => Yii::t('hipanel:stock', 'Parts'),
+            self::SALE_TYPE_PART => Yii::t('hipanel:finance:sale', 'Parts'),
         ];
     }
 }

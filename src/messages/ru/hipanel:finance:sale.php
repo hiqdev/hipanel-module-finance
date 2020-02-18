@@ -20,4 +20,5 @@ return [
     'Tariff information' => 'Информация о тарифе',
     'Sale was successfully deleted.' => 'Продажа успешно удалена.',
     'Not sold' => 'Не продан',
+    'Parts' => 'Детали',
 ];
