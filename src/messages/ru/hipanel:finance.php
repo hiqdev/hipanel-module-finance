@@ -201,7 +201,7 @@ return [
     'Requisite detailed information' => 'Детальная информция о реквизите',
     'Requisite templates' => 'Шаблоны реквизита',
     'Recipient' => 'Получатель',
-  
+
 
     'Recharge account to pay the whole cart: {amount}' => 'Пополнить счёт, чтобы оплатить всю корзину: {amount}',
     'Checkout total: {amount}' => 'Сумма к оплате: {amount}',
@@ -211,4 +211,6 @@ return [
     'Is payed?' => 'Оплачено?',
     'Charge paid' => 'Да, оплачено',
     'Charge not paid' => 'Нет, не оплачено',
+    'Add formula' => 'Добавить формулу',
+    'Replace formulas' => 'Заменить формулы',
 ];
