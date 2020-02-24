@@ -40,7 +40,7 @@ use hipanel\widgets\RefCombo;
 
                         <?= RequisiteTemplatesWidget::widget([
                             'model' => $models,
-                            'actionUrl' => 'bulk-set-templates',
+                            'actionUrl' => '@requisite/bulk-set-templates',
                         ]) ?>
                         <br>
                     <?php endif ?>
@@ -50,10 +50,10 @@ use hipanel\widgets\RefCombo;
         <div role="tabpanel" class="tab-pane" id="by-one">
             <?php $form = ActiveForm::begin([
                 'id' => 'bulk-set-templates',
-                'action' => Url::toRoute('set-templates'),
+                'action' => Url::toRoute('@requisite/set-templates'),
                 'enableAjaxValidation' => true,
                 'validateOnBlur' => true,
-                'validationUrl' => Url::toRoute(['validate-form', 'scenario' => 'set-templates']),
+                'validationUrl' => Url::toRoute(['@requisite/validate-form', 'scenario' => 'set-templates']),
             ]) ?>
             <div class="row" style="margin-top: 15pt;">
                 <?php foreach ($models as $model) : ?>
