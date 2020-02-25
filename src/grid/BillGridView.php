@@ -166,6 +166,15 @@ class BillGridView extends \hipanel\grid\BoxedGridView
 
                     return $tariff . $amount . ' ' . implode('<br>', array_filter([$object, $text]));
                 },
+                'exportedValue' => function (Bill $model) {
+                    $text = $model->descr ?: $model->label;
+                    $tariff = $model->tariff ?
+                        Html::tag('span', Yii::t('hipanel', 'Tariff') . ': ' . $this->tariffLink($model), ['class' => 'pull-right']) : '';
+                    $amount = $this->formatQuantity($model);
+                    $object = $this->objectTag($model);
+
+                    return $tariff . ' ' . $amount . ' ' . implode('<br>', array_filter([$object, $text]));
+                },
             ],
             'tariff_link' => [
                 'attribute' => 'tariff',
@@ -213,7 +222,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
 
     public function objectTag($model): string
     {
-        return $model->object ? implode(':&nbsp;', [$model->class_label, $this->objectLink($model)]) : '';
+        return $model->object ? implode(':&nbsp;', [Yii::t('hipanel', $model->class_label), $this->objectLink($model)]) : '';
     }
 
     /**
