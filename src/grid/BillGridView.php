@@ -166,7 +166,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
 
                     return $tariff . $amount . ' ' . implode('<br>', array_filter([$object, $text]));
                 },
-                'exportedValue' => function (Bill $model) {
+                'exportedValue' => function (Bill $model): string {
                     $text = $model->descr ?: $model->label;
                     $tariff = $model->tariff ?
                         Html::tag('span', Yii::t('hipanel', 'Tariff') . ': ' . $this->tariffLink($model), ['class' => 'pull-right']) : '';
