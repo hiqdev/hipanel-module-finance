@@ -51,7 +51,10 @@ final class CartCurrencyNegotiator extends Widget
     public function run()
     {
         $cartCurrency = $this->cart->getCurrency();
-        $this->renderCurrencyOptions(number_format($this->cart->getTotal(), 2), $cartCurrency);
+        $this->renderCurrencyOptions(
+            $this->numberFormat($this->cart->getTotal(), $cartCurrency),
+            $cartCurrency
+        );
 
         $convertibleCurrencies = $this->convertibleCurrencies(
             ArrayHelper::getColumn($this->client->purses, 'currency'),
@@ -80,7 +83,7 @@ final class CartCurrencyNegotiator extends Widget
     {
         $cartCurrency = $this->cart->getCurrency();
         if ($cartCurrency === $currency) {
-            return number_format($this->cart->getTotal(), 2);
+            return $this->numberFormat($this->cart->getTotal(), $currency);
         }
 
         $convertibleCurrencies = $this->convertibleCurrencies(
@@ -90,7 +93,7 @@ final class CartCurrencyNegotiator extends Widget
 
         foreach ($convertibleCurrencies as $rate) {
             if ($rate->from === strtoupper($currency)) {
-                return number_format($this->cart->getTotal() / $rate->rate, 2);
+                return $this->numberFormat($this->cart->getTotal() / $rate->rate, $cartCurrency);
             }
         }
 
@@ -207,5 +210,10 @@ final class CartCurrencyNegotiator extends Widget
         $fakePurse->credit = 0;
 
         return $fakePurse;
+    }
+
+    private function numberFormat(string $amount, string $currencyCode): string
+    {
+        return number_format($amount, 2, '.', '');
     }
 }
