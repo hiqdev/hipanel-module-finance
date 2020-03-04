@@ -115,7 +115,7 @@ final class CartCurrencyNegotiator extends Widget
     {
         $purse = $this->getClientPurseByCurrency($currency);
 
-        return $this->getCartAmountInCurrency($currency) - $purse->getBudget();
+        return $this->getCartAmountInCurrency($currency) - abs($purse->getBudget());
     }
 
     public function renderBalance(): string
