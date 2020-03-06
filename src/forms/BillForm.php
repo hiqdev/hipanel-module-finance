@@ -201,6 +201,7 @@ class BillForm extends Model
             [['sum'], BillChargesSumValidator::class],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]], // TODO: should be probably replaced with input on client side
             [['object_id'], 'integer', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
+            [['currency'], 'filter', 'filter' => 'mb_strtolower'],
             [['currency'], 'currencyValidate', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
             [['id'], 'required', 'on' => [self::SCENARIO_UPDATE]],
             [
@@ -220,18 +221,18 @@ class BillForm extends Model
         ];
     }
 
-    public function currencyValidate($attribute, $params, $validator)
+    public function currencyValidate($attribute, $params, $validator): void
     {
         if (empty($this->client_id)) {
             return;
         }
         $clientCurrencies = Yii::$app->cache->getOrSet('clientCurrencies' . $this->client_id, function (): array {
             $purses = Purse::find()
-                        ->where(['id' => $this->client_id])
+                        ->where(['client_id' => $this->client_id])
                         ->all();
             return ArrayHelper::getColumn($purses, 'currency');
         }, 3600);
-        if (!in_array($this->currency, $clientCurrencies)) {
+        if (!in_array($this->currency, $clientCurrencies, true)) {
             $this->addError($attribute, Yii::t('hipanel:finance', 'Client hasn\'t purse with this currency'));
         }
     }
