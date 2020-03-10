@@ -85,7 +85,7 @@ class ChangeFormulaButton extends Widget
     {
         $jsExpression = [
             self::MOD_ADD => new JsExpression(<<<"JS"
-$('#{$this->modalId}.modal button').on('click', () => {
+$('#{$this->modalId}.modal .modal-footer button').on('click', () => {
     const t = $('.modal.in .formula-input').first().data('ace-editor').session;
     $(".form-group .formula-input").each((idx, elem) => {
         const e = $(elem).data("ace-editor").session;
@@ -97,7 +97,7 @@ $('#{$this->modalId}.modal button').on('click', () => {
 JS
             ),
             self::MOD_REPLACE => new JsExpression(<<<"JS"
-$('#{$this->modalId}.modal button').on('click', () => {
+$('#{$this->modalId}.modal .modal-footer button').on('click', () => {
     const t = $('.modal.in .formula-input').first().data('ace-editor').session;
     $(".form-group .formula-input").each((idx, elem) => {
         $(elem).data("ace-editor").session.setValue(t.getValue());
