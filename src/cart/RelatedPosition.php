@@ -1,7 +1,5 @@
 <?php
 
-namespace hiqdev\yii2\cart;
-
 namespace hipanel\modules\finance\cart;
 
 use hipanel\modules\finance\logic\Calculator;
