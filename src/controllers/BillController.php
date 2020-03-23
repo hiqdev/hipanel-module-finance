@@ -52,8 +52,9 @@ class BillController extends \hipanel\base\CrudController
             'access-bill' => [
                 'class' => EasyAccessControl::class,
                 'actions' => [
-                    'create,import,copy'    => 'bill.create',
-                    'create-exchange'       => 'bill.create',
+                    'create,copy'           => 'bill.create',
+                    'create-exchange'       => 'bill.create-exchange',
+                    'import'                => 'bill.import',
                     'update,charge-delete'  => 'bill.update',
                     'delete'                => 'bill.delete',
                     '*'                     => 'bill.read',
