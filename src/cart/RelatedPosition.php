@@ -16,10 +16,15 @@ abstract class RelatedPosition implements RelatedPositionInterface
     /** @var ShoppingCart */
     public $cart;
 
+    /** @var CalculableModelInterface */
+    public $relatedPosition;
+
     public function __construct(CartPositionInterface $mainPosition)
     {
         $this->cart = Module::getInstance()->getCart();
         $this->mainPosition = $mainPosition;
+        $position = $this->createRelatedPosition();
+        $this->relatedPosition = $this->calculate($position);
     }
 
     /** @inheritDoc */
