@@ -16,10 +16,22 @@ abstract class RelatedPosition implements RelatedPositionInterface
     /** @var ShoppingCart */
     public $cart;
 
+    /** @var CalculableModelInterface */
+    public $relatedPosition;
+
     public function __construct(CartPositionInterface $mainPosition)
     {
         $this->cart = Module::getInstance()->getCart();
         $this->mainPosition = $mainPosition;
+        $this->relatedPosition = $this->createRelatedPosition();
+        $currentPositions = $this->cart->getPositions();
+        if (isset($currentPositions[$this->relatedPosition->getId()])) {
+            $relatedPosition = $currentPositions[$this->relatedPosition->getId()];
+            $relatedPosition->setQuantity($this->mainPosition->getQuantity());
+            $this->relatedPosition = $relatedPosition;
+        } else {
+            $this->calculate();
+        }
     }
 
     /** @inheritDoc */
@@ -28,17 +40,16 @@ abstract class RelatedPosition implements RelatedPositionInterface
         return $this->getWidget()->run();
     }
 
-    public function calculate(CalculableModelInterface $position): CalculableModelInterface
+    protected function calculate(): void
     {
+        $position = $this->relatedPosition;
         $calculator = new Calculator([$position]);
-        $calculationId = $position->getCalculationModel()->calculation_id;
+        $calculationId = $position->getId();
         $calculation = $calculator->getCalculation($calculationId);
         $value = $calculation->forCurrency($this->cart->getCurrency());
         $position->setPrice($value->price);
         $position->setValue($value->value);
         $position->setCurrency($value->currency);
-
-        return $position;
+        $this->relatedPosition = $position;
     }
-
 }
