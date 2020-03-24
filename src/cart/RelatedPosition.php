@@ -40,7 +40,7 @@ abstract class RelatedPosition implements RelatedPositionInterface
         return $this->getWidget()->run();
     }
 
-    public function calculate(): void
+    protected function calculate(): void
     {
         $position = $this->relatedPosition;
         $calculator = new Calculator([$position]);
