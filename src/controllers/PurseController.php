@@ -32,6 +32,7 @@ class PurseController extends \hipanel\base\CrudController
                 'class' => EasyAccessControl::class,
                 'actions' => [
                     'update' => 'bill.update',
+                    'pre-generate-document,generate-monthly-document,generate-document' => 'document.generate',
                     '*' => 'bill.read',
                 ],
             ],
