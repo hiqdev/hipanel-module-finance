@@ -68,7 +68,7 @@ final class CartCalculator extends Calculator
         $cart = $event->sender;
 
         $calculator = new static($cart);
-        if ($event->action === CartActionEvent::ACTION_BEFORE_REMOVE && $event->position) {
+        if ($event->action === CartActionEvent::ACTION_BEFORE_REMOVE && $event->position !== null) {
             $calculator->positionsBeingRemoved[] = $event->position->getId();
         }
 
