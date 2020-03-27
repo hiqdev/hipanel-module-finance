@@ -89,7 +89,7 @@ $('#{$this->modalId}.modal .modal-footer button').on('click', () => {
     const t = $('.modal.in .formula-input').first().data('ace-editor').session;
     $(".form-group .formula-input").each((idx, elem) => {
         const e = $(elem).data("ace-editor").session;
-        const n = "\\n" + t.getValue();
+        const n = t.getValue();
         e.insert({row: e.getLength(), column: 0}, n);
     });
     t.setValue('');
