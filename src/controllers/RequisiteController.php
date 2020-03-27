@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
+use hipanel\actions\SmartPerformAction;
 use hipanel\actions\ViewAction;
 use hipanel\actions\ComboSearchAction;
 use hipanel\actions\SmartUpdateAction;
@@ -21,9 +22,8 @@ use hipanel\filters\EasyAccessControl;
 use hipanel\actions\ValidateFormAction;
 use hipanel\base\CrudController;
 use hipanel\helpers\ArrayHelper;
-use hipanel\modules\finance\models\Requisite;
+use hipanel\modules\client\models\query\ContactQuery;
 use yii\base\Event;
-use yii\filters\VerbFilter;
 use Yii;
 
 class RequisiteController extends CrudController
@@ -108,11 +108,13 @@ class RequisiteController extends CrudController
                 'scenario' => 'set-templates',
                 'view' => 'modal/_bulkSetTemplates',
                 'success' => Yii::t('hipanel:finance', 'Templates changed'),
-                'POST pjax' => [
+                'POST' => [
                     'save' => true,
                     'success' => [
-                        'class' => ProxyAction::class,
-                        'action' => 'index',
+                        'class' => RedirectAction::class,
+                        'url' => function ($action) {
+                            return Yii::$app->request->referrer;
+                        },
                     ],
                 ],
                 'collectionLoader' => function ($action) {
