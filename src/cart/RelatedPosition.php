@@ -7,6 +7,7 @@ use hipanel\modules\finance\models\CalculableModelInterface;
 use hiqdev\yii2\cart\CartPositionInterface;
 use hiqdev\yii2\cart\Module;
 use hiqdev\yii2\cart\ShoppingCart;
+use yii\base\Widget;
 
 abstract class RelatedPosition implements RelatedPositionInterface
 {
@@ -19,6 +20,9 @@ abstract class RelatedPosition implements RelatedPositionInterface
     /** @var CalculableModelInterface */
     public $relatedPosition;
 
+    /** @var Widget */
+    private $widget;
+
     public function __construct(CartPositionInterface $mainPosition)
     {
         $this->cart = Module::getInstance()->getCart();
@@ -27,7 +31,6 @@ abstract class RelatedPosition implements RelatedPositionInterface
         $currentPositions = $this->cart->getPositions();
         if (isset($currentPositions[$this->relatedPosition->getId()])) {
             $relatedPosition = $currentPositions[$this->relatedPosition->getId()];
-            $relatedPosition->setQuantity($this->mainPosition->getQuantity());
             $this->relatedPosition = $relatedPosition;
         } else {
             $this->calculate();
@@ -37,7 +40,11 @@ abstract class RelatedPosition implements RelatedPositionInterface
     /** @inheritDoc */
     public function render(): string
     {
-        return $this->getWidget()->run();
+        if (!$this->widget) {
+            $this->widget = $this->getWidget();
+        }
+
+        return $this->widget->run();
     }
 
     protected function calculate(): void
