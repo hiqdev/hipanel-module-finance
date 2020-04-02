@@ -31,18 +31,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-8">
         <div class="bill-import">
             <?php $form = ActiveForm::begin() ?>
-            <div class="box box-danger">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><?= $model->getAttributeLabel('data') ?></h3>
+                </div>
                 <div class="box-body">
                     <div class="form-instance">
-                        <?= $form->field($model, 'data')->textarea(['rows' => 20]) ?>
+                        <?= $form->field($model, 'data')->textarea(['rows' => 20])->label(false) ?>
                     </div>
-
-                    <?= Html::submitButton(Yii::t('hipanel:finance', 'Import'), ['class' => 'btn btn-success']) ?>
-                    <?= Html::button(Yii::t('hipanel', 'Cancel'),
-                        ['class' => 'btn btn-default', 'onclick' => 'history.go(-1)']) ?>
-
                 </div>
             </div>
+            <?= Html::submitButton(Yii::t('hipanel:finance', 'Import'), ['class' => 'btn btn-success btn-flat']) ?>
+            &nbsp;
+            <?= Html::button(Yii::t('hipanel', 'Cancel'),
+                ['class' => 'btn btn-default btn-flat', 'onclick' => 'history.go(-1)']) ?>
             <?php ActiveForm::end() ?>
         </div>
     </div>
