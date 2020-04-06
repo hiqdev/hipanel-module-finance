@@ -1,5 +1,6 @@
 <?php
 
+use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\PriceSuggestionRequestForm;
 use hipanel\modules\finance\widgets\combo\TemplatePlanCombo;
@@ -94,6 +95,9 @@ use yii\helpers\Html;
         'plan_id' => $plan->id,
     ]) ?>
     <?php $form->action = ['@plan/create-prices', 'id' => $plan->id]; ?>
+<?php elseif ($plan->type === Plan::TYPE_HARDWARE): ?>
+    <?= $form->field($model, 'object_id')->widget(ClientCombo::class) ?>
+    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, ['plan_id' => $plan->id]) ?>
 <?php else: ?>
     <p class="text-center bg-warning"
        style="padding: 1rem;"><?= Yii::t('hipanel.finance.plan', 'This plan doesn\'t support detailed prices') ?></p>

@@ -50,7 +50,16 @@ class SalePricesActionsMenu extends \hiqdev\yii2\menus\Menu
 
     protected function suggestionLink($type)
     {
-        return ['@price/suggest', 'plan_id' => $this->model->tariff_id, 'object_id' => $this->model->object_id, 'type' => $type];
+        $object_id = $this->model->tariff_type === Sale::SALE_TYPE_HARDWARE
+                        ? $this->model->buyer_id
+                        : $this->model->object_id;
+
+        return [
+            '@price/suggest',
+            'plan_id' => $this->model->tariff_id,
+            'object_id' => $object_id,
+            'type' => $type
+        ];
     }
 
     protected function suggestionTypesByObject()
@@ -75,6 +84,14 @@ class SalePricesActionsMenu extends \hiqdev\yii2\menus\Menu
                         'icon' => 'fa-hdd-o',
                     ] : null,
                 ]);
+            case Sale::SALE_TYPE_HARDWARE:
+                return [
+                    [
+                        'type' => 'parts',
+                        'label' => Yii::t('hipanel.finance.price', 'Hardware prices'),
+                        'icon' => 'fa-hdd-o',
+                    ]
+                ];
             case Sale::SALE_TYPE_PCDN:
             case Sale::SALE_TYPE_VCDN:
                 return [

@@ -20,6 +20,7 @@ use Yii;
  * @property string|int $object_id
  * @property string|int $tariff_id
  * @property string $tariff_type
+ * @property string|int $buyer_id
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -36,6 +37,7 @@ class Sale extends \hipanel\base\Model
     const SALE_TYPE_ACCOUNT = 'account';
     const SALE_TYPE_CLIENT = 'client';
     const SALE_TYPE_PART = 'part';
+    const SALE_TYPE_HARDWARE = 'model_group';
 
     public function rules()
     {
