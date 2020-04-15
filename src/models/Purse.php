@@ -68,7 +68,11 @@ class Purse extends \hipanel\base\Model
 
     public function getDocuments()
     {
-        return $this->hasMany(Document::class, ['object_id' => 'id']);
+        if (Yii::getAlias('@document', false)) {
+            return $this->hasMany(Document::class, ['object_id' => 'id']);
+        }
+
+        return [];
     }
 
     public function getInvoices()
