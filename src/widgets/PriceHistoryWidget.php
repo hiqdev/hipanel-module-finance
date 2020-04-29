@@ -46,7 +46,7 @@ class PriceHistoryWidget extends Widget
     private function getSortedTimesArray(): array
     {
         $dates = array_unique(ArrayHelper::getColumn($this->model->priceHistory, function (PriceHistory $el): string {
-            return $el->time;
+            return (string)$el->time;
         }));
         rsort($dates);
 

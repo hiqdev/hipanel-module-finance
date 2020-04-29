@@ -64,7 +64,7 @@ class View extends Authenticated
         $this->priceValues = $I->executeJS("
         var prices = [];
         $('.price-item').each(function(){
-            var dollarInput = $(this).find('input[id^={$type}][id$=price]');
+            var dollarInput = $(this).find('input[id*={$type}][id$=price]');
             var euroInput = $(this).find('input[id^=TemplatePrice][id*=subprices][id*=EUR]');
             var values = {'dollarValue': Math.floor(Math.random() * 2147483647)};
             dollarInput.val(values['dollarValue']);
