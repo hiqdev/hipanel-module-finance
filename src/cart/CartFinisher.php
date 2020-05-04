@@ -15,6 +15,7 @@ use hiqdev\yii2\cart\NotPurchasableException;
 use hiqdev\yii2\cart\ShoppingCart;
 use Yii;
 use yii\base\BaseObject;
+use yii\web\User;
 
 class CartFinisher extends BaseObject
 {
@@ -27,6 +28,11 @@ class CartFinisher extends BaseObject
      * @var string|null
      */
     public $exchangeFromCurrency;
+
+    /**
+     * @var User
+     */
+    public $user;
 
     /**
      * @var PurchaseStrategyInterface[]
@@ -151,7 +157,7 @@ class CartFinisher extends BaseObject
     protected function getPurchaser($positionClass, $purchaserClass)
     {
         if (!isset($this->purchasers[$positionClass])) {
-            $this->purchasers[$positionClass] = new $purchaserClass($this->cart);
+            $this->purchasers[$positionClass] = new $purchaserClass($this->cart, $this->user);
         }
 
         return $this->purchasers[$positionClass];

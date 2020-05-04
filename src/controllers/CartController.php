@@ -107,7 +107,8 @@ class CartController extends \yii\web\Controller
 
         $finisher = new CartFinisher([
             'cart' => $cart,
-            'exchangeFromCurrency' => $exchangeFromCurrency
+            'exchangeFromCurrency' => $exchangeFromCurrency,
+            'user' => Yii::$app->user,
         ]);
         $finisher->run();
 

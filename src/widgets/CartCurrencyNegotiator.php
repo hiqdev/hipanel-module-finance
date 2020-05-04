@@ -56,12 +56,16 @@ final class CartCurrencyNegotiator extends Widget
             $cartCurrency
         );
 
-        $convertibleCurrencies = $this->convertibleCurrencies(
-            ArrayHelper::getColumn($this->client->purses, 'currency'),
-            $cartCurrency
-        );
-        foreach ($convertibleCurrencies as $rate) {
-            $this->renderCurrencyOptions($this->getCartAmountInCurrency($rate->from), $rate->from);
+        if (!Yii::$app->user->can('support')) {
+            // Prevent seller from exchanging own money to pay for client's services,
+            // when client's tariff is in different currency.
+            $convertibleCurrencies = $this->convertibleCurrencies(
+                ArrayHelper::getColumn($this->client->purses, 'currency'),
+                $cartCurrency
+            );
+            foreach ($convertibleCurrencies as $rate) {
+                $this->renderCurrencyOptions($this->getCartAmountInCurrency($rate->from), $rate->from);
+            }
         }
     }
 
@@ -137,7 +141,6 @@ final class CartCurrencyNegotiator extends Widget
         }, 3600);
 
         $result = [];
-
         foreach ($clientPursesCurrencies as $currency) {
             foreach ($rates as $rate) {
                 if ($rate->from === strtoupper($currency) && $rate->to === strtoupper($cartCurrency)) {

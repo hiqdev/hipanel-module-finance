@@ -14,6 +14,7 @@ use hiqdev\hiart\ResponseErrorException;
 use hiqdev\yii2\cart\ShoppingCart;
 use Yii;
 use yii\base\InvalidParamException;
+use yii\web\User;
 
 /**
  * Class BatchPurchaseStrategy purchases positions in batch.
@@ -38,15 +39,20 @@ class BatchPurchaseStrategy implements PurchaseStrategyInterface
      * @var AbstractPurchase[]
      */
     protected $purchases;
+    /**
+     * @var User
+     */
+    private $user;
 
     /**
      * BatchPurchaseStrategy constructor.
      *
      * @param ShoppingCart $cart
      */
-    public function __construct(ShoppingCart $cart)
+    public function __construct(ShoppingCart $cart, User $user)
     {
         $this->cart = $cart;
+        $this->user = $user;
     }
 
     /** {@inheritdoc} */
@@ -113,6 +119,17 @@ class BatchPurchaseStrategy implements PurchaseStrategyInterface
 
     protected function analyzeResponse($response)
     {
+        if ($response['_error'] === 'not enough money') {
+            foreach ($this->purchases as $key => $purchase) {
+                $error = Yii::t('hipanel:finance', 'Insufficient funds on the balance');
+                if ($this->user->can('support')) {
+                    $error = Yii::t('hipanel:finance', 'Insufficient funds. Maybe, your client does not have enough money on balance?');
+                }
+
+                $this->error[] = new ErrorPurchaseException($error, $purchase);
+            }
+        }
+
         foreach ($response as $key => $item) {
             $this->analyzeResponseItem($key, $item);
         }
