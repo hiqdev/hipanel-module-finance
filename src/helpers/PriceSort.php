@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\helpers;
 
+use Closure;
 use hipanel\modules\finance\models\Price;
 use Tuck\Sort\Sort;
 use Tuck\Sort\SortChain;
@@ -29,7 +30,7 @@ class PriceSort
     }
 
     /**
-     * @return \Tuck\Sort\SortChain
+     * @return SortChain
      */
     public static function serverPrices(): SortChain
     {
@@ -40,6 +41,11 @@ class PriceSort
             ->asc(self::byHardwareType())
             ->compare(self::byTargetObjectName())
             ->compare(self::byServerPriceType());
+    }
+
+    public static function zonePrices(): SortChain
+    {
+        return Sort::chain()->asc(self::byObjectNo());
     }
 
     private static function byServerPriceType()
@@ -53,7 +59,7 @@ class PriceSort
         };
     }
 
-    private static function byServerPriceGroups(): \Closure
+    private static function byServerPriceGroups(): Closure
     {
         return function (Price $price) {
             if ($price->type !== 'monthly,hardware') {
@@ -68,7 +74,7 @@ class PriceSort
         };
     }
 
-    private static function byServerMainPrices(): \Closure
+    private static function byServerMainPrices(): Closure
     {
         $order = [
             'rack',
@@ -93,7 +99,7 @@ class PriceSort
         };
     }
 
-    private static function byHardwareType(): \Closure
+    private static function byHardwareType(): Closure
     {
         $order = ['SERVER', 'CHASSIS', 'MOTHERBOARD', 'CPU', 'RAM', 'HDD', 'SSD'];
 
@@ -107,14 +113,14 @@ class PriceSort
         };
     }
 
-    private static function byTargetObjectName(): \Closure
+    private static function byTargetObjectName(): Closure
     {
         return function (Price $a, Price $b) {
             return strnatcasecmp($a->object->name, $b->object->name);
         };
     }
 
-    private static function byObjectType(): \Closure
+    private static function byObjectType(): Closure
     {
         $order = ['dedicated', 'net', 'model_group', 'part'];
 
@@ -124,6 +130,13 @@ class PriceSort
             }
 
             return INF;
+        };
+    }
+
+    private static function byObjectNo(): Closure
+    {
+        return static function ($group): int {
+            return reset($group)->object->no;
         };
     }
 }
