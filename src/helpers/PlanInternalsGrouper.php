@@ -228,6 +228,7 @@ class PlanInternalsGrouper
                 $servicePrices[$price->type] = $price;
             }
         }
+        $zonePrices = PriceSort::zonePrices()->values($zonePrices, true);
 
         return [$zonePrices, $servicePrices];
     }
