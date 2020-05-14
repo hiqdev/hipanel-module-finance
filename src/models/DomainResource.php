@@ -47,7 +47,7 @@ class DomainResource extends Resource
             },
         ];
         $rules['create-required-price'] = [['price'], 'required', 'on' => ['create', 'update']];
-        $rules[] = [['zone'], 'safe'];
+        $rules[] = [['zone', 'no'], 'safe'];
 
         return $rules;
     }
