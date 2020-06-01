@@ -69,7 +69,7 @@ class PlanQuery extends \hiqdev\hiart\ActiveQuery
     {
         $this
             ->joinWith('sales')
-            ->andWhere(['state' => ['ok', 'deleted']]);
+            ->andWhere(['states' => ['ok', 'deleted']]);
 
         return $this;
     }
