@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\client\widgets\combo\ContactCombo;
+use hipanel\modules\finance\widgets\combo\RequisiteCombo;
 use hiqdev\xeditable\widgets\ComboXEditable;
 use Yii;
 
@@ -107,7 +108,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                             'url' => ['@purse/update-requisite', 'id' => $model->id],
                         ],
                         'combo' => [
-                            'class' => ContactCombo::class,
+                            'class' => RequisiteCombo::class,
                             'filter' => [
                                 'client_id' => ['format' => $model->seller_id],
                             ],
