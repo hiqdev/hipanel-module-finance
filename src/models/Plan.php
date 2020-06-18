@@ -49,6 +49,23 @@ class Plan extends Model
     public const TYPE_SVDS = 'svds';
     public const TYPE_CLIENT = 'client';
     public const TYPE_HARDWARE = 'hardware';
+    public const TYPE_ANYCASTCDN = 'anycastcdn';
+
+    protected $knownTypes = [
+        self::TYPE_SERVER       => self::TYPE_SERVER,
+        self::TYPE_PCDN         => self::TYPE_PCDN,
+        self::TYPE_VCDN         => self::TYPE_VCDN,
+        self::TYPE_TEMPLATE     => self::TYPE_TEMPLATE,
+        self::TYPE_CERTIFICATE  => self::TYPE_CERTIFICATE,
+        self::TYPE_DOMAIN       => self::TYPE_DOMAIN,
+        self::TYPE_SWITCH       => self::TYPE_SWITCH,
+        self::TYPE_AVDS         => self::TYPE_AVDS,
+        self::TYPE_OVDS         => self::TYPE_OVDS,
+        self::TYPE_SVDS         => self::TYPE_SVDS,
+        self::TYPE_CLIENT       => self::TYPE_CLIENT,
+        self::TYPE_HARDWARE     => self::TYPE_HARDWARE,
+        self::TYPE_ANYCASTCDN   => self::TYPE_ANYCASTCDN,
+    ];
 
     use ModelTrait;
 
@@ -142,5 +159,10 @@ class Plan extends Model
         return new PlanQuery(get_called_class(), [
             'options' => $options,
         ]);
+    }
+
+    public function isKnownType(string $type = null): bool
+    {
+        return isset($this->knownTypes[$type ?: $this->type]);
     }
 }
