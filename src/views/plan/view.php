@@ -93,20 +93,7 @@ CSS
         <div class="col">
             <div class="row-md-12">
                 <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
-                <?php if (in_array($model->type, [
-                    Plan::TYPE_SERVER,
-                    Plan::TYPE_VCDN,
-                    Plan::TYPE_PCDN,
-                    Plan::TYPE_TEMPLATE,
-                    Plan::TYPE_CERTIFICATE,
-                    Plan::TYPE_DOMAIN,
-                    Plan::TYPE_SWITCH,
-                    Plan::TYPE_AVDS,
-                    Plan::TYPE_OVDS,
-                    Plan::TYPE_SVDS,
-                    Plan::TYPE_CLIENT,
-                    Plan::TYPE_HARDWARE,
-                ], true)): ?>
+                <?php if ($model->isKnownType()): ?>
                     <?php $page->beginContent('show-actions') ?>
                     <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>
                     <?php $page->endContent() ?>
