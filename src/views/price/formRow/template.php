@@ -64,7 +64,8 @@ use yii\bootstrap\Html;
                         'options' => [
                             'id' => Html::getInputName($model, "[$i][subprices]$currCode"),
                             'name' => Html::getInputName($model, "[$i][subprices]$currCode"),
-                            'value' => $model->subprices[$currCode] ?? 0,
+                            'value' => Yii::$container->get(\Money\Formatter\DecimalMoneyFormatter::class)
+                                            ->format(new \Money\Money($model->subprices[$currCode]['amount'] ?? 0, new \Money\Currency($currCode))),
                         ],
                         'selectedCurrencyCode' => $currCode,
                         'currencyAttributeName' => 'subprices',

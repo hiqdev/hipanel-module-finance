@@ -69,9 +69,10 @@ use yii\helpers\Html;
             'switch' => Yii::t('hipanel.finance.suggestionTypes', 'switch'),
             'v_cdn' => Yii::t('hipanel.finance.suggestionTypes', 'v_cdn'),
             'p_cdn' => Yii::t('hipanel.finance.suggestionTypes', 'p_cdn'),
+            'anycastcdn' => Yii::t('hipanel.finance.suggestionTypes', 'anycast_cdn'),
         ],
     ]) ?>
-<?php elseif (in_array($plan->type, [Plan::TYPE_VCDN, Plan::TYPE_PCDN], true)): ?>
+<?php elseif (in_array($plan->type, [Plan::TYPE_VCDN, Plan::TYPE_PCDN, Plan::TYPE_ANYCASTCDN], true)): ?>
     <?php if ($model->isObjectPredefined()) : ?>
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
     <?php else : ?>
