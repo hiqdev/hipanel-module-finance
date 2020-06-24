@@ -81,12 +81,12 @@ class Sale extends \hipanel\base\Model
 
     public function getTypes()
     {
-        return [
+        return array_filter([
             self::SALE_TYPE_DEVICE => Yii::t('hipanel:finance', 'Servers'),
             self::SALE_TYPE_IP => 'IP',
-            self::SALE_TYPE_ACCOUNT => Yii::t('hipanel:hosting', 'Accounts'),
+            self::SALE_TYPE_ACCOUNT => Yii::t('hipanel', 'Accounts'),
             self::SALE_TYPE_CLIENT => Yii::t('hipanel', 'Clients'),
-            self::SALE_TYPE_PART => Yii::t('hipanel:stock', 'Parts'),
-        ];
+            self::SALE_TYPE_PART => Yii::getAlias('@part', false) ? Yii::t('hipanel:stock', 'Parts') : null,
+        ]);
     }
 }
