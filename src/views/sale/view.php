@@ -42,7 +42,7 @@ $this->registerCss('
 
         <?php if (Yii::$app->user->can('client.read') && Yii::$app->user->can('access-subclients')) : ?>
             <div class="row">
-                <?= $this->render('@hipanel/modules/ticket/views/ticket/_clientInfo', compact('client')); ?>
+                <?= $this->render('@vendor/hiqdev/hipanel-modules-ticket/srcviews/ticket/_clientInfo', compact('client')); ?>
             </div>
         <?php endif ?>
     </div>

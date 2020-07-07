@@ -23,7 +23,7 @@ class PriceEstimator extends AssetBundle
     /**
      * @var string
      */
-    public $sourcePath = '@hipanel/modules/finance/assets/PriceEstimator';
+    public $sourcePath = __DIR__;
 
     /**
      * @var array
