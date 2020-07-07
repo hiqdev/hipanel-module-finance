@@ -30,17 +30,12 @@ return [
             'class' => \hiqdev\yii2\cart\Module::class,
             'termsPage' => $params['organization.termsUrl'] ?: $params['organization.url'],
             'orderPage' => '/finance/cart/select',
-            /*'orderButton'    => function ($module) {
-                return Yii::$app->getView()->render('@hipanel/modules/finance/views/cart/order-button', [
-                    'module' => $module,
-                ]);
-            },*/
             'paymentMethods' => function () {
                 $merchants = Yii::$app->getModule('merchant')->getPurchaseRequestCollection(
                     new \hiqdev\yii2\merchant\models\DepositRequest(['amount' => 5])
                 )->getItems();
 
-                return Yii::$app->getView()->render('@hipanel/modules/finance/views/cart/payment-methods', [
+                return Yii::$app->getView()->render(dirname(__DIR__) . '/src/views/cart/payment-methods', [
                     'merchants' => $merchants,
                 ]);
             },
@@ -77,59 +72,59 @@ return [
         ],
         'themeManager' => [
             'pathMap' => [
-                '@hipanel/modules/finance/views' => '$themedViewPaths',
+                dirname(__DIR__) . '/src/views' => '$themedViewPaths',
             ],
         ],
         'i18n' => [
             'translations' => [
                 'hipanel:finance' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hipanel/modules/finance/messages',
+                    'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
                 'hipanel:finance:change' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hipanel/modules/finance/messages',
+                    'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
                 'hipanel:finance:tariff' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hipanel/modules/finance/messages',
+                    'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
                 'hipanel.finance.units' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hipanel/modules/finance/messages',
+                    'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
                 'hipanel:finance:tariff:types' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hipanel/modules/finance/messages',
+                    'basePath' => dirname(__DIR__) . '/src/messages',
                     'forceTranslation' => true,
                 ],
                 'hipanel:finance:deposit' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hipanel/modules/finance/messages',
+                    'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
                 'hipanel:finance:sale' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hipanel/modules/finance/messages',
+                    'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
                 'hipanel.finance.suggestionTypes' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hipanel/modules/finance/messages',
+                    'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
                 'hipanel.finance.price' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hipanel/modules/finance/messages',
+                    'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
                 'hipanel.finance.billTypes' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hipanel/modules/finance/messages',
+                    'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
                 'hipanel.finance.plan' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hipanel/modules/finance/messages',
+                    'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
                 'hipanel.finance.tariffprofile' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hipanel/modules/finance/messages',
+                    'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
             ],
         ],
