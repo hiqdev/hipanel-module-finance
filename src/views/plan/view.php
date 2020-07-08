@@ -108,11 +108,13 @@ CSS
 
                 <?php $page->end() ?>
             </div>
-            <div class="row-md-12">
-                <?= PriceHistoryWidget::widget([
-                    'model' => $model,
-                ]) ?>
-            </div>
+            <?php if (Yii::$app->user->can('plan.update')): ?>
+                <div class="row-md-12">
+                    <?= PriceHistoryWidget::widget([
+                        'model' => $model,
+                    ]) ?>
+                </div>
+            <? endif; ?>
         </div>
     </div>
 </div>
