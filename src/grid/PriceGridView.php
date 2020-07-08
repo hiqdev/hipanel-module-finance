@@ -68,6 +68,13 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                             ->renderPrice($model);
                 },
             ],
+            'object->name_clear' => [
+                'label' => Yii::t('hipanel', 'Object'),
+                'format' => 'raw',
+                'value' => function (Price $model) {
+                    return $model->object->name ?: Yii::t('hipanel.finance.price', 'Any');
+                },
+            ],
             'object->name' => [
                 'label' => Yii::t('hipanel', 'Object'),
                 'format' => 'raw',

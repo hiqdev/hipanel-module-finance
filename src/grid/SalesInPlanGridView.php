@@ -113,15 +113,15 @@ class SalesInPlanGridView extends SaleGridView
                     'allModels' => $prices,
                     'pagination' => false,
                 ]),
-                'columns' => [
+                'columns' => array_filter([
                     'checkbox',
-                    'object->name',
+                    Yii::$app->user->can('part.read') ? 'object->name' : 'object->name_clear',
                     'type',
-                    'info',
-                    'price',
+                    Yii::$app->user->can('part.read') ? 'info' : null,
+                    Yii::$app->user->can('plan.update') ? 'price' : null,
                     'value',
                     'note',
-                ],
+                ]),
             ]);
         };
     }
