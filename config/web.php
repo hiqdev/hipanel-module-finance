@@ -41,7 +41,7 @@ return [
             },
             'shoppingCartOptions' => [
                 'on cartChange' => [\hipanel\modules\finance\cart\CartCalculator::class, 'handle'],
-                'session' => \yii\di\Instance::of(\hipanel\modules\finance\cart\storage\CartStorageInterface::class),
+                'session' => \hipanel\modules\finance\cart\storage\CartStorageInterface::class,
             ],
         ]),
         'merchant' => [
