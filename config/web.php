@@ -30,7 +30,7 @@ return [
             'class' => \hiqdev\yii2\cart\Module::class,
             'termsPage' => $params['organization.termsUrl'] ?: $params['organization.url'],
             'orderPage' => '/finance/cart/select',
-            'paymentMethodsProvider' => \hipanel\modules\finance\providers\PaymentMethodsProvider::class,
+            'paymentMethodsProvider' =>  \yii\di\Instance::of(\hipanel\modules\finance\providers\PaymentMethodsProvider::class),
             'shoppingCartOptions' => [
                 'on cartChange' => [\hipanel\modules\finance\cart\CartCalculator::class, 'handle'],
                 'session' => \hipanel\modules\finance\cart\storage\CartStorageInterface::class,
