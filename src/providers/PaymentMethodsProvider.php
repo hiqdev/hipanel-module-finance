@@ -22,7 +22,7 @@ class PaymentMethodsProvider implements PaymentMethodsProviderInterface
             new \hiqdev\yii2\merchant\models\DepositRequest(['amount' => 5])
         )->getItems();
 
-        return Yii::$app->getView()->renderFile(dirname(__DIR__) . '/src/views/cart/payment-methods.php', [
+        return Yii::$app->getView()->renderFile(dirname(__DIR__) . '/views/cart/payment-methods.php', [
             'merchants' => $merchants,
         ]);
     }
