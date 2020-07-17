@@ -35,7 +35,7 @@ return [
                     new \hiqdev\yii2\merchant\models\DepositRequest(['amount' => 5])
                 )->getItems();
 
-                return Yii::$app->getView()->render(dirname(__DIR__) . '/src/views/cart/payment-methods', [
+                return Yii::$app->getView()->renderFile(dirname(__DIR__) . '/src/views/cart/payment-methods.php', [
                     'merchants' => $merchants,
                 ]);
             },
