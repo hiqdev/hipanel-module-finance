@@ -30,15 +30,7 @@ return [
             'class' => \hiqdev\yii2\cart\Module::class,
             'termsPage' => $params['organization.termsUrl'] ?: $params['organization.url'],
             'orderPage' => '/finance/cart/select',
-            'paymentMethods' => function () {
-                $merchants = Yii::$app->getModule('merchant')->getPurchaseRequestCollection(
-                    new \hiqdev\yii2\merchant\models\DepositRequest(['amount' => 5])
-                )->getItems();
-
-                return Yii::$app->getView()->renderFile(dirname(__DIR__) . '/src/views/cart/payment-methods.php', [
-                    'merchants' => $merchants,
-                ]);
-            },
+            'paymentMethodsProvider' => \hipanel\modules\finance\providers\PaymentMethodsProvider::class,
             'shoppingCartOptions' => [
                 'on cartChange' => [\hipanel\modules\finance\cart\CartCalculator::class, 'handle'],
                 'session' => \hipanel\modules\finance\cart\storage\CartStorageInterface::class,
