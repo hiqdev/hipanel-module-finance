@@ -70,6 +70,7 @@ use yii\helpers\Html;
             'v_cdn' => Yii::t('hipanel.finance.suggestionTypes', 'v_cdn'),
             'p_cdn' => Yii::t('hipanel.finance.suggestionTypes', 'p_cdn'),
             'anycastcdn' => Yii::t('hipanel.finance.suggestionTypes', 'anycast_cdn'),
+            'referral' => Yii::t('hipanel.finance.suggestionTypes', 'referral'),
         ],
     ]) ?>
 <?php elseif (in_array($plan->type, [Plan::TYPE_VCDN, Plan::TYPE_PCDN, Plan::TYPE_ANYCASTCDN], true)): ?>
@@ -91,7 +92,7 @@ use yii\helpers\Html;
             'default' => Yii::t('hipanel.finance.suggestionTypes', 'default'),
         ],
     ]) ?>
-<?php elseif (in_array($plan->type, [Plan::TYPE_CERTIFICATE, Plan::TYPE_DOMAIN], true)): ?>
+<?php elseif (in_array($plan->type, [Plan::TYPE_CERTIFICATE, Plan::TYPE_DOMAIN, Plan::TYPE_REFERRAL], true)): ?>
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
         'plan_id' => $plan->id,
     ]) ?>

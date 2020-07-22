@@ -50,6 +50,7 @@ class Plan extends Model
     public const TYPE_CLIENT = 'client';
     public const TYPE_HARDWARE = 'hardware';
     public const TYPE_ANYCASTCDN = 'anycastcdn';
+    public const TYPE_REFERRAL = 'referral';
 
     protected $knownTypes = [
         self::TYPE_SERVER       => self::TYPE_SERVER,
@@ -65,6 +66,7 @@ class Plan extends Model
         self::TYPE_CLIENT       => self::TYPE_CLIENT,
         self::TYPE_HARDWARE     => self::TYPE_HARDWARE,
         self::TYPE_ANYCASTCDN   => self::TYPE_ANYCASTCDN,
+        self::TYPE_REFERRAL     => self::TYPE_REFERRAL,
     ];
 
     use ModelTrait;
