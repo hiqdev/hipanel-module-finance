@@ -33,7 +33,7 @@ class MoneyQuantity extends DefaultQuantityFormatter
     public function getAmount(): Money
     {
         $quantity = $this->getQuantity();
-        $amount = $quantity->getQuantity();
+        $amount = ceil(100*$quantity->getQuantity());
 
         return new Money($amount, new Currency($this->getCurrency()));
     }
