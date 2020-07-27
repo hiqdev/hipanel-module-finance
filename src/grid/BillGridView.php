@@ -233,7 +233,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
      */
     public function objectLink(Bill $model): string
     {
-        return $model->class === 'device'
+        return $model->class === 'device' && Yii::getAlias('@server/view', false)
             ? Html::a($model->object, ['@server/view', 'id' => $model->object_id])
             : Html::tag('b', $model->object);
     }

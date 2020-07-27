@@ -26,7 +26,7 @@ class ServerTariffManager extends AbstractTariffManager
 
     public function init()
     {
-        if (!Yii::getAlias('@server', true)) {
+        if (!Yii::getAlias('@server', false)) {
             throw new NotFoundHttpException('Server module is missing');
         }
 
