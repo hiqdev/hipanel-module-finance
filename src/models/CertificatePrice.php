@@ -136,9 +136,9 @@ class CertificatePrice extends Price
     public function getAvailablePeriods()
     {
         $periods = [];
-        foreach ([1, 2] as $period) {
+        foreach (self::getPeriods() as $period => $message) {
             if ($this->hasPriceForPeriod($period)) {
-                $periods[$period] = Yii::t('hipanel:finance:tariff', '{n, plural, one{# year} other{# years}}', ['n' => $period]);
+                $periods[$period] = $message;
             }
         }
 
