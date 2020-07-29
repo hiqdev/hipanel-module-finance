@@ -51,6 +51,8 @@ return [
     'hours' => 'часы',
     'files' => 'файлы',
 
+    'Referral rate' => 'Реферальная ставка (%)',
+
     'Object name' => 'Название объекта',
     'Tariff plan name' => 'Название тарифного плана',
     'Tariff plan buyer' => 'Покупатель тарифного плана',

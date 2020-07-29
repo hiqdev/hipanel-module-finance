@@ -92,13 +92,16 @@ use yii\helpers\Html;
             'default' => Yii::t('hipanel.finance.suggestionTypes', 'default'),
         ],
     ]) ?>
-<?php elseif (in_array($plan->type, [Plan::TYPE_CERTIFICATE, Plan::TYPE_DOMAIN, Plan::TYPE_REFERRAL], true)): ?>
+<?php elseif (in_array($plan->type, [Plan::TYPE_CERTIFICATE, Plan::TYPE_DOMAIN], true)): ?>
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
         'plan_id' => $plan->id,
     ]) ?>
     <?php $form->action = ['@plan/create-prices', 'id' => $plan->id]; ?>
 <?php elseif ($plan->type === Plan::TYPE_HARDWARE): ?>
     <?= $form->field($model, 'object_id')->widget(ClientCombo::class) ?>
+    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, ['plan_id' => $plan->id]) ?>
+<?php elseif ($plan->type === Plan::TYPE_REFERRAL): ?>
+    <?= Html::activeHiddenInput($model, 'type', ['value' => Plan::TYPE_REFERRAL]) ?>
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, ['plan_id' => $plan->id]) ?>
 <?php else: ?>
     <p class="text-center bg-warning"

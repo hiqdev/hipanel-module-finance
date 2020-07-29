@@ -1,12 +1,17 @@
 <?php
 
+use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\models\TemplatePrice;
+use hipanel\modules\finance\widgets\BillType;
+use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\widgets\AmountWithCurrency;
 use yii\bootstrap\Html;
+use yii\widgets\ActiveForm;
 
 /**
- * @var \hipanel\modules\finance\models\Plan|null $plan
- * @var \hipanel\modules\finance\models\TemplatePrice $model
- * @var \yii\widgets\ActiveForm $form
+ * @var Plan|null $plan
+ * @var TemplatePrice $model
+ * @var ActiveForm $form
  * @var int $i
  */
 ?>
@@ -21,13 +26,13 @@ use yii\bootstrap\Html;
         <?= Html::activeHiddenInput($model, "[$i]class") ?>
         <?= Html::activeHiddenInput($model, "[$i]object") ?>
         <strong>
-            <?= \hipanel\modules\finance\widgets\LinkToObjectResolver::widget([
+            <?= LinkToObjectResolver::widget([
                 'model' => $model->object,
                 'labelAttribute' => 'name',
             ]) ?>
         </strong>
         <br />
-        <?= \hipanel\modules\finance\widgets\BillType::widget([
+        <?= BillType::widget([
             'model' => $model,
             'field' => 'type',
         ])?>
@@ -44,18 +49,24 @@ use yii\bootstrap\Html;
     </div>
     <div class="col-md-4">
         <div class="col-md-4">
-            <div class="<?= AmountWithCurrency::$widgetClass ?>">
-                <?= $form->field($model, "[$i]price")->widget(AmountWithCurrency::class, [
-                    'currencyAttributeName' => 'currency',
-                    'currencyAttributeOptions' => [
-                        'items' => $this->context->getCurrencyTypes(),
-                    ],
-                    'currencyDropdownOptions' => [
-                        'disabled' => true,
-                        'hidden' => true,
-                    ],
-                ]) ?>
-            </div>
+            <?php if ($model->rate) : ?>
+                <?= $form->field($model, "[$i]rate")->input('number') ?>
+                <?= Html::activeHiddenInput($model, "[$i]price") ?>
+                <?= Html::activeHiddenInput($model, "[$i]currency") ?>
+            <?php else : ?>
+                <div class="<?= AmountWithCurrency::$widgetClass ?>">
+                    <?= $form->field($model, "[$i]price")->widget(AmountWithCurrency::class, [
+                        'currencyAttributeName' => 'currency',
+                        'currencyAttributeOptions' => [
+                            'items' => $this->context->getCurrencyTypes(),
+                        ],
+                        'currencyDropdownOptions' => [
+                            'disabled' => true,
+                            'hidden' => true,
+                        ],
+                    ]) ?>
+                </div>
+            <?php endif; ?>
         </div>
         <?php foreach ($model->subprices as $currCode => $subprice): ?>
             <div class="col-md-4">
