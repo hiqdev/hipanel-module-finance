@@ -2,6 +2,7 @@
 
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\RatePrice;
 use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\FormulaInput;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
@@ -78,22 +79,30 @@ JS
         <?php endif ?>
     </div>
     <div class="col-md-2">
-        <div class="<?= AmountWithCurrency::$widgetClass ?>">
-            <?= $form->field($model, "[$i]price")->widget(AmountWithCurrency::class, [
-                'currencyAttributeName' => 'currency',
-                'currencyAttributeOptions' => [
-                    'items' => $this->context->getCurrencyTypes(),
-                ],
-            ]) ?>
-            <?= $form->field($model, "[$i]currency", ['template' => '{input}{error}'])->hiddenInput([
-                'ref' => 'currency',
-            ]) ?>
-        </div>
-        <div class="price-estimates">
-        </div>
+        <?php if ($model instanceof RatePrice) : ?>
+            <?= $form->field($model, "[$i]rate")->input('number') ?>
+            <?= Html::activeHiddenInput($model, "[$i]price", ['value' => 0]) ?>
+            <?= Html::activeHiddenInput($model, "[$i]currency", ['value' => $model->plan->currency]) ?>
+            <?= Html::activeHiddenInput($model, "[$i]unit", ['value' => $model->plan->currency]) ?>
+        <?php else : ?>
+            <div class="<?= AmountWithCurrency::$widgetClass ?>">
+                <?= $form->field($model, "[$i]price")->widget(AmountWithCurrency::class, [
+                    'currencyAttributeName' => 'currency',
+                    'currencyAttributeOptions' => [
+                        'items' => $this->context->getCurrencyTypes(),
+                    ],
+                ]) ?>
+                <?= $form->field($model, "[$i]currency", ['template' => '{input}{error}'])->hiddenInput([
+                    'ref' => 'currency',
+                ]) ?>
+            </div>
+            <div class="price-estimates"></div>
+        <?php endif; ?>
     </div>
     <div class="col-md-5">
-        <?= $form->field($model, "[$i]formula")->widget(FormulaInput::class) ?>
+        <?php if (!($model instanceof RatePrice)) : ?>
+            <?= $form->field($model, "[$i]formula")->widget(FormulaInput::class) ?>
+        <?php endif; ?>
     </div>
     <div class="col-md-1" style="padding-top: 25px;">
         <label>&nbsp;</label>

@@ -38,11 +38,13 @@ class TemplatePricePresenter extends PricePresenter
         $result = [
             Html::tag('strong', $formatter->asCurrency($price->price, $price->currency) . $unit),
         ];
-        foreach ($price->subprices as $currencyCode => $amount) {
-            try {
-                $result[] = $formatter->asCurrency($amount, $currencyCode);
-            } catch (InvalidConfigException $e) {
-                $result[] = $amount . ' ' . $currencyCode;
+        if ($price->subprices) {
+            foreach ($price->subprices as $currencyCode => $amount) {
+                try {
+                    $result[] = $formatter->asCurrency($amount, $currencyCode);
+                } catch (InvalidConfigException $e) {
+                    $result[] = $amount . ' ' . $currencyCode;
+                }
             }
         }
 

@@ -156,6 +156,10 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
             'value' => [
                 'class' => ValueColumn::class,
             ],
+            'rate' => [
+                'label' => Yii::t('hipanel.finance.price', 'Referral rate'),
+                'attribute' => 'rate',
+            ],
         ]);
     }
 }

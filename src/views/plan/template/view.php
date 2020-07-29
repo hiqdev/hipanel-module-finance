@@ -2,6 +2,7 @@
 
 use hipanel\modules\finance\grid\PriceGridView;
 use hipanel\modules\finance\helpers\PriceSort;
+use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\widgets\CreatePricesButton;
 use hipanel\widgets\IndexPage;
 use yii\data\ArrayDataProvider;
@@ -45,6 +46,7 @@ use yii\data\ArrayDataProvider;
             'object->label',
             'type',
             'price',
+            'rate',
             'note',
         ],
     ]) ?>
