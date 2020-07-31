@@ -2,7 +2,7 @@
 
 use hipanel\helpers\Url;
 use hipanel\models\Ref;
-use hipanel\modules\client\widgets\combo\ClientCombo;
+use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\models\Plan;
 use hipanel\widgets\RefCombo;
 use yii\bootstrap\ActiveForm;
@@ -28,7 +28,7 @@ use yii\helpers\Html;
                 <?php endif ?>
                 <?= $form->field($model, 'name') ?>
                 <?= $form->field($model, 'type')->dropDownList($model->typeOptions, ['prompt' => '--']) ?>
-                <?= $form->field($model, 'client')->widget(ClientCombo::class) ?>
+                <?= $form->field($model, 'client')->widget(SellerCombo::class) ?>
                 <?= $form->field($model, 'currency')->widget(RefCombo::class, [
                     'gtype' => 'type,currency',
                     'i18nDictionary' => 'hipanel',
