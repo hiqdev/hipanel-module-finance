@@ -23,7 +23,7 @@ class PriceEstimator extends AssetBundle
     /**
      * @var string
      */
-    public $sourcePath = __DIR__;
+    public $sourcePath = __DIR__ . '/PriceEstimator';
 
     /**
      * @var array
