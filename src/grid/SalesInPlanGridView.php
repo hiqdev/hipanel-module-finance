@@ -117,7 +117,7 @@ class SalesInPlanGridView extends SaleGridView
                     'checkbox',
                     Yii::$app->user->can('part.read') ? 'object->name' : 'object->name_clear',
                     'type',
-                    Yii::$app->user->can('part.read') ? 'info' : null,
+                    'info',
                     Yii::$app->user->can('plan.update') ? 'price' : null,
                     'value',
                     'note',
