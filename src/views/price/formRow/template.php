@@ -5,7 +5,11 @@ use hipanel\modules\finance\models\TemplatePrice;
 use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\widgets\AmountWithCurrency;
+use Money\Currency;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\Money;
 use yii\bootstrap\Html;
+use yii\helpers\StringHelper;
 use yii\widgets\ActiveForm;
 
 /**
@@ -49,8 +53,8 @@ use yii\widgets\ActiveForm;
     </div>
     <div class="col-md-4">
         <div class="col-md-4">
-            <?php if ($model->rate) : ?>
-                <?= $form->field($model, "[$i]rate")->input('number') ?>
+            <?php if (StringHelper::startsWith($model->type, Plan::TYPE_REFERRAL)) : ?>
+                <?= $form->field($model, "[$i]rate")->input('number', ['min' => 0]) ?>
                 <?= Html::activeHiddenInput($model, "[$i]price") ?>
                 <?= Html::activeHiddenInput($model, "[$i]currency") ?>
             <?php else : ?>
@@ -68,29 +72,31 @@ use yii\widgets\ActiveForm;
                 </div>
             <?php endif; ?>
         </div>
-        <?php foreach ($model->subprices as $currCode => $subprice): ?>
-            <div class="col-md-4">
-                <div class="<?= AmountWithCurrency::$widgetClass ?>">
-                    <?= $form->field($model, "[$i]subprices")->widget(AmountWithCurrency::class, [
-                        'options' => [
-                            'id' => Html::getInputName($model, "[$i][subprices]$currCode"),
-                            'name' => Html::getInputName($model, "[$i][subprices]$currCode"),
-                            'value' => Yii::$container->get(\Money\Formatter\DecimalMoneyFormatter::class)
-                                            ->format(new \Money\Money($model->subprices[$currCode]['amount'] ?? 0, new \Money\Currency($currCode))),
-                        ],
-                        'selectedCurrencyCode' => $currCode,
-                        'currencyAttributeName' => 'subprices',
-                        'currencyDropdownOptions' => [
-                            'disabled' => true,
-                            'hidden' => true,
-                        ],
-                        'currencyAttributeOptions' => [
-                            'items' => $this->context->getCurrencyTypes(),
-                        ],
-                    ])->label(Yii::t('hipanel.finance.price', 'Price in {currency}', ['currency' => $currCode])) ?>
+        <?php if ($model->subprices) : ?>
+            <?php foreach ($model->subprices as $currCode => $subprice): ?>
+                <div class="col-md-4">
+                    <div class="<?= AmountWithCurrency::$widgetClass ?>">
+                        <?= $form->field($model, "[$i]subprices")->widget(AmountWithCurrency::class, [
+                            'options' => [
+                                'id' => Html::getInputName($model, "[$i][subprices]$currCode"),
+                                'name' => Html::getInputName($model, "[$i][subprices]$currCode"),
+                                'value' => Yii::$container->get(DecimalMoneyFormatter::class)
+                                                ->format(new Money($model->subprices[$currCode]['amount'] ?? 0, new Currency($currCode))),
+                            ],
+                            'selectedCurrencyCode' => $currCode,
+                            'currencyAttributeName' => 'subprices',
+                            'currencyDropdownOptions' => [
+                                'disabled' => true,
+                                'hidden' => true,
+                            ],
+                            'currencyAttributeOptions' => [
+                                'items' => $this->context->getCurrencyTypes(),
+                            ],
+                        ])->label(Yii::t('hipanel.finance.price', 'Price in {currency}', ['currency' => $currCode])) ?>
+                    </div>
                 </div>
-            </div>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
     <div class="col-md-3">
         <?= $form->field($model, "[$i]note") ?>

@@ -27,7 +27,7 @@ class TemplatePrice extends Price
     {
         return array_merge(parent::rules(), [
             [['subprices'], 'each', 'rule' => ['number']],
-            [['rate'], 'number'],
+            [['rate'], 'number', 'min' => 0],
         ]);
     }
 }

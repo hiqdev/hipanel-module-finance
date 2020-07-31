@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\grid\presenters\price;
 
+use hipanel\helpers\StringHelper;
 use hipanel\modules\finance\models\Price;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -35,9 +36,15 @@ class TemplatePricePresenter extends PricePresenter
             $unit = ' ' . Yii::t('hipanel:finance', 'per {unit}', ['unit' => $price->getUnitLabel()]);
         }
 
-        $result = [
-            Html::tag('strong', $formatter->asCurrency($price->price, $price->currency) . $unit),
-        ];
+        if (StringHelper::startsWith($price->type, 'referral')) {
+            $result = [
+                Html::tag('strong', $price->rate . '%'),
+            ];
+        } else {
+            $result = [
+                Html::tag('strong', $formatter->asCurrency($price->price, $price->currency) . $unit),
+            ];
+        }
         if ($price->subprices) {
             foreach ($price->subprices as $currencyCode => $amount) {
                 try {
