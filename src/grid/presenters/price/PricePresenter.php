@@ -102,7 +102,7 @@ class PricePresenter
             ]);
         }
 
-        if ($price->getSubtype() === 'hardware') {
+        if ($price->getSubtype() === 'hardware' && Yii::$app->user->can('part.read')) {
             return $price->object->label;
         }
 
