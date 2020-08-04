@@ -44,6 +44,14 @@ class PriceHistory extends Price
     }
 
     /**
+     * @inheritDoc
+     */
+    public function isQuantityPredefined(): bool
+    {
+        return true;
+    }
+
+    /**
      * @inheritdoc
      */
     public static function instantiate($row)
