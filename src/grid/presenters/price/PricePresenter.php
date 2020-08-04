@@ -14,6 +14,8 @@ use hipanel\modules\finance\models\Price;
 use hipanel\widgets\ArraySpoiler;
 use Yii;
 use yii\bootstrap\Html;
+use yii\i18n\Formatter;
+use yii\web\User;
 
 /**
  * Class PricePresenter contains methods that present price properties.
@@ -24,18 +26,24 @@ use yii\bootstrap\Html;
 class PricePresenter
 {
     /**
-     * @var \yii\i18n\Formatter
+     * @var Formatter
      */
     private $formatter;
+
+    /**
+     * @var User
+     */
+    private $user;
 
     /**
      * @var string
      */
     private $priceAttribute = 'price';
 
-    public function __construct()
+    public function __construct(Formatter $formatter, User $user)
     {
-        $this->formatter = Yii::$app->formatter;
+        $this->formatter = $formatter;
+        $this->user = $user;
     }
 
     /**
@@ -102,7 +110,7 @@ class PricePresenter
             ]);
         }
 
-        if ($price->getSubtype() === 'hardware') {
+        if ($price->getSubtype() === 'hardware' && $this->user->can('part.read')) {
             return $price->object->label;
         }
 
