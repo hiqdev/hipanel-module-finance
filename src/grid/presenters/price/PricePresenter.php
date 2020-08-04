@@ -33,7 +33,7 @@ class PricePresenter
     /**
      * @var User
      */
-    private User $user;
+    private $user;
 
     /**
      * @var string
