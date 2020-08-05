@@ -106,7 +106,7 @@ CSS
                     <?php $page->endContent() ?>
                 <?php endif; ?>
 
-                <?php $page->end() ?>
+                <?php $page::end() ?>
             </div>
             <?php if (Yii::$app->user->can('plan.update')): ?>
                 <div class="row-md-12">
