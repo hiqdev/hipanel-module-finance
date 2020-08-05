@@ -257,12 +257,15 @@
             cells.html('&mdash;');
         },
         updatePriceCharges() {
+            const spinner = this.getSpinner();
             this.totalSum = {};
             let prices = this.getPrices();
             let actions = this.getActions(prices);
 
-            this.getPriceRows().find('.price-estimates').html(hipanel.spinner.small);
-            $(this.settings.totalCellSelector).html(hipanel.spinner.small);
+            document.querySelectorAll(`${this.form.attr('id')} .price-estimates`).forEach(elem => {
+                elem.appendChild(spinner.cloneNode(true));
+            });
+            document.querySelector(this.settings.totalCellSelector).appendChild(spinner.cloneNode(true));
 
             $.ajax({
                 method: 'post',
@@ -277,7 +280,9 @@
                 },
                 error: xhr => {
                     this.showError(xhr.statusText);
-                    this.getPriceRows().find('.price-estimates').html('');
+                    document.querySelectorAll(`${this.form.attr('id')} .price-estimates`).forEach(elem => {
+                        elem.innerText = '--';
+                    });
                 }
             }).then(() => {
                 this.activatePopovers();
@@ -291,11 +296,9 @@
             });
 
             $.ajax({
-                method: 'post',
+                method: 'POST',
                 url: this.url,
                 success: json => {
-                    const t0 = performance.now();
-
                     this.drawDynamicQuantity(json);
                     Object.keys(json).forEach(period => {
                         this.rememberEstimates(period, json[period].targets);
@@ -303,14 +306,12 @@
                     this.drawEstimates();
                     this.drawTotalPerSaleObject();
                     this.drawPlanTotal()
-
-                    const t1 = performance.now();
-                    // console.log("estimate took " + (t1 - t0) + " milliseconds.")
-
                 },
                 error: xhr => {
                     hipanel.notify.error(xhr.statusText);
-                    $('.price-estimates').text('--');
+                    document.querySelectorAll('.price-estimates').forEach(elem => {
+                        elem.innerText = "--";
+                    });
                 }
             }).then(() => {
                 this.activatePopovers();
@@ -321,11 +322,10 @@
                 this.popoverElements.forEach(elem => {
                     elem.onclick = () => {
                         $(elem).popover({
-                            html: true
-                        }).on('show.bs.popover', e => {
-                            $('.price-estimates *').not(e.target).popover('hide');
-                        });
-                        $(elem).popover('show');
+                            html: true,
+                        }).on('show.bs.popover', event => {
+                            $('.price-estimates *').not(event.target).popover('hide');
+                        }).popover('show');
                     };
                 });
             }
