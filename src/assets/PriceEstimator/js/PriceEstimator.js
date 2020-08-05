@@ -253,8 +253,9 @@
             });
         },
         clearUnestimatedCells() {
-            let cells = $('.total-per-object:not(.estimated)');
-            cells.html('&mdash;');
+            document.querySelectorAll('.total-per-object:not(.estimated)').forEach(elem => {
+                elem.innerHTML = '&mdash;';
+            });
         },
         updatePriceCharges() {
             const spinner = this.getSpinner();
