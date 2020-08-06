@@ -50,7 +50,7 @@ class PriceSort
 
     private static function byServerPriceType()
     {
-        return function (Price $a, Price $b) {
+        return static function (Price $a, Price $b) {
             if ($a->getSubtype() === $b->getSubtype()) {
                 return $a->isOveruse() ? 1 : -1;
             }
@@ -83,14 +83,18 @@ class PriceSort
             'support_time',
             'backup_du',
             'server_traf_max',
+            'cdn_traf_max',
             'server_traf95_max',
+            'cdn_traf95_max',
             'server_du',
+            'storage_du',
+            'cdn_cache',
             'server_ssd',
             'server_sata',
             'win_license',
         ];
 
-        return function (Price $price) use ($order) {
+        return static function (Price $price) use ($order) {
             if (($key = array_search($price->getSubtype(), $order, true)) !== false) {
                 return $key;
             }
