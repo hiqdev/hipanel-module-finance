@@ -212,7 +212,9 @@
                 let saleObject = this.saleObjects[saleObjectId];
                 let saleObjectTotalCell = document.querySelector(`tr[data-key="${saleObjectId}"] ${this.totalPerObjectSelector}`);
 
-                saleObjectTotalCell.innerHTML = '';
+                if (saleObjectTotalCell) {
+                    saleObjectTotalCell.innerHTML = '';
+                }
                 Object.keys(saleObject).forEach(currency => {
                     let saleObjectTotalSpan = document.createElement('span');
 
@@ -226,8 +228,10 @@
                             objectCurrency[period].sumFormatted || '&mdash;'
                         );
                     });
-                    saleObjectTotalCell.appendChild(saleObjectTotalSpan);
-                    saleObjectTotalCell.classList.add('estimated');
+                    if (saleObjectTotalCell) {
+                        saleObjectTotalCell.appendChild(saleObjectTotalSpan);
+                        saleObjectTotalCell.classList.add('estimated');
+                    }
                 });
             })
             this.clearUnestimatedCells();
