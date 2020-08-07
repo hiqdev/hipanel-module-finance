@@ -17,11 +17,8 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
     public function items()
     {
         $user = Yii::$app->user;
-        if (!$user->can('finance.read')) {
-            return [];
-        }
 
-        return [
+        $result = [
             'finance' => [
                 'label' => Yii::t('hipanel:finance', 'Finance'),
                 'url'   => ['/finance/bill/index'],
@@ -80,5 +77,11 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                 ],
             ],
         ];
+
+        if (empty ($result['finance']['items'])) {
+            return [];
+        }
+
+        return $result;
     }
 }
