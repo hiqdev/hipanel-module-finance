@@ -32,6 +32,8 @@ class PricesCollection extends Collection
     {
         parent::__construct($config);
         $this->priceModelFactory = $priceModelFactory;
+        // Prevent default behavior in Collection::collectData() in order to allow all attributes for different models
+        $this->dataCollector = fn(Price $model) => [$model->getPrimaryKey(), $model->toArray()];
     }
 
     /**
