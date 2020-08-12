@@ -92,9 +92,10 @@ class PricePresenter
 
     /**
      * @param Price $price
+     * @param string $attribute
      * @return string
      */
-    public function renderInfo(Price $price): string
+    public function renderInfo(Price $price, string $attribute = 'quantity'): string
     {
         if (!$price->isQuantityPredefined()) {
             return Yii::t('hipanel:finance', '{icon} Quantity: {quantity}', [
@@ -105,7 +106,7 @@ class PricePresenter
         if ($price->isOveruse()) {
             return Yii::t('hipanel:finance', '{coins}&nbsp;&nbsp;{amount,number} {unit}', [
                 'coins' => Html::tag('i', '', ['class' => 'fa fa-money', 'title' => Yii::t('hipanel.finance.price', 'Prepaid amount')]),
-                'amount' => $price->quantity,
+                'amount' => $price->{$attribute},
                 'unit' => $price->getUnitLabel(),
             ]);
         }

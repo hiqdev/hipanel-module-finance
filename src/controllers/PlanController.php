@@ -187,6 +187,7 @@ class PlanController extends CrudController
                 'object->name',
                 'type',
                 'info',
+                'old_quantity',
                 'old_price',
                 'note',
             ],
