@@ -28,7 +28,7 @@ class PriceHistory extends Price
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['old_price'], 'number'],
+            [['old_price', 'old_quantity'], 'number'],
             [['time'], 'date'],
         ]);
     }
@@ -40,6 +40,7 @@ class PriceHistory extends Price
     {
         return array_merge(parent::attributeLabels(), [
             'old_price' => \Yii::t('hipanel.finance.price', 'Old price'),
+            'old_quantity' => \Yii::t('hipanel.finance.price', 'Old quantity'),
         ]);
     }
 
@@ -59,6 +60,7 @@ class PriceHistory extends Price
         return new self([
             'time' => $row['time'],
             'old_price' => $row['old_price'],
+            'old_quantity' => $row['old_quantity'],
         ]);
     }
 }
