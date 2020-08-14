@@ -70,7 +70,7 @@ class CreatePricesButton extends Widget
             ]) . Dropdown::widget([
                 'options' => ['class' => 'pull-right'],
                 'items' => array_filter([
-                    [
+                    $this->model->supportsPrices() ? [
                         'encode' => false,
                         'url' => '#',
                         'label' => Yii::t('hipanel.finance.price', 'Create prices'),
@@ -80,7 +80,7 @@ class CreatePricesButton extends Widget
                                 'target' => '#create-prices-modal',
                             ],
                         ],
-                    ],
+                    ] : null,
                     $this->model->supportsSharedPrices() ? [
                         'encode' => false,
                         'url' => '#',

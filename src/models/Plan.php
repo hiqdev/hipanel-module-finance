@@ -51,22 +51,33 @@ class Plan extends Model
     public const TYPE_HARDWARE = 'hardware';
     public const TYPE_ANYCASTCDN = 'anycastcdn';
     public const TYPE_REFERRAL = 'referral';
+    public const TYPE_VPS = 'vps';
+    public const TYPE_SNAPSHOT = 'snapshot';
+    public const TYPE_VOLUME = 'volume';
+    public const TYPE_STORAGE = 'storage';
+    public const TYPE_PRIVATE_CLOUD_BACKUP = 'private_cloud_backup';
+    public const TYPE_PRIVATE_CLOUD = 'private_cloud';
 
     protected $knownTypes = [
-        self::TYPE_SERVER       => self::TYPE_SERVER,
-        self::TYPE_PCDN         => self::TYPE_PCDN,
-        self::TYPE_VCDN         => self::TYPE_VCDN,
-        self::TYPE_TEMPLATE     => self::TYPE_TEMPLATE,
-        self::TYPE_CERTIFICATE  => self::TYPE_CERTIFICATE,
-        self::TYPE_DOMAIN       => self::TYPE_DOMAIN,
-        self::TYPE_SWITCH       => self::TYPE_SWITCH,
-        self::TYPE_AVDS         => self::TYPE_AVDS,
-        self::TYPE_OVDS         => self::TYPE_OVDS,
-        self::TYPE_SVDS         => self::TYPE_SVDS,
-        self::TYPE_CLIENT       => self::TYPE_CLIENT,
-        self::TYPE_HARDWARE     => self::TYPE_HARDWARE,
-        self::TYPE_ANYCASTCDN   => self::TYPE_ANYCASTCDN,
-        self::TYPE_REFERRAL     => self::TYPE_REFERRAL,
+        self::TYPE_SERVER               => self::TYPE_SERVER,
+        self::TYPE_PCDN                 => self::TYPE_PCDN,
+        self::TYPE_VCDN                 => self::TYPE_VCDN,
+        self::TYPE_TEMPLATE             => self::TYPE_TEMPLATE,
+        self::TYPE_CERTIFICATE          => self::TYPE_CERTIFICATE,
+        self::TYPE_DOMAIN               => self::TYPE_DOMAIN,
+        self::TYPE_SWITCH               => self::TYPE_SWITCH,
+        self::TYPE_AVDS                 => self::TYPE_AVDS,
+        self::TYPE_OVDS                 => self::TYPE_OVDS,
+        self::TYPE_SVDS                 => self::TYPE_SVDS,
+        self::TYPE_CLIENT               => self::TYPE_CLIENT,
+        self::TYPE_HARDWARE             => self::TYPE_HARDWARE,
+        self::TYPE_ANYCASTCDN           => self::TYPE_ANYCASTCDN,
+        self::TYPE_VPS                  => self::TYPE_VPS,
+        self::TYPE_SNAPSHOT             => self::TYPE_SNAPSHOT,
+        self::TYPE_VOLUME               => self::TYPE_VOLUME,
+        self::TYPE_STORAGE              => self::TYPE_STORAGE,
+        self::TYPE_PRIVATE_CLOUD_BACKUP => self::TYPE_PRIVATE_CLOUD_BACKUP,
+        self::TYPE_PRIVATE_CLOUD        => self::TYPE_PRIVATE_CLOUD,
     ];
 
     use ModelTrait;
@@ -147,9 +158,24 @@ class Plan extends Model
         return $this->state === 'deleted';
     }
 
+    public function supportsPrices(): bool
+    {
+        return !in_array($this->type, [
+            self::TYPE_SNAPSHOT,
+            self::TYPE_STORAGE,
+            self::TYPE_PRIVATE_CLOUD_BACKUP,
+            self::TYPE_PRIVATE_CLOUD,
+        ], true);
+    }
+
     public function supportsSharedPrices(): bool
     {
-        return !\in_array($this->type, [Plan::TYPE_TEMPLATE, Plan::TYPE_CERTIFICATE, Plan::TYPE_DOMAIN], true);
+        return !in_array($this->type, [
+            self::TYPE_TEMPLATE,
+            self::TYPE_CERTIFICATE,
+            self::TYPE_DOMAIN,
+            self::TYPE_VPS,
+        ], true);
     }
 
     /**
