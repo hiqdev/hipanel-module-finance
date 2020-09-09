@@ -78,6 +78,7 @@ class Plan extends Model
         self::TYPE_STORAGE              => self::TYPE_STORAGE,
         self::TYPE_PRIVATE_CLOUD_BACKUP => self::TYPE_PRIVATE_CLOUD_BACKUP,
         self::TYPE_PRIVATE_CLOUD        => self::TYPE_PRIVATE_CLOUD,
+        self::TYPE_REFERRAL             => self::TYPE_REFERRAL,
     ];
 
     use ModelTrait;

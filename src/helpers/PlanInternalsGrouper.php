@@ -55,6 +55,8 @@ class PlanInternalsGrouper
                 return $this->groupCertificatePrices();
             case Plan::TYPE_HARDWARE:
                 return $this->groupHardwarePrices();
+            case Plan::TYPE_REFERRAL:
+                return $this->plan->prices;
             case Plan::TYPE_DOMAIN:
                 $byType = static function (array $servicePrices) {
                     return ArrayHelper::index($servicePrices, 'type', static function ($servicePrice) {

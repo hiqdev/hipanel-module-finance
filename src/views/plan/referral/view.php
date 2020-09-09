@@ -3,6 +3,7 @@
 use hipanel\modules\finance\grid\ReferralPriceGridView;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\models\RatePrice;
 use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\widgets\CreateReferralPricesButton;
@@ -42,14 +43,10 @@ use yii\web\View;
                 'allModels' => $model->prices,
                 'pagination' => false,
             ])),
-            'filterModel' => $model,
+            'filterModel' => reset($model->prices),
             'columns' => [
                 'object->name-any',
-                'rate' => [
-                    'label' => Yii::t('hipanel.finance.price', 'Referral rate'),
-                    'attribute' => 'rate',
-                    'filter' => false,
-                ]
+                'rate',
             ],
         ]) ?>
     <?php $page->endBulkForm() ?>
