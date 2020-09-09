@@ -17,12 +17,16 @@ $models = $grouper->group();
     'action' => ['update-prices', 'id' => $plan->id, 'scenario' => 'update'],
 ]) ?>
 
-<?php $idx = 0; ?>
-<?php foreach ($models as $model) : ?>
-    <?= Html::activeHiddenInput($model, "[$idx]id", ['value' => $model->id]) ?>
-    <?= $this->render('../../price/formRow/simple', ['model' => $model, 'plan' => $plan, 'form' => $form, 'i' => $idx]) ?>
-    <?php $idx++ ?>
-<?php endforeach ?>
+<div class="box box-widget">
+    <div class="box-body">
+        <?php $idx = 0; ?>
+        <?php foreach ($models as $model) : ?>
+            <?= Html::activeHiddenInput($model, "[$idx]id", ['value' => $model->id]) ?>
+            <?= $this->render('../../price/formRow/simple', ['model' => $model, 'plan' => $plan, 'form' => $form, 'i' => $idx]) ?>
+            <?php $idx++ ?>
+        <?php endforeach ?>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-12">
