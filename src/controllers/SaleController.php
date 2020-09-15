@@ -12,6 +12,8 @@ namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
 use hipanel\actions\SmartDeleteAction;
+use hipanel\actions\SmartUpdateAction;
+use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\models\stub\ClientRelationFreeStub;
@@ -27,6 +29,7 @@ class SaleController extends \hipanel\base\CrudController
                 'class' => EasyAccessControl::class,
                 'actions' => [
                     'delete' => 'sale.delete',
+                    'update' => 'sale.update',
                     '*' => 'sale.read',
                 ],
             ],
@@ -55,9 +58,16 @@ class SaleController extends \hipanel\base\CrudController
                     return compact('client', 'tariff');
                 },
             ],
+            'update' => [
+                'class' => SmartUpdateAction::class,
+                'success' => Yii::t('hipanel.finance.plan', 'Sale has been successfully changed'),
+            ],
             'delete' => [
                 'class' => SmartDeleteAction::class,
                 'success' => Yii::t('hipanel:finance:sale', 'Sale was successfully deleted.'),
+            ],
+            'validate-form' => [
+                'class' => ValidateFormAction::class,
             ],
         ]);
     }
