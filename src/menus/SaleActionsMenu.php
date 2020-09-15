@@ -10,12 +10,26 @@
 
 namespace hipanel\modules\finance\menus;
 
-class SaleActionsMenu extends \hiqdev\yii2\menus\Menu
+use hipanel\modules\finance\models\Sale;
+use hiqdev\yii2\menus\Menu;
+use Yii;
+
+class SaleActionsMenu extends Menu
 {
-    public $model;
+    public Sale $model;
 
     public function items(): array
     {
-        return [];
+        return [
+            'update' => [
+                'label' => Yii::t('hipanel:finance:sale', 'Edit'),
+                'icon' => 'fa-pencil',
+                'url' => ['@sale/update', 'id' => $this->model->id],
+                'linkOptions' => [
+                    'data-pjax' => 0,
+                ],
+                'visible' => Yii::$app->user->can('sale.update'),
+            ],
+        ];
     }
 }

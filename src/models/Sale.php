@@ -60,6 +60,7 @@ class Sale extends \hipanel\base\Model
                 'from_old',
             ], 'string'],
             [['id'], 'required', 'on' => 'delete'],
+            [['id', 'tariff_id', 'time'], 'required', 'on' => 'update'],
         ]);
     }
 
