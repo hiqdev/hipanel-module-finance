@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /** @var Sale[] $models */
 
 $this->title = Yii::t('hipanel:finance:sale', 'Edit');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Sales'), 'url' => ['index']];
 if (count($models) === 1) {
     $this->params['breadcrumbs'][] = ['label' => Html::encode($model->object), 'url' => ['view', 'id' => $model->id]];
 }
