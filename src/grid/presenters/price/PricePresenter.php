@@ -25,20 +25,11 @@ use yii\web\User;
  */
 class PricePresenter
 {
-    /**
-     * @var Formatter
-     */
-    private $formatter;
+    protected Formatter $formatter;
 
-    /**
-     * @var User
-     */
-    private $user;
+    protected User $user;
 
-    /**
-     * @var string
-     */
-    private $priceAttribute = 'price';
+    protected string $priceAttribute = 'price';
 
     public function __construct(Formatter $formatter, User $user)
     {
