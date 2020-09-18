@@ -15,7 +15,7 @@ $documents = ($user->can('document.read') && $user->can('bill.read'))
 
 ?>
 
-<?php $box = Box::begin(['renderBody' => false]) ?>
+<?php $box = Box::begin(['renderBody' => false, 'bodyOptions' => ['class' => 'no-padding']]) ?>
     <?php $box->beginHeader() ?>
         <?= $box->renderTitle(Yii::t('hipanel:finance', '<b>{currency}</b> account', ['currency' => strtoupper($model->currency)]), '&nbsp;') ?>
         <?php $box->beginTools() ?>
