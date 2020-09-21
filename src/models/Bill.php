@@ -33,6 +33,7 @@ class Bill extends \hipanel\base\Model
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
     const SCENARIO_DELETE = 'delete';
+    const SCENARIO_TRANSFER = 'create-transfer';
 
     public static $i18nDictionary = 'hipanel:finance';
 
@@ -73,7 +74,10 @@ class Bill extends \hipanel\base\Model
                 }
             }, 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['client_id', 'sum', 'time'], 'required', 'on' => [self::SCENARIO_CREATE]],
-            [['client'], 'safe', 'on' => [self::SCENARIO_CREATE]],
+            [['client_id', 'receiver_id', 'currency_id'], 'integer', 'on' => [self::SCENARIO_TRANSFER]],
+            [['client_id', 'receiver_id', 'sum', 'currency', 'time'], 'required', 'on' => [self::SCENARIO_TRANSFER]],
+            [['client'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_TRANSFER]],
+            [['receiver'], 'safe', 'on' => [self::SCENARIO_TRANSFER]],
             [['no'], 'safe'],
         ];
     }
@@ -106,6 +110,7 @@ class Bill extends \hipanel\base\Model
     public static function negativeTypes()
     {
         return [
+            'transfer,minus',
             'correction,negative',
             'overuse,backup_du',
             'overuse,backup_traf',

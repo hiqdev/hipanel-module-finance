@@ -215,4 +215,8 @@ return [
     'Charge not paid' => 'Нет, не оплачено',
     'Add formula' => 'Добавить формулу',
     'Replace formulas' => 'Заменить формулы',
+    'Sender' => 'Отправитель',
+    'Receiver' => 'Получатель',
+    'Currency exchange' => 'Обменять валюту',
+    'Add internal transfer' => 'Добавить внутренний перевод',
 ];
