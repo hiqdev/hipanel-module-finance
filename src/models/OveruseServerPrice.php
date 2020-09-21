@@ -36,7 +36,7 @@ class OveruseServerPrice extends Price
     }
 
     /** {@inheritdoc} */
-    public function isOveruse95Traf()
+    public function isServer95Traf()
     {
         return strpos($this->type, 'overuse,server_traf95_max') === 0;
     }
