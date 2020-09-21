@@ -51,6 +51,30 @@ class PricesCollection extends Collection
         return parent::load($data);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function collectData($attributes = null)
+    {
+        $data = [];
+        foreach ($this->models as $model) {
+            if ($this->dataCollector instanceof Closure) {
+                [$key, $row] = call_user_func($this->dataCollector, $model, $this);
+            } else {
+                $key = $model->getPrimaryKey();
+                $row = $model->getAttributes($this->isConsistent() ? $attributes : $model->activeAttributes());
+            }
+
+            if ($key) {
+                $data[$key] = $row;
+            } else {
+                $data[] = $row;
+            }
+        }
+
+        return $data;
+    }
+
     private function dataToBeLoadedExistsInPostRequest()
     {
         $request = Yii::$app->request->post();

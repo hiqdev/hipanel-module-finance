@@ -37,6 +37,7 @@ class PriceModelFactory
         'RatePrice' => RatePrice::class,
         'TemplatePrice' => TemplatePrice::class,
         'RateTemplatePrice' => TemplatePrice::class,
+        'OveruseServerPrice' => OveruseServerPrice::class,
         'SinglePrice' => [
             'domain,*' => DomainZonePrice::class,
             'feature,*' => DomainServicePrice::class,

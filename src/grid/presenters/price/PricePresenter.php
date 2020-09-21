@@ -95,10 +95,13 @@ class PricePresenter
             ]);
         }
         if ($price->isOveruse()) {
-            return Yii::t('hipanel:finance', '{coins}&nbsp;&nbsp;{amount,number} {unit}', [
+            return Yii::t('hipanel:finance', '{coins}&nbsp;&nbsp;{amount,number} {unit}{aggregated}', [
                 'coins' => Html::tag('i', '', ['class' => 'fa fa-money', 'title' => Yii::t('hipanel.finance.price', 'Prepaid amount')]),
                 'amount' => $price->{$attribute},
                 'unit' => $price->getUnitLabel(),
+                'aggregated' => $price->hasAttribute('count_aggregated_traffic') && $price->count_aggregated_traffic
+                    ? Html::tag('span', Yii::t('hipanel.finance.price', 'Aggregated'), ['class' => 'label bg-olive pull-right'])
+                    : '',
             ]);
         }
 
