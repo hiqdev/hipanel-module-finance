@@ -77,10 +77,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <?= Html::activeHiddenInput($model, "[$i]id") ?>
                                 </div>
                                 <div class="form-instance">
-                                <!--
-                                    <?= $form->field($model, "[$i]quantity")->hiddenInput(['value'=> 0])->label(false) ?>
-                                    <?= $form->field($model, "[$i]unit")->hiddenInput(['value'=> 'items'])->label(false) ?>
-                                    <?= $form->field($model, "[$i]type")->hiddenInput(['value'=> 'transfer,minus'])->label(false) ?> -->
                                     <div class="col-md-2 <?= AmountWithCurrency::$widgetClass ?>">
                                         <?= $form->field($model, "[$i]sum")->widget(AmountWithCurrency::class, [
                                             'currencyAttributeName' => "[$i]currency",
