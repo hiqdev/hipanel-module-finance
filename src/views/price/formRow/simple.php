@@ -110,7 +110,7 @@ JS
             <i class="glyphicon glyphicon-minus"></i>
         </button>
     </div>
-    <?php if ($model->hasAttribute('count_aggregated_traffic')) : ?>
+    <?php if ($model->isOveruse95Traf()) : ?>
         <div class="col-md-12 col-md-offset-2" style="margin-top: -1em">
             <?= $form->field($model, "[$i]count_aggregated_traffic")->checkbox()->hint(Yii::t('hipanel.finance.price', '(reasonable for grouping tariffs only)')) ?>
         </div>

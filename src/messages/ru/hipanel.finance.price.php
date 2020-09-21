@@ -65,4 +65,7 @@ return [
     'Formula usage examples' => 'Примеры использования формул',
     'Applicable for overuse prices. The example will compensate up to 5 TB of overuse as discount. Make sure to use appropriate unit, such as <code>items</code>, <code>gbps</code> or <code>hours</code>.' => 'Применим для цен на перебор. Этот пример компенсирует до 5 Тб перебора в виде скидки. Убедитесь, что использете единицу измерения, которая соответствует типу цены, например <code>items</code>, <code>gbps</code> или <code>hours</code>.',
     'Applicable for overuse prices. Will compensate up to 5 TB of overuse as a separate Compensation bill. You can use any other bill type in option <code>.as()</code>, such as <code>deposit,creditnote</code> or <code>correction,positive</code>.' => 'Применим для цен на перебор. Этот пример компенсирует до 5 Тб перебора в виде отдельного счёта "Компенсация". Вы можете указывать любой другой тип счёта в опции <code>.as()</code>, например <code>deposit,creditnote</code> или <code>correction,positive</code>.',
+    'Calculate aggregated traffic' => 'Считать агрегировано траффик',
+    '(reasonable for grouping tariffs only)' => 'применимо только для группирующих тарифов',
+    'Aggregated' => 'Агрегирован',
 ];

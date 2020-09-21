@@ -198,6 +198,11 @@ class Price extends Model
         return strpos($this->type, 'overuse,') === 0;
     }
 
+    public function isOveruse95Traf()
+    {
+        return false;
+    }
+
     public function getSubtype()
     {
         [, $subtype] = explode(',', $this->type);
