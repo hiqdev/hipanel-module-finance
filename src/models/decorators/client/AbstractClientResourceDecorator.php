@@ -8,19 +8,14 @@
  * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
-namespace hipanel\modules\finance\models\decorators\server;
+namespace hipanel\modules\finance\models\decorators\client;
 
 use hipanel\inputs\TextInput;
 use hipanel\modules\finance\models\decorators\AbstractResourceDecorator;
-use hipanel\modules\finance\models\decorators\ResourceDecoratorInterface;
-use hipanel\modules\finance\models\ServerResource;
 use Yii;
 
-abstract class AbstractServerResourceDecorator extends AbstractResourceDecorator implements ResourceDecoratorInterface
+abstract class AbstractClientResourceDecorator extends AbstractResourceDecorator
 {
-    /**
-     * @var ServerResource
-     */
     public $resource;
 
     public function __construct($resource)
@@ -31,19 +26,6 @@ abstract class AbstractServerResourceDecorator extends AbstractResourceDecorator
     public function displayTitle()
     {
         return $this->resource->getTypes()[$this->resource->type];
-    }
-
-    public function displayTitleWithDirection(string $title): string
-    {
-        $direction = Yii::t('hipanel', 'OUT');
-        if (str_contains($this->resource->type, '_in')) {
-            $direction = Yii::t('hipanel', 'IN');
-        }
-        if (str_contains($this->resource->type, '_max')) {
-            $direction = '';
-        }
-
-        return Yii::t('hipanel:finance', '{title} {direction}', ['title' => $title, 'direction' => $direction]);
     }
 
     public function getPrepaidQuantity()

@@ -1,0 +1,23 @@
+<?php
+
+namespace hipanel\modules\finance\models\decorators\client;
+
+use Yii;
+
+class ReferralResourceDecorator extends AbstractClientResourceDecorator
+{
+    public function displayTitle()
+    {
+        return Yii::t('hipanel:client', 'Referral');
+    }
+
+    public function displayValue()
+    {
+        return Yii::t('yii', '{nFormatted}', ['nFormatted' => $this->getPrepaidQuantity()]);
+    }
+
+    public function displayUnit()
+    {
+        return '';
+    }
+}

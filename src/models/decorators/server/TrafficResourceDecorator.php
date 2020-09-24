@@ -16,7 +16,7 @@ class TrafficResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel:server:order', 'Traffic');
+        return $this->displayTitleWithDirection(Yii::t('hipanel:server:order', 'Traffic'));
     }
 
     public function displayValue()
