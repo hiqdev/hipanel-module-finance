@@ -34,11 +34,16 @@ class HddResourceDecorator extends AbstractServerResourceDecorator
         $part = $this->resource->part;
         preg_match('/((\d{1,5}) GB)$/i', $part->partno, $matches);
 
-        return (int) $matches[2];
+        return (int)$matches[2];
     }
 
     public function displayUnit()
     {
         return Yii::t('hipanel', 'GB');
+    }
+
+    public function toUnit(): string
+    {
+        return 'gb';
     }
 }

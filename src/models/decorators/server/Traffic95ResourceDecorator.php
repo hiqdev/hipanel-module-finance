@@ -28,4 +28,9 @@ class Traffic95ResourceDecorator extends AbstractServerResourceDecorator
     {
         return Yii::t('hipanel', 'Mbps');
     }
+
+    public function toUnit(): string
+    {
+        return 'Mbps';
+    }
 }

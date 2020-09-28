@@ -21,9 +21,8 @@ class ResourceHelper
             $resourceModel = $resource->buildResourceModel($configurator);
             $object = [
                 'type' => $resource->type,
-                'unit' => $resourceModel->decorator()->displayUnit(),
             ];
-            $object['amount'] += $resource->getAmount();
+            $object['amount'] = $resourceModel->decorator()->displayAmountWithUnit();
             $result[$resource['object_id']][$resource['type']] = $object;
         }
 

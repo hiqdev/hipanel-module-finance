@@ -42,6 +42,7 @@ use yii\db\ActiveRecordInterface;
                 'boxed' => false,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $originalSearchModel,
+                'filterRowOptions' => ['style' => 'display: none;'],
                 'columns' => ResourceGridView::getColumns($configurator),
             ]) ?>
         <?php $page->endBulkForm() ?>

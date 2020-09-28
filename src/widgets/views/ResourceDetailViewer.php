@@ -2,13 +2,10 @@
 
 use hipanel\modules\finance\grid\ResourceGridView;
 use hipanel\modules\finance\helpers\ResourceConfigurator;
-use hipanel\modules\finance\models\proxy\Resource;
-use hipanel\modules\finance\models\proxy\ResourceSearch;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 use yii\data\DataProviderInterface;
 use yii\db\ActiveRecordInterface;
-use yii\helpers\Html;
 
 /** @var DataProviderInterface $dataProvider */
 /** @var ActiveRecordInterface $originalModel */
@@ -22,9 +19,6 @@ use yii\helpers\Html;
             <?php $page = IndexPage::begin(['model' => $originalSearchModel, 'layout' => 'resourceDetail']) ?>
                 <?php $page->beginContent('title') ?>
                     <?= Yii::t('hipanel', 'Resources') ?>
-                <?php $page->endContent() ?>
-                <?php $page->beginContent('actions') ?>
-                    <?= Html::a(Yii::t('hipanel', 'Go to the object'), [$configurator->getModelName(), 'id' => $originalModel->id], ['class' => 'btn btn-success btn-sm']) ?>
                 <?php $page->endContent() ?>
                 <?php $page->beginContent('table') ?>
                     <?php $page->beginBulkForm() ?>

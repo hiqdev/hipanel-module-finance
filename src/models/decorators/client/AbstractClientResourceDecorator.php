@@ -43,6 +43,11 @@ abstract class AbstractClientResourceDecorator extends AbstractResourceDecorator
         return $this->resource->unit;
     }
 
+    public function toUnit(): string
+    {
+        return $this->displayUnit();
+    }
+
     public function displayOverusePrice()
     {
         return Yii::$app->formatter->asCurrency($this->getOverusePrice(), $this->resource->currency);

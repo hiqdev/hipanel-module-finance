@@ -31,7 +31,7 @@ class Resource extends Model implements DecoratedInterface
         return [
             [['id', 'object_id', 'type_id'], 'integer'],
             [['last', 'total'], 'number'],
-            [['type', 'aggregation'], 'string'],
+            [['type', 'aggregation', 'unit'], 'string'],
             [['time_from', 'time_till', 'date'], 'datetime', 'format' => 'php:Y-m-d'],
         ];
     }
@@ -39,7 +39,11 @@ class Resource extends Model implements DecoratedInterface
     public function buildResourceModel(ResourceConfigurator $configurator): DecoratedInterface
     {
         if (!isset($this->resourceModel)) {
-            $this->resourceModel = $configurator->getResourceModel(['type' => $this->type]);
+            $this->resourceModel = $configurator->getResourceModel([
+                'type' => $this->type,
+                'unit' => $this->unit,
+                'quantity' => $this->getAmount(),
+            ]);
         }
 
         return $this;
@@ -60,9 +64,6 @@ class Resource extends Model implements DecoratedInterface
     {
         if (in_array($this->type, $this->getBandwidthTypes(), true)) {
             return $this->last;
-        }
-        if (in_array($this->type, $this->getTrafficTypes(), true)) {
-            return $this->total;
         }
 
         return $this->total;

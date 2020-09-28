@@ -28,4 +28,9 @@ class TrafficResourceDecorator extends AbstractServerResourceDecorator
     {
         return Yii::t('hipanel', 'GB');
     }
+
+    public function toUnit(): string
+    {
+        return 'gb';
+    }
 }

@@ -14,8 +14,6 @@ use yii\web\JsExpression;
 
 class ResourceGridView extends BoxedGridView
 {
-    public string $name = 'server';
-
     public ResourceConfigurator $configurator;
 
     public function columns()
@@ -73,10 +71,7 @@ class ResourceGridView extends BoxedGridView
             'attribute' => 'total',
             'label' => Yii::t('hipanel', 'Consumed'),
             'filter' => false,
-            'value' => fn(Resource $resource): ?string => Yii::t('hipanel', '{amount} {unit}', [
-                'amount' => $resource->getAmount(),
-                'unit' => $resource->buildResourceModel($this->configurator)->decorator()->displayUnit(),
-            ]),
+            'value' => fn(Resource $resource): ?string => $resource->buildResourceModel($this->configurator)->decorator()->displayAmountWithUnit(),
         ];
 
         return array_merge(parent::columns(), $columns);
@@ -89,8 +84,15 @@ class ResourceGridView extends BoxedGridView
             'format' => 'html',
             'attribute' => 'name',
             'label' => Yii::t('hipanel', 'Object'),
-            'contentOptions' => ['style' => 'width: 1%; white-space:nowrap;'],
-            'value' => fn(ActiveRecordInterface $model): string => Html::a($model->name, [$configurator->getToObjectUrl(), 'id' => $model->id], ['class' => 'text-bold']),
+            'contentOptions' => ['style' => 'display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;'],
+            'value' => function (ActiveRecordInterface $model) use ($configurator): string {
+                $objectLabel = Html::tag('span', '-', ['class' => 'text-danger']);
+                if ($model->name) {
+                    $objectLabel = Html::tag('span', $model->name ?: '&nbsp;', ['class' => 'text-bold']);
+                }
+
+                return $objectLabel . Html::a(Yii::t('hipanel', 'Detail view'), [$configurator->getToObjectUrl(), 'id' => $model->id], ['class' => 'btn btn-default btn-xs']);
+            },
         ];
         $columns[] = 'client_like';
         foreach ($configurator->getColumns() as $type => $label) {

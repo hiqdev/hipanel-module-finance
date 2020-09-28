@@ -29,6 +29,11 @@ class SpeedResourceDecorator extends AbstractServerResourceDecorator
         return Yii::t('hipanel:finance:tariff', 'Gbit/s');
     }
 
+    public function toUnit(): string
+    {
+        return 'Gbps';
+    }
+
     public function getPrepaidQuantity()
     {
         return 1;

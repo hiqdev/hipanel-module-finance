@@ -20,6 +20,10 @@ interface ResourceDecoratorInterface
 
     public function displayUnit();
 
+    public function toUnit(): string;
+
+    public function displayAmountWithUnit(): string;
+
     public function displayOverusePrice();
 
     public function displayPrepaidAmount();

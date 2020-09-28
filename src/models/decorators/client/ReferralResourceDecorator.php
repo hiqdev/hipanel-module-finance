@@ -16,8 +16,8 @@ class ReferralResourceDecorator extends AbstractClientResourceDecorator
         return Yii::t('yii', '{nFormatted}', ['nFormatted' => $this->getPrepaidQuantity()]);
     }
 
-    public function displayUnit()
+    public function displayAmountWithUnit(): string
     {
-        return '';
+        return Yii::$app->formatter->asCurrency($this->getPrepaidQuantity(), $this->displayUnit());
     }
 }

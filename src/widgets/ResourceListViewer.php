@@ -90,7 +90,7 @@ class ResourceListViewer extends BaseResourceViewer
           const [type, data] = resource;
           const cell = document.querySelector('tr[data-key="' + id + '"] > td[data-type="' + type + '"]');
           if (!!cell) {
-            cell.innerHTML = data.amount + ' ' + (data.unit || '');
+            cell.innerHTML = data.amount;
           }
         });
       });
