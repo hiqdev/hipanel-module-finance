@@ -39,8 +39,8 @@ class ResourceFetchDataAction extends RenderJsonAction
     {
         $options = DynamicModel::validateData([
             'object_ids' => $params['object_ids'],
-            'time_from' => $params['time_from'] ?? (new DateTime())->modify('first day of last month')->format('Y-m-d'),
-            'time_till' => $params['time_till'] ?? (new DateTime())->modify('last day of last month')->format('Y-m-d'),
+            'time_from' => $params['time_from'] ?? (new DateTime())->modify('first day of this month')->format('Y-m-d'),
+            'time_till' => $params['time_till'] ?? (new DateTime())->modify('last day of this month')->format('Y-m-d'),
             'groupby' => $params['groupby'],
         ], [
             [['object_ids', 'time_from', 'time_till', 'groupby'], 'required'],

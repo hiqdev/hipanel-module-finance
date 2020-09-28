@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\widgets;
 
+use DateTime;
 use hipanel\assets\BootstrapDatetimepickerAsset;
 use hipanel\modules\finance\models\proxy\Resource;
 use Yii;
@@ -29,44 +30,52 @@ class ResourceListViewer extends BaseResourceViewer
     private function registerJs(): void
     {
         BootstrapDatetimepickerAsset::register($this->view);
+        $request = Yii::$app->request;
         $ids = Json::encode(ArrayHelper::getColumn($this->dataProvider->getModels(), 'id'));
-        $csrf_param = Yii::$app->request->csrfParam;
-        $csrf_token = Yii::$app->request->csrfToken;
+        $csrf_param = $request->csrfParam;
+        $csrf_token = $request->csrfToken;
         $locale = Yii::$app->language;
+        $cookieName = 'resource_date_' . $this->originalContext->id;
+        $cookieOptions = Json::encode([
+            'path' => '/' . $request->getPathInfo(),
+            'expires' => (new DateTime())->modify('+45 minutes')->format(DateTime::RFC850),
+            'max-age' => 3600,
+            'samesite' => 'lax',
+        ]);
         $this->view->registerJs(/** @lang JavaScript */ <<<"JS"
 (() => {
   const ids = {$ids};
-  
-  const getRange = () => {
-    const date = getDate();
+  const buildRange = momentObj => {
     return {
-      time_from: date ? moment(date).startOf('month').format('YYYY-MM-DD') : '',
-      time_till: date ? moment(date).endOf('month').format('YYYY-MM-DD') : ''
+      time_from: momentObj ? momentObj.startOf('month').format('YYYY-MM-DD') : '',
+      time_till: momentObj ? momentObj.endOf('month').format('YYYY-MM-DD') : ''
     }
   }
-  const saveDate = date => {
-    localStorage.setItem('resources-list-date', date.format('L'));
-  }
   const getDate = () => {
-    return moment().subtract(1, 'month');
-    return localStorage.getItem('resources-list-date');
+    const rawDate = getCookie('{$cookieName}');
+    
+    return rawDate ? moment(rawDate) : moment();
+  }
+  const setDate = momentObj => {
+    setCookie('{$cookieName}', momentObj, {$cookieOptions});
   }
   const dateInput = $('input[name="date-range"]');
-  const {time_from, time_till} = getRange();
-    
+  const {time_from, time_till} = buildRange(getDate());
   dateInput.datetimepicker({
-    // date: getDate() ? moment(getDate()) : moment().subtract(1, 'month'),
-    date: moment().subtract(1, 'month'),
+    date: getDate(),
+    maxDate: moment(),
     locale: '{$locale}',
     viewMode: 'months',
-    format: 'MMMM YYYY',
-    maxDate: moment().subtract(1, 'month')
+    format: 'MMMM YYYY'
   });
   dateInput.datetimepicker().on('dp.update', evt => {
     $('td[data-type]').html('<div class="spinner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div>');
-    const date = moment(evt.date);
-    // saveDate(date);
-    fetchResources(ids, date.startOf('month').format('YYYY-MM-DD'), date.endOf('month').format('YYYY-MM-DD'));
+    const date = evt.viewDate;
+    setDate(date);
+    fetchResources(ids, date.startOf('month').format('YYYY-MM-DD'), date.endOf('month').format('YYYY-MM-DD')).catch(err => {
+      console.log(err);
+      hipanel.notify.error(err.message);
+    });
   });
   
   const fetchResources = async (ids, time_from, time_till) =>  {
@@ -104,7 +113,38 @@ class ResourceListViewer extends BaseResourceViewer
       hipanel.notify.error(error.message);
     }
   }
-  fetchResources(ids, time_from, time_till);
+  
+  fetchResources(ids, time_from, time_till); // run request
+  
+  // Cookies
+  function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+  }
+  function setCookie(name, value, options = {}) {
+    options = {
+      ...options
+    };
+    if (options.expires instanceof Date) {
+      options.expires = options.expires.toUTCString();
+    }
+    let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+    for (let optionKey in options) {
+      updatedCookie += "; " + optionKey;
+      let optionValue = options[optionKey];
+      if (optionValue !== true) {
+        updatedCookie += "=" + optionValue;
+      }
+    }
+    document.cookie = updatedCookie;
+  }
+  function deleteCookie(name) {
+    setCookie(name, "", {
+      'max-age': -1
+    })
+  }
 })();
 JS
             , View::POS_READY);

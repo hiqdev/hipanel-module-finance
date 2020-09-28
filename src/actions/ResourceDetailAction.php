@@ -26,8 +26,8 @@ class ResourceDetailAction extends IndexAction
         parent::beforePerform();
         $query = $this->getDataProvider()->query;
         $query->andWhere([
-            'time_from' => (new DateTime())->modify('first day of last month')->format('Y-m-d'),
-            'time_till' => (new DateTime())->modify('last day of last month')->format('Y-m-d'),
+            'time_from' => (new DateTime())->modify('first day of this month')->format('Y-m-d'),
+            'time_till' => (new DateTime())->modify('last day of this month')->format('Y-m-d'),
         ]);
         $query->andWhere([
             'object_id' => Yii::$app->request->get('id'),
