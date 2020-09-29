@@ -10,7 +10,9 @@
 
 namespace hipanel\modules\finance\models;
 
-use hipanel\modules\finance\models\decorators\AbstractResourceDecorator;
+use hipanel\base\Model;
+use hipanel\base\ModelTrait;
+use hipanel\modules\finance\models\decorators\ResourceDecoratorInterface;
 use hipanel\modules\stock\models\Part;
 use Money\Money;
 use Money\MoneyParser;
@@ -20,12 +22,11 @@ use yii\base\InvalidConfigException;
 /**
  * @property Tariff $tariff
  */
-class Resource extends \hipanel\base\Model
+class Resource extends Model
 {
-    use \hipanel\base\ModelTrait;
+    use ModelTrait;
 
-    /** @var AbstractResourceDecorator */
-    protected $decorator;
+    protected ResourceDecoratorInterface $decorator;
 
     /** {@inheritdoc} */
     public static $i18nDictionary = 'hipanel:finance:tariff';
