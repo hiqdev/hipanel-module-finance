@@ -119,7 +119,7 @@ $customAttributes = empty($model->getPlanAttributes()) ? [new PlanAttribute()] :
                     <?php endforeach ?>
                     </tbody>
                 </table>
-                <?php DynamicFormWidget::end(); ?>
+                <?php DynamicFormWidget::end() ?>
             </div>
         </div>
     </div>
