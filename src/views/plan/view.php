@@ -4,16 +4,19 @@ use hipanel\modules\finance\grid\PlanGridView;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\menus\PlanDetailMenu;
 use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\models\PriceHistory;
+use hipanel\modules\finance\widgets\PlanAttributes;
 use hipanel\modules\finance\widgets\PriceHistoryWidget;
 use hipanel\widgets\IndexPage;
 use yii\helpers\Html;
+use yii\web\View;
 
 /**
- * @var \yii\web\View $this
+ * @var View $this
  * @var Plan $model
  * @var PlanInternalsGrouper $grouper
  * @var array $parentPrices
- * @var \hipanel\modules\finance\models\PriceHistory[] $plansHistory
+ * @var PriceHistory[] $plansHistory
  */
 $this->title = $model->name ? Html::encode($model->name) : '&nbsp;';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
@@ -87,6 +90,14 @@ CSS
                     ]),
                 ]) ?>
             </div>
+            <div class="box-header">
+                <h4 class="box-title">
+                    <?= Yii::t('hipanel:finance', 'Attributes') ?>
+                </h4>
+            </div>
+            <div class="box-footer no-padding">
+                <?= PlanAttributes::widget(['plan' => $model]) ?>
+            </div>
         </div>
     </div>
     <div class="col-md-9">
@@ -95,7 +106,8 @@ CSS
                 <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
                 <?php if ($model->isKnownType()): ?>
                     <?php $page->beginContent('show-actions') ?>
-                    <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>
+                    <h4 class="box-title" style="display: inline-block;">
+                        &nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>
                     <?php $page->endContent() ?>
                     <?= $this->render($model->type . '/view', compact('model', 'grouper', 'page', 'parentPrices')) ?>
                 <?php else: ?>

@@ -101,6 +101,7 @@ class Plan extends Model
             [['id'], 'required', 'on' => ['delete', 'restore']],
             [['id', 'server_ids'], 'safe', 'on' => ['copy']],
             [['your_tariff'], 'boolean'],
+            [['custom_data', 'data'], 'safe', 'on' => ['create', 'update']],
         ]);
     }
 
@@ -114,6 +115,20 @@ class Plan extends Model
             'is_grouping' => Yii::t('hipanel.finance.plan', 'Grouping'),
             'currency' => Yii::t('hipanel:finance', 'Currency'),
         ]);
+    }
+
+    public function getPlanAttributes(): array
+    {
+        $attributes = $this->custom_data['attributes'] ?? [];
+        $models = [];
+        foreach ($attributes as $name => $value) {
+            $model = new PlanAttribute(compact('name', 'value'));
+            if (!$model->isEmpty()) {
+                $models[] = $model;
+            }
+        }
+
+        return empty($models) ? [] : $models;
     }
 
     public function getPrices()

@@ -10,12 +10,14 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\grid\DataColumn;
 use hipanel\grid\MainColumn;
 use hipanel\grid\RefColumn;
 use hipanel\helpers\Url;
 use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\menus\PlanActionsMenu;
 use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\widgets\PlanAttributes;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\helpers\Html;
@@ -72,6 +74,13 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'monthly',
                 'contentOptions' => ['id' => 'plan-monthly-value'],
             ],
+            'custom_attributes' => [
+                'class' => DataColumn::class,
+                'label' => Yii::t('hipanel:finance', 'Attributes'),
+                'format' => 'raw',
+                'contentOptions' => ['style' => 'padding: 0;'],
+                'value' => static fn(Plan $plan): string => PlanAttributes::widget(['plan' => $plan]),
+            ]
         ]);
     }
 
