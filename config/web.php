@@ -43,6 +43,7 @@ return [
             'finishPage' => '/finance/bill',
             'purchaseRequestCollectionClass' => \hipanel\modules\finance\merchant\PurchaseRequestCollection::class,
             'currenciesCollectionClass' => \hipanel\modules\finance\merchant\CurrenciesCollection::class,
+            'cashewOnly' => $params['module.finance.merchant.pay.cashew.only'] ?? false,
         ],
     ],
     'components' => [
