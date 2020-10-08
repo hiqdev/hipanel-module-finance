@@ -48,11 +48,11 @@ class PurchaseRequestCollection extends Collection
             $this->depositRequest = $this->createDefaultDepositRequest();
         }
 
-        $this->loadMerchants($this->depositRequest);
-
         if ($this->module->cashewOnly) {
             $this->supportedSystems['cashew'] = 1;
         }
+
+        $this->loadMerchants($this->depositRequest);
     }
 
     public function loadMerchants($depositRequest)
