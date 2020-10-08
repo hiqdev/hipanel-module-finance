@@ -13,29 +13,14 @@ namespace hipanel\modules\finance\merchant;
 use hipanel\modules\finance\models\Merchant;
 use hiqdev\hiart\ResponseErrorException;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
+use hiqdev\yii2\merchant\Collection;
 use hiqdev\yii2\merchant\models\DepositRequest;
 use hiqdev\yii2\merchant\models\PurchaseRequest;
 use Yii;
 
-class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
+class PurchaseRequestCollection extends Collection
 {
-    public function init()
-    {
-        parent::init();
-
-        if ($this->depositRequest === null) {
-            $this->depositRequest = $this->createDefaultDepositRequest();
-        }
-
-        $this->loadMerchants($this->depositRequest);
-    }
-
-    public function loadMerchants($depositRequest)
-    {
-        $this->addItems($this->fetchMerchants($depositRequest));
-    }
-
-    public static $supportedSystems = [
+    public array $supportedSystems = [
         'webmoney' => 1,
         'paypal' => 1,
         'yandex' => 1,
@@ -54,6 +39,26 @@ class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
         'coingate' => 1,
         'yandexkassa' => 1,
     ];
+
+    public function init()
+    {
+        parent::init();
+
+        if ($this->depositRequest === null) {
+            $this->depositRequest = $this->createDefaultDepositRequest();
+        }
+
+        $this->loadMerchants($this->depositRequest);
+
+        if ($this->module->cashewOnly) {
+            $this->supportedSystems['cashew'] = 1;
+        }
+    }
+
+    public function loadMerchants($depositRequest)
+    {
+        $this->addItems($this->fetchMerchants($depositRequest));
+    }
 
     public function fetchMerchants(DepositRequest $depositRequest)
     {
@@ -93,7 +98,7 @@ class PurchaseRequestCollection extends \hiqdev\yii2\merchant\Collection
 
         $result = [];
         foreach ($merchants as $name => $merchant) {
-            if (!empty(static::$supportedSystems[$merchant['system']])) {
+            if (!empty($this->supportedSystems[$merchant['system']])) {
                 $result[$name] = $this->convertMerchant($merchant);
             }
         }
