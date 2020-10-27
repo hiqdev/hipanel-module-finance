@@ -30,7 +30,7 @@ use yii\db\ActiveRecordInterface;
             'attributes' => ['id']
         ]) ?>
     <?php $page->endContent() ?>
-    <?php $page->beginContent('actions') ?>
+    <?php $page->beginContent('alt-actions') ?>
         <div class="form-group has-feedback">
             <?= Html::textInput('date-range', null, ['class' => 'form-control', 'id' => 'date-range']) ?>
             <?= Html::tag('span', null, ['class' => 'glyphicon glyphicon-calendar form-control-feedback text-muted']) ?>
