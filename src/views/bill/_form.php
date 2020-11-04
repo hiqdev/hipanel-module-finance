@@ -91,7 +91,7 @@ $form = ActiveForm::begin([
                             <div class="col-md-1">
                                 <?= $form->field($model, "[$i]type")->dropDownList($billTypes, [
                                     'groups' => $billGroupLabels,
-                                    'value' => $model->gtype ? implode(',', [$model->gtype, $model->type]) : null,
+                                    'value' => $model->gtype ? implode(',', [$model->gtype, $model->type]) : $model->type,
                                 ]) ?>
                             </div>
                             <div class="col-md-2 <?= AmountWithCurrency::$widgetClass ?>">

@@ -61,7 +61,7 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
 
     protected function generateManagementButtons($model)
     {
-        if (!Yii::$app->user->can('manage')) {
+        if (!Yii::$app->user->can('document.generate')) {
             return null;
         }
 

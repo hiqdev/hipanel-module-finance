@@ -4,14 +4,19 @@ use hipanel\modules\finance\grid\PlanGridView;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\menus\PlanDetailMenu;
 use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\models\PriceHistory;
+use hipanel\modules\finance\widgets\PlanAttributes;
+use hipanel\modules\finance\widgets\PriceHistoryWidget;
 use hipanel\widgets\IndexPage;
 use yii\helpers\Html;
+use yii\web\View;
 
 /**
- * @var \yii\web\View $this
+ * @var View $this
  * @var Plan $model
  * @var PlanInternalsGrouper $grouper
  * @var array $parentPrices
+ * @var PriceHistory[] $plansHistory
  */
 $this->title = $model->name ? Html::encode($model->name) : '&nbsp;';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
@@ -85,35 +90,43 @@ CSS
                     ]),
                 ]) ?>
             </div>
+            <div class="box-header">
+                <h4 class="box-title">
+                    <?= Yii::t('hipanel:finance', 'Attributes') ?>
+                </h4>
+            </div>
+            <div class="box-footer no-padding">
+                <?= PlanAttributes::widget(['plan' => $model]) ?>
+            </div>
         </div>
     </div>
     <div class="col-md-9">
-        <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
-            <?php if (in_array($model->type, [
-                Plan::TYPE_SERVER,
-                Plan::TYPE_VCDN,
-                Plan::TYPE_PCDN,
-                Plan::TYPE_TEMPLATE,
-                Plan::TYPE_CERTIFICATE,
-                Plan::TYPE_DOMAIN,
-                Plan::TYPE_SWITCH,
-                Plan::TYPE_AVDS,
-                Plan::TYPE_OVDS,
-                Plan::TYPE_SVDS,
-                Plan::TYPE_CLIENT,
-                Plan::TYPE_HARDWARE,
-            ], true)): ?>
-                <?php $page->beginContent('show-actions') ?>
-                    <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>
-                <?php $page->endContent() ?>
-                <?= $this->render($model->type . '/view', compact('model', 'grouper', 'page', 'parentPrices')) ?>
-            <?php else: ?>
-                <?php $page->beginContent('table') ?>
+        <div class="col">
+            <div class="row-md-12">
+                <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
+                <?php if ($model->isKnownType()): ?>
+                    <?php $page->beginContent('show-actions') ?>
+                    <h4 class="box-title" style="display: inline-block;">
+                        &nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>
+                    <?php $page->endContent() ?>
+                    <?= $this->render($model->type . '/view', compact('model', 'grouper', 'page', 'parentPrices')) ?>
+                <?php else: ?>
+                    <?php $page->beginContent('table') ?>
                     <div class="col-md-12">
                         <h2><?= Yii::t('hipanel:finance', 'This plan type viewing is not implemented yet') ?></h2>
                     </div>
-                <?php $page->endContent() ?>
-            <?php endif; ?>
-        <?php $page->end() ?>
+                    <?php $page->endContent() ?>
+                <?php endif; ?>
+
+                <?php $page::end() ?>
+            </div>
+            <?php if (Yii::$app->user->can('plan.update')): ?>
+                <div class="row-md-12">
+                    <?= PriceHistoryWidget::widget([
+                        'model' => $model,
+                    ]) ?>
+                </div>
+            <? endif; ?>
+        </div>
     </div>
 </div>

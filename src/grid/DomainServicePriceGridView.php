@@ -24,10 +24,19 @@ class DomainServicePriceGridView extends PriceGridView
 
     public function columns()
     {
-        return array_merge(parent::columns(), [
-            'purchase' => $this->getPriceGrid('feature,premium_dns_purchase'),
-            'renewal' => $this->getPriceGrid('feature,premium_dns_renew'),
-        ]);
+        $columns = parent::columns();
+        foreach ($this->dataProvider->getModels() as $models) {
+            foreach ($models as $model) {
+                if (strpos($model->type, 'purchase') !== false) {
+                    $columns['purchase'] = $this->getPriceGrid($model->type);
+                }
+                if (strpos($model->type, 'renew') !== false) {
+                    $columns['renewal'] = $this->getPriceGrid($model->type);
+                }
+            }
+        }
+
+        return $columns;
     }
 
     /**

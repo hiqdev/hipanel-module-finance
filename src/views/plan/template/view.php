@@ -25,28 +25,28 @@ use yii\data\ArrayDataProvider;
 
     <?php $page->beginContent('main-actions') ?>
         <?php if (Yii::$app->user->can('plan.create')) : ?>
-           <?= CreatePricesButton::widget(compact('model')) ?>
+            <?= CreatePricesButton::widget(compact('model')) ?>
         <?php endif ?>
     <?php $page->endContent() ?>
 <?php endif ?>
 
 <?php $page->beginContent('table') ?>
-    <?php $page->beginBulkForm() ?>
-        <?= PriceGridView::widget([
-            'boxed' => false,
-            'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
-            'dataProvider' => new ArrayDataProvider([
-                'allModels' => PriceSort::anyPrices()->values($model->prices, true),
-                'pagination' => false,
-            ]),
-            'columns' => [
-                'checkbox',
-                'object->name',
-                'object->label',
-                'type',
-                'price',
-                'note',
-            ],
-        ]) ?>
-    <?php $page->endBulkForm() ?>
+<?php $page->beginBulkForm() ?>
+    <?= PriceGridView::widget([
+        'boxed' => false,
+        'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
+        'dataProvider' => new ArrayDataProvider([
+            'allModels' => PriceSort::anyPrices()->values($model->prices, true),
+            'pagination' => false,
+        ]),
+        'columns' => [
+            'checkbox',
+            'object->name',
+            'object->label',
+            'type',
+            'price',
+            'note',
+        ],
+    ]) ?>
+<?php $page->endBulkForm() ?>
 <?php $page->endContent() ?>

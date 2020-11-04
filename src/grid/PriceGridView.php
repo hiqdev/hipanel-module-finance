@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\RefColumn;
+use hipanel\modules\finance\grid\presenters\price\PricePresenter;
 use hipanel\modules\finance\grid\presenters\price\PricePresenterFactory;
 use hipanel\modules\finance\menus\PriceActionsMenu;
 use hipanel\modules\finance\models\Price;
@@ -54,6 +55,24 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'raw',
                 'value' => function (Price $model) {
                     return $this->presenterFactory->build(\get_class($model))->renderPrice($model);
+                },
+            ],
+            'old_price' => [
+                'label' => Yii::t('hipanel.finance.price', 'Old price'),
+                'format' => 'raw',
+                'value' => function (Price $model): string {
+                    /** @var PricePresenter $presenter */
+                    $presenter = $this->presenterFactory->build(\get_class($model));
+                    return $presenter
+                            ->setPriceAttribute('old_price')
+                            ->renderPrice($model);
+                },
+            ],
+            'object->name_clear' => [
+                'label' => Yii::t('hipanel', 'Object'),
+                'format' => 'raw',
+                'value' => function (Price $model) {
+                    return $model->object->name ?: Yii::t('hipanel.finance.price', 'Any');
                 },
             ],
             'object->name' => [
@@ -134,8 +153,20 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                     return $this->presenterFactory->build(\get_class($model))->renderInfo($model);
                 },
             ],
+            'old_quantity' => [
+                'format' => 'raw',
+                'label' => Yii::t('hipanel.finance.price', 'Old quantity'),
+                'value' => function (Price $model) {
+                    return $this->presenterFactory->build(\get_class($model))->renderInfo($model, 'old_quantity');
+                },
+            ],
             'value' => [
                 'class' => ValueColumn::class,
+            ],
+            'rate' => [
+                'label' => Yii::t('hipanel.finance.price', 'Referral rate'),
+                'attribute' => 'rate',
+                'filter' => false,
             ],
         ]);
     }

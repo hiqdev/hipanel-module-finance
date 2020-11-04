@@ -21,12 +21,12 @@ use yii\data\ArrayDataProvider;
 
 <?php if (!$model->your_tariff) : ?>
     <?php $page->beginContent('bulk-actions') ?>
-            <?php if (Yii::$app->user->can('price.update')) : ?>
-                <?= $page->renderBulkButton('@price/update', Yii::t('hipanel', 'Update'), ['color' => 'warning']) ?>
-            <?php endif ?>
-            <?php if (Yii::$app->user->can('price.delete')) : ?>
-                <?= $page->renderBulkDeleteButton('@price/delete') ?>
-            <?php endif ?>
+        <?php if (Yii::$app->user->can('price.update')) : ?>
+            <?= $page->renderBulkButton('@price/update', Yii::t('hipanel', 'Update'), ['color' => 'warning']) ?>
+        <?php endif ?>
+        <?php if (Yii::$app->user->can('price.delete')) : ?>
+            <?= $page->renderBulkDeleteButton('@price/delete') ?>
+        <?php endif ?>
     <?php $page->endContent() ?>
 
     <?php $page->beginContent('main-actions') ?>

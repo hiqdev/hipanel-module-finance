@@ -20,7 +20,7 @@ class FinanceSidebarMenuCest
         (new SidebarMenu($I))->ensureContains('Finance', [
             'Payments'         => '@bill/index',
             'Recharge account' => '@pay/deposit',
-            'Requisites'       => '@bill/requisites',
+            'Requisites'       => '@finance/requisite/index',
             'Held payments'    => '@finance/held-payments/index',
             'Sales'            => '@sale/index',
             'Tariff plans'     => '@plan/index',

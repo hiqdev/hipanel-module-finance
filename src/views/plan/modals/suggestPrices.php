@@ -1,16 +1,19 @@
 <?php
 
+use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\PriceSuggestionRequestForm;
+use hipanel\modules\finance\widgets\combo\TargetCombo;
 use hipanel\modules\finance\widgets\combo\TemplatePlanCombo;
 use hipanel\modules\server\widgets\combo\HubCombo;
 use hipanel\modules\server\widgets\combo\ServerCombo;
 use hiqdev\combo\StaticCombo;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use yii\web\View;
 
 /**
- * @var \yii\web\View $this
+ * @var View $this
  * @var Plan $plan
  * @var PriceSuggestionRequestForm $model
  */
@@ -42,6 +45,26 @@ use yii\helpers\Html;
             'parts' => Yii::t('hipanel.finance.suggestionTypes', 'parts'),
         ],
     ]) ?>
+<?php elseif (in_array($plan->type, [
+    Plan::TYPE_VPS,
+    Plan::TYPE_SNAPSHOT,
+    Plan::TYPE_VOLUME,
+    Plan::TYPE_STORAGE,
+    Plan::TYPE_PRIVATE_CLOUD_BACKUP,
+    Plan::TYPE_PRIVATE_CLOUD,
+], true)) : ?>
+    <?php if ($model->isObjectPredefined()) : ?>
+        <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
+    <?php else : ?>
+        <?= $form->field($model, 'object_id')->widget(TargetCombo::class) ?>
+    <?php endif; ?>
+    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
+        'plan_id' => $plan->id,
+        'object_input_type' => $model->isObjectPredefined() ? null : 'target/name',
+    ]) ?>
+    <?= $form->field($model, 'type')->widget(StaticCombo::class, [
+        'data' => ['default' => Yii::t('hipanel.finance.suggestionTypes', 'default')],
+    ]) ?>
 <?php elseif ($plan->type === Plan::TYPE_SWITCH): ?>
     <?php if ($model->isObjectPredefined()) : ?>
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
@@ -68,9 +91,11 @@ use yii\helpers\Html;
             'switch' => Yii::t('hipanel.finance.suggestionTypes', 'switch'),
             'v_cdn' => Yii::t('hipanel.finance.suggestionTypes', 'v_cdn'),
             'p_cdn' => Yii::t('hipanel.finance.suggestionTypes', 'p_cdn'),
+            'anycastcdn' => Yii::t('hipanel.finance.suggestionTypes', 'anycast_cdn'),
+            'referral' => Yii::t('hipanel.finance.suggestionTypes', 'referral'),
         ],
     ]) ?>
-<?php elseif (in_array($plan->type, [Plan::TYPE_VCDN, Plan::TYPE_PCDN], true)): ?>
+<?php elseif (in_array($plan->type, [Plan::TYPE_VCDN, Plan::TYPE_PCDN, Plan::TYPE_ANYCASTCDN], true)): ?>
     <?php if ($model->isObjectPredefined()) : ?>
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
     <?php else : ?>
@@ -94,6 +119,12 @@ use yii\helpers\Html;
         'plan_id' => $plan->id,
     ]) ?>
     <?php $form->action = ['@plan/create-prices', 'id' => $plan->id]; ?>
+<?php elseif ($plan->type === Plan::TYPE_HARDWARE): ?>
+    <?= $form->field($model, 'object_id')->widget(ClientCombo::class) ?>
+    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, ['plan_id' => $plan->id]) ?>
+<?php elseif ($plan->type === Plan::TYPE_REFERRAL): ?>
+    <?= Html::activeHiddenInput($model, 'type', ['value' => Plan::TYPE_REFERRAL]) ?>
+    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, ['plan_id' => $plan->id]) ?>
 <?php else: ?>
     <p class="text-center bg-warning"
        style="padding: 1rem;"><?= Yii::t('hipanel.finance.plan', 'This plan doesn\'t support detailed prices') ?></p>

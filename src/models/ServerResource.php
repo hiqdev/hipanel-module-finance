@@ -11,9 +11,12 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\base\ModelTrait;
+use hipanel\modules\finance\models\decorators\DecoratedInterface;
+use hipanel\modules\finance\models\decorators\ResourceDecoratorInterface;
 use hipanel\modules\finance\models\decorators\server\AbstractServerResourceDecorator;
 use hipanel\modules\finance\models\decorators\server\ServerResourceDecoratorFactory;
 use Yii;
+use yii\base\InvalidConfigException;
 
 /**
  * Class ServerResource.
@@ -22,7 +25,7 @@ use Yii;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class ServerResource extends Resource
+class ServerResource extends Resource implements DecoratedInterface
 {
     use ModelTrait;
 
@@ -32,19 +35,31 @@ class ServerResource extends Resource
     }
 
     const MODEL_TYPE_CPU = 'cpu';
+
     const MODEL_TYPE_RAM = 'ram';
+
     const MODEL_TYPE_HDD = 'hdd';
+
     const MODEL_TYPE_CHASSIS = 'chassis';
 
     const TYPE_ISP5 = 'isp5';
+
     const TYPE_ISP = 'isp';
+
     const TYPE_SUPPORT_TIME = 'support_time';
+
     const TYPE_IP_NUMBER = 'ip_num';
+
     const TYPE_SERVER_TRAF_MAX = 'server_traf_max';
+
     const TYPE_SERVER_TRAF95_MAX = 'server_traf95_max';
+
     const TYPE_BACKUP_DU = 'backup_du';
+
     const TYPE_WIN_LICENSE = 'win_license';
+
     const TYPE_SERVER_DU = 'server_du';
+
     const TYPE_MONTHLY = 'monthly';
 
     public function rules()
@@ -99,10 +114,7 @@ class ServerResource extends Resource
         return isset($types[$this->type]) ? $types[$this->type] : 0.01;
     }
 
-    /**
-     * @return AbstractServerResourceDecorator
-     */
-    public function decorator()
+    public function decorator(): ResourceDecoratorInterface
     {
         if (empty($this->decorator)) {
             $this->decorator = ServerResourceDecoratorFactory::createFromResource($this);

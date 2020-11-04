@@ -30,7 +30,7 @@ class TargetObject extends Model
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'no'], 'integer'],
             [['name', 'label', 'type'], 'safe'],
         ];
     }

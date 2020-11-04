@@ -20,6 +20,7 @@ use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class PlanInternalsGrouper can be used to group prices inside $plan depending on
@@ -52,8 +53,24 @@ class PlanInternalsGrouper
         switch ($this->plan->type) {
             case Plan::TYPE_CERTIFICATE:
                 return $this->groupCertificatePrices();
+            case Plan::TYPE_HARDWARE:
+                return $this->groupHardwarePrices();
+            case Plan::TYPE_REFERRAL:
+                return $this->plan->prices;
             case Plan::TYPE_DOMAIN:
-                return $this->groupDomainPrices();
+                $byType = static function (array $servicePrices) {
+                    return ArrayHelper::index($servicePrices, 'type', static function ($servicePrice) {
+                        if (strpos($servicePrice->type, 'premium_dns') !== false) {
+                            return 'premium_dns';
+                        }
+                        if (strpos($servicePrice->type, 'whois_protect') !== false) {
+                            return 'whois_protect';
+                        }
+                    });
+                };
+                [$zonePrices, $servicePrices] = $this->groupDomainPrices();
+
+                return [$zonePrices, $byType($servicePrices)];
             default:
                 return $this->groupServerPrices();
         }
@@ -130,6 +147,45 @@ class PlanInternalsGrouper
             ]);
         }
 
+        return $this->sortSaleAndPrices($salesByObject, $pricesByMainObject);
+    }
+
+    private function groupHardwarePrices(): array
+    {
+        $model = $this->plan;
+        /** @var Sale[] $salesByObject */
+        $salesByObject = [];
+        $salesWithId = [];
+        /** @var Price[][] $pricesByMainObject */
+        $pricesByMainObject = [];
+
+        foreach ($model->prices as $price) {
+            $pricesByMainObject[$price->main_object_id ?? $price->object_id ?? 0][$price->id] = $price;
+        }
+
+        foreach ($model->sales as $sale) {
+            $salesWithId[$sale->object_id] = $sale;
+        }
+
+        foreach ($pricesByMainObject as $id => $prices) {
+            foreach ($prices as $price) {
+                if ((int)$price->main_object_id === (int)$id) {
+                    $tmpSale = $salesWithId[$price->object_id];
+                    $tmpSale->object = $price->main_object_name;
+                    $tmpSale->tariff_id = $model->id;
+                    $tmpSale->object_id = $id;
+                    $tmpSale->tariff_type = 'model_group';
+                    $salesByObject[$id] = $tmpSale;
+                    continue 2;
+                }
+            }
+        }
+
+        return $this->sortSaleAndPrices($salesByObject, $pricesByMainObject);
+    }
+
+    private function sortSaleAndPrices(array $salesByObject, array $pricesByMainObject): array
+    {
         foreach ($pricesByMainObject as &$objPrices) {
             $objPrices = PriceSort::anyPrices()->values($objPrices, true);
         }
@@ -174,6 +230,7 @@ class PlanInternalsGrouper
                 $servicePrices[$price->type] = $price;
             }
         }
+        $zonePrices = PriceSort::zonePrices()->values($zonePrices, true);
 
         return [$zonePrices, $servicePrices];
     }

@@ -69,14 +69,19 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                     if ($model instanceof FakeSale) {
                         return $model->object;
                     }
-
+                    $user = Yii::$app->user;
                     $html = Html::beginTag('div', ['class' => 'sale-flex-cnt']);
                     $html .= LinkToObjectResolver::widget([
                         'model' => $model,
                         'typeAttribute' => 'tariff_type',
                         'idAttribute' => 'object_id',
                     ]);
-                    $html .= Html::a(Yii::t('hipanel:finance:sale', 'More'), ['@sale/view', 'id' => $model->id], ['class' => 'btn btn-xs btn-default btn-flat']);
+                    $html .= Html::beginTag('div', ['class' => 'btn-group']);
+                    $html .= Html::a(Yii::t('hipanel:finance:sale', 'View'), ['@sale/view', 'id' => $model->id], ['class' => 'btn btn-xs btn-primary']);
+                    if ($user->can('sale.update')) {
+                        $html .= Html::a(Yii::t('hipanel:finance:sale', 'Edit'), ['@sale/update', 'id' => $model->id], ['class' => 'btn btn-xs btn-success']);
+                    }
+                    $html .= Html::endTag('div');
                     $html .= Html::endTag('div');
 
                     return $html;

@@ -21,7 +21,6 @@ use yii\helpers\Html;
  */
 [$zonePrices, $servicePrices] = $grouper->group();
 [$parentZonePrices, $parentServicePrices] = $parentPrices;
-
 ?>
 
 <?php if (!$model->your_tariff) : ?>
@@ -55,21 +54,21 @@ use yii\helpers\Html;
                 'restoringDeleted',
             ],
         ]) ?>
-        <h4 class="box-title" style="display: inline-block;">&nbsp;
-            <?= DomainServicePrice::getLabel() ?>
-        </h4>
-        <?= DomainServicePriceGridView::widget([
-            'boxed' => false,
-            'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
-            'dataProvider' => (new ArrayDataProvider([
-                'allModels' => [$servicePrices],
-                'pagination' => false,
-            ])),
-            'parentPrices' => $parentServicePrices,
-            'columns' => [
-                'purchase',
-                'renewal',
-            ],
-        ])?>
-    <?php $page->endBulkForm() ?>
+        <?php foreach ($servicePrices as $groupLabel => $servicePriceGroup) : ?>
+            <?= Html::tag('h4', DomainServicePrice::getLabel($groupLabel), ['class' => 'box-title', 'style' => 'padding-left: 5px;']) ?>
+            <?= DomainServicePriceGridView::widget([
+                'boxed' => false,
+                'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
+                'dataProvider' => (new ArrayDataProvider([
+                    'allModels' => [$servicePriceGroup],
+                    'pagination' => false,
+                ])),
+                'parentPrices' => $parentServicePrices,
+                'columns' => [
+                    'purchase',
+                    'renewal',
+                ],
+            ]) ?>
+        <?php endforeach ?>
+<?php $page->endBulkForm() ?>
 <?php $page->endContent() ?>

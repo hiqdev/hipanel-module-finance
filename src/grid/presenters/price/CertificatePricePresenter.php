@@ -12,6 +12,8 @@ namespace hipanel\modules\finance\grid\presenters\price;
 
 use hipanel\modules\finance\models\Price;
 use Money\MoneyFormatter;
+use yii\i18n\Formatter;
+use yii\web\User;
 
 /**
  * Class CertificatePricePresenter.
@@ -20,15 +22,13 @@ use Money\MoneyFormatter;
  */
 class CertificatePricePresenter extends PricePresenter
 {
-    /**
-     * @var MoneyFormatter
-     */
-    private $moneyFormatter;
+    protected MoneyFormatter $moneyFormatter;
 
-    public function __construct(MoneyFormatter $moneyFormatter)
+    public function __construct(Formatter $formatter, User $user, MoneyFormatter $moneyFormatter)
     {
+        parent::__construct($formatter, $user);
+
         $this->moneyFormatter = $moneyFormatter;
-        parent::__construct();
     }
 
     /**

@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\helpers;
 
+use Closure;
 use hipanel\modules\finance\models\Price;
 use Tuck\Sort\Sort;
 use Tuck\Sort\SortChain;
@@ -29,7 +30,7 @@ class PriceSort
     }
 
     /**
-     * @return \Tuck\Sort\SortChain
+     * @return SortChain
      */
     public static function serverPrices(): SortChain
     {
@@ -42,9 +43,14 @@ class PriceSort
             ->compare(self::byServerPriceType());
     }
 
+    public static function zonePrices(): SortChain
+    {
+        return Sort::chain()->asc(self::byObjectNo());
+    }
+
     private static function byServerPriceType()
     {
-        return function (Price $a, Price $b) {
+        return static function (Price $a, Price $b) {
             if ($a->getSubtype() === $b->getSubtype()) {
                 return $a->isOveruse() ? 1 : -1;
             }
@@ -53,7 +59,7 @@ class PriceSort
         };
     }
 
-    private static function byServerPriceGroups(): \Closure
+    private static function byServerPriceGroups(): Closure
     {
         return function (Price $price) {
             if ($price->type !== 'monthly,hardware') {
@@ -68,7 +74,7 @@ class PriceSort
         };
     }
 
-    private static function byServerMainPrices(): \Closure
+    private static function byServerMainPrices(): Closure
     {
         $order = [
             'rack',
@@ -77,14 +83,18 @@ class PriceSort
             'support_time',
             'backup_du',
             'server_traf_max',
+            'cdn_traf_max',
             'server_traf95_max',
+            'cdn_traf95_max',
             'server_du',
+            'storage_du',
+            'cdn_cache',
             'server_ssd',
             'server_sata',
             'win_license',
         ];
 
-        return function (Price $price) use ($order) {
+        return static function (Price $price) use ($order) {
             if (($key = array_search($price->getSubtype(), $order, true)) !== false) {
                 return $key;
             }
@@ -93,7 +103,7 @@ class PriceSort
         };
     }
 
-    private static function byHardwareType(): \Closure
+    private static function byHardwareType(): Closure
     {
         $order = ['SERVER', 'CHASSIS', 'MOTHERBOARD', 'CPU', 'RAM', 'HDD', 'SSD'];
 
@@ -107,14 +117,14 @@ class PriceSort
         };
     }
 
-    private static function byTargetObjectName(): \Closure
+    private static function byTargetObjectName(): Closure
     {
         return function (Price $a, Price $b) {
             return strnatcasecmp($a->object->name, $b->object->name);
         };
     }
 
-    private static function byObjectType(): \Closure
+    private static function byObjectType(): Closure
     {
         $order = ['dedicated', 'net', 'model_group', 'part'];
 
@@ -124,6 +134,13 @@ class PriceSort
             }
 
             return INF;
+        };
+    }
+
+    private static function byObjectNo(): Closure
+    {
+        return static function ($group): int {
+            return reset($group)->object->no;
         };
     }
 }

@@ -22,12 +22,12 @@ class CartControllerTest extends \PHPUnit\Framework\TestCase
      */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new CartController('bill', null);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
     }
 

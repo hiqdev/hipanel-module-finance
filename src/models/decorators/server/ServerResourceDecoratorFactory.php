@@ -10,12 +10,11 @@
 
 namespace hipanel\modules\finance\models\decorators\server;
 
-use hipanel\modules\finance\models\decorators\ResourceDecoratorInterface;
-use yii\base\InvalidConfigException;
+use hipanel\modules\finance\models\decorators\ResourceDecoratorFactory;
 
-class ServerResourceDecoratorFactory
+class ServerResourceDecoratorFactory extends ResourceDecoratorFactory
 {
-    private static function typeMap()
+    protected static function typeMap(): array
     {
         return [
             'backup_du' => BackupResourceDecorator::class,
@@ -30,27 +29,14 @@ class ServerResourceDecoratorFactory
             'panel' => PanelResourceDecorator::class,
             'support_time' => SupportResourceDecorator::class,
             'server_traf95_max' => Traffic95ResourceDecorator::class,
+            'server_traf95_in' => Traffic95ResourceDecorator::class,
+            'server_traf95' => Traffic95ResourceDecorator::class,
             'server_traf_max' => TrafficResourceDecorator::class,
+            'server_traf_in' => TrafficResourceDecorator::class,
+            'server_traf' => TrafficResourceDecorator::class,
             'server_du' => ServerDUResourceDecorator::class,
             'location' => LocationResourceDecorator::class,
             'monthly' => MonthlyResourceDecorator::class,
         ];
-    }
-
-    /**
-     * @param $resource
-     * @throws InvalidConfigException
-     * @return ResourceDecoratorInterface
-     */
-    public static function createFromResource($resource)
-    {
-        $type = $resource->model_type ?: $resource->type;
-        $map = self::typeMap();
-
-        if (!isset($map[$type])) {
-            throw new InvalidConfigException('No representative decoration class found for type "' . $type . '"');
-        }
-
-        return new $map[$type]($resource);
     }
 }

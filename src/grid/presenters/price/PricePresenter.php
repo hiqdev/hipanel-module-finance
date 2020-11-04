@@ -14,6 +14,8 @@ use hipanel\modules\finance\models\Price;
 use hipanel\widgets\ArraySpoiler;
 use Yii;
 use yii\bootstrap\Html;
+use yii\i18n\Formatter;
+use yii\web\User;
 
 /**
  * Class PricePresenter contains methods that present price properties.
@@ -23,14 +25,27 @@ use yii\bootstrap\Html;
  */
 class PricePresenter
 {
-    /**
-     * @var \yii\i18n\Formatter
-     */
-    private $formatter;
+    protected Formatter $formatter;
 
-    public function __construct()
+    protected User $user;
+
+    protected string $priceAttribute = 'price';
+
+    public function __construct(Formatter $formatter, User $user)
     {
-        $this->formatter = Yii::$app->formatter;
+        $this->formatter = $formatter;
+        $this->user = $user;
+    }
+
+    /**
+     * @param string $priceAttribute
+     * @return $this
+     */
+    public function setPriceAttribute(string $priceAttribute): self
+    {
+        $this->priceAttribute = $priceAttribute;
+
+        return $this;
     }
 
     /**
@@ -63,14 +78,15 @@ class PricePresenter
             ]);
         }
 
-        return Html::tag('strong', $this->formatter->asCurrency($price->price, $price->currency)) . $unit . $formula;
+        return Html::tag('strong', $this->formatter->asCurrency($price->{$this->priceAttribute}, $price->currency)) . $unit . $formula;
     }
 
     /**
      * @param Price $price
+     * @param string $attribute
      * @return string
      */
-    public function renderInfo(Price $price): string
+    public function renderInfo(Price $price, string $attribute = 'quantity'): string
     {
         if (!$price->isQuantityPredefined()) {
             return Yii::t('hipanel:finance', '{icon} Quantity: {quantity}', [
@@ -79,14 +95,17 @@ class PricePresenter
             ]);
         }
         if ($price->isOveruse()) {
-            return Yii::t('hipanel:finance', '{coins}&nbsp;&nbsp;{amount,number} {unit}', [
+            return Yii::t('hipanel:finance', '{coins}&nbsp;&nbsp;{amount,number} {unit}{aggregated}', [
                 'coins' => Html::tag('i', '', ['class' => 'fa fa-money', 'title' => Yii::t('hipanel.finance.price', 'Prepaid amount')]),
-                'amount' => $price->quantity,
+                'amount' => $price->{$attribute},
                 'unit' => $price->getUnitLabel(),
+                'aggregated' => $price->hasAttribute('count_aggregated_traffic') && $price->count_aggregated_traffic
+                    ? Html::tag('span', Yii::t('hipanel.finance.price', 'Aggregated'), ['class' => 'label bg-olive pull-right'])
+                    : '',
             ]);
         }
 
-        if ($price->getSubtype() === 'hardware') {
+        if ($price->getSubtype() === 'hardware' && $this->user->can('part.read')) {
             return $price->object->label;
         }
 

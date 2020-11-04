@@ -20,4 +20,5 @@ return [
     'phone number' => 'номера телефона',
     'In case of any questions, please {contactSupportTeamLink}.' => 'Если у Вас есть вопросы, задайте их {contactSupportTeamLink}.',
     'contact support team' => 'нашей команде поддержки',
+    'Please be informed that due to the difficulties in cash withdrawal from Paxum to the bank account,<br/>we open the possibility to pay using this payment method, but we  have the right to refund you the whole amount<br/> and delete the credit from your account in control panel in case of fail of our possibility to withdraw the funds.' => 'В связи со сложностью вывода средств с Paxum на банк, прием возобновлен, но мы оставляем за собой право,<br/>в случае, неудачной попытки вывести средства,  вернуть Вам платеж и убрать зачисление с личного кабинета.',
 ];

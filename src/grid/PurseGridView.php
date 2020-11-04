@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\client\widgets\combo\ContactCombo;
+use hipanel\modules\finance\widgets\combo\RequisitesCombo;
 use hiqdev\xeditable\widgets\ComboXEditable;
 use Yii;
 
@@ -26,6 +27,14 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
             'invoices' => [
                 'class' => MonthlyDocumentsColumn::class,
                 'type' => 'invoice',
+            ],
+            'serviceInvoices' => [
+                'class' => MonthlyDocumentsColumn::class,
+                'type' => 'service_invoice',
+            ],
+            'purchaseInvoices' => [
+                'class' => MonthlyDocumentsColumn::class,
+                'type' => 'purchase_invoice',
             ],
             'acceptances' => [
                 'class' => MonthlyDocumentsColumn::class,
@@ -52,7 +61,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                     $organization = $model->contact->organization;
                     $result = $organization . ($organization ? ' / ' : '') . $model->contact->name;
 
-                    if (!Yii::$app->user->can('manage')) {
+                    if (!Yii::$app->user->can('purse.update')) {
                         return $result;
                     }
 
@@ -87,7 +96,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                     $organization = $model->requisite->organization;
                     $result = $organization . ($organization ? ' / ' : '') . $model->requisite->name;
 
-                    if (!Yii::$app->user->can('manage')) {
+                    if (!Yii::$app->user->can('purse.update')) {
                         return $result;
                     }
 
@@ -99,7 +108,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                             'url' => ['@purse/update-requisite', 'id' => $model->id],
                         ],
                         'combo' => [
-                            'class' => ContactCombo::class,
+                            'class' => RequisitesCombo::class,
                             'filter' => [
                                 'client_id' => ['format' => $model->seller_id],
                             ],

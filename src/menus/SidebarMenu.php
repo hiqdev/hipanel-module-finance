@@ -17,11 +17,8 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
     public function items()
     {
         $user = Yii::$app->user;
-        if (!$user->can('finance.read')) {
-            return [];
-        }
 
-        return [
+        $result = [
             'finance' => [
                 'label' => Yii::t('hipanel:finance', 'Finance'),
                 'url'   => ['/finance/bill/index'],
@@ -37,9 +34,9 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                         'url'     => ['/merchant/pay/deposit'],
                         'visible' => $user->can('deposit'),
                     ],
-                    'requisites' => [
+                    'requisite' => [
                         'label'   => Yii::t('hipanel:finance', 'Requisites'),
-                        'url'     => ['/finance/bill/requisites'],
+                        'url'     => ['/finance/requisite/index'],
                         'visible' => $user->can('requisites.read'),
                     ],
                     'holds' => [
@@ -50,7 +47,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     'sale' => [
                         'label'   => Yii::t('hipanel:finance:sale', 'Sales'),
                         'url'     => ['/finance/sale/index'],
-                        'visible' => $user->can('sale.read') && Yii::getAlias('@model', false),
+                        'visible' => $user->can('sale.read'),
                     ],
                     'generate' => [
                         'label'   => Yii::t('hipanel:finance', 'Generate documents'),
@@ -60,7 +57,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     'plans' => [
                         'label'   => Yii::t('hipanel:finance', 'Tariff plans'),
                         'url'     => ['@plan/index'],
-                        'visible' => $user->can('plan.read') && $user->can('support'),
+                        'visible' => $user->can('plan.read') && (Yii::$app->params['finance.plan.required.additional.rights'] ? $user->can('support') : true),
                     ],
                     'prices' => [
                         'label'   => Yii::t('hipanel:finance', 'Prices'),
@@ -80,5 +77,11 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                 ],
             ],
         ];
+
+        if (empty($result['finance']['items']) || !$user->can('finance.read')) {
+            return [];
+        }
+
+        return $result;
     }
 }

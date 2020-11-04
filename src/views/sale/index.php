@@ -33,6 +33,9 @@ $this->registerCss('
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('bulk-actions') ?>
+            <?php if (Yii::$app->user->can('sale.update')) : ?>
+                <?= $page->renderBulkButton('@sale/update', Yii::t('hipanel', 'Edit')) ?>
+            <?php endif ?>
             <?php if (Yii::$app->user->can('sale.delete')) : ?>
                 <?= $page->renderBulkDeleteButton('@sale/delete') ?>
             <?php endif ?>

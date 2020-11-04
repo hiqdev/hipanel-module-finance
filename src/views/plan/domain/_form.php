@@ -3,7 +3,7 @@
 /**
  * @var \yii\web\View $this
  * @var \hipanel\modules\finance\models\DomainZonePrice[][] $zonePrices
- * @var \hipanel\modules\finance\models\DomainServicePrice[] $servicePrices
+ * @var \hipanel\modules\finance\models\DomainServicePrice[][] $servicePrices
  * @var \hipanel\modules\finance\models\DomainZonePrice[][] $parentZonePrices
  * @var \hipanel\modules\finance\models\DomainServicePrice[] $parentServicePrices
  * @var \hipanel\modules\finance\models\Plan $plan
@@ -85,7 +85,7 @@ CSS
                                 <?php $price = $group[$type] ?? $originalPrice ?? null; ?>
 
                                 <?php if ($price === null): ?>
-	                                <td></td>
+                                    <td></td>
                                     <?php continue; ?>
                                 <?php endif; ?>
 
@@ -108,43 +108,45 @@ CSS
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-                <table class="table table-condensed price-table">
-                    <thead>
-                    <tr>
-                        <th>
-                            <h4 class="box-title" style="display: inline-block;">&nbsp;
-                                <?= DomainServicePrice::getLabel() ?>
-                            </h4>
-                        </th>
-                    </tr>
-                    <tr>
-                        <?php foreach (DomainServicePrice::getOperations() as $name) : ?>
-                            <?= Html::tag('th', $name); ?>
-                        <?php endforeach; ?>
-                    </tr>
-                    </thead>
-                    <tbody>
+                <?php foreach ($servicePrices as $groupLabel => $servicePriceGroup) : ?>
+                    <table class="table table-condensed price-table">
+                        <thead>
+                        <tr>
+                            <th>
+                                <h4 class="box-title" style="display: inline-block;">&nbsp;
+                                    <?= DomainServicePrice::getLabel($groupLabel) ?>
+                                </h4>
+                            </th>
+                        </tr>
+                        <tr>
+                            <?php foreach (DomainServicePrice::getOperations() as $name) : ?>
+                                <?= Html::tag('th', $name); ?>
+                            <?php endforeach; ?>
+                        </tr>
+                        </thead>
+                        <tbody>
                         <?php $i = 0; ?>
                         <tr>
-                        <?php foreach ($servicePrices as $type => $price) : ?>
-                            <?php $originalPrice = $parentServicePrices[$type] ?? null; ?>
-                            <?php $price->plan_id = $plan_id ?? $price->plan_id; ?>
-                            <?= Html::activeHiddenInput($price, "[$i]id") ?>
-                            <?= Html::activeHiddenInput($price, "[$i]plan_id") ?>
-                            <?= Html::activeHiddenInput($price, "[$i]currency") ?>
-                            <?= Html::activeHiddenInput($price, "[$i]type") ?>
-                            <?= Html::activeHiddenInput($price, "[$i]unit") ?>
-                            <td>
-                                <?= PriceInput::widget([
-                                    'basePrice' => $price->getMoney(),
-                                    'originalPrice' => ($originalPrice ?? $price)->getMoney(),
-                                    'activeField' => $form->field($price, "[$i]price")]) ?>
-                            </td>
-                            <?php ++$i; ?>
-                        <?php endforeach; ?>
+                            <?php foreach ($servicePriceGroup as $type => $price) : ?>
+                                <?php $originalPrice = $parentServicePrices[$type] ?? null; ?>
+                                <?php $price->plan_id = $plan_id ?? $price->plan_id; ?>
+                                <?= Html::activeHiddenInput($price, "[$i]id") ?>
+                                <?= Html::activeHiddenInput($price, "[$i]plan_id") ?>
+                                <?= Html::activeHiddenInput($price, "[$i]currency") ?>
+                                <?= Html::activeHiddenInput($price, "[$i]type") ?>
+                                <?= Html::activeHiddenInput($price, "[$i]unit") ?>
+                                <td>
+                                    <?= PriceInput::widget([
+                                        'basePrice' => $price->getMoney(),
+                                        'originalPrice' => ($originalPrice ?? $price)->getMoney(),
+                                        'activeField' => $form->field($price, "[$i]price")]) ?>
+                                </td>
+                                <?php ++$i; ?>
+                            <?php endforeach; ?>
                         </tr>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                <?php endforeach; ?>
             </div>
         </div>
 

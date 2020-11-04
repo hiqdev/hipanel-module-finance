@@ -31,7 +31,8 @@ class PurseController extends \hipanel\base\CrudController
             [
                 'class' => EasyAccessControl::class,
                 'actions' => [
-                    'update' => 'bill.update',
+                    'update,update-requisite,update-contact' => 'purse.update',
+                    'pre-generate-document,generate-monthly-document,generate-document' => 'document.generate',
                     '*' => 'bill.read',
                 ],
             ],
@@ -88,10 +89,14 @@ class PurseController extends \hipanel\base\CrudController
             return StatisticTableGenerator::widget(['type' => $type, 'statistic' => $statisticByTypes[$type]]);
         } else {
             if ($request->isPost) {
-                Purse::batchPerform('generate-and-save-all-monthly-documents', [
-                    'type' => $type,
-                    'client_types' => $type === 'acceptance' ? 'employee' : null,
-                ]);
+                try {
+                    Purse::batchPerform('generate-and-save-all-monthly-documents', [
+                        'type' => $type,
+                        'client_types' => $type === 'acceptance' ? 'employee' : null,
+                    ]);
+                } catch (ResponseErrorException $e) {
+                    Yii::$app->getSession()->setFlash('error', Yii::t('hipanel:finance', 'Failed to generate document! Check requisites!'));
+                }
             }
 
             return $this->render('generate-all', ['statisticByTypes' => $statisticByTypes]);

@@ -19,4 +19,6 @@ return [
     'certificate' => 'Сертификат',
     'domain' => 'Домен',
     'switch' => 'Свитчи',
+    'anycast_cdn' => 'Anycast CDN',
+    'referral' => 'Реферальные',
 ];

@@ -51,14 +51,21 @@ final class CartCurrencyNegotiator extends Widget
     public function run()
     {
         $cartCurrency = $this->cart->getCurrency();
-        $this->renderCurrencyOptions($this->cart->getTotal(), $cartCurrency);
-
-        $convertibleCurrencies = $this->convertibleCurrencies(
-            ArrayHelper::getColumn($this->client->purses, 'currency'),
+        $this->renderCurrencyOptions(
+            $this->numberFormat($this->cart->getTotal(), $cartCurrency),
             $cartCurrency
         );
-        foreach ($convertibleCurrencies as $rate) {
-            $this->renderCurrencyOptions($this->getCartAmountInCurrency($rate->from), $rate->from);
+
+        if (!Yii::$app->user->can('support')) {
+            // Prevent seller from exchanging own money to pay for client's services,
+            // when client's tariff is in different currency.
+            $convertibleCurrencies = $this->convertibleCurrencies(
+                ArrayHelper::getColumn($this->client->purses, 'currency'),
+                $cartCurrency
+            );
+            foreach ($convertibleCurrencies as $rate) {
+                $this->renderCurrencyOptions($this->getCartAmountInCurrency($rate->from), $rate->from);
+            }
         }
     }
 
@@ -80,7 +87,7 @@ final class CartCurrencyNegotiator extends Widget
     {
         $cartCurrency = $this->cart->getCurrency();
         if ($cartCurrency === $currency) {
-            return $this->cart->getTotal();
+            return $this->numberFormat($this->cart->getTotal(), $currency);
         }
 
         $convertibleCurrencies = $this->convertibleCurrencies(
@@ -90,7 +97,7 @@ final class CartCurrencyNegotiator extends Widget
 
         foreach ($convertibleCurrencies as $rate) {
             if ($rate->from === strtoupper($currency)) {
-                return $this->cart->getTotal() / $rate->rate;
+                return $this->numberFormat($this->cart->getTotal() / $rate->rate, $cartCurrency);
             }
         }
 
@@ -134,7 +141,6 @@ final class CartCurrencyNegotiator extends Widget
         }, 3600);
 
         $result = [];
-
         foreach ($clientPursesCurrencies as $currency) {
             foreach ($rates as $rate) {
                 if ($rate->from === strtoupper($currency) && $rate->to === strtoupper($cartCurrency)) {
@@ -207,5 +213,10 @@ final class CartCurrencyNegotiator extends Widget
         $fakePurse->credit = 0;
 
         return $fakePurse;
+    }
+
+    private function numberFormat(string $amount, string $currencyCode): string
+    {
+        return number_format($amount, 2, '.', '');
     }
 }

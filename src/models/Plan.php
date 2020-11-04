@@ -28,6 +28,7 @@ use Yii;
  * @property bool $is_grouping
  * @property bool $your_tariff
  *
+ * @property PriceHistory[] $priceHistory
  * @property Sale[] $sales
  * @property Price[]|CertificatePrice[] $prices
  * @property-read string[] typeOptions
@@ -48,6 +49,37 @@ class Plan extends Model
     public const TYPE_SVDS = 'svds';
     public const TYPE_CLIENT = 'client';
     public const TYPE_HARDWARE = 'hardware';
+    public const TYPE_ANYCASTCDN = 'anycastcdn';
+    public const TYPE_REFERRAL = 'referral';
+    public const TYPE_VPS = 'vps';
+    public const TYPE_SNAPSHOT = 'snapshot';
+    public const TYPE_VOLUME = 'volume';
+    public const TYPE_STORAGE = 'storage';
+    public const TYPE_PRIVATE_CLOUD_BACKUP = 'private_cloud_backup';
+    public const TYPE_PRIVATE_CLOUD = 'private_cloud';
+
+    protected $knownTypes = [
+        self::TYPE_SERVER               => self::TYPE_SERVER,
+        self::TYPE_PCDN                 => self::TYPE_PCDN,
+        self::TYPE_VCDN                 => self::TYPE_VCDN,
+        self::TYPE_TEMPLATE             => self::TYPE_TEMPLATE,
+        self::TYPE_CERTIFICATE          => self::TYPE_CERTIFICATE,
+        self::TYPE_DOMAIN               => self::TYPE_DOMAIN,
+        self::TYPE_SWITCH               => self::TYPE_SWITCH,
+        self::TYPE_AVDS                 => self::TYPE_AVDS,
+        self::TYPE_OVDS                 => self::TYPE_OVDS,
+        self::TYPE_SVDS                 => self::TYPE_SVDS,
+        self::TYPE_CLIENT               => self::TYPE_CLIENT,
+        self::TYPE_HARDWARE             => self::TYPE_HARDWARE,
+        self::TYPE_ANYCASTCDN           => self::TYPE_ANYCASTCDN,
+        self::TYPE_VPS                  => self::TYPE_VPS,
+        self::TYPE_SNAPSHOT             => self::TYPE_SNAPSHOT,
+        self::TYPE_VOLUME               => self::TYPE_VOLUME,
+        self::TYPE_STORAGE              => self::TYPE_STORAGE,
+        self::TYPE_PRIVATE_CLOUD_BACKUP => self::TYPE_PRIVATE_CLOUD_BACKUP,
+        self::TYPE_PRIVATE_CLOUD        => self::TYPE_PRIVATE_CLOUD,
+        self::TYPE_REFERRAL             => self::TYPE_REFERRAL,
+    ];
 
     use ModelTrait;
 
@@ -69,6 +101,7 @@ class Plan extends Model
             [['id'], 'required', 'on' => ['delete', 'restore']],
             [['id', 'server_ids'], 'safe', 'on' => ['copy']],
             [['your_tariff'], 'boolean'],
+            [['custom_data', 'data'], 'safe', 'on' => ['create', 'update']],
         ]);
     }
 
@@ -84,6 +117,20 @@ class Plan extends Model
         ]);
     }
 
+    public function getPlanAttributes(): array
+    {
+        $attributes = $this->custom_data['attributes'] ?? [];
+        $models = [];
+        foreach ($attributes as $name => $value) {
+            $model = new PlanAttribute(compact('name', 'value'));
+            if (!$model->isEmpty()) {
+                $models[] = $model;
+            }
+        }
+
+        return empty($models) ? [] : $models;
+    }
+
     public function getPrices()
     {
         if ($this->type === Plan::TYPE_CERTIFICATE) {
@@ -91,6 +138,11 @@ class Plan extends Model
         }
 
         return $this->hasMany(Price::class, ['plan_id' => 'id'])->indexBy('id')->inverseOf('plan');
+    }
+
+    public function getPriceHistory()
+    {
+        return $this->hasMany(PriceHistory::class, ['tariff_id' => 'id']);
     }
 
     public function getDesiredPriceClass()
@@ -122,9 +174,24 @@ class Plan extends Model
         return $this->state === 'deleted';
     }
 
+    public function supportsPrices(): bool
+    {
+        return !in_array($this->type, [
+            self::TYPE_SNAPSHOT,
+            self::TYPE_STORAGE,
+            self::TYPE_PRIVATE_CLOUD_BACKUP,
+            self::TYPE_PRIVATE_CLOUD,
+        ], true);
+    }
+
     public function supportsSharedPrices(): bool
     {
-        return !\in_array($this->type, [Plan::TYPE_TEMPLATE, Plan::TYPE_CERTIFICATE, Plan::TYPE_DOMAIN], true);
+        return !in_array($this->type, [
+            self::TYPE_TEMPLATE,
+            self::TYPE_CERTIFICATE,
+            self::TYPE_DOMAIN,
+            self::TYPE_VPS,
+        ], true);
     }
 
     /**
@@ -136,5 +203,10 @@ class Plan extends Model
         return new PlanQuery(get_called_class(), [
             'options' => $options,
         ]);
+    }
+
+    public function isKnownType(string $type = null): bool
+    {
+        return isset($this->knownTypes[$type ?: $this->type]);
     }
 }

@@ -16,6 +16,7 @@ use hipanel\modules\finance\models\DomainServicePrice;
 use hipanel\modules\finance\models\DomainZonePrice;
 use hipanel\modules\finance\models\OveruseServerPrice;
 use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\RatePrice;
 use hipanel\modules\finance\models\TemplatePrice;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
@@ -33,7 +34,10 @@ class PriceModelFactory
      */
     protected $map = [
         'Price' => Price::class,
+        'RatePrice' => RatePrice::class,
         'TemplatePrice' => TemplatePrice::class,
+        'RateTemplatePrice' => TemplatePrice::class,
+        'OveruseServerPrice' => OveruseServerPrice::class,
         'SinglePrice' => [
             'domain,*' => DomainZonePrice::class,
             'feature,*' => DomainServicePrice::class,

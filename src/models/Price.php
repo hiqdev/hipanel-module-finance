@@ -99,29 +99,39 @@ class Price extends Model
     public function getUnitOptions()
     {
         $unitGroup = [
+            'hour'  => ['hour'],
+            'items' => ['items'],
             'speed' => ['bps', 'kbps', 'mbps', 'gbps', 'tbps'],
-            'size' => ['mb', 'mb10', 'mb100', 'gb', 'tb'],
+            'size'  => ['mb', 'mb10', 'mb100', 'gb', 'tb'],
         ];
 
-        $availableUnitsByPriceType = [
-            'overuse,ip_num' => ['items'],
-            'overuse,support_time' => ['hour'],
-            'overuse,backup_du' => $unitGroup['size'],
-            'overuse,server_traf_max' => $unitGroup['size'],
-            'overuse,server_traf95_max' => $unitGroup['speed'],
-            'overuse,server_du' => $unitGroup['size'],
-            'overuse,server_ssd' => $unitGroup['size'],
-            'overuse,server_sata' => $unitGroup['size'],
-            'overuse,backup_traf' => $unitGroup['size'],
-            'overuse,domain_traf' => $unitGroup['size'],
-            'overuse,domain_num' => ['items'],
-            'overuse,ip_traf_max' => $unitGroup['size'],
-            'overuse,account_traf' => $unitGroup['size'],
-            'overuse,account_du' => $unitGroup['size'],
-            'overuse,mail_num' => ['items'],
-            'overuse,mail_du' => $unitGroup['size'],
-            'overuse,db_num' => ['items'],
+        $type2group = [
+            'overuse,ip_num'            => 'items',
+            'overuse,support_time'      => 'hour',
+            'overuse,backup_du'         => 'size',
+            'overuse,server_traf_max'   => 'size',
+            'overuse,server_traf95_max' => 'speed',
+            'overuse,cdn_traf_max'      => 'size',
+            'overuse,cdn_traf95_max'    => 'speed',
+            'overuse,cdn_cache'         => 'size',
+            'overuse,storage_du'        => 'size',
+            'overuse,server_du'         => 'size',
+            'overuse,server_ssd'        => 'size',
+            'overuse,server_sata'       => 'size',
+            'overuse,backup_traf'       => 'size',
+            'overuse,domain_traf'       => 'size',
+            'overuse,domain_num'        => 'items',
+            'overuse,ip_traf_max'       => 'size',
+            'overuse,account_traf'      => 'size',
+            'overuse,account_du'        => 'size',
+            'overuse,mail_num'          => 'items',
+            'overuse,mail_du'           => 'size',
+            'overuse,db_num'            => 'items',
         ];
+
+        foreach ($type2group as $type => $group) {
+            $availableUnitsByPriceType[$type] = $unitGroup[$group];
+        }
 
         $units = Ref::getList('type,unit', 'hipanel.finance.units', [
             'with_recursive' => 1,
@@ -186,6 +196,11 @@ class Price extends Model
     public function isOveruse()
     {
         return strpos($this->type, 'overuse,') === 0;
+    }
+
+    public function isServer95Traf()
+    {
+        return false;
     }
 
     public function getSubtype()

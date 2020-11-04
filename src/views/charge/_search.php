@@ -3,12 +3,14 @@
 /**
  * @var \yii\base\View $this
  * @var \hipanel\widgets\AdvancedSearch $search
+ * @var array $billTypes
+ * @var array $billGroupLabels
  */
 
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\helpers\CurrencyFilter;
-use hipanel\modules\finance\widgets\BillTypeFilter;
+use hipanel\modules\finance\widgets\combo\MultipleBillTypeCombo;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
 use hipanel\modules\stock\widgets\combo\OrderCombo;
 use hiqdev\combo\StaticCombo;
@@ -22,7 +24,7 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?= Html::tag('label', Yii::t('hipanel', 'Type'), ['class' => 'control-label']); ?>
-    <?= $search->field('ftype')->widget(BillTypeFilter::class, ['class' => 'form-control']) ?>
+    <?= $search->field('type_in')->widget(MultipleBillTypeCombo::class, compact('billTypes', 'billGroupLabels')) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">

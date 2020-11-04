@@ -19,4 +19,6 @@ return [
     'certificate' => 'Certificate',
     'domain' => 'Domain',
     'switch' => 'Switch',
+    'anycast_cdn' => 'Anycast CDN',
+    'referral' => 'Referral',
 ];
