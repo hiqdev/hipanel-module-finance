@@ -102,17 +102,17 @@ final class CartCurrencyNegotiator extends Widget
         $purse = $this->getClientPurseByCurrency($currency);
 
         if ($purse->getBudget() < 0) {
-            return -$purse->getBudget() + $this->getCartAmountInCurrency($currency);
+            return round(-$purse->getBudget() + $this->getCartAmountInCurrency($currency), 2);
         }
 
-        return $this->getCartAmountInCurrency($currency);
+        return round($this->getCartAmountInCurrency($currency), 2);
     }
 
     public function getPartialAmount(string $currency): float
     {
         $purse = $this->getClientPurseByCurrency($currency);
 
-        return $this->getCartAmountInCurrency($currency) - $purse->getBudget();
+        return round($this->getCartAmountInCurrency($currency) - $purse->getBudget(), 2);
     }
 
     public function renderBalance(): string
@@ -170,7 +170,7 @@ final class CartCurrencyNegotiator extends Widget
             'currency' => $currency,
         ];
 
-        if ($purse->getBudget() >= $amount || Yii::$app->user->can('manage')) {
+        if (round($purse->getBudget(), 2) >= round($amount, 2) || Yii::$app->user->can('manage')) {
             echo $this->render('enough', $options);
         } elseif ($purse->getBudget() > 0) {
             echo $this->render('partial', array_merge($options, [
