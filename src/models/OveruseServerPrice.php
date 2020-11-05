@@ -9,6 +9,11 @@ class OveruseServerPrice extends Price
 {
     use ModelTrait;
 
+    public static function tableName()
+    {
+        return 'price';
+    }
+
     /**
      * @return array
      */
@@ -29,4 +34,11 @@ class OveruseServerPrice extends Price
             'count_aggregated_traffic' => Yii::t('hipanel.finance.price', 'Calculate aggregated traffic'),
         ]);
     }
+
+    /** {@inheritdoc} */
+    public function isServer95Traf()
+    {
+        return strpos($this->type, 'overuse,server_traf95_max') === 0;
+    }
+
 }

@@ -153,12 +153,20 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                     return $this->presenterFactory->build(\get_class($model))->renderInfo($model);
                 },
             ],
+            'old_quantity' => [
+                'format' => 'raw',
+                'label' => Yii::t('hipanel.finance.price', 'Old quantity'),
+                'value' => function (Price $model) {
+                    return $this->presenterFactory->build(\get_class($model))->renderInfo($model, 'old_quantity');
+                },
+            ],
             'value' => [
                 'class' => ValueColumn::class,
             ],
             'rate' => [
                 'label' => Yii::t('hipanel.finance.price', 'Referral rate'),
                 'attribute' => 'rate',
+                'filter' => false,
             ],
         ]);
     }

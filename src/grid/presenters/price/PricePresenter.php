@@ -25,20 +25,11 @@ use yii\web\User;
  */
 class PricePresenter
 {
-    /**
-     * @var Formatter
-     */
-    private $formatter;
+    protected Formatter $formatter;
 
-    /**
-     * @var User
-     */
-    private $user;
+    protected User $user;
 
-    /**
-     * @var string
-     */
-    private $priceAttribute = 'price';
+    protected string $priceAttribute = 'price';
 
     public function __construct(Formatter $formatter, User $user)
     {
@@ -92,9 +83,10 @@ class PricePresenter
 
     /**
      * @param Price $price
+     * @param string $attribute
      * @return string
      */
-    public function renderInfo(Price $price): string
+    public function renderInfo(Price $price, string $attribute = 'quantity'): string
     {
         if (!$price->isQuantityPredefined()) {
             return Yii::t('hipanel:finance', '{icon} Quantity: {quantity}', [
@@ -103,10 +95,13 @@ class PricePresenter
             ]);
         }
         if ($price->isOveruse()) {
-            return Yii::t('hipanel:finance', '{coins}&nbsp;&nbsp;{amount,number} {unit}', [
+            return Yii::t('hipanel:finance', '{coins}&nbsp;&nbsp;{amount,number} {unit}{aggregated}', [
                 'coins' => Html::tag('i', '', ['class' => 'fa fa-money', 'title' => Yii::t('hipanel.finance.price', 'Prepaid amount')]),
-                'amount' => $price->quantity,
+                'amount' => $price->{$attribute},
                 'unit' => $price->getUnitLabel(),
+                'aggregated' => $price->hasAttribute('count_aggregated_traffic') && $price->count_aggregated_traffic
+                    ? Html::tag('span', Yii::t('hipanel.finance.price', 'Aggregated'), ['class' => 'label bg-olive pull-right'])
+                    : '',
             ]);
         }
 

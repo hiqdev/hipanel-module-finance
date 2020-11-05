@@ -28,4 +28,9 @@ class BackupResourceDecorator extends AbstractServerResourceDecorator
     {
         return Yii::t('yii', '{nFormatted} GB', ['nFormatted' => $this->getPrepaidQuantity()]);
     }
+
+    public function toUnit(): string
+    {
+        return 'gb';
+    }
 }

@@ -47,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'client',
                         'type',
                         'state',
+                        'custom_attributes',
                     ],
                 ]) ?>
             <?php $page->endBulkForm() ?>

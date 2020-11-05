@@ -16,7 +16,7 @@ class Traffic95ResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel:server:order', '95 percentile traffic');
+        return $this->displayTitleWithDirection(Yii::t('hipanel:server:order', '95 percentile traffic'));
     }
 
     public function displayValue()
@@ -27,5 +27,10 @@ class Traffic95ResourceDecorator extends AbstractServerResourceDecorator
     public function displayUnit()
     {
         return Yii::t('hipanel', 'Mbps');
+    }
+
+    public function toUnit(): string
+    {
+        return 'Mbps';
     }
 }

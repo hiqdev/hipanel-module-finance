@@ -100,6 +100,11 @@ class PriceController extends CrudController
                 'collection' => ['class' => PricesCollection::class],
                 'success' => Yii::t('hipanel.finance.price', 'Prices were successfully updated'),
                 'scenario' => 'update',
+                'on beforeSave' => function (Event $event) {
+                    /** @var \hipanel\actions\Action $action */
+                    $action = $event->sender;
+                    $action->collection->load();
+                },
                 'on beforeFetch' => function (Event $event) {
                     /** @var \hipanel\actions\SearchAction $action */
                     $action = $event->sender;

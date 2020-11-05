@@ -37,6 +37,11 @@ class RamResourceDecorator extends AbstractServerResourceDecorator
         return Yii::t('hipanel', 'GB');
     }
 
+    public function toUnit(): string
+    {
+        return 'gb';
+    }
+
     public function displayPrepaidAmount()
     {
         return Yii::t('yii', '{nFormatted} GB', ['nFormatted' => $this->getPrepaidQuantity()]);

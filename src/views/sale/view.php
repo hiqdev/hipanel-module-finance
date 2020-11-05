@@ -42,7 +42,7 @@ $this->registerCss('
 
         <?php if (Yii::$app->user->can('client.read') && Yii::$app->user->can('access-subclients')) : ?>
             <div class="row">
-                <?= $this->render('@vendor/hiqdev/hipanel-modules-ticket/srcviews/ticket/_clientInfo', compact('client')); ?>
+                <?= $this->render('@vendor/hiqdev/hipanel-module-ticket/src/views/ticket/_clientInfo', compact('client')) ?>
             </div>
         <?php endif ?>
     </div>
@@ -52,7 +52,7 @@ $this->registerCss('
                 <div class="box-header with-border">
                     <h3 class="box-title"><?= Yii::t('hipanel:finance:sale', 'Tariff information') ?></h3>
                 </div>
-                <div class="box-body">
+                <div class="box-body no-padding">
                     <?= PlanGridView::detailView([
                         'model' => $tariff,
                         'boxed' => false,

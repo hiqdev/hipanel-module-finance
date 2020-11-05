@@ -35,6 +35,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
         'referral'          => MoneyQuantity::class,
         'server_traf_max'   => DefaultQuantityFormatter::class,
         'server_traf95_max' => DefaultQuantityFormatter::class,
+        'cdn_traf_max'      => DefaultQuantityFormatter::class,
         'backup_du'         => DefaultQuantityFormatter::class,
         'server_du'         => DefaultQuantityFormatter::class,
         'win_license'       => DefaultQuantityFormatter::class,

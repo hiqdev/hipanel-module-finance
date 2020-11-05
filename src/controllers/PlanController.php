@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\controllers;
 
+use Closure;
 use hipanel\actions\Action;
 use hipanel\actions\IndexAction;
 use hipanel\actions\SmartCreateAction;
@@ -28,6 +29,7 @@ use hipanel\modules\finance\helpers\PriceChargesEstimator;
 use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\models\PlanAttribute;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\PriceSuggestionRequestForm;
 use hipanel\modules\finance\models\query\PlanQuery;
@@ -86,10 +88,12 @@ class PlanController extends CrudController
             'create' => [
                 'class' => SmartCreateAction::class,
                 'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully created'),
+                'on beforeSave' => $this->saveWithPlanAttributes(),
             ],
             'update' => [
                 'class' => SmartUpdateAction::class,
                 'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully updated'),
+                'on beforeSave' => $this->saveWithPlanAttributes(),
             ],
             'index' => [
                 'class' => IndexAction::class,
@@ -165,11 +169,11 @@ class PlanController extends CrudController
     public function actionGetPlanHistory(int $plan_id, string $date)
     {
         $plan = Plan::find()
-                    ->where(['id' => $plan_id])
-                    ->andWhere(['history_time' => $date])
-                    ->withSales()
-                    ->withPriceHistory()
-                    ->one();
+            ->where(['id' => $plan_id])
+            ->andWhere(['history_time' => $date])
+            ->withSales()
+            ->withPriceHistory()
+            ->one();
 
         return PriceGridView::widget([
             'boxed' => false,
@@ -187,6 +191,7 @@ class PlanController extends CrudController
                 'object->name',
                 'type',
                 'info',
+                'old_quantity',
                 'old_price',
                 'note',
             ],
@@ -252,8 +257,8 @@ class PlanController extends CrudController
 
     /**
      * @param $id integer
-     * @throws NotFoundHttpException
      * @return Plan|null
+     * @throws NotFoundHttpException
      */
     private function findPlan(int $id): ?Plan
     {
@@ -411,5 +416,25 @@ class PlanController extends CrudController
         $prices = PriceSort::anyPrices()->values($prices, true);
 
         $plan->populateRelation('prices', $prices);
+    }
+
+    private function saveWithPlanAttributes(): Closure
+    {
+        return static function (Event $event): void {
+            $action = $event->sender;
+            $request = $action->controller->request;
+            $attributeModel = new PlanAttribute();
+            $planAttributeData = $request->post($attributeModel->formName(), []);
+            foreach ($action->collection->models as $model) {
+                $customData['attributes'] = [];
+                foreach ($planAttributeData as $planAttribute) {
+                    $attributeModel->load($planAttribute, '');
+                    if ($attributeModel->validate()) {
+                        $customData['attributes'][$attributeModel->name] = $attributeModel->value;
+                    }
+                }
+                $model->custom_data = $customData;
+            }
+        };
     }
 }

@@ -3,15 +3,17 @@
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\PriceSuggestionRequestForm;
+use hipanel\modules\finance\widgets\combo\TargetCombo;
 use hipanel\modules\finance\widgets\combo\TemplatePlanCombo;
 use hipanel\modules\server\widgets\combo\HubCombo;
 use hipanel\modules\server\widgets\combo\ServerCombo;
 use hiqdev\combo\StaticCombo;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use yii\web\View;
 
 /**
- * @var \yii\web\View $this
+ * @var View $this
  * @var Plan $plan
  * @var PriceSuggestionRequestForm $model
  */
@@ -42,6 +44,26 @@ use yii\helpers\Html;
             'services' => Yii::t('hipanel.finance.suggestionTypes', 'services'),
             'parts' => Yii::t('hipanel.finance.suggestionTypes', 'parts'),
         ],
+    ]) ?>
+<?php elseif (in_array($plan->type, [
+    Plan::TYPE_VPS,
+    Plan::TYPE_SNAPSHOT,
+    Plan::TYPE_VOLUME,
+    Plan::TYPE_STORAGE,
+    Plan::TYPE_PRIVATE_CLOUD_BACKUP,
+    Plan::TYPE_PRIVATE_CLOUD,
+], true)) : ?>
+    <?php if ($model->isObjectPredefined()) : ?>
+        <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
+    <?php else : ?>
+        <?= $form->field($model, 'object_id')->widget(TargetCombo::class) ?>
+    <?php endif; ?>
+    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
+        'plan_id' => $plan->id,
+        'object_input_type' => $model->isObjectPredefined() ? null : 'target/name',
+    ]) ?>
+    <?= $form->field($model, 'type')->widget(StaticCombo::class, [
+        'data' => ['default' => Yii::t('hipanel.finance.suggestionTypes', 'default')],
     ]) ?>
 <?php elseif ($plan->type === Plan::TYPE_SWITCH): ?>
     <?php if ($model->isObjectPredefined()) : ?>
