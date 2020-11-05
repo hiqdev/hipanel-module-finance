@@ -126,7 +126,7 @@ CSS
                         'model' => $model,
                     ]) ?>
                 </div>
-            <? endif; ?>
+            <?php endif; ?>
         </div>
     </div>
 </div>

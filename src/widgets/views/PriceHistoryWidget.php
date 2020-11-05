@@ -34,8 +34,8 @@ CSS
             <div class="mailbox-controls">
                 <?= Html::tag('p', '&nbsp;' . Yii::t('hipanel.finance.price', 'Prices history is empty')) ?>
             </div>
-        <? else: ?>
+        <?php else: ?>
             <?= Collapse::widget($collapseItems) ?>
-        <? endif; ?>
+        <?php endif; ?>
     </div>
 </div>
