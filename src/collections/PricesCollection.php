@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\collections;
 
+use Closure;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\Price;
 use hiqdev\hiart\Collection;
