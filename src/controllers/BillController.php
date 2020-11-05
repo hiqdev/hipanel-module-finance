@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\controllers;
 use hipanel\actions\Action;
 use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
+use hipanel\actions\SmartCreateAction;
 use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
@@ -54,6 +55,7 @@ class BillController extends \hipanel\base\CrudController
                 'actions' => [
                     'create,copy'           => 'bill.create',
                     'create-exchange'       => 'bill.create-exchange',
+                    'create-transfer'       => 'bill.create',
                     'import'                => 'bill.import',
                     'update,charge-delete'  => 'bill.update',
                     'delete'                => 'bill.delete',
@@ -113,7 +115,21 @@ class BillController extends \hipanel\base\CrudController
             'copy' => [
                 'class' => BillManagementAction::class,
                 'view' => 'create',
+                'scenario' => 'create',
                 'forceNewRecord' => true,
+            ],
+            'create-transfer' => [
+                'class' => SmartCreateAction::class,
+                'success' => Yii::t('hipanel:finance', 'Transfer was completed'),
+                'POST html' => [
+                    'save' => true,
+                    'success' => [
+                        'class' => RedirectAction::class,
+                        'url' => function ($action) {
+                            return ['@bill/index'];
+                        },
+                    ],
+                ],
             ],
             'delete' => [
                 'class' => SmartDeleteAction::class,
