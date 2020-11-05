@@ -14,6 +14,7 @@ use hipanel\base\Model;
 use hipanel\base\ModelTrait;
 use hipanel\models\Ref;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
+use hipanel\modules\finance\models\query\PriceQuery;
 use Money\Money;
 use Money\MoneyParser;
 use Yii;
@@ -55,6 +56,7 @@ class Price extends Model
             [['id', 'parent_id', 'plan_id', 'object_id', 'type_id', 'unit_id', 'currency_id', 'main_object_id'], 'integer'],
             [['type', 'type_label', 'plan_name', 'unit', 'currency', 'note', 'data', 'main_object_name'], 'string'],
             [['quantity', 'price'], 'number'],
+            [['formula_lines'], 'safe'],
             [['class'], 'string'], // todo: probably, refactor is needed
 
             [['plan_id', 'type', 'price', 'currency'], 'required', 'on' => ['create', 'update']],
@@ -235,5 +237,17 @@ class Price extends Model
         // TODO: decide how to get MoneyParser correctly
         return Yii::$container->get(MoneyParser::class)
             ->parse((string)$this->price, strtoupper($this->currency));
+    }
+
+    public function getFormulaLines(): array
+    {
+        return $this->formula_lines;
+    }
+
+    public static function find(array $options = []): PriceQuery
+    {
+        return new PriceQuery(get_called_class(), [
+            'options' => $options,
+        ]);
     }
 }

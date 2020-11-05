@@ -25,6 +25,7 @@ use hipanel\modules\finance\collections\PricesCollection;
 use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\query\PriceQuery;
 use hipanel\modules\finance\models\TargetObject;
 use Yii;
 use yii\base\Event;
@@ -106,10 +107,11 @@ class PriceController extends CrudController
                     $action->collection->load();
                 },
                 'on beforeFetch' => function (Event $event) {
-                    /** @var \hipanel\actions\SearchAction $action */
-                    $action = $event->sender;
-                    $dataProvider = $action->getDataProvider();
-                    $dataProvider->query->joinWith('object');
+                    /** @var PriceQuery $query */
+                    $query = $event->sender->getDataProvider()->query;
+                    $query
+                        ->withFormulaLines()
+                        ->withMainObject();
                 },
                 'data' => function ($action, $data) {
                     $data['models'] = PriceSort::anyPrices()->values($data['models'], true);

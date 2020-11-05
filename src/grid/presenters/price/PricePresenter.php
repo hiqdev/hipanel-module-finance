@@ -60,11 +60,12 @@ class PricePresenter
             $unit = ' ' . Yii::t('hipanel:finance', 'per {unit}', ['unit' => $price->getUnitLabel()]);
         }
 
-        if (\count($price->formulaLines()) > 0) {
+        $activeFormulas = array_filter($price->getFormulaLines(), fn ($el) => $el['is_actual']);
+        if (!empty($activeFormulas)) {
             $formula = ArraySpoiler::widget([
-                'data' => $price->formulaLines(),
+                'data' => $activeFormulas,
                 'formatter' => function ($v) {
-                    return Html::tag('kbd', $v, ['class' => 'javascript']);
+                    return Html::tag('kbd', $v['formula'], ['class' => 'javascript']);
                 },
                 'visibleCount' => 0,
                 'delimiter' => '<br />',
