@@ -39,6 +39,7 @@ use yii\helpers\StringHelper;
  *
  * @property TargetObject $object
  * @property Plan $plan
+ * @property array|null $formula_lines
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
