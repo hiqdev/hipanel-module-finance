@@ -41,11 +41,10 @@ class PlanQuery extends \hiqdev\hiart\ActiveQuery
     public function withPrices()
     {
         return $this->with([
-            'prices' => function (ActiveQuery $query) {
+            'prices' => function (PriceQuery $query) {
                 $query
-                    ->addSelect('main_object_id')
-                    ->joinWith('object')
-                    ->limit(-1);
+                    ->withMainObject()
+                    ->withFormulaLines();
             },
         ]);
     }
