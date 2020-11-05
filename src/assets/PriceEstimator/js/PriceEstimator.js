@@ -78,8 +78,8 @@
                 let objectActions = objects[object_id];
                 Object.keys(objectActions).forEach(type => {
                     let row = this.matchPriceRow(object_id, type);
-                    let id = row.dataset.id;
                     if (row) {
+                        let id = row.dataset.id;
                         let estimate = objectActions[type];
                         if (estimatesPerRow[id] === undefined) {
                             estimatesPerRow[id] = [];
