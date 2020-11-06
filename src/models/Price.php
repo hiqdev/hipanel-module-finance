@@ -242,7 +242,7 @@ class Price extends Model
 
     public function getFormulaLines(): array
     {
-        return $this->formula_lines;
+        return $this->formula_lines ?? [];
     }
 
     public static function find(array $options = []): PriceQuery
