@@ -18,4 +18,9 @@ class PriceQuery extends \hiqdev\hiart\ActiveQuery
             ->joinWith('object')
             ->limit(-1);
     }
+
+    public function withPlan(): self
+    {
+        return $this->joinWith('plan');
+    }
 }

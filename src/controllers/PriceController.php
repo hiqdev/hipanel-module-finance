@@ -59,11 +59,12 @@ class PriceController extends CrudController
             'index' => [
                 'class' => IndexAction::class,
                 'on beforePerform' => function (Event $event) {
-                    $action = $event->sender;
-                    $action->getDataProvider()->query
-                        ->addSelect('main_object_id')
-                        ->joinWith('object')
-                        ->joinWith('plan');
+                    /** @var PriceQuery $query */
+                    $query = $event->sender->getDataProvider()->query;
+                    $query
+                        ->withMainObject()
+                        ->withPlan()
+                        ->withFormulaLines();
                 },
             ],
             'view' => [
