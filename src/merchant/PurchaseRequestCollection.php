@@ -20,6 +20,8 @@ use Yii;
 
 class PurchaseRequestCollection extends Collection
 {
+    protected const DEFAULT_DEPOSIT_REQUEST_AMOUNT = 10.0;
+
     public array $supportedSystems = [
         'webmoney' => 1,
         'paypal' => 1,
@@ -108,11 +110,17 @@ class PurchaseRequestCollection extends Collection
 
     public function requestMerchants($params)
     {
-        $userId = Yii::$app->user->getIsGuest() ? null : Yii::$app->user->identity->getId();
+        $merchantPrepareInfo = fn() => Merchant::perform('prepare-info', $params, ['batch' => true]);
 
-        return Yii::$app->getCache()->getOrSet([__METHOD__, $params, $userId], function () use ($params) {
-            return Merchant::perform('prepare-info', $params, ['batch' => true]);
-        }, 3600);
+        // Is an empty deposit request, used to get available merchants
+        if (empty($params['transactionId']) && empty($params['currency'])
+            && $params['sum'] === self::DEFAULT_DEPOSIT_REQUEST_AMOUNT
+        ) {
+            $userId = Yii::$app->user->getIsGuest() ? null : Yii::$app->user->identity->getId();
+            return Yii::$app->getCache()->getOrSet([__METHOD__, $params, $userId], $merchantPrepareInfo, 3600);
+        }
+
+        return $merchantPrepareInfo();
     }
 
     public function convertMerchant($data)
@@ -138,7 +146,7 @@ class PurchaseRequestCollection extends Collection
     protected function createDefaultDepositRequest()
     {
         $request = new DepositRequest();
-        $request->amount = 10;
+        $request->amount = self::DEFAULT_DEPOSIT_REQUEST_AMOUNT;
 
         return $request;
     }

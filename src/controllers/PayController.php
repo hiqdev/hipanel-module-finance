@@ -71,7 +71,6 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
             }
         }
 
-        /** @noinspection UnSafeIsSetOverArrayInspection */
         if (!isset($transaction)) {
             return null;
         }
