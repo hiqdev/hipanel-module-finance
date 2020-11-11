@@ -121,7 +121,7 @@ class RequisiteController extends CrudController
                     /** @var SmartPerformAction $action */
                     $data = Yii::$app->request->post($action->collection->getModel()->formName());
                     $attributes = [];
-                    foreach (['invoice_id', 'acceptance_id', 'contract_id', 'probation_id', 'nda_id'] as $attribute) {
+                    foreach (['invoice_id', 'acceptance_id', 'contract_id', 'probation_id', 'nda_id', 'internal_invoice_id'] as $attribute) {
                         $attributes[$attribute] = $data[$attribute];
                         unset($data[$attribute]);
                     }

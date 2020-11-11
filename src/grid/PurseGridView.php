@@ -40,6 +40,11 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                 'class' => MonthlyDocumentsColumn::class,
                 'type' => 'acceptance',
             ],
+            'internalinvoices' => [
+                'class' => MonthlyDocumentsColumn::class,
+                'type' => 'internal_invoice',
+                'label' => Yii::t('hipanel:finance', 'Internal invoice'),
+            ],
             'contracts' => [
                 'class' => DocumentsColumn::class,
                 'type' => 'contract',
