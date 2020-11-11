@@ -110,6 +110,11 @@ class Purse extends \hipanel\base\Model
         return $this->getDocumentsOfType('acceptance');
     }
 
+    public function getInternalInvoices()
+    {
+        return $this->getDocumentsOfType('internal_invoice');
+    }
+
     public function getDocumentsOfType($type)
     {
         if (Yii::$app->user->can('document.read') === false) {

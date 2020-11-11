@@ -36,6 +36,7 @@ $documents = ($user->can('document.read') && $user->can('bill.read'))
                 $user->can('document.read') && $isEmployee ? 'contracts' : null,
                 $user->can('document.read') && $isEmployee ? 'probations' : null,
                 $user->can('document.read') && $isEmployee ? 'ndas' : null,
+                $user->can('document.read') && $isEmployee ? 'internalinvoices' : null,
             ], $documents)),
         ]) ?>
     <?php $box->endBody() ?>

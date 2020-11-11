@@ -201,6 +201,7 @@ return [
     'Requisite detailed information' => 'Детальная информция о реквизите',
     'Requisite templates' => 'Шаблоны реквизита',
     'Recipient' => 'Получатель',
+    'Internal invoice' => 'Внутренний инвоис',
 
 
     'Recharge account to pay the whole cart: {amount}' => 'Пополнить счёт, чтобы оплатить всю корзину: {amount}',
