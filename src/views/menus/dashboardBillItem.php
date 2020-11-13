@@ -1,11 +1,14 @@
 <?php
 
 use hipanel\helpers\Url;
+use hipanel\modules\client\models\Client;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\dashboard\widgets\SearchForm;
 use hipanel\modules\dashboard\widgets\SmallBox;
 use hipanel\modules\finance\models\BillSearch;
 use yii\helpers\Html;
+
+/** @var Client $model */
 
 ?>
 
@@ -16,8 +19,7 @@ use yii\helpers\Html;
         'boxColor' => SmallBox::COLOR_RED,
     ]) ?>
     <?php $box->beginBody() ?>
-    <span
-            style="font-size: 18px"><?= Yii::$app->formatter->asCurrency($model->balance, $model->currency) ?></span>
+    <span style="font-size: 18px"><?= Yii::$app->formatter->asCurrency($model->balance, $model->currency) ?></span>
     <br>
     <?php if ($model->credit > 0) : ?>
         <span><?= Yii::t('hipanel', 'Credit') . ' ' . Yii::$app->formatter->asCurrency($model->credit, $model->currency) ?></span>

@@ -1,10 +1,14 @@
 <?php
 
 use hipanel\helpers\Url;
+use hipanel\modules\dashboard\widgets\ObjectsCountWidget;
 use hipanel\modules\dashboard\widgets\SearchForm;
 use hipanel\modules\dashboard\widgets\SmallBox;
 use hipanel\modules\finance\models\PlanSearch;
 use yii\helpers\Html;
+
+/** @var string $entityName */
+/** @var int $ownCount */
 
 ?>
 
@@ -15,8 +19,7 @@ use yii\helpers\Html;
         'boxColor' => SmallBox::COLOR_GREEN,
     ]) ?>
     <?php $box->beginBody() ?>
-    <br>
-    <br>
+    <?= ObjectsCountWidget::widget(compact('route', 'entityName', 'ownCount')) ?>
     <?= SearchForm::widget([
         'formOptions' => [
             'id' => 'plan-search',

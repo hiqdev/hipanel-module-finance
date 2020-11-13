@@ -18,6 +18,7 @@ use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
+use hipanel\actions\VariantsAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
@@ -96,6 +97,9 @@ class PlanController extends CrudController
                 'on beforeSave' => $this->saveWithPlanAttributes(),
             ],
             'index' => [
+                'responseVariants' => [
+                    'get-total-count' => fn(VariantsAction $action): int => Plan::find()->count(),
+                ],
                 'class' => IndexAction::class,
             ],
             'view' => [
