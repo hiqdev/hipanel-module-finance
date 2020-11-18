@@ -24,6 +24,7 @@ class FormulaExamplesProvider
         $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Fixed discount'), $this->fixedDiscountFormulas());
         $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Growing discount'), $this->growingDiscountFormulas());
         $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Leasing'), $this->leasingFormulas());
+        $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Monthly Cap'), $this->leasingFormulas());
 
         return $result;
     }
@@ -53,6 +54,15 @@ class FormulaExamplesProvider
     {
         return [
             sprintf("leasing.since('%s').lasts('3 months').reason('TEST')", date('m.Y')),
+        ];
+    }
+
+    private function mpnthlyCapFomulas()
+    {
+        return [
+            "cap.monthly('28 days')" => Yii::t('hipanel.finance.price',
+                'The given formula is useful only for monthly prices. When the monthly invoice consumption exceeds the given cap, two charges will be produced: first at the price amount for 28 days, and second for 0 cents for the rest days of month.'
+            ),
         ];
     }
 
