@@ -34,6 +34,13 @@ return [
     'CDN cache HDD' => 'HDD кэш',
     'Rack monthly fee' => 'Стойка',
     'Domain traffic overuse' => 'Траффик домена',
+    'Storage disk usage' => 'Хранилище',
+    'Storage disk usage 95 percentile' => 'Хранилище 95%',
+    'Volume disk usage' => 'Раздел',
+    'Snapshot disk usage' => 'Снапшот',
+    'VPS monthly fee' => 'Абонплата VPS',
+    'Storage monthly fee' => 'Абонплата хранилища',
+    'Private Cloud monthly fee' => 'Абонплата Private Cloud',
 
     'Negative balance correction' => 'Отрицательная корректировка',
     'Positive balance correction' => 'Корректировка',

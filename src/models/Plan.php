@@ -174,23 +174,21 @@ class Plan extends Model
         return $this->state === 'deleted';
     }
 
-    public function supportsPrices(): bool
+    public function supportsIndividualPricesCreation(): bool
     {
-        return !in_array($this->type, [
-            self::TYPE_SNAPSHOT,
-            self::TYPE_STORAGE,
-            self::TYPE_PRIVATE_CLOUD_BACKUP,
-            self::TYPE_PRIVATE_CLOUD,
+        return ! in_array($this->type, [
+            // Types listed here does not support individual prices creation
+
+
         ], true);
     }
 
-    public function supportsSharedPrices(): bool
+    public function supportsSharedPricesCreation(): bool
     {
-        return !in_array($this->type, [
+        return ! in_array($this->type, [
             self::TYPE_TEMPLATE,
             self::TYPE_CERTIFICATE,
             self::TYPE_DOMAIN,
-            self::TYPE_VPS,
         ], true);
     }
 

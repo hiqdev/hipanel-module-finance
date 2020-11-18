@@ -34,4 +34,11 @@ return [
     'CDN cache HDD' => 'HDD cache',
     'Rack monthly fee' => 'Rack price',
     'Domain traffic overuse' => 'Domain traffic overuse',
+    'Storage disk usage' => 'Storage',
+    'Storage disk usage 95 percentile' => 'Storage 95%',
+    'Volume disk usage' => 'Volume',
+    'Snapshot disk usage' => 'Snapshot',
+    'VPS monthly fee' => 'VPS monthly',
+    'Storage monthly fee' => 'Storage monthly',
+    'Private Cloud monthly fee' => 'Private Cloud',
 ];

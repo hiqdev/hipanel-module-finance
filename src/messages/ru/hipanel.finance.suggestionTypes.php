@@ -21,4 +21,10 @@ return [
     'switch' => 'Свитчи',
     'anycast_cdn' => 'Anycast CDN',
     'referral' => 'Реферальные',
+    'vps' => 'VPS',
+    'snapshot' => 'Snapshot',
+    'volume' => 'Volume',
+    'storage' => 'Storage',
+    'private_cloud_backup' => 'Private Cloud Backup',
+    'private_cloud' => 'Private Cloud',
 ];

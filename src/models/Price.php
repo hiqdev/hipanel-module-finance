@@ -130,6 +130,9 @@ class Price extends Model
             'overuse,mail_num'          => 'items',
             'overuse,mail_du'           => 'size',
             'overuse,db_num'            => 'items',
+            'overuse,storage_du95'      => 'size',
+            'overuse,volume_du'         => 'size',
+            'overuse,snapshot_du'       => 'size',
         ];
 
         foreach ($type2group as $type => $group) {

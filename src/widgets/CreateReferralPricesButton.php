@@ -17,7 +17,7 @@ class CreateReferralPricesButton extends CreatePricesButton
             ]) . Dropdown::widget([
                 'options' => ['class' => 'pull-right'],
                 'items' => array_filter([
-                    $this->model->supportsSharedPrices() ? [
+                    $this->model->supportsSharedPricesCreation() ? [
                         'encode' => false,
                         'url' => '#',
                         'label' => Yii::t('hipanel.finance.price', 'Create shared prices'),

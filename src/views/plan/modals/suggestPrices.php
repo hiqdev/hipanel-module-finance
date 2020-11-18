@@ -93,6 +93,12 @@ use yii\web\View;
             'p_cdn' => Yii::t('hipanel.finance.suggestionTypes', 'p_cdn'),
             'anycastcdn' => Yii::t('hipanel.finance.suggestionTypes', 'anycast_cdn'),
             'referral' => Yii::t('hipanel.finance.suggestionTypes', 'referral'),
+            'vps' => Yii::t('hipanel.finance.suggestionTypes', 'vps'),
+            'snapshot' => Yii::t('hipanel.finance.suggestionTypes', 'snapshot'),
+            'volume' => Yii::t('hipanel.finance.suggestionTypes', 'volume'),
+            'storage' => Yii::t('hipanel.finance.suggestionTypes', 'storage'),
+            'private_cloud_backup' => Yii::t('hipanel.finance.suggestionTypes', 'private_cloud_backup'),
+            'private_cloud' => Yii::t('hipanel.finance.suggestionTypes', 'private_cloud'),
         ],
     ]) ?>
 <?php elseif (in_array($plan->type, [Plan::TYPE_VCDN, Plan::TYPE_PCDN, Plan::TYPE_ANYCASTCDN], true)): ?>
