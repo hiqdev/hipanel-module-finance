@@ -78,6 +78,7 @@ class Create extends View
         $I = $this->tester;
 
         $I->click('Save');
+        $I->waitForPageUpdate();
         $I->closeNotification('Prices were successfully created');
     }
 
