@@ -41,4 +41,5 @@ return [
     'VPS monthly fee' => 'VPS monthly',
     'Storage monthly fee' => 'Storage monthly',
     'Private Cloud monthly fee' => 'Private Cloud',
+    'Private Cloud backup disk usage' => 'Private Cloud backup',
 ];

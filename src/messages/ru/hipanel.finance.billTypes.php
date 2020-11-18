@@ -41,6 +41,7 @@ return [
     'VPS monthly fee' => 'Абонплата VPS',
     'Storage monthly fee' => 'Абонплата хранилища',
     'Private Cloud monthly fee' => 'Абонплата Private Cloud',
+    'Private Cloud backup disk usage' => 'Бэкап Private Cloud',
 
     'Negative balance correction' => 'Отрицательная корректировка',
     'Positive balance correction' => 'Корректировка',
