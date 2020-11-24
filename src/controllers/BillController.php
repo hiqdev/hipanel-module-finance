@@ -54,7 +54,6 @@ class BillController extends \hipanel\base\CrudController
                 'class' => EasyAccessControl::class,
                 'actions' => [
                     'create,copy'           => 'bill.create',
-                    'create-exchange'       => 'bill.create-exchange',
                     'create-transfer'       => 'bill.create',
                     'import'                => 'bill.import',
                     'update,charge-delete'  => 'bill.update',
@@ -190,6 +189,10 @@ class BillController extends \hipanel\base\CrudController
     public function actionCreateExchange()
     {
         $model = new CurrencyExchangeForm();
+        $canSupport = Yii::$app->user->can('support');
+        if (!$canSupport) {
+            $model->client_id = Yii::$app->user->identity->getId();
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($id = $model->save()) {
@@ -198,9 +201,9 @@ class BillController extends \hipanel\base\CrudController
                 return $this->redirect(['@bill']);
             }
         }
-
         return $this->render('create-exchange', [
             'model' => $model,
+            'canSupport' => $canSupport,
             'rates' => $this->getExchangeRates(),
         ]);
     }

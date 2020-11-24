@@ -34,9 +34,7 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
                 <?= Html::a(Yii::t('hipanel:finance', 'Add payment'), ['@bill/create'], ['class' => 'btn btn-sm btn-success']) ?>
                 <?= Html::a(Yii::t('hipanel:finance', 'Add internal transfer'), ['@bill/create-transfer'], ['class' => 'btn btn-sm btn-default']) ?>
             <?php endif ?>
-            <?php if (Yii::$app->user->can('bill.create-exchange')) : ?>
-                <?= Html::a(Yii::t('hipanel:finance', 'Currency exchange'), ['@bill/create-exchange'], ['class' => 'btn btn-sm btn-default']) ?>
-            <?php endif ?>
+            <?= Html::a(Yii::t('hipanel:finance', 'Currency exchange'), ['@bill/create-exchange'], ['class' => 'btn btn-sm btn-default']) ?>
             <?php if (Yii::$app->user->can('bill.import')) : ?>
                 <?= Html::a(Yii::t('hipanel:finance', 'Import payments'), ['@bill/import'], ['class' => 'btn btn-sm btn-default']) ?>
             <?php endif ?>

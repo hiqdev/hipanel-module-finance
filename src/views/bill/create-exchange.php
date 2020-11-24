@@ -1,13 +1,20 @@
 <?php
 
-/**
- * @var \yii\web\View $this
- * @var \hipanel\modules\finance\models\ExchangeRate[] $rates
- */
 use hipanel\modules\client\widgets\combo\ClientCombo;
+use hipanel\modules\finance\forms\CurrencyExchangeForm;
+use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\widgets\Box;
+use hiqdev\combo\StaticCombo;
 use yii\helpers\Html;
+use yii\web\View;
 use yii\widgets\ActiveForm;
+
+/**
+ * @var View $this
+ * @var bool $canSupport
+ * @var CurrencyExchangeForm $model
+ * @var ExchangeRate[] $rates
+ */
 
 $this->title = Yii::t('hipanel:finance', 'Create currency exchange');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Payments'), 'url' => ['index']];
@@ -15,21 +22,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
+<?php $form = ActiveForm::begin([
+    'id' => 'rates-form',
+    'enableClientValidation' => true,
+    'options' => [
+        'data-rates' => array_map(static fn(ExchangeRate $model) => $model->getAttributes(), $rates),
+    ],
+]) ?>
     <div class="bill-create-exchange">
         <div class="row">
             <div class="col-lg-6 col-md-8">
                 <?php Box::begin() ?>
-                <?php $form = ActiveForm::begin([
-                    'enableClientValidation' => true,
-                    'options' => [
-                        'data-rates' => array_map(function ($model) {
-                            /** @var \hipanel\modules\finance\models\ExchangeRate $model */
-                            return $model->getAttributes();
-                        }, $rates),
-                    ],
-                    'id' => 'rates-form',
-                ]) ?>
-                <?= $form->field($model, 'client_id')->widget(ClientCombo::class) ?>
+                <?= $canSupport ? $form->field($model, 'client_id')->widget(ClientCombo::class) : Html::activeHiddenInput($model, 'client_id') ?>
                 <div class="row">
                     <div class="col-md-2">
                         <?= $form->field($model, 'sum')->textInput([
@@ -38,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ])->label(false) ?>
                     </div>
                     <div class="col-md-3">
-                        <?= $form->field($model, 'from')->widget(\hiqdev\combo\StaticCombo::class, [
+                        <?= $form->field($model, 'from')->widget(StaticCombo::class, [
                             'pluginOptions' => [
                                 'select2Options' => [
                                     'allowClear' => false,
@@ -58,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ])->label(false) ?>
                     </div>
                     <div class="col-md-3">
-                        <?= $form->field($model, 'to')->widget(\hiqdev\combo\StaticCombo::class, [
+                        <?= $form->field($model, 'to')->widget(StaticCombo::class, [
                             'pluginOptions' => [
                                 'select2Options' => [
                                     'allowClear' => false,
@@ -71,16 +75,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         ?>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <?= Html::submitButton(Yii::t('hipanel', 'Create'), ['class' => 'btn btn-success']) ?>
-                    </div>
-                </div>
-                <?php ActiveForm::end() ?>
                 <?php Box::end() ?>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <?= Html::submitButton(Yii::t('hipanel', 'Create'), ['class' => 'btn btn-success']) ?>
+            </div>
+        </div>
     </div>
+<?php ActiveForm::end() ?>
 
 <?php $this->registerJs(<<<'JS'
 (function ($, window, document, undefined) {
