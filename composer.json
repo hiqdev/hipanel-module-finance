@@ -44,10 +44,10 @@
     ],
     "require": {
         "yiisoft/yii2": "^2.0",
-        "hiqdev/yii2-cart": "<2.0 || dev-master",
-        "hiqdev/yii2-merchant": "<2.0 || dev-master",
-        "hiqdev/hipanel-core": "<2.0 || dev-master",
-        "hiqdev/hipanel-module-client": "<2.0 || dev-master",
+        "hiqdev/yii2-cart": "dev-master",
+        "hiqdev/yii2-merchant": "dev-master",
+        "hiqdev/hipanel-core": "dev-master",
+        "hiqdev/hipanel-module-client": "dev-master",
         "tuck/sort": "^0.1.0",
         "moneyphp/money": "*",
         "hiqdev/php-units": "*"
