@@ -41,6 +41,11 @@ class BillForm extends Model
     public $client_id;
 
     /**
+     * @var integer
+     */
+    public $requisite_id;
+
+    /**
      * @var string
      */
     public $currency;
@@ -125,7 +130,7 @@ class BillForm extends Model
     {
         $attributes = $bill->getAttributes([
             'id', 'object_id', 'client_id', 'currency', 'type',
-            'gtype', 'sum', 'time', 'quantity', 'unit', 'label', 'object', 'class',
+            'gtype', 'sum', 'time', 'quantity', 'unit', 'label', 'object', 'class', 'requisite_id'
         ]);
 
         $form = new self(['scenario' => $scenario]);
@@ -200,7 +205,7 @@ class BillForm extends Model
             [['label', 'currency', 'unit', 'type', 'object', 'class'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
             [['sum'], BillChargesSumValidator::class],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]], // TODO: should be probably replaced with input on client side
-            [['object_id'], 'integer', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
+            [['object_id', 'requisite_id'], 'integer', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
             [['currency'], 'filter', 'filter' => 'mb_strtolower'],
             [['currency'], 'currencyValidate', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
             [['id'], 'required', 'on' => [self::SCENARIO_UPDATE]],
@@ -248,6 +253,8 @@ class BillForm extends Model
             'type' => Yii::t('hipanel', 'Type'),
             'quantity' => Yii::t('hipanel', 'Quantity'),
             'object_id' => Yii::t('hipanel', 'Object'),
+            'requisite' => Yii::t('hipanel:finance', 'Requisite'),
+            'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
         ];
     }
 
@@ -280,6 +287,7 @@ class BillForm extends Model
             'id',
             'client_id',
             'object_id',
+            'requisite_id',
             'currency',
             'sum',
             'time',

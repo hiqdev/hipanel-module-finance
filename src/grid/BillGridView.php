@@ -51,6 +51,12 @@ class BillGridView extends \hipanel\grid\BoxedGridView
     public function columns()
     {
         return array_merge(parent::columns(), [
+            'requisite' => [
+                'format' => 'raw',
+                'attribute' => 'requisite',
+                'value' => fn($model) => Html::a($model->requisite, ['@requisite/view', 'id' => $model->requisite_id]),
+                'visible' => Yii::$app->user->can('requisites.read'),
+            ],
             'bill' => [
                 'class' => MainColumn::class,
                 'attribute' => 'bill',
@@ -157,6 +163,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'descr',
                 'format' => 'raw',
                 'value' => function (Bill $model) {
+                    $requisite = $model->requisite ? Html::tag('small', $model->requisite, ['class' => 'label bg-purple']) : null;
                     $descr = $model->descr ?: $model->label;
                     $text = mb_strlen($descr) > 70 ? ArraySpoiler::widget(['data' => $descr]) : $descr;
                     $tariff = $model->tariff ? Html::tag('span',
@@ -164,7 +171,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     $amount = $this->formatQuantity($model);
                     $object = $this->objectTag($model);
 
-                    return $tariff . $amount . ' ' . implode('<br>', array_filter([$object, $text]));
+                    return $tariff . $amount . ' ' . implode('<br>', array_filter([$requisite, $object, $text]));
                 },
                 'exportedValue' => function (Bill $model): string {
                     $text = $model->descr ?: $model->label;

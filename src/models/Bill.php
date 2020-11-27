@@ -53,9 +53,9 @@ class Bill extends \hipanel\base\Model
     public function rules()
     {
         return [
-            [['client_id', 'seller_id', 'id'], 'integer'],
+            [['client_id', 'seller_id', 'id', 'requisite_id'], 'integer'],
             [['object_id', 'tariff_id'], 'integer'],
-            [['client', 'seller', 'bill', 'unit'], 'safe'],
+            [['client', 'seller', 'bill', 'unit', 'requisite'], 'safe'],
             [['domain', 'server'], 'safe'],
             [['sum', 'balance', 'quantity'], 'number'],
             [['currency', 'label', 'descr'], 'safe'],
@@ -99,6 +99,8 @@ class Bill extends \hipanel\base\Model
             'sum' => Yii::t('hipanel:finance', 'Sum'),
             'tariff' => Yii::t('hipanel:finance', 'Tariff'),
             'tariff_id' => Yii::t('hipanel:finance', 'Tariff'),
+            'requisite' => Yii::t('hipanel:finance', 'Requisite'),
+            'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
         ]);
     }
 
