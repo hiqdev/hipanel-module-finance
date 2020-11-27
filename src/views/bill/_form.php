@@ -4,6 +4,7 @@ use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\widgets\combo\RequisitesCombo;
 use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\DateTimePicker;
 use hipanel\widgets\DynamicFormWidget;
@@ -41,6 +42,7 @@ $form = ActiveForm::begin([
         'class',
         'object_id',
         'client_id',
+        'requisite_id',
         'type',
         'sum',
         'time',
@@ -79,6 +81,9 @@ $form = ActiveForm::begin([
                                 <?= $form->field($model, "[$i]object_id")->widget(ObjectCombo::class, [
                                     'class_attribute_name' => "[$i]class",
                                 ]) ?>
+                                <?php if (Yii::$app->user->can('requisites.read')) : ?>
+                                    <?= $form->field($model, "[$i]requisite_id")->widget(RequisitesCombo::class) ?>
+                                <?php endif ?>
                             </div>
                             <div class="col-md-1">
                                 <?= $form->field($model, "[$i]client_id")->widget(ClientCombo::class, [

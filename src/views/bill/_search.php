@@ -3,15 +3,18 @@
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\helpers\CurrencyFilter;
+use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
 use hipanel\modules\finance\widgets\combo\MultipleBillTypeCombo;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
+use hipanel\widgets\AdvancedSearch;
 use hiqdev\combo\StaticCombo;
 use hiqdev\yii2\daterangepicker\DateRangePicker;
 use yii\helpers\Html;
+use yii\web\View;
 
 /**
- * @var \yii\web\View
- * @var \hipanel\widgets\AdvancedSearch $search
+ * @var View
+ * @var AdvancedSearch $search
  * @var array $billTypes
  * @var array $billGroupLabels
  */
@@ -21,6 +24,10 @@ use yii\helpers\Html;
     <div class="col-md-4 col-sm-6 col-xs-12">
         <?= $search->field('client_id')->widget(ClientCombo::class) ?>
     </div>
+<?php endif ?>
+
+<?php if (Yii::$app->user->can('requisites.read')) : ?>
+    <?= Html::tag('div', $search->field('requisite_id')->widget(BillRequisitesCombo::class), ['class' => 'col-md-4 col-sm-6 col-xs-12']) ?>
 <?php endif ?>
 
 <div class="col-md-4 col-sm-6 col-xs-12">

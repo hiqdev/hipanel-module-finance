@@ -19,6 +19,7 @@ use Yii;
 use yii\base\Action;
 use yii\web\Controller;
 use yii\web\Response;
+use yii\web\UnprocessableEntityHttpException;
 
 class BillManagementAction extends Action
 {
@@ -78,7 +79,7 @@ class BillManagementAction extends Action
             return $result;
         }
 
-        list($billTypes, $billGroupLabels) = $this->billTypesProvider->getGroupedList();
+        [$billTypes, $billGroupLabels] = $this->billTypesProvider->getGroupedList();
 
         return $this->controller->render($this->view, [
             'models' => $this->collection->getModels(),
@@ -87,7 +88,7 @@ class BillManagementAction extends Action
         ]);
     }
 
-    private function findBills()
+    private function findBills(): void
     {
         $ids = $this->getRequestedIds();
 
@@ -127,25 +128,21 @@ class BillManagementAction extends Action
             return true;
         }
 
-        throw new \yii\web\UnprocessableEntityHttpException('Id is missing');
+        throw new UnprocessableEntityHttpException('Id is missing');
     }
 
-    private function createCollection()
+    private function createCollection(): void
     {
         $this->collection = new Collection([
             'model' => new BillForm(['scenario' => $this->scenario]),
             'scenario' => $this->scenario,
-            'loadFormatter' => function ($baseModel, $key, $value) {
-                /** @var BillForm $baseModel */
+            'loadFormatter' => function (BillForm $baseModel, $key, $value) {
                 $charges = $this->request->post($baseModel->newCharge()->formName());
-                $value['charges'] = isset($charges[$key]) ? $charges[$key] : [];
+                $value['charges'] = $charges[$key] ?? [];
 
                 return [$key, $value];
             },
-            'dataCollector' => function ($model) {
-                /** @var BillForm $model */
-                return [$model->getPrimaryKey(), $model->toArray()];
-            },
+            'dataCollector' => fn(BillForm $model) => [$model->getPrimaryKey(), $model->toArray()],
         ]);
     }
 

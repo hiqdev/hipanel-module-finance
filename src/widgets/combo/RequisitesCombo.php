@@ -18,7 +18,7 @@ class RequisitesCombo extends Combo
     public $url = '/finance/requisite/index';
 
     /** {@inheritdoc} */
-    public $_return = ['id', 'name', 'email'];
+    public $_return = ['id', 'name', 'email', 'organization'];
 
     /** {@inheritdoc} */
     public $_rename = ['text' => 'name'];
@@ -34,7 +34,7 @@ class RequisitesCombo extends Combo
                         return data.text;
                     }
 
-                    return data.name + '<br>' + data.email;
+                    return data.name + '<br><b>' + data.organization + '</b>';
                 }"),
                 'escapeMarkup' => new JsExpression('function (markup) {
                     return markup; // Allows HTML

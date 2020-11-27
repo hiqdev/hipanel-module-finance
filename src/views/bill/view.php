@@ -40,6 +40,7 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
         ]) ?>
         <?= BillGridView::detailView([
             'model' => $model,
+            'boxOptions' => ['bodyOptions' => ['class' => 'no-padding']],
             'columns' => [
                 'type_label', 'quantity',
                 'sum_editable', 'balance',
@@ -47,10 +48,11 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
         ]) ?>
         <?= BillGridView::detailView([
             'model' => $model,
+            'boxOptions' => ['bodyOptions' => ['class' => 'no-padding']],
             'columns' => [
                 'client_id', 'seller_id',
                 'time', 'descr',
-                'object', 'tariff_link',
+                'object', 'tariff_link', 'requisite'
             ],
         ]) ?>
     </div>
