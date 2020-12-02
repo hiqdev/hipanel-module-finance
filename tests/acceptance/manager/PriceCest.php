@@ -37,14 +37,14 @@ abstract class PriceCest
      *  ],
      * ```
      */
-    abstract protected function suggestedPricesOptionsProvider(Manager $I): array;
+    abstract protected function suggestedPricesOptionsProvider(): array;
 
     /**
      * @param Manager $I
      */
     public function ensureICanCreateSuggestedPrices(Manager $I): void
     {
-        foreach ($this->suggestedPricesOptionsProvider($I) as $example) {
+        foreach ($this->suggestedPricesOptionsProvider() as $example) {
             $I->amGoingTo(sprintf(
                 'Create new plan with type "%s" and fill it with prices of template "%s" (suggestions %s) for object %s',
                 $example['type'], $example['templateName'], implode(', ', $example['priceTypes']), $example['object']
@@ -81,7 +81,7 @@ abstract class PriceCest
 
         return $page->createPlan();
     }
-
+    /**
     public function ensureICanUpdatePrices(Manager $I, Scenario $scenario): void
     {
         if ($this->id === null) {
@@ -100,5 +100,5 @@ abstract class PriceCest
 
         $page = new PriceDeletePage($I, $this->id);
         $page->deleteTemplatePrices();
-    }
+    }*/
 }
