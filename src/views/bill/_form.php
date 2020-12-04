@@ -72,20 +72,15 @@ $form = ActiveForm::begin([
                 </div>
                 <div class="box-body">
 
-                    <div class="row input-row margin-bottom">
-                        <div class="col-lg-offset-10 col-sm-2 text-right">
-                            <?= Html::activeHiddenInput($model, "[$i]id") ?>
-                        </div>
+                    <div class="row input-row">
+                        <?= Html::activeHiddenInput($model, "[$i]id") ?>
                         <div class="form-instance">
                             <div class="col-md-3">
                                 <?= $form->field($model, "[$i]object_id")->widget(ObjectCombo::class, [
                                     'class_attribute_name' => "[$i]class",
                                 ]) ?>
-                                <?php if (Yii::$app->user->can('requisites.read')) : ?>
-                                    <?= $form->field($model, "[$i]requisite_id")->widget(RequisitesCombo::class) ?>
-                                <?php endif ?>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-3">
                                 <?= $form->field($model, "[$i]client_id")->widget(ClientCombo::class, [
                                     'formElementSelector' => '.form-instance',
                                     'inputOptions' => [
@@ -93,7 +88,7 @@ $form = ActiveForm::begin([
                                     ],
                                 ]) ?>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-3">
                                 <?= $form->field($model, "[$i]type")->dropDownList($billTypes, [
                                     'groups' => $billGroupLabels,
                                     'value' => $model->gtype ? implode(',', [$model->gtype, $model->type]) : $model->type,
@@ -115,22 +110,29 @@ $form = ActiveForm::begin([
                                 <?= Html::activeHiddenInput($model, "[$i]unit") ?>
                                 <?= $form->field($model, "[$i]quantity")->input('text', ['value' => $model->getQuantity()]) ?>
                             </div>
-                            <div class="col-md-2">
-                                <?= $form->field($model, "[$i]time")->widget(DateTimePicker::class, [
-                                    'model' => $model,
-                                    'clientOptions' => [
-                                        'autoclose' => true,
-                                        'format' => 'yyyy-mm-dd hh:ii:ss',
-                                    ],
-                                    'options' => [
-                                        'value' => Yii::$app->formatter->asDatetime(($model->isNewRecord && empty($model->time) ? new DateTime() : $model->time),
-                                            'php:Y-m-d H:i:s'),
-                                    ],
-                                ]) ?>
-                            </div>
-                            <div class="col-md-2">
-                                <?= $form->field($model, "[$i]label") ?>
-                            </div>
+                        </div>
+                    </div>
+                    <div class="row input-row margin-bottom">
+                        <div class="col-md-3">
+                            <?php if (Yii::$app->user->can('requisites.read')) : ?>
+                                <?= $form->field($model, "[$i]requisite_id")->widget(RequisitesCombo::class) ?>
+                            <?php endif ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?= $form->field($model, "[$i]label") ?>
+                        </div>
+                        <div class="col-md-3">
+                            <?= $form->field($model, "[$i]time")->widget(DateTimePicker::class, [
+                                'model' => $model,
+                                'clientOptions' => [
+                                    'autoclose' => true,
+                                    'format' => 'yyyy-mm-dd hh:ii:ss',
+                                ],
+                                'options' => [
+                                    'value' => Yii::$app->formatter->asDatetime(($model->isNewRecord && empty($model->time) ? new DateTime() : $model->time),
+                                        'php:Y-m-d H:i:s'),
+                                ],
+                            ]) ?>
                         </div>
                     </div>
 
