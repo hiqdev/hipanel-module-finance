@@ -37,7 +37,7 @@ class ColoredBalance extends Widget
 
     public function getColor($type)
     {
-        return $this->colors[$type] ?: $type;
+        return $this->colors[$type] ?? $type;
     }
 
     public function run()

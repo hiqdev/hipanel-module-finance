@@ -11,4 +11,5 @@
 return [
     'module.finance.bill.detalization.allowed' => true,
     'module.finance.merchant.pay.cashew.only' => null,
+    'finance.plan.required.additional.rights' => null,
 ];

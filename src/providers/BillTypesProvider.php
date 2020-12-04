@@ -92,7 +92,7 @@ class BillTypesProvider
         $types = $this->getTypesList();
 
         foreach ($types as $key => $title) {
-            list($type, $name) = explode(',', $key);
+            @[$type, $name] = explode(',', $key);
 
             if (!isset($billTypes[$type])) {
                 $billTypes[$type] = [];
