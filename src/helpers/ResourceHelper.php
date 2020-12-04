@@ -2,7 +2,6 @@
 
 namespace hipanel\modules\finance\helpers;
 
-use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use hipanel\modules\finance\models\proxy\Resource;
 
@@ -12,7 +11,6 @@ class ResourceHelper
      * @param Resource[] $resources
      * @param ResourceConfigurator $configurator
      * @return array
-     * @throws InvalidConfigException
      */
     public static function aggregateByObject(array $resources, ResourceConfigurator $configurator): array
     {
