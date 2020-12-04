@@ -16,6 +16,7 @@ use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartCreateAction;
 use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\ValidateFormAction;
+use hipanel\actions\VariantsAction;
 use hipanel\actions\ViewAction;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\controllers\ContactController;
@@ -27,11 +28,14 @@ use hipanel\modules\finance\helpers\ChargesGrouper;
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\models\Resource;
 use hipanel\modules\finance\providers\BillTypesProvider;
+use hipanel\modules\finance\widgets\BillSummaryTable;
+use hipanel\widgets\SynchronousCountEnabler;
 use hiqdev\hiart\ActiveQuery;
 use hiqdev\hiart\Collection;
 use Yii;
 use yii\base\Event;
 use yii\base\Module;
+use yii\grid\GridView;
 
 class BillController extends \hipanel\base\CrudController
 {
@@ -69,12 +73,27 @@ class BillController extends \hipanel\base\CrudController
         return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
-                'data' => function ($action) {
-                    list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
+                'data' => function () {
+                    [$billTypes, $billGroupLabels] = $this->getTypesAndGroups();
                     $rates = $this->getExchangeRates();
 
                     return compact('billTypes', 'billGroupLabels', 'rates');
                 },
+                'responseVariants' => [
+                    IndexAction::VARIANT_SUMMARY_RESPONSE => static function (VariantsAction $action): string {
+                        $dataProvider = $action->parent->getDataProvider();
+                        $defaultSummary = SynchronousCountEnabler::widget([
+                            'dataProvider' => $dataProvider,
+                            'content' => fn(GridView $grid): string => $grid->renderSummary(),
+                        ]);
+
+                        return $defaultSummary . BillSummaryTable::widget([
+                            'currencies' => $action->controller->getCurrencyTypes(),
+                            'onPageBills' => $dataProvider->getModels(),
+                            'allBills' => $dataProvider->query->andWhere(['groupby' => 'total_sum'])->all(),
+                        ]);
+                    },
+                ],
             ],
             'view' => [
                 'class' => ViewAction::class,
@@ -172,7 +191,7 @@ class BillController extends \hipanel\base\CrudController
 
             if ($models !== false) {
                 $models = BillForm::createMultipleFromBills($models, 'create');
-                list($billTypes, $billGroupLabels) = $this->getTypesAndGroups();
+                [$billTypes, $billGroupLabels] = $this->getTypesAndGroups();
 
                 return $this->render('create', [
                     'models' => $models,

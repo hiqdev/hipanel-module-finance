@@ -45,8 +45,6 @@ class CurrencyFilter
             return ArrayHelper::getColumn(Bill::perform('get-used-currencies', [], ['batch' => true]), 'name');
         }, 3600);
 
-        return array_filter($currencies, function (string $cur) use ($filterCurrencies) {
-            return in_array($cur, $filterCurrencies);
-        }, ARRAY_FILTER_USE_KEY);
+        return array_filter($currencies, static fn(string $cur) => in_array($cur, $filterCurrencies, true), ARRAY_FILTER_USE_KEY);
     }
 }
