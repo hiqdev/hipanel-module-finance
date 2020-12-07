@@ -90,7 +90,7 @@ class BillController extends \hipanel\base\CrudController
                         return $defaultSummary . BillSummaryTable::widget([
                             'currencies' => $action->controller->getCurrencyTypes(),
                             'onPageBills' => $dataProvider->getModels(),
-                            'allBills' => $dataProvider->query->andWhere(['groupby' => 'total_sum'])->all(),
+                            'allBills' => $dataProvider->query->andWhere(['groupby' => 'sum_by_currency'])->all(),
                         ]);
                     },
                 ],

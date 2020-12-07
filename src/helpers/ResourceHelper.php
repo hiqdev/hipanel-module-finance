@@ -16,6 +16,9 @@ class ResourceHelper
     {
         $result = [];
         foreach ($resources as $resource) {
+            if (!in_array($resource->type, $configurator->getRawColumns(), true)) {
+                continue;
+            }
             $resourceModel = $resource->buildResourceModel($configurator);
             $object = [
                 'type' => $resource->type,
