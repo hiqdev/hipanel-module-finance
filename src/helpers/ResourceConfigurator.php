@@ -160,6 +160,11 @@ class ResourceConfigurator
         return $columns;
     }
 
+    public function getRawColumns(): array
+    {
+        return $this->columns;
+    }
+
     public function getTypes(): array
     {
         return array_keys($this->getColumns());

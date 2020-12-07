@@ -18,11 +18,6 @@ abstract class AbstractClientResourceDecorator extends AbstractResourceDecorator
 {
     public $resource;
 
-    public function __construct($resource)
-    {
-        parent::__construct($resource);
-    }
-
     public function displayTitle()
     {
         return $this->resource->getTypes()[$this->resource->type];
