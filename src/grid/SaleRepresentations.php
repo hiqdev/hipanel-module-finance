@@ -22,6 +22,7 @@ class SaleRepresentations extends RepresentationCollection
                 'label' => Yii::t('hipanel', 'common'),
                 'columns' => [
                     'checkbox',
+                    'object_type',
                     'object',
                     'seller',
                     'buyer',

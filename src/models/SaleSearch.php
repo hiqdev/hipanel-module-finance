@@ -24,6 +24,7 @@ class SaleSearch extends Sale
     {
         return ArrayHelper::merge($this->defaultSearchAttributes(), [
             'object_inilike',
+            'object_label_ilike',
         ]);
     }
 
@@ -31,6 +32,7 @@ class SaleSearch extends Sale
     {
         return array_merge(parent::attributeLabels(), [
             'object_inilike' => Yii::t('hipanel', 'Object'),
+            'object_label_ilike' => Yii::t('hipanel', 'Description'),
         ]);
     }
 }

@@ -31,6 +31,7 @@ $this->registerCss('
                     'boxed' => false,
                     'columns' => [
                         'object_v',
+                        'object_label',
                         'time',
                         'seller',
                         'buyer',

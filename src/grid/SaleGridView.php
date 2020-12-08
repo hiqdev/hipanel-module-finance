@@ -31,9 +31,13 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 },
             ],
             'time' => [
-                'format' => ['datetime'],
+                'format' => ['html'],
                 'filter' => false,
                 'contentOptions' => ['class' => 'text-nowrap'],
+                'value' => function ($model) {
+                    $time = Yii::$app->formatter->asDateTime($model->time);
+                    return Html::a($time, ['@sale/view', 'id' => $model->id]);
+                },
             ],
             'seller' => [
                 'class' => ClientColumn::class,
@@ -51,16 +55,18 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'label' => Yii::t('hipanel:finance:sale', 'Object'),
                 'format' => 'html',
                 'value' => function ($model) {
-                    $html = Html::beginTag('div', ['class' => 'sale-flex-cnt']);
-                    $html .= LinkToObjectResolver::widget([
+                    return $model->object_type . ' ' . LinkToObjectResolver::widget([
                         'model' => $model,
-                        'typeAttribute' => 'tariff_type',
+                        'typeAttribute' => 'object_type',
                         'idAttribute' => 'object_id',
                     ]);
-                    $html .= Html::endTag('div');
-
-                    return $html;
                 },
+            ],
+            'object_type' => [
+                'label' => Yii::t('hipanel', 'Type'),
+                'filterOptions' => ['class' => 'narrow-filter'],
+                'headerOptions' => ['class' => 'text-right'],
+                'contentOptions' => ['class' => 'text-right'],
             ],
             'object' => [
                 'format' => 'raw',
@@ -69,20 +75,12 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                     if ($model instanceof FakeSale) {
                         return $model->object;
                     }
-                    $user = Yii::$app->user;
-                    $html = Html::beginTag('div', ['class' => 'sale-flex-cnt']);
-                    $html .= LinkToObjectResolver::widget([
+                    $html = LinkToObjectResolver::widget([
                         'model' => $model,
-                        'typeAttribute' => 'tariff_type',
+                        'typeAttribute' => 'object_type',
                         'idAttribute' => 'object_id',
                     ]);
-                    $html .= Html::beginTag('div', ['class' => 'btn-group']);
-                    $html .= Html::a(Yii::t('hipanel:finance:sale', 'View'), ['@sale/view', 'id' => $model->id], ['class' => 'btn btn-xs btn-primary']);
-                    if ($user->can('sale.update')) {
-                        $html .= Html::a(Yii::t('hipanel:finance:sale', 'Edit'), ['@sale/update', 'id' => $model->id], ['class' => 'btn btn-xs btn-success']);
-                    }
-                    $html .= Html::endTag('div');
-                    $html .= Html::endTag('div');
+                    $html .= ' &nbsp; ' . $model->object_label . ' ';
 
                     return $html;
                 },
