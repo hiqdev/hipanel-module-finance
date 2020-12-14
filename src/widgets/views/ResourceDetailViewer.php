@@ -26,6 +26,8 @@ use yii\db\ActiveRecordInterface;
                         'configurator' => $configurator,
                         'dataProvider' => $dataProvider,
                         'filterModel' => $originalSearchModel,
+                        'showFooter' => true,
+                        'placeFooterAfterBody' => true,
                         'tableOptions' => [
                             'class' => 'table table-striped table-bordered',
                         ],

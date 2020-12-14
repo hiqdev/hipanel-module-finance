@@ -38,12 +38,15 @@ use yii\db\ActiveRecordInterface;
     <?php $page->endContent() ?>
     <?php $page->beginContent('table') ?>
         <?php $page->beginBulkForm() ?>
-            <?= call_user_func([$configurator->getGridClassName(), 'widget'], [
+            <?= $configurator->renderGridView([
                 'boxed' => false,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $originalSearchModel,
                 'filterRowOptions' => ['style' => 'display: none;'],
                 'columns' => ResourceGridView::getColumns($configurator),
+                'showFooter' => true,
+                'placeFooterAfterBody' => true,
+                'emptyCell' => null,
             ]) ?>
         <?php $page->endBulkForm() ?>
     <?php $page->endContent() ?>
