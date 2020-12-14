@@ -34,7 +34,7 @@ class RequisitesCombo extends Combo
                         return data.text;
                     }
 
-                    return data.name + '<br><b>' + data.organization + '</b>';
+                    return '<b>' + data.name + '</b><br>' + data.organization;
                 }"),
                 'escapeMarkup' => new JsExpression('function (markup) {
                     return markup; // Allows HTML
