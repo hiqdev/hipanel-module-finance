@@ -27,10 +27,15 @@ class BillSummaryTable extends Widget
 
     public function run(): string
     {
-        $onThePageSummary = Html::tag('div', $this->buildTable(Yii::t('hipanel:finance', 'On the page summary'), $this->onPageBills), ['class' => 'col-md-5 table-responsive']);
-        $totalSummary = Html::tag('div', $this->buildTable(Yii::t('hipanel:finance', 'Total summary'), $this->allBills), ['class' => 'col-md-7 table-responsive']);
+        $tables = '';
+        if (!empty($this->onPageBills)) {
+            $tables .= Html::tag('div', $this->buildTable(Yii::t('hipanel:finance', 'Page summary'), $this->onPageBills), ['class' => 'table-responsive', 'style' => 'margin: 1rem']);
+        }
+        if (!empty($this->allBills)) {
+            $tables .= Html::tag('div', $this->buildTable(Yii::t('hipanel:finance', 'Summary'), $this->allBills), ['class' => 'table-responsive', 'style' => 'margin: 1rem']);
+        }
 
-        return Html::tag('div', Html::tag('div', $onThePageSummary . $totalSummary, ['class' => 'row']), ['class' => 'summary']);
+        return Html::tag('div', Html::tag('div', $tables, ['style' => 'display: flex; flex-wrap: wrap; margin: -1rem']), ['class' => 'summary']);
     }
 
     private function buildTable(string $name, array $bills): string
@@ -44,7 +49,7 @@ class BillSummaryTable extends Widget
         [$positive, $negative, $total] = $this->calculate($bills);
         $head = Html::beginTag('thead');
         $head .= Html::beginTag('tr');
-        $head .= Html::tag('th', '&nbsp;');
+        $head .= Html::tag('td', $name, ['class' => 'text-muted']);
         foreach ($currencies as $currency => $sign) {
             if (isset($positive[$currency]) || isset($negative[$currency])) {
                 $head .= Html::tag('th', $sign, ['class' => 'text-right']);
@@ -69,7 +74,7 @@ class BillSummaryTable extends Widget
         }
         $body .= Html::endTag('tbody');
 
-        return Html::tag('table', Html::tag('caption', $name) . $head . $body, ['class' => 'table table-striped table-bordered table-condensed']);
+        return Html::tag('table', $head . $body, ['class' => 'table table-striped table-bordered table-condensed']);
     }
 
     private function calculate(array $bills): array
