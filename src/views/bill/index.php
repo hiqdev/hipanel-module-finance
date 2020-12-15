@@ -67,7 +67,19 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
     <?php $page->beginBulkForm() ?>
         <?= BillGridView::widget([
             'boxed' => false,
-            'layout' => "<div class='row'><div class='col-xs-12'>{sorter}</div></div><div class='table-responsive'>{items}</div>\n<div class='row'><div class='col-sm-6 col-sm-offset-6 col-xs-12'><div class='dataTables_paginate paging_bootstrap'>{pager}</div></div></div>\n<div class='row'><div class='col-md-12'><div class='dataTables_info'>{summary}</div></div></div>",
+            'layout' => <<<"HTML"
+                <div class='row'>
+                    <div class='col-xs-11'>{sorter}</div>
+                </div>
+                <div class='table-responsive'>{items}</div>
+                \n
+                <div class='row'>
+                    <div class='col-xs-12' style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between;">
+                        <div class='dataTables_info'>{summary}</div>
+                        <div class='dataTables_paginate paging_bootstrap'>{pager}</div>
+                    </div>
+                </div>
+HTML,
             'dataProvider' => $dataProvider,
             'filterModel'  => $model,
             'currencies' => $this->context->getCurrencyTypes(),
