@@ -82,14 +82,10 @@ class BillController extends \hipanel\base\CrudController
                 'responseVariants' => [
                     IndexAction::VARIANT_SUMMARY_RESPONSE => static function (VariantsAction $action): string {
                         $dataProvider = $action->parent->getDataProvider();
-                        $defaultSummary = SynchronousCountEnabler::widget([
-                            'dataProvider' => $dataProvider,
-                            'content' => fn(GridView $grid): string => $grid->renderSummary(),
-                        ]);
+                        $defaultSummary = (new SynchronousCountEnabler($dataProvider, fn(GridView $grid): string => $grid->renderSummary()))();
 
                         return $defaultSummary . BillSummaryTable::widget([
                             'currencies' => $action->controller->getCurrencyTypes(),
-                            'onPageBills' => $dataProvider->getModels(),
                             'allBills' => $dataProvider->query->andWhere(['groupby' => 'sum_by_currency'])->all(),
                         ]);
                     },

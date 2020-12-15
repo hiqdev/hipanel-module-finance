@@ -27,10 +27,15 @@ class BillSummaryTable extends Widget
 
     public function run(): string
     {
-        $onThePageSummary = Html::tag('div', $this->buildTable(Yii::t('hipanel:finance', 'On the page summary'), $this->onPageBills), ['class' => 'col-md-5 table-responsive']);
-        $totalSummary = Html::tag('div', $this->buildTable(Yii::t('hipanel:finance', 'Total summary'), $this->allBills), ['class' => 'col-md-7 table-responsive']);
+        $tables = '';
+        if (!empty($this->onPageBills)) {
+            $tables .= Html::tag('div', $this->buildTable(Yii::t('hipanel:finance', 'On the page summary'), $this->onPageBills), ['class' => 'table-responsive', 'style' => 'margin: 1rem']);
+        }
+        if (!empty($this->allBills)) {
+            $tables .= Html::tag('div', $this->buildTable(Yii::t('hipanel:finance', 'Total summary'), $this->allBills), ['class' => 'table-responsive', 'style' => 'margin: 1rem']);
+        }
 
-        return Html::tag('div', Html::tag('div', $onThePageSummary . $totalSummary, ['class' => 'row']), ['class' => 'summary']);
+        return Html::tag('div', Html::tag('div', $tables, ['style' => 'display: flex; flex-wrap: wrap; margin: -1rem']), ['class' => 'summary']);
     }
 
     private function buildTable(string $name, array $bills): string
