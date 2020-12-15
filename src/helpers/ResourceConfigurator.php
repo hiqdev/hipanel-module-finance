@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\helpers;
 
+use Closure;
 use hipanel\modules\finance\models\proxy\Resource;
 use RuntimeException;
 use Yii;
@@ -27,6 +28,8 @@ class ResourceConfigurator
     private array $columns = [];
 
     private array $totalGroups = [];
+
+    private ?Closure $totalGroupsTransformer = null;
 
     private static self $configurator;
 
@@ -175,6 +178,13 @@ class ResourceConfigurator
         return $this;
     }
 
+    public function setTotalGroupsTransformer(?Closure $totalGroupsTransformer): self
+    {
+        $this->totalGroupsTransformer = $totalGroupsTransformer;
+
+        return $this;
+    }
+
     protected function __clone()
     {
     }
@@ -236,5 +246,14 @@ class ResourceConfigurator
     public function getModelName(): string
     {
         return call_user_func([$this->getModel(), 'modelName']);
+    }
+
+    public function modifyTotalGroups(array $total): array
+    {
+        if (!is_callable($this->totalGroupsTransformer)) {
+            return $total;
+        }
+
+        return call_user_func($this->totalGroupsTransformer, $total, $this->getTotalGroups());
     }
 }

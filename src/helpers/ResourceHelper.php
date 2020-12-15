@@ -95,7 +95,7 @@ class ResourceHelper
         return $result;
     }
 
-    public static function calculateTotal(array $resources, array $totalGroups = []): array
+    public static function calculateTotal(array $resources, ResourceConfigurator $configurator): array
     {
         $total = [];
         foreach ($resources as $types) {
@@ -107,18 +107,13 @@ class ResourceHelper
                 }
             }
         }
+        $totalGroups = $configurator->getTotalGroups();
         if (empty($totalGroups)) {
             self::normalizeQuantity($total);
 
             return $total;
         }
-        foreach ($totalGroups as $group) {
-            foreach ($group as $type) {
-                $key = implode('-', $group);
-                $total[$key]['qty'] += $total[$type]['qty'];
-                $total[$key]['unit'] = $total[$type]['unit'];
-            }
-        }
+        $total = $configurator->modifyTotalGroups($total);
         self::normalizeQuantity($total);
 
         return $total;

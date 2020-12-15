@@ -31,7 +31,7 @@ class ResourceFetchDataAction extends RenderJsonAction
 
                 return [
                     'resources' => ResourceHelper::prepare($resources),
-                    'totals' => ResourceHelper::calculateTotal($resources, $this->configurator->getTotalGroups()),
+                    'totals' => ResourceHelper::calculateTotal($resources, $this->configurator),
                 ];
             }
 
