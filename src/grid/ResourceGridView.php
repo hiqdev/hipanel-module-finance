@@ -77,7 +77,13 @@ class ResourceGridView extends BoxedGridView
             'filter' => false,
             'contentOptions' => ['class' => 'text-right'],
             'footerOptions' => ['class' => 'text-right text-bold'],
-            'value' => fn(Resource $resource): ?string => $resource->buildResourceModel($this->configurator)->decorator()->displayAmountWithUnit(),
+            'value' => function (Resource $resource): ?string {
+                if (in_array($resource->type, $this->configurator->getRawColumns(), true)) {
+                    return $resource->buildResourceModel($this->configurator)->decorator()->displayAmountWithUnit();
+                }
+
+                return '';
+            },
             'footer' => ResourceDetailTotalHook::widget(['id' => 'detail-resource-total']),
         ];
 
