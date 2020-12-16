@@ -15,7 +15,7 @@ class ResourceFetchDataAction extends RenderJsonAction
 {
     public ResourceConfigurator $configurator;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->return = function (Action $action) {
@@ -27,8 +27,12 @@ class ResourceFetchDataAction extends RenderJsonAction
                     'time_till' => $request->post('time_till'),
                     'groupby' => 'server_traf_month',
                 ]);
+                $resources = ResourceHelper::aggregateByObject($resources, $this->configurator);
 
-                return ResourceHelper::aggregateByObject($resources, $this->configurator);
+                return [
+                    'resources' => ResourceHelper::prepare($resources),
+                    'totals' => ResourceHelper::calculateTotal($resources, $this->configurator),
+                ];
             }
 
             return [];

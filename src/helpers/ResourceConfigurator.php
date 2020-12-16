@@ -2,9 +2,12 @@
 
 namespace hipanel\modules\finance\helpers;
 
+use Closure;
 use hipanel\modules\finance\models\proxy\Resource;
 use RuntimeException;
 use Yii;
+use yii\grid\Column;
+use yii\helpers\Html;
 
 class ResourceConfigurator
 {
@@ -24,10 +27,41 @@ class ResourceConfigurator
 
     private array $columns = [];
 
+    private array $totalGroups = [];
+
+    private ?Closure $totalGroupsTransformer = null;
+
     private static self $configurator;
 
     protected function __construct()
     {
+    }
+
+    public function renderGridView(array $options): string
+    {
+        $loader = ResourceHelper::getResourceLoader();
+        $groups = $this->getTotalGroups();
+        if (!empty($groups)) {
+            $options['tableFooterRenderer'] = static function ($grid) use ($groups, $loader): string {
+                $cells = $groupCells = [];
+                foreach ($grid->columns as $column) {
+                    /* @var $column Column */
+                    $cells[] = $column->renderFooterCell();
+                }
+                $content = Html::tag('tr', implode('', $cells), $grid->footerRowOptions);
+                if ($grid->filterPosition === $grid::FILTER_POS_FOOTER) {
+                    $content .= $grid->renderFilters();
+                }
+                foreach ($groups as $group) {
+                    $groupCells[] = Html::tag('td', $loader, ['colspan' => count($groups), 'class' => 'text-bold text-center ' . implode('-', $group)]);
+                }
+                $content .= Html::tag('tr', implode('', $groupCells));
+
+                return "<tfoot>\n" . $content . "\n</tfoot>";
+            };
+        }
+
+        return call_user_func([$this->getGridClassName(), 'widget'], $options);
     }
 
     public function getGridClassName(): string
@@ -132,6 +166,25 @@ class ResourceConfigurator
         return $this;
     }
 
+    public function getTotalGroups(): array
+    {
+        return $this->totalGroups;
+    }
+
+    public function setTotalGroups(array $totalGroups): self
+    {
+        $this->totalGroups = $totalGroups;
+
+        return $this;
+    }
+
+    public function setTotalGroupsTransformer(?Closure $totalGroupsTransformer): self
+    {
+        $this->totalGroupsTransformer = $totalGroupsTransformer;
+
+        return $this;
+    }
+
     protected function __clone()
     {
     }
@@ -193,5 +246,14 @@ class ResourceConfigurator
     public function getModelName(): string
     {
         return call_user_func([$this->getModel(), 'modelName']);
+    }
+
+    public function modifyTotalGroups(array $total): array
+    {
+        if (!is_callable($this->totalGroupsTransformer)) {
+            return $total;
+        }
+
+        return call_user_func($this->totalGroupsTransformer, $total, $this->getTotalGroups());
     }
 }

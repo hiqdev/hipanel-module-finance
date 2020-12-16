@@ -11,10 +11,9 @@
 namespace hipanel\modules\finance\models\decorators\server;
 
 use hipanel\inputs\TextInput;
+use hipanel\modules\finance\helpers\ResourceHelper;
 use hipanel\modules\finance\models\decorators\AbstractResourceDecorator;
 use hipanel\modules\finance\models\ServerResource;
-use hiqdev\php\units\Quantity;
-use hiqdev\php\units\Unit;
 use Yii;
 
 abstract class AbstractServerResourceDecorator extends AbstractResourceDecorator
@@ -87,29 +86,8 @@ abstract class AbstractServerResourceDecorator extends AbstractResourceDecorator
 
     public function displayAmountWithUnit(): string
     {
-        $amount = $this->getPrepaidQuantity();
-        $convertibleTypes = [
-            'backup_du',
-            'hdd',
-            'ram',
-            'speed',
-            'server_traf95_max',
-            'server_traf95_in',
-            'server_traf95',
-            'server_traf_max',
-            'server_traf_in',
-            'server_traf',
-            'server_du',
-        ];
-        if (in_array($this->resource->type, $convertibleTypes, true)) {
-            $amount = Quantity::create(Unit::create($this->resource->unit), $amount)
-                ->convert(Unit::create($this->toUnit()))
-                ->getQuantity();
-            $amount = number_format($amount, 3);
-        }
-
         return Yii::t('hipanel:finance:tariff', '{amount} {unit}', [
-            'amount' => $amount,
+            'amount' => number_format(ResourceHelper::convertAmount($this), 3),
             'unit' => $this->displayUnit(),
         ]);
     }
