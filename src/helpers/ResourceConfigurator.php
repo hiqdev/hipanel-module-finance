@@ -53,7 +53,7 @@ class ResourceConfigurator
                     $content .= $grid->renderFilters();
                 }
                 foreach ($groups as $group) {
-                    $groupCells[] = Html::tag('td', $loader, ['colspan' => count($groups), 'class' => 'text-bold text-center ' . implode('-', $group)]);
+                    $groupCells[] = Html::tag('td', $loader, ['colspan' => count($groups), 'data-type' => true, 'class' => 'text-bold text-center ' . implode('-', $group)]);
                 }
                 $content .= Html::tag('tr', implode('', $groupCells));
 

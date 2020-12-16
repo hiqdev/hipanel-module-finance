@@ -93,7 +93,7 @@ class ResourceGridView extends BoxedGridView
             'attribute' => 'name',
             'label' => Yii::t('hipanel', 'Object'),
             'contentOptions' => ['style' => 'display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;'],
-            'footerOptions' => ['colspan' => 2, 'rowspan' => 2],
+            'footerOptions' => ['colspan' => Yii::$app->user->can('access-subclients') ? 2 : 1, 'rowspan' => 2],
             'value' => static function (ActiveRecordInterface $model) use ($configurator): string {
                 $objectLabel = Html::tag('span', '-', ['class' => 'text-danger']);
                 if ($model->name) {
@@ -118,7 +118,7 @@ class ResourceGridView extends BoxedGridView
                 'contentOptions' => ['class' => 'text-right', 'data-type' => $type, 'style' => 'white-space:nowrap;'],
                 'value' => fn() => $loader,
                 'footer' => $loader,
-                'footerOptions' => ['class' => $type . ' text-right', 'style' => 'white-space: nowrap;'],
+                'footerOptions' => ['class' => $type . ' text-right', 'data-type' => true, 'style' => 'white-space: nowrap;'],
             ];
         }
 

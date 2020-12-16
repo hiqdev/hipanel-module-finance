@@ -11,6 +11,8 @@ use hipanel\modules\finance\models\proxy\Resource;
 
 class ResourceHelper
 {
+    public const LOADER_HTML = '<div class="resource-spinner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div>';
+
     /**
      * @param Resource[] $resources
      * @param ResourceConfigurator $configurator
@@ -185,6 +187,6 @@ class ResourceHelper
 CSS
             , [], 'resource_spinner_css');
 
-        return '<div class="resource-spinner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div>';
+        return self::LOADER_HTML;
     }
 }

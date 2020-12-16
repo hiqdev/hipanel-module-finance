@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\widgets;
 
 use DateTime;
 use hipanel\assets\BootstrapDatetimepickerAsset;
+use hipanel\modules\finance\helpers\ResourceHelper;
 use hipanel\modules\finance\models\proxy\Resource;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -41,6 +42,7 @@ class ResourceListViewer extends BaseResourceViewer
             'max-age' => 3600,
             'samesite' => 'lax',
         ]);
+        $loader = Json::encode(ResourceHelper::LOADER_HTML);
         $this->view->registerJs(/** @lang JavaScript */ <<<"JS"
 (() => {
   const ids = {$ids};
@@ -68,7 +70,7 @@ class ResourceListViewer extends BaseResourceViewer
     format: 'MMMM YYYY'
   });
   dateInput.datetimepicker().on('dp.update', evt => {
-    $('td[data-type]').html('<div class="spinner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div>');
+    $('td[data-type]').html({$loader});
     const date = evt.viewDate;
     setDate(date);
     fetchResources(ids, date.startOf('month').format('YYYY-MM-DD'), date.endOf('month').format('YYYY-MM-DD')).catch(err => {
