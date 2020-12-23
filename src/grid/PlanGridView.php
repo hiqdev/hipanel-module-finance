@@ -63,6 +63,7 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'class' => RefColumn::class,
                 'filterAttribute' => 'type_in',
                 'filterOptions' => ['class' => 'narrow-filter'],
+                'i18nDictionary' => 'hipanel.finance.suggestionTypes',
                 'format' => 'html',
                 'gtype' => 'type,tariff',
             ],

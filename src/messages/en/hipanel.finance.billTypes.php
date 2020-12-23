@@ -42,4 +42,5 @@ return [
     'Storage monthly fee' => 'Storage monthly',
     'Private Cloud monthly fee' => 'Private Cloud',
     'Private Cloud backup disk usage' => 'Private Cloud backup',
+    'Automatic VPS backup monthly fee' => 'Autobackup',
 ];
