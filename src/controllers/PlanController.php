@@ -377,11 +377,15 @@ class PlanController extends CrudController
     }
 
     /**
-     * @param int $plan_id
+     * @param int|null $plan_id
      * @return Price[]|null Array of parent plan prices or `null`, when parent plan was not found
      */
-    private function getParentPrices(int $plan_id)
+    private function getParentPrices(?int $plan_id)
     {
+        if ($plan_id === null) {
+            return null;
+        }
+
         $plan = Plan::find()
             ->addAction('get-parent')
             ->where(['id' => $plan_id])
