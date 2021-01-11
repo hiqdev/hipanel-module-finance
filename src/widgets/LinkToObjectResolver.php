@@ -62,6 +62,7 @@ class LinkToObjectResolver extends Widget
         'tariff' => '@plan/view',
         'switch' => '@hub/view',
         'model_group' => '@model-group/view',
+        'model' => '@model/view',
     ];
 
     /**
