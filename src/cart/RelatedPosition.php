@@ -7,6 +7,8 @@ use hipanel\modules\finance\models\CalculableModelInterface;
 use hiqdev\yii2\cart\CartPositionInterface;
 use hiqdev\yii2\cart\Module;
 use hiqdev\yii2\cart\ShoppingCart;
+use Throwable;
+use Yii;
 use yii\base\Widget;
 
 abstract class RelatedPosition implements RelatedPositionInterface
@@ -22,6 +24,25 @@ abstract class RelatedPosition implements RelatedPositionInterface
 
     /** @var Widget */
     private $widget;
+
+    public static function makeOrReturnNull(CartPositionInterface $mainPosition): ?self
+    {
+        try {
+            return new static($mainPosition);
+        } catch (Throwable $e) {
+            Yii::error([
+                'message' => sprintf(
+                    'Failed to create "%s" for "%s": %s',
+                    static::class,
+                    get_class($mainPosition),
+                    $e->getMessage()
+                ),
+                'exception' => $e
+            ]);
+
+            return null;
+        }
+    }
 
     public function __construct(CartPositionInterface $mainPosition)
     {
