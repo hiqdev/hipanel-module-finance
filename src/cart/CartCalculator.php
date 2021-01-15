@@ -148,7 +148,9 @@ final class CartCalculator extends Calculator
 
     private function ensureCurrencyIsNotConflictingWithCart(AbstractCartPosition $position, Value $value): void
     {
-        if ($this->cart->getCurrency() && $value->currency !== $this->cart->getCurrency()) {
+        if ($this->cart->getCurrency() !== null
+            && $value->currency !== $this->cart->getCurrency()
+        ) {
             throw MultiCurrencyException::forPosition($position, $this->cart, Yii::t('cart', 'Sorry, but now it is impossible to add the position with different currencies to the cart. Pay the current order to add this item to the cart.'));
         }
     }
