@@ -43,7 +43,7 @@ class SalesCest
         $this->index->containsFilters([
             Select2::asAdvancedSearch($I, 'Seller'),
             Select2::asAdvancedSearch($I, 'Buyer'),
-            (Dropdown::asAdvancedSearch($I,'Object type'))->withItems([
+            (Dropdown::asAdvancedSearch($I,'Object Type'))->withItems([
                 'Servers',
                 'IP',
                 'Accounts',
