@@ -3,6 +3,7 @@
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\helpers\CurrencyFilter;
+use hipanel\modules\finance\widgets\BillIsPayedDropdown;
 use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
 use hipanel\modules\finance\widgets\combo\MultipleBillTypeCombo;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
@@ -78,3 +79,7 @@ use yii\web\View;
         <?= $search->field('seller_id')->widget(SellerCombo::class) ?>
     </div>
 <?php endif ?>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('is_payed')->widget(BillIsPayedDropdown::class) ?>
+</div>

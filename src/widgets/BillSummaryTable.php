@@ -2,10 +2,8 @@
 
 namespace hipanel\modules\finance\widgets;
 
-use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\models\Bill;
-use JetBrains\PhpStorm\Pure;
 use Yii;
 use yii\base\Widget;
 use yii\helpers\Html;

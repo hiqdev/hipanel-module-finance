@@ -44,6 +44,7 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
             'columns' => [
                 'type_label', 'quantity',
                 'sum_editable', 'balance',
+                'payment_status',
             ],
         ]) ?>
         <?= BillGridView::detailView([
