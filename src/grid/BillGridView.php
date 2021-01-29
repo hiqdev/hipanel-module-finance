@@ -142,7 +142,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     return ['class' => 'text-right' . ($model->sum > 0 ? ' text-bold' : '')];
                 },
                 'filterAttribute' => 'currency_in',
-                'filterOptions' => ['class' => 'narrow-filter'],
+                'filterOptions' => ['class' => 'narrow-filter text-right'],
                 'filter' => function ($column, $filterModel) {
                     $currencies = CurrencyFilter::addSymbolAndFilter($this->currencies);
                     return Html::activeDropDownList($filterModel, 'currency_in', $currencies, ['class' => 'form-control', 'prompt' => '--']);
@@ -175,6 +175,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                         'align-items' => 'center',
                     ]]);
                 },
+                'filterOptions' => ['class' => 'narrow-filter text-right'],
                 'filter' => fn($column, $filterModel): string => BillIsPayedDropdown::widget(['model' => $filterModel]),
             ],
             'quantity' => [
@@ -206,6 +207,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'gtype',
             ],
             'type_label' => [
+                'filterOptions' => ['class' => 'text-right'],
                 'filter' => function ($column, $filterModel) {
                     return BillTypeFilter::widget([
                         'options' => ['class' => 'form-control text-right', 'style' => 'max-width: 12em'],
