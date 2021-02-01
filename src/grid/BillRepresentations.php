@@ -26,7 +26,7 @@ class BillRepresentations extends RepresentationCollection
                     'client_id',
                     'time',
                     'sum_editable',
-                    'balance',
+                    'index_page_balance',
                     'type_label',
                     'description',
                 ],

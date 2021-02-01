@@ -212,6 +212,9 @@ return [
     'Insufficient funds. Maybe, your client does not have enough money on balance?' => 'Недостаточно средств. Возможно, у вашего клиента недостаточно денег на счету?',
     'Insufficient funds on the balance' => 'Недостаточно средств на балансе',
     'Is payed?' => 'Оплачено?',
+    'Payment status' => 'Статус платежа',
+    'Bill is paid' => 'Платеж оплачен',
+    'Bill not paid' => 'Платеж не оплачен',
     'Charge paid' => 'Да, оплачено',
     'Charge not paid' => 'Нет, не оплачено',
     'Add formula' => 'Добавить формулу',
@@ -222,5 +225,4 @@ return [
     'Add internal transfer' => 'Добавить внутренний перевод',
     'Attributes' => 'Атрибуты',
     'Value' => 'Значение',
-
 ];

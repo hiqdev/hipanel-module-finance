@@ -18,11 +18,13 @@ use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\menus\BillActionsMenu;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
+use hipanel\modules\finance\widgets\BillIsPayedDropdown;
 use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\BillTypeFilter;
 use hipanel\modules\finance\widgets\ColoredBalance;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\widgets\ArraySpoiler;
+use hipanel\widgets\IconStateLabel;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\helpers\Html;
@@ -56,6 +58,37 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'requisite',
                 'value' => fn($model) => Html::a($model->requisite, ['@requisite/view', 'id' => $model->requisite_id]),
                 'visible' => Yii::$app->user->can('requisites.read'),
+            ],
+            'payment_status' => [
+                'format' => 'raw',
+                'attribute' => 'is_payed',
+                'label' => Yii::t('hipanel:finance', 'Payment status'),
+                'headerOptions' => ['class' => 'text-right'],
+                'contentOptions' => ['class' => 'text-right'],
+                'value' => static function (Bill $bill): string {
+                    if ($bill->is_payed) {
+                        return Html::tag('span', Yii::t('hipanel:finance', 'Bill is paid'), ['class' => 'label label-success']);
+                    }
+
+                    return Html::tag('span', Yii::t('hipanel:finance', 'Bill not paid'), ['class' => 'label label-danger']);
+                },
+            ],
+            'is_payed' => [
+                'format' => 'raw',
+                'attribute' => 'is_payed',
+                'label' => Yii::t('hipanel:finance', 'Is payed?'),
+                'headerOptions' => ['class' => 'narrow-filter text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+                'value' => fn(Bill $bill): string => IconStateLabel::widget([
+                    'model' => $bill,
+                    'attribute' => 'is_payed',
+                    'icons' => ['fa-check-circle', 'fa-times-circle'],
+                    'colors' => ['#00a65a', '#d73925'],
+                    'messages' => [
+                        Yii::t('hipanel:finance', 'Bill is paid'),
+                        Yii::t('hipanel:finance', 'Bill is not paid'),
+                    ],
+                ]),
             ],
             'bill' => [
                 'class' => MainColumn::class,
@@ -108,6 +141,42 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'contentOptions' => function (Bill $model) {
                     return ['class' => 'text-right' . ($model->sum > 0 ? ' text-bold' : '')];
                 },
+                'filterAttribute' => 'currency_in',
+                'filterOptions' => ['class' => 'narrow-filter text-right'],
+                'filter' => function ($column, $filterModel) {
+                    $currencies = CurrencyFilter::addSymbolAndFilter($this->currencies);
+                    return Html::activeDropDownList($filterModel, 'currency_in', $currencies, ['class' => 'form-control', 'prompt' => '--']);
+                },
+            ],
+            'index_page_balance' => [
+                'attribute' => 'balance',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'text-right'],
+                'contentOptions' => function ($model, $key, $index) {
+                    return ['class' => 'text-right' . ($index ? '' : ' text-bold')];
+                },
+                'value' => function (Bill $model): string {
+                    $isPayed = IconStateLabel::widget([
+                        'model' => $model,
+                        'attribute' => 'is_payed',
+                        'icons' => ['fa-check-circle', 'fa-times-circle'],
+                        'colors' => ['#00a65a94', '#bdbdbd'],
+                        'cssStyles' => ['padding-top' => '4px'],
+                        'messages' => [
+                            Yii::t('hipanel:finance', 'Bill is paid'),
+                            Yii::t('hipanel:finance', 'Bill is not paid'),
+                        ],
+                    ]);
+                    $balance = ColoredBalance::widget(compact('model'));
+
+                    return Html::tag('span', implode('', [$isPayed, $balance]), ['style' => [
+                        'display' => 'flex',
+                        'justify-content' => 'space-between',
+                        'align-items' => 'center',
+                    ]]);
+                },
+                'filterOptions' => ['class' => 'narrow-filter text-right'],
+                'filter' => fn($column, $filterModel): string => BillIsPayedDropdown::widget(['model' => $filterModel]),
             ],
             'quantity' => [
                 'format' => 'raw',
@@ -138,6 +207,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'gtype',
             ],
             'type_label' => [
+                'filterOptions' => ['class' => 'text-right'],
                 'filter' => function ($column, $filterModel) {
                     return BillTypeFilter::widget([
                         'options' => ['class' => 'form-control text-right', 'style' => 'max-width: 12em'],

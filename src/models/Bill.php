@@ -62,6 +62,7 @@ class Bill extends \hipanel\base\Model
             [['object', 'domains', 'tariff'], 'safe'],
             [['type', 'gtype', 'class', 'ftype'], 'safe'],
             [['class_label'], 'safe'],
+            [['is_payed'], 'boolean'],
             [['type_label', 'gtype_label'], 'safe'],
             [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
 
@@ -101,6 +102,7 @@ class Bill extends \hipanel\base\Model
             'tariff_id' => Yii::t('hipanel:finance', 'Tariff'),
             'requisite' => Yii::t('hipanel:finance', 'Requisite'),
             'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
+            'is_payed' => Yii::t('hipanel:finance', 'Is payed?'),
         ]);
     }
 
