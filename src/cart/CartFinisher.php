@@ -108,11 +108,12 @@ class CartFinisher extends BaseObject
                     $this->cart->remove($exception->position);
                 }
             });
+
             $this->_error = array_merge($this->_error, $purchaser->getErrorPurchaseExceptions());
         }
     }
 
-    protected function ensureCanBeFinished()
+    public function ensureCanBeFinished()
     {
         /** @var PositionPurchasabilityValidatorInterface[] $validators */
         $validators = [];
