@@ -63,6 +63,7 @@ return [
     '{quantity, plural, one{# day} other{# days}}' => '{quantity, plural, one{# день} few{# дня} other{# дней}}',
     '{quantity, plural, one{# year} other{# years}}' => '{quantity, plural, one{# год} few{# года} other{# лет}}',
     '{quantity, time, HH:mm} hour(s)' => '{quantity, time, HH:mm} час(ов)',
+    '{quantity, plural, one{# hour} few{# hours} other{# hours}}' => '{quantity, plural, one{# час} few{# часа} other{# часов}}',
     '{quantity} IP' => '{quantity} IP',
     'Held payments' => 'Ожидающие платежи',
     'Provided services' => 'Предоставленные услуги',
