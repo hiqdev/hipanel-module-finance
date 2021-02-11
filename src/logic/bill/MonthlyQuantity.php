@@ -49,6 +49,11 @@ class MonthlyQuantity extends DefaultQuantityFormatter implements ContextAwareQu
      */
     public function getClientValue(): string
     {
+        $unitName = $this->getQuantity()->getUnit()->getName();
+        if ($unitName === 'hour') {
+            return round($this->getValue());
+        }
+
         return round($this->getQuantity()->getQuantity() * $this->getNumberOfDays());
     }
 
