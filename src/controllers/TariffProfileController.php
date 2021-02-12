@@ -12,17 +12,21 @@ namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\ComboSearchAction;
 use hipanel\actions\IndexAction;
+use hipanel\actions\RenderAction;
 use hipanel\actions\SmartCreateAction;
 use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
+use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
+use hipanel\models\User;
+use hipanel\modules\client\models\Client;
 use Yii;
 
-class TariffProfileController extends \hipanel\base\CrudController
+class TariffProfileController extends CrudController
 {
-    public function behaviors()
+    public function behaviors(): array
     {
         return array_merge(parent::behaviors(), [
             'access-control' => [
@@ -31,13 +35,13 @@ class TariffProfileController extends \hipanel\base\CrudController
                     'create' => 'plan.create',
                     'update' => 'plan.update',
                     'delete' => 'plan.delete',
-                    '*'      => 'plan.read',
+                    '*' => 'plan.read',
                 ],
             ],
         ]);
     }
 
-    public function actions()
+    public function actions(): array
     {
         return array_merge(parent::actions(), [
             'index' => [
@@ -45,24 +49,27 @@ class TariffProfileController extends \hipanel\base\CrudController
             ],
             'create' => [
                 'class' => SmartCreateAction::class,
-                'data' => function(\hipanel\actions\RenderAction $action) : array {
+                'data' => function (): array {
+                    /** @var User $user */
                     $user = Yii::$app->user->identity;
-                    if ($user->type === 'reseller') {
+                    if ($user->type === Client::TYPE_SELLER) {
                         return [
                             'client' => $user->username,
                             'client_id' => $user->id,
                         ];
                     }
+
                     return [
                         'client' => $user->seller,
                         'client_id' => $user->seller_id,
                     ];
-                }
+                },
             ],
             'update' => [
                 'class' => SmartUpdateAction::class,
-                'data'  => function(\hipanel\actions\RenderAction $action, array $data) : array {
+                'data' => function (RenderAction $action, array $data): array {
                     $model = $data['model'];
+
                     return [
                         'client' => $model->client,
                         'client_id' => $model->client_id,
