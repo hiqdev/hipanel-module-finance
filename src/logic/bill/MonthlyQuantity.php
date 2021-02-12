@@ -31,9 +31,12 @@ class MonthlyQuantity extends DefaultQuantityFormatter implements ContextAwareQu
      */
     public function format(): string
     {
-        $text = Yii::t('hipanel:finance', '{quantity, plural, one{# day} other{# days}}', ['quantity' => $this->getClientValue()]);
+        $unitName = $this->getQuantity()->getUnit()->getName();
+        if ($unitName === 'hour') {
+            return Yii::t('hipanel:finance', '{quantity, plural, one{# hour} few{# hours} other{# hours}}', ['quantity' => $this->getQuantity()->getQuantity()]);
+        }
 
-        return $text;
+        return Yii::t('hipanel:finance', '{quantity, plural, one{# day} other{# days}}', ['quantity' => $this->getClientValue()]);
     }
 
     /**
