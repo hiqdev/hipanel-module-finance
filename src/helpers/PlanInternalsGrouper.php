@@ -169,14 +169,21 @@ class PlanInternalsGrouper
 
         foreach ($pricesByMainObject as $id => $prices) {
             foreach ($prices as $price) {
+                if (empty($id) || empty($price->main_object_id) || empty($price->object_id)) {
+                    continue;
+                }
+
                 if ((int)$price->main_object_id === (int)$id) {
-                    $tmpSale = $salesWithId[$price->object_id];
-                    $tmpSale->object = $price->main_object_name;
-                    $tmpSale->tariff_id = $model->id;
-                    $tmpSale->object_id = $id;
-                    $tmpSale->tariff_type = 'model_group';
-                    $salesByObject[$id] = $tmpSale;
-                    continue 2;
+                    try {
+                        $tmpSale = $salesWithId[$price->object_id];
+                        $tmpSale->object = $price->main_object_name;
+                        $tmpSale->tariff_id = $model->id;
+                        $tmpSale->object_id = $id;
+                        $tmpSale->tariff_type = 'model_group';
+                        $salesByObject[$id] = $tmpSale;
+                        continue 2;
+                    } catch (\Throwable $e) {
+                    }
                 }
             }
         }
