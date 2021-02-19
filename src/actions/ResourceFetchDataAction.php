@@ -8,7 +8,7 @@ use hipanel\actions\RenderJsonAction;
 use hipanel\modules\finance\helpers\ResourceConfigurator;
 use hipanel\modules\finance\helpers\ResourceHelper;
 use hipanel\modules\finance\models\proxy\Resource;
-use http\Exception\RuntimeException;
+use RuntimeException;
 use yii\base\DynamicModel;
 
 class ResourceFetchDataAction extends RenderJsonAction
