@@ -214,6 +214,19 @@ class PlanController extends CrudController
         return $this->renderAjax('modals/suggestPrices', compact('plan', 'model'));
     }
 
+    public function actionSuggestCalculatorPricesModal($id, $type)
+    {
+        /** @var Plan $plan */
+        $plan = $this->findPlan($id);
+        $model = new PriceSuggestionRequestForm([
+            'plan_id' => $plan->id,
+            'plan_type' => $plan->type,
+            'type' => $type
+        ]);
+
+        return $this->renderAjax('modals/suggestPrices', compact('plan', 'model'));
+    }
+
     public function actionSuggestGroupingPricesModal($id)
     {
         /** @var Plan $plan */

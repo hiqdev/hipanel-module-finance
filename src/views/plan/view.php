@@ -103,7 +103,7 @@ CSS
     <div class="col-md-9">
         <div class="col">
             <div class="row-md-12">
-                <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
+                <?php $page = IndexPage::begin(['model' => $model, 'layout' => $model->type === Plan::TYPE_CALCULATOR ? 'resourceDetail' : 'noSearch']) ?>
                 <?php if ($model->isKnownType()): ?>
                     <?php $page->beginContent('show-actions') ?>
                     <h4 class="box-title" style="display: inline-block;">

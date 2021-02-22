@@ -91,7 +91,7 @@ class SalesInPlanGridView extends SaleGridView
         ]);
     }
 
-    private function initAfterRow()
+    private function initAfterRow(): void
     {
         $this->afterRow = function (Sale $sale, $key) {
             $prices = $this->pricesBySoldObject[$key] ?? [];
@@ -107,7 +107,7 @@ class SalesInPlanGridView extends SaleGridView
                     'tag' => 'tr',
                     'id' => crc32($sale->id ?? microtime(true)),
                 ],
-                'layout' => '<td colspan="' . \count($this->columns) . '">{items}</td>',
+                'layout' => '<td colspan="' . \count($this->columns) . '" style="padding: 0;">{items}</td>',
                 'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
                 'dataProvider' => new ArrayDataProvider([
                     'allModels' => $prices,

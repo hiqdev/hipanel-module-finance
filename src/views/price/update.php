@@ -6,4 +6,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<?= $this->render('_form', compact('models', 'model')) ?>
+<div class="box">
+    <div class="box-body">
+        <?= $this->render('_form', compact('models', 'model')) ?>
+    </div>
+</div>

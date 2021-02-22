@@ -99,6 +99,9 @@ use yii\web\View;
             'storage' => Yii::t('hipanel.finance.suggestionTypes', 'storage'),
             'private_cloud_backup' => Yii::t('hipanel.finance.suggestionTypes', 'private_cloud_backup'),
             'private_cloud' => Yii::t('hipanel.finance.suggestionTypes', 'private_cloud'),
+            'calculator_public_cloud' => Yii::t('hipanel.finance.suggestionTypes', 'calculator_public_cloud'),
+            'calculator_private_cloud' => Yii::t('hipanel.finance.suggestionTypes', 'calculator_private_cloud'),
+            'calculator_storage' => Yii::t('hipanel.finance.suggestionTypes', 'calculator_storage'),
         ],
     ]) ?>
 <?php elseif (in_array($plan->type, [Plan::TYPE_VCDN, Plan::TYPE_PCDN, Plan::TYPE_ANYCASTCDN], true)): ?>
@@ -130,6 +133,9 @@ use yii\web\View;
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, ['plan_id' => $plan->id]) ?>
 <?php elseif ($plan->type === Plan::TYPE_REFERRAL): ?>
     <?= Html::activeHiddenInput($model, 'type', ['value' => Plan::TYPE_REFERRAL]) ?>
+    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, ['plan_id' => $plan->id]) ?>
+<?php elseif ($plan->type === Plan::TYPE_CALCULATOR): ?>
+    <?= Html::activeHiddenInput($model, 'type') ?>
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, ['plan_id' => $plan->id]) ?>
 <?php else: ?>
     <p class="text-center bg-warning"

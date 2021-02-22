@@ -21,6 +21,7 @@ use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Inflector;
 
 /**
  * Class PlanInternalsGrouper can be used to group prices inside $plan depending on
@@ -30,10 +31,7 @@ use yii\helpers\ArrayHelper;
  */
 class PlanInternalsGrouper
 {
-    /**
-     * @var Plan
-     */
-    private $plan;
+    private Plan $plan;
 
     public function __construct(Plan $plan)
     {
@@ -48,7 +46,7 @@ class PlanInternalsGrouper
      * - certificate.
      * @return array
      */
-    public function group()
+    public function group(): array
     {
         switch ($this->plan->type) {
             case Plan::TYPE_CERTIFICATE:
@@ -57,6 +55,8 @@ class PlanInternalsGrouper
                 return $this->groupHardwarePrices();
             case Plan::TYPE_REFERRAL:
                 return $this->plan->prices;
+            case Plan::TYPE_CALCULATOR:
+                return $this->groupCalculatorPrices($this->plan);
             case Plan::TYPE_DOMAIN:
                 $byType = static function (array $servicePrices) {
                     return ArrayHelper::index($servicePrices, 'type', static function ($servicePrice) {
@@ -72,18 +72,18 @@ class PlanInternalsGrouper
 
                 return [$zonePrices, $byType($servicePrices)];
             default:
-                return $this->groupServerPrices();
+                return $this->groupServerPrices($this->plan);
         }
     }
 
     /**
+     * @param Plan $model
      * @return array of two elements:
      * 0: sales, grouped by sold object
      * 1: prices, grouped by sold object
      */
-    private function groupServerPrices()
+    private function groupServerPrices(Plan $model): array
     {
-        $model = $this->plan;
         /** @var Sale[] $salesByObject */
         $salesByObject = [];
         /** @var Price[][] $pricesByMainObject */
@@ -118,7 +118,7 @@ class PlanInternalsGrouper
             }
 
             foreach ($prices as $price) {
-                if ((int) $price->main_object_id === (int) $id) {
+                if ((string)$price->main_object_id === (string)$id) {
                     $salesByObject[$id] = new FakeSale([
                         'object' => $price->main_object_name,
                         'tariff_id' => $model->id,
@@ -128,7 +128,7 @@ class PlanInternalsGrouper
                     continue 2;
                 }
 
-                if ((int) $price->object_id === (int) $id) {
+                if ((string)$price->object_id === (string)$id) {
                     $salesByObject[$id] = new FakeSale([
                         'object' => $price->object->name,
                         'tariff_id' => $model->id,
@@ -148,6 +148,44 @@ class PlanInternalsGrouper
         }
 
         return $this->sortSaleAndPrices($salesByObject, $pricesByMainObject);
+    }
+
+    public function groupCalculatorPrices(Plan $plan): array
+    {
+        $rules = [
+            'public_cloud' => static fn(Price $price): bool => (strpos($price->type, 'hardware') !== false && $price->object->type === 'config') ||
+                strpos($price->type, 'server_traf_max') !== false ||
+                strpos($price->type, 'ip_num') !== false ||
+                strpos($price->type, 'anycast_ip_num') !== false,
+            'private_cloud' => static fn(Price $price): bool => (strpos($price->type, 'hardware') !== false && $price->object->type === 'model') ||
+                strpos($price->type, 'cluster_ip_num') !== false ||
+                strpos($price->type, 'cluster_traf_max') !== false ||
+                strpos($price->type, 'cluster_traf95_max') !== false,
+            'storage' => static fn(Price $price): bool => strpos($price->type, 'block_hdd_l2_du') !== false ||
+                strpos($price->type, 'block_hdd_l3_du') !== false ||
+                strpos($price->type, 'block_ssd_l2_du') !== false ||
+                strpos($price->type, 'block_ssd_l3_du') !== false ||
+                strpos($price->type, 'object_data') !== false ||
+                strpos($price->type, 'object_traf') !== false,
+        ];
+        $tabs = [];
+        foreach ($plan->prices as $price) {
+            foreach ($rules as $key => $rule) {
+                if ($rule($price)) {
+                    $tabs[$key]['label'] = Inflector::humanize($key, true);
+                    $tabs[$key]['prices'][$price->id] = $price;
+                }
+            }
+        }
+        foreach ($tabs as $key => &$tab) {
+            $fakePlan = new Plan($plan->attributes);
+            $fakePlan->populateRelation('prices', $tab['prices']);
+            $fakePlan->populateRelation('sales', $plan->sales);
+            $tab['groups'] = $this->groupServerPrices($fakePlan);
+        }
+        unset($tab);
+
+        return $tabs;
     }
 
     private function groupHardwarePrices(): array

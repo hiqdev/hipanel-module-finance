@@ -28,7 +28,10 @@ use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\query\PriceQuery;
 use hipanel\modules\finance\models\TargetObject;
 use Yii;
+use yii\base\DynamicModel;
 use yii\base\Event;
+use yii\base\Model;
+use function Webmozart\Assert\Tests\StaticAnalysis\false;
 
 /**
  * Class PriceController.
@@ -135,31 +138,82 @@ class PriceController extends CrudController
         ]);
     }
 
-    public function actionSuggest($plan_id, $object_id = null, $template_plan_id = null, $type = 'default')
+    public function actionAddExtraPrices(int $plan_id, string $type)
     {
         $plan = Plan::findOne(['id' => $plan_id]);
-
-        $suggestions = (new Price())->batchQuery('suggest', [
-            'plan_id' => $plan_id,
-            'object_id' => $object_id,
-            'template_plan_id' => $template_plan_id,
-            'type' => $type,
-        ]);
-
+        $typeMap = [
+            'calculator_public_cloud' => 'config',
+            'calculator_private_cloud' => 'model',
+        ];
+        $model = new DynamicModel(['id', 'type' => $typeMap[$type], 'name']);
         $models = [];
-        foreach ($suggestions as $suggestion) {
-            $object = ArrayHelper::remove($suggestion, 'object');
+        $selection = $this->request->post('selection', []);
+        $newObjects = $this->request->post($model->formName(), []);
+        if (!empty($selection)) {
+            $selection = array_combine(array_keys(ArrayHelper::map($selection, 'id', 'id')), $selection);
+            foreach ($selection as $id => $object) {
+                $clone = clone $model;
+                $clone->id = $id;
+                $clone->name = $object['name'];
+                $clone->type = $typeMap[$type];
+                $models[$id] = $clone;
+            }
+        }
+        if (!empty($newObjects)) {
+            $keys = array_keys(ArrayHelper::map($newObjects, 'id', 'id'));
+            $multipleObjects = array_combine($keys, $newObjects);
+            $suggestions = [];
+            foreach ($multipleObjects as $id => $object) {
+                $object['type'] = empty($object['type']) ? $typeMap[$type] : $object['type'];
+                $suggestions[] = $this->createPrice([
+                    'class' => 'TemplatePrice',
+                    'type' => 'monthly,hardware',
+                    'main_object_id' => $id,
+                    'main_object_name' => $object['name'],
+                    'object_id' => $id,
+                    'object' => $object,
+                    'plan_id' => $plan_id,
+                    'unit' => 'items',
+                    'quantity' => 1,
+                    'price' => $selection[$id]['price'] ?? 0,
+                    'currency' => 'USD',
+                    'note' => $selection[$id]['note'] ?? '',
+                    'subprices' => [
+                        'EUR' => [
+                            'amount' => $selection[$id]['eur'] ?? 0,
+                            'currency' => 'EUR',
+                        ],
+                    ],
+                ], $object);
+            }
+            $prices = $this->getSuggested($plan_id, $plan_id, null, $type);
+            $existingObjects = array_keys(ArrayHelper::map($prices, 'object_id', 'id'));
+            $uniqSuggestions= array_filter($suggestions, static fn($suggestion) => !in_array($suggestion->object_id, $existingObjects, true));
+            $prices = array_merge($prices, $uniqSuggestions);
 
-            /** @var Price $price */
-            $price = Price::instantiate($suggestion);
-            $price->setScenario('create');
-            $price->setAttributes($suggestion);
-            $price->populateRelation('object', new TargetObject($object));
-
-            $models[] = $price;
+            return $this->renderAjax('_form', [
+                'type' => $type,
+                'model' => reset($prices),
+                'models' => $prices,
+                'plan' => $plan,
+            ]);
+        }
+        if (empty($models)) {
+            $models = [$model];
         }
 
-        $models = PriceSort::anyPrices()->values($models, true);
+        return $this->renderAjax('_add-extra-prices', [
+            'plan' => $plan,
+            'model' => $model,
+            'models' => $models,
+            'type' => $type,
+        ]);
+    }
+
+    public function actionSuggest($plan_id, $object_id = null, $template_plan_id = null, string $type = 'default')
+    {
+        $plan = Plan::findOne(['id' => $plan_id]);
+        $models = $this->getSuggested($plan_id, $object_id, $template_plan_id, $type);
 
         return $this->render('suggested', [
             'type' => $type,
@@ -167,5 +221,35 @@ class PriceController extends CrudController
             'models' => $models,
             'plan' => $plan,
         ]);
+    }
+
+    private function getSuggested($plan_id, $object_id = null, $template_plan_id = null, string $type = 'default'): array
+    {
+        $suggestions = (new Price())->batchQuery('suggest', [
+            'plan_id' => $plan_id,
+            'object_id' => $object_id,
+            'template_plan_id' => $template_plan_id,
+            'type' => $type,
+        ]);
+        $models = [];
+        foreach ($suggestions as $suggestion) {
+            $object = ArrayHelper::remove($suggestion, 'object');
+            $models[] = $this->createPrice($suggestion, $object);
+        }
+        $models = PriceSort::anyPrices()->values($models, true);
+
+        return $models;
+    }
+
+    private function createPrice(array $suggestion, array $object): Price
+    {
+        /** @var Price $price */
+        unset($suggestion['id']);
+        $price = Price::instantiate($suggestion);
+        $price->setScenario('create');
+        $price->setAttributes($suggestion);
+        $price->populateRelation('object', new TargetObject($object));
+
+        return $price;
     }
 }

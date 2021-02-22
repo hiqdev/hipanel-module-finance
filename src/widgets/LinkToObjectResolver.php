@@ -63,6 +63,7 @@ class LinkToObjectResolver extends Widget
         'switch' => '@hub/view',
         'model_group' => '@model-group/view',
         'model' => '@model/view',
+        'config' => '@config/view',
     ];
 
     /**
