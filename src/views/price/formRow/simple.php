@@ -16,6 +16,7 @@ use yii\widgets\ActiveForm;
  * @var Plan|null $plan
  * @var Price $model
  * @var ActiveForm $form
+ * @var int $i
  */
 ?>
 
@@ -25,7 +26,7 @@ use yii\widgets\ActiveForm;
         <?= Html::activeHiddenInput($model, "[$i]plan_id") ?>
         <?= Html::activeHiddenInput($model, "[$i]type") ?>
         <?= Html::activeHiddenInput($model, "[$i]class") ?>
-        <?= Html::activeHiddenInput($model, "[$i]object", ['value' => $model->object->name]) ?>
+        <?= Html::activeHiddenInput($model, "[$i]object", ['value' => $model->object->name ?? '']) ?>
         <?= Html::activeHiddenInput($model, "[$i]quantity") ?>
         <?= Html::activeHiddenInput($model, "[$i]unit") ?>
         <?= Html::activeHiddenInput($model, "[$i]note", ['data-attribute' => 'note']) ?>

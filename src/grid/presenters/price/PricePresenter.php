@@ -107,7 +107,7 @@ class PricePresenter
         }
 
         if ($price->getSubtype() === 'hardware' && $this->user->can('part.read')) {
-            return $price->object->label;
+            return $price->object->label ?? $price->object->name;
         }
 
         return ''; // Do not display any information unless we are sure what we are displaying

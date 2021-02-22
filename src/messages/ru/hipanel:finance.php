@@ -226,4 +226,11 @@ return [
     'Add internal transfer' => 'Добавить внутренний перевод',
     'Attributes' => 'Атрибуты',
     'Value' => 'Значение',
+    'Add model prices' => 'Добавить прайсы моделей',
+    'Add config prices' => 'Добавить прайсы конфигураций',
+    'Add extra prices' => 'Добавить дополнительные прайсы',
+    'or {0}' => 'или {0}',
+    'Select model' => 'Выберите модель',
+    'Select config' => 'Выберите конфигурацию',
+    'Add prices' => 'Добавить прайсы',
 ];

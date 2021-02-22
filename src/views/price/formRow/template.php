@@ -28,7 +28,8 @@ use yii\widgets\ActiveForm;
         <?= Html::activeHiddenInput($model, "[$i]type") ?>
         <?= Html::activeHiddenInput($model, "[$i]currency") ?>
         <?= Html::activeHiddenInput($model, "[$i]class") ?>
-        <?= Html::activeHiddenInput($model, "[$i]object") ?>
+        <?= Html::activeHiddenInput($model, "[$i]object", ['value' => $model->object->name ?? '']) ?>
+        <?= Html::activeHiddenInput($model, "[$i]note") ?>
         <strong>
             <?= LinkToObjectResolver::widget([
                 'model' => $model->object,

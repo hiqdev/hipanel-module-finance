@@ -5,6 +5,7 @@ use hipanel\modules\finance\assets\PriceEstimator;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\TemplatePrice;
+use hipanel\modules\finance\widgets\AddExtraPricesButton;
 use hipanel\modules\finance\widgets\ChangeFormulaButton;
 use hipanel\widgets\DynamicFormInputsValueInheritor;
 use hipanel\widgets\DynamicFormWidget;
@@ -13,16 +14,19 @@ use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var Price[] $models */
+/** @var Price $model */
 /** @var Plan|null $plan */
-$model = reset($models);
+/** @var string $type */
 
-$form = ActiveForm::begin([
+?>
+
+<?php $form = ActiveForm::begin([
     'id' => 'prices-form',
-    'action' => $model->isNewRecord ? Url::to(['@price/create-suggested']) : Url::to(['@price/update', 'id' => $model->id]),
+    'action' => $model->scenario === Price::SCENARIO_UPDATE ? Url::to(['@price/update', 'id' => $model->id]) : Url::to(['@price/create-suggested']),
     'enableClientValidation' => true,
     'validationUrl' => Url::toRoute([
         'validate-form',
-        'scenario' => $model->isNewRecord ? $model->scenario : Price::SCENARIO_UPDATE,
+        'scenario' => $model->scenario ?? Price::SCENARIO_UPDATE,
     ]),
 ]) ?>
 
@@ -41,20 +45,10 @@ $form = ActiveForm::begin([
     ],
 ]) ?>
 
-<div class="box box-solid">
-    <div class="box-header with-border">
-        <h3 class="box-title">
-            <?= $plan ? Yii::t('hipanel.finance.price', 'Tariff: {name}', ['name' => $plan->name]) : '' ?>
-        </h3>
-        <div class="box-tools pull-right">
-            <?= ChangeFormulaButton::widget(['mod' => ChangeFormulaButton::MOD_ADD]) ?>
-            <?= ChangeFormulaButton::widget(['mod' => ChangeFormulaButton::MOD_REPLACE]) ?>
-        </div>
-    </div>
     <div class="container-items">
         <?php $i = 0; ?>
         <?php foreach ($models as $model) : ?>
-            <div class="box-body price-item" data-id="<?= $model->id ?? uniqid() ?>">
+            <div class="price-item" data-id="<?= $model->id ?? uniqid() ?>">
                 <?= Html::activeHiddenInput($model, "[$i]id") ?>
                 <?php if ($plan): ?>
                     <?php $model->plan_id = $plan->id ?>
@@ -72,26 +66,24 @@ $form = ActiveForm::begin([
         <?php endforeach ?>
 
         <div class="box-footer with-border">
-                <?= Html::beginTag('div', ['class' => 'total-block']) ?>
-                    <?= Html::tag('span', Yii::t('hipanel:finance', 'Total:'), ['id' => 'total-label']) ?>
-                    <?= Html::tag('span', '', ['id' => 'total-value']) ?>
-                <?= Html::endTag('div') ?>
+            <?= Html::beginTag('div', ['class' => 'total-block']) ?>
+            <?= Html::tag('span', Yii::t('hipanel:finance', 'Total:'), ['id' => 'total-label']) ?>
+            <?= Html::tag('span', '', ['id' => 'total-value']) ?>
+            <?= Html::endTag('div') ?>
         </div>
-
     </div>
-</div>
 
 <?php DynamicFormWidget::end() ?>
 
-<div class="row">
-    <div class="col-md-12">
-        <?= Html::submitButton(Yii::t('hipanel', 'Save'), ['class' => 'btn btn-success']) ?>
-        &nbsp;
-        <?= Html::button(Yii::t('hipanel:finance', 'Update estimates'), ['class' => 'btn btn-info', 'id' => 'update-estimates']) ?>
-        &nbsp;
-        <?= Html::button(Yii::t('hipanel', 'Cancel'), ['class' => 'btn btn-default', 'onclick' => 'history.go(-1)']) ?>
+    <div class="row">
+        <div class="col-md-12">
+            <?= Html::submitButton(Yii::t('hipanel', 'Save'), ['class' => 'btn btn-success']) ?>
+            &nbsp;
+            <?= Html::button(Yii::t('hipanel:finance', 'Update estimates'), ['class' => 'btn btn-info', 'id' => 'update-estimates']) ?>
+            &nbsp;
+            <?= Html::button(Yii::t('hipanel', 'Cancel'), ['class' => 'btn btn-default', 'onclick' => 'history.go(-1)']) ?>
+        </div>
     </div>
-</div>
 <?php ActiveForm::end() ?>
 
 <?= DynamicFormInputsValueInheritor::widget([
