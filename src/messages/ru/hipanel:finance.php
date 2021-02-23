@@ -18,6 +18,7 @@ return [
     'Bill' => 'Платёж',
     'Bills' => 'Платежи',
     'Tariff' => 'Тариф',
+    'Tariff type' => 'Тип тарифа',
     'Tariffs' => 'Тарифы',
     'Servers' => 'Сервера',
     'Charges' => 'Списания',
