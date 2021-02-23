@@ -117,6 +117,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                         ? Yii::$app->formatter->asDate($date, 'LLLL y')
                         : Yii::$app->formatter->asDateTime($model->time);
                 },
+                'exportedColumns' => ['export_date', 'export_time', 'export_tariff', 'export_tariff_type'],
             ],
             'sum' => [
                 'class' => CurrencyColumn::class,
@@ -147,6 +148,37 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     $currencies = CurrencyFilter::addSymbolAndFilter($this->currencies);
                     return Html::activeDropDownList($filterModel, 'currency_in', $currencies, ['class' => 'form-control', 'prompt' => '--']);
                 },
+                'exportedColumns' => ['export_sum', 'export_currency'],
+            ],
+            'export_sum' => [
+                'label' => Yii::t('hipanel:finance', 'Sum'),
+                'value' => static fn($bill): string => $bill->sum,
+            ],
+            'export_currency' => [
+                'label' => Yii::t('hipanel', 'Currency'),
+                'value' => static fn($bill): string => $bill->currency,
+            ],
+            'export_balance' => [
+                'label' => Yii::t('hipanel', 'Balance'),
+                'value' => static fn($bill): string => $bill->balance,
+            ],
+            'export_tariff' => [
+                'label' => Yii::t('hipanel:finance', 'Tariff'),
+                'value' => static fn($bill): string => $bill->tariff ?? '',
+            ],
+            'export_tariff_type' => [
+                'label' => Yii::t('hipanel:finance', 'Tariff type'),
+                'value' => static fn($bill): string => $bill->tariff_type ?? '',
+            ],
+            'export_date' => [
+                'label' => Yii::t('hipanel', 'Date'),
+                'format' => ['date', 'php:Y-m-d'],
+                'value' => static fn($bill): string => $bill->time,
+            ],
+            'export_time' => [
+                'label' => Yii::t('hipanel', 'Time'),
+                'format' => ['date', 'php:H:i:s'],
+                'value' => static fn($bill): string => $bill->time,
             ],
             'index_page_balance' => [
                 'attribute' => 'balance',
@@ -177,6 +209,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 },
                 'filterOptions' => ['class' => 'narrow-filter text-right'],
                 'filter' => fn($column, $filterModel): string => BillIsPayedDropdown::widget(['model' => $filterModel]),
+                'exportedColumns' => ['export_balance', 'is_payed'],
             ],
             'quantity' => [
                 'format' => 'raw',
