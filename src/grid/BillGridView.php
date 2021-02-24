@@ -117,7 +117,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                         ? Yii::$app->formatter->asDate($date, 'LLLL y')
                         : Yii::$app->formatter->asDateTime($model->time);
                 },
-                'exportedColumns' => ['export_date', 'export_time', 'export_tariff', 'export_tariff_type'],
+                'exportedColumns' => ['export_year', 'export_date', 'export_time', 'export_tariff', 'export_tariff_type'],
             ],
             'sum' => [
                 'class' => CurrencyColumn::class,
@@ -169,6 +169,11 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             'export_tariff_type' => [
                 'label' => Yii::t('hipanel:finance', 'Tariff type'),
                 'value' => static fn($bill): string => $bill->tariff_type ?? '',
+            ],
+            'export_year' => [
+                'label' => Yii::t('hipanel', 'Year'),
+                'format' => ['date', 'php:Y'],
+                'value' => static fn($bill): string => $bill->time,
             ],
             'export_date' => [
                 'label' => Yii::t('hipanel', 'Date'),
