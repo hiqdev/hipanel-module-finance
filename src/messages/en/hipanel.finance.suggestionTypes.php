@@ -27,4 +27,7 @@ return [
     'storage' => 'Storage',
     'private_cloud_backup' => 'Private Cloud Backup',
     'private_cloud' => 'Private Cloud',
+    'calculator_public_cloud' => 'Calculator Public cloud',
+    'calculator_private_cloud' => 'Calculator Private cloud',
+    'calculator_storage' => 'Calculator Storage',
 ];
