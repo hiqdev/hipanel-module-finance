@@ -12,6 +12,8 @@ namespace hipanel\modules\finance\widgets;
 
 use hipanel\models\Ref;
 use hipanel\widgets\Type;
+use Yii;
+use yii\helpers\Html;
 
 class BillType extends Type
 {
@@ -35,13 +37,30 @@ class BillType extends Type
             'correction,*',
         ],
     ];
+
     public $field = 'type';
+
     public $i18nDictionary = 'hipanel.finance.billTypes';
+
+    public function init(): void
+    {
+        parent::init();
+        $this->setColor('none');
+    }
 
     protected function getModelLabel(): string
     {
         $billTypes = Ref::getListRecursively('type,bill', false);
 
         return $billTypes[$this->getFieldValue()] ?? $this->getFieldValue();
+    }
+
+    public function renderLabel(): string
+    {
+        $label = parent::renderLabel();
+        $color = $this->pickColor();
+        $paymentType = Html::tag('span', Yii::t('hipanel.finance.billTypes', explode(',', $this->getFieldValue())[0]), ['class' => "label label-{$color}"]);
+
+        return Html::tag('span', $label . $paymentType, ['style' => 'display: flex; justify-content: space-between; align-items: center;']);
     }
 }
