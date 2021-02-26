@@ -30,8 +30,7 @@ use hipanel\modules\finance\models\TargetObject;
 use Yii;
 use yii\base\DynamicModel;
 use yii\base\Event;
-use yii\base\Model;
-use function Webmozart\Assert\Tests\StaticAnalysis\false;
+use function Webmozart\Assert\Tests\StaticAnalysis\string;
 
 /**
  * Class PriceController.
@@ -145,51 +144,93 @@ class PriceController extends CrudController
             'calculator_public_cloud' => 'config',
             'calculator_private_cloud' => 'model',
         ];
-        $model = new DynamicModel(['id', 'type' => $typeMap[$type], 'name']);
+        $model = new DynamicModel(['id', 'price_type' => 'monthly,hardware', 'type' => $typeMap[$type], 'name']);
         $models = [];
         $selection = $this->request->post('selection', []);
         $newObjects = $this->request->post($model->formName(), []);
         if (!empty($selection)) {
-            $selection = array_combine(array_keys(ArrayHelper::map($selection, 'id', 'id')), $selection);
-            foreach ($selection as $id => $object) {
+            foreach ($selection as $item) {
                 $clone = clone $model;
-                $clone->id = $id;
-                $clone->name = $object['name'];
+                $clone->id = $item['object_id'];
+                $clone->name = $item['name'];
                 $clone->type = $typeMap[$type];
-                $models[$id] = $clone;
+                $clone->price_type = $item['price_type'];
+                $models[] = $clone;
             }
         }
         if (!empty($newObjects)) {
-            $keys = array_keys(ArrayHelper::map($newObjects, 'id', 'id'));
-            $multipleObjects = array_combine($keys, $newObjects);
             $suggestions = [];
-            foreach ($multipleObjects as $id => $object) {
+            foreach ($newObjects as $object) {
+                $object_id = $object['id'];
                 $object['type'] = empty($object['type']) ? $typeMap[$type] : $object['type'];
+                $newObject = [
+                    'id' => $object_id,
+                    'type' => $object['type'],
+                    'name' => $object['name'],
+                ];
                 $suggestions[] = $this->createPrice([
                     'class' => 'TemplatePrice',
                     'type' => 'monthly,hardware',
-                    'main_object_id' => $id,
+                    'main_object_id' => $object_id,
                     'main_object_name' => $object['name'],
-                    'object_id' => $id,
-                    'object' => $object,
+                    'object_id' => $object_id,
+                    'object' => $newObject,
                     'plan_id' => $plan_id,
                     'unit' => 'items',
                     'quantity' => 1,
-                    'price' => $selection[$id]['price'] ?? 0,
+                    'price' => $selection[$object_id]['price'] ?? 0,
                     'currency' => 'USD',
-                    'note' => $selection[$id]['note'] ?? '',
+                    'note' => $selection[$object_id]['note'] ?? '',
                     'subprices' => [
                         'EUR' => [
-                            'amount' => $selection[$id]['eur'] ?? 0,
+                            'amount' => $selection[$object_id]['eur'] ?? 0,
                             'currency' => 'EUR',
                         ],
                     ],
-                ], $object);
+                ], $newObject);
+                if ($type === 'calculator_public_cloud') {
+                    $trafficExist = array_filter(
+                        $selection,
+                        static fn($entry) => (string)$entry['object_id'] === (string)$object['object_id'] && $entry['price_type'] === 'overuse,server_traf_max'
+                    );
+                    if (!empty($trafficExist)) {
+                        $object = reset($trafficExist);
+                    }
+                    if (preg_match('/(\d+)\s(TB)$/i', $newObject['name'], $matches) !== 0) {
+                        $quantity = $matches[1];
+                    }
+                    $suggestions[] = $this->createPrice([
+                        'class' => 'TemplatePrice',
+                        'type' => 'overuse,server_traf_max',
+                        'main_object_id' => $object_id,
+                        'main_object_name' => $object['name'],
+                        'object_id' => $object_id,
+                        'object' => [
+                            'id' => $object_id,
+                            'type' => $object['price_type'],
+                            'name' => $object['name'],
+                        ],
+                        'plan_id' => $plan_id,
+                        'unit' => 'tb',
+                        'quantity' => $quantity ?? 0,
+                        'price' => $selection[$object_id]['price'] ?? 0,
+                        'currency' => 'USD',
+                        'note' => $selection[$object_id]['note'] ?? '',
+                        'subprices' => [
+                            'EUR' => [
+                                'amount' => $selection[$object_id]['eur'] ?? 0,
+                                'currency' => 'EUR',
+                            ],
+                        ],
+                    ], $newObject);
+                    unset($quantity);
+                }
             }
             $prices = $this->getSuggested($plan_id, $plan_id, null, $type);
             $existingObjects = array_keys(ArrayHelper::map($prices, 'object_id', 'id'));
-            $uniqSuggestions= array_filter($suggestions, static fn($suggestion) => !in_array($suggestion->object_id, $existingObjects, true));
+            $uniqSuggestions = array_filter($suggestions, static fn($suggestion) => !in_array($suggestion->object_id, $existingObjects, true));
             $prices = array_merge($prices, $uniqSuggestions);
+            $prices = PriceSort::anyPrices()->values($prices, true);
 
             return $this->renderAjax('_form', [
                 'type' => $type,
@@ -201,6 +242,7 @@ class PriceController extends CrudController
         if (empty($models)) {
             $models = [$model];
         }
+        $models = array_values(array_filter($models, static fn($entry) => $entry->price_type === 'monthly,hardware'));
 
         return $this->renderAjax('_add-extra-prices', [
             'plan' => $plan,

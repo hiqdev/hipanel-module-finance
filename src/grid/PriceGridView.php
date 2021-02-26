@@ -113,9 +113,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                     'pnames' => 'monthly,overuse',
                     'with_recursive' => 1,
                 ],
-                'value' => function ($model) {
-                    return BillType::widget(['model' => $model]);
-                },
+                'value' => static fn($model) => BillType::widget(['model' => $model]),
             ],
             'unit' => [
                 'class' => RefColumn::class,

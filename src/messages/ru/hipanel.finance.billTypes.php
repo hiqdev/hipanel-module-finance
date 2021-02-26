@@ -44,6 +44,12 @@ return [
     'Private Cloud backup disk usage' => 'Бэкап Private Cloud',
     'Automatic VPS backup monthly fee' => 'Автобэекап',
 
+    'monthly' => 'абонплата',
+    'overuse' => 'перебор',
+    'leasing' => 'лизинг',
+    'correction' => 'корректировка',
+    'exchange' => 'обмен',
+
     'Negative balance correction' => 'Отрицательная корректировка',
     'Positive balance correction' => 'Корректировка',
     'Registration' => 'Регистрация',
