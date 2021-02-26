@@ -26,15 +26,17 @@ class AddExtraPricesButton extends Widget
                 var selection = [];
                 $('#prices-form .price-item').each(function() {
                     const row = $(this);
-                    const id = row.find('input[id$=\"object_id\"]').val();
-                    if (id) {
+                    const object_id = row.find('input[id$=\"object_id\"]').val();
+                    if (object_id) {
                         const name = row.find('input[id$=\"object\"]').val();
                         const price = row.find('input[id$=\"-price\"]').val();
+                        const type = row.find('input[id$=\"-type\"]').val();
                         const note = row.find('input[id$=\"-note\"].form-control').val();
                         const eur = row.find('input[id$=\"[EUR]\"]').val();
                         selection.push({
-                            id: id,
+                            object_id: object_id,
                             name: name,
+                            price_type: type,
                             price: price,
                             note: note,
                             eur: parseInt(eur) * 100

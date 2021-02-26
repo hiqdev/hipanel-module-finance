@@ -58,15 +58,7 @@ $canAddExtraPrices = in_array($type, ['calculator_private_cloud', 'calculator_pu
                     'backToPlan' => Html::a($plan->name, Url::to(['@plan/view', 'id' => $plan->id])),
                 ]) ?>
                 <?php if ($canAddExtraPrices) : ?>
-                    <?= Yii::t('hipanel:finance', 'or {0}', AddExtraPricesButton::widget([
-                        'plan_id' => $plan->id,
-                        'type' => $type,
-                        'toggleButton' => [
-                            'tag' => 'a',
-                            'class' => '',
-                        ],
-                    ]),
-                    ) ?>
+                    <?= Yii::t('hipanel:finance', 'or {0}', Yii::t('hipanel:finance', 'Add extra prices')) ?>
                 <?php endif ?>
                 <?php Alert::end() ?>
             </div>
