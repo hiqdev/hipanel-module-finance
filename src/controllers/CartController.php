@@ -65,6 +65,13 @@ class CartController extends \yii\web\Controller
 
     public function actionSelect()
     {
+        $finisher = new CartFinisher([
+            'cart' => $this->module->getCart(),
+            'exchangeFromCurrency' => null,
+            'user' => Yii::$app->user,
+        ]);
+        $finisher->ensureCanBeFinished();
+
         return $this->render('select', [
             'negotiator' => $this->getNegotiator()
         ]);
