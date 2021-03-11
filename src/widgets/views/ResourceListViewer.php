@@ -8,9 +8,10 @@ use yii\base\ViewContextInterface;
 use yii\bootstrap\Html;
 use yii\data\DataProviderInterface;
 use yii\db\ActiveRecordInterface;
+use yii\web\Controller;
 
 /** @var DataProviderInterface $dataProvider */
-/** @var ViewContextInterface $originalContext */
+/** @var ViewContextInterface|Controller $originalContext */
 /** @var ActiveRecordInterface $originalSearchModel */
 /** @var IndexPageUiOptions $uiModel */
 /** @var ResourceConfigurator $configurator */
@@ -22,8 +23,10 @@ use yii\db\ActiveRecordInterface;
     'dataProvider' => $dataProvider,
     'originalContext' => $originalContext,
     'searchView' => $configurator->getSearchView(),
+    'searchFormOptions' => [
+        'action' => ['/' . $originalContext->request->pathInfo],
+    ],
 ]) ?>
-    <?php $page->setSearchFormOptions(['action' => '']) ?>
     <?php $page->setSearchFormData(['uiModel' => $uiModel]) ?>
     <?php $page->beginContent('sorter-actions') ?>
         <?= $page->renderSorter([
