@@ -94,31 +94,39 @@ class ResourceListViewer extends BaseResourceViewer
         body: formData
       });
       const result = await response.json();
-      Object.entries(result.resources).forEach(entry => {
-        const [id, resources] = entry;
-        Object.entries(resources).forEach(resource => {
-          const [type, data] = resource;
-          const cell = document.querySelector('tr[data-key="' + id + '"] > td[data-type="' + type + '"]');
+      if (result.error) {
+        throw {
+          name: 'Error',
+          message: result.error
+        };
+      } else {
+        Object.entries(result.resources).forEach(entry => {
+          const [id, resources] = entry;
+          Object.entries(resources).forEach(resource => {
+            const [type, data] = resource;
+            const cell = document.querySelector('tr[data-key="' + id + '"] > td[data-type="' + type + '"]');
+            if (!!cell) {
+              cell.innerHTML = data.qty + ' ' + data.unit;
+            }
+          });
+        });
+        Object.entries(result.totals).forEach(total => {
+          const [type, data] = total;
+          const cell = document.querySelector('tfoot td.' + type);
           if (!!cell) {
             cell.innerHTML = data.qty + ' ' + data.unit;
           }
         });
-      });
-      Object.entries(result.totals).forEach(total => {
-        const [type, data] = total;
-        const cell = document.querySelector('tfoot td.' + type);
-        if (!!cell) {
-          cell.innerHTML = data.qty + ' ' + data.unit;
-        }
-      });
+      }
+    } catch (error) {
+      hipanel.notify.error(error.message);
+    } finally {
       const not_counted = document.createElement('span');
       not_counted.classList.add('text-danger');
       not_counted.appendChild(document.createTextNode('not counted'));
       document.querySelectorAll('table .resource-spinner').forEach(node => {
         node.parentNode.replaceChild(not_counted.cloneNode(true), node);
       });
-    } catch (error) {
-      hipanel.notify.error(error.message);
     }
   }
 

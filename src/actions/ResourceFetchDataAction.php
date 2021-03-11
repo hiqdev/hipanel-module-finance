@@ -8,7 +8,7 @@ use hipanel\actions\RenderJsonAction;
 use hipanel\modules\finance\helpers\ResourceConfigurator;
 use hipanel\modules\finance\helpers\ResourceHelper;
 use hipanel\modules\finance\models\proxy\Resource;
-use RuntimeException;
+use hiqdev\hiart\ResponseErrorException;
 use yii\base\DynamicModel;
 
 class ResourceFetchDataAction extends RenderJsonAction
@@ -27,6 +27,9 @@ class ResourceFetchDataAction extends RenderJsonAction
                     'time_till' => $request->post('time_till'),
                     'groupby' => 'server_traf_month',
                 ]);
+                if (isset($resources['error'])) {
+                    return $resources;
+                }
                 $resources = ResourceHelper::aggregateByObject($resources, $this->configurator);
 
                 return [
@@ -53,17 +56,22 @@ class ResourceFetchDataAction extends RenderJsonAction
             ['groupby', 'in', 'range' => ['server_traf_month', 'server_traf_week', 'server_traf_day']],
         ]);
         if ($options->hasErrors()) {
-            throw new RuntimeException($options->getErrors()[0]);
+            return ['error' => $options->getErrors()[0]];
+        }
+        try {
+            $resources = Resource::find()
+                ->where([
+                    'object_id' => explode(',', $options->object_ids),
+                    'time_from' => $options->time_from,
+                    'time_till' => $options->time_till,
+                    'groupby' => $options->groupby,
+                ])
+                ->limit(-1)
+                ->all();
+        } catch (ResponseErrorException $exception) {
+            return ['error' => $exception->getMessage()];
         }
 
-        return Resource::find()
-            ->where([
-                'object_id' => explode(',', $options->object_ids),
-                'time_from' => $options->time_from,
-                'time_till' => $options->time_till,
-                'groupby' => $options->groupby,
-            ])
-            ->limit(-1)
-            ->all();
+        return $resources;
     }
 }
