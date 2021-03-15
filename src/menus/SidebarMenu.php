@@ -74,6 +74,11 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                         'url'     => ['/finance/charge/index'],
                         'visible' => $user->can('bill.charges.read'),
                     ],
+                    'target' => [
+                        'label'   => Yii::t('hipanel:finance', 'Targets'),
+                        'url'     => ['/finance/target/index'],
+                        'visible' => $user->can('plan.read'),
+                    ],
                 ],
             ],
         ];

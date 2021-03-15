@@ -8,6 +8,11 @@
  * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
+use hipanel\modules\finance\helpers\ResourceConfigurator;
+use hipanel\modules\finance\models\ServerResource;
+use hipanel\modules\finance\models\Target;
+use hipanel\modules\finance\models\TargetSearch;
+
 return [
     'aliases' => [
         '@bill' => '/finance/bill',
@@ -182,6 +187,14 @@ return [
                 );
             },
             \Money\MoneyParser::class => \Money\Parser\DecimalMoneyParser::class,
+            'target-resource-config' => static fn() => ResourceConfigurator::build()
+                ->setModelClassName(Target::class)
+                ->setSearchModelClassName(TargetSearch::class)
+//                ->setToObjectUrl('@server/resource-detail')
+//                ->setGridClassName(TargetGridView::class)
+                ->setResourceModelClassName(ServerResource::class)
+//                ->setSearchView('@vendor/hiqdev/hipanel-module-finance/src/views/target/_search')
+                ->setColumns(['server_traf', 'server_traf_in', 'server_traf95', 'server_traf95_in']),
         ],
     ],
 ];
