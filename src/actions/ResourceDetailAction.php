@@ -21,9 +21,11 @@ class ResourceDetailAction extends IndexAction
     public function init(): void
     {
         $configurator = $this->configurator;
-        $this->data = fn(Action $action): array => [
-            'originalModel' => call_user_func([$this->model, 'findOne'], $action->controller->request->get('id')),
-        ];
+        if (!$this->data) {
+            $this->data = fn(Action $action): array => [
+                'originalModel' => call_user_func([$this->model, 'findOne'], $action->controller->request->get('id')),
+            ];
+        }
         $this->setSearchModel(new ResourceSearch());
         $this->responseVariants['resource-total'] = static function (VariantsAction $action) use ($configurator): string {
             $dataProvider = $action->parent->getDataProvider();
