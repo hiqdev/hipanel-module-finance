@@ -169,7 +169,6 @@ class PriceController extends CrudController
                     'name' => $object['name'],
                 ];
                 $suggestions[] = $this->createPrice([
-                    'class' => 'TemplatePrice',
                     'type' => 'monthly,hardware',
                     'main_object_id' => $object_id,
                     'main_object_name' => $object['name'],
@@ -177,7 +176,7 @@ class PriceController extends CrudController
                     'object' => $newObject,
                     'plan_id' => $plan_id,
                     'unit' => 'items',
-                    'quantity' => 1,
+                    'quantity' => 0,
                     'price' => $selection[$object_id]['price'] ?? 0,
                     'currency' => 'USD',
                     'note' => $selection[$object_id]['note'] ?? '',
@@ -200,7 +199,6 @@ class PriceController extends CrudController
                         $quantity = $matches[1];
                     }
                     $suggestions[] = $this->createPrice([
-                        'class' => 'TemplatePrice',
                         'type' => 'overuse,server_traf_max',
                         'main_object_id' => $object_id,
                         'main_object_name' => $object['name'],
