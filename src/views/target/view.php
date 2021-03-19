@@ -20,6 +20,7 @@ use yii\helpers\Html;
 $this->title = Html::encode($originalModel->name);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Targets'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <div class="row">

@@ -9,8 +9,8 @@
  */
 
 use hipanel\modules\finance\helpers\ResourceConfigurator;
-use hipanel\modules\finance\models\ServerResource;
 use hipanel\modules\finance\models\Target;
+use hipanel\modules\finance\models\TargetResource;
 use hipanel\modules\finance\models\TargetSearch;
 
 return [
@@ -190,11 +190,8 @@ return [
             'target-resource-config' => static fn() => ResourceConfigurator::build()
                 ->setModelClassName(Target::class)
                 ->setSearchModelClassName(TargetSearch::class)
-//                ->setToObjectUrl('@server/resource-detail')
-//                ->setGridClassName(TargetGridView::class)
-                ->setResourceModelClassName(ServerResource::class)
-//                ->setSearchView('@vendor/hiqdev/hipanel-module-finance/src/views/target/_search')
-                ->setColumns(['server_traf', 'server_traf_in', 'server_traf95', 'server_traf95_in']),
+                ->setResourceModelClassName(TargetResource::class)
+                ->setColumns(['server_du', 'cdn_traf', 'cdn_traf_max', 'server_traf_max', 'server_sata', 'server_traf95_max', 'server_ssd']),
         ],
     ],
 ];
