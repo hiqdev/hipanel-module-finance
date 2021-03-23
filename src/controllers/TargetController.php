@@ -8,6 +8,7 @@ use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\models\stub\ClientRelationFreeStub;
 use hipanel\modules\finance\actions\ResourceDetailAction;
+use hipanel\modules\finance\actions\ResourceFetchDataAction;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Target;
 use Yii;
@@ -31,6 +32,10 @@ class TargetController extends CrudController
         return array_merge(parent::actions(), [
             'search' => [
                 'class' => ComboSearchAction::class,
+            ],
+            'fetch-resources' => [
+                'class' => ResourceFetchDataAction::class,
+                'configurator' => Yii::$container->get('target-resource-config'),
             ],
             'index' => [
                 'class' => IndexAction::class,

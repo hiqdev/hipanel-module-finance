@@ -70,6 +70,8 @@ class ResourceHelper
             'server_traf_in',
             'server_traf',
             'server_du',
+            'cdn_traf',
+            'cdn_traf_max',
         ];
         if (in_array($decorator->resource->type, $convertibleTypes, true)) {
             $amount = Quantity::create(Unit::create($decorator->resource->unit), $amount)
@@ -78,6 +80,34 @@ class ResourceHelper
         }
 
         return $amount;
+    }
+
+    public static function prepareDetailView(array $resources, $configurator): array
+    {
+        $result = [];
+        $resources = self::aggregateByObject($resources, $configurator);
+        foreach ($resources as $id => $types) {
+            foreach ($types as $type => $models) {
+                foreach ($models as $resource) {
+                    $decorator = $resource->decorator();
+                    $item = [
+                        'object_id' => $id,
+                        'date' => $resource->date,
+                        'type' => $resource->type,
+                        'type_label' => $decorator->displayTitle(),
+                        'qty' => self::convertAmount($decorator),
+                        'unit' => $decorator->displayUnit(),
+                    ];
+                    $result[$id][$type][] = $item;
+                }
+                self::normalizeQuantity($result[$id][$type]);
+            }
+        }
+
+        return [
+            'resources' => $result,
+            'totals' => self::calculateTotal($resources, $configurator),
+        ];
     }
 
     public static function prepare(array $resources): array
