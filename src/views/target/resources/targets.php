@@ -11,7 +11,6 @@ use yii\db\ActiveRecordInterface;
 /** @var ActiveRecordInterface $model */
 
 $this->title = Yii::t('hipanel', 'Target resources');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:server', 'Targets'), 'url' => ['@target/index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

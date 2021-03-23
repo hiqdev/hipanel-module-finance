@@ -39,11 +39,18 @@ class TargetController extends CrudController
                 'class' => ResourceFetchDataAction::class,
                 'configurator' => Yii::$container->get('target-resource-config'),
             ],
-            'target-resources' => [
+            'resource-list' => [
                 'class' => ResourceListAction::class,
                 'model' => Target::class,
                 'searchModel' => TargetSearch::class,
                 'view' => 'resources/targets',
+            ],
+            'resource-detail' => [
+                'class' => ResourceDetailAction::class,
+                'model' => Target::class,
+                'view' => 'resources/target',
+                'configurator' => Yii::$container->get('target-resource-config'),
+                'data' => fn($action, $data): array => $this->getData($action, $data),
             ],
             'index' => [
                 'class' => IndexAction::class,
@@ -52,22 +59,25 @@ class TargetController extends CrudController
                 'class' => ResourceDetailAction::class,
                 'model' => Target::class,
                 'configurator' => Yii::$container->get('target-resource-config'),
-                'data' => function ($action, $data) {
-                    $target = Target::findOne($action->controller->request->get('id'));
-                    $attributes = [
-                        'id' => $target->client_id,
-                        'login' => $target->client,
-                    ];
-                    $client = new ClientRelationFreeStub($attributes);
-                    $tariff = Plan::find()->where(['id' => $target->tariff_id])->one();
-
-                    return array_merge($data, [
-                        'originalModel' => $target,
-                        'client' => $client,
-                        'tariff' => $tariff,
-                    ]);
-                },
+                'data' => fn($action, $data): array => $this->getData($action, $data),
             ],
+        ]);
+    }
+
+    private function getData($action, $data)
+    {
+        $target = Target::findOne($action->controller->request->get('id'));
+        $attributes = [
+            'id' => $target->client_id,
+            'login' => $target->client,
+        ];
+        $client = new ClientRelationFreeStub($attributes);
+        $tariff = Plan::find()->where(['id' => $target->tariff_id])->one();
+
+        return array_merge($data, [
+            'originalModel' => $target,
+            'client' => $client,
+            'tariff' => $tariff,
         ]);
     }
 }

@@ -72,6 +72,8 @@ class ResourceHelper
             'server_du',
             'cdn_traf',
             'cdn_traf_max',
+            'server_sata',
+            'server_ssd',
         ];
         if (in_array($decorator->resource->type, $convertibleTypes, true)) {
             $amount = Quantity::create(Unit::create($decorator->resource->unit), $amount)
