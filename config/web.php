@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
+use hipanel\modules\finance\grid\TargetGridView;
 use hipanel\modules\finance\helpers\ResourceConfigurator;
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\models\TargetResource;
@@ -26,6 +27,7 @@ return [
         '@price' => '/finance/price',
         '@tariffprofile' => '/finance/tariff-profile',
         '@requisite' => '/finance/requisite',
+        '@target' => '/finance/target',
     ],
     'modules' => [
         'finance' => [
@@ -190,9 +192,12 @@ return [
             'target-resource-config' => static fn() => ResourceConfigurator::build()
                 ->setModelClassName(Target::class)
                 ->setSearchModelClassName(TargetSearch::class)
+                ->setToObjectUrl('@target/resource-detail')
+                ->setGridClassName(TargetGridView::class)
                 ->setResourceModelClassName(TargetResource::class)
-                // TODO: Unhardcode resurce types
-                ->setColumns(['server_du', 'cdn_traf', 'cdn_traf_max', 'server_traf_max', 'server_sata', 'server_traf95_max', 'server_ssd']),
+                ->setSearchView('@vendor/hiqdev/hipanel-module-finance/src/views/target/_search')
+                // TODO: Unhardcode resource types
+                ->setColumns(['server_sata', 'server_ssd', 'server_du', 'cdn_traf', 'cdn_traf_max', 'server_traf', 'server_traf_in', 'server_traf95', 'server_traf95_in']),
         ],
     ],
 ];

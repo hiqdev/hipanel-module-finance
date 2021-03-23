@@ -36,6 +36,7 @@ class ServerResourceDecoratorFactory extends ResourceDecoratorFactory
             'server_traf' => TrafficResourceDecorator::class,
             'server_du' => ServerDUResourceDecorator::class,
             'server_ssd' => HddResourceDecorator::class,
+            'server_sata' => ServerSataDUResourceDecorator::class,
             'rack_unit' => RackUnitResourceDecorator::class,
             'location' => LocationResourceDecorator::class,
             'monthly' => MonthlyResourceDecorator::class,
