@@ -191,6 +191,7 @@ return [
                 ->setModelClassName(Target::class)
                 ->setSearchModelClassName(TargetSearch::class)
                 ->setResourceModelClassName(TargetResource::class)
+                // TODO: Unhardcode resurce types
                 ->setColumns(['server_du', 'cdn_traf', 'cdn_traf_max', 'server_traf_max', 'server_sata', 'server_traf95_max', 'server_ssd']),
         ],
     ],
