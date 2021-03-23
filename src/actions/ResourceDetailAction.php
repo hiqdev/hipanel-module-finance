@@ -22,7 +22,7 @@ class ResourceDetailAction extends IndexAction
     {
         $configurator = $this->configurator;
         if (!$this->data) {
-            $this->data = fn(Action $action): array => [
+            $this->data = fn(Action $action, $data): array => [
                 'originalModel' => call_user_func([$this->model, 'findOne'], $action->controller->request->get('id')),
             ];
         }
@@ -50,12 +50,12 @@ class ResourceDetailAction extends IndexAction
         parent::beforePerform();
         $query = $this->getDataProvider()->query;
         $query->andWhere([
-            'time_from' => (new DateTime())->modify('first day of this month')->format('Y-m-d'),
+            'time_from' => (new DateTime('2007-01-01'))->format('Y-m-d'),
             'time_till' => (new DateTime())->modify('last day of this month')->format('Y-m-d'),
         ]);
         $query->andWhere([
             'object_id' => Yii::$app->request->get('id'),
-            'groupby' => 'server_traf_day',
+            'groupby' => 'server_traf_year',
         ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\widgets;
 
+use hipanel\modules\finance\assets\ResourceDetailAsset;
 use yii\db\ActiveRecordInterface;
 
 class ResourceDetailViewer extends BaseResourceViewer
@@ -10,6 +11,8 @@ class ResourceDetailViewer extends BaseResourceViewer
 
     public function run(): string
     {
+        ResourceDetailAsset::register($this->view);
+
         return $this->render('ResourceDetailViewer', [
             'configurator' => $this->configurator,
             'dataProvider' => $this->dataProvider,

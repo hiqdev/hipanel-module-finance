@@ -10,8 +10,8 @@
 
 use hipanel\modules\finance\grid\TargetGridView;
 use hipanel\modules\finance\helpers\ResourceConfigurator;
-use hipanel\modules\finance\models\ServerResource;
 use hipanel\modules\finance\models\Target;
+use hipanel\modules\finance\models\TargetResource;
 use hipanel\modules\finance\models\TargetSearch;
 
 return [
@@ -194,8 +194,9 @@ return [
                 ->setSearchModelClassName(TargetSearch::class)
                 ->setToObjectUrl('@target/view')
                 ->setGridClassName(TargetGridView::class)
-                ->setResourceModelClassName(ServerResource::class)
+                ->setResourceModelClassName(TargetResource::class)
                 ->setSearchView('@vendor/hiqdev/hipanel-module-finance/src/views/target/_search')
+                // TODO: Unhardcode resurce types
                 ->setColumns(['cdn_traf', 'cdn_traf_max', 'server_traf', 'server_traf_in', 'server_traf95', 'server_traf95_in']),
         ],
     ],
