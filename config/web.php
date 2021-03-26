@@ -73,6 +73,7 @@ return [
         'themeManager' => [
             'pathMap' => [
                 dirname(__DIR__) . '/src/views' => '$themedViewPaths',
+                dirname(__DIR__) . '/src/widgets/views' => '$themedWidgetPaths',
             ],
         ],
         'i18n' => [
