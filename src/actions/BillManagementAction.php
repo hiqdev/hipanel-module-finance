@@ -35,7 +35,7 @@ class BillManagementAction extends Action
     /**
      * @var BillTypesProvider
      */
-    private $billTypesProvider;
+    protected $billTypesProvider;
 
     /**
      * @var string
@@ -131,7 +131,7 @@ class BillManagementAction extends Action
         throw new UnprocessableEntityHttpException('Id is missing');
     }
 
-    private function createCollection(): void
+    protected function createCollection(): void
     {
         $this->collection = new Collection([
             'model' => new BillForm(['scenario' => $this->scenario]),

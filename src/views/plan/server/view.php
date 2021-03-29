@@ -3,6 +3,7 @@
 use hipanel\modules\finance\grid\SalesInPlanGridView;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
+use hipanel\modules\finance\widgets\CreateBillFromHardwareButton;
 use hipanel\modules\finance\widgets\CreatePricesButton;
 use hipanel\widgets\IndexPage;
 use yii\data\ArrayDataProvider;
@@ -21,6 +22,9 @@ use yii\data\ArrayDataProvider;
 
 <?php if (!$model->your_tariff) : ?>
     <?php $page->beginContent('bulk-actions') ?>
+        <?php if (Yii::$app->user->can('bill.create')) : ?>
+            <?= CreateBillFromHardwareButton::widget(compact('model')) ?>
+        <?php endif ?>
         <?php if (Yii::$app->user->can('price.update')) : ?>
             <?= $page->renderBulkButton('@price/update', Yii::t('hipanel', 'Update'), ['color' => 'warning']) ?>
         <?php endif ?>

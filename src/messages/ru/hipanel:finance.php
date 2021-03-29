@@ -234,4 +234,8 @@ return [
     'Select model' => 'Выберите модель',
     'Select config' => 'Выберите конфигурацию',
     'Add prices' => 'Добавить прайсы',
+
+    'Create bill' => 'Создать платеж',
+    'Prepare to bill creation' => 'Подготовка к созданию платежа',
+    'Proceed to bill(s) creation' => 'Перейти к созданию платежа(ей)',
 ];
