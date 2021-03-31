@@ -7,6 +7,7 @@ use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillFromPricesForm;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
+use yii\web\BadRequestHttpException;
 
 class CreateFromPricesAction extends BillManagementAction
 {
@@ -45,5 +46,7 @@ class CreateFromPricesAction extends BillManagementAction
                 'billGroupLabels' => $billGroupLabels,
             ]);
         }
+        
+        throw new BadRequestHttpException('unknown error while creating invoice');
     }
 }
