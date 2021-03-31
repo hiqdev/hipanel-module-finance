@@ -21,6 +21,7 @@ use hipanel\actions\ViewAction;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\controllers\ContactController;
 use hipanel\modules\finance\actions\BillManagementAction;
+use hipanel\modules\finance\actions\CreateFromPricesAction;
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\forms\CurrencyExchangeForm;
@@ -122,6 +123,9 @@ class BillController extends \hipanel\base\CrudController
             ],
             'create' => [
                 'class' => BillManagementAction::class,
+            ],
+            'create-from-prices' => [
+                'class' => CreateFromPricesAction::class,
             ],
             'update' => [
                 'class' => BillManagementAction::class,
