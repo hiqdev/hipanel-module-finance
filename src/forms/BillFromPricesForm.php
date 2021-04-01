@@ -7,6 +7,7 @@ use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\stock\models\Model;
 use Yii;
+use function Webmozart\Assert\Tests\StaticAnalysis\float;
 
 class BillFromPricesForm extends Model
 {
@@ -84,7 +85,7 @@ class BillFromPricesForm extends Model
             $sum += $charge->sum;
         }
 
-        return number_format($sum, 2);
+        return (float)number_format($sum, 2);
     }
 
     /**

@@ -32,10 +32,15 @@ class CreateFromPricesAction extends BillManagementAction
         if ($this->controller->request->isPost && !empty($priceIds)) {
             $model->load($this->controller->request->post());
             $sales = Sale::find()->where(['object_ids' => array_keys($pricesByObjectId), 'tariff_id' => reset($prices)->plan_id])->limit(-1)->all();
+            if (empty($sales)) {
+                throw new BadRequestHttpException('Apparently the details belonging to the object(s) have not been sold yet');
+            }
             $indexedSales = ArrayHelper::index($sales, 'object_id');
             $bills = [];
             foreach ($pricesByObjectId as $mainObjectId => $prices) {
-                $bills[] = $model->createBillWithCharges($indexedSales[$mainObjectId]->buyer_id, $mainObjectId, $this->billObjectClass, $prices);
+                if (isset($indexedSales[$mainObjectId])) {
+                    $bills[] = $model->createBillWithCharges($indexedSales[$mainObjectId]->buyer_id, $mainObjectId, $this->billObjectClass, $prices);
+                }
             }
             $billForms = BillForm::createMultipleFromBills($bills, $this->scenario);
             $this->createCollection();
@@ -47,7 +52,7 @@ class CreateFromPricesAction extends BillManagementAction
                 'billGroupLabels' => $billGroupLabels,
             ]);
         }
-        
+
         throw new BadRequestHttpException('unknown error while creating invoice');
     }
 }

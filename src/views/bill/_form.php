@@ -145,7 +145,7 @@ $form = ActiveForm::begin([
                                 'widgetBody' => '.bill-charges', // required: css class selector
                                 'widgetItem' => '.charge-item', // required: css class
                                 'limit' => 99, // the maximum times, an element can be cloned (default 999)
-                                'min' => count($charges),
+                                'min' => count($charges) === 1 && $charge->getIsNewRecord() ? 0 : count($charges),
                                 'insertButton' => '.add-charge',
                                 'deleteButton' => '.remove-charge',
                                 'model' => $charge,
