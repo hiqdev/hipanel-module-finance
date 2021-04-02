@@ -32,17 +32,16 @@ class MultipleBillTypeCombo extends StaticCombo
      */
     public $multiple = true;
 
+    public bool $dontCutType = false;
+
     /**
      * @inheritDoc
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
         $this->data = $this->getData();
-        $this->inputOptions[] = [
-            'groups' => $this->billGroupLabels,
-        ];
     }
 
     /**
@@ -51,13 +50,19 @@ class MultipleBillTypeCombo extends StaticCombo
     private function getData(): array
     {
         $types = [];
-        foreach ($this->billTypes as $gtype => $category) {
-            $item = [];
+        foreach ($this->billTypes as $groupType => $category) {
+            $items = [];
             foreach ($category as $key => $label) {
-                $item[substr($key, strpos($key, ',') + 1)] = $label;
+                if ($this->dontCutType) {
+                    $items[$key] = $label;
+                } else {
+                    $items[substr($key, strpos($key, ',') + 1)] = $label;
+                }
             }
-            $types[$gtype] = $item;
+            $groupLabel = isset($this->billGroupLabels[$groupType]) ? $this->billGroupLabels[$groupType]['label'] : $groupType;
+            $types[$groupLabel] = $items;
         }
+
         return $types;
     }
 }
