@@ -94,7 +94,7 @@ $form = ActiveForm::begin([
                                     'billTypes' => $billTypes,
                                     'billGroupLabels' => $billGroupLabels,
                                     'multiple' => false,
-                                    'dontCutType' => true,
+                                    'useFullType' => true,
                                     'value' => $model->gtype ? implode(',', [$model->gtype, $model->type]) : $model->type,
                                 ]) ?>
                             </div>
@@ -187,7 +187,7 @@ $form = ActiveForm::begin([
                                                         'billTypes' => $billTypes,
                                                         'billGroupLabels' => $billGroupLabels,
                                                         'multiple' => false,
-                                                        'dontCutType' => true,
+                                                        'useFullType' => true,
                                                         'value' => $charge->ftype,
                                                     ]) ?>
                                                 </div>

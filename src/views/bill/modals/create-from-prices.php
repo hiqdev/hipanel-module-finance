@@ -33,7 +33,7 @@ use yii\helpers\Url;
             'billTypes' => $billTypes,
             'billGroupLabels' => $billGroupLabels,
             'multiple' => false,
-            'dontCutType' => true,
+            'useFullType' => true,
         ]) ?>
     </div>
     <div class="col-md-6">
