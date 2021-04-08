@@ -189,7 +189,7 @@ $form = ActiveForm::begin([
                                                         'billGroupLabels' => $billGroupLabels,
                                                         'multiple' => false,
                                                         'useFullType' => true,
-                                                        'value' => $charge->ftype,
+                                                        'value' => $charge->ftype ?? $charge->type,
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-1">
