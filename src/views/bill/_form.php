@@ -184,7 +184,7 @@ $form = ActiveForm::begin([
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <?= $form->field($model, "[$i][$j]type")->widget(MultipleBillTypeCombo::class, [
+                                                    <?= $form->field($charge, "[$i][$j]type")->widget(MultipleBillTypeCombo::class, [
                                                         'billTypes' => $billTypes,
                                                         'billGroupLabels' => $billGroupLabels,
                                                         'multiple' => false,
