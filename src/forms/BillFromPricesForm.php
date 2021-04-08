@@ -66,10 +66,12 @@ class BillFromPricesForm extends Model
         $charges = [];
         foreach ($this->prices as $price) {
             $charges[] = new Charge([
+                'id' => 'fake_id', // this need for DynamicForm, if `id` is not exists it not displayed in Detalization.
                 'class' => $classMap[$price->type],
                 'object_id' => $price->object_id,
-                'name' => $price->object->name,
+                'name' => $price->object->label,
                 'ftype' => $this->type,
+                'type' => $this->type,
                 'sum' => number_format(((float)$price->price / $this->numbersOfDays($bill)) * $bill->quantity, 2),
                 'quantity' => 1,
             ]);
@@ -85,7 +87,7 @@ class BillFromPricesForm extends Model
             $sum += $charge->sum;
         }
 
-        return (float)number_format($sum, 2);
+        return -(float)number_format($sum, 2);
     }
 
     /**
