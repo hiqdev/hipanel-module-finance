@@ -142,7 +142,7 @@ class BillManagementAction extends Action
 
                 return [$key, $value];
             },
-            'dataCollector' => fn(BillForm $model) => [$model->getPrimaryKey(), $model->toArray()],
+            'dataCollector' => fn(BillForm $model) => [$model->getPrimaryKey(), $model->toArray([], ['charges'])],
         ]);
     }
 

@@ -110,6 +110,11 @@ class BillForm extends Model
      */
     public $charges = [];
 
+    public function extraFields()
+    {
+        return ['charges'];
+    }
+
     public function behaviors()
     {
         return [
