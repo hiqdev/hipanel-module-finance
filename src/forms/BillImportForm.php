@@ -113,7 +113,8 @@ class BillImportForm extends \yii\base\Model
             $this->resolveClients(ArrayHelper::getColumn($bills, 'client'));
 
             foreach ($bills as $bill) {
-                $bill->time = \Yii::$app->formatter->asDatetime($this->resolveTime($bill->time), 'php:d.m.Y H:i:s');
+                $time = $this->resolveTime($bill->time);
+                $bill->time = $time !== false ? \Yii::$app->formatter->asDatetime($time, 'php:d.m.Y H:i:s') : false;
                 $bill->type = $this->resolveType($bill->type);
                 $bill->client_id = $this->convertClientToId($bill->client);
             }
@@ -177,7 +178,7 @@ class BillImportForm extends \yii\base\Model
             return strtotime('first day of last month midnight');
         }
 
-        return time();
+        return false;
     }
 
     /**

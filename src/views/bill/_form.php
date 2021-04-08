@@ -4,6 +4,7 @@ use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\widgets\combo\MultipleBillTypeCombo;
 use hipanel\modules\finance\widgets\combo\RequisitesCombo;
 use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\DateTimePicker;
@@ -89,8 +90,11 @@ $form = ActiveForm::begin([
                                 ]) ?>
                             </div>
                             <div class="col-md-3">
-                                <?= $form->field($model, "[$i]type")->dropDownList($billTypes, [
-                                    'groups' => $billGroupLabels,
+                                <?= $form->field($model, "[$i]type")->widget(MultipleBillTypeCombo::class, [
+                                    'billTypes' => $billTypes,
+                                    'billGroupLabels' => $billGroupLabels,
+                                    'multiple' => false,
+                                    'useFullType' => true,
                                     'value' => $model->gtype ? implode(',', [$model->gtype, $model->type]) : $model->type,
                                 ]) ?>
                             </div>
@@ -129,8 +133,9 @@ $form = ActiveForm::begin([
                                     'format' => 'yyyy-mm-dd hh:ii:ss',
                                 ],
                                 'options' => [
-                                    'value' => Yii::$app->formatter->asDatetime(($model->isNewRecord && empty($model->time) ? new DateTime() : $model->time),
-                                        'php:Y-m-d H:i:s'),
+                                    'value' => isset($model->time)
+                                        ? ($model->time !== false ? Yii::$app->formatter->asDatetime($model->time, 'php:Y-m-d H:i:s') : null)
+                                        :  Yii::$app->formatter->asDatetime(new DateTime(), 'php:Y-m-d H:i:s'),
                                 ],
                             ]) ?>
                         </div>
@@ -178,9 +183,12 @@ $form = ActiveForm::begin([
                                                         'selectedAttributeName' => 'name',
                                                     ]) ?>
                                                 </div>
-                                                <div class="col-md-1">
-                                                    <?= $form->field($charge, "[$i][$j]type")->dropDownList($billTypes, [
-                                                        'groups' => $billGroupLabels,
+                                                <div class="col-md-2">
+                                                    <?= $form->field($model, "[$i][$j]type")->widget(MultipleBillTypeCombo::class, [
+                                                        'billTypes' => $billTypes,
+                                                        'billGroupLabels' => $billGroupLabels,
+                                                        'multiple' => false,
+                                                        'useFullType' => true,
                                                         'value' => $charge->ftype ?? $charge->type,
                                                     ]) ?>
                                                 </div>
@@ -193,7 +201,7 @@ $form = ActiveForm::begin([
                                                     <?= Html::activeHiddenInput($charge, "[$i][$j]unit") ?>
                                                     <?= $form->field($charge, "[$i][$j]quantity")->input('text', ['value' => $charge->getQuantity()]) ?>
                                                 </div>
-                                                <div class="col-md-5">
+                                                <div class="col-md-4">
                                                     <?= $form->field($charge, "[$i][$j]label") ?>
                                                 </div>
                                             </div>

@@ -3,6 +3,7 @@
 use hipanel\modules\finance\forms\BillFromPricesForm;
 use hipanel\modules\finance\grid\PriceGridView;
 use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\widgets\combo\MultipleBillTypeCombo;
 use hipanel\widgets\DateTimePicker;
 use yii\bootstrap\ActiveForm;
 use yii\data\ArrayDataProvider;
@@ -28,8 +29,11 @@ use yii\helpers\Url;
 
 <div class="row">
     <div class="col-md-6">
-        <?= $form->field($model, 'type')->dropDownList($billTypes, [
-            'groups' => $billGroupLabels,
+        <?= $form->field($model, "type")->widget(MultipleBillTypeCombo::class, [
+            'billTypes' => $billTypes,
+            'billGroupLabels' => $billGroupLabels,
+            'multiple' => false,
+            'useFullType' => true,
         ]) ?>
     </div>
     <div class="col-md-6">
