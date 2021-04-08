@@ -181,7 +181,7 @@ $form = ActiveForm::begin([
                                                 <div class="col-md-1">
                                                     <?= $form->field($charge, "[$i][$j]type")->dropDownList($billTypes, [
                                                         'groups' => $billGroupLabels,
-                                                        'value' => $charge->ftype,
+                                                        'value' => $charge->ftype ?? $charge->type,
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-1">
