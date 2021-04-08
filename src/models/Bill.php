@@ -103,7 +103,7 @@ class Bill extends \hipanel\base\Model
             'tariff_type' => Yii::t('hipanel:finance', 'Tariff type'),
             'requisite' => Yii::t('hipanel:finance', 'Requisite'),
             'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
-            'is_payed' => Yii::t('hipanel:finance', 'Is payed?'),
+            'is_payed' => Yii::t('hipanel:finance', 'Is paid?'),
         ]);
     }
 

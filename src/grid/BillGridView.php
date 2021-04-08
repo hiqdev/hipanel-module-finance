@@ -76,7 +76,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             'is_payed' => [
                 'format' => 'raw',
                 'attribute' => 'is_payed',
-                'label' => Yii::t('hipanel:finance', 'Is payed?'),
+                'label' => Yii::t('hipanel:finance', 'Is paid?'),
                 'headerOptions' => ['class' => 'narrow-filter text-center'],
                 'contentOptions' => ['class' => 'text-center'],
                 'value' => fn(Bill $bill): string => IconStateLabel::widget([

@@ -74,7 +74,7 @@ class Charge extends Resource
             'time' => Yii::t('hipanel', 'Time'),
             'object_id' => Yii::t('hipanel', 'Object Id'),
             'order_id' => Yii::t('hipanel', 'Order'),
-            'is_payed' => Yii::t('hipanel:finance', 'Is payed?'),
+            'is_payed' => Yii::t('hipanel:finance', 'Is paid?'),
         ]);
     }
 

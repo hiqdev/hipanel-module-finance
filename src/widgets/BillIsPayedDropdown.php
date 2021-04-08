@@ -16,8 +16,8 @@ class BillIsPayedDropdown extends Widget
     public function run(): string
     {
         return Html::activeDropDownList($this->model, $this->attribute, [
-            0 => Yii::t('hipanel:finance', 'Bill not paid'),
-            1 => Yii::t('hipanel:finance', 'Bill is paid'),
+            0 => Yii::t('hipanel:finance', 'Not paid'),
+            1 => Yii::t('hipanel:finance', 'Paid'),
         ], ['class' => 'form-control', 'prompt' => Yii::t('hipanel:finance', 'Payment status')]);
     }
 }
