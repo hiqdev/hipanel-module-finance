@@ -18,4 +18,6 @@ return [
     'Monthly' => 'Ежемесячно',
     'Estimated value' => 'Оценочная стоимость',
     'Grouping' => 'Группирующий',
+
+    'Your tariff plan' => 'Ваш тарифный план',
 ];

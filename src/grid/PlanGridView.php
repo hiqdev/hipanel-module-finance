@@ -93,7 +93,11 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
     {
         $html = '';
         if ($model->your_tariff) {
-            $html .=  Html::tag('span', Html::tag('i', null, ['class' => 'fa fa-lock']), ['class' => 'label bg-red pull-right', 'style' => 'margin-left: .1em;']);
+            $html .=  Html::tag('span', Html::tag('i', null, ['class' => 'fa fa-lock']), [
+                'class' => 'label bg-red pull-right',
+                'style' => 'margin-left: .1em',
+                'title' => Yii::t('hipanel:finance:plan', 'Your tariff plan')
+            ]);
         }
         if ($model->is_grouping) {
             $localization = Yii::t('hipanel.finance.plan', 'Grouping');
