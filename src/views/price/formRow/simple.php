@@ -29,7 +29,7 @@ use yii\widgets\ActiveForm;
         <?= Html::activeHiddenInput($model, "[$i]object", ['value' => $model->object->name ?? '']) ?>
         <?= Html::activeHiddenInput($model, "[$i]quantity") ?>
         <?= Html::activeHiddenInput($model, "[$i]unit") ?>
-        <?= Html::activeHiddenInput($model, "[$i]note", ['data-attribute' => 'note']) ?>
+        <?= Html::activeHiddenInput($model, "[$i]note", ['data' => ['attribute' => 'note', 'pk' => $model->object_id]]) ?>
 
         <div class="form-group">
             <?php if ($model->object->name === null): ?>
@@ -55,10 +55,11 @@ use yii\widgets\ActiveForm;
             ]) ?>
             <br/>
             <?= XEditable::widget([
-                'model' => $model,
+                'model' => $model->object,
                 'attribute' => 'note',
                 'pluginOptions' => [
-                    'url' => new JsExpression(<<<'JS'
+                    'selector' => ".editable[data-pk={$model->object_id}][data-name=note]",
+                    'url' => new JsExpression(<<<"JS"
                     function(params) {
                         $(this).closest('.form-instance').find('input[data-attribute=note]').val(params.value);
                         return $.Deferred().resolve();
