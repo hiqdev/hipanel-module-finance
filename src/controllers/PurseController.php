@@ -90,6 +90,7 @@ class PurseController extends \hipanel\base\CrudController
         } else {
             if ($request->isPost) {
                 try {
+                    session_write_close();
                     Purse::batchPerform('generate-and-save-all-monthly-documents', [
                         'type' => $type,
                         'client_types' => $type === 'acceptance' ? 'employee' : null,
