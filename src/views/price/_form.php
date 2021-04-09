@@ -5,8 +5,6 @@ use hipanel\modules\finance\assets\PriceEstimator;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\TemplatePrice;
-use hipanel\modules\finance\widgets\AddExtraPricesButton;
-use hipanel\modules\finance\widgets\ChangeFormulaButton;
 use hipanel\widgets\DynamicFormInputsValueInheritor;
 use hipanel\widgets\DynamicFormWidget;
 use yii\bootstrap\ActiveForm;
