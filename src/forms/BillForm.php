@@ -140,6 +140,7 @@ class BillForm extends Model
 
         $form = new self(['scenario' => $scenario]);
         $form->setAttributes($attributes, false);
+        $form->type = $form->gtype && strpos($form->type, ',') === false ? implode(',', [$form->gtype, $form->type]) : $form->type;
 
         $form->charges = array_map(function ($model) use ($scenario) {
             $model->scenario = $scenario;
