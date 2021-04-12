@@ -1,28 +1,32 @@
 <?php
 
 use hipanel\modules\finance\grid\BillGridView;
+use hipanel\modules\finance\helpers\ChargesGrouper;
 use hipanel\modules\finance\menus\BillDetailMenu;
 use hipanel\modules\finance\models\Charge;
 use hipanel\widgets\ClientSellerLink;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\MainDetails;
 use hipanel\widgets\Pjax;
+use yii\helpers\StringHelper;
+use yii\web\View;
 
 /**
- * @var \yii\web\View $this
- * @var \hipanel\modules\finance\models\Charge $model
+ * @var View $this
+ * @var Charge $model
  * @var IndexPage $page
- * @var \hipanel\modules\finance\helpers\ChargesGrouper $grouper
+ * @var ChargesGrouper $grouper
  * @var Charge[] $idToNameObject
  * @var Charge[][] $chargesByMainObject
  */
-$this->title = sprintf(
+
+$this->title = StringHelper::truncateWords(sprintf(
     '%s: %s %s %s',
     $model->client,
     $model->sum,
     $model->currency,
     $model->label
-) ?: '&nbsp;';
+), 7) ?: '&nbsp;';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Payments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
