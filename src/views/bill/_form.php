@@ -95,7 +95,6 @@ $form = ActiveForm::begin([
                                     'billGroupLabels' => $billGroupLabels,
                                     'multiple' => false,
                                     'useFullType' => true,
-                                    'value' => $model->gtype ? implode(',', [$model->gtype, $model->type]) : $model->type,
                                 ]) ?>
                             </div>
                             <div class="col-md-2 <?= AmountWithCurrency::$widgetClass ?>">
