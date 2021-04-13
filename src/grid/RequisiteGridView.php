@@ -25,41 +25,62 @@ class RequisiteGridView extends ContactGridView
     public function columns()
     {
         $currencies = Ref::getList('type,currency');
+        $formatter = Yii::$app->formatter;
+        $cellLabels = [
+            'balance' => Yii::t('hipanel:finance', "Balance"),
+            'debit' => Yii::t('hipanel:finance', "Debit"),
+            'credit' => Yii::t('hipanel:finance', "Credit"),
+        ];
+        $labelColors = [
+//            'balance' => '#FFFBEB',
+            'balance' => '#F3F4F6',
+            'debit' => '#ECFDF5',
+            'credit' => '#FEF2F2',
+        ];
         foreach ($currencies as $currency => $name) {
             $curColumns[$currency] = [
                 'format' => 'raw',
                 'attribute' => 'balances',
                 'filter' => false,
                 'label' => Yii::t('hipanel:finance', strtoupper($currency)),
-                'value' => static function (Requisite $model) use ($currency): string {
-                    $tags[] = Html::tag('span', Yii::t('hipanel:finance', "Balance: {b}", [
-                        'b' => $model->balances[$currency]['balance'] ?? "0.00",
-                    ]), ['class' => 'label label-default']);
-                    $tags[] = Html::tag('span', Yii::t('hipanel:finance', "Debit: {b}", [
-                        'b' => $model->balances[$currency]['debit'] ?? "0.00",
-                    ]), ['class' => 'label label-primary']);
-                    $tags[] = Html::tag('span', Yii::t('hipanel:finance', "Credit: {b}", [
-                        'b' => $model->balances[$currency]['credit'] ?? "0.00",
-                    ]), ['class' => 'label label-success']);
+                'contentOptions' => [
+                    'class' => 'no-padding',
+                    'style' => 'width: 1%; white-space: nowrap;',
+                ],
+                'value' => function (Requisite $model) use ($currency, $cellLabels, $formatter, $labelColors): string {
+                    foreach ($cellLabels as $attribute => $label) {
+                        $balance = $model->balances[$currency]['balance'];
+                        $tags[] = Html::tag('span', $formatter->asCurrency($balance, $currency), [
+                            'title' => $label,
+                            'style' => "background-color: $labelColors[$attribute];",
+                        ]);
+                    }
+                    if (empty($tags)) {
+                        return '';
+                    }
 
-                    return implode("<br/>", $tags);
+                    return Html::tag('span', implode("", $tags), ['class' => 'balance-cell']);
                 },
             ];
         }
 
-        foreach ([
-                'balance' => Yii::t('hipanel:finance', "Balance"),
-                'debit' => Yii::t('hipanel:finance', "Debit"),
-                'credit' => Yii::t('hipanel:finance', "Credit"),
-        ] as $attr => $name) {
-            $balanceColumns[$attr] = [
+        foreach ($cellLabels as $attribute => $label) {
+            $balanceColumns[$attribute] = [
                 'format' => 'raw',
                 'attribute' => 'balance',
                 'filter' => false,
-                'label' => $name,
-                'value' => static function (Requisite $model) use ($attr): string {
-                    return Html::tag('span', $model->balance[$attr] ?? "0.00");
-                },
+                'label' => $label,
+                'contentOptions' => [
+                    'style' => "width: 1%; white-space: nowrap; background-color: $labelColors[$attribute]",
+                ],
+            'value' => function (Requisite $model) use ($attribute, $formatter): string {
+                $balance = $model->balance[$attribute];
+                if (!empty($balance)) {
+                    return Html::tag('span', $formatter->asCurrency($balance, $model->balance->currency ?? 'usd'));
+                }
+
+                return '';
+            }
             ];
         }
 
@@ -69,12 +90,15 @@ class RequisiteGridView extends ContactGridView
                 'pluginOptions' => [
                     'url' => Url::to('@requisite/set-serie'),
                 ],
+                'contentOptions' => ['style' => 'width: 1%; white-space: nowrap;'],
+                'filterOptions' => ['class' => 'narrow-filter'],
             ],
             'actions' => [
                 'class' => MenuColumn::class,
                 'menuClass' => RequisiteActionsMenu::class,
+                'contentOptions' => ['style' => 'width: 1%; white-space: nowrap;'],
             ],
-            ], $curColumns ?? [],
+        ], $curColumns ?? [],
             $balanceColumns ?? []
         );
     }

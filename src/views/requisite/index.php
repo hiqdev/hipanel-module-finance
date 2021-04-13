@@ -7,6 +7,10 @@ use yii\helpers\Html;
 use hipanel\widgets\AjaxModal;
 use yii\bootstrap\Modal;
 
+$this->registerCss("
+.balance-cell { display: flex; flex-direction: column; height: 100%; text-align: center; }
+.balance-cell > span { flex: 1 0 auto; padding: .3em; }
+");
 
 $this->title = Yii::t('hipanel:finance', 'Requisites');
 $this->params['subtitle'] = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
