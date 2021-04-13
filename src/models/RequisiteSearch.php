@@ -25,7 +25,7 @@ class RequisiteSearch extends Requisite
     public function rules()
     {
         return ArrayHelper::merge(parent::rules(), [
-            [['time_from', 'time_till'], 'date', 'format' => 'php:Y-m-d'],
+            [['balance_time'], 'date', 'format' => 'php:Y-m-d'],
             [['currency'], 'safe'],
         ]);
     }
@@ -34,7 +34,7 @@ class RequisiteSearch extends Requisite
     {
         return ArrayHelper::merge($this->defaultSearchAttributes(), [
             'limit',
-            'time_from', 'time_till',
+            'balance_time',
             'currency',
         ]);
     }

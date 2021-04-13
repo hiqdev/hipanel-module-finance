@@ -56,8 +56,11 @@ class RequisiteController extends CrudController
             'index' => [
                 'class' => IndexAction::class,
                 'on beforePerform' => function (Event $event) {
-
-                    $event->sender->getDataProvider()->query->addSelect('balances');
+                    $action = $event->sender;
+                    $representation = $action->controller->indexPageUiOptionsModel->representation;
+                    if (in_array($representation, ['balance', 'balances'], true)) {
+                        $action->getDataProvider()->query->addSelect('balances');
+                    }
                 },
             ],
             'search' => [

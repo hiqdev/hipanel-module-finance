@@ -182,12 +182,9 @@ FlagIconCssAsset::register($this);
                                 'boxed'   => false,
                                 'model'   => $model,
                                 'columns' => [
-                                    'current_balance',
-                                    'last_balance',
-                                    'previous_balance',
-                                    'deposit',
-                                    'withdraw',
-                                    'saldo',
+                                    'balance',
+                                    'debit',
+                                    'credit',
                                 ],
                             ]) ?>
                         <?php $box->endBody() ?>

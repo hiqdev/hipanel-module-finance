@@ -32,36 +32,25 @@ class RequisiteGridView extends ContactGridView
                 'filter' => false,
                 'label' => Yii::t('hipanel:finance', strtoupper($currency)),
                 'value' => static function (Requisite $model) use ($currency): string {
-                    $tags[] = Html::tag('span', Yii::t('hipanel:finance', "Current balance: {b}", [
-                        'b' => $model->balances[$currency]['current_balance'] ?? "0.00",
+                    $tags[] = Html::tag('span', Yii::t('hipanel:finance', "Balance: {b}", [
+                        'b' => $model->balances[$currency]['balance'] ?? "0.00",
                     ]), ['class' => 'label label-default']);
-                    $tags[] = Html::tag('span', Yii::t('hipanel:finance', "Last balance: {b}", [
-                        'b' => $model->balances[$currency]['last_balance'] ?? "0.00",
+                    $tags[] = Html::tag('span', Yii::t('hipanel:finance', "Debit: {b}", [
+                        'b' => $model->balances[$currency]['debit'] ?? "0.00",
                     ]), ['class' => 'label label-primary']);
-                    $tags[] = Html::tag('span', Yii::t('hipanel:finance', "Start balance: {b}", [
-                        'b' => $model->balances[$currency]['previous_balance'] ?? "0.00",
+                    $tags[] = Html::tag('span', Yii::t('hipanel:finance', "Credit: {b}", [
+                        'b' => $model->balances[$currency]['credit'] ?? "0.00",
                     ]), ['class' => 'label label-success']);
-                    $tags[] = Html::tag('span', Yii::t('hipanel:finance', "Deposit: {b}", [
-                        'b' => $model->balances[$currency]['deposit'] ?? "0.00",
-                    ]), ['class' => 'label label-info']);
-                    $tags[] = Html::tag('span', Yii::t('hipanel:finance', "Withdraw: {b}", [
-                        'b' => $model->balances[$currency]['withdraw'] ?? "0.00",
-                    ]), ['class' => 'label label-danger']);
-                    $tags[] = Html::tag('span', Yii::t('hipanel:finance', "Saldo: {b}", [
-                        'b' => $model->balances[$currency]['saldo'] ?? "0.00",
-                    ]), ['class' => 'label label-success']);
+
                     return implode("<br/>", $tags);
                 },
             ];
         }
 
         foreach ([
-                'current_balance' => Yii::t('hipanel:finance', "Current balance"),
-                'last_balance' => Yii::t('hipanel:finance', "Last balance"),
-                'previous_balance' => Yii::t('hipanel:finance', "Start balance"),
-                'deposit' => Yii::t('hipanel:finance', "Deposit"),
-                'withdraw' => Yii::t('hipanel:finance', "Withdraw"),
-                'saldo' => Yii::t('hipanel:finance', "Saldo"),
+                'balance' => Yii::t('hipanel:finance', "Balance"),
+                'debit' => Yii::t('hipanel:finance', "Debit"),
+                'credit' => Yii::t('hipanel:finance', "Credit"),
         ] as $attr => $name) {
             $balanceColumns[$attr] = [
                 'format' => 'raw',
