@@ -171,6 +171,28 @@ FlagIconCssAsset::register($this);
                     <?php $box->end() ?>
                 <?php endif; ?>
 
+                <?php foreach ($model->balances as $currency => $data) : ?>
+                    <?php $box = Box::begin(['renderBody' => false]) ?>
+                        <?php $box->beginHeader() ?>
+                            <?= $box->renderTitle(strtoupper($currency)) ?>
+                        <?php $box->endHeader() ?>
+                        <?php $box->beginBody() ?>
+                            <?php $model->balance = $data ?>
+                            <?= RequisiteGridView::detailView([
+                                'boxed'   => false,
+                                'model'   => $model,
+                                'columns' => [
+                                    'current_balance',
+                                    'last_balance',
+                                    'previous_balance',
+                                    'deposit',
+                                    'withdraw',
+                                    'saldo',
+                                ],
+                            ]) ?>
+                        <?php $box->endBody() ?>
+                    <?php $box->end() ?>
+                <?php endforeach ?>
             </div>
         </div>
     </div>

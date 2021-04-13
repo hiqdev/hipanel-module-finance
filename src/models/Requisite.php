@@ -39,7 +39,7 @@ class Requisite extends Contact
             [['serie'], 'required', 'on' => ['set-serie', 'update']],
             [['invoice_id'], 'required', 'on' => ['set-templates', 'update']],
             [['invoice_name', 'acceptance_name', 'contract_name', 'probation_name', 'internal_invoice_name'], 'safe'],
-            [['balance'], 'number'],
+            [['balance', 'balances'], 'safe'],
         ]);
     }
 

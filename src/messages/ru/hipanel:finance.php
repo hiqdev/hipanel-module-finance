@@ -238,4 +238,16 @@ return [
     'Create bill' => 'Создать платеж',
     'Prepare to bill creation' => 'Подготовка к созданию платежа',
     'Proceed to bill(s) creation' => 'Перейти к созданию платежа(ей)',
+
+    'Balances' => 'Балансы',
+    'Current balance' => 'Текущий баланс',
+    'Last balance' => 'Последний баланс',
+    'Start balance' => 'Начальный баланс',
+    'Withdraw' => 'Списание',
+    'Saldo' => 'Сальдо',
+    'Current balance: {b}' => 'Текущий баланс: {b}',
+    'Last balance: {b}' => 'Последний баланс: {b}',
+    'Start balance: {b}' => 'Начальный баланс: {b}',
+    'Withdraw: {b}' => 'Списание: {b}',
+    'Saldo: {b}' => 'Сальдо: {b}',
 ];
