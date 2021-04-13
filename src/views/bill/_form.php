@@ -6,6 +6,7 @@ use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\widgets\combo\MultipleBillTypeCombo;
 use hipanel\modules\finance\widgets\combo\RequisitesCombo;
+use hipanel\modules\finance\widgets\SumSignToggleButton;
 use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\DateTimePicker;
 use hipanel\widgets\DynamicFormWidget;
@@ -57,7 +58,9 @@ $form = ActiveForm::begin([
         <div class="bill-item">
             <div class="box box-solid">
                 <div class="box-header with-border">
-                    <h3 class="box-title">&nbsp;</h3>
+                    <div class="box-title">
+                        <?= SumSignToggleButton::widget() ?>
+                    </div>
                     <div class="box-tools">
                         <?php if ($model->isNewRecord) : ?>
                             <div class="btn-group">
