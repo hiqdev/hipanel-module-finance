@@ -23,6 +23,7 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\base\CrudController;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\client\models\query\ContactQuery;
+use hiqdev\higrid\representations\RepresentationCollection;
 use yii\base\Event;
 use Yii;
 
@@ -54,6 +55,13 @@ class RequisiteController extends CrudController
         return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
+                'on beforePerform' => function (Event $event) {
+                    $action = $event->sender;
+                    $representation = $action->controller->indexPageUiOptionsModel->representation;
+                    if (in_array($representation, ['balance', 'balances'], true)) {
+                        $action->getDataProvider()->query->addSelect('balances');
+                    }
+                },
             ],
             'search' => [
                 'class' => ComboSearchAction::class,
@@ -71,6 +79,8 @@ class RequisiteController extends CrudController
                     if (Yii::getAlias('@document', false)) {
                         $query->withDocuments();
                     }
+
+                    $query->addSelect('balances');
                     $query->withLocalizations();
                 },
             ],

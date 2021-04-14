@@ -239,4 +239,12 @@ return [
     'Create bill' => 'Создать платеж',
     'Prepare to bill creation' => 'Подготовка к созданию платежа',
     'Proceed to bill(s) creation' => 'Перейти к созданию платежа(ей)',
+
+    'Balances' => 'Балансы',
+    'Balance' => 'Баланс',
+    'Debit' => 'Дебет',
+    'Credit' => 'Кредит',
+    'Debit: {b}' => 'Дебет: {b}',
+    'Credit: {b}' => 'Кредит: {b}',
+    'Balance: {b}' => 'Баланс: {b}',
 ];

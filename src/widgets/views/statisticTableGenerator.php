@@ -15,7 +15,7 @@
         <tbody>
         <?php foreach ($statistic as $date => $count) : ?>
             <tr>
-                <td><?= Yii::$app->formatter->asDate($date, 'php:M Y') ?></td>
+                <td><?= Yii::$app->formatter->asDate($date, 'php:Y-m-d') ?></td>
                 <td><?= $count ?></td>
             </tr>
         <?php endforeach; ?>

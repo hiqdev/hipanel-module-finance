@@ -26,6 +26,37 @@ class RequisiteRepresentations extends RepresentationCollection
                     'name', 'actions', 'serie', 'requisites',
                 ]),
             ],
+            'balances' => [
+                'label' => Yii::t('hipanel:finance', 'Balances'),
+                'columns' => array_filter([
+                    'checkbox',
+                    'client_like',
+                    'name',
+                    'actions',
+                    'serie',
+                    'usd',
+                    'eur',
+                    'uah',
+                    'rub',
+                    'pln',
+                    'btc',
+                    'sgd',
+                    'gbp',
+                ]),
+            ],
+            'balance' => [
+                'label' => Yii::t('hipanel', 'Balance'),
+                'columns' => array_filter([
+                    'checkbox',
+                    'client_like',
+                    'name',
+                    'actions',
+                    'serie',
+                    'balance',
+                    'debit',
+                    'credit',
+                ]),
+            ],
         ]);
     }
 
