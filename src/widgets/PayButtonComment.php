@@ -67,8 +67,6 @@ class PayButtonComment extends Widget
             'bitpay*' => 'bitpay',
             'paxum*' => 'paxum',
             'yandexmoney*' => 'yandexmoney',
-            'yandexmoney*' => 'yandexmoney',
-            'yandexmoney*' => 'yandexmoney',
         ];
     }
 
