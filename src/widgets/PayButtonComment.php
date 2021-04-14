@@ -63,9 +63,12 @@ class PayButtonComment extends Widget
     protected function getDefaultCommentViews()
     {
         return [
-            'paypal_*' => 'paypal',
-            'bitpay_*' => 'bitpay',
-            'paxum_*' => 'paxum',
+            'paypal*' => 'paypal',
+            'bitpay*' => 'bitpay',
+            'paxum*' => 'paxum',
+            'yandexmoney*' => 'yandexmoney',
+            'yandexmoney*' => 'yandexmoney',
+            'yandexmoney*' => 'yandexmoney',
         ];
     }
 
@@ -98,11 +101,15 @@ class PayButtonComment extends Widget
             return '';
         }
 
-        return $this->render($view, [
-            'merchant' => $merchant,
-            'widget' => $this,
-            'event' => $this->event,
-        ]);
+        try {
+            return $this->render($view, [
+                'merchant' => $merchant,
+                'widget' => $this,
+                'event' => $this->event,
+            ]);
+        } catch (\yii\base\ViewNotFoundException $e) {
+            return '';
+        }
     }
 
     /**
@@ -111,7 +118,7 @@ class PayButtonComment extends Widget
      */
     protected function getMerchantName()
     {
-        return $this->event->sender->getMerchantName();
+        return $this->event->sender->getMerchantSystem();
     }
 
     /**
