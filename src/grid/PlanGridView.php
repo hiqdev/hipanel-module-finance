@@ -78,7 +78,7 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
             'custom_attributes' => [
                 'class' => DataColumn::class,
                 'label' => Yii::t('hipanel:finance', 'Attributes'),
-                'format' => 'raw',
+                'format' => 'html',
                 'contentOptions' => ['style' => 'padding: 0;'],
                 'value' => static fn(Plan $plan): string => PlanAttributes::widget(['plan' => $plan]),
             ]

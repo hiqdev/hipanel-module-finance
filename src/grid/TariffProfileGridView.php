@@ -37,7 +37,7 @@ class TariffProfileGridView extends BoxedGridView
             ],
             'tariff_names' => [
                 'filter' => false,
-                'format' => 'raw',
+                'format' => 'html',
                 'value' => function (TariffProfile $model) {
                     if (empty($model->tariffs)) {
                         return '';
@@ -60,7 +60,7 @@ class TariffProfileGridView extends BoxedGridView
             ],
             'domain_tariff' => [
                 'attribute' => 'domain',
-                'format' => 'raw',
+                'format' => 'html',
                 'value' => function (TariffProfile $model) {
                     if (empty($model->domain)) {
                         return '';
@@ -71,7 +71,7 @@ class TariffProfileGridView extends BoxedGridView
             ],
             'certificate_tariff' => [
                 'attribute' => 'certificate',
-                'format' => 'raw',
+                'format' => 'html',
                 'value' => function (TariffProfile $model) {
                     if (empty($model->certificate)) {
                         return '';
@@ -82,7 +82,7 @@ class TariffProfileGridView extends BoxedGridView
             ],
             'svds_tariff' => [
                 'attribute' => 'svds',
-                'format' => 'raw',
+                'format' => 'html',
                 'value' => function (TariffProfile $model) {
                     if (empty($model->tariffs)) {
                         return '';
@@ -101,7 +101,7 @@ class TariffProfileGridView extends BoxedGridView
             ],
             'ovds_tariff' => [
                 'attribute' => 'ovds',
-                'format' => 'raw',
+                'format' => 'html',
                 'value' => function (TariffProfile $model) {
                     if (empty($model->tariffs)) {
                         return '';
@@ -120,7 +120,7 @@ class TariffProfileGridView extends BoxedGridView
             ],
             'server_tariff' => [
                 'attribute' => 'server',
-                'format' => 'raw',
+                'format' => 'html',
                 'value' => function (TariffProfile $model) {
                     if (empty($model->tariffs)) {
                         return '';

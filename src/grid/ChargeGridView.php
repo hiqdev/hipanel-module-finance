@@ -71,7 +71,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             ],
             'type_label' => [
                 'label' => Yii::t('hipanel', 'Type'),
-                'format' => 'raw',
+                'format' => 'html',
                 'value' => function (Charge $model) {
                     return BillType::widget([
                         'model' => $model,
@@ -102,7 +102,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             'name' => [
                 'attribute' => 'name_ilike',
                 'label' => Yii::t('hipanel', 'Object'),
-                'format' => 'raw',
+                'format' => 'html',
                 'value' => function (Charge $model) {
                     $result = LinkToObjectResolver::widget([
                         'model' => $model,
@@ -131,14 +131,13 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             ],
             'quantity' => [
                 'attribute' => 'quantity',
-                'format' => 'raw',
+                'format' => 'html',
                 'filter' => false,
                 'value' => function (Charge $model) {
                     return $this->renderQuantity($model);
                 },
             ],
             'time' => [
-                'format' => 'raw',
                 'filter' => false,
                 'contentOptions' => ['class' => 'text-nowrap'],
                 'value' => function ($model) {
@@ -151,7 +150,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             ],
             'is_payed' => [
                 'attribute' => 'is_payed',
-                'format' => 'raw',
+                'format' => 'html',
                 'enableSorting' => false,
                 'filter' => $this->filterModel !== null
                     ? StaticCombo::widget([

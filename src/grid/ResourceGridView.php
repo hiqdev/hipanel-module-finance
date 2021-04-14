@@ -119,7 +119,7 @@ class ResourceGridView extends BoxedGridView
             $columns[$type] = [
                 'class' => DataColumn::class,
                 'label' => $label,
-                'format' => 'raw',
+                'format' => 'html',
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => ['class' => 'text-right', 'data-type' => $type, 'style' => 'white-space:nowrap;'],
                 'value' => fn() => $loader,

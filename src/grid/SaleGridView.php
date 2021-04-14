@@ -69,7 +69,7 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'contentOptions' => ['class' => 'text-right'],
             ],
             'object' => [
-                'format' => 'raw',
+                'format' => 'html',
                 'filterAttribute' => 'object_inilike',
                 'value' => function (Sale $model) {
                     if ($model instanceof FakeSale) {
@@ -87,7 +87,7 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
             ],
             'object_link' => [
                 'attribute' => 'object',
-                'format' => 'raw',
+                'format' => 'html',
                 'filterAttribute' => 'object_like',
                 'enableSorting' => false,
                 'value' => function (Sale $model) {

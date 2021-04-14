@@ -43,7 +43,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
     {
         return array_merge(parent::columns(), [
             'plan' => [
-                'format' => 'raw',
+                'format' => 'html',
                 'filterAttribute' => 'plan_name_ilike',
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'value' => function (Price $model) {
@@ -52,6 +52,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
             ],
             'price' => [
                 'label' => Yii::t('hipanel.finance.price', 'Price'),
+                /** todo: refactor */
                 'format' => 'raw',
                 'value' => function (Price $model) {
                     return $this->presenterFactory->build(\get_class($model))->renderPrice($model);
@@ -59,6 +60,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
             ],
             'old_price' => [
                 'label' => Yii::t('hipanel.finance.price', 'Old price'),
+                /** todo: refactor */
                 'format' => 'raw',
                 'value' => function (Price $model): string {
                     /** @var PricePresenter $presenter */
@@ -70,14 +72,13 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
             ],
             'object->name_clear' => [
                 'label' => Yii::t('hipanel', 'Object'),
-                'format' => 'raw',
                 'value' => function (Price $model) {
                     return $model->object->name ?: Yii::t('hipanel.finance.price', 'Any');
                 },
             ],
             'object->name' => [
                 'label' => Yii::t('hipanel', 'Object'),
-                'format' => 'raw',
+                'format' => 'html',
                 'value' => function (Price $model) {
                     $link = LinkToObjectResolver::widget([
                         'model' => $model->object,
@@ -94,7 +95,6 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 },
             ],
             'object->label' => [
-                'format' => 'raw',
                 'label' => Yii::t('hipanel', 'Details'),
                 'value' => function (Price $model) {
                     return $model->object->label;
@@ -106,7 +106,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'type',
                 'filterAttribute' => 'type',
                 'filterOptions' => ['class' => 'narrow-filter'],
-                'format' => 'raw',
+                'format' => 'html',
                 'gtype' => 'type,bill',
                 'findOptions' => [
                     'select' => 'name',
@@ -120,7 +120,6 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'unit',
                 'filterAttribute' => 'unit',
                 'filterOptions' => ['class' => 'narrow-filter'],
-                'format' => 'raw',
                 'gtype' => 'type,unit',
                 'i18nDictionary' => 'hipanel.finance.units',
                 'findOptions' => [
@@ -137,7 +136,6 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'currency',
                 'filterAttribute' => 'currency',
                 'filterOptions' => ['class' => 'narrow-filter'],
-                'format' => 'raw',
                 'gtype' => 'type,currency',
             ],
             'actions' => [
@@ -145,6 +143,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'menuClass' => PriceActionsMenu::class,
             ],
             'info' => [
+                /** todo: refactor */
                 'format' => 'raw',
                 'label' => Yii::t('hipanel', 'Details'),
                 'value' => function (Price $model) {
@@ -152,6 +151,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 },
             ],
             'old_quantity' => [
+                /** todo: refactor */
                 'format' => 'raw',
                 'label' => Yii::t('hipanel.finance.price', 'Old quantity'),
                 'value' => function (Price $model) {

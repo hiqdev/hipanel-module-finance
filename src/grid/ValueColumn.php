@@ -35,6 +35,7 @@ class ValueColumn extends Column
 
     protected function renderDataCellContent($model, $key, $index)
     {
+        /** todo: refactor */
         $fields = Html::hiddenInput("[{$model->id}]object_id", $model->object_id);
         $fields .= Html::hiddenInput("[{$model->id}]type", $model->type);
 

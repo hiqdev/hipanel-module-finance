@@ -19,6 +19,7 @@ use yii\helpers\Html;
 
 class DocumentsColumn extends \hipanel\grid\DataColumn
 {
+    /** todo: refactor */
     public $format = 'raw';
 
     public $type;

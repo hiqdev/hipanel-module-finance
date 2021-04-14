@@ -54,13 +54,13 @@ class BillGridView extends \hipanel\grid\BoxedGridView
     {
         return array_merge(parent::columns(), [
             'requisite' => [
-                'format' => 'raw',
+                'format' => 'html',
                 'attribute' => 'requisite',
                 'value' => fn($model) => Html::a($model->requisite, ['@requisite/view', 'id' => $model->requisite_id]),
                 'visible' => Yii::$app->user->can('requisites.read'),
             ],
             'payment_status' => [
-                'format' => 'raw',
+                'format' => 'html',
                 'attribute' => 'is_payed',
                 'label' => Yii::t('hipanel:finance', 'Payment status'),
                 'headerOptions' => ['class' => 'text-right'],
@@ -74,7 +74,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 },
             ],
             'is_payed' => [
-                'format' => 'raw',
+                'format' => 'html',
                 'attribute' => 'is_payed',
                 'label' => Yii::t('hipanel:finance', 'Is paid?'),
                 'headerOptions' => ['class' => 'narrow-filter text-center'],
@@ -130,7 +130,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             ],
             'sum_editable' => [
                 'class' => CurrencyColumn::class,
-                'format' => 'raw',
+                'format' => 'html',
                 'attribute' => 'sum',
                 'colors' => ['danger' => 'warning'],
                 'headerOptions' => ['class' => 'text-right'],
@@ -187,7 +187,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             ],
             'index_page_balance' => [
                 'attribute' => 'balance',
-                'format' => 'raw',
+                'format' => 'html',
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => function ($model, $key, $index) {
                     return ['class' => 'text-right' . ($index ? '' : ' text-bold')];
@@ -217,7 +217,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'exportedColumns' => ['export_balance', 'is_payed'],
             ],
             'quantity' => [
-                'format' => 'raw',
+                'format' => 'html',
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => ['class' => 'text-right text-bold'],
                 'value' => function (Bill $bill) {
@@ -226,7 +226,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             ],
             'balance' => [
                 'attribute' => 'balance',
-                'format' => 'raw',
+                'format' => 'html',
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => function ($model, $key, $index) {
                     return ['class' => 'text-right' . ($index ? '' : ' text-bold')];
@@ -254,7 +254,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     ]);
                 },
                 'sortAttribute' => 'type',
-                'format' => 'raw',
+                'format' => 'html',
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => function (Bill $model) {
                     return ['class' => 'text-right'];
@@ -269,7 +269,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             ],
             'description' => [
                 'attribute' => 'descr',
-                'format' => 'raw',
+                'format' => 'html',
                 'value' => function (Bill $model) {
                     $requisite = $model->requisite ? Html::tag('small', $model->requisite, ['class' => 'label bg-purple']) : null;
                     $descr = $model->descr ?: $model->label;
