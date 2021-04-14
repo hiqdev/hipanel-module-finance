@@ -32,14 +32,13 @@ class RequisiteGridView extends ContactGridView
             'credit' => Yii::t('hipanel:finance', "Credit"),
         ];
         $labelColors = [
-//            'balance' => '#FFFBEB',
             'balance' => '#F3F4F6',
             'debit' => '#ECFDF5',
             'credit' => '#FEF2F2',
         ];
-        foreach ($currencies as $currency => $name) {
+        foreach (array_keys($currencies) as $currency) {
             $curColumns[$currency] = [
-                'format' => 'raw',
+                'format' => 'html',
                 'attribute' => 'balances',
                 'filter' => false,
                 'label' => Yii::t('hipanel:finance', strtoupper($currency)),
@@ -48,9 +47,10 @@ class RequisiteGridView extends ContactGridView
                     'style' => 'width: 1%; white-space: nowrap;',
                 ],
                 'value' => function (Requisite $model) use ($currency, $cellLabels, $formatter, $labelColors): string {
+                    $tags = [];
                     foreach ($cellLabels as $attribute => $label) {
-                        $balance = $model->balances[$currency]['balance'];
-                        $tags[] = Html::tag('span', $formatter->asCurrency($balance, $currency), [
+                        $balance = $model->balances[$currency][$attribute];
+                        $tags[] = Html::tag($attribute==='balance' ? 'b' : 'span', $formatter->asCurrency($balance, $currency), [
                             'title' => $label,
                             'style' => "background-color: $labelColors[$attribute];",
                         ]);
@@ -59,7 +59,7 @@ class RequisiteGridView extends ContactGridView
                         return '';
                     }
 
-                    return Html::tag('span', implode("", $tags), ['class' => 'balance-cell']);
+                    return Html::tag('span', implode('', $tags), ['class' => 'balance-cell']);
                 },
             ];
         }
