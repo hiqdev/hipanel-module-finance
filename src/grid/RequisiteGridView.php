@@ -49,7 +49,7 @@ class RequisiteGridView extends ContactGridView
                 'value' => function (Requisite $model) use ($currency, $cellLabels, $formatter, $labelColors): string {
                     $tags = [];
                     foreach ($cellLabels as $attribute => $label) {
-                        $balance = $model->balances[$currency][$attribute];
+                        $balance = $model->balances[$currency][$attribute] ?? null;
                         $tags[] = Html::tag($attribute==='balance' ? 'b' : 'span', $formatter->asCurrency($balance, $currency), [
                             'title' => $label,
                             'style' => "background-color: $labelColors[$attribute];",
