@@ -18,7 +18,7 @@ final class ePayServiceParser extends AbstractParser
 
     public function getCurrency(): ?string
     {
-        return null;
+        return 'usd';
     }
 
     public function getQuantity(): ?int

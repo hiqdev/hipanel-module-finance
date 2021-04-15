@@ -26,7 +26,7 @@ class BillImportFromFileForm extends Model
     {
         return [
             [['file', 'type'], 'required'],
-            ['file', 'file', 'skipOnEmpty' => false, 'extensions' => ['csv'], 'maxSize' => 1 * 1024 * 1024 * 1024],
+            ['file', 'file', 'skipOnEmpty' => false, 'checkExtensionByMimeType' => false, 'extensions' => ['csv'], 'maxSize' => 1 * 1024 * 1024],
             ['type', 'in', 'range' => array_keys($this->getPaymentSystemDropdownList())],
         ];
     }

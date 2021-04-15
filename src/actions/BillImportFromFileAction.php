@@ -22,12 +22,12 @@ class BillImportFromFileAction extends BillManagementAction
         if ($this->request->isPost) {
             $form->load($this->request->post());
             $form->file = UploadedFile::getInstance($form, 'file');
-//            if (!$form->validate()) {
-//                $errors = $form->getFirstErrors();
-//                $session->setFlash('error', implode("\n", $errors));
-//
-//                return $this->redirect();
-//            }
+            if (!$form->validate()) {
+                $errors = $form->getFirstErrors();
+                $session->setFlash('error', implode("\n", $errors));
+
+                return $this->redirect();
+            }
             try {
                 $bills = $this->parse($form);
             } catch (NoParserApproiteType $exception) {
@@ -36,7 +36,7 @@ class BillImportFromFileAction extends BillManagementAction
                 return $this->redirect();
             }
             if (empty($bills)) {
-                $session->setFlash('error', Yii::t('hipanel:finance', 'Failed to generate any bills from this file'));
+                $session->setFlash('info', Yii::t('hipanel:finance', 'No payments to add found'));
 
                 return $this->redirect();
             }
