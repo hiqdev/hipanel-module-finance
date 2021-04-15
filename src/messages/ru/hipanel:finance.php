@@ -237,6 +237,8 @@ return [
     'Add prices' => 'Добавить прайсы',
 
     'Create bill' => 'Создать платеж',
+    'Create bills' => 'Создать платежи',
+    'Create bills from file' => 'Создать платежи из файла',
     'Prepare to bill creation' => 'Подготовка к созданию платежа',
     'Proceed to bill(s) creation' => 'Перейти к созданию платежа(ей)',
 

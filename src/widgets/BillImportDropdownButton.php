@@ -4,7 +4,6 @@ namespace hipanel\modules\finance\widgets;
 
 use hipanel\modules\finance\forms\BillImportFromFileForm;
 use Yii;
-use yii\base\DynamicModel;
 use yii\base\Widget;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Dropdown;
@@ -22,7 +21,7 @@ class BillImportDropdownButton extends Widget
             Modal::begin([
                 'id' => $this->getId(),
                 'size' => Modal::SIZE_SMALL,
-                'header' => Html::tag('h4', Yii::t('hipanel.integrations', 'Choose a file'), ['class' => 'modal-title']),
+                'header' => Html::tag('h4', Yii::t('hipanel:finance', 'Create bills from file'), ['class' => 'modal-title']),
                 'toggleButton' => false,
             ]);
 
@@ -30,8 +29,9 @@ class BillImportDropdownButton extends Widget
                 'action' => Url::to(['@bill/import-from-file']),
             ]);
 
+            echo $form->field($model, 'type')->dropDownList($model->getPaymentSystemDropdownList());
             echo $form->field($model, 'file')->fileInput();
-            echo Html::submitButton(Yii::t('hipanel:finance', 'Import bills'), ['class' => 'btn btn-success btn-block']);
+            echo Html::submitButton(Yii::t('hipanel:finance', 'Create bills'), ['class' => 'btn btn-success btn-block']);
 
             ActiveForm::end();
 
@@ -47,7 +47,7 @@ class BillImportDropdownButton extends Widget
 
         return sprintf(
             '<div class="dropdown">
-                <a href="#" data-toggle="dropdown" class="btn btn-sm btn-default dropdown-toggle">
+                <a data-toggle="dropdown" class="btn btn-sm btn-default dropdown-toggle clickable">
                      %s <b class="caret"></b>
                 </a>
                 %s
@@ -62,8 +62,8 @@ class BillImportDropdownButton extends Widget
                     ],
                     [
                         'label' => '<i class="fa fa-file-text-o"></i> ' . Yii::t('hipanel:finance', 'Import from a file'),
-                        'url' => ['#'],
-                        'options' => [
+                        'url' => '#',
+                        'linkOptions' => [
                             'data' => [
                                 'toggle' => 'modal',
                                 'target' => '#' . $this->getId(),

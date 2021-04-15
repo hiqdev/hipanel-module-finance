@@ -124,8 +124,11 @@ $form = ActiveForm::begin([
                                 <?= $form->field($model, "[$i]requisite_id")->widget(RequisitesCombo::class) ?>
                             <?php endif ?>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <?= $form->field($model, "[$i]label") ?>
+                        </div>
+                        <div class="col-md-2">
+                            <?= $form->field($model, "[$i]txn") ?>
                         </div>
                         <div class="col-md-3">
                             <?= $form->field($model, "[$i]time")->widget(DateTimePicker::class, [

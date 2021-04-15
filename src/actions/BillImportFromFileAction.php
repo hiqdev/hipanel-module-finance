@@ -6,7 +6,8 @@ namespace hipanel\modules\finance\actions;
 
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillImportFromFileForm;
-use hipanel\modules\finance\helpers\parsers\BillsParser;
+use hipanel\modules\finance\helpers\parser\BillsImporter;
+use hipanel\modules\finance\helpers\parser\NoParserApproiteType;
 use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
@@ -17,27 +18,36 @@ class BillImportFromFileAction extends BillManagementAction
     public function run()
     {
         $form = new BillImportFromFileForm();
-        if ($this->controller->request->isPost) {
+        $session = Yii::$app->getSession();
+        if ($this->request->isPost) {
+            $form->load($this->request->post());
             $form->file = UploadedFile::getInstance($form, 'file');
-            if (!$form->validate()) {
-                Yii::$app->getSession()->setFlash('error', $form->getFirstError('file'));
+//            if (!$form->validate()) {
+//                $errors = $form->getFirstErrors();
+//                $session->setFlash('error', implode("\n", $errors));
+//
+//                return $this->redirect();
+//            }
+            try {
+                $bills = $this->parse($form);
+            } catch (NoParserApproiteType $exception) {
+                $session->setFlash('error', Yii::t('hipanel:finance', 'No parser appropriate type'));
 
-                $this->redirect();
+                return $this->redirect();
             }
-            $bills = $this->parse($form);
             if (empty($bills)) {
-                Yii::$app->getSession()->setFlash('error', Yii::t('hipanel:finance', 'Failed to generate any bills from this file'));
+                $session->setFlash('error', Yii::t('hipanel:finance', 'Failed to generate any bills from this file'));
 
-                $this->redirect();
+                return $this->redirect();
             }
             [$billTypes, $billGroupLabels] = $this->billTypesProvider->getGroupedList();
             $billForms = BillForm::createMultipleFromBills($bills, $this->scenario);
             $this->createCollection();
             $this->collection->set($billForms);
 
-            return $this->render('create', [
-                'models' => $bills,
-                'model' => reset($bills),
+            return $this->controller->render('create', [
+                'models' => $billForms,
+                'model' => reset($billForms),
                 'billTypes' => $billTypes,
                 'billGroupLabels' => $billGroupLabels,
             ]);
@@ -48,13 +58,13 @@ class BillImportFromFileAction extends BillManagementAction
 
     private function parse(BillImportFromFileForm $form): array
     {
-        $parser = Yii::$container->get(BillsParser::class);
+        $parser = Yii::$container->get(BillsImporter::class, [$form]);
 
-        return $parser->__invoke($form);
+        return $parser->__invoke();
     }
 
     private function redirect(): Response
     {
-        return $this->controller->redirect(['@bill/index']);
+        return $this->controller->goBack();
     }
 }
