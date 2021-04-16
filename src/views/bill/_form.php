@@ -90,12 +90,12 @@ $form = ActiveForm::begin([
                                 ]) ?>
                             </div>
                             <div class="col-md-3">
+                                <?php $model->type = isset($model->gtype) ? implode(',', [$model->gtype, $model->type]) : $model->type ?>
                                 <?= $form->field($model, "[$i]type")->widget(MultipleBillTypeCombo::class, [
                                     'billTypes' => $billTypes,
                                     'billGroupLabels' => $billGroupLabels,
                                     'multiple' => false,
                                     'useFullType' => true,
-                                    'value' => $model->gtype ? implode(',', [$model->gtype, $model->type]) : $model->type,
                                 ]) ?>
                             </div>
                             <div class="col-md-2 <?= AmountWithCurrency::$widgetClass ?>">
