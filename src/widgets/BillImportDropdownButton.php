@@ -29,7 +29,7 @@ class BillImportDropdownButton extends Widget
                 'action' => Url::to(['@bill/import-from-file']),
             ]);
 
-            echo $form->field($model, 'type')->dropDownList($model->getPaymentSystemDropdownList());
+            echo $form->field($model, 'type')->dropDownList($model->getPaymentSystemDropdownList(), ['prompt' => '--']);
             echo $form->field($model, 'file')->fileInput();
             echo Html::submitButton(Yii::t('hipanel:finance', 'Create bills'), ['class' => 'btn btn-success btn-block']);
 
@@ -56,7 +56,7 @@ class BillImportDropdownButton extends Widget
             Dropdown::widget([
                 'items' => [
                     [
-                        'label' => '<i class="fa fa-list"></i> ' . Yii::t('hipanel:finance', 'Import from strings'),
+                        'label' => '<i class="fa fa-list"></i> ' . Yii::t('hipanel:finance', 'Import payments'),
                         'url' => ['@bill/import'],
                         'encode' => false,
                     ],

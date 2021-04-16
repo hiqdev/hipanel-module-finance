@@ -11,6 +11,8 @@ use hipanel\modules\finance\helpers\parser\parsers\ParserInterface;
 use hipanel\modules\finance\helpers\parser\parsers\PaxumParser;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
+use Money\Currency;
+use Money\Money;
 use yii\helpers\ArrayHelper;
 
 class BillsImporter
@@ -31,6 +33,9 @@ class BillsImporter
         $bills = [];
         foreach ($this->parser->getParsedRows() as $parser) {
             $bills[] = $this->createBill($parser);
+        }
+        if (empty($bills)) {
+            return $bills;
         }
         $bills = $this->resolveClients($bills);
 
@@ -103,10 +108,10 @@ class BillsImporter
         $clients = Client::find()->where(['logins' => ArrayHelper::getColumn($bills, 'client')])->limit(-1)->all();
         $clientsMap = array_combine(ArrayHelper::getColumn($clients, 'login'), ArrayHelper::getColumn($clients, 'id'));
         foreach ($bills as $bill) {
-            $bill->client_id = $clientsMap[$bill->client];
+            $bill->client_id = $clientsMap[$bill->client] ?? null;
         }
 
-        return $bills;
+        return array_filter($bills, static fn($bill) => $bill->client_id !== null);
     }
 
     private function filterExisting(array $bills): array
@@ -116,11 +121,14 @@ class BillsImporter
         return array_filter($bills, static function (Bill $bill) use ($exists): bool {
             $leave = true;
             foreach ($exists as $row) {
-                if ($bill->client_id === $row['client_id'] && ((int)$bill->sum * 100) === $row['sum']) {
+                if (isset($row['txn']) && $row['txn'] === $bill->txn) {
                     $leave = false;
                     break;
                 }
-                if (isset($row['txn']) && $row['txn'] === $bill->txn) {
+                $currency = new Currency($bill->currency);
+                $billSum = new Money($bill->sum * 100, $currency);
+                $rowSum = new Money($row['sum'], $currency);
+                if ($bill->client_id === $row['client_id'] && $billSum->equals($rowSum)) {
                     $leave = false;
                     break;
                 }

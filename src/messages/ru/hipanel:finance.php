@@ -241,6 +241,10 @@ return [
     'Create bills from file' => 'Создать платежи из файла',
     'Prepare to bill creation' => 'Подготовка к созданию платежа',
     'Proceed to bill(s) creation' => 'Перейти к созданию платежа(ей)',
+    'No bills to add found' => 'В этой выписке не найдено походящих записей для создания платежей',
+    'No parser appropriate type' => 'Для этой выписки не найдено подходящего парсера',
+    'Import from a file' => 'Импорт выписки из платёжной системы',
+    'File from the payment system' => 'Выписка из платёжной системы',
 
     'Balances' => 'Балансы',
     'Balance' => 'Баланс',
