@@ -6,7 +6,7 @@ namespace hipanel\modules\finance\helpers\parser;
 
 use RuntimeException;
 
-class NoParserApproiteType extends RuntimeException
+class NoParserAppropriateType extends RuntimeException
 {
 }
 

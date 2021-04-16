@@ -52,7 +52,7 @@ class BillsImporter
 //            'deposit,paypal' => PayPalParser::class,
         ];
         if (!isset($map[$type])) {
-            throw new NoParserApproiteType();
+            throw new NoParserAppropriateType();
         }
 
         return new $map[$type]($rows);

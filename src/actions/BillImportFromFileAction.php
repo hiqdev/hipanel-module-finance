@@ -7,7 +7,7 @@ namespace hipanel\modules\finance\actions;
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillImportFromFileForm;
 use hipanel\modules\finance\helpers\parser\BillsImporter;
-use hipanel\modules\finance\helpers\parser\NoParserApproiteType;
+use hipanel\modules\finance\helpers\parser\NoParserAppropriateType;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use Yii;
 use yii\web\BadRequestHttpException;
@@ -41,7 +41,7 @@ class BillImportFromFileAction extends BillManagementAction
         }
         try {
             $bills = $this->parse($form);
-        } catch (NoParserApproiteType $exception) {
+        } catch (NoParserAppropriateType $exception) {
             $this->session->setFlash('error', Yii::t('hipanel:finance', 'No parser appropriate type'));
 
             return $this->redirect();
