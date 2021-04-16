@@ -187,7 +187,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             ],
             'index_page_balance' => [
                 'attribute' => 'balance',
-                'format' => 'html',
+                'format' => 'raw',
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => function ($model, $key, $index) {
                     return ['class' => 'text-right' . ($index ? '' : ' text-bold')];
