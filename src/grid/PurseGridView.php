@@ -60,7 +60,6 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
             'taxes' => [
             ],
             'contact' => [
-                /** todo: refactor */
                 'format' => 'raw',
                 'label' => Yii::t('hipanel:finance', 'Contact'),
                 'value' => function ($model) {
@@ -96,7 +95,6 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                 },
             ],
             'requisite' => [
-                /** todo: refactor */
                 'format' => 'raw',
                 'label' => Yii::t('hipanel:finance', 'Payment details'),
                 'value' => function ($model) {
