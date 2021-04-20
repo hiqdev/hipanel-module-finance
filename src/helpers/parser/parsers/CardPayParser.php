@@ -60,7 +60,7 @@ final class CardPayParser extends AbstractParser
         return null;
     }
 
-    public function getClient(): ?string
+    public function getClient(): ?string // todo: add more sophisticated logic
     {
         if (
             str_starts_with($this->row[1], 'Payment for server equipment') &&

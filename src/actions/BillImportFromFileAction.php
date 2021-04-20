@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\actions;
 
+use Exception;
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillImportFromFileForm;
 use hipanel\modules\finance\helpers\parser\BillsImporter;
 use hipanel\modules\finance\helpers\parser\NoParserAppropriateType;
 use hipanel\modules\finance\models\Requisite;
 use hipanel\modules\finance\providers\BillTypesProvider;
+use http\Exception\RuntimeException;
 use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -30,27 +32,23 @@ class BillImportFromFileAction extends BillManagementAction
     public function run()
     {
         $form = new BillImportFromFileForm();
-        if (!$this->request->isPost || !$form->load($this->request->post())) {
-            throw new BadRequestHttpException('unknown error while importing bills');
-        }
-        $form->file = UploadedFile::getInstance($form, 'file');
-        $requisite = Requisite::find()->where(['id' => $form->requisite_id])->one();
-        $form->guessTypeByRequisiteName($requisite->name);
-        if (!$form->validate()) {
-            $errors = $form->getFirstErrors();
-            $this->session->setFlash('error', implode("\n", $errors));
-
-            return $this->redirect();
-        }
         try {
+            if (!$this->request->isPost || !$form->load($this->request->post())) {
+                throw new BadRequestHttpException('No form data found');
+            }
+            $form->file = UploadedFile::getInstance($form, 'file');
+            $requisite = Requisite::find()->where(['id' => $form->requisite_id])->one();
+            $form->guessTypeByRequisiteName($requisite->name);
+            if (!$form->validate()) {
+                $errors = $form->getFirstErrors();
+                throw new RuntimeException(implode("\n", $errors));
+            }
             $bills = $this->parse($form);
-        } catch (NoParserAppropriateType $exception) {
-            $this->session->setFlash('error', Yii::t('hipanel:finance', 'No parser appropriate type'));
-
-            return $this->redirect();
-        }
-        if (empty($bills)) {
-            $this->session->setFlash('warning', Yii::t('hipanel:finance', 'No bills to add found'));
+            if (empty($bills)) {
+                throw new RuntimeException(Yii::t('hipanel:finance', 'No bills to add found'));
+            }
+        } catch (Exception $exception) {
+            $this->session->setFlash('warning', $exception->getMessage());
 
             return $this->redirect();
         }

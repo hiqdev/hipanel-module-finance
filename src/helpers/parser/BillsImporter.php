@@ -14,6 +14,7 @@ use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
 use Money\Currency;
 use Money\Money;
+use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 
@@ -53,7 +54,7 @@ class BillsImporter
 //            'deposit,dwgg_transferwise' => TransferWiseParser::class,
         ];
         if (!isset($map[$type])) {
-            throw new NoParserAppropriateType();
+            throw new NoParserAppropriateType(Yii::t('hipanel:finance', 'No parser appropriate type'));
         }
 
         return new $map[$type]($file);

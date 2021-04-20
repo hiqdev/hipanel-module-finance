@@ -10,9 +10,9 @@ class BillRequisitesCombo extends RequisitesCombo
     /** {@inheritdoc} */
     public $_return = ['id', 'name', 'email', 'organization'];
 
-//    /** {@inheritdoc} */
-//    public function getFilter()
-//    {
-//        return [];
-//    }
+    /** {@inheritdoc} */
+    public function getFilter()
+    {
+        return [];
+    }
 }

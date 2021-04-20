@@ -3,7 +3,7 @@
 namespace hipanel\modules\finance\widgets;
 
 use hipanel\modules\finance\forms\BillImportFromFileForm;
-use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
+use hipanel\modules\finance\widgets\combo\BillFileImportRequisiteCombo;
 use Yii;
 use yii\base\Widget;
 use yii\bootstrap\ActiveForm;
@@ -30,12 +30,7 @@ class BillImportDropdownButton extends Widget
                 'action' => Url::to(['@bill/import-from-file']),
             ]);
 
-            echo $form->field($model, 'requisite_id')->widget(BillRequisitesCombo::class, [
-                'hasId' => true,
-                'filter' => [
-                    'name_in' => ['format' => $model->getRequisiteNames()],
-                ],
-            ]);
+            echo $form->field($model, 'requisite_id')->widget(BillFileImportRequisiteCombo::class);
             echo $form->field($model, 'file')->fileInput();
             echo Html::submitButton(Yii::t('hipanel:finance', 'Create bills'), ['class' => 'btn btn-success btn-block']);
 
