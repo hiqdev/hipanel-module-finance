@@ -10,6 +10,7 @@ use hipanel\modules\finance\helpers\parser\parsers\CardPayParser;
 use hipanel\modules\finance\helpers\parser\parsers\ePayServiceParser;
 use hipanel\modules\finance\helpers\parser\parsers\ParserInterface;
 use hipanel\modules\finance\helpers\parser\parsers\PaxumParser;
+use hipanel\modules\finance\helpers\parser\parsers\PayPalParser;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
 use Money\Currency;
@@ -50,8 +51,8 @@ class BillsImporter
             'deposit,epayservice' => ePayServiceParser::class,
             'deposit,paxum' => PaxumParser::class,
             'deposit,cardpay_dwgg' => CardPayParser::class,
-//            'deposit,paypal' => PayPalParser::class,
-//            'deposit,dwgg_transferwise' => TransferWiseParser::class,
+            'deposit,paypal' => PayPalParser::class,
+//            'deposit,dwgg_transferwise' => TransferWiseParser::class, // todo: add this parser
         ];
         if (!isset($map[$type])) {
             throw new NoParserAppropriateType(Yii::t('hipanel:finance', 'No parser appropriate type'));
