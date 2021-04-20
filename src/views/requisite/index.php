@@ -9,7 +9,7 @@ use yii\bootstrap\Modal;
 
 $this->registerCss("
 .balance-cell { display: flex; flex-direction: column; height: 100%; text-align: center; }
-.balance-cell > span { flex: 1 0 auto; padding: .3em; }
+.balance-cell > span { flex: 1 1 auto; padding: .3em; }
 ");
 
 $this->title = Yii::t('hipanel:finance', 'Requisites');
