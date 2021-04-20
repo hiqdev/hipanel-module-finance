@@ -139,6 +139,7 @@ class PurchaseRequestCollection extends Collection
         $request->disableReason = $data['disable_reason'] ?? null;
         $request->vat_rate = $data['vat_rate'] ?? null;
         $request->vat_sum = $data['vat_sum'] ?? null;
+        $request->paymentMethod = $data['payment_method'] ?? null;
 
         return $request;
     }
