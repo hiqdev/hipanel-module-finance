@@ -37,10 +37,10 @@ class BillImportFromFileForm extends Model
     public function getLinkedTypesAndRequisites(): array
     {
         return [
-            'deposit,epayservice' => null,
-            'deposit,paxum' => null,
+            'deposit,epayservice' => 'Profitrade PLC - ePayService',
+            'deposit,paxum' => 'Profitrade PLC - Paxum',
             'deposit,cardpay_dwgg' => 'DataWeb Global Group BV - CardPay',
-            'deposit,paypal' => null,
+            'deposit,paypal' => 'Profitrade PLC - PayPal',
             'deposit,dwgg_transferwise' => 'DataWeb Global Group BV - TransferWise',
         ];
     }
