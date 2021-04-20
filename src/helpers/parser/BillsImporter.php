@@ -6,6 +6,7 @@ namespace hipanel\modules\finance\helpers\parser;
 
 use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\forms\BillImportFromFileForm;
+use hipanel\modules\finance\helpers\parser\parsers\CardPayParser;
 use hipanel\modules\finance\helpers\parser\parsers\ePayServiceParser;
 use hipanel\modules\finance\helpers\parser\parsers\ParserInterface;
 use hipanel\modules\finance\helpers\parser\parsers\PaxumParser;
@@ -14,6 +15,7 @@ use hipanel\modules\finance\models\Charge;
 use Money\Currency;
 use Money\Money;
 use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
 
 class BillsImporter
 {
@@ -23,15 +25,14 @@ class BillsImporter
 
     public function __construct(BillImportFromFileForm $fileForm)
     {
-        $rows = $this->extractRows($fileForm);
         $this->fileForm = $fileForm;
-        $this->parser = $this->createParser($fileForm->type, $rows);
+        $this->parser = $this->createParser($fileForm->type, $fileForm->file);
     }
 
     public function __invoke(): array
     {
         $bills = [];
-        foreach ($this->parser->getParsedRows() as $parser) {
+        foreach ($this->parser->getRows() as $parser) {
             $bills[] = $this->createBill($parser);
         }
         if (empty($bills)) {
@@ -39,33 +40,23 @@ class BillsImporter
         }
         $bills = $this->resolveClients($bills);
 
-        return $this->filterExisting($bills);
+        return $this->filterExisting(array_splice($bills, 0, 20));
     }
 
-    private function createParser(string $type, array $rows): ParserInterface
+    private function createParser(string $type, UploadedFile $file): ParserInterface
     {
         $map = [
             'deposit,epayservice' => ePayServiceParser::class,
-            'deposit,paxum' => PaxumParser::class
-//            'deposit,dwgg_epayments' => ePaymentsParser::class,
-//            'deposit,cardpay_dwgg' => CardPayParser::class,
+            'deposit,paxum' => PaxumParser::class,
+            'deposit,cardpay_dwgg' => CardPayParser::class,
 //            'deposit,paypal' => PayPalParser::class,
+//            'deposit,dwgg_transferwise' => TransferWiseParser::class,
         ];
         if (!isset($map[$type])) {
             throw new NoParserAppropriateType();
         }
 
-        return new $map[$type]($rows);
-    }
-
-    private function extractRows(BillImportFromFileForm $fileForm): array
-    {
-        $temp = $fileForm->file->tempName;
-        if (is_readable($temp)) {
-            return array_map('str_getcsv', file($temp));
-        }
-
-        return [];
+        return new $map[$type]($file);
     }
 
     private function createBill(ParserInterface $parser): Bill
@@ -79,6 +70,7 @@ class BillsImporter
         $bill->quantity = $parser->getQuantity();
         $bill->sum = $parser->getSum();
         $bill->txn = $parser->getTxn();
+        $bill->label = $parser->getLabel();
         $charges = $this->createCharges($parser);
         $bill->populateRelation('charges', $charges);
 

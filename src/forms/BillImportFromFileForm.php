@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\forms;
 
-use hipanel\modules\finance\providers\BillTypesProvider;
 use Yii;
 use yii\base\Model;
 
@@ -14,20 +13,15 @@ class BillImportFromFileForm extends Model
 
     public $type;
 
-    private BillTypesProvider $billTypesProvider;
-
-    public function init(): void
-    {
-        parent::init();
-        $this->billTypesProvider = Yii::$container->get(BillTypesProvider::class);
-    }
+    public $requisite_id;
 
     public function rules()
     {
         return [
-            [['file', 'type'], 'required'],
+            [['file', 'requisite_id', 'type'], 'required'],
+            ['requisite_id', 'integer'],
             ['file', 'file', 'skipOnEmpty' => false, 'checkExtensionByMimeType' => false, 'extensions' => ['csv'], 'maxSize' => 1 * 1024 * 1024],
-            ['type', 'in', 'range' => array_keys($this->getPaymentSystemDropdownList())],
+            ['type', 'in', 'range' => array_keys($this->getLinkedTypesAndRequisites())],
         ];
     }
 
@@ -36,20 +30,31 @@ class BillImportFromFileForm extends Model
         return [
             'file' => Yii::t('hipanel:finance', 'File from the payment system'),
             'type' => Yii::t('hipanel:finance', 'Payment system'),
+            'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
         ];
     }
 
-    public function getPaymentSystemDropdownList(): array
+    public function getLinkedTypesAndRequisites(): array
     {
-        $types = $this->billTypesProvider->getTypesList();
+        return [
+            'deposit,epayservice' => null,
+            'deposit,paxum' => null,
+            'deposit,cardpay_dwgg' => 'DataWeb Global Group BV - CardPay',
+            'deposit,paypal' => null,
+            'deposit,dwgg_transferwise' => 'DataWeb Global Group BV - TransferWise',
+        ];
+    }
 
-        return array_filter($types, static fn($label, $type): bool => in_array($type, [
-            'deposit,epayservice',
-            'deposit,paxum'
-//            'deposit,dwgg_epayments',
-//            'deposit,cardpay_dwgg',
-//            'deposit,paypal',
-        ], true), ARRAY_FILTER_USE_BOTH);
+    public function getRequisiteNames(): array
+    {
+        return array_values(array_filter($this->getLinkedTypesAndRequisites()));
+    }
 
+    public function guessTypeByRequisiteName(string $name): void
+    {
+        $names = array_values($this->getLinkedTypesAndRequisites());
+        if (in_array($name, $names, true)) {
+            $this->type = array_search($name, $this->getLinkedTypesAndRequisites(), true);
+        }
     }
 }

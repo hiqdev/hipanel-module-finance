@@ -20,4 +20,5 @@ interface ParserInterface
 
     public function getTxn(): ?string;
 
+    public function getLabel(): ?string;
 }

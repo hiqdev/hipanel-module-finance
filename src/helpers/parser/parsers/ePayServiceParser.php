@@ -56,4 +56,9 @@ final class ePayServiceParser extends AbstractParser
     {
         return null;
     }
+
+    public function getLabel(): ?string
+    {
+        return null;
+    }
 }

@@ -63,4 +63,9 @@ class PaxumParser extends AbstractParser
     {
         return $this->row[0];
     }
+
+    public function getLabel(): ?string
+    {
+        return null;
+    }
 }
