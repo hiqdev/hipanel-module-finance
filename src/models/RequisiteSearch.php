@@ -27,6 +27,7 @@ class RequisiteSearch extends Requisite
         return ArrayHelper::merge(parent::rules(), [
             [['balance_time'], 'date', 'format' => 'php:Y-m-d'],
             [['currency'], 'safe'],
+            [['name_ilike'], 'string'],
         ]);
     }
 

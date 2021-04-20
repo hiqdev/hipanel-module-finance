@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\grid\MainColumn;
 use hipanel\helpers\Url;
 use hipanel\modules\finance\menus\RequisiteActionsMenu;
 use hipanel\modules\finance\models\Requisite;
@@ -22,6 +23,8 @@ use Yii;
 
 class RequisiteGridView extends ContactGridView
 {
+    public $resizableColumns = false;
+
     public function columns()
     {
         $currencies = Ref::getList('type,currency');
@@ -50,9 +53,10 @@ class RequisiteGridView extends ContactGridView
                     $tags = [];
                     foreach ($cellLabels as $attribute => $label) {
                         $balance = $model->balances[$currency][$attribute] ?? null;
-                        $tags[] = Html::tag($attribute==='balance' ? 'b' : 'span', $formatter->asCurrency($balance, $currency), [
+                        $tags[] = Html::tag('span', $formatter->asCurrency($balance, $currency), [
                             'title' => $label,
                             'style' => "background-color: $labelColors[$attribute];",
+                            'class' => $attribute === 'balance' ? 'text-bold' : '',
                         ]);
                     }
                     if (empty($tags)) {
@@ -73,18 +77,23 @@ class RequisiteGridView extends ContactGridView
                 'contentOptions' => [
                     'style' => "width: 1%; white-space: nowrap; background-color: $labelColors[$attribute]",
                 ],
-            'value' => function (Requisite $model) use ($attribute, $formatter): string {
-                $balance = $model->balance[$attribute];
-                if (!empty($balance)) {
-                    return Html::tag('span', $formatter->asCurrency($balance, $model->balance->currency ?? 'usd'));
-                }
+                'value' => function (Requisite $model) use ($attribute, $formatter): string {
+                    $balance = $model->balance[$attribute];
+                    if (!empty($balance)) {
+                        return Html::tag('span', $formatter->asCurrency($balance, $model->balance->currency ?? 'usd'));
+                    }
 
-                return '';
-            }
+                    return '';
+                },
             ];
         }
 
         return array_merge(parent::columns(), [
+            'name' => [
+                'class' => MainColumn::class,
+                'filterAttribute' => 'name_ilike',
+                'extraAttribute' => 'organization',
+            ],
             'serie' => [
                 'class' => XEditableColumn::class,
                 'pluginOptions' => [
