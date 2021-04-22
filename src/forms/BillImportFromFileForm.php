@@ -21,7 +21,7 @@ class BillImportFromFileForm extends Model
             [['file', 'requisite_id', 'type'], 'required'],
             ['requisite_id', 'integer'],
             ['file', 'file', 'skipOnEmpty' => false, 'checkExtensionByMimeType' => false, 'extensions' => ['csv'], 'maxSize' => 1 * 1024 * 1024],
-            ['type', 'in', 'range' => array_keys($this->getLinkedTypesAndRequisites())],
+            ['type', 'in', 'range' => array_unique(array_values($this->getLinkedTypesAndRequisites()))],
         ];
     }
 
@@ -51,16 +51,16 @@ class BillImportFromFileForm extends Model
 
     public function getRequisiteNames(): array
     {
-        return array_values(array_filter($this->getLinkedTypesAndRequisites()));
+        return array_keys($this->getLinkedTypesAndRequisites());
     }
 
     public function guessTypeByRequisiteName(string $name): void
     {
-        $names = array_values($this->getLinkedTypesAndRequisites());
-        if (!in_array($name, $names, true)) {
+        $map = $this->getLinkedTypesAndRequisites();
+        if (!array_key_exists($name, $map)) {
             throw new \RuntimeException(Yii::t('hipanel:finance', 'None of the existing import parsers is associated with the selected requisite. Choose a different requisite.'));
         }
 
-        $this->type = array_search($name, $this->getLinkedTypesAndRequisites(), true);
+        $this->type = $map[$name];
     }
 }
