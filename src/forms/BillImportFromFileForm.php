@@ -34,15 +34,19 @@ class BillImportFromFileForm extends Model
         ];
     }
 
+    /**
+     * This method should be return associative array where the keys are bill types and the values are the names of the requisites
+     *
+     * Example: [
+     *  BILL_TYPE => REQUISITE_NAME,
+     *  BILL_TYPE => REQUISITE_NAME,
+     *  ...
+     * ]
+     * @return array
+     */
     public function getLinkedTypesAndRequisites(): array
     {
-        return [
-            'deposit,epayservice' => 'Profitrade PLC - ePayService',
-            'deposit,paxum' => 'Profitrade PLC - Paxum',
-            'deposit,cardpay_dwgg' => 'DataWeb Global Group BV - CardPay',
-            'deposit,paypal' => 'Profitrade PLC - PayPal',
-            'deposit,dwgg_transferwise' => 'DataWeb Global Group BV - TransferWise',
-        ];
+        return Yii::$app->params['finance.bill.import.requisite.names'] ?? [];
     }
 
     public function getRequisiteNames(): array
@@ -53,8 +57,10 @@ class BillImportFromFileForm extends Model
     public function guessTypeByRequisiteName(string $name): void
     {
         $names = array_values($this->getLinkedTypesAndRequisites());
-        if (in_array($name, $names, true)) {
-            $this->type = array_search($name, $this->getLinkedTypesAndRequisites(), true);
+        if (!in_array($name, $names, true)) {
+            throw new \RuntimeException(Yii::t('hipanel:finance', 'None of the existing import parsers is associated with the selected requisite. Choose a different requisite.'));
         }
+
+        $this->type = array_search($name, $this->getLinkedTypesAndRequisites(), true);
     }
 }

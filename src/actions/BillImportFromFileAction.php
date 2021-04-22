@@ -41,7 +41,7 @@ class BillImportFromFileAction extends BillManagementAction
             $form->guessTypeByRequisiteName($requisite->name);
             if (!$form->validate()) {
                 $errors = $form->getFirstErrors();
-                throw new RuntimeException(implode("\n", $errors));
+                throw new Exception(implode("\n", $errors));
             }
             $bills = $this->parse($form);
             if (empty($bills)) {
