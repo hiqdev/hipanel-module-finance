@@ -188,6 +188,7 @@ return [
     'Total:' => 'Всего:',
     '{units, plural, one{# unit} other{# units}} &times; {quantity, plural, one{# day} other{# days}}' => '{units, plural, one{# юнит} few{# юнита} other{# юнитов}} &times; {quantity, plural, one{# день} few{# дня} other{# дней}}',
     'The bill is not unique' => 'Платёж не уникальный',
+    'Charges are not unique' => 'Списания не уникальны',
     'Client hasn\'t purse with this currency' => 'У клиента нет кошелька с этой валютой',
 
     // Requisites
