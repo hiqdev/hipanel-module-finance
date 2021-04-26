@@ -2,9 +2,8 @@
 
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
-use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
-use hipanel\modules\finance\widgets\AmountPerUnitWidget;
+use hipanel\modules\finance\widgets\PricePerUnitWidget;
 use hipanel\modules\finance\widgets\combo\MultipleBillTypeCombo;
 use hipanel\modules\finance\widgets\combo\RequisitesCombo;
 use hipanel\modules\finance\widgets\SumSignToggleButton;
@@ -197,7 +196,7 @@ $form = ActiveForm::begin([
                                                     <?= $form->field($charge, "[$i][$j]quantity")->input('number', ['value' => $charge->getQuantity()]) ?>
                                                 </div>
                                                 <div class="col-md-1">
-                                                    <?= AmountPerUnitWidget::widget() ?>
+                                                    <?= PricePerUnitWidget::widget() ?>
                                                 </div>
                                                 <div class="col-md-1">
                                                     <?= $form->field($charge, "[$i][$j]sum")->input('number', [
