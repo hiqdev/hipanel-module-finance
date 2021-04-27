@@ -240,6 +240,7 @@ return [
     'Create bill' => 'Создать платеж',
     'Prepare to bill creation' => 'Подготовка к созданию платежа',
     'Proceed to bill(s) creation' => 'Перейти к созданию платежа(ей)',
+    'per unit' => 'за ед.',
 
     'Balances' => 'Балансы',
     'Balance' => 'Баланс',

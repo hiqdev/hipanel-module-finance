@@ -2,8 +2,8 @@
 
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
-use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\widgets\PricePerUnitWidget;
 use hipanel\modules\finance\widgets\combo\MultipleBillTypeCombo;
 use hipanel\modules\finance\widgets\combo\RequisitesCombo;
 use hipanel\modules\finance\widgets\SumSignToggleButton;
@@ -114,7 +114,7 @@ $form = ActiveForm::begin([
                             </div>
                             <div class="col-md-1">
                                 <?= Html::activeHiddenInput($model, "[$i]unit") ?>
-                                <?= $form->field($model, "[$i]quantity")->input('text', ['value' => $model->getQuantity()]) ?>
+                                <?= $form->field($model, "[$i]quantity")->input('number', ['value' => $model->getQuantity()]) ?>
                             </div>
                         </div>
                     </div>
@@ -192,15 +192,18 @@ $form = ActiveForm::begin([
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-1">
-                                                    <?= $form->field($charge, "[$i][$j]sum")->textInput([
+                                                    <?= Html::activeHiddenInput($charge, "[$i][$j]unit") ?>
+                                                    <?= $form->field($charge, "[$i][$j]quantity")->input('number', ['value' => $charge->getQuantity()]) ?>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <?= PricePerUnitWidget::widget() ?>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <?= $form->field($charge, "[$i][$j]sum")->input('number', [
                                                         'data-attribute' => 'sum',
                                                     ]) ?>
                                                 </div>
-                                                <div class="col-md-1">
-                                                    <?= Html::activeHiddenInput($charge, "[$i][$j]unit") ?>
-                                                    <?= $form->field($charge, "[$i][$j]quantity")->input('text', ['value' => $charge->getQuantity()]) ?>
-                                                </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <?= $form->field($charge, "[$i][$j]label") ?>
                                                 </div>
                                             </div>
