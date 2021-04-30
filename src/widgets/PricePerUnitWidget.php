@@ -51,7 +51,7 @@ JS
 
         return sprintf('%s%s',
             Html::label(Yii::t('hipanel:finance', 'per unit'), $name, ['class' => 'control-label ppu-input']),
-            Html::input('number', $name, null, ['class' => 'form-control'])
+            Html::textInput($name, null, ['class' => 'form-control'])
         );
     }
 }
