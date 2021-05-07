@@ -48,7 +48,7 @@ class DomainServicePriceGridView extends PriceGridView
         return [
             'label' =>  DomainServicePrice::getOperations()[$type],
             'contentOptions' => ['class' => 'text-center'],
-            'format' => 'html',
+            'format' => 'raw',
             'value' => function ($prices) use ($type) {
                 /** @var DomainServicePrice[] $prices */
                 if (!isset($prices[$type])) {

@@ -92,7 +92,7 @@ class LinkToObjectResolver extends Widget
      */
     private function getLabel()
     {
-        return $this->model->{$this->labelAttribute};
+        return Html::encode($this->model->{$this->labelAttribute});
     }
 
     /**

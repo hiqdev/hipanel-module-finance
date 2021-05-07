@@ -37,7 +37,7 @@ class TariffProfileGridView extends BoxedGridView
             ],
             'tariff_names' => [
                 'filter' => false,
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (TariffProfile $model) {
                     if (empty($model->tariffs)) {
                         return '';
@@ -60,7 +60,7 @@ class TariffProfileGridView extends BoxedGridView
             ],
             'domain_tariff' => [
                 'attribute' => 'domain',
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (TariffProfile $model) {
                     if (empty($model->domain)) {
                         return '';
@@ -71,7 +71,7 @@ class TariffProfileGridView extends BoxedGridView
             ],
             'certificate_tariff' => [
                 'attribute' => 'certificate',
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (TariffProfile $model) {
                     if (empty($model->certificate)) {
                         return '';
@@ -82,7 +82,7 @@ class TariffProfileGridView extends BoxedGridView
             ],
             'svds_tariff' => [
                 'attribute' => 'svds',
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (TariffProfile $model) {
                     if (empty($model->tariffs)) {
                         return '';
@@ -101,7 +101,7 @@ class TariffProfileGridView extends BoxedGridView
             ],
             'ovds_tariff' => [
                 'attribute' => 'ovds',
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (TariffProfile $model) {
                     if (empty($model->tariffs)) {
                         return '';
@@ -120,7 +120,7 @@ class TariffProfileGridView extends BoxedGridView
             ],
             'server_tariff' => [
                 'attribute' => 'server',
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (TariffProfile $model) {
                     if (empty($model->tariffs)) {
                         return '';
@@ -146,6 +146,6 @@ class TariffProfileGridView extends BoxedGridView
 
     protected function tariffLink($id, $name)
     {
-        return Html::a($name, ['@plan/view', 'id' => $id]);
+        return Html::a(Html::encode($name), ['@plan/view', 'id' => $id]);
     }
 }

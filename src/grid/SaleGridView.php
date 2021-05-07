@@ -24,14 +24,14 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
     {
         return array_merge(parent::columns(), [
             'tariff' => [
-                'format' => 'html',
+                'format' => 'raw',
                 'filterAttribute' => 'tariff_like',
                 'value' => function ($model) {
-                    return Html::a($model->tariff, ['@plan/view', 'id' => $model->tariff_id]);
+                    return Html::a(Html::encode($model->tariff), ['@plan/view', 'id' => $model->tariff_id]);
                 },
             ],
             'time' => [
-                'format' => ['html'],
+                'format' => 'raw',
                 'filter' => false,
                 'contentOptions' => ['class' => 'text-nowrap'],
                 'value' => function ($model) {
@@ -53,9 +53,9 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
             ],
             'object_v' => [
                 'label' => Yii::t('hipanel:finance:sale', 'Object'),
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function ($model) {
-                    return $model->object_type . ' ' . LinkToObjectResolver::widget([
+                    return Html::encode($model->object_type) . ' ' . LinkToObjectResolver::widget([
                         'model' => $model,
                         'typeAttribute' => 'object_type',
                         'idAttribute' => 'object_id',
@@ -69,30 +69,30 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'contentOptions' => ['class' => 'text-right'],
             ],
             'object' => [
-                'format' => 'html',
+                'format' => 'raw',
                 'filterAttribute' => 'object_inilike',
                 'value' => function (Sale $model) {
                     if ($model instanceof FakeSale) {
-                        return $model->object;
+                        return Html::encode($model->object);
                     }
                     $html = LinkToObjectResolver::widget([
                         'model' => $model,
                         'typeAttribute' => 'object_type',
                         'idAttribute' => 'object_id',
                     ]);
-                    $html .= ' &nbsp; ' . $model->object_label . ' ';
+                    $html .= ' &nbsp; ' . Html::encode($model->object_label) . ' ';
 
                     return $html;
                 },
             ],
             'object_link' => [
                 'attribute' => 'object',
-                'format' => 'html',
+                'format' => 'raw',
                 'filterAttribute' => 'object_like',
                 'enableSorting' => false,
                 'value' => function (Sale $model) {
                     if ($model instanceof FakeGroupingSale) {
-                        return $model->object;
+                        return Html::encode($model->object);
                     }
 
                     return LinkToObjectResolver::widget([

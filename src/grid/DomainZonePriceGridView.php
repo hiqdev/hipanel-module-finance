@@ -51,7 +51,7 @@ class DomainZonePriceGridView extends PriceGridView
         return [
             'label' =>  DomainZonePrice::getTypes()[$type],
             'contentOptions' => ['class' => 'text-center'],
-            'format' => 'html',
+            'format' => 'raw',
             'value' => function ($prices) use ($type) {
                 /** @var DomainZonePrice[] $prices */
                 if (!isset($prices[$type])) {

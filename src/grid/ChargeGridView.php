@@ -64,14 +64,14 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'tariff_id',
                 'label' => Yii::t('hipanel', 'Plan'),
                 'filter' => false,
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (Charge $model): string {
                     return $this->tariffLink($model);
                 },
             ],
             'type_label' => [
                 'label' => Yii::t('hipanel', 'Type'),
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (Charge $model) {
                     return BillType::widget([
                         'model' => $model,
@@ -102,7 +102,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             'name' => [
                 'attribute' => 'name_ilike',
                 'label' => Yii::t('hipanel', 'Object'),
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (Charge $model) {
                     $result = LinkToObjectResolver::widget([
                         'model' => $model,
@@ -131,7 +131,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             ],
             'quantity' => [
                 'attribute' => 'quantity',
-                'format' => 'html',
+                'format' => 'raw',
                 'filter' => false,
                 'value' => function (Charge $model) {
                     return $this->renderQuantity($model);
@@ -150,7 +150,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
             ],
             'is_payed' => [
                 'attribute' => 'is_payed',
-                'format' => 'html',
+                'format' => 'raw',
                 'enableSorting' => false,
                 'filter' => $this->filterModel !== null
                     ? StaticCombo::widget([
@@ -189,8 +189,9 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
     public function tariffLink(Charge $model): ?string
     {
         $canSeeLink = Yii::$app->user->can('plan.create');
+        $tariff = Html::encode($model->tariff);
 
-        return $canSeeLink ? Html::a($model->tariff, ['@plan/view', 'id' => $model->tariff_id]) : $model->tariff;
+        return $canSeeLink ? Html::a($tariff, ['@plan/view', 'id' => $model->tariff_id]) : $tariff;
     }
 
     /**

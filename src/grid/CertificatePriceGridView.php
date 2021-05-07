@@ -58,7 +58,7 @@ class CertificatePriceGridView extends PriceGridView
             $result['columns'][] = [
                 'label' => Yii::t('hipanel:finance:tariff', $label),
                 'contentOptions' => ['class' => 'text-center'],
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function ($prices) use ($type, $period) {
                     /** @var CertificatePrice[] $prices */
                     if (!isset($prices[$type])) {

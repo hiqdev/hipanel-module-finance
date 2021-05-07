@@ -51,7 +51,7 @@ class SalesInPlanGridView extends SaleGridView
     {
         return array_merge(parent::columns(), [
             'object_label' => [
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (Sale $sale, $key) {
                     if ($sale instanceof FakeSale) {
                         return Label::widget([
@@ -62,7 +62,7 @@ class SalesInPlanGridView extends SaleGridView
 
                     foreach ($this->pricesBySoldObject[$key] ?? [] as $price) {
                         if ($price->object->id === $sale->object_id) {
-                            return $price->object->label;
+                            return Html::encode($price->object->label);
                         }
                     }
 
@@ -82,7 +82,7 @@ class SalesInPlanGridView extends SaleGridView
                 'contentOptions' => [
                     'class' => 'total-per-object-cell',
                 ],
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function () {
                     return  Html::tag('span', Yii::t('hipanel:finance', 'Total:')) . '&nbsp;&nbsp;' .
                             Html::tag('span', '', ['class' => 'total-per-object']);

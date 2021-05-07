@@ -56,7 +56,7 @@ class GroupedChargesGridView extends ChargeGridView
         return array_merge(parent::columns(), [
             'type_label' => [
                 'label' => Yii::t('hipanel', 'Type'),
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function ($model) {
                     $html = '';
 
@@ -73,7 +73,7 @@ class GroupedChargesGridView extends ChargeGridView
             ],
             'sum_with_children' => [
                 'label' => '',
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (Charge $model) {
                     if ($model->parent_id) {
                         return '';

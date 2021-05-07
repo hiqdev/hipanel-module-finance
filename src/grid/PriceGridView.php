@@ -43,11 +43,11 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
     {
         return array_merge(parent::columns(), [
             'plan' => [
-                'format' => 'html',
+                'format' => 'raw',
                 'filterAttribute' => 'plan_name_ilike',
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'value' => function (Price $model) {
-                    return Html::a($model->plan->name, ['@plan/view', 'id' => $model->plan->id]);
+                    return Html::a(Html::encode($model->plan->name), ['@plan/view', 'id' => $model->plan->id]);
                 },
             ],
             'price' => [
@@ -76,7 +76,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
             ],
             'object->name' => [
                 'label' => Yii::t('hipanel', 'Object'),
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (Price $model) {
                     $link = LinkToObjectResolver::widget([
                         'model' => $model->object,
@@ -104,7 +104,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'type',
                 'filterAttribute' => 'type',
                 'filterOptions' => ['class' => 'narrow-filter'],
-                'format' => 'html',
+                'format' => 'raw',
                 'gtype' => 'type,bill',
                 'findOptions' => [
                     'select' => 'name',
