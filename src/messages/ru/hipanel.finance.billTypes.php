@@ -46,6 +46,7 @@ return [
 
     'monthly' => 'абонплата',
     'overuse' => 'перебор',
+    'deposit' => 'оплата',
     'leasing' => 'лизинг',
     'correction' => 'корректировка',
     'exchange' => 'обмен',

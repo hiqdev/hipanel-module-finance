@@ -234,6 +234,17 @@ class BillForm extends Model
                     $this->addError($attribute, Yii::t('hipanel:finance', 'The bill is not unique'));
                 }
             }, 'on' => self::SCENARIO_COPY],
+            [['charges'], function ($attribute) {
+                $charges = $this->getChargesAsArray();
+                $chargeStrings = array_unique(array_map(
+                    fn ($ch) => $ch['object_id'] . $ch['type'] . $ch['sum'] . $ch['unit'],
+                    $charges,
+                ));
+
+                if (count($charges) !== count($chargeStrings)) {
+                    \Yii::$app->session->setFlash('error', 'Charges are not unique');
+                }
+            }, 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
         ];
     }
 

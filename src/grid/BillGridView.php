@@ -266,6 +266,15 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                         'labelField' => 'type_label',
                     ]);
                 },
+                'exportedColumns' => ['export_type_type', 'export_payment_type'],
+            ],
+            'export_type_type' => [
+                'label' => Yii::t('hipanel', 'Type'),
+                'value' => static fn(Bill $bill): string => Yii::t('hipanel.finance.billTypes', $bill->type_label),
+            ],
+            'export_payment_type' => [
+                'label' => Yii::t('hipanel', 'Payment Type'),
+                'value' => static fn(Bill $bill): string => Yii::t('hipanel.finance.billTypes', explode(',', $bill->ftype)[0]),
             ],
             'description' => [
                 'attribute' => 'descr',

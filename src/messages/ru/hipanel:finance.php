@@ -188,6 +188,7 @@ return [
     'Total:' => 'Всего:',
     '{units, plural, one{# unit} other{# units}} &times; {quantity, plural, one{# day} other{# days}}' => '{units, plural, one{# юнит} few{# юнита} other{# юнитов}} &times; {quantity, plural, one{# день} few{# дня} other{# дней}}',
     'The bill is not unique' => 'Платёж не уникальный',
+    'Charges are not unique' => 'Списания не уникальны',
     'Client hasn\'t purse with this currency' => 'У клиента нет кошелька с этой валютой',
 
     // Requisites
@@ -246,6 +247,7 @@ return [
     'Import from a file' => 'Импорт выписки из платёжной системы',
     'File from the payment system' => 'Выписка из платёжной системы',
     'None of the existing import parsers is associated with the selected requisite. Choose a different requisite.' => 'С выбранном реквизитом не связан ни один из существующих парсеров импорта. Выберите другой реквизит.',
+    'per unit' => 'за ед.',
 
     'Balances' => 'Балансы',
     'Balance' => 'Баланс',
