@@ -106,6 +106,11 @@ class BillForm extends Model
     public $class;
 
     /**
+     * @var string
+     */
+    public $txn;
+
+    /**
      * @var Charge[]
      */
     public $charges = [];
@@ -135,7 +140,7 @@ class BillForm extends Model
     {
         $attributes = $bill->getAttributes([
             'id', 'object_id', 'client_id', 'currency', 'type',
-            'gtype', 'sum', 'time', 'quantity', 'unit', 'label', 'object', 'class', 'requisite_id'
+            'gtype', 'sum', 'time', 'quantity', 'unit', 'label', 'object', 'class', 'requisite_id', 'txn'
         ]);
 
         $form = new self(['scenario' => $scenario]);
@@ -272,6 +277,7 @@ class BillForm extends Model
             'object_id' => Yii::t('hipanel', 'Object'),
             'requisite' => Yii::t('hipanel:finance', 'Requisite'),
             'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
+            'txn' => Yii::t('hipanel:finance', 'TXN'),
         ];
     }
 

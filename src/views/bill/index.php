@@ -1,18 +1,22 @@
 <?php
 
 use hipanel\modules\finance\grid\BillGridView;
+use hipanel\modules\finance\models\ExchangeRate;
+use hipanel\modules\finance\widgets\BillImportDropdownButton;
 use hipanel\modules\finance\widgets\ExchangeRatesLine;
 use hipanel\widgets\IndexPage;
-use hipanel\widgets\Pjax;
+use hiqdev\hiart\ActiveDataProvider;
+use hiqdev\hiart\ActiveRecord;
 use yii\helpers\Html;
+use yii\web\View;
 
 /**
- * @var \yii\web\View $this
+ * @var View $this
  * @var array $billTypes
  * @var array $billGroupLabels
- * @var \hiqdev\hiart\ActiveDataProvider $dataProvider
- * @var \hiqdev\hiart\ActiveRecord $model
- * @var \hipanel\modules\finance\models\ExchangeRate[] $rates
+ * @var ActiveDataProvider $dataProvider
+ * @var ActiveRecord $model
+ * @var ExchangeRate[] $rates
  */
 $this->title = Yii::t('hipanel:finance', 'Bills');
 $this->params['breadcrumbs'][] = $this->title;
@@ -34,10 +38,8 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
             <?= Html::a(Yii::t('hipanel:finance', 'Add internal transfer'), ['@bill/create-transfer'], ['class' => 'btn btn-sm btn-default']) ?>
         <?php endif ?>
         <?= Html::a(Yii::t('hipanel:finance', 'Currency exchange'), ['@bill/create-exchange'], ['class' => 'btn btn-sm btn-default']) ?>
-        <?php if (Yii::$app->user->can('bill.import')) : ?>
-            <?= Html::a(Yii::t('hipanel:finance', 'Import payments'), ['@bill/import'], ['class' => 'btn btn-sm btn-default']) ?>
-        <?php endif ?>
-    <?php $page->endContent() ?>
+        <?= BillImportDropdownButton::widget() ?>
+<?php $page->endContent() ?>
 
     <?php $page->beginContent('sorter-actions') ?>
         <?= $page->renderSorter([

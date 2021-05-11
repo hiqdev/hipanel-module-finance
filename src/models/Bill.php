@@ -65,6 +65,7 @@ class Bill extends \hipanel\base\Model
             [['is_payed'], 'boolean'],
             [['type_label', 'gtype_label'], 'safe'],
             [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
+            [['txn'], 'string'],
 
             [['id'], 'required', 'on' => [self::SCENARIO_UPDATE, self::SCENARIO_DELETE]],
             [['client_id'], 'integer', 'on' => [self::SCENARIO_CREATE]],
@@ -104,6 +105,7 @@ class Bill extends \hipanel\base\Model
             'requisite' => Yii::t('hipanel:finance', 'Requisite'),
             'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
             'is_payed' => Yii::t('hipanel:finance', 'Is paid?'),
+            'txn' => Yii::t('hipanel:finance', 'TXN'),
         ]);
     }
 

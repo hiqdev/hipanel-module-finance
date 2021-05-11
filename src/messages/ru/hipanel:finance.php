@@ -238,8 +238,15 @@ return [
     'Add prices' => 'Добавить прайсы',
 
     'Create bill' => 'Создать платеж',
+    'Create bills' => 'Создать платежи',
+    'Create bills from file' => 'Создать платежи из файла',
     'Prepare to bill creation' => 'Подготовка к созданию платежа',
     'Proceed to bill(s) creation' => 'Перейти к созданию платежа(ей)',
+    'No bills to add found' => 'В этой выписке не найдено походящих записей для создания платежей',
+    'No parser appropriate type' => 'Для этой выписки не найдено подходящего парсера',
+    'Import from a file' => 'Импорт выписки из платёжной системы',
+    'File from the payment system' => 'Выписка из платёжной системы',
+    'None of the existing import parsers is associated with the selected requisite. Choose a different requisite.' => 'С выбранном реквизитом не связан ни один из существующих парсеров импорта. Выберите другой реквизит.',
     'per unit' => 'за ед.',
 
     'Balances' => 'Балансы',
