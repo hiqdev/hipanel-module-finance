@@ -46,8 +46,7 @@ class CreateFromPricesAction extends BillManagementAction
                     'prices' => $prices,
                 ]);
             }
-            if ($this->controller->request->isPost) {
-                $model->load($this->controller->request->post());
+            if ($this->controller->request->isPost && $model->load($this->controller->request->post())) {
                 $sales = Sale::find()->where(['object_ids' => array_keys($pricesByObjectId), 'tariff_id' => reset($prices)->plan_id])->limit(-1)->all();
                 if (empty($sales)) {
                     throw new BadRequestHttpException('Apparently the details belonging to the object(s) have not been sold yet');
