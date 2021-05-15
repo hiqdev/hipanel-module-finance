@@ -37,8 +37,8 @@ class AccountSalesCest
     {
         $I->seeLink('Type');
 	$I->seeElement('input', ['name' => 'SaleSearch[object_type]']);
-        
+
     }
 
-    
+
 }
