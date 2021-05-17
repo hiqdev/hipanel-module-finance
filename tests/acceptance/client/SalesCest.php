@@ -36,7 +36,7 @@ class AccountSalesCest
     private function ensureICanSeeBodyBox(Client $I)
     {
         $I->seeLink('Type');
-	$I->seeElement('input', ['name' => 'SaleSearch[object_type]']);
+        $I->seeElement('input', ['name' => 'SaleSearch[object_type]']);
 
     }
 
