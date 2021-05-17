@@ -39,6 +39,4 @@ class AccountSalesCest
         $I->seeElement('input', ['name' => 'SaleSearch[object_type]']);
 
     }
-
-
 }
