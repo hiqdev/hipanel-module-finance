@@ -22,9 +22,21 @@ use yii\web\View;
 class FormulaHelpModal extends Widget
 {
     /**
+     * @var string
+     */
+    private $currencyCode = 'USD';
+    /**
      * @var bool
      */
     private $wasRendered = false;
+
+    public function withCurrency(string $currencyCode): self
+    {
+        $self = clone $this;
+        $self->currencyCode = strtoupper($currencyCode);
+
+        return $self;
+    }
 
     public function run()
     {
@@ -62,6 +74,6 @@ JS
 
     public function formulaExamplesProvider(): FormulaExamplesProvider
     {
-        return new FormulaExamplesProvider();
+        return new FormulaExamplesProvider($this->currencyCode);
     }
 }
