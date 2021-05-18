@@ -235,7 +235,7 @@ $form = ActiveForm::begin([
 </div>
 
 <?php $this->registerJs(<<<JS
-    $('#dynamic-form').on('change', '.charge-item input[data-attribute=sum]', function () {
+    $('#bill-dynamic-form').on('change', '.bill-charges .charge-item input[data-attribute=sum]', function () {
         $(this).closest('.bill-item').find('input[data-bill-sum]').blur();
     });
 JS
