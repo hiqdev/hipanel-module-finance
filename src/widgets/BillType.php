@@ -46,6 +46,16 @@ class BillType extends Type
     {
         parent::init();
         $this->setColor('none');
+        $this->getView()->registerCss(<<<CSS
+.flex-space-beetween {
+    display: flex;
+    justify-content: space-between;
+}
+.align-center {
+    align-items: center;
+}
+CSS
+        );
     }
 
     protected function getModelLabel(): string
@@ -61,6 +71,6 @@ class BillType extends Type
         $color = $this->pickColor();
         $paymentType = Html::tag('span', Yii::t('hipanel.finance.billTypes', explode(',', $this->getFieldValue())[0]), ['class' => "label label-{$color}"]);
 
-        return Html::tag('span', $label . $paymentType, ['style' => 'display: flex; justify-content: space-between; align-items: center;']);
+        return Html::tag('span', $label . $paymentType, ['class' => 'flex-space-beetween align-center']);
     }
 }

@@ -47,7 +47,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'filterAttribute' => 'plan_name_ilike',
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'value' => function (Price $model) {
-                    return Html::a($model->plan->name, ['@plan/view', 'id' => $model->plan->id]);
+                    return Html::a(Html::encode($model->plan->name), ['@plan/view', 'id' => $model->plan->id]);
                 },
             ],
             'price' => [
@@ -70,7 +70,6 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
             ],
             'object->name_clear' => [
                 'label' => Yii::t('hipanel', 'Object'),
-                'format' => 'raw',
                 'value' => function (Price $model) {
                     return $model->object->name ?: Yii::t('hipanel.finance.price', 'Any');
                 },
@@ -94,7 +93,6 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 },
             ],
             'object->label' => [
-                'format' => 'raw',
                 'label' => Yii::t('hipanel', 'Details'),
                 'value' => function (Price $model) {
                     return $model->object->label;
@@ -120,7 +118,6 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'unit',
                 'filterAttribute' => 'unit',
                 'filterOptions' => ['class' => 'narrow-filter'],
-                'format' => 'raw',
                 'gtype' => 'type,unit',
                 'i18nDictionary' => 'hipanel.finance.units',
                 'findOptions' => [
@@ -137,7 +134,6 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'currency',
                 'filterAttribute' => 'currency',
                 'filterOptions' => ['class' => 'narrow-filter'],
-                'format' => 'raw',
                 'gtype' => 'type,currency',
             ],
             'actions' => [

@@ -62,7 +62,7 @@ class SalesInPlanGridView extends SaleGridView
 
                     foreach ($this->pricesBySoldObject[$key] ?? [] as $price) {
                         if ($price->object->id === $sale->object_id) {
-                            return $price->object->label;
+                            return Html::encode($price->object->label);
                         }
                     }
 
