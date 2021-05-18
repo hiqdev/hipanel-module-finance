@@ -179,7 +179,9 @@ $form = ActiveForm::begin([
                                 </div>
                                 <?php foreach ($charges as $j => $charge) : ?>
                                     <div class="charge-item col-md-12">
-                                        <?php if (!$charge->isNewRecord) echo Html::activeHiddenInput($charge, "[$i][$j]id") ?>
+                                        <?php if (!$charge->isNewRecord && !$model->isNewRecord): ?>
+                                            <?= Html::activeHiddenInput($charge, "[$i][$j]id") ?>
+                                        <?php endif ?>
                                         <div class="row input-row margin-bottom">
                                             <div class="form-instance">
                                                 <div class="col-md-3">
