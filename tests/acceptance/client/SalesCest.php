@@ -17,7 +17,6 @@ class SalesCest
 {
     public function ensureIndexPageWorks(Client $I)
     {
-        $I->login();
         $I->needPage(Url::to('@sale/index'));
         $I->see('Sales', 'h1');
         $this->ensureICanSeeAdvancedSearchBox($I);
