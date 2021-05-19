@@ -46,7 +46,8 @@ class BillChargesSumValidator extends Validator
             if (isNaN(sum)) {
                 return;
             }
-            if (value * 100 != -sum) {
+
+            if (Math.round(value * 100) != - Math.round(sum)) {
                 messages.push($message + ': ' + (-(sum / 100)));
             }
         }
