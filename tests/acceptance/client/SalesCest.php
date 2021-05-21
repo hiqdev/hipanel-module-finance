@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2021, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\tests\acceptance\client;
@@ -13,7 +13,7 @@ namespace hipanel\modules\finance\tests\acceptance\client;
 use hipanel\helpers\Url;
 use hipanel\tests\_support\Step\Acceptance\Client;
 
-class AccountSalesCest
+class SalesCest
 {
     public function ensureIndexPageWorks(Client $I)
     {
@@ -23,20 +23,17 @@ class AccountSalesCest
         $this->ensureICanSeeAdvancedSearchBox($I);
         $this->ensureICanSeeBodyBox($I);
     }
-
     private function ensureICanSeeAdvancedSearchBox(Client $I)
     {
         $url = Url::to('@sale/index');
         $form = "//form[@action='$url']";
         $I->see('Advanced search', 'h3');
         $I->seeElement('input', ['id' => 'salesearch-object_inilike']);
-        $I->see('Search', "$form/button[@type='submit']");
+        $I->see('Search', 'button');
     }
-
     private function ensureICanSeeBodyBox(Client $I)
     {
         $I->seeLink('Type');
         $I->seeElement('input', ['name' => 'SaleSearch[object_type]']);
-
     }
 }

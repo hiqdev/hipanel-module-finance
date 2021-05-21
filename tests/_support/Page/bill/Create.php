@@ -14,6 +14,7 @@ use hipanel\tests\_support\Page\Authenticated;
 use hipanel\tests\_support\Page\Widget\Input\Dropdown;
 use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
+use hipanel\helpers\Url;
 
 class Create extends Authenticated
 {
@@ -80,8 +81,10 @@ class Create extends Authenticated
         $I = $this->tester;
 
         $base = 'div.bill-charges>div:last-child ';
-        $classSelector = $base . 'div[class=row] select[id*=class]';
-        (new Dropdown($I, $classSelector))->setValue($chargeData['class']);
+        #$classSelector = $base . 'div[class=row] select[id*=class]';
+        #(new Dropdown($I, $classSelector))->setValue($chargeData['class']);
+
+        (new Dropdown($I, "//select[@id='charge-0-1-class']"))->setValue($chargeData['class']);
 
         $objectIdSelector = $base . 'div[class=row] select[id*=object_id]';
         (new Select2($I, $objectIdSelector))->setValue($chargeData['objectId']);
@@ -141,6 +144,17 @@ JS
             [$chargeName]
         );
     }
+    public function deleteBillById($BillId): void 
+    {
+        $I = $this->tester;
+        $url = Url::to('@bill/view?id='. $BillId);
+        $I->amOnPage($url);
+        $I->see('Description');
+        $I->see('Bill not paid');
+        $I->click('//a[@data-confirm="Are you sure you want to delete this item?"]');
+        $I->acceptPopup();
+        $I->closeNotification('Payment was deleted successfully');
+    }
 
     /**
      * Checks whether a bill was created successfully and returns its id.
@@ -178,5 +192,13 @@ JS
     public function containsSumMismatch(): void
     {
         $this->tester->waitForText('Bill sum must match charges sum:');
+    }
+    public function visit(): void
+    {
+        $this->tester->needPage(Url::to('@bill/create'));
+    }
+    public function clickToggleSign(): void 
+    {
+        $this->tester->click("//button[contains(text(),'Toggle sign')]");
     }
 }
