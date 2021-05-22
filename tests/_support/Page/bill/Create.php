@@ -81,8 +81,6 @@ class Create extends Authenticated
         $I = $this->tester;
 
         $base = 'div.bill-charges>div:last-child ';
-        #$classSelector = $base . 'div[class=row] select[id*=class]';
-        #(new Dropdown($I, $classSelector))->setValue($chargeData['class']);
 
         (new Dropdown($I, "//select[@id='charge-0-1-class']"))->setValue($chargeData['class']);
 
