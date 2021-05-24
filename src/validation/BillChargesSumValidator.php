@@ -25,7 +25,7 @@ class BillChargesSumValidator extends Validator
     {
         if (count($model->charges) > 0) {
             $chargesSum = array_sum(ArrayHelper::getColumn($model->charges, 'sum'));
-            if ($model->sum != -$chargesSum) {
+            if (bccomp($model->sum, -$chargesSum, 4) !== 0) {
                 $model->addError($attribute, $this->message . ': ' . -$chargesSum);
             }
         }
@@ -46,7 +46,8 @@ class BillChargesSumValidator extends Validator
             if (isNaN(sum)) {
                 return;
             }
-            if (value * 100 != -sum) {
+
+            if (Math.round(value * 100) != - Math.round(sum)) {
                 messages.push($message + ': ' + (-(sum / 100)));
             }
         }

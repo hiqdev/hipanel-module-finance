@@ -132,7 +132,7 @@ class ResourceConfigurator
 
     public function getToObjectUrl(): string
     {
-        return $this->toObjectUrl;
+        return Html::encode($this->toObjectUrl);
     }
 
     public function setToObjectUrl(string $toObjectUrl): self

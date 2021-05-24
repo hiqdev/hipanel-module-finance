@@ -179,7 +179,9 @@ $form = ActiveForm::begin([
                                 </div>
                                 <?php foreach ($charges as $j => $charge) : ?>
                                     <div class="charge-item col-md-12">
-                                        <?php if (!$charge->isNewRecord) echo Html::activeHiddenInput($charge, "[$i][$j]id") ?>
+                                        <?php if (!$charge->isNewRecord && !$model->isNewRecord): ?>
+                                            <?= Html::activeHiddenInput($charge, "[$i][$j]id") ?>
+                                        <?php endif ?>
                                         <div class="row input-row margin-bottom">
                                             <div class="form-instance">
                                                 <div class="col-md-3">
@@ -233,7 +235,7 @@ $form = ActiveForm::begin([
 </div>
 
 <?php $this->registerJs(<<<JS
-    $('#dynamic-form').on('change', '.charge-item input[data-attribute=sum]', function () {
+    $('#bill-dynamic-form').on('change', '.bill-charges .charge-item input[data-attribute=sum]', function () {
         $(this).closest('.bill-item').find('input[data-bill-sum]').blur();
     });
 JS

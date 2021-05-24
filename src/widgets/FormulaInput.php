@@ -60,7 +60,7 @@ JS
     private function registerHelpModal(): void
     {
         $help = Yii::createObject(FormulaHelpModal::class);
-        $this->helpModalSelector = '#' . $help->run();
+        $this->helpModalSelector = '#' . $help->withCurrency($this->model->currency)->run();
     }
 
     public function formulaLinesCount()

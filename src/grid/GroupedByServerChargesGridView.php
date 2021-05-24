@@ -40,7 +40,7 @@ class GroupedByServerChargesGridView extends BillGridView
     {
         return array_merge(parent::columns(), [
             'object_link' => [
-                'format' => 'html',
+                'format' => 'raw',
                 'attribute' => 'commonObject.name',
             ],
         ]);

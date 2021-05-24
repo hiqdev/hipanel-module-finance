@@ -56,7 +56,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             'requisite' => [
                 'format' => 'raw',
                 'attribute' => 'requisite',
-                'value' => fn($model) => Html::a($model->requisite, ['@requisite/view', 'id' => $model->requisite_id]),
+                'value' => fn($model) => Html::a(Html::encode($model->requisite), ['@requisite/view', 'id' => $model->requisite_id]),
                 'visible' => Yii::$app->user->can('requisites.read'),
             ],
             'payment_status' => [
@@ -96,7 +96,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'filterAttribute' => 'bill_like',
             ],
             'time' => [
-                'format' => 'html',
+                'format' => 'raw',
                 'filter' => false,
                 'label' => Yii::t('hipanel', 'Time'),
                 'sortAttribute' => 'time',
@@ -280,7 +280,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'descr',
                 'format' => 'raw',
                 'value' => function (Bill $model) {
-                    $requisite = $model->requisite ? Html::tag('small', $model->requisite, ['class' => 'label bg-purple']) : null;
+                    $requisite = $model->requisite ? Html::tag('small', Html::encode($model->requisite), ['class' => 'label bg-purple']) : null;
                     $descr = $model->descr ?: $model->label;
                     $text = mb_strlen($descr) > 70 ? ArraySpoiler::widget(['data' => $descr]) : $descr;
                     $tariff = $model->tariff ? Html::tag('span',
@@ -302,14 +302,14 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             ],
             'tariff_link' => [
                 'attribute' => 'tariff',
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (Bill $model) {
                     return $this->tariffLink($model);
                 },
             ],
             'object' => [
                 'attribute' => 'object',
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (Bill $model) {
                     return $this->objectTag($model);
                 },
@@ -319,7 +319,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'menuClass' => BillActionsMenu::class,
             ],
             'common_object_link' => [
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (Charge $model) {
                     $link = LinkToObjectResolver::widget([
                         'model'          => $model->commonObject,
@@ -340,13 +340,14 @@ class BillGridView extends \hipanel\grid\BoxedGridView
     public function tariffLink(Bill $model): ?string
     {
         $canSeeLink = Yii::$app->user->can('plan.read');
+        $tariff = Html::encode($model->tariff);
 
-        return $canSeeLink ? Html::a($model->tariff, ['@plan/view', 'id' => $model->tariff_id]) : $model->tariff;
+        return $canSeeLink ? Html::a($tariff, ['@plan/view', 'id' => $model->tariff_id]) : $tariff;
     }
 
     public function objectTag($model): string
     {
-        return $model->object ? implode(':&nbsp;', [Yii::t('hipanel', $model->class_label), $this->objectLink($model)]) : '';
+        return $model->object ? implode(':&nbsp;', [Yii::t('hipanel', Html::encode($model->class_label)), $this->objectLink($model)]) : '';
     }
 
     /**

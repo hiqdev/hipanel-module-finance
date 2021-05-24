@@ -146,6 +146,6 @@ class TariffProfileGridView extends BoxedGridView
 
     protected function tariffLink($id, $name)
     {
-        return Html::a($name, ['@plan/view', 'id' => $id]);
+        return Html::a(Html::encode($name), ['@plan/view', 'id' => $id]);
     }
 }

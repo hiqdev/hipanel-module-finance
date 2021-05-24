@@ -23,7 +23,7 @@ class ResourceGridView extends BoxedGridView
     {
         $columns = $this->configurator->getColumns();
         $columns['date'] = [
-            'format' => 'html',
+            'format' => 'raw',
             'attribute' => 'date',
             'label' => Yii::t('hipanel', 'Date'),
             'footerOptions' => ['colspan' => 2, 'class' => 'text-center text-bold', 'style' => 'vertical-align: middle;'],
@@ -61,17 +61,17 @@ class ResourceGridView extends BoxedGridView
             ]),
         ];
         $columns['type'] = [
-            'format' => 'html',
+            'format' => 'raw',
             'attribute' => 'type',
             'label' => Yii::t('hipanel', 'Type'),
             'filter' => $this->configurator->getFilterColumns(),
             'filterInputOptions' => ['class' => 'form-control', 'id' => null, 'prompt' => '---'],
             'footerOptions' => ['style' => 'display: none;'],
             'enableSorting' => false,
-            'value' => fn($model): ?string => $columns[$model->type] ?? $model->type,
+            'value' => fn($model): ?string => Html::encode($columns[$model->type] ?? $model->type),
         ];
         $columns['total'] = [
-            'format' => 'html',
+            'format' => 'raw',
             'attribute' => 'total',
             'label' => Yii::t('hipanel', 'Consumed'),
             'filter' => false,
@@ -95,7 +95,7 @@ class ResourceGridView extends BoxedGridView
         $loader = ResourceHelper::getResourceLoader();
         $columns = [];
         $columns['object'] = [
-            'format' => 'html',
+            'format' => 'raw',
             'attribute' => 'name',
             'label' => Yii::t('hipanel', 'Object'),
             'contentOptions' => ['style' => 'display: flex; flex-direction: row; justify-content: space-between; flex-wrap: nowrap;'],
@@ -103,7 +103,7 @@ class ResourceGridView extends BoxedGridView
             'value' => static function (ActiveRecordInterface $model) use ($configurator): string {
                 $objectLabel = Html::tag('span', '-', ['class' => 'text-danger']);
                 if ($model->name) {
-                    $objectLabel = Html::tag('span', $model->name ?: '&nbsp;', ['class' => 'text-bold']);
+                    $objectLabel = Html::tag('span', Html::encode($model->name) ?: '&nbsp;', ['class' => 'text-bold']);
                 }
 
                 return $objectLabel . Html::a(Yii::t('hipanel', 'Detail view'), [$configurator->getToObjectUrl(), 'id' => $model->id], ['class' => 'btn btn-default btn-xs']);

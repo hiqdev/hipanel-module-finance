@@ -57,7 +57,7 @@ class PricePresenter
     {
         $unit = $formula = '';
         if ($price->getUnitLabel()) {
-            $unit = ' ' . Yii::t('hipanel:finance', 'per {unit}', ['unit' => $price->getUnitLabel()]);
+            $unit = ' ' . Yii::t('hipanel:finance', 'per {unit}', ['unit' => Html::encode($price->getUnitLabel())]);
         }
 
         $activeFormulas = array_filter($price->getFormulaLines(), fn ($el) => $el['is_actual']);

@@ -64,7 +64,7 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'tariff_id',
                 'label' => Yii::t('hipanel', 'Plan'),
                 'filter' => false,
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (Charge $model): string {
                     return $this->tariffLink($model);
                 },
@@ -138,7 +138,6 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 },
             ],
             'time' => [
-                'format' => 'raw',
                 'filter' => false,
                 'contentOptions' => ['class' => 'text-nowrap'],
                 'value' => function ($model) {
@@ -190,8 +189,9 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
     public function tariffLink(Charge $model): ?string
     {
         $canSeeLink = Yii::$app->user->can('plan.create');
+        $tariff = Html::encode($model->tariff);
 
-        return $canSeeLink ? Html::a($model->tariff, ['@plan/view', 'id' => $model->tariff_id]) : $model->tariff;
+        return $canSeeLink ? Html::a($tariff, ['@plan/view', 'id' => $model->tariff_id]) : $tariff;
     }
 
     /**

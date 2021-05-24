@@ -45,9 +45,9 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
             ],
             'simple_name' => [
                 'attribute' => 'name',
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function (Plan $model): string {
-                    return sprintf('%s %s', $model->name, $this->prepareBadges($model));
+                    return sprintf('%s %s', Html::encode($model->name), $this->prepareBadges($model));
                 },
             ],
             'state' => [
@@ -55,7 +55,7 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'class' => RefColumn::class,
                 'filterAttribute' => 'state',
                 'filterOptions' => ['class' => 'narrow-filter'],
-                'format' => 'html',
+                'format' => 'raw',
                 'gtype' => 'state,tariff',
             ],
             'type' => [
@@ -64,7 +64,7 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'filterAttribute' => 'type_in',
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'i18nDictionary' => 'hipanel.finance.suggestionTypes',
-                'format' => 'html',
+                'format' => 'raw',
                 'gtype' => 'type,tariff',
             ],
             'actions' => [
