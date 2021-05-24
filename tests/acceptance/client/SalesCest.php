@@ -6,7 +6,6 @@
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2015-2021, HiQDev (http://hiqdev.com/)
-
  */
 
 namespace hipanel\modules\finance\tests\acceptance\client;
@@ -18,6 +17,7 @@ class SalesCest
 {
     public function ensureIndexPageWorks(Client $I)
     {
+        $I->login();
         $I->needPage(Url::to('@sale/index'));
         $I->see('Sales', 'h1');
         $this->ensureICanSeeAdvancedSearchBox($I);
