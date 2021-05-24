@@ -145,7 +145,7 @@ JS
     public function deleteBillById($billId): void 
     {
         $I = $this->tester;
-        $url = Url::to('@bill/view?id='. $BillId);
+        $url = Url::to('@bill/view?id=' . $billId);
         $I->amOnPage($url);
         $I->see('Description');
         $I->see('Bill not paid');
