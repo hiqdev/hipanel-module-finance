@@ -25,7 +25,7 @@ class ToggleSignCest
         $this->ensureBillWasCreatedAndDeleteIt($I, $example['charge']);
     }
 
-    private function ensureBillWasCreatedAndDeleteIt(Seller $I, $chargeData): void
+    private function ensureBillWasCreatedAndDeleteIt(Seller $I, array $chargeData): void
     {
         $newId = new Create($I);
         $id = $newId->seeActionSuccess();
