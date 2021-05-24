@@ -142,7 +142,7 @@ JS
             [$chargeName]
         );
     }
-    public function deleteBillById($BillId): void 
+    public function deleteBillById($billId): void 
     {
         $I = $this->tester;
         $url = Url::to('@bill/view?id='. $BillId);
