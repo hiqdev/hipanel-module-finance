@@ -197,6 +197,6 @@ JS
     }
     public function clickToggleSign(): void 
     {
-        $this->tester->click("//button[contains(text(),'Toggle sign')]");
+        $this->tester->click('Toggle sign');
     }
 }
