@@ -11,7 +11,6 @@ class PaymentCreationCest
 {
     /**
      * @dataProvider provideDataBill
-     * 
      */
     public function ensureIndexPageWorks(Seller $I, Example $example)
     {
@@ -20,26 +19,27 @@ class PaymentCreationCest
         $I->see('Create payment', 'h1');
         $I->see('Save', 'button');
         $createPage->fillMainBillFields(iterator_to_array($example->getIterator()));
-        $createPage->addCharge($this->provideDataCharge());
+        $charge = $this->provideDataCharge();
+        $createPage->addCharge($charge);
         $createPage->clickToggleSign();
         $I->click('Save');
-        $this->ensureBillWasCreatedAndDeleteIt($I);
+        $this->ensureBillWasCreatedAndDeleteIt($I, $charge);
     }
-    private function ensureBillWasCreatedAndDeleteIt(Seller $I): void
+    private function ensureBillWasCreatedAndDeleteIt(Seller $I, $chargeData): void
     {
         $newId = new Create($I);
         $id = $newId->seeActionSuccess();
-        $I->see('$777.00');
+        $I->see('$' . $chargeData['sum']);
         $newId->deleteBillById($id);
     }
     private function provideDataCharge(): array
     {
         return [  
-                'class' => 'Client',
-                'objectId' => 'hipanel_test_admin',
-                'type' => 'PayPal',
-                'sum' => '-777',
-                'quantity' => '1'
+            'class' => 'Client',
+            'objectId' => 'hipanel_test_admin',
+            'type' => 'PayPal',
+            'sum' => '777.00',
+            'quantity' => '1'
         ];
         
     }
@@ -48,7 +48,7 @@ class PaymentCreationCest
         return [
             'client' => [ 'login' => 'hipanel_test_user',
                 'type' => 'PayPal',
-                'sum' => '777',
+                'sum' => '-777.00',
                 'quantity' => '1']
         ];
     }
