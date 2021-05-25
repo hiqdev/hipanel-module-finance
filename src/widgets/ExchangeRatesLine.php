@@ -35,7 +35,7 @@ class ExchangeRatesLine extends Widget
 
     public function run()
     {
-        if (!Yii::$app->user->can('manage') || empty($this->rates)) {
+        if (!Yii::$app->user->can('bill.create-exchange') || empty($this->rates)) {
             return '';
         }
 
