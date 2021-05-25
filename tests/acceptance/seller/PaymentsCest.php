@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
-namespace hipanel\modules\finance\tests\acceptance\manager;
+namespace hipanel\modules\finance\tests\acceptance\seller;
 
 use hipanel\helpers\Url;
 use hipanel\modules\finance\tests\_support\Page\bill\Create;

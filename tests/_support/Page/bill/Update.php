@@ -24,4 +24,11 @@ class Update extends Create
 
         return null;
     }
+    public function seeTransferActionSuccess(): void
+    {
+        $I = $this->tester;
+
+        $I->closeNotification('Transfer was completed');
+        $I->seeInCurrentUrl('finance/bill/index');
+    }
 }
