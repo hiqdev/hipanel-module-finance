@@ -8,24 +8,28 @@ use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\modules\finance\tests\_support\Page\bill\Create;
 use hipanel\modules\finance\tests\_support\Page\bill\Update;
-use hipanel\modules\finance\tests\acceptance\seller\PaymentsCest;
 
 class InternalTransferCest
 {
-
     public function ensureIndexPageWorks(Seller $I): void
     {
         $indexPage = new Create($I);
         $indexUpdate = new Update($I);
-        $paymnet = new PaymentsCest($I);
         $I->login();
-        $paymnet->ensureICanCreateSimpleBill($I);
+        $this->ensureICanCreateBill($I, $indexPage);
         $I->needPage(Url::to('@bill/create-transfer'));
         $I->see('Add internal transfer', 'h1');
         $this->ensureICantCreateTransferWithoutRequiredData($I, $indexPage);
         $this->ensureICanCreateInternalTransfer($I, $indexPage);
         $I->click('Save');
         $indexUpdate->seeTransferActionSuccess();
+    }
+
+    private function ensureICanCreateBill(Seller $I, $Page): void
+    {
+        $I->needPage(Url::to('@bill/create'));
+        $Page->fillMainBillFields($this->getBillData());
+        $I->pressButton('Save');
     }
 
     private function ensureICantCreateTransferWithoutRequiredData(Seller $I, $Page): void 
@@ -37,15 +41,27 @@ class InternalTransferCest
    private function ensureICanCreateInternalTransfer(Seller $I, $Page): void
     {
         $transferData = $this->getTransferData();
-        $Page->fillMainInternalTransferFields($transferData);
+        $Page->fillMainInternalTransferFields($transferData['client']);
     }
 
     private function getTransferData(): array
     {
         return [
-            'Sum'          => 1000,
-            'Client'       => 'hipanel_test_user',
-            'Receiver ID'  => 'hipanel_test_user2',
+            'client' => [
+                'Sum'          => 1000,
+                'Client'       => 'hipanel_test_user',
+                'Receiver ID'  => 'hipanel_test_user2',
+            ],
+        ];
+    }
+    protected function getBillData(): array
+    {
+        return [
+            'login'     => 'hipanel_test_user',
+            'type'      => 'PayPal',
+            'currency'  => '$',
+            'sum'       =>  1000,
+            'quantity'  =>  1,
         ];
     }
 }
