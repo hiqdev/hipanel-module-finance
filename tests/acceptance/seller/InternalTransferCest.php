@@ -12,7 +12,6 @@ use hipanel\modules\finance\tests\acceptance\seller\PaymentsCest;
 
 class InternalTransferCest
 {
-
     public function ensureIndexPageWorks(Seller $I): void
     {
         $indexPage = new Create($I);
