@@ -82,7 +82,7 @@ class Create extends Authenticated
 
         $base = 'div.bill-charges>div:last-child ';
 
-        (new Dropdown($I, "//select[@id='charge-0-1-class']"))->setValue($chargeData['class']);
+        (new Dropdown($I, $base . "select[id*=class]"))->setValue($chargeData['class']);
 
         $objectIdSelector = $base . 'div[class=row] select[id*=object_id]';
         (new Select2($I, $objectIdSelector))->setValue($chargeData['objectId']);
@@ -149,7 +149,7 @@ JS
         $I->amOnPage($url);
         $I->see('Description');
         $I->see('Bill not paid');
-        $I->click('Are you sure you want to delete this item?');
+        $I->click('//a[@data-confirm="Are you sure you want to delete this item?"]');
         $I->acceptPopup();
         $I->closeNotification('Payment was deleted successfully');
     }
@@ -164,6 +164,15 @@ JS
         $I = $this->tester;
 
         $I->closeNotification('Bill was created successfully');
+        $I->seeInCurrentUrl('/finance/bill?id');
+
+        return $I->grabFromCurrentUrl('~id_in%5B0%5D=(\d+)~');
+    }
+    public function seeUpdateSuccess(): ?string
+    {
+        $I = $this->tester;
+
+        $I->closeNotification('Bill was updated successfully');
         $I->seeInCurrentUrl('/finance/bill?id');
 
         return $I->grabFromCurrentUrl('~id_in%5B0%5D=(\d+)~');
