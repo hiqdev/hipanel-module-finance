@@ -5,7 +5,7 @@ use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\widgets\PricePerUnitWidget;
 use hipanel\modules\finance\widgets\combo\MultipleBillTypeCombo;
-use hipanel\modules\finance\widgets\combo\RequisitesCombo;
+use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
 use hipanel\modules\finance\widgets\SumSignToggleButton;
 use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\DateTimePicker;
@@ -121,7 +121,7 @@ $form = ActiveForm::begin([
                     <div class="row input-row margin-bottom">
                         <div class="col-md-3">
                             <?php if (Yii::$app->user->can('requisites.read')) : ?>
-                                <?= $form->field($model, "[$i]requisite_id")->widget(RequisitesCombo::class) ?>
+                                <?= $form->field($model, "[$i]requisite_id")->widget(BillRequisitesCombo::class) ?>
                             <?php endif ?>
                         </div>
                         <div class="col-md-4">
