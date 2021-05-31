@@ -12,6 +12,7 @@ namespace hipanel\modules\finance\tests\_support\Page\plan;
 
 use hipanel\helpers\Url;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
+use hipanel\tests\_support\Page\Widget\Input\Dropdown;
 
 class Create extends Plan
 {
@@ -32,59 +33,25 @@ class Create extends Plan
         $this->id = $I->grabFromCurrentUrl('/id=(\d+)/');
     }
 
-    public function createPlan(): int
+    public function createPlan($partData): int
     {
         $this->loadPage();
-        $this->fillName();
-        $this->chooseType();
-        $this->setGrouping();
-        $this->findClient();
-        $this->chooseCurrency();
-        $this->fillNote();
+        $this->fillMainFields($partData);
         $this->savePlan();
 
         return $this->id;
     }
 
-    private function fillName()
+    private function fillMainFields($partData): void
     {
         $I = $this->tester;
+        $I->fillField(['name' => 'Plan[name]'], uniqid());
 
-        $I->fillField(['name' => 'Plan[name]'], $this->name);
-    }
+        (new Dropdown($this->tester, "//select[@id='plan-type']"))
+            ->setValue($partData['type']);
 
-    private function chooseType()
-    {
-        $I = $this->tester;
-
-        $I->click(['name' => 'Plan[type]']);
-        $I->click("//select/option[.='{$this->type}']");
-    }
-
-    protected function setGrouping()
-    {
-        $I = $this->tester;
-
-        $I->uncheckOption("//input[@name='Plan[is_grouping]'][@type='checkbox']");
-    }
-
-    private function findClient()
-    {
-        (new Select2($this->tester, '#plan-client'))
-            ->setValue($this->client);
-    }
-
-    private function chooseCurrency()
-    {
         (new Select2($this->tester, '#plan-currency'))
-            ->setValueLike($this->currency);
-    }
-
-    private function fillNote()
-    {
-        $I = $this->tester;
-
-        $I->fillField(['name' => 'Plan[note]'], $this->note);
+            ->setValueLike($partData['currency']);
     }
 
     public function seeFields()
@@ -95,6 +62,19 @@ class Create extends Plan
         $this->seeCurrencyDropdownList();
     }
 
+    public function createCreateSharedPrice($priceData)
+    {
+        $I = $this->tester;
+        $I->click("//a[contains(text(), 'Create price')]");
+        $I->click("//a[contains(text(), 'Create shared price')]");
+        $I->waitForElement('#template_plan_id');
+        (new Select2($this->tester, '#template_plan_id'))
+            ->setValueLike($priceData['plan']);
+        (new Select2($this->tester, '#type'))
+            ->setValueLike($priceData['type']);
+        $I->click("//button[contains(text(), 'Proceed to creation')]");
+
+    }
     private function seeLabels()
     {
         $I = $this->tester;

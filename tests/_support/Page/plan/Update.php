@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\tests\_support\Page\plan;
 
 use hipanel\helpers\Url;
+use hipanel\tests\_support\Page\Widget\Input\Select2;
 
 class Update extends Create
 {
@@ -34,5 +35,14 @@ class Update extends Create
         $this->id = $id;
 
         return $this->createPlan();
+    }
+
+    public function updatePlanWithNewCurrency($currentCurrency, $id): void
+    {
+        $I = $this->tester;
+        $I->needPage(Url::to('@plan/update?id='. $id));
+        (new Select2($I, '#plan-currency'))
+            ->setValueLike($currentCurrency);
+        $I->click('Save');
     }
 }
