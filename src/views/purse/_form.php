@@ -59,9 +59,9 @@ $form = ActiveForm::begin([
                                     ]) ?>
                                 </div>
                                 <div class="col-md-2">
-                                    <?= $form->field($model, "[{$i}]currency")->dropDownList(Purse::getCurrencyOptions(), [
-                                        'readonly' => !$model->isNewRecord,
-                                    ]) ?>
+                                    <?= $form->field($model, "[{$i}]currency")->dropDownList(Purse::getCurrencyOptions(), array_filter([
+                                        'readonly' => !$model->isNewRecord ? "readonly" : null,
+                                    ])) ?>
                                 </div>
                             <?php if (!$model->isNewRecord): ?>
                                 <?= $form->field($model, "[{$i}]id")->hiddenInput()->label(false) ?>

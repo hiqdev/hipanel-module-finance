@@ -22,7 +22,6 @@ class PurseRepresentations extends RepresentationCollection
                 'label' => Yii::t('hipanel', 'common'),
                 'columns' => [
                     'checkbox',
-                    'actions',
                     'seller_id',
                     'client_id',
                     'requisite',
