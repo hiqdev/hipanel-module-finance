@@ -42,28 +42,32 @@ $form = ActiveForm::begin([
                     <div class="box-body">
                         <div class="form-instance">
                                 <div class="col-md-2">
-                                    <?= $form->field($model, "[{$i}]seller_id")->widget(SellerCombo::class, [
+                                    <?= $form->field($model, "[{$i}]seller")->widget(SellerCombo::class, [
                                         'formElementSelector' => '.form-instance',
+                                        'clientType' => ['owner', 'reseller', 'client'],
+                                        'inputOptions' => [
+                                            'readonly' => !$model->isNewRecord,
+                                        ],
                                     ]) ?>
                                 </div>
                                 <div class="col-md-2">
-                                    <?= $form->field($model, "[{$i}]client_id")->widget(ClientCombo::class, [
+                                    <?= $form->field($model, "[{$i}]client")->widget(ClientCombo::class, [
                                         'formElementSelector' => '.form-instance',
+                                        'inputOptions' => [
+                                            'readonly' => !$model->isNewRecord,
+                                        ],
                                     ]) ?>
                                 </div>
-                            <?php if ($model->isNewRecord) : ?>
                                 <div class="col-md-2">
-                                    <?= $form->field($model, "[{$i}]currency")->dropDownList(Purse::getCurrencyOptions()) ?>
+                                    <?= $form->field($model, "[{$i}]currency")->dropDownList(Purse::getCurrencyOptions(), [
+                                        'readonly' => !$model->isNewRecord,
+                                    ]) ?>
                                 </div>
-                            <?php else: ?>
-                                <div class="col-md-2">
-                                    <?= $form->field($model, "[{$i}]client_id")->hiddenInput()->label(false) ?>
-                                </div>
+                            <?php if (!$model->isNewRecord): ?>
                                 <?= $form->field($model, "[{$i}]id")->hiddenInput()->label(false) ?>
                             <?php endif ?>
                             <div class="col-md-2">
                                 <?= $form->field($model, "[{$i}]requisite_id")->widget(ResellerRequisitesCombo::class, [
-                                    'formElementSelector' => '.form-instance',
                                     'inputOptions' => [
                                         'data-attribute' => 'reseller-requisite',
                                     ],
@@ -71,7 +75,6 @@ $form = ActiveForm::begin([
                             </div>
                             <div class="col-md-2">
                                 <?= $form->field($model, "[{$i}]contact_id")->widget(RequisitesCombo::class, [
-                                    'formElementSelector' => '.form-instance',
                                     'inputOptions' => [
                                         'data-attribute' => 'requisite',
                                     ],

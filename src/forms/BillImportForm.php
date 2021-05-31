@@ -12,6 +12,7 @@ namespace hipanel\modules\finance\forms;
 
 use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\models\Requisite;
 use Yii;
 use yii\base\InvalidValueException;
 use yii\helpers\ArrayHelper;
@@ -54,6 +55,13 @@ class BillImportForm extends \yii\base\Model
      * Value - id
      */
     private $clientsMap = [];
+
+    /**
+     * @var array map to find client seller by login.
+     * Key - login
+     * Value - seller
+     */
+    private $sellerMap = [];
 
     /**
      * {@inheritdoc}
@@ -104,9 +112,9 @@ class BillImportForm extends \yii\base\Model
 
                 $bills[] = $bill = clone $billTemplate;
 
-                list($client, $time, $sum, $currency, $type, $label) = $this->splitLine($line);
+                list($client, $time, $sum, $currency, $type, $label, $requisite) = $this->splitLine($line);
                 $quantity = 1;
-                $bill->setAttributes(compact('client', 'time', 'sum', 'currency', 'type', 'label', 'quantity'));
+                $bill->setAttributes(compact('client', 'time', 'sum', 'currency', 'type', 'label', 'quantity', 'requisite'));
                 $bill->populateRelation('charges', []);
             }
 
@@ -117,6 +125,7 @@ class BillImportForm extends \yii\base\Model
                 $bill->time = $time !== false ? \Yii::$app->formatter->asDatetime($time, 'php:d.m.Y H:i:s') : false;
                 $bill->type = $this->resolveType($bill->type);
                 $bill->client_id = $this->convertClientToId($bill->client);
+                $bill->requisite_id = $this->convertRequisiteNameToId($bill->requisite, $bill->client);
             }
         } catch (InvalidValueException $e) {
             $this->addError('data', $e->getMessage());
@@ -138,7 +147,7 @@ class BillImportForm extends \yii\base\Model
     protected function splitLine($line)
     {
         $chunks = explode(';', $line);
-        if (count($chunks) !== 6) {
+        if (count($chunks) !== 7) {
             throw new InvalidValueException('Line "' . $line . '" is malformed');
         }
 
@@ -151,9 +160,12 @@ class BillImportForm extends \yii\base\Model
      */
     private function resolveClients($logins)
     {
-        $clients = Client::find()->where(['logins' => $logins])->limit(-1)->all();
+
+        $clients = $this->getClients($logins);
         $this->clientsMap = array_combine(ArrayHelper::getColumn($clients, 'login'),
             ArrayHelper::getColumn($clients, 'id'));
+        $this->sellerMap = array_combine(ArrayHelper::getColumn($clients, 'login'),
+            ArrayHelper::getColumn($clients, 'seller'));
     }
 
     /**
@@ -237,5 +249,48 @@ class BillImportForm extends \yii\base\Model
         }
 
         return $this->clientsMap[$client];
+    }
+
+    protected function getClients($logins)
+    {
+        return Yii::$app->cache->getOrSet([__CLASS__, __METHOD__ , $logins], function () use ($logins) {
+            return Client::find()
+                ->where([
+                    'logins' => $logins,
+                ])
+                ->limit(-1)
+                ->all();
+        }, 3600);
+    }
+
+    protected function convertRequisiteNameToId(string $requisite, string $client)
+    {
+        if (!isset($this->sellerMap[$client])) {
+            return null;
+        }
+
+        $requisites = $this->getRequisites($this->sellerMap[$client]);
+
+        return $requisites[$requisite] ?? null;
+
+    }
+
+    protected function getRequisites(string $seller)
+    {
+        return Yii::$app->cache->getOrSet([__CLASS__, __METHOD__ , $seller], function() use ($seller) {
+            $requisites = Requisite::find()
+                ->where(['client' => $seller])
+                ->limit(-1)
+                ->all();
+            if (empty($requisites)) {
+                return [];
+            }
+
+            foreach ($requisites as $requisite) {
+                $name2id[$requisite->name] = $requisite->id;
+            }
+
+            return $name2id;
+        }, 3600);
     }
 }
