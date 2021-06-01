@@ -62,7 +62,7 @@ class Create extends Plan
         $this->seeCurrencyDropdownList();
     }
 
-    public function createCreateSharedPrice($priceData)
+    public function createSharedPrice($priceData)
     {
         $I = $this->tester;
         $I->click("//a[contains(text(), 'Create price')]");

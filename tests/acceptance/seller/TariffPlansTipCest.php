@@ -34,14 +34,14 @@ class TariffPlansTipCest
     {
         $page = new Create($I);
         $update = new Update($I);
-        $currency = $this->getCurrnecyfData();
+        $currency = $this->getCurrencyfData();
         $priceData = $this->getPriceData();
 
         foreach($currency as $key => $currentCurrency)
         {
             $update->updatePlanWithNewCurrency($currentCurrency, $id);
             $I->waitForText('Create prices', 10);
-            $page->createCreateSharedPrice($priceData['price']);
+            $page->createSharedPrice($priceData['price']);
             $I->waitForElement("div[class*='0'] button[class*='formula-help']");
             $I->click("div[class*='0'] button[class*='formula-help']");
             $I->waitForText($currentCurrency);
@@ -68,7 +68,7 @@ class TariffPlansTipCest
         ];
     }
 
-    protected function getCurrnecyfData(): array
+    protected function getCurrencyfData(): array
     {
         return [
             'usd' => 'USD',
