@@ -34,7 +34,7 @@ class TariffPlansTipCest
     {
         $page = new Create($I);
         $update = new Update($I);
-        $currency = $this->getCurrencyfData();
+        $currency = $this->getCurrencyData();
         $priceData = $this->getPriceData();
 
         foreach($currency as $key => $currentCurrency)
@@ -68,7 +68,7 @@ class TariffPlansTipCest
         ];
     }
 
-    protected function getCurrencyfData(): array
+    protected function getCurrencyData(): array
     {
         return [
             'usd' => 'USD',
