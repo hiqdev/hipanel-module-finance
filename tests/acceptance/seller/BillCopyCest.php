@@ -11,23 +11,22 @@ use hipanel\modules\finance\tests\_support\Page\bill\Create;
 class BillCopyCest
 {
     /**
-     * @var IndexPage
+     * @dataProvider provideDataBill
      */
-    private $index;
-
-    public function ensureICanCreateAndCopyBill(Seller $I)
+    public function ensureICanCreateAndCopyBill(Seller $I, Example $example)
     {
         $I->login();
         $dataBill = $this->provideDataBill();
-        $billId = $this->ensureICanCreateSimpleBill($I, $dataBill['client']);
+        $example = iterator_to_array($example->getIterator());
+        $billId = $this->ensureICanCreateSimpleBill($I, $example);
         $this->ensureICanCopyBill($I, $billId);
-        $billId = $this->ensureICanCreateBillWithCharge($I, $dataBill['client']);
+        $billId = $this->ensureICanCreateBillWithCharge($I, $example);
         $copyId = $this->ensureICanCopyBill($I, $billId);
-        $billSum = $this->ensureICanEditCopiedBill($I, $copyId, $dataBill['client']);
+        $billSum = $this->ensureICanEditCopiedBill($I, $copyId, $example);
         $checkId = $this->ensureICanSaveUpdatedBill($I);
-        $this->ensureBillWasCreatedCorrectly($I, $checkId, $dataBill['client'], $billSum);
-        $this->ensureChargesWasCreatedCorrectly($I, $checkId, $dataBill['client']);
-        $this->ensurePreviousBillDidntChange($I, $billId, $dataBill['client']);
+        $this->ensureBillWasCreatedCorrectly($I, $checkId, $example, $billSum);
+        $this->ensureChargesWasCreatedCorrectly($I, $checkId, $example);
+        $this->ensurePreviousBillDidntChange($I, $billId, $example);
     }
 
     private function ensureICanCreateSimpleBill(Seller $I, $billData)
@@ -76,11 +75,11 @@ class BillCopyCest
 
     private function ensureBillWasCreatedCorrectly(Seller $I, $id, $dataBill, $sum)
     {
-        $indexPage = new IndexPage($I);
+        $index = new IndexPage($I);
         $I->needPage(Url::to('@bill/view?id=' . $id));
         $tempResult = array_intersect_key($dataBill, array_flip(['login', 'type']));
         $tempResult[] = -$sum;
-        $indexPage->gridView->ensureBillViewContainsData($tempResult);
+        $index->gridView->ensureBillViewContainsData($tempResult);
     }
 
     private function ensureChargesWasCreatedCorrectly(Seller $I, $id, $dataBill)
