@@ -18,7 +18,7 @@ class AddingChargesCest
     public function ensureBillWillBeEditedWithNewChargesCorrectly(Seller $I, Example $example): void
     {
         $I->login();
-        $page = new Create($I);
+        $createPage = new Create($I);
         $update = new Update($I);
         $view = new View($I);
         $indexPage = new IndexPage($I);
