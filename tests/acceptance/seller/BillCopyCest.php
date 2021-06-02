@@ -15,11 +15,6 @@ class BillCopyCest
      */
     private $index;
 
-    public function _before(Seller $I)
-    {
-        $this->index = new IndexPage($I);
-    }
-
     public function ensureICanCreateAndCopyBill(Seller $I)
     {
         $I->login();
