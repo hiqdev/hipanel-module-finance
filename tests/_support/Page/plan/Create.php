@@ -111,17 +111,21 @@ class Create extends Plan
         $I = $this->tester;
 
         $I->click("//select[@name='Plan[currency]']/../span");
-        $list = [
-            'usd' => 'USD',
-            'eur' => 'EUR',
-            'uah' => 'UAH',
-            'rub' => 'RUB',
-            'pln' => 'PLN',
-            'btc' => 'BTC',
-        ];
+        $list = $this->getCurrencyList();
         foreach ($list as $key => $text) {
             $I->see($text, "//select/option[@value='{$key}']");
         }
         $I->clickWithLeftButton('h1');
+    }
+
+    public function getCurrencyList(): array
+    {
+        return [
+            'usd' => 'USD',
+            'eur' => 'EUR',
+            'uah' => 'UAH',
+            'rub' => 'RUB',
+            'btc' => 'BTC',
+        ];
     }
 }
