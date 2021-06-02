@@ -10,6 +10,8 @@
 
 namespace hipanel\modules\finance\tests\_support\Page\bill;
 
+use hipanel\helpers\Url;
+
 class Update extends Create
 {
     /**
@@ -23,5 +25,18 @@ class Update extends Create
         $I->seeInCurrentUrl('/finance/bill?id');
 
         return null;
+    }
+
+    public function addChargeInBillById($billId, $charge): array
+    {
+        $I = $this->tester;
+
+        $I->needPage(Url::to("@bill/update?id=$billId"));
+        $this->addCharge($charge);
+        $chargesSum = $this->getChargesTotalSum();
+        $this->setBillTotalSum(-$chargesSum);
+        $I->pressButton('Save');
+        $I->waitForElement("//th[contains(text(),'Negative')]");
+        return $this->getDataForViewCheck($charge);
     }
 }

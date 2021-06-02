@@ -202,24 +202,6 @@ JS
         $this->tester->click('Toggle sign');
     }
 
-    public function addChargeInBillById($billId, $charge): array
-    {
-        $I = $this->tester;
-
-        $I->needPage(Url::to("@bill/update?id=$billId"));
-        $this->addCharge($charge);
-        $chargesSum = $this->getChargesTotalSum();
-        $this->setBillTotalSum(-$chargesSum);
-        $I->pressButton('Save');
-        $I->waitForElement("//th[contains(text(),'Negative')]");
-        return $this->getDataForViewCheck($charge);
-    }
-
-    public function ViewBillById($billId): void
-    {
-        $this->tester->needPage(Url::to("@bill/view?id=$billId"));
-    }
-
     public function getDataForViewCheck($chargeData): array
     {
         return array_intersect_key($chargeData, array_flip(['objectId', 'type', 'sum']));
