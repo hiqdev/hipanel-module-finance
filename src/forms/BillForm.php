@@ -237,7 +237,7 @@ class BillForm extends Model
             [['charges'], function ($attribute) {
                 $charges = $this->getChargesAsArray();
                 $chargeStrings = array_unique(array_map(
-                    fn ($ch) => $ch['object_id'] . $ch['type'] . $ch['sum'] . $ch['unit'],
+                    fn ($ch) => $ch['object_id'] . $ch['type'] . $ch['sum'] . $ch['unit'] . $ch['time'],
                     $charges,
                 ));
 
