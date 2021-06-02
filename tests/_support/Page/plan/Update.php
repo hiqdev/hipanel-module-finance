@@ -37,12 +37,12 @@ class Update extends Create
         return $this->createPlan();
     }
 
-    public function updatePlanWithNewCurrency($currentCurrency, $id): void
+    public function updatePlanWithNewCurrency($currency, $id): void
     {
         $I = $this->tester;
         $I->needPage(Url::to('@plan/update?id='. $id));
         (new Select2($I, '#plan-currency'))
-            ->setValueLike($currentCurrency);
+            ->setValueLike($currency);
         $I->click('Save');
     }
 }

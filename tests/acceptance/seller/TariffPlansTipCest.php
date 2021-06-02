@@ -19,23 +19,21 @@ class TariffPlansTipCest
     public function ensureIndexPageWorks(Seller $I,  Example $example): void
     {
         $I->login();
-        $id = $this->ensureICanCreateNewTariff($I, $example);
-        $this->ensureTipsAreCorrect($I, $id);
+        $id = $this->ensureICanCreateNewTariff($I, $example['plan']);
+        $this->ensureTipsAreCorrect($I, $id, $example);
     }
 
     private function ensureICanCreateNewTariff(Seller $I, $tariffData): int
     {
         $page = new Create($I);
-        $I->needPage(Url::to('@plan/create'));
         return $page->createPlan($tariffData);
     }
 
-    private function ensureTipsAreCorrect(Seller $I, $id): void
+    private function ensureTipsAreCorrect(Seller $I, $id, $priceData): void
     {
         $page = new Create($I);
         $update = new Update($I);
         $currency = $page->getCurrencyList();
-        $priceData = $this->getPriceData();
 
         foreach($currency as $key => $currentCurrency)
         {
@@ -51,20 +49,16 @@ class TariffPlansTipCest
     protected function getTariffData(): array
     {
         return [
-            'plan' => [
-                'type'     => 'Server tariff',
-                'currency' => 'USD',
+            'tariff' => [
+                'plan' => [
+                    'type'     => 'Server tariff',
+                    'currency' => 'USD',
+                ],
+                'price' => [
+                    'plan' => 'TEST-CONFIG-NL',
+                    'type' => 'Main prices',
+                ],
             ],
         ];
     }
-
-    protected function getPriceData(): array
-    {
-        return [
-            'price' => [
-                'plan' => 'TEST-CONFIG-NL',
-                'type' => 'Main prices',
-            ]
-        ];
-    }    
 }
