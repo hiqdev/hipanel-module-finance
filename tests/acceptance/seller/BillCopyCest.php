@@ -13,37 +13,38 @@ class BillCopyCest
     /**
      * @dataProvider provideDataBill
      */
-    public function ensureICanCreateAndCopyBill(Seller $I, Example $example)
+     public function ensureICanCreateAndCopyBill(Seller $I, Example $example)
     {
         $I->login();
-        $dataBill = $this->provideDataBill();
-        $example = iterator_to_array($example->getIterator());
-        $billId = $this->ensureICanCreateSimpleBill($I, $example);
+        $billId = $this->ensureICanCreateBill($I, iterator_to_array($example->getIterator()));
         $this->ensureICanCopyBill($I, $billId);
-        $billId = $this->ensureICanCreateBillWithCharge($I, $example);
-        $copyId = $this->ensureICanCopyBill($I, $billId);
-        $billSum = $this->ensureICanEditCopiedBill($I, $copyId, $example);
-        $checkId = $this->ensureICanSaveUpdatedBill($I);
-        $this->ensureBillWasCreatedCorrectly($I, $checkId, $example, $billSum);
-        $this->ensureChargesWasCreatedCorrectly($I, $checkId, $example);
-        $this->ensurePreviousBillDidntChange($I, $billId, $example);
-    }
-
-    private function ensureICanCreateSimpleBill(Seller $I, $billData)
+    } 
+    
+    /**
+     * @dataProvider provideDataBillWithCharge
+     */
+    public function ensureCopiedBillWillBeCorrect(Seller $I, Example $example)
     {
-        $page = new Create($I);
-        $I->needPage(Url::to('@bill/create'));
-        $page->fillMainBillFields($billData);
-        $I->pressButton('Save');
-        return $page->seeActionSuccess();
+        $example = iterator_to_array($example->getIterator());
+
+        $billId = $this->ensureICanCreateBill($I, $example);
+        $copyId = $this->ensureICanCopyBill($I, $billId);
+        $billSum = $this->ensureICanEditCopiedBill($I, $copyId, $example['charges']);
+        $checkId = $this->ensureICanSaveUpdatedBill($I);
+
+        $this->ensureBillWasCreatedCorrectly($I, $checkId, $example, $billSum);
+        $this->ensureChargesWasCreatedCorrectly($I, $checkId, $example['charges']);
+        $this->ensurePreviousBillDidntChange($I, $billId, $example['charges']);
     }
 
-    private function ensureICanCreateBillWithCharge(Seller $I, $billData)
+    private function ensureICanCreateBill(Seller $I, $billData): int
     {
         $createPage = new Create($I);
         $I->needPage(Url::to('@bill/create'));
         $createPage->fillMainBillFields($billData);
-        $createPage->addCharge($billData['charge1']);
+        if (isset($billData['charges'])) {
+            $createPage->addCharge($billData['charges']['charge1']);
+        }
         $I->pressButton('Save');
         return $createPage->seeActionSuccess();
     }
@@ -107,26 +108,41 @@ class BillCopyCest
     protected function provideDataBill(): array
     {
         return [
-            'client' => [
+            'bill' => [
                 'login'     => 'hipanel_test_user',
                 'type'      => 'HDD',
                 'currency'  => '$',
                 'sum'       =>  -44,
                 'quantity'  =>  1,
-                'charge1'    => [
-                    'class'    => 'Domain zone',
-                    'objectId' => 'army',
-                    'type'     => 'Common',
-                    'sum'      => 44,
-                    'quantity' => '1',
-                ],
-                'charge2'      =>[
-                    'class'    => 'Domain',
-                    'objectId' => 'bladeroot.net',
-                    'type'     => 'PayPal',
-                    'sum'      => 56,
-                    'quantity' => '1',
-                ],
+            ],
+        ];
+    }
+
+    protected function provideDataBillWithCharge(): array
+    {
+        return [
+            'bill' => [
+                'login'     => 'hipanel_test_user',
+                'type'      => 'HDD',
+                'currency'  => '$',
+                'sum'       =>  -44,
+                'quantity'  =>  1,
+                'charges'   => [
+                    'charge1'    => [
+                        'class'    => 'Domain zone',
+                        'objectId' => 'army',
+                        'type'     => 'Common',
+                        'sum'      => 44,
+                        'quantity' => '1',
+                    ],
+                    'charge2'      =>[
+                        'class'    => 'Domain',
+                        'objectId' => 'bladeroot.net',
+                        'type'     => 'PayPal',
+                        'sum'      => 56,
+                        'quantity' => '1',
+                    ],
+                ]
             ],
         ];
     }
