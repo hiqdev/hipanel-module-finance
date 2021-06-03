@@ -63,7 +63,6 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
                     <div class='col-xs-11'>{sorter}</div>
                 </div>
                 <div class='table-responsive'>{items}</div>
-                \n
                 <div class='row'>
                     <div class='col-xs-12' style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between;">
                         <div class='dataTables_info'>{summary}</div>
