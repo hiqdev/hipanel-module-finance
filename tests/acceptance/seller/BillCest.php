@@ -36,7 +36,7 @@ class BillCest
         $I->seeLink('Recharge account', Url::to('@pay/deposit'));
         $I->seeLink('Add payment', Url::to('@bill/create'));
         $I->seeLink('Currency exchange', Url::to('@bill/create-exchange'));
-        $I->seeLink('Import payments', Url::to('@bill/import'));
+        $I->seeLink('Import payments');
         $this->ensureICanSeeAdvancedSearchBox($I);
         $this->ensureICanSeeBulkBillSearchBox();
     }
