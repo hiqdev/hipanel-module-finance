@@ -62,8 +62,7 @@ class BillCopyCest
         $pageCopy = new Create($I);
         $I->needPage(Url::to('@bill/update?id=' . $id));
         $pageCopy->addCharge($billData['charge2']);
-        $sum = $pageCopy->getChargesTotalSum();
-        $pageCopy->setBillTotalSum(-$sum);
+        $sum = $pageCopy->getAndSetBillTotalSum();
         return -$sum;
     }
 
@@ -105,7 +104,7 @@ class BillCopyCest
         $indexPage->gridView->ensureBillViewDontContainData($result);
     }
 
-    protected function provideDataBill(): array
+    private function provideDataBill(): array
     {
         return [
             'bill' => [
@@ -118,7 +117,7 @@ class BillCopyCest
         ];
     }
 
-    protected function provideDataBillWithCharge(): array
+    private function provideDataBillWithCharge(): array
     {
         return [
             'bill' => [
