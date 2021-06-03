@@ -19,10 +19,10 @@ class BillChargeSumCest
         $I->needPage(Url::to('@bill/create'));
         $bill = $this->getBillData();
         $page->fillMainBillFields(iterator_to_array($example->getIterator()));
-        $page->addCharge($example['charge1']);
-        $page->addCharge($example['charge2']);
+        $exampleArray = iterator_to_array($example->getIterator());
+        $page->addCharges($exampleArray['charges']);
         $I->pressButton('Save');
-        $I->cantSee('Bill sum must match charges sum: -762.7');
+        $I->cantSee('Bill sum must match charges sum: -' . $example['sum']);
     }
 
     private function getBillData(): array
@@ -34,19 +34,21 @@ class BillChargeSumCest
                 'currency'  => '$',
                 'sum'       =>  762.7,
                 'quantity'  =>  1,
-                'charge1'    => [
-                    'class'     => 'Client',
-                    'objectId'  => 'hipanel_test_user1',
-                    'type'      => 'Monthly fee',
-                    'sum'       => -712.80,
-                    'quantity'  => 1,
-                ],
-                'charge2'      =>[
-                    'class'     => 'Client',
-                    'objectId'  => 'hipanel_test_user2',
-                    'type'      => 'VAT',
-                    'sum'       => -49.90,
-                    'quantity'  => 1,
+                'charges'   => [ 
+                    'charge1'    => [
+                        'class'     => 'Client',
+                        'objectId'  => 'hipanel_test_user1',
+                        'type'      => 'Monthly fee',
+                        'sum'       => -712.80,
+                        'quantity'  => 1,
+                    ],
+                    'charge2'      =>[
+                        'class'     => 'Client',
+                        'objectId'  => 'hipanel_test_user2',
+                        'type'      => 'VAT',
+                        'sum'       => -49.90,
+                        'quantity'  => 1,
+                    ],
                 ],
             ],
         ];
