@@ -50,7 +50,7 @@ class InternalTransferCest
             'client' => [
                 'sum'          => 1000,
                 'client'       => 'hipanel_test_user',
-                'receiver ID'  => 'hipanel_test_user2',
+                'receiverId'  => 'hipanel_test_user2',
             ],
         ];
     }

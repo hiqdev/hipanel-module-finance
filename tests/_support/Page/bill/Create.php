@@ -40,12 +40,12 @@ class Create extends Authenticated
     {
         $I = $this->tester;
 
-        (new Input($I, '#bill-0-sum'))->setValue($transferData['Sum']);
+        (new Input($I, '#bill-0-sum'))->setValue($transferData['sum']);
         $I->click('//div[@class=\'input-group-btn\']/button[2]');
         $I->click('//li/a[contains(text(),\'$\')]');
 
-        (new Select2($I, '#bill-0-client_id'))->setValue($transferData['Client']);
-        (new Select2($I, '#bill-0-receiver_id'))->setValue($transferData['Receiver ID']);
+        (new Select2($I, '#bill-0-client_id'))->setValue($transferData['client']);
+        (new Select2($I, '#bill-0-receiver_id'))->setValue($transferData['receiverId']);
     }
 
     /**
