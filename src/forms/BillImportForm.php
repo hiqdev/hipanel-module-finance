@@ -37,7 +37,7 @@ use yii\helpers\ArrayHelper;
  * }
  * ```
  */
-class BillImportForm extends \yii\base\Model
+final class BillImportForm extends \yii\base\Model
 {
 
     const BILL_FIELD_COUNT_WITHOUT_REQUISITE = 6;
