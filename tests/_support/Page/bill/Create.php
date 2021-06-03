@@ -166,7 +166,8 @@ JS
         $I->closeNotification('Bill was created successfully');
         $I->seeInCurrentUrl('/finance/bill?id');
 
-        return $I->grabFromCurrentUrl('~id_in%5B0%5D=(\d+)~');
+        $id = $this->grabBillIdFromUrl();
+        return $id;
     }
     public function seeUpdateSuccess(): ?string
     {
@@ -175,7 +176,8 @@ JS
         $I->closeNotification('Bill was updated successfully');
         $I->seeInCurrentUrl('/finance/bill?id');
 
-        return $I->grabFromCurrentUrl('~id_in%5B0%5D=(\d+)~');
+        $id = $this->grabBillIdFromUrl();
+        return $id;
     }
 
     /**
@@ -207,5 +209,10 @@ JS
     public function clickToggleSign(): void 
     {
         $this->tester->click('Toggle sign');
+    }
+    private function grabBillIdFromUrl()
+    {
+        $I = $this->tester;
+        return $I->grabFromCurrentUrl('~id_in%5B0%5D=(\d+)~');
     }
 }
