@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hipanel-module-finance
  * @package   hipanel-module-finance
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2021, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\finance\forms;
@@ -39,6 +39,9 @@ use yii\helpers\ArrayHelper;
  */
 class BillImportForm extends \yii\base\Model
 {
+
+    const BILL_FIELD_COUNT_WITHOUT_REQUISITE = 6;
+    const BILL_FIELD_COUNT_WITH_REQUISITE = 7;
     /**
      * @var string
      */
@@ -96,7 +99,7 @@ class BillImportForm extends \yii\base\Model
      *
      * @return Bill[]|false Array of [[Bill]] models on success or `false` on parsing error
      */
-    public function parse()
+    public function parse(): ?array
     {
         $bills = [];
         $billTemplate = new Bill(['scenario' => Bill::SCENARIO_CREATE]);
@@ -110,11 +113,17 @@ class BillImportForm extends \yii\base\Model
                     continue;
                 }
 
-                $bills[] = $bill = clone $billTemplate;
-
-                list($client, $time, $sum, $currency, $type, $label, $requisite) = $this->splitLine($line);
-                $quantity = 1;
+                $bill = clone $billTemplate;
+                $splitted = $this->splitLine($line);
+                if (count($splitted) === self::BILL_FIELD_COUNT_WITHOUT_REQUISITE) {
+                    list($client, $time, $sum, $currency, $type, $label) = $splitted;
+                    $requisite = null;
+                } else {
+                    list($client, $time, $sum, $currency, $type, $label, $requisite) = $splitted;
+                }
                 $bill->setAttributes(compact('client', 'time', 'sum', 'currency', 'type', 'label', 'quantity', 'requisite'));
+                $bills[] = $bill;
+                $quantity = 1;
                 $bill->populateRelation('charges', []);
             }
 
@@ -125,15 +134,20 @@ class BillImportForm extends \yii\base\Model
                 $bill->time = $time !== false ? \Yii::$app->formatter->asDatetime($time, 'php:d.m.Y H:i:s') : false;
                 $bill->type = $this->resolveType($bill->type);
                 $bill->client_id = $this->convertClientToId($bill->client);
-                $bill->requisite_id = $this->convertRequisiteNameToId($bill->requisite, $bill->client);
+                if ($bill->requisite !== null) {
+                    $bill->requisite_id = $this->convertRequisiteNameToId($bill->requisite, $bill->client);
+                    if (empty($bill->requisite_id)) {
+                        $bill->addError('requisite_id', Yii::t('hipanel:finance', 'Requisite is not found'));
+                    }
+                }
             }
         } catch (InvalidValueException $e) {
             $this->addError('data', $e->getMessage());
 
-            return false;
+            return null;
         }
 
-        return empty($bills) ? false : $bills;
+        return empty($bills) ? null : $bills;
     }
 
     /**
@@ -143,22 +157,23 @@ class BillImportForm extends \yii\base\Model
      *
      * @param string $line to be exploded
      * @return array
+     * @throw InvalidValueException
      */
-    protected function splitLine($line)
+    private function splitLine(string $line): array
     {
-        $chunks = explode(';', $line);
-        if (count($chunks) !== 7) {
-            throw new InvalidValueException('Line "' . $line . '" is malformed');
+        $chunks = array_map('trim', explode(';', $line));
+        if (in_array(count($chunks), [self::BILL_FIELD_COUNT_WITHOUT_REQUISITE, self::BILL_FIELD_COUNT_WITH_REQUISITE], true)) {
+            return $chunks;
         }
 
-        return array_map('trim', $chunks);
+        throw new InvalidValueException('Line "' . $line . '" is malformed');
     }
 
     /**
      * @param array $logins all logins used current import session to be pre-fetched
      * @void
      */
-    private function resolveClients($logins)
+    private function resolveClients($logins): void
     {
 
         $clients = $this->getClients($logins);
@@ -174,7 +189,7 @@ class BillImportForm extends \yii\base\Model
      * @param $time
      * @return int UNIX epoch timestamp
      */
-    protected function resolveTime($time)
+    private function resolveTime(string $time): int
     {
         $timestamp = strtotime($time);
 
@@ -200,7 +215,7 @@ class BillImportForm extends \yii\base\Model
      * @throws InvalidValueException
      * @return string
      */
-    protected function resolveType($type)
+    private function resolveType(string $type): string
     {
         $types = $this->billTypes;
 
@@ -242,7 +257,7 @@ class BillImportForm extends \yii\base\Model
      * @return string|int
      * @see clientMap
      */
-    protected function convertClientToId($client)
+    private function convertClientToId(string $client): string
     {
         if (!isset($this->clientsMap[$client])) {
             throw new InvalidValueException('Client "' . $client . '" was not found');
@@ -251,7 +266,7 @@ class BillImportForm extends \yii\base\Model
         return $this->clientsMap[$client];
     }
 
-    protected function getClients($logins)
+    private function getClients(array $logins): array
     {
         return Yii::$app->cache->getOrSet([__CLASS__, __METHOD__ , $logins], function () use ($logins) {
             return Client::find()
@@ -263,7 +278,7 @@ class BillImportForm extends \yii\base\Model
         }, 3600);
     }
 
-    protected function convertRequisiteNameToId(string $requisite, string $client)
+    private function convertRequisiteNameToId(string $requisite, string $client): ?int
     {
         if (!isset($this->sellerMap[$client])) {
             return null;
@@ -271,11 +286,11 @@ class BillImportForm extends \yii\base\Model
 
         $requisites = $this->getRequisites($this->sellerMap[$client]);
 
-        return $requisites[$requisite] ?? null;
+        return isset($requisites[$requisite]) && !empty($requisites[$requisite]) ? (int) $requisites[$requisite] : null;
 
     }
 
-    protected function getRequisites(string $seller)
+    private function getRequisites(string $seller): array
     {
         return Yii::$app->cache->getOrSet([__CLASS__, __METHOD__ , $seller], function() use ($seller) {
             $requisites = Requisite::find()
@@ -287,7 +302,7 @@ class BillImportForm extends \yii\base\Model
             }
 
             foreach ($requisites as $requisite) {
-                $name2id[$requisite->name] = $requisite->id;
+                $name2id[$requisite->name] = (int) $requisite->id;
             }
 
             return $name2id;
