@@ -13,48 +13,49 @@ class InternalTransferCest
 {
     public function ensureIndexPageWorks(Seller $I): void
     {
-        $indexPage = new Create($I);
-        $indexUpdate = new Update($I);
+        $createPage = new Create($I);
+        $updatePage = new Update($I);
         $I->login();
-        $this->ensureICanCreateBill($I, $indexPage);
+        $this->ensureICanCreateBill($I, $createPage);
         $I->needPage(Url::to('@bill/create-transfer'));
         $I->see('Add internal transfer', 'h1');
-        $this->ensureICantCreateTransferWithoutRequiredData($I, $indexPage);
-        $this->ensureICanCreateInternalTransfer($I, $indexPage);
+        $this->ensureICantCreateTransferWithoutRequiredData($I, $createPage);
+        $this->ensureICanCreateInternalTransfer($I, $createPage);
         $I->click('Save');
-        $indexUpdate->seeTransferActionSuccess();
+        $updatePage->seeTransferActionSuccess();
     }
 
-    private function ensureICanCreateBill(Seller $I, $Page): void
+    private function ensureICanCreateBill(Seller $I, Create $page): void
     {
         $I->needPage(Url::to('@bill/create'));
-        $Page->fillMainBillFields($this->getBillData());
+        $page->fillMainBillFields($this->getBillData());
         $I->pressButton('Save');
     }
 
-    private function ensureICantCreateTransferWithoutRequiredData(Seller $I, $Page): void 
+    private function ensureICantCreateTransferWithoutRequiredData(Seller $I, Create $page): void
     {
         $I->click('Save');
-        $Page->containsBlankFieldsError(['Sum' ,'Client', 'Receiver ID', 'Currency']);
+        $page->containsBlankFieldsError(['Sum' ,'Client', 'Receiver ID', 'Currency']);
     }
 
-   private function ensureICanCreateInternalTransfer(Seller $I, $Page): void
+   private function ensureICanCreateInternalTransfer(Seller $I, Create $page): void
     {
         $transferData = $this->getTransferData();
-        $Page->fillMainInternalTransferFields($transferData['client']);
+        $page->fillMainInternalTransferFields($transferData['client']);
     }
 
     private function getTransferData(): array
     {
         return [
             'client' => [
-                'Sum'          => 1000,
-                'Client'       => 'hipanel_test_user',
-                'Receiver ID'  => 'hipanel_test_user2',
+                'sum'          => 1000,
+                'client'       => 'hipanel_test_user',
+                'receiver ID'  => 'hipanel_test_user2',
             ],
         ];
     }
-    protected function getBillData(): array
+
+    private function getBillData(): array
     {
         return [
             'login'     => 'hipanel_test_user',

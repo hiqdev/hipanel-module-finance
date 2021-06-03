@@ -35,6 +35,7 @@ class Create extends Authenticated
 
         (new Input($I, '#billform-0-quantity'))->setValue($billData['quantity']);
     }
+
     public function fillMainInternalTransferFields(array $transferData): void
     {
         $I = $this->tester;
