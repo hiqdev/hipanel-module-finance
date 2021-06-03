@@ -286,6 +286,10 @@ final class BillImportForm extends \yii\base\Model
 
         $requisites = $this->getRequisites($this->sellerMap[$client]);
 
+        if (in_array((int) $requisite, $requisites, true)) {
+            return $requisite;
+        }
+
         return isset($requisites[$requisite]) && !empty($requisites[$requisite]) ? (int) $requisites[$requisite] : null;
 
     }
