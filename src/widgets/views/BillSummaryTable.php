@@ -38,9 +38,9 @@ use hipanel\modules\finance\widgets\ColoredBalance;
                                     'attribute' => 'sum',
                                 ]) ?>
                             </td>
-                        <?php endforeach; ?>
+                        <?php endforeach ?>
                     </tr>
-                <?php endforeach; ?>
+                <?php endforeach ?>
                 </tbody>
             </table>
         </div>
