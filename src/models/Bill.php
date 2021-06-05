@@ -57,7 +57,7 @@ class Bill extends \hipanel\base\Model
             [['object_id', 'tariff_id'], 'integer'],
             [['client', 'seller', 'bill', 'unit', 'requisite'], 'safe'],
             [['domain', 'server'], 'safe'],
-            [['sum', 'balance', 'quantity', 'positive', 'negative', 'opening_balance', 'closed_balance'], 'number'],
+            [['sum', 'balance', 'quantity', 'positive', 'negative', 'opening_balance', 'closing_balance'], 'number'],
             [['currency', 'label', 'descr'], 'safe'],
             [['object', 'domains', 'tariff', 'tariff_type'], 'safe'],
             [['type', 'gtype', 'class', 'ftype'], 'safe'],

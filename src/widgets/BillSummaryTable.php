@@ -33,7 +33,7 @@ class BillSummaryTable extends Widget
             'positive' => Yii::t('hipanel:finance', 'Positive'),
             'negative' => Yii::t('hipanel:finance', 'Negative'),
             'openingBalance' => Yii::t('hipanel:finance', 'Opening balance'),
-            'closedBalance' => Yii::t('hipanel:finance', 'Closed balance'),
+            'closingBalance' => Yii::t('hipanel:finance', 'Closing balance'),
             'total' => Yii::t('hipanel:finance', 'Total'),
         ];
         $this->displayBills = empty($this->onPageBills) ? $this->allBills : $this->onPageBills;
@@ -72,14 +72,14 @@ class BillSummaryTable extends Widget
 
     private function calculate(): array
     {
-        $positive = $negative = $total = $openingBalance = $closedBalance = [];
+        $positive = $negative = $total = $openingBalance = $closingBalance = [];
         foreach ($this->displayBills as $bill) {
             if ($this->isGrouped($bill)) {
                 $positive[$bill->currency] = $bill->positive;
                 $negative[$bill->currency] = $bill->negative;
                 $total[$bill->currency] = $bill->sum;
                 $openingBalance[$bill->currency] = $bill->opening_balance;
-                $closedBalance[$bill->currency] = $bill->closed_balance;
+                $closingBalance[$bill->currency] = $bill->closing_balance;
             } else if ($bill->sum >= 0) {
                 $positive[$bill->currency] += abs($bill->sum);
                 $total[$bill->currency] += abs($bill->sum);
@@ -94,12 +94,12 @@ class BillSummaryTable extends Widget
             'negative' => $negative,
             'total' => $total,
             'openingBalance' => $openingBalance,
-            'closedBalance' => $closedBalance,
+            'closingBalance' => $closingBalance,
         ];
     }
 
     private function isGrouped(Bill $bill): bool
     {
-        return $bill->negative || $bill->positive || $bill->opening_balance || $bill->closed_balance;
+        return $bill->negative || $bill->positive || $bill->opening_balance || $bill->closing_balance;
     }
 }
