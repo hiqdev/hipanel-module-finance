@@ -21,7 +21,7 @@ use hipanel\modules\finance\widgets\ColoredBalance;
                     <td class="text-muted"><?= $tableName ?></td>
                     <?php foreach ($currencies as $sign): ?>
                         <th class="text-right"><?= $sign ?></th>
-                    <?php endforeach; ?>
+                    <?php endforeach ?>
                 </tr>
                 </thead>
                 <tbody>
