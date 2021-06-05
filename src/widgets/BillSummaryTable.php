@@ -33,8 +33,8 @@ class BillSummaryTable extends Widget
             'positive' => Yii::t('hipanel:finance', 'Positive'),
             'negative' => Yii::t('hipanel:finance', 'Negative'),
             'openingBalance' => Yii::t('hipanel:finance', 'Opening balance'),
-            'closingBalance' => Yii::t('hipanel:finance', 'Closing balance'),
             'total' => Yii::t('hipanel:finance', 'Total'),
+            'closingBalance' => Yii::t('hipanel:finance', 'Closing balance'),
         ];
         $this->displayBills = empty($this->onPageBills) ? $this->allBills : $this->onPageBills;
     }
