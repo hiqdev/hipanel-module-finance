@@ -39,8 +39,8 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
                 'requisite_id',
                 'contact_id',
                 'id',
-                 Yii::$app->user->can('resell') ? 'client' : null,
-                 Yii::$app->user->can('support') ? 'seller' : null
+                 Yii::$app->user->can('access-subclients') ? 'client' : null,
+                 Yii::$app->user->can('access-subclients') ? 'seller' : null
             ]),
         ]) ?>
     <?php $page->endContent() ?>
