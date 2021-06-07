@@ -21,7 +21,7 @@ use yii\web\View;
  */
 ?>
 
-<?php if (Yii::$app->user->can('support')) : ?>
+<?php if (Yii::$app->user->can('access-subclients')) : ?>
     <div class="col-md-4 col-sm-6 col-xs-12">
         <?= $search->field('seller_id')->widget(SellerCombo::class) ?>
     </div>
@@ -46,5 +46,4 @@ use yii\web\View;
         'multiple' => true,
     ]) ?>
 </div>
-
 
