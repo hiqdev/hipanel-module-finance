@@ -18,4 +18,25 @@ class View extends Create
     {
         $this->tester->needPage(Url::to("@bill/view?id=$billId"));
     }
+
+    public function ensureBillViewContainsData(array $elements): void
+    {
+        foreach ($elements as $tableContent) {
+            $this->tester->see($tableContent, "//div[@class='box']//table");
+        }
+    }
+
+    public function ensureChargeViewContainsData(array $chargeData): void
+    {
+        foreach ($chargeData as $key => $element) {
+            $this->tester->see($element, '//div[@class="table-responsive"]//tr');
+        }
+    }
+
+    public function ensureBillViewDontContainData(array $element): void
+    {
+        foreach ($element as $tableContent) {
+            $this->tester->dontSee($tableContent, "//table//table//tbody");
+        }
+    }
 }

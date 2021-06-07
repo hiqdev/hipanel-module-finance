@@ -33,9 +33,9 @@ class AddingChargesCest
         $viewData['charge3'] = $update->addChargeInBillById($billId, $example['charge3']);
         
         $view->viewBillById($billId);
-        $indexPage->gridView->ensureChargeViewContainsData($viewData['charge1']);
-        $indexPage->gridView->ensureChargeViewContainsData($viewData['charge2']);
-        $indexPage->gridView->ensureChargeViewContainsData($viewData['charge3']);
+        $view->ensureChargeViewContainsData($viewData['charge1']);
+        $view->ensureChargeViewContainsData($viewData['charge2']);
+        $view->ensureChargeViewContainsData($viewData['charge3']);
     }
 
     private function getBillData(): array
