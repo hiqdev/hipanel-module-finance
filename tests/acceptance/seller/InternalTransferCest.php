@@ -33,8 +33,6 @@ class InternalTransferCest
      */
     public function ensureIndexPageWorks(Seller $I, Example $example): void
     {
-        #$createPage = new Create($I);
-        #$updatePage = new Update($I);
         $I->login();
         $exampleArray = iterator_to_array($example->getIterator());
         $this->ensureICanCreateBill($I, $exampleArray['bill']);
