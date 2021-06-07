@@ -171,7 +171,7 @@ FlagIconCssAsset::register($this);
                     <?php $box->end() ?>
                 <?php endif; ?>
 
-                <?php foreach ($model->balances as $currency => $data) : ?>
+                <?php foreach ($model->balances ?? [] as $currency => $data) : ?>
                     <?php $box = Box::begin(['renderBody' => false]) ?>
                         <?php $box->beginHeader() ?>
                             <?= $box->renderTitle(strtoupper($currency)) ?>
