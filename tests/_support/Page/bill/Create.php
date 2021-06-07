@@ -18,6 +18,20 @@ use hipanel\helpers\Url;
 
 class Create extends Authenticated
 {
+    public function createNewbill($billData): int
+    {
+        $I = $this->tester;
+        $I->needPage(Url::to('@bill/create'));
+        $this->fillMainBillFields($billData);
+        if (isset($billData['charges'])) {
+            foreach ($billData['charges'] as $charge) {
+                $this->addCharge($charge);
+            }
+        }
+        $I->pressButton('Save');
+        return $this->seeActionSuccess();
+    }
+
     /**
      * @param array $billData
      * @throws \Exception

@@ -17,12 +17,9 @@ class BillChargeSumCest
         $I->login();
         $page = new Create($I);
         $I->needPage(Url::to('@bill/create'));
-        $bill = $this->getBillData();
-        $page->fillMainBillFields(iterator_to_array($example->getIterator()));
         $exampleArray = iterator_to_array($example->getIterator());
-        $page->addCharges($exampleArray['charges']);
-        $I->pressButton('Save');
-        $I->cantSee('Bill sum must match charges sum: -' . $example['sum']);
+        $page->createNewBill($exampleArray);
+        $I->cantSee('Bill sum must match charges sum: -' . $exampleArray['sum']);
     }
 
     private function getBillData(): array
