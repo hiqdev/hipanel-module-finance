@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\tests\acceptance\seller;
 
 use hipanel\helpers\Url;
+use Codeception\Example;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
@@ -11,58 +12,75 @@ use hipanel\modules\finance\tests\_support\Page\bill\Update;
 
 class InternalTransferCest
 {
-    public function ensureIndexPageWorks(Seller $I): void
+     /**
+     * @var Create
+     */
+    private $create;
+
+    /**
+     * @var Update
+     */
+    private $update;
+
+    public function _before(Seller $I)
     {
-        $createPage = new Create($I);
-        $updatePage = new Update($I);
-        $I->login();
-        $this->ensureICanCreateBill($I, $createPage);
-        $I->needPage(Url::to('@bill/create-transfer'));
-        $I->see('Add internal transfer', 'h1');
-        $this->ensureICantCreateTransferWithoutRequiredData($I, $createPage);
-        $this->ensureICanCreateInternalTransfer($I, $createPage);
-        $I->click('Save');
-        $updatePage->seeTransferActionSuccess();
+        $this->create = new Create($I);
+        $this->update = new Update($I);
     }
 
-    private function ensureICanCreateBill(Seller $I, Create $page): void
+    /**
+     * @dataProvider provideTransferData
+     */
+    public function ensureIndexPageWorks(Seller $I, Example $example): void
+    {
+        #$createPage = new Create($I);
+        #$updatePage = new Update($I);
+        $I->login();
+        $exampleArray = iterator_to_array($example->getIterator());
+        $this->ensureICanCreateBill($I, $exampleArray['bill']);
+        $I->needPage(Url::to('@bill/create-transfer'));
+        $I->see('Add internal transfer', 'h1');
+        $this->ensureICantCreateTransferWithoutRequiredData($I);
+        $this->ensureICanCreateInternalTransfer($I, $exampleArray);
+        $I->click('Save');
+        $this->update->seeTransferActionSuccess();
+    }
+
+    private function ensureICanCreateBill(Seller $I, $billData): void
     {
         $I->needPage(Url::to('@bill/create'));
-        $page->fillMainBillFields($this->getBillData());
+        $this->create->fillMainBillFields($billData);
         $I->pressButton('Save');
     }
 
-    private function ensureICantCreateTransferWithoutRequiredData(Seller $I, Create $page): void
+    private function ensureICantCreateTransferWithoutRequiredData(Seller $I): void
     {
         $I->click('Save');
-        $page->containsBlankFieldsError(['Sum' ,'Client', 'Receiver ID', 'Currency']);
+        $this->create->containsBlankFieldsError(['Sum' ,'Client', 'Receiver ID', 'Currency']);
     }
 
-   private function ensureICanCreateInternalTransfer(Seller $I, Create $page): void
+   private function ensureICanCreateInternalTransfer(Seller $I, $transferData): void
     {
-        $transferData = $this->getTransferData();
-        $page->fillMainInternalTransferFields($transferData['client']);
+        $this->create->fillMainInternalTransferFields($transferData['transfer']);
     }
 
-    private function getTransferData(): array
+    private function provideTransferData(): array
     {
         return [
-            'client' => [
-                'sum'          => 1000,
-                'client'       => 'hipanel_test_user',
-                'receiverId'  => 'hipanel_test_user2',
+            'payments' => [
+                'transfer' => [
+                    'sum'          => 1000,
+                    'client'       => 'hipanel_test_user',
+                    'receiverId'  => 'hipanel_test_user2',
+                ],
+                'bill' => [
+                    'login'     => 'hipanel_test_user',
+                    'type'      => 'PayPal',
+                    'currency'  => '$',
+                    'sum'       =>  1000,
+                    'quantity'  =>  1,
+                ],
             ],
-        ];
-    }
-
-    private function getBillData(): array
-    {
-        return [
-            'login'     => 'hipanel_test_user',
-            'type'      => 'PayPal',
-            'currency'  => '$',
-            'sum'       =>  1000,
-            'quantity'  =>  1,
         ];
     }
 }
