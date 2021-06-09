@@ -46,7 +46,7 @@ class BillCest
     {
         $I->click("//a[contains(text(), 'Import payments')]");
         $I->seeLink('Import payments', Url::to('@finance/bill/import'));
-        $I->seeLink('Import from a file', Url::to('#'));
+        $I->seeLink('Import from a file');
     }
 
     private function ensureICanSeeAdvancedSearchBox(Seller $I)
