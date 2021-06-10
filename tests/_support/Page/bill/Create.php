@@ -108,6 +108,14 @@ class Create extends Authenticated
         $this->tester->seeNumberOfElements($selector, $n);
     }
 
+    public function getChargesAmount()
+    {
+        $I = $this->tester;
+        $selector = 'div.bill-charges div[class*=input-row]';
+
+        return $I->grabMultiple($selector);        
+    }
+
     /**
      * Adds sum of each charge on page and returns it.
      *
@@ -169,15 +177,28 @@ JS
         $id = $this->grabBillIdFromUrl();
         return $id;
     }
-    public function seeUpdateSuccess(): ?string
+
+    public function createAndCopyBill($billData)
     {
         $I = $this->tester;
 
-        $I->closeNotification('Bill was updated successfully');
-        $I->seeInCurrentUrl('/finance/bill?id');
+        $I->needPage(Url::to('@bill/create'));
+        $this->fillMainBillFields($billData);
+        if (isset($billData['charges'])) {
+            $this->addCharges($billData['charges']);
+        }
 
-        $id = $this->grabBillIdFromUrl();
-        return $id;
+        if ($this->getChargesAmount()) {
+            $this->setBillTotalSum('-' . $this->getChargesTotalSum());
+        }
+        
+        $I->pressButton('Save');
+        $billId = $this->seeActionSuccess();
+        
+        $I->needPage(Url::to('@bill/copy?id=' . $billId));
+        $I->wait(5);
+        $I->pressButton('Save');
+        return $this->seeActionSuccess();
     }
 
     /**
