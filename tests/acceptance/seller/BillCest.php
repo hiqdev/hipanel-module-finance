@@ -14,6 +14,7 @@ use hipanel\helpers\Url;
 use hipanel\tests\_support\Page\IndexPage;
 use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
+use hipanel\tests\_support\Page\Widget\Input\Dropdown;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 
 class BillCest
@@ -45,7 +46,11 @@ class BillCest
     {
         $I->click("//a[contains(text(), 'Import payments')]");
         $I->seeLink('Import payments', Url::to('@finance/bill/import'));
+<<<<<<< HEAD
         $I->seeLink('Import from a file');
+=======
+        $I->seeLink('Import from a file', Url::to('#'));
+>>>>>>> 386d1fef18d630da6b43141b63bc969fe101604c
     }
 
     private function ensureICanSeeAdvancedSearchBox(Seller $I)

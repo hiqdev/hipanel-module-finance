@@ -149,7 +149,7 @@ JS
         $I->amOnPage($url);
         $I->see('Description');
         $I->see('Bill not paid');
-        $I->click('Are you sure you want to delete this item?');
+        $I->click("//a[@data-confirm='Are you sure you want to delete this item?']");
         $I->acceptPopup();
         $I->closeNotification('Payment was deleted successfully');
     }
