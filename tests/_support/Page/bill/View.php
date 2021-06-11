@@ -32,11 +32,4 @@ class View extends Create
                 $this->tester->see($billData, '//div[@class="table-responsive"]//tr');
         }
     }
-
-    public function ensureBillViewDontContainData(array $element): void
-    {
-        foreach ($element as $tableContent) {
-            $this->tester->dontSee($tableContent, "//table//table//tbody");
-        }
-    }
 }
