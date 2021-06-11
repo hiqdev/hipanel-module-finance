@@ -27,7 +27,7 @@ class Update extends Create
         return null;
     }
 
-    public function addChargeInBillById($billId, $charge): array
+    public function addChargeInBillById($billId, array $charge): array
     {
         $I = $this->tester;
 

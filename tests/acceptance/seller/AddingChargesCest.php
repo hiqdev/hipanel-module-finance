@@ -13,32 +13,29 @@ use Codeception\Example;
 class AddingChargesCest
 {
     /**
-     * @dataProvider getBillData
+     * @dataProvider provideBillData
      */
     public function ensureBillWillBeEditedWithNewChargesCorrectly(Seller $I, Example $example): void
     {
         $I->login();
         $createPage = new Create($I);
-        $update = new Update($I);
-        $view = new View($I);
-        $indexPage = new IndexPage($I);
+        $updatePage = new Update($I);
+        $viewPage = new View($I);
+        $exampleArray = iterator_to_array($example->getIterator());
         $I->needPage(Url::to('@bill/create'));
         
-        $page->fillMainBillFields(iterator_to_array($example->getIterator()));
+        $createPage->fillMainBillFields($exampleArray);
         $I->pressButton('Save');
-        $billId = $page->seeActionSuccess();
+        $billId = $createPage->seeActionSuccess();
         
-        $viewData['charge1'] = $update->addChargeInBillById($billId, $example['charge1']);
-        $viewData['charge2'] = $update->addChargeInBillById($billId, $example['charge2']);
-        $viewData['charge3'] = $update->addChargeInBillById($billId, $example['charge3']);
-        
-        $view->viewBillById($billId);
-        $view->ensureChargeViewContainsData($viewData['charge1']);
-        $view->ensureChargeViewContainsData($viewData['charge2']);
-        $view->ensureChargeViewContainsData($viewData['charge3']);
+        foreach ($exampleArray['charges'] as $key => $billData) {
+            $viewData = $updatePage->addChargeInBillById($billId, $exampleArray['charges'][$key]);
+            $viewPage->viewBillById($billId);
+            $viewPage->ensureChargeViewContainsData($viewData);
+        }
     }
 
-    private function getBillData(): array
+    private function provideBillData(): array
     {
         return [
             'client' => [
@@ -47,26 +44,28 @@ class AddingChargesCest
                 'currency'  => '$',
                 'sum'       =>  250,
                 'quantity'  =>  1,
-                'charge1'   => [
-                    'class'     => 'Client',
-                    'objectId'  => 'hipanel_test_user',
-                    'type'      => 'Cash',
-                    'sum'       => 250,
-                    'quantity'  => 1,
-                ],
-                'charge2'   => [
-                    'class'     => 'Client',
-                    'objectId'  => 'hipanel_test_user1',
-                    'type'      => 'Intercept fee',
-                    'sum'       => 350,
-                    'quantity'  => 1,
-                ],
-                'charge3'   => [
-                    'class'     => 'Client',
-                    'objectId'  => 'hipanel_test_user2',
-                    'type'      => 'VAT',
-                    'sum'       => 450,
-                    'quantity'  => 1,
+                'charges'   => [
+                    'charge1'   => [
+                        'class'     => 'Client',
+                        'objectId'  => 'hipanel_test_user',
+                        'type'      => 'Cash',
+                        'sum'       => 250,
+                        'quantity'  => 1,
+                    ],
+                    'charge2'   => [
+                        'class'     => 'Client',
+                        'objectId'  => 'hipanel_test_user1',
+                        'type'      => 'Intercept fee',
+                        'sum'       => 350,
+                        'quantity'  => 1,
+                    ],
+                    'charge3'   => [
+                        'class'     => 'Client',
+                        'objectId'  => 'hipanel_test_user2',
+                        'type'      => 'VAT',
+                        'sum'       => 450,
+                        'quantity'  => 1,
+                    ],
                 ],
             ],
         ];
