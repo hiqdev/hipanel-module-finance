@@ -116,10 +116,10 @@ final class BillImportForm extends \yii\base\Model
                 $bill = clone $billTemplate;
                 $splitted = $this->splitLine($line);
                 if (count($splitted) === self::BILL_FIELD_COUNT_WITHOUT_REQUISITE) {
-                    list($client, $time, $sum, $currency, $type, $label) = $splitted;
+                    [$client, $time, $sum, $currency, $type, $label] = $splitted;
                     $requisite = null;
                 } else {
-                    list($client, $time, $sum, $currency, $type, $label, $requisite) = $splitted;
+                    [$client, $time, $sum, $currency, $type, $label, $requisite] = $splitted;
                 }
                 $bill->setAttributes(compact('client', 'time', 'sum', 'currency', 'type', 'label', 'quantity', 'requisite'));
                 $bill->populateRelation('charges', []);
