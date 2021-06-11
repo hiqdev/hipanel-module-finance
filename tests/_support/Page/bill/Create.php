@@ -14,6 +14,7 @@ use hipanel\tests\_support\Page\Authenticated;
 use hipanel\tests\_support\Page\Widget\Input\Dropdown;
 use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
+use hipanel\modules\finance\tests\_support\Page\bill\Copy;
 use hipanel\helpers\Url;
 
 class Create extends Authenticated
@@ -181,6 +182,7 @@ JS
     public function createAndCopyBill($billData)
     {
         $I = $this->tester;
+        $copyPage = new Copy($I);
 
         $I->needPage(Url::to('@bill/create'));
         $this->fillMainBillFields($billData);
@@ -194,10 +196,7 @@ JS
         
         $I->pressButton('Save');
         $billId = $this->seeActionSuccess();
-        
-        $I->needPage(Url::to('@bill/copy?id=' . $billId));
-        $I->wait(5);
-        $I->pressButton('Save');
+        $copyPage->copyBill($billId);
         return $this->seeActionSuccess();
     }
 

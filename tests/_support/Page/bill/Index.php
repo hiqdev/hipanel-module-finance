@@ -5,7 +5,7 @@ namespace hipanel\modules\finance\tests\_support\Page\bill;
 use hipanel\helpers\Url;
 use hipanel\tests\_support\Page\Authenticated;
 
-class Index extends Authenticated
+class Index extends hipanel\tests\_support\Page\IndexPage
 {   
     public function seeUpdateSuccess(): ?string
     {

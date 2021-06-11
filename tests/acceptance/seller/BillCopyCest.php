@@ -11,6 +11,8 @@ use hipanel\modules\finance\tests\_support\Page\bill\Index;
 
 class BillCopyCest
 {
+    private string $copyId;
+
     /**
      * @var Create
      */
@@ -32,13 +34,21 @@ class BillCopyCest
     /**
      * @dataProvider provideDataBillWithCharge
      */
-    public function ensureCopiedBillWithChargesWillBeCorrect(Seller $I, Example $example)
+    public function createAndCopyBillWithCharges(Seller $I, Example $example)
     {
         $exampleArray = iterator_to_array($example->getIterator());
 
-        $copyId = $this->create->createAndCopyBill($exampleArray);
-        $billId = --$copyId;
+        $this->copyId = $this->create->createAndCopyBill($exampleArray);
+    }
 
+    /**
+     * @dataProvider provideDataBillWithCharge
+     */
+    public function ensureCopiedBillWithChargesIsCorrect(Seller $I, Example $example)
+    {
+        $billId = --$this->copyId;
+
+        $exampleArray = iterator_to_array($example->getIterator());
         $this->ensurePreviousBillDidntChange($I, $billId, $exampleArray['charges']);
     }
 
@@ -48,7 +58,7 @@ class BillCopyCest
         $I->needPage(Url::to('@bill/view?id=' . $id));
         $result = array_intersect_key($dataBill['charge2'], array_flip(['objectId', 'type']));
         $result[] = '$' . $dataBill['charge2']['sum'];
-        $indexPage->gridView->ensureBillViewDontContainData($result);
+        $indexPage->gridView->ensureBillViewContainData($result);
     }
 
     private function provideDataBill(): array
