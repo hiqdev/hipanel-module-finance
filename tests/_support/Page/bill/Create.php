@@ -24,9 +24,7 @@ class Create extends Authenticated
         $I->needPage(Url::to('@bill/create'));
         $this->fillMainBillFields($billData);
         if (isset($billData['charges'])) {
-            foreach ($billData['charges'] as $charge) {
-                $this->addCharge($charge);
-            }
+            $this->addCharges($billData['charges']);
         }
         $I->pressButton('Save');
         return $this->seeActionSuccess();
