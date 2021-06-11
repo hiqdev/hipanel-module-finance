@@ -39,4 +39,9 @@ class Update extends Create
         $I->waitForElement("//th[contains(text(),'Negative')]");
         return $this->getDataForViewCheck($charge);
     }
+
+    public function openBillUpdateById($billId): void
+    {
+        $this->tester->needPage(Url::to("@bill/update?id=$billId"));
+    }
 }

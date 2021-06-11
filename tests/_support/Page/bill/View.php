@@ -28,8 +28,8 @@ class View extends Create
 
     public function ensureChargeViewContainsData(array $chargeData): void
     {
-        foreach ($chargeData as $key => $element) {
-            $this->tester->see($element, '//div[@class="table-responsive"]//tr');
+        foreach ($chargeData as $key => $billData) {
+                $this->tester->see($billData, '//div[@class="table-responsive"]//tr');
         }
     }
 

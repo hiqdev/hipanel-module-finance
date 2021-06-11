@@ -27,11 +27,16 @@ class AddingChargesCest
         $createPage->fillMainBillFields($exampleArray);
         $I->pressButton('Save');
         $billId = $createPage->seeActionSuccess();
+
+
+        $updatePage->openBillUpdateById($billId);
+        $createPage->addCharges( $exampleArray['charges']);
+        $viewData = $createPage->getDataForViewCheck($exampleArray['charges']);
+        $I->click('Save');
         
-        foreach ($exampleArray['charges'] as $key => $billData) {
-            $viewData = $updatePage->addChargeInBillById($billId, $exampleArray['charges'][$key]);
-            $viewPage->viewBillById($billId);
-            $viewPage->ensureChargeViewContainsData($viewData);
+        $viewPage->viewBillById($billId);
+        foreach ($viewData as $key => $charge) {
+            $viewPage->ensureChargeViewContainsData($charge);
         }
     }
 
