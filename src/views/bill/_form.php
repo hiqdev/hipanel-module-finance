@@ -5,7 +5,7 @@ use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\widgets\PricePerUnitWidget;
 use hipanel\modules\finance\widgets\combo\MultipleBillTypeCombo;
-use hipanel\modules\finance\widgets\combo\RequisitesCombo;
+use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
 use hipanel\modules\finance\widgets\SumSignToggleButton;
 use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\DateTimePicker;
@@ -121,7 +121,7 @@ $form = ActiveForm::begin([
                     <div class="row input-row margin-bottom">
                         <div class="col-md-3">
                             <?php if (Yii::$app->user->can('requisites.read')) : ?>
-                                <?= $form->field($model, "[$i]requisite_id")->widget(RequisitesCombo::class) ?>
+                                <?= $form->field($model, "[$i]requisite_id")->widget(BillRequisitesCombo::class) ?>
                             <?php endif ?>
                         </div>
                         <div class="col-md-4">
@@ -196,29 +196,45 @@ $form = ActiveForm::begin([
                                                         'value' => $charge->ftype ?? $charge->type,
                                                     ]) ?>
                                                 </div>
-                                                <div class="col-md-1">
-                                                    <?= Html::activeHiddenInput($charge, "[$i][$j]unit") ?>
-                                                    <?= $form->field($charge, "[$i][$j]quantity")->input('text', ['value' => $charge->getQuantity()]) ?>
+                                                <div class="col-md-2">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <?= Html::activeHiddenInput($charge, "[$i][$j]unit") ?>
+                                                            <?= $form->field($charge, "[$i][$j]quantity")->input('text', ['value' => $charge->getQuantity()]) ?>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <?= PricePerUnitWidget::widget() ?>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <?= $form->field($charge, "[$i][$j]sum")->input('text', [
+                                                                'data-attribute' => 'sum',
+                                                            ]) ?>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-1">
-                                                    <?= PricePerUnitWidget::widget() ?>
-                                                </div>
-                                                <div class="col-md-1">
-                                                    <?= $form->field($charge, "[$i][$j]sum")->input('text', [
-                                                        'data-attribute' => 'sum',
-                                                    ]) ?>
-                                                </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <?= $form->field($charge, "[$i][$j]label") ?>
                                                 </div>
-                                            </div>
-
-                                            <div class="col-md-1" style="padding-top: 25px;">
-                                                <label>&nbsp;</label>
-                                                <button type="button"
-                                                        class="remove-charge btn bg-maroon btn-sm btn-flat">
-                                                    <i class="glyphicon glyphicon-minus"></i>
-                                                </button>
+                                                <div class="col-md-2">
+                                                    <?= $form->field($charge, "[$i][$j]time")->widget(DateTimePicker::class, [
+                                                        'clientOptions' => [
+                                                            'format' => 'yyyy-mm-dd hh:ii:ss',
+                                                            'autoclose' => true,
+                                                            'clearBtn' => true,
+                                                            'minView' => 2,
+                                                        ],
+                                                        'options' => [
+                                                            'placeholder' => Yii::t('hipanel', 'Select date'),
+                                                        ],
+                                                    ]) ?>
+                                                </div>
+                                                <div class="col-md-1" style="padding-top: 25px;">
+                                                    <label>&nbsp;</label>
+                                                    <button type="button"
+                                                            class="remove-charge btn bg-maroon btn-sm btn-flat">
+                                                        <i class="glyphicon glyphicon-minus"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

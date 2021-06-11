@@ -151,6 +151,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'exportedColumns' => ['export_sum', 'export_currency'],
             ],
             'export_sum' => [
+                'format' => 'decimal',
                 'label' => Yii::t('hipanel:finance', 'Sum'),
                 'value' => static fn($bill): string => $bill->sum,
             ],
@@ -159,6 +160,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'value' => static fn($bill): string => $bill->currency,
             ],
             'export_balance' => [
+                'format' => 'decimal',
                 'label' => Yii::t('hipanel', 'Balance'),
                 'value' => static fn($bill): string => $bill->balance,
             ],
