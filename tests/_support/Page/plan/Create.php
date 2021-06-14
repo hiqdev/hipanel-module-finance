@@ -33,16 +33,62 @@ class Create extends Plan
         $this->id = $I->grabFromCurrentUrl('/id=(\d+)/');
     }
 
-    public function createPlan($partData): int
+    public function createPlan(): int
     {
         $this->loadPage();
-        $this->fillMainFields($partData);
+        $this->fillName();
+        $this->chooseType();
+        $this->setGrouping();
+        $this->findClient();
+        $this->chooseCurrency();
+        $this->fillNote();
         $this->savePlan();
 
         return $this->id;
     }
 
-    private function fillMainFields($partData): void
+    private function fillName()
+    {
+        $I = $this->tester;
+
+        $I->fillField(['name' => 'Plan[name]'], $this->name);
+    }
+
+    private function chooseType()
+    {
+        $I = $this->tester;
+
+        $I->click(['name' => 'Plan[type]']);
+        $I->click("//select/option[.='{$this->type}']");
+    }
+
+    protected function setGrouping()
+    {
+        $I = $this->tester;
+
+        $I->uncheckOption("//input[@name='Plan[is_grouping]'][@type='checkbox']");
+    }
+
+    private function findClient()
+    {
+        (new Select2($this->tester, '#plan-client'))
+            ->setValue($this->client);
+    }
+
+    private function chooseCurrency()
+    {
+        (new Select2($this->tester, '#plan-currency'))
+            ->setValueLike($this->currency);
+    }
+
+    private function fillNote()
+    {
+        $I = $this->tester;
+
+        $I->fillField(['name' => 'Plan[note]'], $this->note);
+    }
+
+    public function fillPlanMainFields(array $partData): int
     {
         $I = $this->tester;
         $I->fillField(['name' => 'Plan[name]'], uniqid());
@@ -52,6 +98,9 @@ class Create extends Plan
 
         (new Select2($this->tester, '#plan-currency'))
             ->setValueLike($partData['currency']);
+
+        $this->savePlan();
+        return  $this->id;
     }
 
     public function seeFields()

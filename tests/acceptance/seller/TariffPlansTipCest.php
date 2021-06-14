@@ -19,6 +19,7 @@ class TariffPlansTipCest
     public function ensureIndexPageWorks(Seller $I,  Example $example): void
     {
         $I->login();
+        $I->needPage(Url::to('@plan/create'));
         $id = $this->ensureICanCreateNewTariff($I, $example['plan']);
         $this->ensureTipsAreCorrect($I, $id, $example);
     }
@@ -26,7 +27,8 @@ class TariffPlansTipCest
     private function ensureICanCreateNewTariff(Seller $I, $tariffData): int
     {
         $page = new Create($I);
-        return $page->createPlan($tariffData);
+        return $page->fillPlanMainFields($tariffData);
+
     }
 
     private function ensureTipsAreCorrect(Seller $I, $id, $priceData): void
