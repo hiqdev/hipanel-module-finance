@@ -18,7 +18,7 @@ class BillCopyCest
     private IndexPage $indexPage;
     private Copy $copyPage;
 
-    public function _before(Seller $I)
+    public function _before(Seller $I): void
     {
         $this->createPage = new Create($I);
         $this->indexPage = new IndexPage($I);

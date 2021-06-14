@@ -109,7 +109,7 @@ class Create extends Authenticated
         $this->tester->seeNumberOfElements($selector, $n);
     }
 
-    public function getChargesAmount()
+    public function getChargesAmount(): int
     {
         $I = $this->tester;
         $selector = 'div.bill-charges div[class*=input-row]';
