@@ -7,31 +7,20 @@ use Codeception\Example;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
-use hipanel\modules\finance\tests\_support\Page\transfer\Create as transferCreate;
-use hipanel\modules\finance\tests\_support\Page\bill\Create as billCreate;
+use hipanel\modules\finance\tests\_support\Page\transfer\Create as TransferCreate;
+use hipanel\modules\finance\tests\_support\Page\bill\Create as BillCreate;
 use hipanel\modules\finance\tests\_support\Page\transfer\Index;
 
 class InternalTransferCest
 {
-    /**
-     * @var transferCreate
-     */
     private $transferCreate;
-
-    /**
-     * @var billCreate
-     */
     private $billCreate;
-
-    /**
-     * @var Index
-     */
     private $index;
 
-    public function _before(Seller $I)
+    public function _before(Seller $I): void
     {
-        $this->transferCreate = new transferCreate($I);
-        $this->billCreate = new billCreate($I);
+        $this->transferCreate = new TransferCreate($I);
+        $this->billCreate = new BillCreate($I);
         $this->index = new Index($I);
     }
 
@@ -66,10 +55,10 @@ class InternalTransferCest
     private function ensureICantCreateTransferWithoutRequiredData(Seller $I): void
     {
         $I->click('Save');
-        $this->transferCreate->containsBlankFieldsError(['Sum' ,'Client', 'Receiver ID', 'Currency']);
+        $this->transferCreate->containsBlankFieldsError();
     }
 
-    private function ensureICanCreateInternalTransfer(Seller $I, $transferData): void
+    private function ensureICanCreateInternalTransfer(Seller $I, array $transferData): void
     {
         $this->transferCreate->fillMainInternalTransferFields($transferData['transfer']);
     }

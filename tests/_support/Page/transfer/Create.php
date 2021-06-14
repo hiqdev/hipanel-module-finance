@@ -20,10 +20,23 @@ class Create extends Authenticated
         (new Select2($I, '#bill-0-receiver_id'))->setValue($transferData['receiverId']);
     }
     
-    public function containsBlankFieldsError(array $fieldsList): void
+    public function containsBlankFieldsError(): void
     {
-        foreach ($fieldsList as $field) {
+        $fieldsList = $this->getTransferFormFields();
+        foreach ($fieldsList['fields'] as $field) {
             $this->tester->waitForText("$field cannot be blank.");
         }
+    }
+
+    protected function getTransferFormFields(): array
+    {
+        return [
+            'fields' => [
+                'Sum',
+                'Client',
+                'Receiver ID',
+                'Currency',
+            ],
+        ];
     }
 }
