@@ -29,7 +29,7 @@ class BillCopyCest
      public function ensureICanCreateAndCopyBillWithoutCharges(Seller $I, Example $example): void
     {
         $I->login();
-        $this->createPage->createBill(iterator_to_array($example->getIterator()));
+        $this->createBill($I, iterator_to_array($example->getIterator()));
     } 
     
     /**
@@ -39,7 +39,7 @@ class BillCopyCest
     {
         $exampleArray = iterator_to_array($example->getIterator());
 
-        $billId = $this->createPage->createBill($exampleArray);
+        $billId = $this->createBill($I, $exampleArray);
 
         $this->copyPage->copyBill($billId);
         $exampleArray['id'] = $billId;
@@ -53,6 +53,19 @@ class BillCopyCest
         $result = array_intersect_key($dataBill['charges']['charge2'], array_flip(['objectId', 'type']));
         $result[] = '$' . $dataBill['charges']['charge2']['sum'];
         $this->indexPage->gridView->ensureBillViewContainData($result);
+    }
+
+    private function createBill(Seller $I, $billData): ?string
+    {
+
+        $I->needPage(Url::to('@bill/create'));
+        $this->createPage->fillMainBillFields($billData);
+        if (isset($billData['charges'])) {
+            $this->createPage->addCharges($billData['charges']);
+        }
+
+        $I->pressButton('Save');
+        return $this->createPage->seeActionSuccess();
     }
 
     private function provideDataBill(): array
@@ -75,21 +88,21 @@ class BillCopyCest
                 'login'     => 'hipanel_test_user',
                 'type'      => 'HDD',
                 'currency'  => '$',
-                'sum'       =>  -44,
+                'sum'       =>  -762.7,
                 'quantity'  =>  1,
                 'charges'   => [
                     'charge1'    => [
                         'class'    => 'Domain zone',
                         'objectId' => 'army',
                         'type'     => 'Common',
-                        'sum'      => 44,
+                        'sum'      => 712.80,
                         'quantity' => '1',
                     ],
                     'charge2'      =>[
                         'class'    => 'Domain',
                         'objectId' => 'bladeroot.net',
                         'type'     => 'PayPal',
-                        'sum'      => 56,
+                        'sum'      => 49.90,
                         'quantity' => '1',
                     ],
                 ],

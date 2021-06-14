@@ -179,25 +179,6 @@ JS
         return $id;
     }
 
-    public function createBill($billData): ?string
-    {
-        $I = $this->tester;
-        $copyPage = new Copy($I);
-
-        $I->needPage(Url::to('@bill/create'));
-        $this->fillMainBillFields($billData);
-        if (isset($billData['charges'])) {
-            $this->addCharges($billData['charges']);
-        }
-
-        if ($this->getChargesAmount()) {
-            $this->setBillTotalSum('-' . $this->getChargesTotalSum());
-        }
-        
-        $I->pressButton('Save');
-        return $this->seeActionSuccess();
-    }
-
     /**
      * Looking for blank errors for the given fields.
      *
@@ -240,7 +221,7 @@ JS
     public function getAndSetBillTotalSum(): int 
     {
         $sum = $this->getChargesTotalSum();
-        $this->setBillTotalSum(-$sum);
+        $this->setBillTotalSum($this->getChargesTotalSum());
         
         return $sum;
     }
