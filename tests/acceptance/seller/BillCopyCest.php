@@ -8,57 +8,53 @@ use hipanel\tests\_support\Page\IndexPage;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 use hipanel\modules\finance\tests\_support\Page\bill\Create;
 use hipanel\modules\finance\tests\_support\Page\bill\Index;
+use hipanel\modules\finance\tests\_support\Page\bill\Copy;
 
 class BillCopyCest
 {
-    private string $copyId;
+    public string $billId;
 
-    /**
-     * @var Create
-     */
-    private $create;
+    private Create $createPage;
+    private IndexPage $indexPage;
+    private Copy $copyPage;
 
     public function _before(Seller $I)
     {
-        $this->create = new Create($I);
+        $this->createPage = new Create($I);
+        $this->indexPage = new IndexPage($I);
+        $this->copyPage = new Copy($I);
     }
+
     /**
      * @dataProvider provideDataBill
      */
-     public function ensureICanCreateAndCopyBillWithoutCharges(Seller $I, Example $example)
+     public function ensureICanCreateAndCopyBillWithoutCharges(Seller $I, Example $example): void
     {
         $I->login();
-        $this->create->createAndCopyBill(iterator_to_array($example->getIterator()));
+        $this->createPage->createBill(iterator_to_array($example->getIterator()));
     } 
     
     /**
      * @dataProvider provideDataBillWithCharge
      */
-    public function createAndCopyBillWithCharges(Seller $I, Example $example)
+    public function createAndCopyBillWithCharges(Seller $I, Example $example): void
     {
         $exampleArray = iterator_to_array($example->getIterator());
 
-        $this->copyId = $this->create->createAndCopyBill($exampleArray);
+        $billId = $this->createPage->createBill($exampleArray);
+
+        $this->copyPage->copyBill($billId);
+        $exampleArray['id'] = $billId;
+        $this->ensurePreviousBillDidntChange($I, $exampleArray);
     }
 
-    /**
-     * @dataProvider provideDataBillWithCharge
-     */
-    public function ensureCopiedBillWithChargesIsCorrect(Seller $I, Example $example)
+    private function ensurePreviousBillDidntChange(Seller $I, array $dataBill): void 
     {
-        $billId = --$this->copyId;
-
-        $exampleArray = iterator_to_array($example->getIterator());
-        $this->ensurePreviousBillDidntChange($I, $billId, $exampleArray['charges']);
-    }
-
-    private function ensurePreviousBillDidntChange(Seller $I, $id, $dataBill): void 
-    {
-        $indexPage = new IndexPage($I);
-        $I->needPage(Url::to('@bill/view?id=' . $id));
-        $result = array_intersect_key($dataBill['charge2'], array_flip(['objectId', 'type']));
-        $result[] = '$' . $dataBill['charge2']['sum'];
-        $indexPage->gridView->ensureBillViewContainData($result);
+        
+        $I->needPage(Url::to('@bill/view?id=' . $dataBill['id']));
+        $result = array_intersect_key($dataBill['charges']['charge2'], array_flip(['objectId', 'type']));
+        $result[] = '$' . $dataBill['charges']['charge2']['sum'];
+        $this->indexPage->gridView->ensureBillViewContainData($result);
     }
 
     private function provideDataBill(): array
@@ -98,7 +94,7 @@ class BillCopyCest
                         'sum'      => 56,
                         'quantity' => '1',
                     ],
-                ]
+                ],
             ],
         ];
     }

@@ -179,7 +179,7 @@ JS
         return $id;
     }
 
-    public function createAndCopyBill($billData)
+    public function createBill($billData): ?string
     {
         $I = $this->tester;
         $copyPage = new Copy($I);
@@ -195,8 +195,6 @@ JS
         }
         
         $I->pressButton('Save');
-        $billId = $this->seeActionSuccess();
-        $copyPage->copyBill($billId);
         return $this->seeActionSuccess();
     }
 
@@ -233,7 +231,7 @@ JS
         $this->tester->click('Toggle sign');
     }
 
-    private function grabBillIdFromUrl()
+    private function grabBillIdFromUrl(): ?string
     {
         $I = $this->tester;
         return $I->grabFromCurrentUrl('~id_in%5B0%5D=(\d+)~');
