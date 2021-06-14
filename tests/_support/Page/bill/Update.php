@@ -27,20 +27,7 @@ class Update extends Create
         return null;
     }
 
-    public function addChargeInBillById($billId, array $charge): array
-    {
-        $I = $this->tester;
-
-        $I->needPage(Url::to("@bill/update?id=$billId"));
-        $this->addCharge($charge);
-        $chargesSum = $this->getChargesTotalSum();
-        $this->setBillTotalSum(-$chargesSum);
-        $I->pressButton('Save');
-        $I->waitForElement("//th[contains(text(),'Negative')]");
-        return $this->getDataForViewCheck($charge);
-    }
-
-    public function openBillUpdateById($billId): void
+    public function openBillUpdateById(string $billId): void
     {
         $this->tester->needPage(Url::to("@bill/update?id=$billId"));
     }

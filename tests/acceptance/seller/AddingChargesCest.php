@@ -28,7 +28,6 @@ class AddingChargesCest
         $I->pressButton('Save');
         $billId = $createPage->seeActionSuccess();
 
-
         $updatePage->openBillUpdateById($billId);
         $createPage->addCharges( $exampleArray['charges']);
         $viewData = $createPage->getDataForViewCheck($exampleArray['charges']);
