@@ -12,8 +12,6 @@ use hipanel\modules\finance\tests\_support\Page\bill\Copy;
 
 class BillCopyCest
 {
-    public string $billId;
-
     private Create $createPage;
     private IndexPage $indexPage;
     private Copy $copyPage;
