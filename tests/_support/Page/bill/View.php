@@ -11,11 +11,22 @@
 namespace hipanel\modules\finance\tests\_support\Page\bill;
 
 use hipanel\tests\_support\Page\Authenticated;
+use hipanel\tests\_support\AcceptanceTester;
 use hipanel\tests\_support\Page\Widget\Grid;
 use hipanel\helpers\Url;
 
 class View extends Authenticated
 {
+    public Grid $gridView;
+    protected string $gridSelector = "//form[contains(@id, 'bulk') and contains(@id, 'search')]";
+
+    public function __construct(AcceptanceTester $I, string $gridSelector = null)
+    {
+        parent::__construct($I);
+
+        $this->gridView = new Grid($I, $gridSelector ?? $this->gridSelector);
+    }
+
     public function viewBillById(string $billId): void
     {
         $this->tester->needPage(Url::to("@bill/view?id=$billId"));
@@ -23,9 +34,6 @@ class View extends Authenticated
 
     public function ensureChargeViewContainsData(array $chargeData): void
     {
-        $I = $this->tester;
-
-        $gridView = new Grid($I);
-        $gridView->containsDataInTable($chargeData);
+        $this->gridView->containsDataInTable($chargeData);
     }
 }
