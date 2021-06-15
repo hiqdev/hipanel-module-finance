@@ -28,6 +28,7 @@ return [
         '@tariffprofile' => '/finance/tariff-profile',
         '@requisite' => '/finance/requisite',
         '@target' => '/finance/target',
+        '@target-resource' => '/finance/targetresource',
     ],
     'modules' => [
         'finance' => [

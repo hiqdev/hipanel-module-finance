@@ -14,6 +14,8 @@ use hipanel\tests\_support\Page\Authenticated;
 use hipanel\tests\_support\Page\Widget\Input\Dropdown;
 use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
+use hipanel\modules\finance\tests\_support\Page\bill\Copy;
+use hipanel\tests\_support\Helper\PressButtonHelper;
 use hipanel\helpers\Url;
 
 class Create extends Authenticated
@@ -82,7 +84,7 @@ class Create extends Authenticated
 
         $base = 'div.bill-charges>div:last-child ';
 
-        (new Dropdown($I, "//select[@id='charge-0-1-class']"))->setValue($chargeData['class']);
+        (new Dropdown($I, $base . "select[id*=class]"))->setValue($chargeData['class']);
 
         $objectIdSelector = $base . 'div[class=row] select[id*=object_id]';
         (new Select2($I, $objectIdSelector))->setValue($chargeData['objectId']);
@@ -106,6 +108,14 @@ class Create extends Authenticated
     {
         $selector = 'div.bill-charges div[class*=input-row]';
         $this->tester->seeNumberOfElements($selector, $n);
+    }
+
+    public function getChargesAmount(): array
+    {
+        $I = $this->tester;
+        $selector = 'div.bill-charges div[class*=input-row]';
+
+        return $I->grabMultiple($selector);        
     }
 
     /**
@@ -145,11 +155,12 @@ JS
     public function deleteBillById($billId): void 
     {
         $I = $this->tester;
+
         $url = Url::to('@bill/view?id=' . $billId);
         $I->amOnPage($url);
         $I->see('Description');
         $I->see('Bill not paid');
-        $I->click('Are you sure you want to delete this item?');
+        $I->clickLink('Delete');
         $I->acceptPopup();
         $I->closeNotification('Payment was deleted successfully');
     }
@@ -166,7 +177,7 @@ JS
         $I->closeNotification('Bill was created successfully');
         $I->seeInCurrentUrl('/finance/bill?id');
 
-        return $I->grabFromCurrentUrl('~id_in%5B0%5D=(\d+)~');
+        return $this->grabBillIdFromUrl();
     }
 
     /**
@@ -200,5 +211,11 @@ JS
     public function clickToggleSign(): void 
     {
         $this->tester->click('Toggle sign');
+    }
+
+    private function grabBillIdFromUrl(): ?string
+    {
+        $I = $this->tester;
+        return $I->grabFromCurrentUrl('~id_in%5B0%5D=(\d+)~');
     }
 }

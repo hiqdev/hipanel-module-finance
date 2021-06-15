@@ -81,7 +81,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     ],
                     'target-resources' => [
                         'label'   => Yii::t('hipanel:finance', 'Target resources'),
-                        'url'     => ['@target/resource-list'],
+                        'url'     => ['@target-resource/index'],
                         'visible' => $user->can('plan.read'),
                     ],
                 ],
