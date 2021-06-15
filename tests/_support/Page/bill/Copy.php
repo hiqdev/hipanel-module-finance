@@ -12,7 +12,6 @@ class Copy extends Authenticated
         $I = $this->tester;
         
         $I->needPage(Url::to('@bill/copy?id=' . $billId));
-        $I->wait(5);
         $I->pressButton('Save');
     }
 }
