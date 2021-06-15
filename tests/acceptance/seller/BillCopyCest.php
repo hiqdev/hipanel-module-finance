@@ -45,7 +45,7 @@ class BillCopyCest
         $this->indexPage->gridView->ensureBillViewContainData($result);
     }
 
-    private function createBill(Seller $I, $billData): ?string
+    private function createBill(Seller $I, array $billData): ?string
     {
         $I->needPage(Url::to('@bill/create'));
         $this->createPage->fillMainBillFields($billData);

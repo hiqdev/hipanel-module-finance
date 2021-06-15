@@ -14,7 +14,6 @@ class Index extends hipanel\tests\_support\Page\IndexPage
         $I->closeNotification('Bill was updated successfully');
         $I->seeInCurrentUrl('/finance/bill?id');
 
-        $id = $this->grabBillIdFromUrl();
-        return $id;
+        return $this->grabBillIdFromUrl();
     }
 }

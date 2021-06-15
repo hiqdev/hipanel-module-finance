@@ -7,7 +7,7 @@ use hipanel\helpers\Url;
 
 class Copy extends Authenticated
 {
-    public function copyBill($billId): void
+    public function copyBill(string $billId): void
     {
         $I = $this->tester;
         
