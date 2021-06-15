@@ -24,7 +24,7 @@ class View extends Authenticated
     {
         parent::__construct($I);
 
-        $this->gridView = new Grid($I, $gridSelector ?? $this->gridSelector);
+        $this->gridView = new Grid($I, $this->gridSelector);
     }
 
     public function viewBillById(string $billId): void
