@@ -45,6 +45,7 @@ return [
     'Amount' => 'Сумма',
     'Currency' => 'Валюта',
     'Quantity' => 'Количество',
+    'Qty.' => 'К-во.',
     'Date' => 'Дата',
     'Label' => 'Описание',
     'Create payment' => 'Создать платеж',
