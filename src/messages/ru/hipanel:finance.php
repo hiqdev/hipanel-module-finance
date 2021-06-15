@@ -23,6 +23,11 @@ return [
     'Servers' => 'Сервера',
     'Charges' => 'Списания',
     'Toggle sign' => 'Переключить знак',
+    'Opening balance' => 'Начальный баланс',
+    'Closing balance' => 'Конечный балланс',
+    'Positive' => 'Позитивный',
+    'Negative' => 'Негативный',
+    'Total' => 'Всего',
 
     '<b>{currency}</b> account' => '<b>{currency}</b> счёт',
     'Are you sure you want to update invoice?' => 'Вы уверены что хотите обновить инвойс',
@@ -256,4 +261,5 @@ return [
     'Debit: {b}' => 'Дебет: {b}',
     'Credit: {b}' => 'Кредит: {b}',
     'Balance: {b}' => 'Баланс: {b}',
+    'Show deleted' => 'Отображать удаленные',
 ];

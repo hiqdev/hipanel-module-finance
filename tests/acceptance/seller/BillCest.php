@@ -14,6 +14,7 @@ use hipanel\helpers\Url;
 use hipanel\tests\_support\Page\IndexPage;
 use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
+use hipanel\tests\_support\Page\Widget\Input\Dropdown;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 
 class BillCest
@@ -36,9 +37,16 @@ class BillCest
         $I->seeLink('Recharge account', Url::to('@pay/deposit'));
         $I->seeLink('Add payment', Url::to('@bill/create'));
         $I->seeLink('Currency exchange', Url::to('@bill/create-exchange'));
-        $I->seeLink('Import payments', Url::to('@bill/import'));
+        $this->ensureImportPaymentsContainsData($I);
         $this->ensureICanSeeAdvancedSearchBox($I);
         $this->ensureICanSeeBulkBillSearchBox();
+    }
+
+    private function ensureImportPaymentsContainsData(Seller $I)
+    {
+        $I->click("//a[contains(text(), 'Import payments')]");
+        $I->seeLink('Import payments', Url::to('@finance/bill/import'));
+        $I->seeLink('Import from a file');
     }
 
     private function ensureICanSeeAdvancedSearchBox(Seller $I)
