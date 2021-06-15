@@ -161,7 +161,7 @@ JS
         $I->amOnPage($url);
         $I->see('Description');
         $I->see('Bill not paid');
-        $this->helper->click('Delete');
+        $this->helper->clickLink('Delete');
         $I->acceptPopup();
         $I->closeNotification('Payment was deleted successfully');
     }
