@@ -20,7 +20,7 @@ class View extends Authenticated
     public Grid $gridView;
     protected string $gridSelector = "//form[contains(@id, 'bulk') and contains(@id, 'search')]";
 
-    public function __construct(AcceptanceTester $I, string $gridSelector = null)
+    public function __construct(AcceptanceTester $I)
     {
         parent::__construct($I);
 
