@@ -69,7 +69,7 @@ class Charge extends Resource
         return array_merge(parent::attributeLabels(), [
             'sum' => Yii::t('hipanel', 'Sum'),
             'type' => Yii::t('hipanel', 'Type'),
-            'quantity' => Yii::t('hipanel', 'Quantity'),
+            'quantity' => Yii::t('hipanel:finance', 'Qty.'),
             'label' => Yii::t('hipanel', 'Description'),
             'time' => Yii::t('hipanel', 'Time'),
             'object_id' => Yii::t('hipanel', 'Object Id'),
