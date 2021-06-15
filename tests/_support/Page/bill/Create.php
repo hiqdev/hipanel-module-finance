@@ -178,8 +178,7 @@ JS
         $I->closeNotification('Bill was created successfully');
         $I->seeInCurrentUrl('/finance/bill?id');
 
-        $id = $this->grabBillIdFromUrl();
-        return $id;
+        return $this->grabBillIdFromUrl();
     }
 
     /**
@@ -219,13 +218,5 @@ JS
     {
         $I = $this->tester;
         return $I->grabFromCurrentUrl('~id_in%5B0%5D=(\d+)~');
-    }
-
-    public function getAndSetBillTotalSum(): int 
-    {
-        $sum = $this->getChargesTotalSum();
-        $this->setBillTotalSum($this->getChargesTotalSum());
-        
-        return $sum;
     }
 }

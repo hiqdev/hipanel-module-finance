@@ -24,15 +24,6 @@ class BillCopyCest
     }
 
     /**
-     * @dataProvider provideDataBill
-     */
-     public function ensureICanCreateAndCopyBillWithoutCharges(Seller $I, Example $example): void
-    {
-        $I->login();
-        $this->createBill($I, iterator_to_array($example->getIterator()));
-    } 
-    
-    /**
      * @dataProvider provideDataBillWithCharge
      */
     public function createAndCopyBillWithCharges(Seller $I, Example $example): void
@@ -48,7 +39,6 @@ class BillCopyCest
 
     private function ensurePreviousBillDidntChange(Seller $I, array $dataBill): void 
     {
-        
         $I->needPage(Url::to('@bill/view?id=' . $dataBill['id']));
         $result = array_intersect_key($dataBill['charges']['charge2'], array_flip(['objectId', 'type']));
         $result[] = '$' . $dataBill['charges']['charge2']['sum'];
@@ -57,7 +47,6 @@ class BillCopyCest
 
     private function createBill(Seller $I, $billData): ?string
     {
-
         $I->needPage(Url::to('@bill/create'));
         $this->createPage->fillMainBillFields($billData);
         if (isset($billData['charges'])) {
@@ -66,19 +55,6 @@ class BillCopyCest
 
         $I->pressButton('Save');
         return $this->createPage->seeActionSuccess();
-    }
-
-    private function provideDataBill(): array
-    {
-        return [
-            'bill' => [
-                'login'     => 'hipanel_test_user',
-                'type'      => 'HDD',
-                'currency'  => '$',
-                'sum'       =>  -44,
-                'quantity'  =>  1,
-            ],
-        ];
     }
 
     private function provideDataBillWithCharge(): array
