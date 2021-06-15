@@ -15,6 +15,7 @@ use hipanel\tests\_support\Page\Widget\Input\Dropdown;
 use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\modules\finance\tests\_support\Page\bill\Copy;
+use hipanel\tests\_support\Helper\ClickLinkHelper;
 use hipanel\helpers\Url;
 
 class Create extends Authenticated
@@ -153,12 +154,14 @@ JS
     }
     public function deleteBillById($billId): void 
     {
+        $helper = new ClickLinkHelper($I);
         $I = $this->tester;
+
         $url = Url::to('@bill/view?id=' . $billId);
         $I->amOnPage($url);
         $I->see('Description');
         $I->see('Bill not paid');
-        $I->click('//a[@data-confirm="Are you sure you want to delete this item?"]');
+        $this->helper->click('Delete');
         $I->acceptPopup();
         $I->closeNotification('Payment was deleted successfully');
     }
