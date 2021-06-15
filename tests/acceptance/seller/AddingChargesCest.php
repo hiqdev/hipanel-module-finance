@@ -29,14 +29,23 @@ class AddingChargesCest
         $billId = $createPage->seeActionSuccess();
 
         $updatePage->openBillUpdateById($billId);
-        $createPage->addCharges( $exampleArray['charges']);
-        $viewData = $createPage->getDataForViewCheck($exampleArray['charges']);
+        $createPage->addCharges($exampleArray['charges']);
+        $viewData = $this->getDataForViewCheck($exampleArray['charges']);
         $I->click('Save');
         
         $viewPage->viewBillById($billId);
         foreach ($viewData as $key => $charge) {
             $viewPage->ensureChargeViewContainsData($charge);
         }
+    }
+
+    private function getDataForViewCheck(array $chargeData): array
+    {
+        foreach ($chargeData as $key => $billData) {
+            $viewData[] = array_intersect_key($chargeData, array_flip(['objectId', 'type', 'sum']));
+        }
+
+        return $viewData;
     }
 
     private function provideBillData(): array

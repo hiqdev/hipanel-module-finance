@@ -10,26 +10,31 @@
 
 namespace hipanel\modules\finance\tests\_support\Page\bill;
 
+use hipanel\tests\_support\Page\IndexPage;
 use hipanel\helpers\Url;
 
 class View extends Create
 {
+
+
     public function viewBillById(string $billId): void
     {
         $this->tester->needPage(Url::to("@bill/view?id=$billId"));
     }
 
-    public function ensureBillViewContainsData(array $elements): void
+    public function ensureBillViewContainsData(array $billData): void
     {
-        foreach ($elements as $tableContent) {
-            $this->tester->see($tableContent, "//div[@class='box']//table");
-        }
+        $I = $this->tester;
+
+        $indexPage = new IndexPage($I);
+        $indexPage->gridView->BillViewContainsData($billData);
     }
 
     public function ensureChargeViewContainsData(array $chargeData): void
     {
-        foreach ($chargeData as $key => $billData) {
-                $this->tester->see($billData, '//div[@class="table-responsive"]//tr');
-        }
+        $I = $this->tester;
+
+        $indexPage = new IndexPage($I);
+        $indexPage->gridView->BillViewContainsData($chargeData);
     }
 }

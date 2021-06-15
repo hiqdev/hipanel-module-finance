@@ -201,13 +201,4 @@ JS
     {
         $this->tester->click('Toggle sign');
     }
-
-    public function getDataForViewCheck($chargeData): array
-    {
-        foreach ($chargeData as $key => $billData) {
-            $viewData[] = array_intersect_key($chargeData, array_flip(['objectId', 'type', 'sum']));
-        }
-         
-        return $viewData;
-    }
 }
