@@ -15,8 +15,6 @@ use hipanel\helpers\Url;
 
 class View extends Create
 {
-
-
     public function viewBillById(string $billId): void
     {
         $this->tester->needPage(Url::to("@bill/view?id=$billId"));
