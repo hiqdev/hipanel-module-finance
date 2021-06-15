@@ -10,6 +10,8 @@
 
 namespace hipanel\modules\finance\tests\_support\Page\bill;
 
+use hipanel\helpers\Url;
+
 class Update extends Create
 {
     /**
@@ -23,5 +25,10 @@ class Update extends Create
         $I->seeInCurrentUrl('/finance/bill?id');
 
         return null;
+    }
+
+    public function openBillUpdateById(string $billId): void
+    {
+        $this->tester->needPage(Url::to("@bill/update?id=$billId"));
     }
 }
