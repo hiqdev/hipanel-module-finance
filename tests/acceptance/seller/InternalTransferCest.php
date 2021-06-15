@@ -25,6 +25,8 @@ class InternalTransferCest
     }
 
     /**
+     * IMPORTANT: this bill is needed because transfer can not be created when client has low balance
+     * TODO: remove bill creation when transfer rules will be changed
      * @dataProvider provideTransferData
      */
     public function rechargeAccount(Seller $I, Example $example): void
