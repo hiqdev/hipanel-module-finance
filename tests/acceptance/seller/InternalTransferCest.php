@@ -13,9 +13,9 @@ use hipanel\modules\finance\tests\_support\Page\transfer\Index;
 
 class InternalTransferCest
 {
-    private $transferCreate;
-    private $billCreate;
-    private $index;
+    private TransferCreate $transferCreate;
+    private BillCreate $billCreate;
+    private Index $index;
 
     public function _before(Seller $I): void
     {
@@ -33,7 +33,6 @@ class InternalTransferCest
         $this->billCreate->fillMainBillFields($example['bill']);
         $I->pressButton('Save');
         $this->billCreate->seeActionSuccess();
-        $I->wait(3);
     }
 
     /**

@@ -22,8 +22,7 @@ class Create extends Authenticated
     
     public function containsBlankFieldsError(): void
     {
-        $fieldsList = $this->getTransferFormFields();
-        foreach ($fieldsList['fields'] as $field) {
+        foreach ($this->getTransferFormFields() as $field) {
             $this->tester->waitForText("$field cannot be blank.");
         }
     }
@@ -31,12 +30,10 @@ class Create extends Authenticated
     protected function getTransferFormFields(): array
     {
         return [
-            'fields' => [
-                'Sum',
-                'Client',
-                'Receiver ID',
-                'Currency',
-            ],
+            'Sum',
+            'Client',
+            'Receiver ID',
+            'Currency',
         ];
     }
 }
