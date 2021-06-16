@@ -32,7 +32,9 @@ use hipanel\widgets\RefCombo;
                             'data' => $models,
                             'visibleCount' => count($models),
                             'formatter' => static function ($model) {
-                                return "{$model->email} / {$model->name}";
+                                $email = Html::encode($model->email);
+                                $name = Html::encode($model->name);
+                                return "{$email} / {$name}";
                             },
                             'delimiter' => ',&nbsp; ',
                         ]); ?>

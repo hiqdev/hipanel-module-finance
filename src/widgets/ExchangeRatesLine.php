@@ -35,7 +35,7 @@ class ExchangeRatesLine extends Widget
 
     public function run()
     {
-        if (!Yii::$app->user->can('manage') || empty($this->rates)) {
+        if (!Yii::$app->user->can('bill.create-exchange') || empty($this->rates)) {
             return '';
         }
 
@@ -72,7 +72,7 @@ class ExchangeRatesLine extends Widget
             ],
             'hiddenDelimiter' => '<br />',
             'formatter' => function (ExchangeRate $model) {
-                return Html::tag('span', $model->pairCode(), ['style' => 'font-weight: 400']) . ': ' . $model->rate;
+                return Html::tag('span', Html::encode($model->pairCode()), ['style' => 'font-weight: 400']) . ': ' . Html::encode($model->rate);
             },
         ]), ['style' => 'padding-left: 20px; color: #737272;']);
     }

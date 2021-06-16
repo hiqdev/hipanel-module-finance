@@ -21,8 +21,8 @@ class SupportTimeQuantity extends DefaultQuantityFormatter
 {
     public function format(): string
     {
-        return Yii::t('hipanel:finance', '{quantity, time, HH:mm} hour(s)', [
-            'quantity' => ceil($this->getQuantity()->getQuantity() * 3600),
+        return Yii::t('hipanel:finance', '{quantity} hour(s)', [
+            'quantity' => ceil($this->getQuantity()->getQuantity()),
         ]);
     }
 }

@@ -65,7 +65,7 @@ class PricePresenter
             $formula = ArraySpoiler::widget([
                 'data' => $activeFormulas,
                 'formatter' => function ($v) {
-                    return Html::tag('kbd', $v['formula'], ['class' => 'javascript']);
+                    return Html::tag('kbd', Html::encode($v['formula']), ['class' => 'javascript']);
                 },
                 'visibleCount' => 0,
                 'delimiter' => '<br />',

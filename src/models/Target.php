@@ -19,6 +19,7 @@ class Target extends Model
         return [
             [['id', 'type_id', 'state_id', 'client_id', 'access_id', 'tariff_id'], 'integer'],
             [['type', 'state', 'client', 'name', 'tariff'], 'string'],
+            [['show_deleted'], 'boolean'],
         ];
     }
 
@@ -27,6 +28,13 @@ class Target extends Model
         return array_filter([
             'anycastcdn' => Yii::t('hipanel:finance', 'AnycastCDN'),
             'videocdn' => Yii::t('hipanel:finance', 'VideoCDN'),
+        ]);
+    }
+
+    public function attributeLabels(): array
+    {
+        return array_merge(parent::attributeLabels(), [
+            'show_deleted' => Yii::t('hipanel:finance', 'Show deleted'),
         ]);
     }
 }

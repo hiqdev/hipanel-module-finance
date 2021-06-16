@@ -59,7 +59,11 @@ use yii\web\View;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('type_in')->widget(MultipleBillTypeCombo::class, compact('billTypes', 'billGroupLabels')) ?>
+    <?= $search->field('type_in')->widget(MultipleBillTypeCombo::class, [
+        'billTypes' => $billTypes,
+        'billGroupLabels' => $billGroupLabels,
+        'isFlatList' => true,
+    ]) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">

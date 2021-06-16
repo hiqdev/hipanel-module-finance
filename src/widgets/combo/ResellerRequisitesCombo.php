@@ -34,8 +34,8 @@ class ResellerRequisitesCombo extends Combo
                         return data.text;
                     }
 
-                    var name = data.name.replace(/(<([^>]+)>)/ig,'');
-                    var organization = data.organization.replace(/(<([^>]+)>)/ig,'');
+                    var name = $('<div>').text(data.name).html();
+                    var organization = $('<div>').text(data.organization).html();
                     return '<b>' + name + '</b><br>' + organization;
                 }"),
                 'escapeMarkup' => new JsExpression('function (markup) {

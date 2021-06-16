@@ -9,7 +9,6 @@ use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\models\stub\ClientRelationFreeStub;
 use hipanel\modules\finance\actions\ResourceDetailAction;
 use hipanel\modules\finance\actions\ResourceFetchDataAction;
-use hipanel\modules\finance\actions\ResourceListAction;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\models\TargetSearch;
@@ -38,12 +37,6 @@ class TargetController extends CrudController
             'fetch-resources' => [
                 'class' => ResourceFetchDataAction::class,
                 'configurator' => Yii::$container->get('target-resource-config'),
-            ],
-            'resource-list' => [
-                'class' => ResourceListAction::class,
-                'model' => Target::class,
-                'searchModel' => TargetSearch::class,
-                'view' => 'resources/targets',
             ],
             'resource-detail' => [
                 'class' => ResourceDetailAction::class,
