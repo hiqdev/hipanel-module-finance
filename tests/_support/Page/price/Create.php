@@ -46,6 +46,22 @@ class Create extends View
         $I->waitForElement('#create-prices');
     }
 
+
+    public function createSharedPrice(array $priceData)
+    {
+        $I = $this->tester;
+        
+        $I->click("//div/a[contains(text(), 'Create price')]");
+        $I->click("//li/a[contains(text(), 'Create shared price')]");
+        $I->waitForElement('#template_plan_id');
+        (new Select2($this->tester, '#template_plan_id'))
+            ->setValueLike($priceData['plan']);
+        (new Select2($this->tester, '#type'))
+            ->setValueLike($priceData['type']);
+        $I->click("//button[contains(text(), 'Proceed to creation')]");
+
+    }
+
     public function chooseObject(string $objectName): void
     {
         (new Select2($this->tester, '#object_id'))

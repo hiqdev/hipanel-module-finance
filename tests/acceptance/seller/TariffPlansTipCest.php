@@ -8,8 +8,8 @@ use hipanel\tests\_support\Page\IndexPage;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
-use hipanel\modules\finance\tests\_support\Page\plan\Create;
-use hipanel\modules\finance\tests\_support\Page\plan\Update;
+use hipanel\modules\finance\tests\_support\Page\plan\Create as planCreate;
+use hipanel\modules\finance\tests\_support\Page\price\Create as priceCreate;
 
 class TariffPlansTipCest
 {
@@ -21,31 +21,39 @@ class TariffPlansTipCest
         $I->login();
         $I->needPage(Url::to('@plan/create'));
         $id = $this->ensureICanCreateNewTariff($I, $example['plan']);
-        $this->ensureTipsAreCorrect($I, $id, $example);
+        $this->ensureTipsAreCorrect($I, $id, $example['price']);
     }
 
-    private function ensureICanCreateNewTariff(Seller $I, $tariffData): int
+    private function ensureICanCreateNewTariff(Seller $I, array $tariffData): int
     {
-        $page = new Create($I);
-        return $page->fillPlanMainFields($tariffData);
+        $page = new planCreate($I, $tariffData);
+        return $page->createPlan();
 
     }
 
-    private function ensureTipsAreCorrect(Seller $I, $id, $priceData): void
+    private function ensureTipsAreCorrect(Seller $I, string $id, array $priceData): void
     {
-        $page = new Create($I);
-        $update = new Update($I);
-        $currency = $page->getCurrencyList();
+        $pricePage = new priceCreate($I, 0);
+        $planPage = new planCreate($I);
+        $currency = $planPage->getCurrencyList();
 
         foreach($currency as $key => $currentCurrency)
         {
-            $update->updatePlanWithNewCurrency($currentCurrency, $id);
+            $this->updatePlanWithNewCurrency($I, $currentCurrency, $id);
             $I->waitForText('Create prices', 10);
-            $page->createSharedPrice($priceData['price']);
+            $pricePage->createSharedPrice($priceData);
             $I->waitForElement("div[class*='0'] button[class*='formula-help']");
             $I->click("div[class*='0'] button[class*='formula-help']");
             $I->waitForText($currentCurrency);
         }
+    }
+
+    private function updatePlanWithNewCurrency(Seller $I, string $currency, string $id): void
+    {
+        $I->needPage(Url::to('@plan/update?id='. $id));
+        (new Select2($I, '#plan-currency'))
+            ->setValueLike($currency);
+        $I->click('Save');
     }
     
     protected function getTariffData(): array
@@ -53,8 +61,11 @@ class TariffPlansTipCest
         return [
             'tariff' => [
                 'plan' => [
+                    'name'     => uniqid(),
                     'type'     => 'Server tariff',
+                    'client'   => 'hipanel_test_reseller',
                     'currency' => 'USD',
+                    'note'     => 'note #' . uniqid(),
                 ],
                 'price' => [
                     'plan' => 'TEST-CONFIG-NL',

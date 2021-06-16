@@ -88,21 +88,6 @@ class Create extends Plan
         $I->fillField(['name' => 'Plan[note]'], $this->note);
     }
 
-    public function fillPlanMainFields(array $partData): int
-    {
-        $I = $this->tester;
-        $I->fillField(['name' => 'Plan[name]'], uniqid());
-
-        (new Dropdown($this->tester, "//select[@id='plan-type']"))
-            ->setValue($partData['type']);
-
-        (new Select2($this->tester, '#plan-currency'))
-            ->setValueLike($partData['currency']);
-
-        $this->savePlan();
-        return  $this->id;
-    }
-
     public function seeFields()
     {
         $this->loadPage();
@@ -110,20 +95,7 @@ class Create extends Plan
         $this->seeTypeDropdownList();
         $this->seeCurrencyDropdownList();
     }
-
-    public function createSharedPrice($priceData)
-    {
-        $I = $this->tester;
-        $I->click("//a[contains(text(), 'Create price')]");
-        $I->click("//a[contains(text(), 'Create shared price')]");
-        $I->waitForElement('#template_plan_id');
-        (new Select2($this->tester, '#template_plan_id'))
-            ->setValueLike($priceData['plan']);
-        (new Select2($this->tester, '#type'))
-            ->setValueLike($priceData['type']);
-        $I->click("//button[contains(text(), 'Proceed to creation')]");
-
-    }
+    
     private function seeLabels()
     {
         $I = $this->tester;
