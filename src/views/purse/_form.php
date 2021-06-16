@@ -36,7 +36,7 @@ $form = ActiveForm::begin([
                                 <button type="button" class="btn btn-box-tool add-item"><i class="fa fa-plus"></i></button>
                             </div>
                         <?php else: ?>
-                            <h3 class="box-title"><?= $model->client ?> <?= $model->currency ?></h3>
+                            <h3 class="box-title"><?= Html::encode($model->client) ?> <?= Html::encode($model->currency) ?></h3>
                         <?php endif ?>
                     </div>
                     <div class="box-body">
