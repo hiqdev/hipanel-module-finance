@@ -6,7 +6,6 @@ use hipanel\helpers\Url;
 use Codeception\Example;
 use hipanel\tests\_support\Page\IndexPage;
 use hipanel\tests\_support\Step\Acceptance\Seller;
-use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\modules\finance\tests\_support\Page\plan\Create as PlanCreate;
 use hipanel\modules\finance\tests\_support\Page\price\Create as PriceCreate;
@@ -28,7 +27,6 @@ class TariffPlansTipCest
     {
         $page = new PlanCreate($I, $tariffData);
         return $page->createPlan();
-
     }
 
     private function ensureTipsAreCorrect(Seller $I, string $id, array $priceData): void
