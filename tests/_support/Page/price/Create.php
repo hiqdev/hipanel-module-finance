@@ -58,7 +58,7 @@ class Create extends View
             ->setValueLike($priceData['plan']);
         (new Select2($this->tester, '#type'))
             ->setValueLike($priceData['type']);
-        $I->click("//button[contains(text(), 'Proceed to creation')]");
+        $this->proceedToCreation();
 
     }
 
