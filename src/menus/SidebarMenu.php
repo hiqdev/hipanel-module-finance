@@ -52,7 +52,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     'purse' => [
                         'label'   => Yii::t('hipanel:finance', 'Purses'),
                         'url'     => ['/finance/purse/index'],
-                        'visible' => $user->can('purse.read') || $user->can('purse.update'),
+                        'visible' => $user->can('purse.read'),
                     ],
                     'generate' => [
                         'label'   => Yii::t('hipanel:finance', 'Generate documents'),
