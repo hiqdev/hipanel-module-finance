@@ -95,7 +95,7 @@ class Create extends Plan
         $this->seeTypeDropdownList();
         $this->seeCurrencyDropdownList();
     }
-    
+
     private function seeLabels()
     {
         $I = $this->tester;
