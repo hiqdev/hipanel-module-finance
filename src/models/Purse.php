@@ -14,6 +14,7 @@ use hipanel\models\File;
 use hipanel\modules\client\models\Client;
 use hipanel\modules\client\models\Contact;
 use hipanel\modules\document\models\Document;
+use hipanel\models\Ref;
 use Yii;
 
 /**
@@ -181,5 +182,10 @@ class Purse extends \hipanel\base\Model
     public function getBudget(): float
     {
         return (float)$this->balance + (float)$this->credit;
+    }
+
+    public static function getCurrencyOptions(): array
+    {
+        return Ref::getList('type,currency');
     }
 }

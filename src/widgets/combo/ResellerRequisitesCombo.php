@@ -6,7 +6,7 @@ namespace hipanel\modules\finance\widgets\combo;
 use hiqdev\combo\Combo;
 use yii\web\JsExpression;
 
-class RequisitesCombo extends Combo
+class ResellerRequisitesCombo extends Combo
 {
     /** {@inheritdoc} */
     public $type = 'finance/requisite';
@@ -42,6 +42,10 @@ class RequisitesCombo extends Combo
                     return markup; // Allows HTML
                 }'),
             ],
+            'clearWhen' => ['client/seller'],
+            'affects'   => [
+                'client/seller' => 'client',
+            ],
         ]);
     }
 
@@ -49,7 +53,7 @@ class RequisitesCombo extends Combo
     public function getFilter()
     {
         return \hipanel\helpers\ArrayHelper::merge(parent::getFilter(), [
-            'client' => 'client/client',
+            'client' => 'client/seller',
         ]);
     }
 }

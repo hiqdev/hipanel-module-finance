@@ -93,7 +93,13 @@ class RequisiteGridView extends ContactGridView
             'name' => [
                 'class' => MainColumn::class,
                 'filterAttribute' => 'name_ilike',
-                'extraAttribute' => 'organization',
+                'format' => 'raw',
+                'value' => function($model) {
+                    return Html::a(Html::encode($model->name), ['view', 'id' => $model->id])
+                        . "<br>"
+                        . Html::encode($model->organization);
+                }
+                //'extraAttribute' => 'organization',
             ],
             'serie' => [
                 'class' => XEditableColumn::class,

@@ -14,6 +14,7 @@ use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
+use hipanel\actions\SmartCreateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\filters\EasyAccessControl;
@@ -47,6 +48,9 @@ class PurseController extends \hipanel\base\CrudController
             ],
             'view' => [
                 'class' => ViewAction::class,
+            ],
+            'create' => [
+                'class' => SmartCreateAction::class,
             ],
             'update' => [
                 'class' => SmartUpdateAction::class,
