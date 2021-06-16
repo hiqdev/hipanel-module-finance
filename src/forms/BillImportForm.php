@@ -42,6 +42,7 @@ final class BillImportForm extends \yii\base\Model
 
     const BILL_FIELD_COUNT_WITHOUT_REQUISITE = 6;
     const BILL_FIELD_COUNT_WITH_REQUISITE = 7;
+    const BILL_DEFAULT_QUANTITY = 1;
     /**
      * @var string
      */
@@ -121,6 +122,7 @@ final class BillImportForm extends \yii\base\Model
                 } else {
                     [$client, $time, $sum, $currency, $type, $label, $requisite] = $splitted;
                 }
+                $quantity = self::BILL_DEFAULT_QUANTITY;
                 $bill->setAttributes(compact('client', 'time', 'sum', 'currency', 'type', 'label', 'quantity', 'requisite'));
                 $bill->populateRelation('charges', []);
                 $bills[] = $bill;
