@@ -68,15 +68,15 @@ class BillCopyCest
                 'quantity'  =>  1,
                 'charges'   => [
                     'charge1'    => [
-                        'class'    => 'Domain zone',
-                        'objectId' => 'army',
+                        'class'    => 'Client',
+                        'objectId' => 'hipanel_test_user1',
                         'type'     => 'Common',
                         'sum'      => 712.80,
                         'quantity' => '1',
                     ],
                     'charge2'      =>[
-                        'class'    => 'Domain',
-                        'objectId' => 'bladeroot.net',
+                        'class'    => 'Client',
+                        'objectId' => 'hipanel_test_user2',
                         'type'     => 'PayPal',
                         'sum'      => 49.90,
                         'quantity' => '1',
