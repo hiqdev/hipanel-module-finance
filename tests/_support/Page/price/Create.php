@@ -10,35 +10,31 @@
 
 namespace hipanel\modules\finance\tests\_support\Page\price;
 
-use hipanel\modules\finance\tests\_support\Page\price\View;
-use hipanel\tests\_support\Page\Authenticated;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\tests\_support\Page\Widget\Input\XEditable;
 
-class Create extends Authenticated
+class Create extends View
 {
     /**
      * @param string $objectName
      * @param string $templateName
      * @param string $priceType
-     * @param string $id
      */
-    public function createRandomPrices(string $objectName, string $templateName, string $priceType, string $id): void
+    public function createRandomPrices(string $objectName, string $templateName, string $priceType): void
     {
         $note = 'test note';
-        $viewPage = new View($I, $id);
 
-        $this->viewPage->loadPage();
+        $this->loadPage();
         $this->openModal();
         $this->chooseObject($objectName);
         $this->chooseTemplate($templateName);
         $this->choosePriceType($priceType);
         $this->proceedToCreation();
-        $this->viewPage->fillRandomPrices('price');
+        $this->fillRandomPrices('price');
         $howNotes = $this->fillNote($note);
         $this->saveForm();
         $this->seeNoteInTbodyRow($note, $howNotes);
-        $this->viewPage->seeRandomPrices();
+        $this->seeRandomPrices();
     }
 
     public function openModal(): void
@@ -49,7 +45,6 @@ class Create extends Authenticated
         $I->click("//li/a[contains(text(), 'Create prices')]");
         $I->waitForElement('#create-prices');
     }
-
 
     public function createSharedPrice(array $priceData)
     {
@@ -73,8 +68,10 @@ class Create extends Authenticated
 
     public function chooseTemplate(string $templateName): void
     {
+        $this->tester->click("//span[@id='select2-template_plan_id-container']");
         (new Select2($this->tester, '#template_plan_id'))
-            ->setValue($templateName);
+            ->fillSearchField($templateName)
+            ->chooseOptionLike($templateName);
     }
 
     public function choosePriceType(string $priceType): void

@@ -11,10 +11,12 @@
 namespace hipanel\modules\finance\tests\_support\Page\plan;
 
 use hipanel\helpers\Url;
+use hipanel\tests\_support\Helper\CurrencyListTrait;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 
 class Create extends Plan
 {
+    use CurrencyListTrait;
     protected function loadPage()
     {
         $I = $this->tester;
@@ -110,14 +112,10 @@ class Create extends Plan
         $I = $this->tester;
 
         $list = [
-            'server' => 'Server',
-            'vcdn' => 'vCDN',
-            'pcdn' => 'pCDN',
-            'ip' => 'IP',
-            'account' => 'Account',
-            'domain' => 'Domain',
-            'client' => 'Client',
-            'template' => 'Template',
+            'server' => 'Server tariff',
+            'domain' => 'Domain tariff',
+            'switch' => 'Switch tariff',
+            'template' => 'Template tariff',
         ];
         $I->click(['name' => 'Plan[type]']);
         foreach ($list as $key => $text) {
@@ -135,16 +133,5 @@ class Create extends Plan
             $I->see($text, "//select/option[@value='{$key}']");
         }
         $I->clickWithLeftButton('h1');
-    }
-
-    public function getCurrencyList(): array
-    {
-        return [
-            'usd' => 'USD',
-            'eur' => 'EUR',
-            'uah' => 'UAH',
-            'rub' => 'RUB',
-            'btc' => 'BTC',
-        ];
     }
 }

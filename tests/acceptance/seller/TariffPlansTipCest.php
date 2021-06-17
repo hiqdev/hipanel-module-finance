@@ -7,11 +7,13 @@ use Codeception\Example;
 use hipanel\tests\_support\Page\Authenticated;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
+use hipanel\tests\_support\Helper\CurrencyListTrait;
 use hipanel\modules\finance\tests\_support\Page\plan\Create as PlanCreate;
 use hipanel\modules\finance\tests\_support\Page\price\Create as PriceCreate;
 
 class TariffPlansTipCest
 {
+    use CurrencyListTrait;
     /**
      * @dataProvider getTariffData
      */
@@ -32,9 +34,8 @@ class TariffPlansTipCest
 
     private function ensureTipsAreCorrect(Seller $I, array $priceData): void
     {
-        $pricePage = new PriceCreate($I);
-        $planPage = new PlanCreate($I);
-        $currency = $planPage->getCurrencyList();
+        $pricePage = new PriceCreate($I, $priceData['id']);
+        $currency = $this->getCurrencyList();
 
         foreach($currency as $key => $currentCurrency)
         {
