@@ -10,31 +10,35 @@
 
 namespace hipanel\modules\finance\tests\_support\Page\price;
 
+use hipanel\modules\finance\tests\_support\Page\price\View;
+use hipanel\tests\_support\Page\Authenticated;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\tests\_support\Page\Widget\Input\XEditable;
 
-class Create extends View
+class Create extends Authenticated
 {
     /**
      * @param string $objectName
      * @param string $templateName
      * @param string $priceType
+     * @param string $id
      */
-    public function createRandomPrices(string $objectName, string $templateName, string $priceType): void
+    public function createRandomPrices(string $objectName, string $templateName, string $priceType, string $id): void
     {
         $note = 'test note';
+        $viewPage = new View($I, $id);
 
-        $this->loadPage();
+        $this->viewPage->loadPage();
         $this->openModal();
         $this->chooseObject($objectName);
         $this->chooseTemplate($templateName);
         $this->choosePriceType($priceType);
         $this->proceedToCreation();
-        $this->fillRandomPrices('price');
+        $this->viewPage->fillRandomPrices('price');
         $howNotes = $this->fillNote($note);
         $this->saveForm();
         $this->seeNoteInTbodyRow($note, $howNotes);
-        $this->seeRandomPrices();
+        $this->viewPage->seeRandomPrices();
     }
 
     public function openModal(): void
@@ -51,13 +55,12 @@ class Create extends View
     {
         $I = $this->tester;
         
-        $I->click("//div/a[contains(text(), 'Create price')]");
-        $I->click("//li/a[contains(text(), 'Create shared price')]");
+        $I->clickLink('Create price');
+        $I->clickLink('Create shared price');
         $I->waitForElement('#template_plan_id');
-        (new Select2($this->tester, '#template_plan_id'))
-            ->setValueLike($priceData['plan']);
-        (new Select2($this->tester, '#type'))
-            ->setValueLike($priceData['type']);
+
+        $this->chooseTemplate($priceData['plan']);
+        $this->choosePriceType($priceData['type']);
         $this->proceedToCreation();
 
     }
@@ -71,8 +74,7 @@ class Create extends View
     public function chooseTemplate(string $templateName): void
     {
         (new Select2($this->tester, '#template_plan_id'))
-            ->fillSearchField($templateName)
-            ->chooseOptionLike($templateName);
+            ->setValue($templateName);
     }
 
     public function choosePriceType(string $priceType): void

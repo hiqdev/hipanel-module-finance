@@ -4,6 +4,7 @@ namespace hipanel\modules\stock\tests\acceptance\seller;
 
 use hipanel\helpers\Url;
 use Codeception\Example;
+use hipanel\tests\_support\Page\Authenticated;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\modules\finance\tests\_support\Page\plan\Create as PlanCreate;
@@ -18,8 +19,9 @@ class TariffPlansTipCest
     {
         $I->login();
         $I->needPage(Url::to('@plan/create'));
-        $id = $this->ensureICanCreateNewTariff($I, $example['plan']);
-        $this->ensureTipsAreCorrect($I, $id, $example['price']);
+        $exampleArray = iterator_to_array($example->getIterator());
+        $exampleArray['price']['id'] = $this->ensureICanCreateNewTariff($I, $exampleArray['plan']);
+        $this->ensureTipsAreCorrect($I, $exampleArray['price']);
     }
 
     private function ensureICanCreateNewTariff(Seller $I, array $tariffData): int
@@ -28,15 +30,15 @@ class TariffPlansTipCest
         return $page->createPlan();
     }
 
-    private function ensureTipsAreCorrect(Seller $I, string $id, array $priceData): void
+    private function ensureTipsAreCorrect(Seller $I, array $priceData): void
     {
-        $pricePage = new PriceCreate($I, 0);
+        $pricePage = new PriceCreate($I);
         $planPage = new PlanCreate($I);
         $currency = $planPage->getCurrencyList();
 
         foreach($currency as $key => $currentCurrency)
         {
-            $this->updatePlanWithNewCurrency($I, $currentCurrency, $id);
+            $this->updatePlanWithNewCurrency($I, $currentCurrency, $priceData['id']);
             $I->waitForText('Create prices', 10);
             $pricePage->createSharedPrice($priceData);
             $I->waitForElement("div[class*='0'] button[class*='formula-help']");
@@ -45,9 +47,9 @@ class TariffPlansTipCest
         }
     }
 
-    private function updatePlanWithNewCurrency(Seller $I, string $currency, string $id): void
+    private function updatePlanWithNewCurrency(Seller $I, string $currency, string $planId): void
     {
-        $I->needPage(Url::to('@plan/update?id='. $id));
+        $I->needPage(Url::to('@plan/update?id='. $planId));
         (new Select2($I, '#plan-currency'))
             ->setValueLike($currency);
         $I->click('Save');

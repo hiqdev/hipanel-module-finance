@@ -131,8 +131,7 @@ class Create extends Plan
         $I = $this->tester;
 
         $I->click("//select[@name='Plan[currency]']/../span");
-        $list = $this->getCurrencyList();
-        foreach ($list as $key => $text) {
+        foreach ($this->getCurrencyList() as $key => $text) {
             $I->see($text, "//select/option[@value='{$key}']");
         }
         $I->clickWithLeftButton('h1');
