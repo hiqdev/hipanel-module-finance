@@ -57,7 +57,6 @@ class Create extends View
         $this->chooseTemplate($priceData['plan']);
         $this->choosePriceType($priceData['type']);
         $this->proceedToCreation();
-
     }
 
     public function chooseObject(string $objectName): void

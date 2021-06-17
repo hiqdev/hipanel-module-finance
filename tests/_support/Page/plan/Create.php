@@ -11,12 +11,13 @@
 namespace hipanel\modules\finance\tests\_support\Page\plan;
 
 use hipanel\helpers\Url;
-use hipanel\tests\_support\Helper\CurrencyListTrait;
+use hipanel\modules\finance\tests\_support\Helper\CurrencyListTrait;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 
 class Create extends Plan
 {
     use CurrencyListTrait;
+
     protected function loadPage()
     {
         $I = $this->tester;
