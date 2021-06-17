@@ -24,7 +24,7 @@ return [
     'Charges' => 'Списания',
     'Toggle sign' => 'Переключить знак',
     'Opening balance' => 'Начальный баланс',
-    'Closing balance' => 'Конечный балланс',
+    'Closing balance' => 'Конечный баланс',
     'Positive' => 'Позитивный',
     'Negative' => 'Негативный',
     'Total' => 'Всего',
