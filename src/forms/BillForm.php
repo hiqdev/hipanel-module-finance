@@ -41,6 +41,11 @@ class BillForm extends Model
     public $client_id;
 
     /**
+     * @var string
+     */
+    public $client;
+
+    /**
      * @var integer
      */
     public $requisite_id;
@@ -139,7 +144,7 @@ class BillForm extends Model
     public static function createFromBill($bill, $scenario)
     {
         $attributes = $bill->getAttributes([
-            'id', 'object_id', 'client_id', 'currency', 'type',
+            'id', 'object_id', 'client_id', 'client', 'currency', 'type',
             'gtype', 'sum', 'time', 'quantity', 'unit', 'label', 'object', 'class', 'requisite_id', 'txn'
         ]);
 
