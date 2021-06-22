@@ -24,7 +24,7 @@ return [
     'Charges' => 'Списания',
     'Toggle sign' => 'Переключить знак',
     'Opening balance' => 'Начальный баланс',
-    'Closing balance' => 'Конечный балланс',
+    'Closing balance' => 'Конечный баланс',
     'Positive' => 'Позитивный',
     'Negative' => 'Негативный',
     'Total' => 'Всего',
@@ -261,5 +261,7 @@ return [
     'Debit: {b}' => 'Дебет: {b}',
     'Credit: {b}' => 'Кредит: {b}',
     'Balance: {b}' => 'Баланс: {b}',
+    'Purses' => 'Кошельки',
+    'Add purse' => 'Добавить кошелек',
     'Show deleted' => 'Отображать удаленные',
 ];
