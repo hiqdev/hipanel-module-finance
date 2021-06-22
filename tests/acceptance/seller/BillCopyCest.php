@@ -70,7 +70,7 @@ class BillCopyCest
                     'charge1'    => [
                         'class'    => 'Client',
                         'objectId' => 'hipanel_test_user1',
-                        'type'     => 'Common',
+                        'type'     => 'Cash',
                         'sum'      => 712.80,
                         'quantity' => '1',
                     ],
