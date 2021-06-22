@@ -1,6 +1,6 @@
 <?php
 
-namespace hipanel\modules\finance\tests\acceptance\client\PaymentCreation;
+namespace hipanel\modules\finance\tests\acceptance\client;
 
 use hipanel\helpers\Url;
 use hipanel\tests\_support\Step\Acceptance\Seller;

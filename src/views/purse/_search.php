@@ -21,7 +21,11 @@ use yii\web\View;
  */
 ?>
 
-<?php if (Yii::$app->user->can('support')) : ?>
+<?php if (Yii::$app->user->can('access-subclients')) : ?>
+    <div class="col-md-4 col-sm-6 col-xs-12">
+        <?= $search->field('seller_id')->widget(SellerCombo::class) ?>
+    </div>
+
     <div class="col-md-4 col-sm-6 col-xs-12">
         <?= $search->field('client_id')->widget(ClientCombo::class) ?>
     </div>
@@ -43,47 +47,3 @@ use yii\web\View;
     ]) ?>
 </div>
 
-<div class="col-md-4 col-sm-6 col-xs-12">
-    <div class="form-group">
-        <?= Html::label(Yii::t('hipanel', 'Date')) ?>
-        <?= DateRangePicker::widget([
-            'model' => $search->model,
-            'attribute' => 'time_from',
-            'attribute2' => 'time_till',
-            'options' => [
-                'class' => 'form-control',
-            ],
-            'dateFormat' => 'yyyy-MM-dd',
-        ]) ?>
-    </div>
-</div>
-
-<div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('type_in')->widget(MultipleBillTypeCombo::class, [
-        'billTypes' => $billTypes,
-        'billGroupLabels' => $billGroupLabels,
-        'isFlatList' => true,
-    ]) ?>
-</div>
-
-<div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('servers') ?>
-</div>
-
-<div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('descr') ?>
-</div>
-
-<div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('tariff_id')->widget(PlanCombo::class) ?>
-</div>
-
-<?php if (Yii::$app->user->can('support')) : ?>
-    <div class="col-md-4 col-sm-6 col-xs-12">
-        <?= $search->field('seller_id')->widget(SellerCombo::class) ?>
-    </div>
-<?php endif ?>
-
-<div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('is_payed')->widget(BillIsPayedDropdown::class) ?>
-</div>

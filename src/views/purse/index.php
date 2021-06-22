@@ -1,9 +1,6 @@
 <?php
 
-use hipanel\modules\finance\grid\BillGridView;
-use hipanel\modules\finance\models\ExchangeRate;
-use hipanel\modules\finance\widgets\BillImportDropdownButton;
-use hipanel\modules\finance\widgets\ExchangeRatesLine;
+use hipanel\modules\finance\grid\PurseGridView;
 use hipanel\widgets\IndexPage;
 use hiqdev\hiart\ActiveDataProvider;
 use hiqdev\hiart\ActiveRecord;
@@ -18,10 +15,9 @@ use yii\web\View;
  * @var ActiveRecord $model
  * @var ExchangeRate[] $rates
  */
-$this->title = Yii::t('hipanel:finance', 'Bills');
+$this->title = Yii::t('hipanel:finance', 'Purses');
 $this->params['breadcrumbs'][] = $this->title;
 $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
-$this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates' => $rates]);
 
 ?>
 
@@ -30,44 +26,37 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
     <?php $page->setSearchFormData(compact('billTypes', 'billGroupLabels')) ?>
 
     <?php $page->beginContent('main-actions') ?>
-        <?php if (Yii::$app->user->can('deposit')) : ?>
-            <?= Html::a(Yii::t('hipanel:finance', 'Recharge account'), ['@pay/deposit'], ['class' => 'btn btn-sm btn-success']) ?>
+        <?php if (Yii::$app->user->can('purse.update')) : ?>
+            <?= Html::a(Yii::t('hipanel:finance', 'Add purse'), ['@purse/create'], ['class' => 'btn btn-sm btn-success']) ?>
         <?php endif ?>
-        <?php if (Yii::$app->user->can('bill.create')) : ?>
-            <?= Html::a(Yii::t('hipanel:finance', 'Add payment'), ['@bill/create'], ['class' => 'btn btn-sm btn-success']) ?>
-            <?= Html::a(Yii::t('hipanel:finance', 'Add internal transfer'), ['@bill/create-transfer'], ['class' => 'btn btn-sm btn-default']) ?>
-        <?php endif ?>
-        <?= Html::a(Yii::t('hipanel:finance', 'Currency exchange'), ['@bill/create-exchange'], ['class' => 'btn btn-sm btn-default']) ?>
-        <?= BillImportDropdownButton::widget() ?>
 <?php $page->endContent() ?>
 
     <?php $page->beginContent('sorter-actions') ?>
         <?= $page->renderSorter([
             'attributes' => array_filter([
-                'sum', 'balance',
-                'type', 'descr',
-                'time', 'no',
-                 Yii::$app->user->can('resell') ? 'client' : null,
-                 Yii::$app->user->can('support') ? 'seller' : null
+                'balance',
+                'currency_id',
+                'requisite_id',
+                'contact_id',
+                'id',
+                 Yii::$app->user->can('access-subclients') ? 'client' : null,
+                 Yii::$app->user->can('access-subclients') ? 'seller' : null
             ]),
         ]) ?>
     <?php $page->endContent() ?>
 
     <?php $page->beginContent('bulk-actions') ?>
-        <?php if (Yii::$app->user->can('bill.create')) : ?>
-            <?= $page->renderBulkButton('copy', Yii::t('hipanel', 'Copy')) ?>
+        <?php if (Yii::$app->user->can('purse.update')) : ?>
+            <?= $page->renderBulkButton('@purse/update', Yii::t('hipanel', 'Update')) ?>
         <?php endif ?>
-        <?php if (Yii::$app->user->can('bill.update')) : ?>
-            <?= $page->renderBulkButton('@bill/update', Yii::t('hipanel', 'Update')) ?>
-        <?php endif ?>
-        <?php if (Yii::$app->user->can('bill.delete')) : ?>
+        <?php if (Yii::$app->user->can('purse.delete')) : ?>
             <?= $page->renderBulkDeleteButton('delete') ?>
         <?php endif ?>
     <?php $page->endContent() ?>
 
     <?php $page->beginContent('table') ?>
     <?php $page->beginBulkForm() ?>
-        <?= BillGridView::widget([
+        <?= PurseGridView::widget([
             'boxed' => false,
             'layout' => <<<"HTML"
                 <div class='row'>
@@ -83,7 +72,6 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
 HTML,
             'dataProvider' => $dataProvider,
             'filterModel'  => $model,
-            'currencies' => $this->context->getCurrencyTypes(),
             'columns' => $representationCollection->getByName($uiModel->representation)->getColumns(),
         ]) ?>
     <?php $page->endBulkForm() ?>

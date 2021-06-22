@@ -194,7 +194,7 @@ class BillController extends \hipanel\base\CrudController
         if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post())) {
             $models = $model->parse();
 
-            if ($models !== false) {
+            if ($models !== null) {
                 $models = BillForm::createMultipleFromBills($models, 'create');
                 [$billTypes, $billGroupLabels] = $this->getTypesAndGroups();
 

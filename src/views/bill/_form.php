@@ -90,6 +90,9 @@ $form = ActiveForm::begin([
                                     'inputOptions' => [
                                         'readonly' => $model->scenario === Bill::SCENARIO_UPDATE,
                                     ],
+                                    'current' => [
+                                        $model->client_id => $model->client
+                                    ]
                                 ]) ?>
                             </div>
                             <div class="col-md-3">

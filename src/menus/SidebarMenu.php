@@ -49,6 +49,11 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                         'url'     => ['/finance/sale/index'],
                         'visible' => $user->can('sale.read'),
                     ],
+                    'purse' => [
+                        'label'   => Yii::t('hipanel:finance', 'Purses'),
+                        'url'     => ['/finance/purse/index'],
+                        'visible' => $user->can('purse.read'),
+                    ],
                     'generate' => [
                         'label'   => Yii::t('hipanel:finance', 'Generate documents'),
                         'url'     => ['/finance/purse/generate-all'],
@@ -81,7 +86,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     ],
                     'target-resources' => [
                         'label'   => Yii::t('hipanel:finance', 'Target resources'),
-                        'url'     => ['@target/resource-list'],
+                        'url'     => ['@target-resource/index'],
                         'visible' => $user->can('plan.read'),
                     ],
                 ],
