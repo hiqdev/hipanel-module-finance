@@ -68,14 +68,14 @@ class AddingChargesCest
                     'charge2'   => [
                         'class'     => 'Client',
                         'objectId'  => 'hipanel_test_user1',
-                        'type'      => 'Intercept fee',
+                        'type'      => 'Certificate purchase',
                         'sum'       => 350,
                         'quantity'  => 1,
                     ],
                     'charge3'   => [
                         'class'     => 'Client',
                         'objectId'  => 'hipanel_test_user2',
-                        'type'      => 'VAT',
+                        'type'      => 'Negative balance correction',
                         'sum'       => 450,
                         'quantity'  => 1,
                     ],
