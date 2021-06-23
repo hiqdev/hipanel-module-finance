@@ -11,10 +11,14 @@
 namespace hipanel\modules\finance\tests\_support\Page\price;
 
 use hipanel\tests\_support\Page\Widget\Input\Select2;
+use hipanel\helpers\Url;
+use hipanel\modules\finance\tests\_support\Helper\CurrencyListTrait;
 use hipanel\tests\_support\Page\Widget\Input\XEditable;
 
 class Create extends View
 {
+    use CurrencyListTrait;
+
     /**
      * @param string $objectName
      * @param string $templateName
@@ -120,5 +124,27 @@ class Create extends View
         foreach (range(1, $how) as $i) {
             $this->tester->see("$note $i", '//tbody');
         }
+    }
+
+    public function lookForHelpTip(string $currentCurrency, array $sharedPriceData): void
+    {
+        $I = $this->tester;
+
+        $this->updatePlanWithNewCurrency($currentCurrency, $this->getId());
+        $I->waitForText('Create prices', 10);
+        $this->createSharedPrice($sharedPriceData);
+        $I->waitForElement("div[class*='0'] button[class*='formula-help']");
+        $I->click("div[class*='0'] button[class*='formula-help']");
+        $I->waitForText($currentCurrency);
+    }
+
+    public function updatePlanWithNewCurrency(string $currency, string $planId): void
+    {
+        $I = $this->tester;
+
+        $I->needPage(Url::to('@plan/update?id='. $planId));
+        (new Select2($I, '#plan-currency'))
+            ->setValueLike($currency);
+        $I->click('Save');
     }
 }

@@ -7,14 +7,11 @@ use Codeception\Example;
 use hipanel\tests\_support\Page\Authenticated;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
-use hipanel\modules\finance\tests\_support\Helper\CurrencyListTrait;
 use hipanel\modules\finance\tests\_support\Page\plan\Create as PlanCreate;
 use hipanel\modules\finance\tests\_support\Page\price\Create as PriceCreate;
 
 class TariffPlansTipCest
 {
-    use CurrencyListTrait;
-
     /**
      * @dataProvider getTariffData
      */
@@ -37,23 +34,9 @@ class TariffPlansTipCest
     {
         $pricePage = new PriceCreate($I, $priceData['id']);
 
-        foreach($this->getCurrencyList() as $key => $currentCurrency)
-        {
-            $this->updatePlanWithNewCurrency($I, $currentCurrency, $priceData['id']);
-            $I->waitForText('Create prices', 10);
-            $pricePage->createSharedPrice($priceData);
-            $I->waitForElement("div[class*='0'] button[class*='formula-help']");
-            $I->click("div[class*='0'] button[class*='formula-help']");
-            $I->waitForText($currentCurrency);
+        foreach ($pricePage->getCurrencyList() as $key => $currentCurrency) {
+            $pricePage->lookForHelpTip($currentCurrency, $priceData);
         }
-    }
-
-    private function updatePlanWithNewCurrency(Seller $I, string $currency, string $planId): void
-    {
-        $I->needPage(Url::to('@plan/update?id='. $planId));
-        (new Select2($I, '#plan-currency'))
-            ->setValueLike($currency);
-        $I->click('Save');
     }
     
     protected function getTariffData(): array
