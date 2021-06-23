@@ -26,7 +26,8 @@ class TariffPlansTipCest
 
     private function ensureICanCreateNewTariff(Seller $I, array $tariffData): int
     {
-        $page = new PlanCreate($I, $tariffData);
+        $planData = $this->getTariffData();
+        $page = new PlanCreate($I, $tariffData, $planData['tariff']['plan']);
         return $page->createPlan();
     }
 
