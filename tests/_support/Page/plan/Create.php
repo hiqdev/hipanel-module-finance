@@ -95,7 +95,7 @@ class Create extends Plan
     {
         $this->loadPage();
         $this->seeLabels();
-        $this->seeTypeDropdownList($list);
+        $this->seeTypeDropdownList($typeDropDownElements);
         $this->seeCurrencyDropdownList();
     }
 
