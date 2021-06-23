@@ -1,14 +1,6 @@
 <?php
-/**
- * Finance module for HiPanel
- *
- * @link      https://github.com/hiqdev/hipanel-module-finance
- * @package   hipanel-module-finance
- * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
- */
 
-namespace hipanel\modules\finance\tests\acceptance\manager;
+namespace hipanel\modules\finance\tests\acceptance\seller;
 
 use hipanel\helpers\Url;
 use hipanel\modules\finance\tests\_support\Page\bill\Create;
@@ -81,7 +73,8 @@ class PaymentsCest
         $page->fillMainBillFields($this->getBillData());
         $page->addCharge([]);
         $I->pressButton('Save');
-        $page->containsBlankFieldsError(['Sum', 'Quantity']);
+        $I->waitForPageUpdate();
+        $page->containsBlankFieldsError(['Sum', 'Qty.']);
         $page->deleteLastCharge();
     }
 
