@@ -33,6 +33,7 @@ class BillCopyCest
         $billId = $this->createBill($I, $exampleArray);
 
         $this->copyPage->copyBill($billId);
+        $this->copyPage->seeActionSuccess();
         $exampleArray['id'] = $billId;
         $this->ensurePreviousBillDidntChange($I, $exampleArray);
     }
