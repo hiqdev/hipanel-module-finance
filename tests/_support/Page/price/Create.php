@@ -46,7 +46,7 @@ class Create extends View
         $I->waitForElement('#create-prices');
     }
 
-    public function createSharedPrice(array $priceData)
+    public function createSharedPrice(array $priceData): void
     {
         $I = $this->tester;
         

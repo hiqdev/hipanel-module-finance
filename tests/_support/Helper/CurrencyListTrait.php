@@ -2,7 +2,8 @@
 
 namespace hipanel\modules\finance\tests\_support\Helper;
 
-trait CurrencyListTrait {
+trait CurrencyListTrait
+{
     public function getCurrencyList(): array
     {
         return [
