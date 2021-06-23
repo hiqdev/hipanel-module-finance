@@ -50,6 +50,7 @@ class TariffPlansTipCest
                     'client'   => 'hipanel_test_reseller',
                     'currency' => 'USD',
                     'note'     => 'note #' . uniqid(),
+                    'typeDropDownElements' => [],
                 ],
                 'price' => [
                     'plan' => 'TEST-CONFIG-NL',

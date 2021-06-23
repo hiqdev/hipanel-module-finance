@@ -44,10 +44,10 @@ abstract class Plan extends Authenticated
      * @var string
      */
     protected $id;
-    
+
     protected array $typeDropDownElements;
 
-    public function __construct(AcceptanceTester $I, $fields = null, $typeDropDownElements = null)
+    public function __construct(AcceptanceTester $I, $fields = null)
     {
         parent::__construct($I);
 
@@ -57,9 +57,7 @@ abstract class Plan extends Authenticated
             $this->client = $fields['client'];
             $this->currency = $fields['currency'];
             $this->note = $fields['note'];
-        }
-        if ($typeDropDownElements) {
-            $this->typeDropDownElements =  $typeDropDownElements;
+            $this->typeDropDownElements = $fields['typeDropDownElements'];
         }
     }
 }

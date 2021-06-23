@@ -95,7 +95,7 @@ class Create extends Plan
     {
         $this->loadPage();
         $this->seeLabels();
-        $this->seeTypeDropdownList($this->typeDropDownElements);
+        $this->seeTypeDropdownList();
         $this->seeCurrencyDropdownList();
     }
 
@@ -109,12 +109,12 @@ class Create extends Plan
         }
     }
 
-    private function seeTypeDropdownList(array $list): void
+    private function seeTypeDropdownList(): void
     {
         $I = $this->tester;
 
         $I->click(['name' => 'Plan[type]']);
-        foreach ($list as $key => $text) {
+        foreach ($this->typeDropDownElements as $key => $text) {
             $I->see($text, "//select/option[@value='{$key}']");
         }
         $I->clickWithLeftButton('h1');
