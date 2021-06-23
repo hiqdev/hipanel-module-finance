@@ -30,7 +30,6 @@ use hipanel\modules\finance\helpers\PriceChargesEstimator;
 use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\Plan;
-use hipanel\modules\finance\models\PlanAttribute;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\PriceSuggestionRequestForm;
 use hipanel\modules\finance\models\query\PlanQuery;
@@ -89,12 +88,10 @@ class PlanController extends CrudController
             'create' => [
                 'class' => SmartCreateAction::class,
                 'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully created'),
-                'on beforeSave' => $this->saveWithPlanAttributes(),
             ],
             'update' => [
                 'class' => SmartUpdateAction::class,
                 'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully updated'),
-                'on beforeSave' => $this->saveWithPlanAttributes(),
             ],
             'index' => [
                 'responseVariants' => [
@@ -437,25 +434,5 @@ class PlanController extends CrudController
         $prices = PriceSort::anyPrices()->values($prices, true);
 
         $plan->populateRelation('prices', $prices);
-    }
-
-    private function saveWithPlanAttributes(): Closure
-    {
-        return static function (Event $event): void {
-            $action = $event->sender;
-            $request = $action->controller->request;
-            $attributeModel = new PlanAttribute();
-            $planAttributeData = $request->post($attributeModel->formName(), []);
-            foreach ($action->collection->models as $model) {
-                $customData['attributes'] = [];
-                foreach ($planAttributeData as $planAttribute) {
-                    $attributeModel->load($planAttribute, '');
-                    if ($attributeModel->validate()) {
-                        $customData['attributes'][$attributeModel->name] = $attributeModel->value;
-                    }
-                }
-                $model->custom_data = $customData;
-            }
-        };
     }
 }

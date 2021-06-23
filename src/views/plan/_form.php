@@ -4,8 +4,7 @@ use hipanel\helpers\Url;
 use hipanel\models\Ref;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\models\Plan;
-use hipanel\modules\finance\models\PlanAttribute;
-use hipanel\widgets\DynamicFormWidget;
+use hipanel\widgets\CustomAttributesForm;
 use hipanel\widgets\RefCombo;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
@@ -20,15 +19,7 @@ $this->registerCss('
   #plan-form .container-items .form-group { position: relative; }
   #plan-form .container-items .help-block-error { position: absolute; top: 46px; }
 ');
-$this->registerJs(/** @lang ECMAScript 6 */ '
-$(".remove-attribute").click(() => {
-  if ($(".attribute-item").length === 1) {
-    $(".container-items :input").val("");
-  }
-});
-');
 
-$customAttributes = empty($model->getPlanAttributes()) ? [new PlanAttribute()] : $model->getPlanAttributes();
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -74,52 +65,7 @@ $customAttributes = empty($model->getPlanAttributes()) ? [new PlanAttribute()] :
                 </h4>
             </div>
             <div class="box-body no-padding">
-                <?php DynamicFormWidget::begin([
-                    'widgetContainer' => 'dynamicform_wrapper',
-                    'widgetBody' => '.container-items',
-                    'widgetItem' => '.attribute-item',
-                    'insertButton' => '.add-attribute',
-                    'deleteButton' => '.remove-attribute',
-                    'model' => $customAttributes[0],
-                    'formId' => 'plan-form',
-                    'formFields' => [
-                        'name',
-                        'value',
-                    ],
-                ]) ?>
-                <table class="table table-striped table-condensed">
-                    <thead>
-                    <tr>
-                        <th><?= Yii::t('hipanel:finance', 'Name') ?></th>
-                        <th><?= Yii::t('hipanel:finance', 'Value') ?></th>
-                        <th class="text-center" style="width: 90px;">
-                            <button type="button" class="add-attribute btn bg-olive btn-sm"
-                                    title="<?= Yii::t('hipanel', 'Add new') ?>">
-                                <?= Html::tag('span', null, ['class' => 'fa fa-fw fa-plus']) ?>
-                            </button>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody class="container-items">
-                    <?php foreach ($customAttributes as $idx => $attribute): ?>
-                        <tr class="attribute-item">
-                            <td class="text-center" style="vertical-align: middle">
-                                <?= $form->field($attribute, "[{$idx}]name")->label('')->textInput(['maxlength' => true]) ?>
-                            </td>
-                            <td class="text-center" style="vertical-align: middle">
-                                <?= $form->field($attribute, "[{$idx}]value")->label('')->textInput(['maxlength' => true]) ?>
-                            </td>
-                            <td class="text-center" style="vertical-align: middle">
-                                <button type="button" class="remove-attribute btn btn-danger btn-sm"
-                                        title="<?= Yii::t('hipanel', 'Remove') ?>">
-                                    <?= Html::tag('span', null, ['class' => 'fa fa-fw fa-minus']) ?>
-                                </button>
-                            </td>
-                        </tr>
-                    <?php endforeach ?>
-                    </tbody>
-                </table>
-                <?php DynamicFormWidget::end() ?>
+                <?= CustomAttributesForm::widget(['form' => $form, 'owner' => $model]) ?>
             </div>
         </div>
     </div>

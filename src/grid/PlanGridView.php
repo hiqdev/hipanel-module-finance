@@ -17,7 +17,7 @@ use hipanel\helpers\Url;
 use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\menus\PlanActionsMenu;
 use hipanel\modules\finance\models\Plan;
-use hipanel\modules\finance\widgets\PlanAttributes;
+use hipanel\widgets\CustomAttributesViewer;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\helpers\Html;
@@ -80,7 +80,7 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'label' => Yii::t('hipanel:finance', 'Attributes'),
                 'format' => 'raw',
                 'contentOptions' => ['style' => 'padding: 0;'],
-                'value' => static fn(Plan $plan): string => PlanAttributes::widget(['plan' => $plan]),
+                'value' => static fn(Plan $plan): string => CustomAttributesViewer::widget(['owner' => $plan]),
             ]
         ]);
     }
