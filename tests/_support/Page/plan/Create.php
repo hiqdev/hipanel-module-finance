@@ -91,7 +91,7 @@ class Create extends Plan
         $I->fillField(['name' => 'Plan[note]'], $this->note);
     }
 
-    public function seeFields(array $list): void
+    public function seeFields(array $typeDropDownElements): void
     {
         $this->loadPage();
         $this->seeLabels();
