@@ -62,7 +62,7 @@ class InternalTransferCest
         $this->index->seeTransferActionSuccess();
     }
 
-    private function checkIfUserHaveNegativeBalance(Seller $I, array $billInfo)
+    private function checkIfUserHaveNegativeBalance(Seller $I, array $billInfo): array
     {
         $I->needPage(Url::to('@finance/bill'));
 
