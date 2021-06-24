@@ -18,7 +18,31 @@ use yii\helpers\Html;
 /** @var hipanel\modules\finance\forms\BillForm[] $models */
 /** @var array $billTypes */
 /** @var array $billGroupLabels */
+
 $model = reset($models);
+
+$this->registerCss("
+#bill-dynamic-form .charge-item .col-md-1,
+#bill-dynamic-form .charge-item .col-md-2,
+#bill-dynamic-form .charge-item .col-md-3,
+#bill-dynamic-form .charge-item .col-md-4,
+#bill-dynamic-form .charge-item .col-md-5,
+#bill-dynamic-form .charge-item .col-md-6,
+#bill-dynamic-form .charge-item .col-md-7,
+#bill-dynamic-form .charge-item .col-md-8,
+#bill-dynamic-form .charge-item .col-md-9,
+#bill-dynamic-form .charge-item .col-md-10,
+#bill-dynamic-form .charge-item .col-md-11,
+#bill-dynamic-form .charge-item .col-md-12 {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+#bill-dynamic-form .charge-item .row {
+  margin-right: -10px;
+  margin-left: -10px;
+}
+}
+");
 
 $form = ActiveForm::begin([
     'id' => 'bill-dynamic-form',
@@ -143,7 +167,7 @@ $form = ActiveForm::begin([
                                 'options' => [
                                     'value' => isset($model->time)
                                         ? ($model->time !== false ? Yii::$app->formatter->asDatetime($model->time, 'php:Y-m-d H:i:s') : null)
-                                        :  Yii::$app->formatter->asDatetime(new DateTime(), 'php:Y-m-d H:i:s'),
+                                        : Yii::$app->formatter->asDatetime(new DateTime(), 'php:Y-m-d H:i:s'),
                                 ],
                             ]) ?>
                         </div>
@@ -187,19 +211,19 @@ $form = ActiveForm::begin([
                                         <?php endif ?>
                                         <div class="row input-row margin-bottom">
                                             <div class="form-instance">
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <?= $form->field($charge, "[$i][$j]object_id")->widget(ObjectCombo::class, [
                                                         'class_attribute_name' => "[$i][$j]class",
                                                         'selectedAttributeName' => 'name',
                                                     ]) ?>
                                                 </div>
-                                                <div class="col-md-2">
+                                                <div class="col-md-1">
                                                     <?= $form->field($charge, "[$i][$j]type")->dropDownList($billTypes, [
                                                         'groups' => $billGroupLabels,
                                                         'value' => $charge->ftype ?? $charge->type,
                                                     ]) ?>
                                                 </div>
-                                                <div class="col-md-2">
+                                                <div class="col-md-4">
                                                     <div class="row">
                                                         <div class="col-md-4">
                                                             <?= Html::activeHiddenInput($charge, "[$i][$j]unit") ?>
