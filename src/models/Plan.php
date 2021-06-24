@@ -111,7 +111,7 @@ class Plan extends Model
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
-            CustomAttributes::class
+            'as customAttributes' => CustomAttributes::class,
         ]);
     }
 
