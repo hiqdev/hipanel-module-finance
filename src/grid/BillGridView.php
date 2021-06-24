@@ -290,7 +290,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     $amount = $this->formatQuantity($model);
                     $object = $this->objectTag($model);
 
-                    return $tariff . $amount . ' ' . implode('<br>', array_filter([$requisite, $object, $text]));
+                    return $tariff . $amount . ' ' . implode('<br>', array_filter([$requisite, $object, nl2br($text)]));
                 },
                 'exportedValue' => function (Bill $model): string {
                     $text = $model->descr ?: $model->label;
