@@ -32,10 +32,6 @@ class InternalTransferCest
     * TODO: remove bill creation when transfer rules will be changed
     * @dataProvider provideTransferData
     */
-
-    /**
-     * @dataProvider provideTransferData
-     */
     public function rechargeAccount(Seller $I, Example $example): void
     {
         $billData = iterator_to_array($example->getIterator()); 
