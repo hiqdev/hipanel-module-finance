@@ -12,6 +12,7 @@ namespace hipanel\modules\finance\models;
 
 use hipanel\base\Model;
 use hipanel\base\ModelTrait;
+use hipanel\behaviors\CustomAttributes;
 use hipanel\models\Ref;
 use hipanel\modules\finance\models\query\PlanQuery;
 use Yii;
@@ -107,6 +108,13 @@ class Plan extends Model
         ]);
     }
 
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            'as customAttributes' => CustomAttributes::class,
+        ]);
+    }
+
     public function attributeLabels()
     {
         return array_merge(parent::attributeLabels(), [
@@ -117,20 +125,6 @@ class Plan extends Model
             'is_grouping' => Yii::t('hipanel.finance.plan', 'Grouping'),
             'currency' => Yii::t('hipanel:finance', 'Currency'),
         ]);
-    }
-
-    public function getPlanAttributes(): array
-    {
-        $attributes = $this->custom_data['attributes'] ?? [];
-        $models = [];
-        foreach ($attributes as $name => $value) {
-            $model = new PlanAttribute(compact('name', 'value'));
-            if (!$model->isEmpty()) {
-                $models[] = $model;
-            }
-        }
-
-        return empty($models) ? [] : $models;
     }
 
     public function getPrices()

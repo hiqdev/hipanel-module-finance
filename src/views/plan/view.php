@@ -5,8 +5,8 @@ use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\menus\PlanDetailMenu;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\PriceHistory;
-use hipanel\modules\finance\widgets\PlanAttributes;
 use hipanel\modules\finance\widgets\PriceHistoryWidget;
+use hipanel\widgets\CustomAttributesViewer;
 use hipanel\widgets\IndexPage;
 use yii\helpers\Html;
 use yii\web\View;
@@ -96,7 +96,7 @@ CSS
                 </h4>
             </div>
             <div class="box-footer no-padding">
-                <?= PlanAttributes::widget(['plan' => $model]) ?>
+                <?= CustomAttributesViewer::widget(['owner' => $model]) ?>
             </div>
         </div>
     </div>
