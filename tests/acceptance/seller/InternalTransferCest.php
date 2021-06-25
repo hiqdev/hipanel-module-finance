@@ -95,8 +95,8 @@ class InternalTransferCest
 
     private function transofrmSum(string $currentBalance): ?string
     {
-
         $repl = [',' => ''];
+
         if(similar_text($currentBalance, '-')) {
             $currentBalance = substr_replace($currentBalance, '', 0, 2);
             $currentBalance = strtr($currentBalance, $repl);
