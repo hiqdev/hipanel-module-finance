@@ -34,7 +34,7 @@ class View extends Authenticated
         $this->loadPage();
     }
 
-    protected function getId(): ?string
+    public function getId(): ?string
     {
         return $this->id;
     }
