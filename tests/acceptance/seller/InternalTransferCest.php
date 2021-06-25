@@ -5,7 +5,6 @@ namespace hipanel\modules\finance\tests\acceptance\seller;
 use hipanel\helpers\Url;
 use Codeception\Example;
 use hipanel\tests\_support\Step\Acceptance\Seller;
-use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\modules\finance\tests\_support\Page\transfer\Create as TransferCreate;
 use hipanel\modules\finance\tests\_support\Page\bill\Create as BillCreate;
