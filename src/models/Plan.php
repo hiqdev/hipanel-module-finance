@@ -104,7 +104,7 @@ class Plan extends Model
             [['id'], 'required', 'on' => ['delete', 'restore']],
             [['id', 'server_ids'], 'safe', 'on' => ['copy']],
             [['your_tariff'], 'boolean'],
-            [['custom_data', 'data'], 'safe', 'on' => ['create', 'update']],
+            [['custom_attributes', 'data'], 'safe', 'on' => ['create', 'update']],
         ]);
     }
 
