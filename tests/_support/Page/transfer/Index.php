@@ -2,9 +2,9 @@
 
 namespace hipanel\modules\finance\tests\_support\Page\transfer;
 
-use hipanel\tests\_support\Page\Authenticated;
+use hipanel\tests\_support\Page\IndexPage;
 
-class Index extends Authenticated
+class Index extends IndexPage
 {
     public function seeTransferActionSuccess(): void
     {

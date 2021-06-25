@@ -9,21 +9,18 @@ use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\modules\finance\tests\_support\Page\transfer\Create as TransferCreate;
 use hipanel\modules\finance\tests\_support\Page\bill\Create as BillCreate;
 use hipanel\modules\finance\tests\_support\Page\transfer\Index;
-use hipanel\tests\_support\Page\IndexPage;
 
 class InternalTransferCest
 {
     private TransferCreate $transferCreate;
     private BillCreate $billCreate;
     private Index $index;
-    private IndexPage $indexPage;
 
     public function _before(Seller $I): void
     {
         $this->transferCreate = new TransferCreate($I);
         $this->billCreate = new BillCreate($I);
         $this->index = new Index($I);
-        $this->indexPage = new IndexPage($I);
     }
 
     /**
@@ -65,8 +62,8 @@ class InternalTransferCest
     {
         $I->needPage(Url::to('@finance/bill'));
 
-        $this->indexPage->filterBy(Select2::asTableFilter($I, 'Client'), $billInfo['transfer']['client']);
-        $rowNumber = $this->indexPage->gridView->getRowNumberByNameFromSummary('Total');
+        $this->index->filterBy(Select2::asTableFilter($I, 'Client'), $billInfo['transfer']['client']);
+        $rowNumber = $this->index->gridView->getRowNumberByNameFromSummary('Total');
         $sum = $I->grabTextFrom("//div[@class='summary']//tbody//tr[$rowNumber]//td//span");
 
         $sum = $this->transofrmSum($sum);
@@ -96,14 +93,12 @@ class InternalTransferCest
     {
         $repl = [',' => ''];
 
-        if(similar_text($currentBalance, '-')) {
+        if (similar_text($currentBalance, '-')) {
             $currentBalance = substr_replace($currentBalance, '', 0, 2);
-            $currentBalance = strtr($currentBalance, $repl);
+            return strtr($currentBalance, $repl);
         } else {
             return null;
         }
-
-        return $currentBalance;
     }
 
     private function provideTransferData(): array
