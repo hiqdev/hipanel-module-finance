@@ -11,18 +11,22 @@
 namespace hipanel\modules\finance\tests\_support\Page\plan;
 
 use hipanel\helpers\Url;
+use Codeception\Example;
+use hipanel\modules\finance\tests\_support\Helper\CurrencyListTrait;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 
 class Create extends Plan
 {
-    protected function loadPage()
+    use CurrencyListTrait;
+
+    protected function loadPage(): void
     {
         $I = $this->tester;
 
         $I->needPage(Url::to('@plan/create'));
     }
 
-    protected function savePlan()
+    protected function savePlan(): void
     {
         $I = $this->tester;
 
@@ -46,14 +50,14 @@ class Create extends Plan
         return $this->id;
     }
 
-    private function fillName()
+    private function fillName(): void
     {
         $I = $this->tester;
 
         $I->fillField(['name' => 'Plan[name]'], $this->name);
     }
 
-    private function chooseType()
+    private function chooseType(): void
     {
         $I = $this->tester;
 
@@ -61,33 +65,33 @@ class Create extends Plan
         $I->click("//select/option[.='{$this->type}']");
     }
 
-    protected function setGrouping()
+    protected function setGrouping(): void
     {
         $I = $this->tester;
 
         $I->uncheckOption("//input[@name='Plan[is_grouping]'][@type='checkbox']");
     }
 
-    private function findClient()
+    private function findClient(): void
     {
         (new Select2($this->tester, '#plan-client'))
             ->setValue($this->client);
     }
 
-    private function chooseCurrency()
+    private function chooseCurrency(): void
     {
         (new Select2($this->tester, '#plan-currency'))
             ->setValueLike($this->currency);
     }
 
-    private function fillNote()
+    private function fillNote(): void
     {
         $I = $this->tester;
 
         $I->fillField(['name' => 'Plan[note]'], $this->note);
     }
 
-    public function seeFields()
+    public function seeFields(): void
     {
         $this->loadPage();
         $this->seeLabels();
@@ -95,7 +99,7 @@ class Create extends Plan
         $this->seeCurrencyDropdownList();
     }
 
-    private function seeLabels()
+    private function seeLabels(): void
     {
         $I = $this->tester;
 
@@ -105,41 +109,23 @@ class Create extends Plan
         }
     }
 
-    private function seeTypeDropdownList()
+    private function seeTypeDropdownList(): void
     {
         $I = $this->tester;
 
-        $list = [
-            'server' => 'Server',
-            'vcdn' => 'vCDN',
-            'pcdn' => 'pCDN',
-            'ip' => 'IP',
-            'account' => 'Account',
-            'domain' => 'Domain',
-            'client' => 'Client',
-            'template' => 'Template',
-        ];
         $I->click(['name' => 'Plan[type]']);
-        foreach ($list as $key => $text) {
+        foreach ($this->typeDropDownElements as $key => $text) {
             $I->see($text, "//select/option[@value='{$key}']");
         }
         $I->clickWithLeftButton('h1');
     }
 
-    private function seeCurrencyDropdownList()
+    private function seeCurrencyDropdownList(): void
     {
         $I = $this->tester;
 
         $I->click("//select[@name='Plan[currency]']/../span");
-        $list = [
-            'usd' => 'USD',
-            'eur' => 'EUR',
-            'uah' => 'UAH',
-            'rub' => 'RUB',
-            'pln' => 'PLN',
-            'btc' => 'BTC',
-        ];
-        foreach ($list as $key => $text) {
+        foreach ($this->getCurrencyList() as $key => $text) {
             $I->see($text, "//select/option[@value='{$key}']");
         }
         $I->clickWithLeftButton('h1');
