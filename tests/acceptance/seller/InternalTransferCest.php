@@ -60,14 +60,10 @@ class InternalTransferCest
 
     private function checkIfUserHaveNegativeBalance(Seller $I, array $billInfo): array
     {
-        $I->needPage(Url::to('@finance/bill'));
+        $sum = $this->getTotalSumOnUserAccount($I, $billInfo);
 
-        $this->index->filterBy(Select2::asTableFilter($I, 'Client'), $billInfo['transfer']['client']);
-        $rowNumber = $this->index->gridView->getRowNumberByNameFromSummary('Total');
-        $sum = $I->grabTextFrom("//div[@class='summary']//tbody//tr[$rowNumber]//td//span");
-
-        $sum = $this->transofrmSum($sum);
-        if ($sum) {
+        $sum = $this->transformSum($sum);
+        if ($sum !== null) {
             $sum = (int)$sum;
             $billInfo['bill']['charges']['charge2'] = $billInfo['bill']['charges']['charge1'];
             
@@ -76,6 +72,16 @@ class InternalTransferCest
         }
 
         return $billInfo;
+    }
+
+    private function getTotalSumOnUserAccount(Seller $I, array $billInfo): ?string
+    {
+        $I->needPage(Url::to('@finance/bill'));
+
+        $this->index->filterBy(Select2::asTableFilter($I, 'Client'), $billInfo['transfer']['client']);
+        $rowNumber = $this->index->gridView->getRowNumberByNameFromSummary('Total');
+
+        return $I->grabTextFrom("//div[@class='summary']//tbody//tr[$rowNumber]//td//span");
     }
 
     private function ensureICantCreateTransferWithoutRequiredData(Seller $I): void
@@ -89,16 +95,16 @@ class InternalTransferCest
         $this->transferCreate->fillMainInternalTransferFields($transferData['transfer']);
     }
 
-    private function transofrmSum(string $currentBalance): ?string
+    private function transformSum(string $currentBalance): ?string
     {
         $repl = [',' => ''];
 
         if (similar_text($currentBalance, '-')) {
             $currentBalance = substr_replace($currentBalance, '', 0, 2);
             return strtr($currentBalance, $repl);
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     private function provideTransferData(): array
