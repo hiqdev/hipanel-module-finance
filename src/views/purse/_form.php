@@ -28,14 +28,7 @@ $form = ActiveForm::begin([
             <div class="col-md-12">
                 <div class="box box-widget">
                     <div class="box-header with-border">
-                        <?php if ($model->isNewRecord) : ?>
-                            <h3 class="box-title"></h3>
-                            <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool remove-item"><i class="fa fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn btn-box-tool add-item"><i class="fa fa-plus"></i></button>
-                            </div>
-                        <?php else: ?>
+                        <?php if (!$model->isNewRecord) : ?>
                             <h3 class="box-title"><?= Html::encode($model->client) ?> <?= Html::encode($model->currency) ?></h3>
                         <?php endif ?>
                     </div>
