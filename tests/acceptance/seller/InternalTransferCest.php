@@ -63,15 +63,16 @@ class InternalTransferCest
         $sum = $this->getTotalSumOnUserAccount($I, $billInfo);
 
         $sum = $this->transformSum($sum);
-        if ($sum !== null) {
+        if ($sum == null) {
+            return $billInfo;
+        }
             $sum = (int)$sum;
             $billInfo['bill']['charges']['charge2'] = $billInfo['bill']['charges']['charge1'];
             
             $billInfo['bill']['charges']['charge2']['type'] = 'PayPal';
             $billInfo['bill']['charges']['charge2']['sum'] = ++$sum;
-        }
 
-        return $billInfo;
+            return $billInfo;
     }
 
     private function getTotalSumOnUserAccount(Seller $I, array $billInfo): ?string
@@ -99,7 +100,7 @@ class InternalTransferCest
     {
         $repl = [',' => ''];
 
-        if (!similar_text($currentBalance, '-')) {
+        if (!strstr($currentBalance, '-')) {
             return null;
         }
 
