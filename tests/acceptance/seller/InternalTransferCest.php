@@ -63,14 +63,11 @@ class InternalTransferCest
         $sum = $this->getTotalSumOnUserAccount($I, $billInfo);
 
         $sum = $this->transformSum($sum);
-        if ($sum == null) {
+        if ($sum === null) {
             return $billInfo;
         }
             $sum = (int)$sum;
-            $billInfo['bill']['charges']['charge2'] = $billInfo['bill']['charges']['charge1'];
-            
-            $billInfo['bill']['charges']['charge2']['type'] = 'PayPal';
-            $billInfo['bill']['charges']['charge2']['sum'] = ++$sum;
+            $billInfo['bill']['charges']['charge1']['sum'] += ++$sum;
 
             return $billInfo;
     }
