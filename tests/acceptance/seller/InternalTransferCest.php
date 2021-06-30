@@ -34,10 +34,7 @@ class InternalTransferCest
         $billData = $this->checkIfUserHaveNegativeBalance($I, $billData);
 
         $I->needPage(Url::to('@bill/create'));
-        $this->billCreate->fillMainBillFields($example['bill']);
-        $this->billCreate->addCharges($billData['bill']['charges']);
-        $this->billCreate->getAndSetBillSumFromCharges();
-        $this->billCreate->clickToggleSign();
+        $this->billCreate->fillMainBillFields($billData['bill']);
         $I->pressButton('Save');
         $this->billCreate->seeActionSuccess();
     }
@@ -66,7 +63,7 @@ class InternalTransferCest
         if ($sum === null) {
             return $billInfo;
         }
-        $billInfo['bill']['charges']['charge1']['sum'] += ++$sum;
+        $billInfo['bill']['sum'] += ++$sum;
 
         return $billInfo;
     }
@@ -117,17 +114,8 @@ class InternalTransferCest
                     'login'     => 'hipanel_test_user1',
                     'type'      => 'Monthly fee',
                     'currency'  => '$',
-                    'sum'       =>  0,
+                    'sum'       =>  1000,
                     'quantity'  =>  1,
-                    'charges'   => [
-                        'charge1'   => [
-                            'class' => 'Client',
-                            'objectId' => 'hipanel_test_user1',
-                            'type' => 'Monthly fee',
-                            'sum' => 1000,
-                            'quantity' => '1',
-                        ],
-                    ],
                 ],
             ],
         ];
