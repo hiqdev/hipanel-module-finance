@@ -66,7 +66,6 @@ class InternalTransferCest
         if ($sum === null) {
             return $billInfo;
         }
-        $sum = (int)$sum;
         $billInfo['bill']['charges']['charge1']['sum'] += ++$sum;
 
         return $billInfo;
@@ -102,7 +101,7 @@ class InternalTransferCest
         }
 
         $currentBalance = substr_replace($currentBalance, '', 0, 2);
-        return strtr($currentBalance, $repl);
+        return (int)strtr($currentBalance, $repl);
     }
 
     private function provideTransferData(): array
