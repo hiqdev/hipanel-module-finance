@@ -99,12 +99,12 @@ class InternalTransferCest
     {
         $repl = [',' => ''];
 
-        if (similar_text($currentBalance, '-')) {
-            $currentBalance = substr_replace($currentBalance, '', 0, 2);
-            return strtr($currentBalance, $repl);
+        if (!similar_text($currentBalance, '-')) {
+            return null;
         }
 
-        return null;
+        $currentBalance = substr_replace($currentBalance, '', 0, 2);
+        return strtr($currentBalance, $repl);
     }
 
     private function provideTransferData(): array
