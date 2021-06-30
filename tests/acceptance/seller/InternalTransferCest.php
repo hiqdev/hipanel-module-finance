@@ -66,10 +66,10 @@ class InternalTransferCest
         if ($sum === null) {
             return $billInfo;
         }
-            $sum = (int)$sum;
-            $billInfo['bill']['charges']['charge1']['sum'] += ++$sum;
+        $sum = (int)$sum;
+        $billInfo['bill']['charges']['charge1']['sum'] += ++$sum;
 
-            return $billInfo;
+        return $billInfo;
     }
 
     private function getTotalSumOnUserAccount(Seller $I, array $billInfo): ?string
