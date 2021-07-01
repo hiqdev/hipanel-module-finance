@@ -2,7 +2,6 @@
 
 namespace hipanel\modules\finance\tests\_support\Page\exchange;
 
-use hipanel\helpers\Url;
 use hipanel\tests\_support\Page\Authenticated;
 use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Helper\PressButtonHelper;
