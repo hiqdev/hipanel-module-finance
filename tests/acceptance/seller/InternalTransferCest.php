@@ -5,7 +5,6 @@ namespace hipanel\modules\finance\tests\acceptance\seller;
 use hipanel\helpers\Url;
 use Codeception\Example;
 use hipanel\tests\_support\Step\Acceptance\Seller;
-use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\modules\finance\tests\_support\Page\transfer\Create as TransferCreate;
 use hipanel\modules\finance\tests\_support\Page\bill\Create as BillCreate;
@@ -31,8 +30,11 @@ class InternalTransferCest
      */
     public function rechargeAccount(Seller $I, Example $example): void
     {
+        $billData = iterator_to_array($example->getIterator()); 
+        $billData = $this->updateBillIfUserHaveNegativeBalance($I, $billData);
+
         $I->needPage(Url::to('@bill/create'));
-        $this->billCreate->fillMainBillFields($example['bill']);
+        $this->billCreate->fillMainBillFields($billData['bill']);
         $I->pressButton('Save');
         $this->billCreate->seeActionSuccess();
     }
@@ -53,6 +55,29 @@ class InternalTransferCest
         $this->index->seeTransferActionSuccess();
     }
 
+    private function updateBillIfUserHaveNegativeBalance(Seller $I, array $billInfo): array
+    {
+        $sum = $this->getTotalSumOnUserAccount($I, $billInfo);
+
+        $sum = $this->transformSum($sum);
+        if ($sum === null) {
+            return $billInfo;
+        }
+        $billInfo['bill']['sum'] += ++$sum;
+
+        return $billInfo;
+    }
+
+    private function getTotalSumOnUserAccount(Seller $I, array $billInfo): ?string
+    {
+        $I->needPage(Url::to('@finance/bill'));
+
+        $this->index->filterBy(Select2::asTableFilter($I, 'Client'), $billInfo['transfer']['client']);
+        $rowNumber = $this->index->gridView->getRowNumberByNameFromSummary('Total');
+
+        return $I->grabTextFrom("//div[@class='summary']//tbody//tr[$rowNumber]//td//span");
+    }
+
     private function ensureICantCreateTransferWithoutRequiredData(Seller $I): void
     {
         $I->click('Save');
@@ -64,22 +89,34 @@ class InternalTransferCest
         $this->transferCreate->fillMainInternalTransferFields($transferData['transfer']);
     }
 
+    private function transformSum(string $currentBalance): ?string
+    {
+        $repl = [',' => ''];
+
+        if (!strstr($currentBalance, '-')) {
+            return null;
+        }
+
+        $currentBalance = substr_replace($currentBalance, '', 0, 2);
+        return (int)strtr($currentBalance, $repl);
+    }
+
     private function provideTransferData(): array
     {
         return [
-            'transfers' => [
+            'payments' => [
                 'transfer' => [
                     'sum'        => 1000,
-                    'client'     => 'hipanel_test_user',
+                    'client'     => 'hipanel_test_user1',
                     'receiverId' => 'hipanel_test_user2',
                 ],
                 'bill' => [
-                    'login'     => 'hipanel_test_user',
+                    'login'     => 'hipanel_test_user1',
                     'type'      => 'Monthly fee',
                     'currency'  => '$',
-                    'sum'       =>  1200,
+                    'sum'       =>  1000,
                     'quantity'  =>  1,
-                ]
+                ],
             ],
         ];
     }

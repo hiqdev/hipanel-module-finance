@@ -218,4 +218,10 @@ JS
         $I = $this->tester;
         return $I->grabFromCurrentUrl('~id_in%5B0%5D=(\d+)~');
     }
+
+    public function getAndSetBillSumFromCharges(): void
+    {
+        $sum = $this->getChargesTotalSum();
+        $this->setBillTotalSum(-$sum);
+    }
 }
