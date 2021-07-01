@@ -31,7 +31,7 @@ class InternalTransferCest
     public function rechargeAccount(Seller $I, Example $example): void
     {
         $billData = iterator_to_array($example->getIterator()); 
-        $billData = $this->checkIfUserHaveNegativeBalance($I, $billData);
+        $billData = $this->updateBillIfUserHaveNegativeBalance($I, $billData);
 
         $I->needPage(Url::to('@bill/create'));
         $this->billCreate->fillMainBillFields($billData['bill']);
@@ -55,7 +55,7 @@ class InternalTransferCest
         $this->index->seeTransferActionSuccess();
     }
 
-    private function checkIfUserHaveNegativeBalance(Seller $I, array $billInfo): array
+    private function updateBillIfUserHaveNegativeBalance(Seller $I, array $billInfo): array
     {
         $sum = $this->getTotalSumOnUserAccount($I, $billInfo);
 
@@ -104,7 +104,7 @@ class InternalTransferCest
     private function provideTransferData(): array
     {
         return [
-            'transfers' => [
+            'payments' => [
                 'transfer' => [
                     'sum'        => 1000,
                     'client'     => 'hipanel_test_user1',
