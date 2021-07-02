@@ -19,7 +19,7 @@ class CurrencyExchangeCest
     /**
      * @dataProvider provideExchangeData
      */
-    public function ensureThatIndexPageWorks(Manager $I, Example $example): void
+    public function ensureThatCurrencyExchangeWorks(Manager $I, Example $example): void
     {
         $I->login();
         $exchangeData = iterator_to_array($example->getIterator());
