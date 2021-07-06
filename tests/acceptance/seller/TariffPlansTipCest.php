@@ -46,7 +46,7 @@ class TariffPlansTipCest
             'tariff' => [
                 'plan' => [
                     'name'     => uniqid(),
-                    'type'     => 'Server tariff',
+                    'type'     => 'Server',
                     'client'   => 'hipanel_test_reseller',
                     'currency' => 'USD',
                     'note'     => 'note #' . uniqid(),
