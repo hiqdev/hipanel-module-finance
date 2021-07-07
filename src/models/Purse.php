@@ -59,7 +59,7 @@ class Purse extends \hipanel\base\Model
             [['month'], 'date', 'format' => 'php:Y-m', 'on' => ['generate-and-save-monthly-document']],
             [['month'], 'required', 'on' => ['generate-and-save-monthly-document']],
             [['type'], 'string', 'on' => ['generate-and-save-monthly-document', 'generate-and-save-document']],
-            [['client_id', 'currency_id'], 'required', 'on' => ['create']],
+            [['client_id', 'currency'], 'required', 'on' => ['create']],
             [['id'], 'required', 'on' => 'update'],
         ];
     }
