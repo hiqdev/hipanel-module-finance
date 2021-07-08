@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\forms;
 
-use Yii;
+use hipanel\modules\finance\models\Requisite;
 use yii\base\Model;
+use Yii;
 
 class BillImportFromFileForm extends Model
 {
@@ -23,8 +24,8 @@ class BillImportFromFileForm extends Model
             [['file', 'requisite_id', 'type'], 'required'],
             ['requisite_id', 'integer'],
             ['file', 'file', 'skipOnEmpty' => false, 'checkExtensionByMimeType' => false, 'extensions' => ['csv'], 'maxSize' => 1 * 1024 * 1024],
-            ['type', 'in', 'range' => array_unique(array_values($this->getLinkedTypesAndRequisites()))],
-            ['fee_type', 'in', 'range' => array_unique(array_values($this->getLinkedFeeTypesAndRequisites()))],
+            ['type', 'in', 'range' => $this->getDepositTypes()],
+            ['fee_type', 'in', 'range' => $this->getFeeTypes()],
         ];
     }
 
@@ -37,53 +38,22 @@ class BillImportFromFileForm extends Model
         ];
     }
 
-    /**
-     * This method should be return associative array where the keys are bill types and the values are the names of the requisites
-     *
-     * Example: [
-     *  BILL_TYPE => REQUISITE_NAME,
-     *  BILL_TYPE => REQUISITE_NAME,
-     *  ...
-     * ]
-     * @return array
-     */
-    public function getLinkedTypesAndRequisites(): array
+    public function getDepositTypes(): array
     {
-        return $this->getLinkedAttributesAndRequisites('names');
-    }
-
-    public function getLinkedFeeTypesAndRequisites(): array
-    {
-        return $this->getLinkedAttributesAndRequisites('fee_names');
-    }
-
-    public function getRequisiteNames(): array
-    {
-        return array_keys($this->getLinkedTypesAndRequisites());
-    }
-
-    public function guessTypeByRequisiteName(string $name): void
-    {
-        $type = $this->guessAttributeByRequisiteName('type', $name);
-        if ($type === null) {
-            throw new \RuntimeException(Yii::t('hipanel:finance', 'None of the existing import parsers is associated with the selected requisite. Choose a different requisite.'));
+        foreach ($this->getRequisitesTypes() as $type => $data) {
+            $deposits[$data['deposit']] = $data['deposit'];
         }
 
-        $this->type = $type;
+        return $deposits;
     }
 
-    public function guessFeeTypeByRequisiteName(string $name): void
+    public function getFeeTypes(): array
     {
-        $this->fee_type = $this->guessAttributeByRequisiteName('fee_type', $name);
-    }
+        foreach ($this->getRequisitesTypes() as $type => $data) {
+            $fees[$data['fee']] = $data['fee'];
+        }
 
-    public function guessAttributeByRequisiteName(string $attribute, string $name): ?string
-    {
-        $map = $attribute === 'type'
-            ? $this->getLinkedTypesAndRequisites()
-            : $this->getLinkedFeeTypesAndRequisites();
-
-        return $map[$name] ?? null;
+        return array_filter($fees);
     }
 
     public function getClientSubstrings(): ?array
@@ -93,9 +63,39 @@ class BillImportFromFileForm extends Model
         return empty($data) ? null : $data;
     }
 
-    protected function getLinkedAttributesAndRequisites(string $attribute): array
+    public function guessRequisiteType(): string
     {
-        return $this->getImportData("requisite.{$attribute}");
+        $requisite = $this->getRequisite();
+        $types = $this->getRequisitesTypes();
+        foreach ($types as $key => $data) {
+            if (preg_match("/{$key}/ui", $requisite->name)) {
+                $this->type = $types[$key]['deposit'] ?? null;
+                if ($this->type === null) {
+                    continue;
+                }
+                $this->fee_type = $types[$key]['fee'] ?? null;
+                return $key;
+            }
+        }
+
+        throw new RuntimeException(Yii::t('hipanel:finance', 'None of the existing import parsers is associated with the selected requisite. Choose a different requisite.'));
+    }
+
+    public function getRequisiteTypes(): ?array
+    {
+        return array_keys($this->getRequisitesTypes());
+    }
+
+    public function getRequisitesTypes(): ?array
+    {
+        return $this->getImportData("requisite.types") ?? [];
+    }
+
+    public function getRequisite(): ?Requisite
+    {
+        return Yii::$app->cache->getOrSet([__CLASS__, __METHOD__, $this->requisite_id], function() {
+            return Requisite::find()->where(['id' => $this->requisite_id])->one();
+        }, 3600);
     }
 
     protected function getImportData(string $name): array

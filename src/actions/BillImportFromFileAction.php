@@ -9,7 +9,6 @@ use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillImportFromFileForm;
 use hipanel\modules\finance\helpers\parser\BillsImporter;
 use hipanel\modules\finance\helpers\parser\NoParserAppropriateType;
-use hipanel\modules\finance\models\Requisite;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use RuntimeException;
 use Yii;
@@ -37,9 +36,8 @@ class BillImportFromFileAction extends BillManagementAction
                 throw new BadRequestHttpException('No form data found');
             }
             $form->file = UploadedFile::getInstance($form, 'file');
-            $requisite = Requisite::find()->where(['id' => $form->requisite_id])->one();
-            $form->guessTypeByRequisiteName($requisite->name);
-            $form->guessFeeTypeByRequisiteName($requisite->name);
+            $requisite = $form->getRequisite();
+            $form->guessRequisiteType();
             if (!$form->validate()) {
                 $errors = $form->getFirstErrors();
                 throw new Exception(implode("\n", $errors));

@@ -14,8 +14,7 @@ return [
     'module.finance.plan.required.additional.rights' => null,
 
     'module.finance.bill.import' => [
-        'requisite.names' => null,
-        'requisite.fee_names' => null,
+        'requisite.types' => null,
         'client.substrings' => null,
     ],
 ];

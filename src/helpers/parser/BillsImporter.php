@@ -78,29 +78,22 @@ class BillsImporter
         $bill->sum = $parser->getNet();
         $bill->txn = $parser->getTxn();
         $bill->label = $parser->getLabel();
-        $charges = $this->createCharges($parser);
+        $bill->requisite_id = $this->fileForm->requisite_id;
+        $bill = $this->resolveClient($bill);
+        $charges = $this->createCharges($parser, $bill);
         $bill->populateRelation('charges', $charges);
 
         return $bill;
     }
 
-    private function createCharges(ParserInterface $parser): array
+    private function createCharges(ParserInterface $parser, Bill $bill): array
     {
-        $charges[] = new Charge([
-            'id' => 'fake_id_0',
-            'type' => $this->fileForm->type,
-            'sum' => -1 * $parser->getSum(),
-            'unit' => $parser->getUnit(),
-            'currency' => $parser->getCurrency(),
-            'time' => $parser->getTime(),
-            'quantity' => 1,
-        ]);
-
-        if ($parser->getFee() !== null) {
+        foreach (['deposit', 'fee'] as $attribute) {
             $charges[] = new Charge([
-                'id' => 'fake_id_1',
-                'type' => $this->fileForm->fee_type, // todo: clarify fee type
-                'sum' => -1 * number_format((float)$parser->getFee(), 2),
+                'id' => "fake_id_{$attribute}",
+                'object_id' => $bill->client_id,
+                'type' => $attribute === 'fee' ? $this->fileForm->fee_type : $this->fileForm->type,
+                'sum' => -1 * number_format((float) ($attribute === 'fee' ? $parser->getFee() : $parser->getSum()), 2),
                 'unit' => $parser->getUnit(),
                 'currency' => $parser->getCurrency(),
                 'time' => $parser->getTime(),
@@ -113,13 +106,18 @@ class BillsImporter
 
     private function resolveClients(array $bills): array
     {
-        $clients = Client::find()->where(['logins' => ArrayHelper::getColumn($bills, 'client')])->limit(-1)->all();
-        $clientsMap = array_combine(ArrayHelper::getColumn($clients, 'login'), ArrayHelper::getColumn($clients, 'id'));
-        foreach ($bills as $bill) {
-            $bill->client_id = $clientsMap[$bill->client] ?? null;
-        }
-
         return array_filter($bills, static fn($bill) => $bill->client_id !== null);
+    }
+
+    private function resolveClient(Bill $bill): Bill
+    {
+        $client = Yii::$app->cache->getOrSet([__CLASS__, __METHOD__, $bill->client], function() use ($bill) {
+                return Client::find()->where(['login' => $bill->client])->one();
+        }, 3600);
+
+        $bill->client_id = $client->id ?? null;
+
+        return $bill;
     }
 
     private function filterExisting(array $bills): array
