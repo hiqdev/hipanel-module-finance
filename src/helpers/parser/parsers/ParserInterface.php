@@ -8,6 +8,8 @@ interface ParserInterface
 
     public function getFee(): ?float;
 
+    public function getNet(): ?float;
+
     public function getCurrency(): ?string;
 
     public function getQuantity(): ?int;
@@ -21,4 +23,8 @@ interface ParserInterface
     public function getTxn(): ?string;
 
     public function getLabel(): ?string;
+
+    public function getClientSubstrings(): ?array;
+
+    public function findClient(string $str): ?string;
 }

@@ -45,6 +45,11 @@ class BillsImporter
         return $this->filterExisting(array_splice($bills, 0, 20));
     }
 
+    public function getClientSubstrings(): ?array
+    {
+        return $this->fileForm->getClientSubstrings();
+    }
+
     private function createParser(string $type, UploadedFile $file): ParserInterface
     {
         $map = [
@@ -58,7 +63,7 @@ class BillsImporter
             throw new NoParserAppropriateType(Yii::t('hipanel:finance', 'No parser appropriate type'));
         }
 
-        return new $map[$type]($file);
+        return new $map[$type]($file, $this);
     }
 
     private function createBill(ParserInterface $parser): Bill
@@ -70,7 +75,7 @@ class BillsImporter
         $bill->currency = $parser->getCurrency();
         $bill->unit = $parser->getUnit();
         $bill->quantity = $parser->getQuantity();
-        $bill->sum = $parser->getSum();
+        $bill->sum = $parser->getNet();
         $bill->txn = $parser->getTxn();
         $bill->label = $parser->getLabel();
         $charges = $this->createCharges($parser);
@@ -81,15 +86,24 @@ class BillsImporter
 
     private function createCharges(ParserInterface $parser): array
     {
-        $charges = [];
+        $charges[] = new Charge([
+            'id' => 'fake_id_0',
+            'type' => $this->fileForm->type,
+            'sum' => -1 * $parser->getSum(),
+            'unit' => $parser->getUnit(),
+            'currency' => $parser->getCurrency(),
+            'time' => $parser->getTime(),
+            'quantity' => 1,
+        ]);
+
         if ($parser->getFee() !== null) {
             $charges[] = new Charge([
-                'id' => 'fake_id',
-                'type' => $this->fileForm->type, // todo: clarify fee type
-                'sum' => number_format((float)$parser->getFee(), 2),
+                'id' => 'fake_id_1',
+                'type' => $this->fileForm->fee_type, // todo: clarify fee type
+                'sum' => -1 * number_format((float)$parser->getFee(), 2),
                 'unit' => $parser->getUnit(),
                 'currency' => $parser->getCurrency(),
-                'time' => $parser->getTxn(),
+                'time' => $parser->getTime(),
                 'quantity' => 1,
             ]);
         }

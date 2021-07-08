@@ -11,7 +11,7 @@ use hipanel\modules\finance\helpers\parser\BillsImporter;
 use hipanel\modules\finance\helpers\parser\NoParserAppropriateType;
 use hipanel\modules\finance\models\Requisite;
 use hipanel\modules\finance\providers\BillTypesProvider;
-use http\Exception\RuntimeException;
+use RuntimeException;
 use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -39,6 +39,7 @@ class BillImportFromFileAction extends BillManagementAction
             $form->file = UploadedFile::getInstance($form, 'file');
             $requisite = Requisite::find()->where(['id' => $form->requisite_id])->one();
             $form->guessTypeByRequisiteName($requisite->name);
+            $form->guessFeeTypeByRequisiteName($requisite->name);
             if (!$form->validate()) {
                 $errors = $form->getFirstErrors();
                 throw new Exception(implode("\n", $errors));

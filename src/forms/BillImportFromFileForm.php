@@ -15,6 +15,8 @@ class BillImportFromFileForm extends Model
 
     public $requisite_id;
 
+    public $fee_type;
+
     public function rules()
     {
         return [
@@ -22,6 +24,7 @@ class BillImportFromFileForm extends Model
             ['requisite_id', 'integer'],
             ['file', 'file', 'skipOnEmpty' => false, 'checkExtensionByMimeType' => false, 'extensions' => ['csv'], 'maxSize' => 1 * 1024 * 1024],
             ['type', 'in', 'range' => array_unique(array_values($this->getLinkedTypesAndRequisites()))],
+            ['fee_type', 'in', 'range' => array_unique(array_values($this->getLinkedFeeTypesAndRequisites()))],
         ];
     }
 
@@ -46,7 +49,12 @@ class BillImportFromFileForm extends Model
      */
     public function getLinkedTypesAndRequisites(): array
     {
-        return Yii::$app->params['finance.bill.import.requisite.names'] ?? [];
+        return $this->getLinkedAttributesAndRequisites('names');
+    }
+
+    public function getLinkedFeeTypesAndRequisites(): array
+    {
+        return $this->getLinkedAttributesAndRequisites('fee_names');
     }
 
     public function getRequisiteNames(): array
@@ -56,11 +64,47 @@ class BillImportFromFileForm extends Model
 
     public function guessTypeByRequisiteName(string $name): void
     {
-        $map = $this->getLinkedTypesAndRequisites();
-        if (!array_key_exists($name, $map)) {
+        $type = $this->guessAttributeByRequisiteName('type', $name);
+        if ($type === null) {
             throw new \RuntimeException(Yii::t('hipanel:finance', 'None of the existing import parsers is associated with the selected requisite. Choose a different requisite.'));
         }
 
-        $this->type = $map[$name];
+        $this->type = $type;
+    }
+
+    public function guessFeeTypeByRequisiteName(string $name): void
+    {
+        $this->fee_type = $this->guessAttributeByRequisiteName('fee_type', $name);
+    }
+
+    public function guessAttributeByRequisiteName(string $attribute, string $name): ?string
+    {
+        $map = $attribute === 'type'
+            ? $this->getLinkedTypesAndRequisites()
+            : $this->getLinkedFeeTypesAndRequisites();
+
+        return $map[$name] ?? null;
+    }
+
+    public function getClientSubstrings(): ?array
+    {
+        $data = $this->getImportData('client.substrings');
+
+        return empty($data) ? null : $data;
+    }
+
+    protected function getLinkedAttributesAndRequisites(string $attribute): array
+    {
+        return $this->getImportData("requisite.{$attribute}");
+    }
+
+    protected function getImportData(string $name): array
+    {
+        $data = Yii::$app->params['module.finance.bill.import'];
+        if (empty($data)) {
+            return [];
+        }
+
+        return $data[$name] ?? [];
     }
 }

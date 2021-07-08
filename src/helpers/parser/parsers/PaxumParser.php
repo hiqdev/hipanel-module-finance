@@ -18,14 +18,25 @@ class PaxumParser extends AbstractParser
 
     public function getFee(): ?float
     {
-        $fees = array_filter($this->rows, fn($row): bool => $row[4] === 'Transfer Fee' && $row[3] === $this->row[3]);
+        $fees = array_filter($this->rows, function($row): bool {
+            return $row[4] === 'Transfer Fee'
+                && (
+                    $row[3] === $this->row[3]
+                ||  $row[0] === $this->row[0]
+            );
+        });
         if (!empty($fees)) {
             $fee = reset($fees);
 
-            return $fee[7] > 0 ? (float)$fee[7] : null;
+            return $fee[6] > 0 ? (float)"-{$fee[6]}" : null;
         }
 
         return null;
+    }
+
+    public function getNet(): ?float
+    {
+        return $this->getSum() + $this->getFee();
     }
 
     public function getCurrency(): ?string
@@ -50,13 +61,7 @@ class PaxumParser extends AbstractParser
 
     public function getClient(): ?string
     {
-        $str = $this->row[2];
-        preg_match('/( : (\w*))/', $str, $matches);
-        if (empty($matches)) {
-            return null;
-        }
-
-        return $matches[2];
+        return $this->findClient($this->row[2]);
     }
 
     public function getTxn(): ?string
