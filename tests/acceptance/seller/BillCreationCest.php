@@ -8,7 +8,6 @@ use hipanel\modules\finance\tests\_support\Page\bill\Update;
 use hipanel\modules\finance\tests\_support\Page\bill\Index;
 use hipanel\tests\_support\Page\Widget\Input\MultipleSelect2;
 use hipanel\tests\_support\Helper\PressButtonHelper;
-use hipanel\tests\_support\Page\IndexPage;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 
 class BillCteationCest
@@ -125,16 +124,15 @@ class BillCteationCest
      */
     public function ensureICanUpdateBill(Seller $I): void
     {
-        $indexPage  = new IndexPage($I);
         $updatePage = new Update($I);
 
         $I->needPage(Url::to('@bill/index'));
 
-        $indexPage->sortBy('Time');
-        $indexPage->sortBy('Time');
+        $this->index->sortBy('Time');
+        $this->index->sortBy('Time');
 
-        $indexPage->openRowMenuById($this->billId);
-        $indexPage->chooseRowMenuOption('Update');
+        $this->index->openRowMenuById($this->billId);
+        $this->index->chooseRowMenuOption('Update');
 
         $updatePage->containsCharges(2);
 
@@ -156,13 +154,12 @@ class BillCteationCest
      */
     public function ensureBillWasSuccessfullyUpdated(Seller $I): void
     {
-        $indexPage  = new IndexPage($I);
         $updatePage = new Update($I);
 
         $I->needPage(Url::to('@bill/index'));
 
-        $indexPage->openRowMenuById($this->billId);
-        $indexPage->chooseRowMenuOption('Update');
+        $this->index->openRowMenuById($this->billId);
+        $this->index->chooseRowMenuOption('Update');
 
         $updatePage->containsCharges(1);
 
