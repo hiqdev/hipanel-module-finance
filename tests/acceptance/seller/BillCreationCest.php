@@ -5,12 +5,25 @@ namespace hipanel\modules\finance\tests\acceptance\seller;
 use hipanel\helpers\Url;
 use hipanel\modules\finance\tests\_support\Page\bill\Create;
 use hipanel\modules\finance\tests\_support\Page\bill\Update;
+use hipanel\modules\finance\tests\_support\Page\bill\Index;
+use hipanel\tests\_support\Page\Widget\Input\MultipleSelect2;
+use hipanel\tests\_support\Helper\PressButtonHelper;
 use hipanel\tests\_support\Page\IndexPage;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 
-class PaymentsCest
+class BillCteationCest
 {
     public $billId;
+    private $billData;
+    private Create $create;
+    private Index $index;
+
+    public function _before(Seller $I): void
+    {
+        $this->billdata = $this->getBillData();
+        $this->create = new Create($I);
+        $this->index = new Index($I);
+    }
 
     public function ensureBillPageWorks(Seller $I): void
     {
@@ -28,12 +41,10 @@ class PaymentsCest
      */
     public function ensureICantCreateBillWithoutRequiredData(Seller $I): void
     {
-        $page = new Create($I);
-
         $I->needPage(Url::to('@bill/create'));
 
         $I->pressButton('Save');
-        $page->containsBlankFieldsError(['Sum', 'Currency', 'Quantity']);
+        $this->create->containsBlankFieldsError(['Sum', 'Currency', 'Quantity']);
     }
 
     /**
@@ -43,17 +54,16 @@ class PaymentsCest
      *
      * @param Seller $I
      * @throws \Exception
+     * 
      */
     public function ensureICanCreateSimpleBill(Seller $I): void
     {
-        $page = new Create($I);
-
         $I->needPage(Url::to('@bill/create'));
 
-        $page->fillMainBillFields($this->getBillData());
+        $this->create->fillMainBillFields($this->billdata['bill1']);
         $I->pressButton('Save');
 
-        $page->seeActionSuccess();
+        $this->create->seeActionSuccess();
     }
 
     /**
@@ -66,16 +76,14 @@ class PaymentsCest
      */
     public function ensureICantCreateDetailedBillWithoutData(Seller $I): void
     {
-        $page = new Create($I);
-
         $I->needPage(Url::to('@bill/create'));
 
-        $page->fillMainBillFields($this->getBillData());
-        $page->addCharge([]);
+        $this->create->fillMainBillFields($this->billdata['bill1']);
+        $this->create->addCharge([]);
         $I->pressButton('Save');
         $I->waitForPageUpdate();
-        $page->containsBlankFieldsError(['Sum', 'Qty.']);
-        $page->deleteLastCharge();
+        $this->create->containsBlankFieldsError(['Sum', 'Qty.']);
+        $this->create->deleteLastCharge();
     }
 
     /**
@@ -89,26 +97,24 @@ class PaymentsCest
      */
     public function ensureICanCreateDetailedBill(Seller $I): void
     {
-        $page = new Create($I);
-
         $I->needPage(Url::to('@bill/create'));
 
-        $page->fillMainBillFields($this->getBillData());
-        $page->addCharges([
-            $this->getChargeData('TEST-DS-01'),
-            $this->getChargeData('TEST-DS-02'),
+        $this->create->fillMainBillFields($this->billdata['bill2']);
+        $this->create->addCharges([
+            $this->getChargeData('hipanel_test_user1'),
+            $this->getChargeData('hipanel_test_user2'),
         ]);
-        $page->containsCharges(2);
+        $this->create->containsCharges(2);
 
         $I->pressButton('Save');
 
-        $page->containsSumMismatch();
+        $this->create->containsSumMismatch();
 
-        $chargesSum = $page->getChargesTotalSum();
+        $chargesSum = $this->create->getChargesTotalSum();
 
-        $page->setBillTotalSum(-$chargesSum);
+        $this->create->setBillTotalSum(-$chargesSum);
         $I->pressButton('Save');
-        $this->billId = $page->seeActionSuccess();
+        $this->billId = $this->create->seeActionSuccess();
     }
 
     /**
@@ -132,7 +138,7 @@ class PaymentsCest
 
         $updatePage->containsCharges(2);
 
-        $updatePage->deleteChargeByName('TEST-DS-01');
+        $updatePage->deleteChargeByName('hipanel_test_user1');
         $updatePage->containsCharges(1);
 
         $chargesSum = $updatePage->getChargesTotalSum();
@@ -161,22 +167,39 @@ class PaymentsCest
         $updatePage->containsCharges(1);
 
         $chargeSelector = 'div.bill-charges:first-child';
-        $I->see('TEST-DS-02', $chargeSelector);
+        $I->see('hipanel_test_user2', $chargeSelector);
         $I->see('Server', $chargeSelector);
         $I->see('Monthly fee', $chargeSelector);
     }
 
-    /**
-     * @return array
-     */
+    public function ensureAdvansedFilterWorksCorrectly(Seller $I): void
+    {
+        $I->needPage(Url::to('@bill/index'));
+
+        $this->index->setAdvancedFilter(MultipleSelect2::asAdvancedSearch($I, 'Type'), 'Refund');
+        $I->pressButton('Search');
+        $I->waitForPageUpdate();
+
+        $this->index->checkBillDataInBulkTable([$this->billdata['bill1'], $this->billdata['bill2']]);
+    }
+
     protected function getBillData(): array
     {
         return [
-            'login'     => 'hipanel_test_user',
-            'type'      => 'Monthly fee',
-            'currency'  => '$',
-            'sum'       =>  1000,
-            'quantity'  =>  1,
+            'bill1' => [
+                'login'     => 'hipanel_test_user',
+                'type'      => 'Uninstall',
+                'currency'  => '$',
+                'sum'       =>  750,
+                'quantity'  =>  1,
+            ],
+            'bill2' => [
+                'login'     => 'hipanel_test_user',
+                'type'      => 'Unsale',
+                'currency'  => '$',
+                'sum'       =>  250,
+                'quantity'  =>  1,
+            ]
         ];
     }
 
@@ -187,7 +210,7 @@ class PaymentsCest
     protected function getChargeData(string $objectId): array
     {
         return [
-            'class'     => 'Server',
+            'class'     => 'Client',
             'objectId'  => $objectId,
             'type'      => 'Monthly fee',
             'sum'       => -250,
