@@ -16,11 +16,13 @@ class BillCteationCest
     private $billData;
     private Create $create;
     private Index $index;
+    private Update $update;
 
     public function _before(Seller $I): void
     {
         $this->billdata = $this->getBillData();
         $this->create = new Create($I);
+        $this->update = new Update($I);
         $this->index = new Index($I);
     }
 
@@ -124,8 +126,6 @@ class BillCteationCest
      */
     public function ensureICanUpdateBill(Seller $I): void
     {
-        $updatePage = new Update($I);
-
         $I->needPage(Url::to('@bill/index'));
 
         $this->index->sortBy('Time');
@@ -134,16 +134,16 @@ class BillCteationCest
         $this->index->openRowMenuById($this->billId);
         $this->index->chooseRowMenuOption('Update');
 
-        $updatePage->containsCharges(2);
+        $this->update->containsCharges(2);
 
-        $updatePage->deleteChargeByName('hipanel_test_user1');
-        $updatePage->containsCharges(1);
+        $this->update->deleteChargeByName('hipanel_test_user1');
+        $this->update->containsCharges(1);
 
-        $chargesSum = $updatePage->getChargesTotalSum();
-        $updatePage->setBillTotalSum(-$chargesSum);
+        $chargesSum = $this->update->getChargesTotalSum();
+        $this->update->setBillTotalSum(-$chargesSum);
 
         $I->pressButton('Save');
-        $updatePage->seeActionSuccess();
+        $this->update->seeActionSuccess();
     }
 
     /**
@@ -154,14 +154,12 @@ class BillCteationCest
      */
     public function ensureBillWasSuccessfullyUpdated(Seller $I): void
     {
-        $updatePage = new Update($I);
-
         $I->needPage(Url::to('@bill/index'));
 
         $this->index->openRowMenuById($this->billId);
         $this->index->chooseRowMenuOption('Update');
 
-        $updatePage->containsCharges(1);
+        $this->update->containsCharges(1);
 
         $chargeSelector = 'div.bill-charges:first-child';
         $I->see('hipanel_test_user2', $chargeSelector);
