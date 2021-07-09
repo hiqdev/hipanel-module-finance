@@ -46,14 +46,14 @@ class TariffPlansTipCest
             'tariff' => [
                 'plan' => [
                     'name'     => uniqid(),
-                    'type'     => 'Server',
-                    'client'   => 'hipanel_test_reseller',
-                    'currency' => 'USD',
+                    'type'     => 'AnycastCDN tariff',
+                    'client'   => 'blazingcdn',
+                    'currency' => 'EUR',
                     'note'     => 'note #' . uniqid(),
                     'typeDropDownElements' => [],
                 ],
                 'price' => [
-                    'plan' => 'TEST-CONFIG-NL',
+                    'plan' => 'AnycastCDN Template',
                     'type' => 'Main prices',
                 ],
             ],
