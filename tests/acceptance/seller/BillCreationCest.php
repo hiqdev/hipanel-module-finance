@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\tests\acceptance\seller;
 
 use hipanel\helpers\Url;
+use Codeception\Example;
 use hipanel\modules\finance\tests\_support\Page\bill\Create;
 use hipanel\modules\finance\tests\_support\Page\bill\Update;
 use hipanel\modules\finance\tests\_support\Page\bill\Index;
@@ -13,18 +14,6 @@ use hipanel\tests\_support\Step\Acceptance\Seller;
 class BillCteationCest
 {
     public $billId;
-    private $billData;
-    private Create $create;
-    private Index $index;
-    private Update $update;
-
-    public function _before(Seller $I): void
-    {
-        $this->billdata = $this->getBillData();
-        $this->create = new Create($I);
-        $this->update = new Update($I);
-        $this->index = new Index($I);
-    }
 
     public function ensureBillPageWorks(Seller $I): void
     {
@@ -42,6 +31,8 @@ class BillCteationCest
      */
     public function ensureICantCreateBillWithoutRequiredData(Seller $I): void
     {
+        $this->create = new Create($I);
+
         $I->needPage(Url::to('@bill/create'));
 
         $I->pressButton('Save');
@@ -56,15 +47,19 @@ class BillCteationCest
      * @param Seller $I
      * @throws \Exception
      * 
+     * @dataProvider getBillData
      */
-    public function ensureICanCreateSimpleBill(Seller $I): void
+    public function ensureICanCreateSimpleBill(Seller $I, Example $example): void
     {
+        $create = new Create($I);
+        $billData = iterator_to_array($example->getIterator());
+
         $I->needPage(Url::to('@bill/create'));
 
-        $this->create->fillMainBillFields($this->billdata['bill1']);
+        $create->fillMainBillFields($billData);
         $I->pressButton('Save');
 
-        $this->create->seeActionSuccess();
+        $create->seeActionSuccess();
     }
 
     /**
@@ -74,17 +69,22 @@ class BillCteationCest
      *
      * @param Seller $I
      * @throws \Exception
+     *
+     * @dataProvider getBillData
      */
-    public function ensureICantCreateDetailedBillWithoutData(Seller $I): void
+    public function ensureICantCreateDetailedBillWithoutData(Seller $I, Example $example): void
     {
+        $create = new Create($I);
+        $billData = iterator_to_array($example->getIterator());
+
         $I->needPage(Url::to('@bill/create'));
 
-        $this->create->fillMainBillFields($this->billdata['bill1']);
-        $this->create->addCharge([]);
+        $create->fillMainBillFields($billData);
+        $create->addCharge([]);
         $I->pressButton('Save');
         $I->waitForPageUpdate();
-        $this->create->containsBlankFieldsError(['Sum', 'Qty.']);
-        $this->create->deleteLastCharge();
+        $create->containsBlankFieldsError(['Sum', 'Qty.']);
+        $create->deleteLastCharge();
     }
 
     /**
@@ -95,27 +95,32 @@ class BillCteationCest
      *
      * @param Seller $I
      * @throws \Exception
+     *
+     * @dataProvider getBillData
      */
-    public function ensureICanCreateDetailedBill(Seller $I): void
+    public function ensureICanCreateDetailedBill(Seller $I, Example $example): void
     {
+        $create = new Create($I);
+        $billData = iterator_to_array($example->getIterator());
+
         $I->needPage(Url::to('@bill/create'));
 
-        $this->create->fillMainBillFields($this->billdata['bill2']);
-        $this->create->addCharges([
+        $create->fillMainBillFields($billData);
+        $create->addCharges([
             $this->getChargeData('hipanel_test_user1'),
             $this->getChargeData('hipanel_test_user2'),
         ]);
-        $this->create->containsCharges(2);
+        $create->containsCharges(2);
 
         $I->pressButton('Save');
 
-        $this->create->containsSumMismatch();
+        $create->containsSumMismatch();
 
-        $chargesSum = $this->create->getChargesTotalSum();
+        $chargesSum = $create->getChargesTotalSum();
 
-        $this->create->setBillTotalSum(-$chargesSum);
+        $create->setBillTotalSum(-$chargesSum);
         $I->pressButton('Save');
-        $this->billId = $this->create->seeActionSuccess();
+        $this->billId = $create->seeActionSuccess();
     }
 
     /**
@@ -126,24 +131,27 @@ class BillCteationCest
      */
     public function ensureICanUpdateBill(Seller $I): void
     {
+        $index = new Index($I);
+        $update = new Update($I);
+
         $I->needPage(Url::to('@bill/index'));
 
-        $this->index->sortBy('Time');
-        $this->index->sortBy('Time');
+        $index->sortBy('Time');
+        $index->sortBy('Time');
 
-        $this->index->openRowMenuById($this->billId);
-        $this->index->chooseRowMenuOption('Update');
+        $index->openRowMenuById($this->billId);
+        $index->chooseRowMenuOption('Update');
 
-        $this->update->containsCharges(2);
+        $update->containsCharges(2);
 
-        $this->update->deleteChargeByName('hipanel_test_user1');
-        $this->update->containsCharges(1);
+        $update->deleteChargeByName('hipanel_test_user1');
+        $update->containsCharges(1);
 
-        $chargesSum = $this->update->getChargesTotalSum();
-        $this->update->setBillTotalSum(-$chargesSum);
+        $chargesSum = $update->getChargesTotalSum();
+        $update->setBillTotalSum(-$chargesSum);
 
         $I->pressButton('Save');
-        $this->update->seeActionSuccess();
+        $update->seeActionSuccess();
     }
 
     /**
@@ -154,12 +162,15 @@ class BillCteationCest
      */
     public function ensureBillWasSuccessfullyUpdated(Seller $I): void
     {
+        $index = new Index($I);
+        $update = new Update($I);
+
         $I->needPage(Url::to('@bill/index'));
 
-        $this->index->openRowMenuById($this->billId);
-        $this->index->chooseRowMenuOption('Update');
+        $index->openRowMenuById($this->billId);
+        $index->chooseRowMenuOption('Update');
 
-        $this->update->containsCharges(1);
+        $update->containsCharges(1);
 
         $chargeSelector = 'div.bill-charges:first-child';
         $I->see('hipanel_test_user2', $chargeSelector);
@@ -167,28 +178,34 @@ class BillCteationCest
         $I->see('Monthly fee', $chargeSelector);
     }
 
-    public function ensureAdvansedFilterWorksCorrectly(Seller $I): void
+    /**
+     * @dataProvider getBillData
+     */
+    public function ensureAdvansedFilterWorksCorrectly(Seller $I, Example $example): void
     {
+        $index = new Index($I);
+        $billData = iterator_to_array($example->getIterator());
+
         $I->needPage(Url::to('@bill/index'));
 
-        $this->index->setAdvancedFilter(MultipleSelect2::asAdvancedSearch($I, 'Type'), 'Refund');
+        $index->setAdvancedFilter(MultipleSelect2::asAdvancedSearch($I, 'Type'), 'Refund');
         $I->pressButton('Search');
         $I->waitForPageUpdate();
 
-        $this->index->checkBillDataInBulkTable([$this->billdata['bill1'], $this->billdata['bill2']]);
+        $index->checkBillDataInBulkTable([$billData]);
     }
 
     protected function getBillData(): array
     {
         return [
-            'bill1' => [
+            [
                 'login'     => 'hipanel_test_user',
                 'type'      => 'Uninstall',
                 'currency'  => '$',
                 'sum'       =>  750,
                 'quantity'  =>  1,
             ],
-            'bill2' => [
+            [
                 'login'     => 'hipanel_test_user',
                 'type'      => 'Unsale',
                 'currency'  => '$',
@@ -208,7 +225,7 @@ class BillCteationCest
             'class'     => 'Client',
             'objectId'  => $objectId,
             'type'      => 'Monthly fee',
-            'sum'       => -250,
+            'sum'       => -350,
             'quantity'  => 1,
         ];
     }
