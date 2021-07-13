@@ -34,6 +34,6 @@ class View extends Authenticated
 
     public function ensureChargeViewContainsData(array $chargeData): void
     {
-        $this->gridView->containsDataInTable($chargeData);
+        $this->gridView->containsChargeDataInTable($chargeData);
     }
 }
