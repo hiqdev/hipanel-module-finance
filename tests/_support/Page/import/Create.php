@@ -4,7 +4,6 @@ namespace hipanel\modules\finance\tests\_support\Page\import;
 
 use hipanel\tests\_support\Page\Authenticated;
 use hipanel\tests\_support\Page\Widget\Input\Input;
-use hipanel\helpers\Url;
 
 class Create extends Authenticated
 {

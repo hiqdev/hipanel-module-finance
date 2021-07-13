@@ -7,8 +7,6 @@ use Codeception\Example;
 use hipanel\modules\finance\tests\_support\Page\import\Create as ImportCreate;
 use hipanel\modules\finance\tests\_support\Page\bill\Create as BillCreate;
 use hipanel\modules\finance\tests\_support\Page\bill\View;
-use hipanel\modules\finance\tests\_support\Page\bill\Update;
-use hipanel\tests\_support\Page\IndexPage;
 use hipanel\tests\_support\Step\Acceptance\Manager;
 
 class ImportPaymentsCest
