@@ -16,6 +16,6 @@ class ServerSataDUResourceDecorator extends BackupResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel:server:order', 'SATA disk usage');
+        return Yii::t('hipanel.finance.resource', 'SATA disk usage');
     }
 }

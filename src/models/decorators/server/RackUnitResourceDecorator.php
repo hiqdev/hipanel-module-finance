@@ -16,6 +16,6 @@ class RackUnitResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel:server:order', 'Rack Unit');
+        return Yii::t('hipanel.finance.resource', 'Rack Unit');
     }
 }

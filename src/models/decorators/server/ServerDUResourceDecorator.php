@@ -16,6 +16,6 @@ class ServerDUResourceDecorator extends BackupResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel:server:order', 'Disk usage');
+        return Yii::t('hipanel.finance.resource', 'Disk usage');
     }
 }
