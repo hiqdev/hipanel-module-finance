@@ -36,13 +36,14 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
         'server_traf_max'   => DefaultQuantityFormatter::class,
         'server_traf95_max' => DefaultQuantityFormatter::class,
         'cdn_traf_max'      => DefaultQuantityFormatter::class,
+        'cdn_traf95_max'    => DefaultQuantityFormatter::class,
         'backup_du'         => DefaultQuantityFormatter::class,
         'server_du'         => DefaultQuantityFormatter::class,
+        'storage_du'        => DefaultQuantityFormatter::class,
         'win_license'       => DefaultQuantityFormatter::class,
         'hw_purchase'       => DefaultQuantityFormatter::class,
         'server_ssd'        => DefaultQuantityFormatter::class,
         'server_sata'       => DefaultQuantityFormatter::class,
-
         'drenewal'          => DomainRenewalQuantity::class,
     ];
     /**
