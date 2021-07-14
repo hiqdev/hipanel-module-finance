@@ -17,7 +17,7 @@ class IspResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel:server:order', 'ISP Manager');
+        return Yii::t('hipanel.finance.resource', 'ISP Manager');
     }
 
     public function displayPrepaidAmount()
