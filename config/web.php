@@ -128,6 +128,10 @@ return [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
+                'hipanel.finance.resource' => [
+                    'class' => \yii\i18n\PhpMessageSource::class,
+                    'basePath' => dirname(__DIR__) . '/src/messages',
+                ],
             ],
         ],
     ],
