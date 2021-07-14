@@ -68,7 +68,7 @@ abstract class AbstractParser implements ParserInterface
         return $this->importer->getClientSubstrings();
     }
 
-    public function findClient(string $str): ?string
+    public function extractClient(string $str): ?string
     {
         $substrings = $this->getClientSubstrings();
 

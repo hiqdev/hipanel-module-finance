@@ -61,7 +61,7 @@ class PaxumParser extends AbstractParser
 
     public function getClient(): ?string
     {
-        return $this->findClient($this->row[2]);
+        return $this->extractClient($this->row[2]);
     }
 
     public function getTxn(): ?string

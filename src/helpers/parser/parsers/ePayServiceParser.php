@@ -38,7 +38,7 @@ final class ePayServiceParser extends AbstractParser
 
     public function getClient(): ?string
     {
-        return $this->findClient($this->row[3]);
+        return $this->extractClient($this->row[3]);
     }
 
     public function getTxn(): ?string

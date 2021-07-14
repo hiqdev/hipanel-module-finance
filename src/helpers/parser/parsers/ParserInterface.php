@@ -26,5 +26,5 @@ interface ParserInterface
 
     public function getClientSubstrings(): ?array;
 
-    public function findClient(string $str): ?string;
+    public function extractClient(string $str): ?string;
 }

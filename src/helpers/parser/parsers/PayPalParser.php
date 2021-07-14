@@ -59,7 +59,7 @@ final class PayPalParser extends AbstractParser
 
     public function getClient(): ?string
     {
-        return $this->findClient(trim($this->row[15]));
+        return $this->extractClient(trim($this->row[15]));
     }
 
     public function getTxn(): ?string
