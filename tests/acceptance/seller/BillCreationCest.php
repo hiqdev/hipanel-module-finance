@@ -192,7 +192,7 @@ class BillCteationCest
         $I->pressButton('Search');
         $I->waitForPageUpdate();
 
-        $index->checkBillDataInBulkTable([$billData]);
+        $index->checkBillDataInBulkTable($billData);
     }
 
     protected function getBillData(): array

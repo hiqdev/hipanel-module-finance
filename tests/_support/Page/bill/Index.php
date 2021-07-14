@@ -18,14 +18,12 @@ class Index extends IndexPage
         return $this->grabBillIdFromUrl();
     }
 
-    public function checkBillDataInBulkTable(array $bills): void
+    public function checkBillDataInBulkTable(array $bill): void
     {
         $selector = "//div[@class='dataTables_wrapper form-inline']";
-        foreach ($bills as $bill) {
-            unset($this->billdata[$bill]['quantity']);
-            foreach ($bill as $element) {
-                $this->tester->see($element, $selector);
-            }
+        unset($bill['quantity']);
+        foreach ($bill as $element) {
+            $this->tester->see($element, $selector);
         }
     }
 }
