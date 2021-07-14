@@ -38,13 +38,7 @@ final class ePayServiceParser extends AbstractParser
 
     public function getClient(): ?string
     {
-        $str = $this->row[3];
-        preg_match('/( : (\w*))/', $str, $matches);
-        if (empty($matches)) {
-            return null;
-        }
-
-        return $matches[2];
+        return $this->extractClient($this->row[3]);
     }
 
     public function getTxn(): ?string
@@ -55,6 +49,11 @@ final class ePayServiceParser extends AbstractParser
     public function getFee(): ?float
     {
         return null;
+    }
+
+    public function getNet(): ?float
+    {
+        return $this->getSum();
     }
 
     public function getLabel(): ?string

@@ -7,17 +7,29 @@ final class PayPalParser extends AbstractParser
 {
     protected function canParse(): bool
     {
+        if (preg_match('/Reserve (Hold|Release)/ui', $this->row[4])) {
+            return false;
+        }
+
         return $this->row[5] === 'Completed' && $this->getClient() !== null;
     }
 
     public function getSum(): ?float
     {
-        return (float)$this->row[7];
+        return $this->replaceComma($this->row[7]);
     }
 
     public function getFee(): ?float
     {
-        return $this->row[8] !== '0.00' ? (float)$this->row[8] : null;
+        if ($this->row[8] === '0.00') {
+            return null;
+        }
+        return $this->replaceComma($this->row[8]);
+    }
+
+    public function getNet(): ?float
+    {
+        return (float) $this->replaceComma($this->row[9]);
     }
 
     public function getCurrency(): ?string
@@ -47,12 +59,7 @@ final class PayPalParser extends AbstractParser
 
     public function getClient(): ?string
     {
-        preg_match('/^AH RCP : (\w*)/', trim($this->row[15]), $matches);
-        if (empty($matches)) {
-            return null;
-        }
-
-        return $matches[1];
+        return $this->extractClient(trim($this->row[15]));
     }
 
     public function getTxn(): ?string
@@ -63,5 +70,10 @@ final class PayPalParser extends AbstractParser
     public function getLabel(): ?string
     {
         return null;
+    }
+
+    protected function replaceComma(?string $str): ?float
+    {
+        return (float) str_replace(",", "", $str);
     }
 }

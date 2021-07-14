@@ -27,6 +27,11 @@ final class CardPayParser extends AbstractParser
         return null;
     }
 
+    public function getNet(): ?float
+    {
+        return $this->getSum();
+    }
+
     public function getCurrency(): ?string
     {
         $currency = '';

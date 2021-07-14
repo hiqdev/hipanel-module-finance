@@ -28,6 +28,7 @@ class RequisiteSearch extends Requisite
             [['balance_time'], 'date', 'format' => 'php:Y-m-d'],
             [['currency', 'name_in'], 'safe'],
             [['name_ilike'], 'string'],
+            [['name_insubstri'], 'safe'],
         ]);
     }
 
@@ -37,6 +38,7 @@ class RequisiteSearch extends Requisite
             'limit',
             'balance_time',
             'currency',
+            'name_insubstri',
         ]);
     }
 }

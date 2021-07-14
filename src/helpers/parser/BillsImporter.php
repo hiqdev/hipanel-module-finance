@@ -45,6 +45,11 @@ class BillsImporter
         return $this->filterExisting(array_splice($bills, 0, 20));
     }
 
+    public function getClientSubstrings(): ?array
+    {
+        return $this->fileForm->getClientSubstrings();
+    }
+
     private function createParser(string $type, UploadedFile $file): ParserInterface
     {
         $map = [
@@ -58,7 +63,7 @@ class BillsImporter
             throw new NoParserAppropriateType(Yii::t('hipanel:finance', 'No parser appropriate type'));
         }
 
-        return new $map[$type]($file);
+        return new $map[$type]($file, $this);
     }
 
     private function createBill(ParserInterface $parser): Bill
@@ -70,26 +75,28 @@ class BillsImporter
         $bill->currency = $parser->getCurrency();
         $bill->unit = $parser->getUnit();
         $bill->quantity = $parser->getQuantity();
-        $bill->sum = $parser->getSum();
+        $bill->sum = $parser->getNet();
         $bill->txn = $parser->getTxn();
         $bill->label = $parser->getLabel();
-        $charges = $this->createCharges($parser);
+        $bill->requisite_id = $this->fileForm->requisite_id;
+        $bill = $this->resolveClient($bill);
+        $charges = $this->createCharges($parser, $bill);
         $bill->populateRelation('charges', $charges);
 
         return $bill;
     }
 
-    private function createCharges(ParserInterface $parser): array
+    private function createCharges(ParserInterface $parser, Bill $bill): array
     {
-        $charges = [];
-        if ($parser->getFee() !== null) {
+        foreach (['deposit', 'fee'] as $attribute) {
             $charges[] = new Charge([
-                'id' => 'fake_id',
-                'type' => $this->fileForm->type, // todo: clarify fee type
-                'sum' => number_format((float)$parser->getFee(), 2),
+                'id' => "fake_id_{$attribute}",
+                'object_id' => $bill->client_id,
+                'type' => $attribute === 'fee' ? $this->fileForm->fee_type : $this->fileForm->type,
+                'sum' => -1 * number_format((float) ($attribute === 'fee' ? $parser->getFee() : $parser->getSum()), 2),
                 'unit' => $parser->getUnit(),
                 'currency' => $parser->getCurrency(),
-                'time' => $parser->getTxn(),
+                'time' => $parser->getTime(),
                 'quantity' => 1,
             ]);
         }
@@ -99,13 +106,18 @@ class BillsImporter
 
     private function resolveClients(array $bills): array
     {
-        $clients = Client::find()->where(['logins' => ArrayHelper::getColumn($bills, 'client')])->limit(-1)->all();
-        $clientsMap = array_combine(ArrayHelper::getColumn($clients, 'login'), ArrayHelper::getColumn($clients, 'id'));
-        foreach ($bills as $bill) {
-            $bill->client_id = $clientsMap[$bill->client] ?? null;
-        }
-
         return array_filter($bills, static fn($bill) => $bill->client_id !== null);
+    }
+
+    private function resolveClient(Bill $bill): Bill
+    {
+        $client = Yii::$app->cache->getOrSet([__CLASS__, __METHOD__, $bill->client], function() use ($bill) {
+                return Client::find()->where(['login' => $bill->client])->one();
+        }, 3600);
+
+        $bill->client_id = $client->id ?? null;
+
+        return $bill;
     }
 
     private function filterExisting(array $bills): array
