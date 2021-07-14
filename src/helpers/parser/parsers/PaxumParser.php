@@ -19,11 +19,7 @@ class PaxumParser extends AbstractParser
     public function getFee(): ?float
     {
         $fees = array_filter($this->rows, function($row): bool {
-            return $row[4] === 'Transfer Fee'
-                && (
-                    $row[3] === $this->row[3]
-                ||  $row[0] === $this->row[0]
-            );
+            return $row[4] === 'Transfer Fee' && ($row[3] === $this->row[3] || $row[0] === $this->row[0]);
         });
         if (!empty($fees)) {
             $fee = reset($fees);
