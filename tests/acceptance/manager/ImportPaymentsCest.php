@@ -66,7 +66,7 @@ class ImportPaymentsCest
         $view = new View($I);
 
         $view->viewBillById($this->billId);
-        $view->ensureBillViewContainsData($importData);
+        $view->containsBillDataInTable($importData);
     }
 
     private function ensureICantCreateImportedBillWithouData(Manager $I): void
