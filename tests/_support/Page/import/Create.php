@@ -14,8 +14,8 @@ class Create extends Authenticated
         $importString = null;
 
         foreach ($importData as $element) {
-                $importString = $importString . ';' . $element;
-            }
+            $importString = $importString . ';' . $element;
+        }
         $importString = substr_replace($importString, '', 0, 1);
 
         (new Input($I, '#billimportform-data'))->setValue($importString);

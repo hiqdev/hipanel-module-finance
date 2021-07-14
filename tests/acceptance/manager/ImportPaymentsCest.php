@@ -11,8 +11,6 @@ use hipanel\tests\_support\Step\Acceptance\Manager;
 
 class ImportPaymentsCest
 {
-    private $billId;
-
     /**
      * @dataProvider provideImportData
      */
@@ -56,16 +54,16 @@ class ImportPaymentsCest
         $I->pressButton('Import');
         $I->wait(3);
         $I->pressButton('Save');
-        $this->billId = $billCreate->seeActionSuccess();
+        $billId = $billCreate->seeActionSuccess();
 
-        $this->checkThatBillWasCreatedCorrectly($I, $importData);
+        $this->checkThatBillWasCreatedCorrectly($I, $importData, $billId);
     }
 
-    private function checkThatBillWasCreatedCorrectly(Manager $I, array $importData): void
+    private function checkThatBillWasCreatedCorrectly(Manager $I, array $importData, string $billId): void
     {
         $view = new View($I);
 
-        $view->viewBillById($this->billId);
+        $view->viewBillById($billId);
         $view->containsBillDataInTable($importData);
     }
 
