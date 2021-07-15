@@ -200,9 +200,9 @@ class BillCteationCest
         return [
             [
                 'login'     => 'hipanel_test_user',
-                'type'      => 'Uninstall',
+                'type'      => 'Monthly fee',
                 'currency'  => '$',
-                'sum'       =>  750,
+                'sum'       =>  1000,
                 'quantity'  =>  1,
             ],
             [
@@ -225,7 +225,7 @@ class BillCteationCest
             'class'     => 'Client',
             'objectId'  => $objectId,
             'type'      => 'Monthly fee',
-            'sum'       => -350,
+            'sum'       => -250,
             'quantity'  => 1,
         ];
     }
