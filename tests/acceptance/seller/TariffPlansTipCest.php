@@ -28,7 +28,7 @@ class TariffPlansTipCest
         $this->createTemplatePrices($I, $exampleArray['template']);
     }
 
-    private function createTemplatePrices(Seller $I, $templateData): void
+    private function createTemplatePrices(Seller $I, array $templateData): void
     {
         $pricePage = new PriceCreate($I, $this->planId);
 
