@@ -11,7 +11,7 @@ class Create extends Authenticated
     {
         $I = $this->tester;
 
-        $importString = null;
+        $importString = '';
 
         foreach ($importData as $element) {
             $importString = $importString . ';' . $element;
