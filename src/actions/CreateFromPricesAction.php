@@ -7,10 +7,13 @@ use Exception;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillFromPricesForm;
+use hipanel\modules\finance\helpers\PriceChargesEstimator;
+use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use RuntimeException;
+use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\Session;
@@ -30,24 +33,31 @@ class CreateFromPricesAction extends BillManagementAction
     public function run()
     {
         try {
-            $model = new BillFromPricesForm();
+            $form = new BillFromPricesForm();
             $priceIds = $this->controller->request->post('selection', []);
             if (empty($priceIds)) {
                 throw new BadRequestHttpException('No prices selected');
             }
             [$billTypes, $billGroupLabels] = $this->billTypesProvider->getGroupedList();
-            $prices = Price::find()->select(['*', 'main_object_id'])->joinWith(['object'])->where(['id_in' => $priceIds])->limit(-1)->all();
+            $prices = Price::find()->select(['*', 'main_object_id'])->joinWith(['object'])->withFormulaLines()->where(['id_in' => $priceIds])->limit(-1)->all();
             $pricesByObjectId = ArrayHelper::index($prices, null, 'main_object_id');
             if ($this->controller->request->isAjax) {
                 return $this->controller->renderAjax('modals/create-from-prices', [
-                    'model' => $model,
+                    'model' => $form,
                     'billTypes' => $billTypes,
                     'billGroupLabels' => $billGroupLabels,
                     'prices' => $prices,
                 ]);
             }
-            if ($this->controller->request->isPost && $model->load($this->controller->request->post())) {
-                $sales = Sale::find()->where(['object_ids' => array_keys($pricesByObjectId), 'tariff_id' => reset($prices)->plan_id])->limit(-1)->all();
+            if ($this->controller->request->isPost && $form->load($this->controller->request->post())) {
+                $form->validate();
+                if ($form->hasErrors()) {
+                    $errors = $form->getFirstErrors();
+                    throw  new RuntimeException(reset($errors));
+                }
+                $planId = reset($prices)->plan_id;
+                $calculations = $this->getCalculations($planId, $form->time);
+                $sales = Sale::find()->where(['object_ids' => array_keys($pricesByObjectId), 'tariff_id' => $planId])->limit(-1)->all();
                 if (empty($sales)) {
                     throw new BadRequestHttpException('Apparently the details belonging to the object(s) have not been sold yet');
                 }
@@ -55,7 +65,7 @@ class CreateFromPricesAction extends BillManagementAction
                 $bills = [];
                 foreach ($pricesByObjectId as $mainObjectId => $prices) {
                     if (isset($indexedSales[$mainObjectId])) {
-                        $bills[] = $model->createBillWithCharges($indexedSales[$mainObjectId]->buyer_id, $mainObjectId, $this->billObjectClass, $prices);
+                        $bills[] = $form->createBillWithCharges($indexedSales[$mainObjectId]->buyer_id, $mainObjectId, $this->billObjectClass, $prices, $calculations);
                     }
                 }
                 if (empty($bills)) {
@@ -77,5 +87,15 @@ class CreateFromPricesAction extends BillManagementAction
 
             return $this->controller->goBack();
         }
+    }
+
+    private function getCalculations(int $planId, string $period): array
+    {
+        $periods = [$period];
+        $values = Plan::perform('calculate-values', ['id' => $planId, 'times' => $periods]);
+        $calculator = Yii::$container->get(PriceChargesEstimator::class, [$values]);
+        $calculations = $calculator->calculateForPeriods($periods);
+
+        return reset($calculations)['targets'] ?? [];
     }
 }

@@ -63,6 +63,7 @@ class PricePresenter
         $activeFormulas = array_filter($price->getFormulaLines(), fn ($el) => $el['is_actual']);
         if (!empty($activeFormulas)) {
             $formula = ArraySpoiler::widget([
+                'id' => mt_rand(),
                 'data' => $activeFormulas,
                 'formatter' => function ($v) {
                     return Html::tag('kbd', Html::encode($v['formula']), ['class' => 'javascript']);
