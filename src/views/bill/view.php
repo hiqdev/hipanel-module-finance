@@ -56,7 +56,7 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
             'boxOptions' => ['bodyOptions' => ['class' => 'no-padding']],
             'columns' => [
                 'client_id', 'seller_id',
-                'time', 'descr',
+                'time', 'description',
                 'object', 'tariff_link', 'requisite'
             ],
         ]) ?>
