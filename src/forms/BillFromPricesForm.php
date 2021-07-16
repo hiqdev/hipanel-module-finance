@@ -5,13 +5,15 @@ namespace hipanel\modules\finance\forms;
 
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
+use hipanel\modules\finance\models\Price;
 use hipanel\modules\stock\models\Model;
 use Yii;
-use function Webmozart\Assert\Tests\StaticAnalysis\float;
 
 class BillFromPricesForm extends Model
 {
     private array $prices = [];
+
+    private array $calculations = [];
 
     public function attributes(): array
     {
@@ -27,8 +29,8 @@ class BillFromPricesForm extends Model
     public function attributeLabels(): array
     {
         return [
-            'chargesCount' => Yii::t('hipanel:finance', 'Detalizations will be generated'),
-            'billsCount' => Yii::t('hipanel:finance', 'Payments will be generated'),
+            'time' => Yii::t('hipanel', 'Time'),
+            'type' => Yii::t('hipanel', 'Type'),
         ];
     }
 
@@ -36,12 +38,14 @@ class BillFromPricesForm extends Model
     {
         return [
             [['type', 'time'], 'string'],
+            [['type', 'time'], 'required'],
         ];
     }
 
-    public function createBillWithCharges(int $buyer_id, int $mainObjectId, string $mainObjectClass = 'device', array $prices = []): Bill
+    public function createBillWithCharges(int $buyer_id, int $mainObjectId, string $mainObjectClass = 'device', array $prices = [], array $calculations = []): Bill
     {
         $this->prices = $prices;
+        $this->calculations = $calculations;
         $bill = new Bill(['scenario' => 'create']);
         $bill->object_id = $mainObjectId;
         $bill->class = $mainObjectClass;
@@ -72,7 +76,7 @@ class BillFromPricesForm extends Model
                 'name' => $price->object->label,
                 'ftype' => $this->type,
                 'type' => $this->type,
-                'sum' => number_format(((float)$price->price / $this->numbersOfDays($bill)) * $bill->quantity, 2),
+                'sum' => $this->calculateSum($price, $bill),
                 'quantity' => 1,
             ]);
         }
@@ -108,5 +112,16 @@ class BillFromPricesForm extends Model
     private function daysLeft(Bill $bill): int
     {
         return (int)date('j', strtotime($bill->time));
+    }
+
+    private function calculateSum(Price $price, Bill $bill): string
+    {
+        if (isset($this->calculations[$price->object_id][$price->type])) {
+            $sum = $this->calculations[$price->object_id][$price->type]['sum'];
+        } else {
+            $sum = $price->price;
+        }
+
+        return number_format(((float)$sum / $this->numbersOfDays($bill)) * $bill->quantity, 2);
     }
 }

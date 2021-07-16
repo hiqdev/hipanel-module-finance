@@ -57,6 +57,8 @@ use yii\helpers\Url;
             'layout' => '{items}',
             'columns' => [
                 'object->name',
+                'object->label',
+                'price',
             ],
         ]) ?>
         <?= Html::submitButton(Yii::t('hipanel:finance', 'Proceed to bill(s) creation'), [
