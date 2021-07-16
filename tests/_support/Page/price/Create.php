@@ -63,6 +63,18 @@ class Create extends View
         $this->proceedToCreation();
     }
 
+    public function createTemplatePrices(array $priceData): void
+    {
+        $I = $this->tester;
+
+        $I->click("//div/a[contains(text(), 'Create prices')]");
+        $I->click("//li/a[contains(text(), 'Create prices')]");
+        $I->waitForElement('#create-prices');
+
+        $this->choosePriceType($priceData['type']);
+        $this->proceedToCreation();
+    }
+
     public function chooseObject(string $objectName): void
     {
         (new Select2($this->tester, '#object_id'))

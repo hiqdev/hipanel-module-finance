@@ -12,6 +12,30 @@ use hipanel\modules\finance\tests\_support\Page\price\Create as PriceCreate;
 
 class TariffPlansTipCest
 {
+    protected $templateName;
+    protected $planId;
+
+    /**
+     * @dataProvider getTariffData
+     */
+    public function createTemplateTariffAndItsPrices(Seller $I,  Example $example): void
+    {
+        $I->login();
+        $I->needPage(Url::to('@plan/create'));
+        $exampleArray = iterator_to_array($example->getIterator());
+        $this->planId = $this->ensureICanCreateNewTariff($I, $exampleArray['template']);
+
+        $this->createTemplatePrices($I, $exampleArray['template']);
+    }
+
+    private function createTemplatePrices(Seller $I, $templateData): void
+    {
+        $pricePage = new PriceCreate($I, $this->planId);
+
+        $pricePage->createTemplatePrices($templateData['price']);
+        $pricePage->saveForm();
+    }
+
     /**
      * @dataProvider getTariffData
      */
@@ -20,7 +44,7 @@ class TariffPlansTipCest
         $I->login();
         $I->needPage(Url::to('@plan/create'));
         $exampleArray = iterator_to_array($example->getIterator());
-        $exampleArray['price']['id'] = $this->ensureICanCreateNewTariff($I, $exampleArray['plan']);
+        $this->planId = $this->ensureICanCreateNewTariff($I, $exampleArray['plan']);
         $this->ensureTipsAreCorrect($I, $exampleArray['price']);
     }
 
@@ -33,28 +57,39 @@ class TariffPlansTipCest
 
     private function ensureTipsAreCorrect(Seller $I, array $priceData): void
     {
-        $pricePage = new PriceCreate($I, $priceData['id']);
+        $pricePage = new PriceCreate($I, $this->planId);
 
         foreach ($pricePage->getCurrencyList() as $key => $currentCurrency) {
             $pricePage->lookForHelpTip($currentCurrency, $priceData);
         }
     }
-    
+
     protected function getTariffData(): array
     {
         return [
             'tariff' => [
                 'plan' => [
                     'name'     => uniqid(),
-                    'type'     => 'Server',
+                    'type'     => 'AnycastCDN tariff',
                     'client'   => 'hipanel_test_reseller',
-                    'currency' => 'USD',
+                    'currency' => 'EUR',
                     'note'     => 'note #' . uniqid(),
                     'typeDropDownElements' => [],
                 ],
                 'price' => [
-                    'plan' => 'TEST-CONFIG-NL',
+                    'plan' => $this->templateName,
                     'type' => 'Main prices',
+                ],
+                'template' => [
+                    'name'     => $this->templateName = 'template tariff' . uniqid(),
+                    'type'     => 'Template tariff',
+                    'client'   => 'hipanel_test_reseller',
+                    'currency' => 'EUR',
+                    'note'     => 'note #' . uniqid(),
+                    'typeDropDownElements' => [],
+                    'price'    => [
+                        'type' => 'Anycast CDN',
+                    ],
                 ],
             ],
         ];
