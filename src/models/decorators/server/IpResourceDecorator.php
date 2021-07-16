@@ -16,7 +16,7 @@ class IpResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel:server:order', 'Dedicated IP');
+        return Yii::t('hipanel.finance.resource', 'Dedicated IP');
     }
 
     public function getOverusePrice()
