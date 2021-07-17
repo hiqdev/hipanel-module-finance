@@ -36,8 +36,6 @@ class BillImportFromFileAction extends BillManagementAction
                 throw new BadRequestHttpException('No form data found');
             }
             $form->file = UploadedFile::getInstance($form, 'file');
-            $requisite = $form->getRequisite();
-            $form->guessRequisiteType();
             if (!$form->validate()) {
                 $errors = $form->getFirstErrors();
                 throw new Exception(implode("\n", $errors));

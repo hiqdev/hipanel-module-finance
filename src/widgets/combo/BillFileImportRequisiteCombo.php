@@ -12,7 +12,7 @@ class BillFileImportRequisiteCombo extends BillRequisitesCombo
     public function getFilter()
     {
         return [
-            'name_insubstri' => ['format' => $this->model->getRequisiteTypes()],
+            'name_insubstri' => ['format' => $this->model->getTypes()],
         ];
     }
 }

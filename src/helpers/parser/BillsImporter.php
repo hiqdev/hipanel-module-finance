@@ -6,6 +6,7 @@ namespace hipanel\modules\finance\helpers\parser;
 
 use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\forms\BillImportFromFileForm;
+use hipanel\modules\finance\helpers\BillImportFromFileHelper;
 use hipanel\modules\finance\helpers\parser\parsers\CardPayParser;
 use hipanel\modules\finance\helpers\parser\parsers\ePayServiceParser;
 use hipanel\modules\finance\helpers\parser\parsers\ParserInterface;
@@ -21,14 +22,15 @@ use yii\web\UploadedFile;
 
 class BillsImporter
 {
-    private BillImportFromFileForm $fileForm;
-
     private ParserInterface $parser;
+
+    private BillImportFromFileHelper $requisiteToTypes;
 
     public function __construct(BillImportFromFileForm $fileForm)
     {
-        $this->fileForm = $fileForm;
-        $this->parser = $this->createParser($fileForm->type, $fileForm->file);
+        $requisite_id = $fileForm->requisite_id ? (int) $fileForm->requisite_id : null;
+        $this->requisiteToTypes = new BillImportFromFileHelper($requisite_id);
+        $this->parser = $this->createParser($this->requisiteToTypes->getRequisiteType(), $fileForm->file);
     }
 
     public function __invoke(): array
@@ -47,17 +49,17 @@ class BillsImporter
 
     public function getClientSubstrings(): ?array
     {
-        return $this->fileForm->getClientSubstrings();
+        return $this->requisiteToTypes->getClientSubstrings();
     }
 
     private function createParser(string $type, UploadedFile $file): ParserInterface
     {
         $map = [
-            'deposit,epayservice' => ePayServiceParser::class,
-            'deposit,paxum' => PaxumParser::class,
-            'deposit,cardpay_dwgg' => CardPayParser::class,
-            'deposit,paypal' => PayPalParser::class,
-//            'deposit,dwgg_transferwise' => TransferWiseParser::class, // todo: add this parser
+            'epayservice' => ePayServiceParser::class,
+            'paxum' => PaxumParser::class,
+            'cardpay_dwgg' => CardPayParser::class, // TODO: create and left only type cardpay
+            'paypal' => PayPalParser::class,
+//            'dwgg_transferwise' => TransferWiseParser::class, // todo: add this parser
         ];
         if (!isset($map[$type])) {
             throw new NoParserAppropriateType(Yii::t('hipanel:finance', 'No parser appropriate type'));
@@ -70,7 +72,7 @@ class BillsImporter
     {
         $bill = new Bill(['scenario' => Bill::SCENARIO_CREATE]);
         $bill->client = $parser->getClient();
-        $bill->type = $this->fileForm->type;
+        $bill->type = $this->requisiteToTypes->getDepositType();
         $bill->time = $parser->getTime();
         $bill->currency = $parser->getCurrency();
         $bill->unit = $parser->getUnit();
@@ -78,7 +80,7 @@ class BillsImporter
         $bill->sum = $parser->getNet();
         $bill->txn = $parser->getTxn();
         $bill->label = $parser->getLabel();
-        $bill->requisite_id = $this->fileForm->requisite_id;
+        $bill->requisite_id = $this->requisiteToTypes->getRequisiteID();
         $bill = $this->resolveClient($bill);
         $charges = $this->createCharges($parser, $bill);
         $bill->populateRelation('charges', $charges);
@@ -92,7 +94,9 @@ class BillsImporter
             $charges[] = new Charge([
                 'id' => "fake_id_{$attribute}",
                 'object_id' => $bill->client_id,
-                'type' => $attribute === 'fee' ? $this->fileForm->fee_type : $this->fileForm->type,
+                'type' => $attribute === 'fee'
+                    ? $this->requisiteToTypes->getFeeType()
+                    : $this->requisiteToTypes->getDepositType(),
                 'sum' => -1 * number_format((float) ($attribute === 'fee' ? $parser->getFee() : $parser->getSum()), 2),
                 'unit' => $parser->getUnit(),
                 'currency' => $parser->getCurrency(),
