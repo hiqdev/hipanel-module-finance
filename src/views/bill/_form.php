@@ -230,7 +230,10 @@ $form = ActiveForm::begin([
                                                             <?= $form->field($charge, "[$i][$j]quantity")->input('text', ['value' => $charge->getQuantity()]) ?>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <?= PricePerUnitWidget::widget() ?>
+                                                            <?= PricePerUnitWidget::widget([
+                                                                'sum' => $charge->sum ?? null,
+                                                                'quantity' => $charge->quantity ?? null,
+                                                            ]) ?>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <?= $form->field($charge, "[$i][$j]sum")->input('text', [
