@@ -11,6 +11,10 @@
 return [
     'module.finance.bill.detalization.allowed' => true,
     'module.finance.merchant.pay.cashew.only' => null,
-    'finance.plan.required.additional.rights' => null,
-    'finance.bill.import.requisite.names' => null, // associative array where the keys are bill types and the values are the names of the requisites
+    'module.finance.plan.required.additional.rights' => null,
+
+    'module.finance.bill.import' => [
+        'requisite.types' => null,
+        'client.substrings' => null,
+    ],
 ];

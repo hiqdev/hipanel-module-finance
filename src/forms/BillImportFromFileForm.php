@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\forms;
 
-use Yii;
+use hipanel\modules\finance\models\Requisite;
+use hipanel\modules\finance\helpers\BillImportFromFileHelper;
 use yii\base\Model;
+use Yii;
 
 class BillImportFromFileForm extends Model
 {
@@ -18,10 +20,9 @@ class BillImportFromFileForm extends Model
     public function rules()
     {
         return [
-            [['file', 'requisite_id', 'type'], 'required'],
+            [['file', 'requisite_id'], 'required'],
             ['requisite_id', 'integer'],
             ['file', 'file', 'skipOnEmpty' => false, 'checkExtensionByMimeType' => false, 'extensions' => ['csv'], 'maxSize' => 1 * 1024 * 1024],
-            ['type', 'in', 'range' => array_unique(array_values($this->getLinkedTypesAndRequisites()))],
         ];
     }
 
@@ -29,38 +30,12 @@ class BillImportFromFileForm extends Model
     {
         return [
             'file' => Yii::t('hipanel:finance', 'File from the payment system'),
-            'type' => Yii::t('hipanel:finance', 'Payment system'),
             'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
         ];
     }
 
-    /**
-     * This method should be return associative array where the keys are bill types and the values are the names of the requisites
-     *
-     * Example: [
-     *  BILL_TYPE => REQUISITE_NAME,
-     *  BILL_TYPE => REQUISITE_NAME,
-     *  ...
-     * ]
-     * @return array
-     */
-    public function getLinkedTypesAndRequisites(): array
+    public function getTypes(): array
     {
-        return Yii::$app->params['finance.bill.import.requisite.names'] ?? [];
-    }
-
-    public function getRequisiteNames(): array
-    {
-        return array_keys($this->getLinkedTypesAndRequisites());
-    }
-
-    public function guessTypeByRequisiteName(string $name): void
-    {
-        $map = $this->getLinkedTypesAndRequisites();
-        if (!array_key_exists($name, $map)) {
-            throw new \RuntimeException(Yii::t('hipanel:finance', 'None of the existing import parsers is associated with the selected requisite. Choose a different requisite.'));
-        }
-
-        $this->type = $map[$name];
+        return array_keys((new BillImportFromFileHelper())->getRequisitesTypes());
     }
 }
