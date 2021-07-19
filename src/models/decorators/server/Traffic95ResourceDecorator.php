@@ -16,7 +16,7 @@ class Traffic95ResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
-        return $this->displayTitleWithDirection(Yii::t('hipanel:server:order', '95 percentile traffic'));
+        return $this->displayTitleWithDirection(Yii::t('hipanel.finance.resource', '95 percentile traffic'));
     }
 
     public function displayValue()

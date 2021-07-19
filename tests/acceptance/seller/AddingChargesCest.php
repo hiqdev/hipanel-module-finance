@@ -35,7 +35,7 @@ class AddingChargesCest
         
         $viewPage->viewBillById($billId);
         foreach ($viewData as $key => $charge) {
-            $viewPage->ensureChargeViewContainsData($charge);
+            $viewPage->containsChargeDataInTable($charge);
         }
     }
 

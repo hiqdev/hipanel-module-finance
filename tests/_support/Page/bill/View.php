@@ -45,6 +45,8 @@ class View extends Authenticated
 
     public function ensureChargeViewContainsData(array $chargeData): void
     {
-        $this->gridView->containsChargeDataInTable($chargeData);
+        foreach ($chargeData as $element) {
+            $this->tester->see($element, '//div[@class="table-responsive"]//tr');
+        }
     }
 }
