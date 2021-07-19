@@ -10,6 +10,10 @@ use yii\bootstrap\Html;
 
 final class PricePerUnitWidget extends Widget
 {
+    public ?float $quantity;
+
+    public ?float $sum;
+
     public function run(): string
     {
         $name = 'price_per_unit_' . $this->getId();
@@ -51,7 +55,7 @@ JS
 
         return sprintf('%s%s',
             Html::label(Yii::t('hipanel:finance', 'per unit'), $name, ['class' => 'control-label ppu-input']),
-            Html::textInput($name, null, ['class' => 'form-control'])
+            Html::textInput($name, !empty($this->quantity) ? $this->sum / $this->quantity : null, ['class' => 'form-control'])
         );
     }
 }
