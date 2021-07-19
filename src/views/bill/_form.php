@@ -231,8 +231,8 @@ $form = ActiveForm::begin([
                                                         </div>
                                                         <div class="col-md-4">
                                                             <?= PricePerUnitWidget::widget([
-                                                                            'sum' => $charge->sum ?? null,
-                                                                            'quantity' => $charge->quantity ?? null,
+                                                                'sum' => $charge->sum ?? null,
+                                                                'quantity' => $charge->quantity ?? null,
                                                             ]) ?>
                                                         </div>
                                                         <div class="col-md-4">
