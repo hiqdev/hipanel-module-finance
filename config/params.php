@@ -15,6 +15,6 @@ return [
 
     'module.finance.bill.import' => [
         'requisite.types' => null,
-        'client.substrings' => null,
+        'client.substrings' => [],
     ],
 ];
