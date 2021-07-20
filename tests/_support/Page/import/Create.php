@@ -11,12 +11,9 @@ class Create extends Authenticated
     {
         $I = $this->tester;
 
-        $importString = '';
-
         foreach ($importData as $element) {
-            $importString = $importString . ';' . $element;
+            $importString = implode(';', $importData);
         }
-        $importString = substr_replace($importString, '', 0, 1);
 
         (new Input($I, '#billimportform-data'))->setValue($importString);
     }
@@ -26,5 +23,18 @@ class Create extends Authenticated
         foreach ($fieldsList as $field) {
             $this->tester->waitForText("$field cannot be blank.");
         }
+    }
+
+    public function closeImportedBillPopup(): void
+    {
+        $this->tester->click("//div[@id = 'w1'] //button[@class = 'close']");
+    }
+
+    public function enusreImportTipIsCorrectlyDisplayed(): void
+    {
+        $I = $this->tester;
+
+        $I->see('Use the following format:');
+        $I->see('Client;Time;Amount;Currency;Type;Description;Requisite', 'pre');
     }
 }

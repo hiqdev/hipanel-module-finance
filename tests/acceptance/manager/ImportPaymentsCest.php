@@ -26,18 +26,21 @@ class ImportPaymentsCest
 
     private function enusreImportFromAFileMethodWorksCorrectly(Manager $I): void
     {
+        $importCreate = new ImportCreate($I);
+
         $I->clickLink('Import payments');
         $I->clickLink('Import from a file', '//ul');
         
         $this->ensureICantCreateImportedBillWithouData($I);
 
-        $this->closeImportedBillPopup($I);
+        $importCreate->closeImportedBillPopup();
     }
 
     private function enureImportPaymentsWorksCorrectly(Manager $I, array $importData): void
     {
         $importCreate = new ImportCreate($I);
         $billCreate = new BillCreate($I);
+        $view = new View($I);
 
         $I->clickLink('Import payments');
         $I->clickLink('Import payments', '//ul');
@@ -46,7 +49,7 @@ class ImportPaymentsCest
         $I->seeInCurrentUrl('finance/bill/import');
 
         $I->see('Import payments', 'h1');
-        $this->enusreImportTipIsCorrectlyDisplayed($I);
+        $importCreate->enusreImportTipIsCorrectlyDisplayed();
 
         $I->see('Rows for import', 'h3');
         $importCreate->fillImportField($importData);
@@ -54,16 +57,8 @@ class ImportPaymentsCest
         $I->pressButton('Import');
         $I->wait(3);
         $I->pressButton('Save');
-        $billId = $billCreate->seeActionSuccess();
 
-        $this->checkThatBillWasCreatedCorrectly($I, $importData, $billId);
-    }
-
-    private function checkThatBillWasCreatedCorrectly(Manager $I, array $importData, string $billId): void
-    {
-        $view = new View($I);
-
-        $view->viewBillById($billId);
+        $view->viewBillById($billCreate->seeActionSuccess());
         $view->containsBillDataInTable($importData);
     }
 
@@ -75,17 +70,6 @@ class ImportPaymentsCest
         $I->pressButton('Create bills');
         $create->containsBlankFieldsError(['Requisite']);
         $I->see('File from the payment system cannot be blank.');
-    }
-
-    private function closeImportedBillPopup(Manager $I): void
-    {
-        $I->click("//div[@id = 'w1'] //button[@class = 'close']");
-    }
-
-    private function enusreImportTipIsCorrectlyDisplayed(Manager $I): void
-    {
-        $I->see('Use the following format:');
-        $I->see('Client;Time;Amount;Currency;Type;Description;Requisite', 'pre');
     }
 
     protected function provideImportData(): array
