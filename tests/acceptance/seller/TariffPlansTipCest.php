@@ -84,7 +84,7 @@ class TariffPlansTipCest
         ];
     }
 
-    public function getTemplateData(): array
+    protected function getTemplateData(): array
     {
         return [
             'template' => [
