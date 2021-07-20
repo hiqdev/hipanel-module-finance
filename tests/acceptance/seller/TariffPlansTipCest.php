@@ -16,16 +16,16 @@ class TariffPlansTipCest
     protected $planId;
 
     /**
-     * @dataProvider getTariffData
+     * @dataProvider getTemplateData
      */
     public function createTemplateTariffAndItsPrices(Seller $I,  Example $example): void
     {
         $I->login();
         $I->needPage(Url::to('@plan/create'));
         $exampleArray = iterator_to_array($example->getIterator());
-        $this->planId = $this->ensureICanCreateNewTariff($I, $exampleArray['template']);
+        $this->planId = $this->ensureICanCreateNewTariff($I, $exampleArray);
 
-        $this->createTemplatePrices($I, $exampleArray['template']);
+        $this->createTemplatePrices($I, $exampleArray);
     }
 
     private function createTemplatePrices(Seller $I, array $templateData): void
@@ -80,16 +80,22 @@ class TariffPlansTipCest
                     'plan' => $this->templateName,
                     'type' => 'Main prices',
                 ],
-                'template' => [
-                    'name'     => $this->templateName = 'template tariff' . uniqid(),
-                    'type'     => 'Template tariff',
-                    'client'   => 'hipanel_test_reseller',
-                    'currency' => 'EUR',
-                    'note'     => 'note #' . uniqid(),
-                    'typeDropDownElements' => [],
-                    'price'    => [
-                        'type' => 'Anycast CDN',
-                    ],
+            ],
+        ];
+    }
+
+    public function getTemplateData(): array
+    {
+        return [
+            'template' => [
+                'name'     => $this->templateName  = 'template tariff' . uniqid(),
+                'type'     => 'Template tariff',
+                'client'   => 'hipanel_test_reseller',
+                'currency' => 'EUR',
+                'note'     => 'note #' . uniqid(),
+                'typeDropDownElements' => [],
+                'price'    => [
+                    'type' => 'Anycast CDN',
                 ],
             ],
         ];

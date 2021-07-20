@@ -66,10 +66,7 @@ class Create extends View
     public function createTemplatePrices(array $priceData): void
     {
         $I = $this->tester;
-
-        $I->click("//div/a[contains(text(), 'Create prices')]");
-        $I->click("//li/a[contains(text(), 'Create prices')]");
-        $I->waitForElement('#create-prices');
+        $this->openModal();
 
         $this->choosePriceType($priceData['type']);
         $this->proceedToCreation();
