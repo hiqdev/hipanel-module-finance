@@ -17,7 +17,7 @@ class BillImportFromFileHelper
 
     protected string $depositType;
 
-    protected array $clientSubstrings;
+    protected ?array $clientSubstrings;
 
     protected ?string $feeType;
 
