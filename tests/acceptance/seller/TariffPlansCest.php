@@ -3,12 +3,11 @@
 namespace hipanel\modules\stock\tests\acceptance\seller;
 
 use hipanel\helpers\Url;
-use hipanel\modules\finance\tests\_support\Entity\TemplateTariff;
-use hipanel\modules\finance\tests\_support\Entity\Tariff;
 use Codeception\Example;
 use hipanel\tests\_support\Page\Authenticated;
 use hipanel\tests\_support\Step\Acceptance\Seller;
-use hipanel\tests\_support\Page\Widget\Input\Select2;
+use hipanel\modules\finance\tests\_support\Entity\Tariff;
+use hipanel\modules\finance\tests\_support\Entity\TemplateTariff;
 use hipanel\modules\finance\tests\_support\Page\plan\Create as PlanCreate;
 use hipanel\modules\finance\tests\_support\Page\price\Create as PriceCreate;
 
