@@ -14,62 +14,50 @@ class ImportPaymentsCest
     /**
      * @dataProvider provideImportData
      */
-    public function enusreImportPaymentsWorkCorrectly(Manager $I, Example $example): void
-    {
-        $I->login();
-        $importData = iterator_to_array($example->getIterator()); 
-
-        $I->needPage(Url::to('@bill'));
-        $this->enusreImportFromAFileMethodWorksCorrectly($I);
-        $this->enureImportPaymentsWorksCorrectly($I, $importData);
-    }
-
-    private function enusreImportFromAFileMethodWorksCorrectly(Manager $I): void
-    {
-        $importCreate = new ImportCreate($I);
-
-        $I->clickLink('Import payments');
-        $I->clickLink('Import from a file', '//ul');
-        
-        $this->ensureICantCreateImportedBillWithouData($I);
-
-        $importCreate->closeImportedBillPopup();
-    }
-
-    private function enureImportPaymentsWorksCorrectly(Manager $I, array $importData): void
+    public function enureImportPaymentsWorksCorrectly(Manager $I, Example $example): void
     {
         $importCreate = new ImportCreate($I);
         $billCreate = new BillCreate($I);
         $view = new View($I);
 
-        $I->clickLink('Import payments');
-        $I->clickLink('Import payments', '//ul');
+        $I->login();
+        $importData = iterator_to_array($example->getIterator()); 
 
-        $I->waitForPageUpdate();
-        $I->seeInCurrentUrl('finance/bill/import');
+        $I->needPage(Url::to('@bill/import'));
 
         $I->see('Import payments', 'h1');
-        $importCreate->enusreImportTipIsCorrectlyDisplayed();
-
         $I->see('Rows for import', 'h3');
+
+        $importCreate->enusreImportTipIsCorrectlyDisplayed();
         $importCreate->fillImportField($importData);
 
         $I->pressButton('Import');
-        $I->wait(3);
+        $I->waitForElement("//h1[contains(text(),'Create payment')]", 10);
         $I->pressButton('Save');
 
         $view->viewBillById($billCreate->seeActionSuccess());
         $view->containsBillDataInTable($importData);
     }
 
-    private function ensureICantCreateImportedBillWithouData(Manager $I): void
+    public function ensureICantCreateImportedBillWithoutData(Manager $I): void
     {
         $create = new ImportCreate($I);
+
+        $I->needPage(Url::to('@bill'));
+        $I->clickLink('Import payments');
+        $I->clickLink('Import from a file', '//ul');
+
+        $this->seeImportFromFilePopup($I);
         $I->see("Create bills from file", 'h4');
 
         $I->pressButton('Create bills');
         $create->containsBlankFieldsError(['Requisite']);
         $I->see('File from the payment system cannot be blank.');
+    }
+
+    private function seeImportFromFilePopup(Manager $I): void
+    {
+        $I->waitForElementVisible("form[id*='w']");
     }
 
     protected function provideImportData(): array
