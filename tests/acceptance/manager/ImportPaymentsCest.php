@@ -32,7 +32,7 @@ class ImportPaymentsCest
         $importCreate->fillImportField($importData);
 
         $I->pressButton('Import');
-        $I->waitForElement("//h1[contains(text(),'Create payment')]", 10);
+        $I->waitForText('Create payment');
         $I->pressButton('Save');
 
         $view->viewBillById($billCreate->seeActionSuccess());
