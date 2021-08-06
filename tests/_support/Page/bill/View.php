@@ -32,7 +32,18 @@ class View extends Authenticated
         $this->tester->needPage(Url::to("@bill/view?id=$billId"));
     }
 
-    public function containsChargeDataInTable(array $chargeData): void
+    public function containsBillDataInTable(array $billData): void
+    {
+        if (isset($billData['currency'])) {
+            unset($billData['currency']);
+        }
+
+        foreach ($billData as $element) {
+            $this->tester->see($element, "table[class *= 'detail-view']");
+        }
+    }
+
+    public function ensureChargeViewContainsData(array $chargeData): void
     {
         foreach ($chargeData as $element) {
             $this->tester->see($element, '//div[@class="table-responsive"]//tr');
