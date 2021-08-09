@@ -6,66 +6,84 @@ use hipanel\modules\finance\tests\_support\Entity\TemplateTariff;
 
 class Tariff
 {
-    private $data;
-    private $name;
-    private TemplateTariff $template;
+    private string $name;
+    private string $type;
+    private string $client;
+    private string $currency;
+    private string $note;
+    private array $typeDropDownElements;
+    private array $price;
+    public TemplateTariff $template;
 
     public function __construct (array $data, TemplateTariff $template = null) {
-        $this->data = $data;
         $this->name = $data['name'];
+        $this->type = $data['type'];
+        $this->client = $data['client'];
+        $this->currency = $data['currency'];
+        $this->note = $data['note'];
+        $this->typeDropDownElements = $data['typeDropDownElements'];
+        $this->price = $data['price'];
         if (isset($template)) { 
             $this->template = $template;
-            $this->data['price']['plan'] = $this->template->getTemplateName();
+            $this->data['price']['plan'] = $this->template->getName();
         }
     }
 
-    public function getTariffData(): array
+    public function getData(): array 
     {
-        return $this->data;
+        return [
+            'name'                 => $this->name,
+            'type'                 => $this->type,
+            'client'               => $this->client,
+            'currency'             => $this->currency,
+            'note'                 => $this->note,
+            'typeDropDownElements' => $this->typeDropDownElements,
+            'price'                => $this->price,
+        ];
     }
 
-    public function getTariffName(): ?string 
+    public function getName(): ?string 
     {
         return $this->name;
     }
 
-    public function setTariffId(string $id): void
+    public function getPrice(): array
     {
-        $this->data['id'] = $id;
+        return $this->price;
     }
 
-    public function getTariffId(): ?string
+    public function getType(): string
     {
-        return $this->data['id'];
+        return $this->type;
     }
 
-    public function getTariffPrice(): array
+    public function getClient(): string
     {
-        return $this->data['price'];
+        return $this->client;
     }
 
-    public function getTemplateName(): ?string
+    public function getCurrency(): string
     {
-        return $this->template->getTemplateName();
+        return $this->currency;
     }
 
-    public function getTemplateData(): array
+    public function getNote(): string
     {
-        return $this->template->getTemplateData();
+        return $this->note;
     }
 
-    public function getTemplatePrice(): array
+    public function setId(string $id): void
     {
-        return $this->template->getTemplatePrice();
+        $this->id = $id;
     }
 
-    public function setTemplateId(string $id): void
+    public function getId(): ?string
     {
-        $this->template->setTemplateId($id);
+        return $this->id;
     }
 
-    public function getTemplateId(): ?string
+    public function setTemplateName(string $name): void
     {
-        return $this->template->getTemplateId();
+        $this->price['plan'] = $name;
     }
 }

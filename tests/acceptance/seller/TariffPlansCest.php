@@ -13,7 +13,7 @@ use hipanel\modules\finance\tests\_support\Page\price\Create as PriceCreate;
 
 class TariffPlansCest
 {
-    private $tariff;
+    private string $templateName;
 
     /**
      * @dataProvider provideTariffData
@@ -22,12 +22,14 @@ class TariffPlansCest
     {
         $I->login();
         $I->needPage(Url::to('@plan/create'));
-        $this->tariff = $example['this'];
-        $this->tariff->setTemplateId(
-            $this->ensureICanCreateNewTariff($I, $this->tariff->getTemplateData())
-        );
 
-        $this->createTemplatePrices($I);
+        $temp = iterator_to_array($example->getIterator());
+        $tariff = $temp['tariff'];
+        $this->templateName = $tariff->template->getName();
+        $tariff->template->setId(
+                $this->ensureICanCreateNewTariff($I, $tariff->template->getData())
+            );
+        $this->createTemplatePrices($I, $tariff);
     }
 
     private function ensureICanCreateNewTariff(Seller $I, array $tariffData): int
@@ -36,38 +38,44 @@ class TariffPlansCest
         return $page->createPlan();
     }
 
-    private function createTemplatePrices(Seller $I): void
+    private function createTemplatePrices(Seller $I, Tariff $tariff): void
     {
-        $pricePage = new PriceCreate($I, $this->tariff->getTemplateId());
+        $pricePage = new PriceCreate($I, $tariff->template->getId());
 
-        $pricePage->createTemplatePrices($this->tariff->getTemplatePrice());
+        $pricePage->createTemplatePrices($tariff->template->getPrice());
         $pricePage->saveForm();
     }
 
-    public function ensureICanCreateNewPlanAndCheckIt(Seller $I): void
+    /**
+     * @dataProvider provideTariffData
+     */
+    public function ensureICanCreateNewPlanAndCheckIt(Seller $I, Example $example): void
     {
+        $temp = iterator_to_array($example->getIterator());
+        $tariff = $temp['tariff'];
         $I->needPage(Url::to('@plan/create'));
 
-        $this->tariff->setTariffId(
-            $this->ensureICanCreateNewTariff($I, $this->tariff->getTariffData())
+        $tariff->setId(
+            $this->ensureICanCreateNewTariff($I, $tariff->getData())
         );
 
-        $this->ensureTipsAreCorrect($I);
+        $this->ensureTipsAreCorrect($I, $tariff);
     }
 
-    private function ensureTipsAreCorrect(Seller $I): void
+    private function ensureTipsAreCorrect(Seller $I, Tariff $tariff): void
     {
-        $pricePage = new PriceCreate($I, $this->tariff->getTariffId());
+        $pricePage = new PriceCreate($I, $tariff->getId());
+        $tariff->setTemplateName($this->templateName);
 
         foreach ($pricePage->getCurrencyList() as $key => $currentCurrency) {
-            $pricePage->lookForHelpTip($currentCurrency, $this->tariff->getTariffPrice());
+            $pricePage->lookForHelpTip($currentCurrency, $tariff->getPrice());
         }
     }
 
     protected function provideTariffData(): \Generator
     {   
         yield [
-                'this' => new Tariff(
+            'tariff' => new Tariff(
                 [
                     'name'     => uniqid(),
                     'type'     => 'AnycastCDN tariff',
