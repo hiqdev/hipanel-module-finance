@@ -188,7 +188,7 @@ class BillCteationCest
 
         $I->needPage(Url::to('@bill/index'));
 
-        $index->setAdvancedFilter(MultipleSelect2::asAdvancedSearch($I, 'Type'), 'Refund');
+        $index->setAdvancedFilter(MultipleSelect2::asAdvancedSearch($I, 'Type'), 'Feature');
         $I->pressButton('Search');
         $I->waitForPageUpdate();
 
@@ -200,18 +200,18 @@ class BillCteationCest
         return [
             [
                 'login'     => 'hipanel_test_user',
-                'type'      => 'Monthly fee',
+                'type'      => 'Premium renewal',
                 'currency'  => '$',
-                'sum'       =>  1000,
+                'sum'       =>  750,
                 'quantity'  =>  1,
             ],
             [
                 'login'     => 'hipanel_test_user',
-                'type'      => 'Unsale',
+                'type'      => 'Premium purchase',
                 'currency'  => '$',
                 'sum'       =>  250,
                 'quantity'  =>  1,
-            ]
+            ],
         ];
     }
 
