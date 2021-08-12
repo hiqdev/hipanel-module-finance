@@ -67,11 +67,11 @@ class ImportPaymentsCest
         return [
             'importData' => [
                 'client'      => 'hipanel_test_user',
-                'time'        => date('h:i:s'),
+                'time'        => strftime("%l:%M:%S"),
                 'amount'      => 300,
                 'currency'    => 'USD',
                 'type'        => 'PayPal',
-                'description' => null,
+                'description' => 'description' . uniqid(),
             ],
         ];
     }
