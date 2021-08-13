@@ -4,15 +4,12 @@ namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\ComboSearchAction;
 use hipanel\actions\IndexAction;
+use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\models\stub\ClientRelationFreeStub;
-use hipanel\modules\finance\actions\ResourceDetailAction;
-use hipanel\modules\finance\actions\ResourceFetchDataAction;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Target;
-use hipanel\modules\finance\models\TargetSearch;
-use Yii;
 
 class TargetController extends CrudController
 {
@@ -34,24 +31,11 @@ class TargetController extends CrudController
             'search' => [
                 'class' => ComboSearchAction::class,
             ],
-            'fetch-resources' => [
-                'class' => ResourceFetchDataAction::class,
-                'configurator' => Yii::$container->get('target-resource-config'),
-            ],
-            'resource-detail' => [
-                'class' => ResourceDetailAction::class,
-                'model' => Target::class,
-                'view' => 'resources/target',
-                'configurator' => Yii::$container->get('target-resource-config'),
-                'data' => fn($action, $data): array => $this->getData($action, $data),
-            ],
             'index' => [
                 'class' => IndexAction::class,
             ],
             'view' => [
-                'class' => ResourceDetailAction::class,
-                'model' => Target::class,
-                'configurator' => Yii::$container->get('target-resource-config'),
+                'class' => ViewAction::class,
                 'data' => fn($action, $data): array => $this->getData($action, $data),
             ],
         ]);

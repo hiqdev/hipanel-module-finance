@@ -29,6 +29,7 @@ return [
         '@requisite' => '/finance/requisite',
         '@target' => '/finance/target',
         '@target-resource' => '/finance/targetresource',
+        '@consumption' => '/finance/consumption',
     ],
     'modules' => [
         'finance' => [
@@ -195,15 +196,7 @@ return [
                 );
             },
             \Money\MoneyParser::class => \Money\Parser\DecimalMoneyParser::class,
-            'target-resource-config' => static fn() => ResourceConfigurator::build()
-                ->setModelClassName(Target::class)
-                ->setSearchModelClassName(TargetSearch::class)
-                ->setToObjectUrl('@target/resource-detail')
-                ->setGridClassName(TargetGridView::class)
-                ->setResourceModelClassName(TargetResource::class)
-                ->setSearchView('@vendor/hiqdev/hipanel-module-finance/src/views/target/_search')
-                // TODO: Unhardcode resource types
-                ->setColumns(['server_sata', 'server_ssd', 'server_du', 'cdn_traf', 'cdn_traf_max', 'server_traf', 'server_traf_in', 'server_traf95', 'server_traf95_in']),
+            \hipanel\modules\finance\helpers\ConsumptionConfigurator::class => \hipanel\modules\finance\helpers\ConsumptionConfigurator::class,
         ],
     ],
 ];
