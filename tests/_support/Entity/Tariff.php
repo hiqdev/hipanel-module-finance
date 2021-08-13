@@ -15,13 +15,9 @@ class Tariff
     private array $price;
     public TemplateTariff $template;
 
-    public function __construct (array $data, TemplateTariff $template = null)
+    public function __construct (array $data)
     {
         $this->fromArray($data, $this);
-        if (isset($template)) { 
-            $this->template = $template;
-            $this->data['price']['plan'] = $this->template->getName();
-        }
     }
 
     public static function fromArray(array $tariffArray, Tariff $tariff): void
@@ -33,6 +29,11 @@ class Tariff
         $tariff->note = $tariffArray['note'] ?? 'tariff note-' . uniqid();
         $tariff->typeDropDownElements = $tariffArray['typeDropDownElements'] ?? [];
         $tariff->price = $tariffArray['price'] ?? [];
+
+        if (isset($tariffArray['template'])) { 
+            $tariff->template = $tariffArray['template'];
+            $tariff->data['price']['plan'] = $tariff->template->getName();
+        }
     }
 
     public function getData(): array 

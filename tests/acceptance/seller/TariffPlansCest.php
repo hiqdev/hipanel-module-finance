@@ -87,20 +87,20 @@ class TariffPlansCest
                         'plan' => '',
                         'type' => 'Main prices',
                     ],
-                ],
-                new TemplateTariff(
-                    [
-                        'name'     => 'template tariff' . uniqid(),
-                        'type'     => 'Template',
-                        'client'   => 'hipanel_test_reseller',
-                        'currency' => 'EUR',
-                        'note'     => 'note #' . uniqid(),
-                        'typeDropDownElements' => [],
-                        'price'    => [
-                            'type' => 'Anycast CDN',
+                    'template' => new TemplateTariff(
+                        [
+                            'name'     => 'template tariff' . uniqid(),
+                            'type'     => 'Template',
+                            'client'   => 'hipanel_test_reseller',
+                            'currency' => 'EUR',
+                            'note'     => 'note #' . uniqid(),
+                            'typeDropDownElements' => [],
+                            'price'    => [
+                                'type' => 'Anycast CDN',
+                            ],
                         ],
-                    ],
-                )
+                    )
+                ],
             )
         ];
     }
