@@ -15,18 +15,24 @@ class Tariff
     private array $price;
     public TemplateTariff $template;
 
-    public function __construct (array $data, TemplateTariff $template = null) {
-        $this->name = $data['name'];
-        $this->type = $data['type'];
-        $this->client = $data['client'];
-        $this->currency = $data['currency'];
-        $this->note = $data['note'];
-        $this->typeDropDownElements = $data['typeDropDownElements'];
-        $this->price = $data['price'];
+    public function __construct (array $data, TemplateTariff $template = null)
+    {
+        $this->fromArray($data, $this);
         if (isset($template)) { 
             $this->template = $template;
             $this->data['price']['plan'] = $this->template->getName();
         }
+    }
+
+    public static function fromArray(array $tariffArray, Tariff $tariff): void
+    {
+        $tariff->name = $tariffArray['name'] ?? 'tariff name-' . uniqid();
+        $tariff->type = $tariffArray['type'] ?? 'server';
+        $tariff->client = $tariffArray['client'] ?? 'hipanel_test_reseller';
+        $tariff->currency = $tariffArray['currency'] ?? 'USD';
+        $tariff->note = $tariffArray['note'] ?? 'tariff note-' . uniqid();
+        $tariff->typeDropDownElements = $tariffArray['typeDropDownElements'] ?? [];
+        $tariff->price = $tariffArray['price'] ?? [];
     }
 
     public function getData(): array 

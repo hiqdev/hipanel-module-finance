@@ -27,8 +27,8 @@ class TariffPlansCest
         $tariff = $temp['tariff'];
         $this->templateName = $tariff->template->getName();
         $tariff->template->setId(
-                $this->ensureICanCreateNewTariff($I, $tariff->template->getData())
-            );
+            $this->ensureICanCreateNewTariff($I, $tariff->template->getData())
+        );
         $this->createTemplatePrices($I, $tariff);
     }
 
@@ -91,7 +91,7 @@ class TariffPlansCest
                 new TemplateTariff(
                     [
                         'name'     => 'template tariff' . uniqid(),
-                        'type'     => 'Template tariff',
+                        'type'     => 'Template',
                         'client'   => 'hipanel_test_reseller',
                         'currency' => 'EUR',
                         'note'     => 'note #' . uniqid(),
