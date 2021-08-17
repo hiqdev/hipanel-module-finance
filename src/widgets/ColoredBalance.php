@@ -35,6 +35,8 @@ class ColoredBalance extends Widget
 
     public $urlCallback;
 
+    public ?\Closure $valueFormatter = null;
+
     public function getColor($type)
     {
         return $this->colors[$type] ?? $type;
@@ -42,6 +44,7 @@ class ColoredBalance extends Widget
 
     public function run()
     {
+        $formatter = Yii::$app->formatter;
         $value = $this->model->{$this->attribute};
         $color = $value === 0 ? 'primary' : 'success';
 
@@ -54,7 +57,11 @@ class ColoredBalance extends Widget
         }
 
         $url = $this->url;
-        $txt = Yii::$app->formatter->format($value, ['currency', $this->model->currency]);
+        if ($this->valueFormatter) {
+            $txt = call_user_func($this->valueFormatter, $this->model, $value);
+        } else {
+            $txt = $formatter->format($value, ['currency', $this->model->currency]);
+        }
         $ops = ['class' => 'text-nowrap text-' . $this->getColor($color), 'data-pjax' => 0];
 
         return $url ? Html::a($txt, $url, $ops) : Html::tag('span', $txt, $ops);
