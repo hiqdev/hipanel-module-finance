@@ -5,12 +5,13 @@ namespace hipanel\modules\finance\tests\_support\Entity;
 
 use hipanel\modules\finance\tests\_support\Entity\TemplateTariff;
 
-const DEFAULT_TYPE = 'server';
-const DEFAULT_CLIENT = 'hipanel_test_reseller';
-const DEFAULT_CURRENCY = 'USD';
 
 class Tariff
 {
+    const DEFAULT_TYPE = 'server';
+    const DEFAULT_CLIENT = 'hipanel_test_reseller';
+    const DEFAULT_CURRENCY = 'USD';
+
     public string $name;
     public string $type;
     public string $client;

@@ -90,9 +90,9 @@ class TariffPlansCest
                     'note #' . uniqid(),
                     [
                         'type' => 'Anycast CDN',
-                    ]
-                )
-            )
+                    ],
+                ),
+            ),
         ];
     }
 }
