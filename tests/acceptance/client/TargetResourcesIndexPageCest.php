@@ -21,7 +21,7 @@ class TargetResourcesIndexPageCest
     public function ensureIndexPageWorks(Client $I): void
     {
         $I->login();
-        $I->needPage('finance/targetresource/index');
+        $I->needPage(Url::to('@target-resource'));
         $I->see('Target resources', 'h1');
         $this->ensureICanSeeAdvancedSearchBox($I);
         $this->ensureICanSeeBulkSearchBox();
