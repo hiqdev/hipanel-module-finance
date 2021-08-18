@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace hipanel\modules\stock\tests\acceptance\seller;
 
@@ -25,10 +26,8 @@ class TariffPlansCest
 
         $temp = iterator_to_array($example->getIterator());
         $tariff = $temp['tariff'];
-        $this->templateName = $tariff->template->getName();
-        $tariff->template->setId(
-            $this->ensureICanCreateNewTariff($I, $tariff->template->getData())
-        );
+        $this->templateName = $tariff->template->name;
+        $tariff->template->id = $this->ensureICanCreateNewTariff($I, get_object_vars($tariff->template));
         $this->createTemplatePrices($I, $tariff);
     }
 
@@ -40,9 +39,9 @@ class TariffPlansCest
 
     private function createTemplatePrices(Seller $I, Tariff $tariff): void
     {
-        $pricePage = new PriceCreate($I, $tariff->template->getId());
+        $pricePage = new PriceCreate($I, $tariff->template->id);
 
-        $pricePage->createTemplatePrices($tariff->template->getPrice());
+        $pricePage->createTemplatePrices($tariff->template->price);
         $pricePage->saveForm();
     }
 
@@ -55,20 +54,18 @@ class TariffPlansCest
         $tariff = $temp['tariff'];
         $I->needPage(Url::to('@plan/create'));
 
-        $tariff->setId(
-            $this->ensureICanCreateNewTariff($I, $tariff->getData())
-        );
+        $tariff->id = $this->ensureICanCreateNewTariff($I, get_object_vars($tariff));
 
         $this->ensureTipsAreCorrect($I, $tariff);
     }
 
     private function ensureTipsAreCorrect(Seller $I, Tariff $tariff): void
     {
-        $pricePage = new PriceCreate($I, $tariff->getId());
-        $tariff->setTemplateName($this->templateName);
+        $pricePage = new PriceCreate($I, $tariff->id);
+        $tariff->price['plan'] = $this->templateName;
 
         foreach ($pricePage->getCurrencyList() as $key => $currentCurrency) {
-            $pricePage->lookForHelpTip($currentCurrency, $tariff->getPrice());
+            $pricePage->lookForHelpTip($currentCurrency, $tariff->price);
         }
     }
 
@@ -76,31 +73,25 @@ class TariffPlansCest
     {   
         yield [
             'tariff' => new Tariff(
+                'tariff' . uniqid(),
+                'AnycastCDN tariff',
+                'hipanel_test_reseller',
+                'EUR',
+                'note #' . uniqid(),
                 [
-                    'name'     => uniqid(),
-                    'type'     => 'AnycastCDN tariff',
-                    'client'   => 'hipanel_test_reseller',
-                    'currency' => 'EUR',
-                    'note'     => 'note #' . uniqid(),
-                    'typeDropDownElements' => [],
-                    'price' => [
-                        'plan' => '',
-                        'type' => 'Main prices',
-                    ],
-                    'template' => new TemplateTariff(
-                        [
-                            'name'     => 'template tariff' . uniqid(),
-                            'type'     => 'Template',
-                            'client'   => 'hipanel_test_reseller',
-                            'currency' => 'EUR',
-                            'note'     => 'note #' . uniqid(),
-                            'typeDropDownElements' => [],
-                            'price'    => [
-                                'type' => 'Anycast CDN',
-                            ],
-                        ],
-                    )
+                    'plan' => '',
+                    'type' => 'Main prices',
                 ],
+                new TemplateTariff(
+                    'template tariff' . uniqid(),
+                    'Template',
+                    'hipanel_test_reseller',
+                    'EUR',
+                    'note #' . uniqid(),
+                    [
+                        'type' => 'Anycast CDN',
+                    ]
+                )
             )
         ];
     }
