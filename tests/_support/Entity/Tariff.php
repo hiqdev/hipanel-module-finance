@@ -7,6 +7,7 @@ use hipanel\modules\finance\tests\_support\Entity\TemplateTariff;
 
 class Tariff
 {
+    public ?int $id = null;
     public string $name;
     public string $type;
     public string $client;
@@ -14,7 +15,6 @@ class Tariff
     public string $note;
     public array $typeDropDownElements;
     public array $price;
-    public int $id;
     public ?TemplateTariff $template = null;
 
     public function __construct(
