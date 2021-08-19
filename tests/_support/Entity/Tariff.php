@@ -5,13 +5,8 @@ namespace hipanel\modules\finance\tests\_support\Entity;
 
 use hipanel\modules\finance\tests\_support\Entity\TemplateTariff;
 
-
 class Tariff
 {
-    const DEFAULT_TYPE = 'Server';
-    const DEFAULT_CLIENT = 'hipanel_test_reseller';
-    const DEFAULT_CURRENCY = 'USD';
-
     public string $name;
     public string $type;
     public string $client;
@@ -24,20 +19,20 @@ class Tariff
 
     public function __construct(
         string $name,
-        string $type = null,
-        string $client = null,
-        string $currency = null,
-        string $note = null,
-        array $price = null,
+        string $type,
+        string $client,
+        string $currency,
+        string $note,
+        array $price,
         ?TemplateTariff $template = null
     )
     {
         $this->name = $name;
-        $this->type = $type ?? self::DEFAULT_TYPE;
-        $this->client = $client ?? self::DEFAULT_CLIENT;
-        $this->currency = $currency ?? self::DEFAULT_CURRENCY;
-        $this->note = $note ?? 'tariff note-' . uniqid();
-        $this->price = $price ?? ['type' => 'Main prices'];
+        $this->type = $type;
+        $this->client = $client;
+        $this->currency = $currency;
+        $this->note = $note;
+        $this->price = $price;
 
         if (isset($template)) {
             $this->template = $template;
