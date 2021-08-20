@@ -1,71 +1,79 @@
 <?php
-/**
- * Finance module for HiPanel
- *
- * @link      https://github.com/hiqdev/hipanel-module-finance
- * @package   hipanel-module-finance
- * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
- */
+declare(strict_types=1);
 
 namespace hipanel\modules\finance\tests\acceptance\seller;
 
 use hipanel\helpers\Url;
+use Codeception\Example;
 use hipanel\tests\_support\Page\IndexPage;
-use hipanel\tests\_support\Page\Widget\Input\Dropdown;
-use hipanel\tests\_support\Page\Widget\Input\Input;
+use hipanel\modules\finance\tests\_support\Page\sale\Edit;
+use hipanel\modules\finance\tests\_support\Page\sale\Index;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 
-class SalesCest
+class SalesIndexPageCest
 {
+    #TO DO: исключить третью колонку из выборки для детайл вью, потому что там есть опциональная ссылка, которой может не быть.
+
+
     /**
-     * @var IndexPage
+     * @dataProvider getSaleData
      */
-    private $index;
-
-    public function _before(Seller $I)
-    {
-        $this->index = new IndexPage($I);
-    }
-
-    public function ensureIndexPageWorks(Seller $I)
+    public function EnsureICanEditSeveralSales(Seller $I, Example $example): void
     {
         $I->login();
-        $I->needPage(Url::to('@sale'));
-        $I->see('Sales', 'h1');
-        $this->ensureICanSeeAdvancedSearchBox($I);
-        $this->ensureICanSeeBulkBillSearchBox();
+        $edit = new Edit($I);
+        $saleData = iterator_to_array($example->getIterator());
+
+        $I->needPage(Url::to('@sale/index'));
+        $I->checkOption("//tbody/tr[1]//input[1]");
+        $I->checkOption("//tbody/tr[2]//input[1]");
+        $I->pressButton('Edit');
+        $edit->fillSaleFields($saleData);
     }
 
-    private function ensureICanSeeAdvancedSearchBox(Seller $I)
+    private function fillSaleEditFields(Seller $I, array $saleData): void
     {
-        $this->index->containsFilters([
-            Select2::asAdvancedSearch($I, 'Seller'),
-            Select2::asAdvancedSearch($I, 'Buyer'),
-            (Dropdown::asAdvancedSearch($I,'Object Type'))->withItems([
-                'Servers',
-                'IP',
-                'Accounts',
-                'Clients',
-                'Parts',
-            ]),
-            Select2::asAdvancedSearch($I, 'Tariff'),
-            Input::asAdvancedSearch($I, 'Object'),
-        ]);
+        $edit = new Edit($I);
+
+        $edit->fillSaleFields($saleData);
+        $I->pressButton('Apply changes');
+        $edit->seeActionSuccess();
     }
 
-    private function ensureICanSeeBulkBillSearchBox()
+    public function EnsureSaleDetailViewIsCorrect(Seller $I): void
     {
-        $this->index->containsBulkButtons([
-            'Delete',
-        ]);
-        $this->index->containsColumns([
-            'Object',
-            'Seller',
-            'Buyer',
-            'Tariff',
-            'Time',
-        ]);
+        $index = new IndexPage($I);
+        $edit = new Edit($I);
+
+        $I->needPage(Url::to('@sale/index'));
+        $column = $index->gridView->getColumnNumber('Time');
+
+        $saleData = $edit->editArrayForDetailView($I->grabMultiple("//tbody/tr[1]"), $column);
+
+        $I->click("//tbody/tr[1]/td[$column]//a");
+        $I->waitForPageUpdate();
+
+        $edit->checkDetailViewData($saleData);
+    }
+
+    public function EnsureICanDeleteSeveralSales(Seller $I): void
+    {
+        $index = new Index($I);
+
+        $I->needPage(Url::to('@sale/index'));
+        $I->checkOption("//tbody/tr[1]//input[1]");
+        $I->checkOption("//tbody/tr[2]//input[1]");
+
+        $index->deleteSelectedSales();
+    }
+
+    protected function getSaleData(): array
+    {
+        return [
+            'sale' => [
+                'tariff' => 'Sol Test 1@'
+            ],
+        ];
     }
 }
