@@ -51,7 +51,6 @@ class ConsumptionController extends Controller
                     $query = $action->getDataProvider()->query;
                     $query
                         ->joinWith('resources')
-                        ->andWhere(['types' => $action->getSearchModel()->getColumns()])
                         ->groupBy('month');
                 },
                 'data' => function (RenderAction $action, array $data): array {

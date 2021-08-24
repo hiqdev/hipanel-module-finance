@@ -51,7 +51,7 @@ class ConsumptionGridView extends BoxedGridView
         ];
         foreach ($this->filterModel->getColumnsWithLabels() as $type => $label) {
             $columns[$type] = [
-                'class' => DataColumn::class,
+                'attribute' => $type,
                 'label' => $label,
                 'enableSorting' => true,
                 'format' => 'raw',
