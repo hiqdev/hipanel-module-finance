@@ -17,7 +17,7 @@ class Edit extends Authenticated
         $n = 0;
 
         foreach ($sales as $sale) {
-            (new Select2($I, "//select[@id='sale-$n-tariff_id']"))->setValue($saleData['tariff']);
+            (new Select2($I, "select[id*='sale-$n-tariff_id']"))->setValue($saleData['tariff']);
             $n++;
         }
     }
@@ -33,9 +33,6 @@ class Edit extends Authenticated
 
         unset($saleData[0]);
         unset($saleData[2]);
-
-        $saleData[2] = $I->grabTextFrom("//tbody/tr[1]/td[3]//a");
-        $saleData[] = str_replace($saleData[2], '', $I->grabTextFrom("//tbody/tr[1]/td[3]"));
 
         return $saleData;
     }

@@ -13,9 +13,6 @@ use hipanel\tests\_support\Step\Acceptance\Seller;
 
 class SalesIndexPageCest
 {
-    #TO DO: исключить третью колонку из выборки для детайл вью, потому что там есть опциональная ссылка, которой может не быть.
-
-
     /**
      * @dataProvider getSaleData
      */
@@ -72,7 +69,7 @@ class SalesIndexPageCest
     {
         return [
             'sale' => [
-                'tariff' => 'Sol Test 1@'
+                'tariff' => 'Sol Test 1@dsr'
             ],
         ];
     }
