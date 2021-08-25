@@ -63,6 +63,15 @@ class Create extends View
         $this->proceedToCreation();
     }
 
+    public function createTemplatePrices(array $priceData): void
+    {
+        $I = $this->tester;
+        $this->openModal();
+
+        $this->choosePriceType($priceData['type']);
+        $this->proceedToCreation();
+    }
+
     public function chooseObject(string $objectName): void
     {
         (new Select2($this->tester, '#object_id'))

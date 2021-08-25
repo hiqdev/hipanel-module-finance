@@ -57,7 +57,7 @@ abstract class Plan extends Authenticated
             $this->client = $fields['client'];
             $this->currency = $fields['currency'];
             $this->note = $fields['note'];
-            $this->typeDropDownElements = $fields['typeDropDownElements'];
+            $this->typeDropDownElements = $fields['typeDropDownElements'] ?? [];
         }
     }
 }
