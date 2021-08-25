@@ -54,6 +54,7 @@ class ConsumptionGridView extends BoxedGridView
                 'attribute' => $type,
                 'label' => $label,
                 'enableSorting' => true,
+                'filter' => false,
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => ['class' => 'text-right', 'data-type' => $type, 'style' => 'white-space:nowrap;'],

@@ -30,14 +30,14 @@ class ConsumptionController extends Controller
 
     public function behaviors()
     {
-        return array_merge(parent::behaviors(), [
+        return [
             [
                 'class' => EasyAccessControl::class,
                 'actions' => [
                     '*' => 'consumption.read',
                 ],
             ],
-        ]);
+        ];
     }
 
     public function actions()
