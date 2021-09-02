@@ -7,7 +7,6 @@ use hipanel\helpers\Url;
 use Codeception\Example;
 use hipanel\tests\_support\Page\IndexPage;
 use hipanel\modules\finance\tests\_support\Page\sale\Edit;
-use hipanel\modules\finance\tests\_support\Page\sale\Index;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 
@@ -52,17 +51,6 @@ class SalesIndexPageCest
         $I->waitForPageUpdate();
 
         $edit->checkDetailViewData($saleData);
-    }
-
-    public function EnsureICanDeleteSeveralSales(Seller $I): void
-    {
-        $index = new Index($I);
-
-        $I->needPage(Url::to('@sale/index'));
-        $I->checkOption("//tbody/tr[1]//input[1]");
-        $I->checkOption("//tbody/tr[2]//input[1]");
-
-        $index->deleteSelectedSales();
     }
 
     protected function getSaleData(): array
