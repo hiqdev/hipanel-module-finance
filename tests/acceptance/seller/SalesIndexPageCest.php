@@ -24,12 +24,12 @@ class SalesIndexPageCest
      */
     private $index;
 
-    public function _before(Seller $I)
+    public function _before(Seller $I): void
     {
         $this->index = new IndexPage($I);
     }
 
-    public function ensureIndexPageWorks(Seller $I)
+    public function ensureIndexPageWorks(Seller $I): void
     {
         $I->login();
         $I->needPage(Url::to('@sale'));
@@ -38,7 +38,7 @@ class SalesIndexPageCest
         $this->ensureICanSeeBulkBillSearchBox();
     }
 
-    private function ensureICanSeeAdvancedSearchBox(Seller $I)
+    private function ensureICanSeeAdvancedSearchBox(Seller $I): void
     {
         $this->index->containsFilters([
             Select2::asAdvancedSearch($I, 'Seller'),
@@ -55,7 +55,7 @@ class SalesIndexPageCest
         ]);
     }
 
-    private function ensureICanSeeBulkBillSearchBox()
+    private function ensureICanSeeBulkBillSearchBox(): void
     {
         $this->index->containsBulkButtons([
             'Delete',
