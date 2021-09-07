@@ -28,7 +28,7 @@ class Consumption extends Model
             [['id', 'type_id', 'state_id', 'client_id', 'object_id'], 'integer'],
             [['name', 'state', 'type', 'client'], 'string'],
             [['class'], 'string'],
-            [['class'], 'default', 'value' => 'device'],
+            [['class'], 'default', 'value' => $this->consumptionConfigurator->getFirstAvailableClass()],
             [['mainObject'], 'safe'],
             [$this->consumptionConfigurator->getAllPossibleColumns(), 'safe'],
         ]);

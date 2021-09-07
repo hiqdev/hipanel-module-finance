@@ -26,11 +26,6 @@ class ConsumptionGridView extends BoxedGridView
         parent::init();
     }
 
-    public function columns(): array
-    {
-        return array_merge(parent::columns(), []);
-    }
-
     public function getColumns(): array
     {
         $columns = [];

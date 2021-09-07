@@ -8,11 +8,8 @@
  * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
-use hipanel\modules\finance\grid\TargetGridView;
-use hipanel\modules\finance\helpers\ResourceConfigurator;
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\models\TargetResource;
-use hipanel\modules\finance\models\TargetSearch;
 
 return [
     'aliases' => [
@@ -138,6 +135,43 @@ return [
     ],
     'container' => [
         'definitions' => [
+            \hipanel\modules\finance\helpers\ConsumptionConfigurator::class => [
+                'class' => \hipanel\modules\finance\helpers\ConsumptionConfigurator::class,
+                'configurations' => [
+                    'anycastcdn' => [
+                        'label' => ['hipanel:finance', 'Anycast CDN resources'],
+                        'columns' => [
+                            'server_traf_max',
+                            'server_traf95',
+                            'server_traf95_max',
+                            'server_du',
+                            'server_ssd',
+                            'server_sata',
+                            'cdn_traf',
+                            'cdn_traf_max',
+                            'storage_du',
+                        ],
+                        'groups' => [['server_traf', 'server_traf_in'], ['server_traf95', 'server_traf95_in'], ['cdn_traf', 'cdn_traf_max']],
+                        'model' => Target::class,
+                        'resourceModel' => TargetResource::class,
+                    ],
+                    'videocdn' => [
+                        'label' => ['hipanel:finance', 'Video CDN resources'],
+                        'columns' => [
+                            'server_traf',
+                            'server_traf_max',
+                            'server_traf95',
+                            'server_traf95_max',
+                            'server_du',
+                            'server_ssd',
+                            'server_sata',
+                        ],
+                        'groups' => [['server_traf', 'server_traf_in'], ['server_traf95', 'server_traf95_in']],
+                        'model' => Target::class,
+                        'resourceModel' => TargetResource::class,
+                    ],
+                ]
+            ],
             \hipanel\modules\dashboard\menus\DashboardMenu::class => [
                 'add' => [
                     'finance' => [
@@ -196,7 +230,7 @@ return [
                 );
             },
             \Money\MoneyParser::class => \Money\Parser\DecimalMoneyParser::class,
-            \hipanel\modules\finance\helpers\ConsumptionConfigurator::class => \hipanel\modules\finance\helpers\ConsumptionConfigurator::class,
+//            \hipanel\modules\finance\helpers\ConsumptionConfigurator::class => \hipanel\modules\finance\helpers\ConsumptionConfigurator::class,
         ],
     ],
 ];

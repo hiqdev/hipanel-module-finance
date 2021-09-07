@@ -10,7 +10,7 @@ use yii\helpers\Html;
 
 <div class="box box-widget">
     <div class="box-header with-border">
-        <h3 class="box-title"><?= Html::a(Html::encode($this->title), ['@client/view', 'id' => $mainObject->name]) ?></h3>
+        <h3 class="box-title"><?= Html::a(Html::encode($this->title), ['@client/view', 'id' => $mainObject->id]) ?></h3>
     </div>
     <div class="box-body no-padding">
         <?= ClientGridView::detailView([

@@ -18,6 +18,8 @@ use Yii;
 
 final class ConsumptionConfigurator
 {
+    public array $configurations = [];
+
     public function getColumns(string $class): array
     {
         return $this->getConfigurationByClass($class)['columns'];
@@ -123,6 +125,13 @@ final class ConsumptionConfigurator
         return $configuration['model'];
     }
 
+    public function getFirstAvailableClass(): string
+    {
+        $configurations = $this->getConfigurations();
+
+        return array_key_first($configurations);
+    }
+
     /**
      * @param string $class
      * @return array{label: string, columns: array, group: array, model: ActiveRecordInterface, resourceModel: ActiveRecordInterface}
@@ -134,54 +143,14 @@ final class ConsumptionConfigurator
 
     private function getConfigurations(): array
     {
-        return [
-            'device' => [
-                'label' => Yii::t('hipanel:finance', 'Server resources'),
-                'columns' => ['server_traf', 'server_traf_in', 'server_traf95', 'server_traf95_in', 'ip_num'],
-                'groups' => [['server_traf', 'server_traf_in'], ['server_traf95', 'server_traf95_in']],
-                'model' => $this->createObject(Server::class),
-                'resourceModel' => $this->createObject(ServerResource::class),
-            ],
-            'anycastcdn' => [
-                'label' => Yii::t('hipanel:finance', 'Anycast CDN resources'),
-                'columns' => [
-                    'server_traf_max',
-                    'server_traf95',
-                    'server_traf95_max',
-                    'server_du',
-                    'server_ssd',
-                    'server_sata',
-                    'cdn_traf',
-                    'cdn_traf_max',
-                    'storage_du',
-                ],
-                'groups' => [['server_traf', 'server_traf_in'], ['server_traf95', 'server_traf95_in'], ['cdn_traf', 'cdn_traf_max']],
-                'model' => $this->createObject(Target::class),
-                'resourceModel' => $this->createObject(TargetResource::class),
-            ],
-            'videocdn' => [
-                'label' => Yii::t('hipanel:finance', 'Video CDN resources'),
-                'columns' => [
-                    'server_traf',
-                    'server_traf_max',
-                    'server_traf95',
-                    'server_traf95_max',
-                    'server_du',
-                    'server_ssd',
-                    'server_sata',
-                ],
-                'groups' => [['server_traf', 'server_traf_in'], ['server_traf95', 'server_traf95_in']],
-                'model' => $this->createObject(Target::class),
-                'resourceModel' => $this->createObject(TargetResource::class),
-            ],
-            'client' => [
-                'label' => Yii::t('hipanel:finance', 'Client resources'),
-                'columns' => ['referral'],
-                'groups' => [],
-                'model' => $this->createObject(Client::class),
-                'resourceModel' => $this->createObject(ClientResource::class),
-            ],
-        ];
+        return array_map(function (array $config): array {
+            [$dictionary, $label] = $config['label'];
+            $config['label'] = Yii::t($dictionary, $label);
+            $config['model'] = $this->createObject($config['model']);
+            $config['resourceModel'] = $this->createObject($config['resourceModel']);
+
+            return $config;
+        }, $this->configurations);
     }
 
     private function createObject(string $className, array $params = []): object

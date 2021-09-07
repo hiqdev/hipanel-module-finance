@@ -23,25 +23,25 @@ final class MonthRangePicker extends Widget
         BootstrapDatetimepickerAsset::register($this->view);
         $locale = Yii::$app->language;
         $this->view->registerJs(/* @lang JavaScript */ <<<"JS"
-const dateInput = $('input[name=month-picker]');
-const getDateFromInput = (dateIntput) => {
-  const fromInputDate = dateIntput.closest('form').find('input[name*=$this->timeFromAttribute]').val();
+            const dateInput = $('input[name=month-picker]');
+            const getDateFromInput = (dateIntput) => {
+              const fromInputDate = dateIntput.closest('form').find('input[name*=$this->timeFromAttribute]').val();
 
-  return moment(fromInputDate);
-};
-dateInput.datetimepicker({
-  date: getDateFromInput(dateInput),
-  maxDate: moment(),
-  locale: '$locale',
-  viewMode: 'months',
-  format: 'MMMM YYYY'
-});
-dateInput.datetimepicker().on('dp.update', evt => {
-  const date = evt.viewDate;
-  const form = $(evt.target).closest('form');
-  form.find('input[name*=$this->timeFromAttribute]').val(date.startOf('month').format('YYYY-MM-DD'));
-  form.find('input[name*=$this->timeTillAttribute]').val(date.endOf('month').format('YYYY-MM-DD'));
-});
+              return moment(fromInputDate);
+            };
+            dateInput.datetimepicker({
+              date: getDateFromInput(dateInput),
+              maxDate: moment(),
+              locale: '$locale',
+              viewMode: 'months',
+              format: 'MMMM YYYY'
+            });
+            dateInput.datetimepicker().on('dp.update', evt => {
+              const date = evt.viewDate;
+              const form = $(evt.target).closest('form');
+              form.find('input[name*=$this->timeFromAttribute]').val(date.startOf('month').format('YYYY-MM-DD'));
+              form.find('input[name*=$this->timeTillAttribute]').val(date.add(1, 'month').startOf('month').format('YYYY-MM-DD'));
+            });
 JS
         );
 

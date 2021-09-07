@@ -24,7 +24,7 @@ class ConsumptionSearch extends Consumption
             [['time_from', 'time_till'], 'date', 'format' => 'php:Y-m-d'],
             [['groupby'], 'string'],
             ['time_from', 'default', 'value' => $date->modify('first day of this month')->format('Y-m-d')],
-            ['time_till', 'default', 'value' => $date->modify('last day of this month')->format('Y-m-d')],
+            ['time_till', 'default', 'value' => $date->modify('first day of next month')->format('Y-m-d')],
             ['groupby', 'default', 'value' => 'month'],
         ]);
     }
