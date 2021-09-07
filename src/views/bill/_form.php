@@ -110,7 +110,6 @@ $form = ActiveForm::begin([
                             </div>
                             <div class="col-md-3">
                                 <?= $form->field($model, "[$i]client_id")->widget(ClientCombo::class, [
-                                    'filter' => ['state' => ['format' => 'ok']],
                                     'formElementSelector' => '.form-instance',
                                     'inputOptions' => [
                                         'readonly' => $model->scenario === Bill::SCENARIO_UPDATE,
