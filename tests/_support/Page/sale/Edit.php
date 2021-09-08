@@ -14,11 +14,9 @@ class Edit extends Authenticated
         $I = $this->tester;
 
         $sales = $I->grabMultiple("select[id*=-tariff_id]");
-        $n = 0;
 
-        foreach ($sales as $sale) {
+        foreach ($sales as $n => $sale) {
             (new Select2($I, "select[id*='sale-$n-tariff_id']"))->setValue($saleData['tariff']);
-            $n++;
         }
     }
 
@@ -27,22 +25,12 @@ class Edit extends Authenticated
         $this->tester->closeNotification('Sale has been successfully changed');
     }
 
-    public function editArrayForDetailView(array $saleData, int $column): array
+    public function checkDetailViewData(array $salesData): void
     {
         $I = $this->tester;
 
-        unset($saleData[0]);
-        unset($saleData[2]);
-
-        return $saleData;
-    }
-
-    public function checkDetailViewData(array $saleData): void
-    {
-        $I = $this->tester;
-
-        foreach ($saleData as $data) {
-            $I->see($data, "//div[@class='box box-widget']");
+        foreach ($salesData as $sale) {
+            $I->see($sale, "//div[@class='box box-widget']");
         }
     }
 }

@@ -17,9 +17,4 @@ class Sale extends Authenticated
 
         (new Select2($I, "select[id*='server-tariff_id']"))->setValue($saleData['tariff']);
     }
-
-    public function saveSell(): void
-    {
-        $this->tester->click("//form[@id='bulk-sale']//button[@id='save-button']");
-    }
 }

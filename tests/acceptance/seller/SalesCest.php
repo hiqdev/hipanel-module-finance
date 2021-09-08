@@ -28,9 +28,9 @@ class SalesIndexPageCest
         $I->needPage('/server/server');
         $I->waitForPageUpdate();
 
-        $column = $index->gridView->getColumnNumber('DC');
-        $row[] = $index->getRowNumberInColumnByValue($column, 'TEST-DS-01');
-        $row[] = $index->getRowNumberInColumnByValue($column, 'TEST-DS-02');
+        #$column = $index->gridView->getColumnNumber('DC');
+        $row[] = $index->getRowNumberInColumnByValue('DC', 'TEST-DS-01');
+        $row[] = $index->getRowNumberInColumnByValue('DC', 'TEST-DS-02');
 
         foreach ($row as $currentRow) {
             $I->needPage('/server/server');
@@ -52,7 +52,7 @@ class SalesIndexPageCest
     /**
      * @dataProvider getSaleDataForSeller
      */
-    public function EnsureICanEditSeveralSales(Seller $I, Example $example): void
+    public function ensureICanEditSeveralSales(Seller $I, Example $example): void
     {
         $index = new IndexPage($I);
         $edit = new Edit($I);
@@ -90,7 +90,8 @@ class SalesIndexPageCest
         $I->needPage(Url::to('@sale/index'));
         $column = $index->gridView->getColumnNumber('Time');
 
-        $saleData = $edit->editArrayForDetailView($I->grabMultiple("//tbody/tr[1]"), $column);
+        $saleData = $I->grabMultiple("//tbody/tr[1]");
+        unset($saleData[0], $saleData[2]);
 
         $I->click("//tbody/tr[1]/td[$column]//a");
         $I->waitForPageUpdate();
