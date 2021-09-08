@@ -11,7 +11,6 @@
 namespace hipanel\modules\finance\tests\_support\Page\plan;
 
 use hipanel\helpers\Url;
-use Codeception\Example;
 use hipanel\modules\finance\tests\_support\Helper\CurrencyListTrait;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 

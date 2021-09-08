@@ -15,6 +15,6 @@ class ViewGrouping extends View
     public function seePlan()
     {
         parent::seePlan();
-        $I->see('Grouping', '//span');
+        $this->tester->see('Grouping', '//span');
     }
 }

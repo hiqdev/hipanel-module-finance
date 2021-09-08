@@ -14,14 +14,14 @@ use hipanel\helpers\Url;
 
 class Update extends Create
 {
-    protected function loadPage()
+    protected function loadPage(): void
     {
         $I = $this->tester;
 
         $I->needPage(Url::to(['@plan/update', 'id' => $this->id]));
     }
 
-    protected function savePlan()
+    protected function savePlan(): void
     {
         $I = $this->tester;
 
