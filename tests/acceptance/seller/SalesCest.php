@@ -18,7 +18,7 @@ class SalesIndexPageCest
     /**
      * @dataProvider getSaleDataForManager
      */
-    public function EnsureICanCreateSeveralSales(Manager $I, Example $example): void
+    public function ensureICanCreateSeveralSales(Manager $I, Example $example): void
     {
         $index = new IndexPage($I);
         $sale = new Sale($I);
@@ -28,7 +28,6 @@ class SalesIndexPageCest
         $I->needPage('/server/server');
         $I->waitForPageUpdate();
 
-        #$column = $index->gridView->getColumnNumber('DC');
         $row[] = $index->getRowNumberInColumnByValue('DC', 'TEST-DS-01');
         $row[] = $index->getRowNumberInColumnByValue('DC', 'TEST-DS-02');
 
@@ -37,10 +36,10 @@ class SalesIndexPageCest
             $index->openRowMenuByNumber($currentRow);
             $index->chooseRowMenuOption('View');
             $I->clickLink('Change tariff');
-            $I->waitForElementVisible("//div[contains(text(),'Affected items')]", 90);
+            $I->waitForText('Affected items');
 
             $sale->fillSaleFields($saleData);
-            
+
             $I->pressButton('Sell');
             $I->waitForPageUpdate();
             $I->closeNotification('Servers were sold');
@@ -67,8 +66,13 @@ class SalesIndexPageCest
 
         $I->waitForPageUpdate();
 
-        $I->checkOption("//tbody/tr[1]//input[1]");
-        $I->checkOption("//tbody/tr[2]//input[1]");
+        $row[] = $index->getRowIdByNumber(1);
+        $row[] = $index->getRowIdByNumber(2);
+
+        foreach ($row as $rowId) {
+            $I->checkOption("//input[@value='$rowId']");
+        }
+
         $I->pressButton('Edit');
         $edit->fillSaleFields($saleData);
     }
@@ -82,18 +86,23 @@ class SalesIndexPageCest
         $edit->seeActionSuccess();
     }
 
-    public function EnsureSaleDetailViewIsCorrect(Seller $I): void
+    public function ensureSaleDetailViewIsCorrect(Seller $I): void
     {
         $index = new IndexPage($I);
         $edit = new Edit($I);
 
         $I->needPage(Url::to('@sale/index'));
-        $column = $index->gridView->getColumnNumber('Time');
+        $column = $index->getColumnNumber('Time');
 
-        $saleData = $I->grabMultiple("//tbody/tr[1]");
+
+        $rowId = $index->getRowIdByNumber(1);
+
+        $saleData = $I->grabMultiple("//tr[@data-key='$rowId']");
+
         unset($saleData[0], $saleData[2]);
 
-        $I->click("//tbody/tr[1]/td[$column]//a");
+        $value = $index->getValueFromCell($column, 1);
+        $I->click("//tr[1]//td[$column]//a[contains(text(), '$value')]");
         $I->waitForPageUpdate();
 
         $edit->checkDetailViewData($saleData);
@@ -102,21 +111,24 @@ class SalesIndexPageCest
     /**
      * @dataProvider getSaleDataForSeller
      */
-    public function EnsureICanDeleteSeveralSales(Seller $I, Example $example): void
+    public function ensureICanDeleteSeveralSales(Seller $I, Example $example): void
     {
         $index = new Index($I);
-        $indexPage = new IndexPage($I);
         $saleData = iterator_to_array($example->getIterator());
 
         $I->needPage(Url::to('@sale/index'));
 
-        $indexPage->setAdvancedFilter(Select2::asAdvancedSearch($I, 'Tariff'), $saleData['tariff']);
+        $index->setAdvancedFilter(Select2::asAdvancedSearch($I, 'Tariff'), $saleData['tariff']);
         $I->pressButton('Search');
 
         $I->waitForPageUpdate();
 
-        $I->checkOption("//tbody/tr[1]//input[1]");
-        $I->checkOption("//tbody/tr[2]//input[1]");
+        $row[] = $index->getRowIdByNumber(1);
+        $row[] = $index->getRowIdByNumber(2);
+
+        foreach ($row as $rowId) {
+            $I->checkOption("//input[@value='$rowId']");
+        }
 
         $index->deleteSelectedSales();
     }
@@ -134,7 +146,7 @@ class SalesIndexPageCest
     {
         return [
             'sale' => [
-                'client' => 'testuser60798ee837548@test1.test1',
+                'client' => 'hipanel_test_user2',
                 'tariff' => 'PlanForkerViaLegacyApiTest / Plan to be clonned@hipanel_test_reseller',
             ],
         ];

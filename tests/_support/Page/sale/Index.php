@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace hipanel\modules\finance\tests\_support\Page\sale;
 
 use hipanel\tests\_support\Page\Authenticated;
+use hipanel\tests\_support\Page\IndexPage;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\tests\_support\Helper\PressButtonHelper;
 
-class Index extends Authenticated
+class Index extends IndexPage
 {
     public function deleteSelectedSales(): void
     {

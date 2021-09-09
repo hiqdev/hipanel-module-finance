@@ -19,10 +19,7 @@ use hipanel\tests\_support\Step\Acceptance\Seller;
 
 class SalesIndexPageCest
 {
-    /**
-     * @var IndexPage
-     */
-    private $index;
+    private IndexPage $index;
 
     public function _before(Seller $I): void
     {
