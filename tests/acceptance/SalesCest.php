@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace hipanel\modules\finance\tests\acceptance\seller;
+namespace hipanel\modules\finance\tests\acceptance;
 
 use hipanel\helpers\Url;
 use Codeception\Example;
@@ -24,28 +24,19 @@ class SalesIndexPageCest
         $sale = new Sale($I);
         $saleData = iterator_to_array($example->getIterator());
 
-        $I->login();
         $I->needPage('/server/server');
         $I->waitForPageUpdate();
+        $row = $index->getRowNumberInColumnByValue($saleData['column'], $saleData['server']);
+        $index->openRowMenuByNumber($row);
+        $index->chooseRowMenuOption('View');
+        $I->clickLink('Change tariff');
+        $I->waitForText('Affected items');
 
-        $row[] = $index->getRowNumberInColumnByValue('DC', 'TEST-DS-01');
-        $row[] = $index->getRowNumberInColumnByValue('DC', 'TEST-DS-02');
+        $sale->fillSaleFields($saleData);
 
-        foreach ($row as $currentRow) {
-            $I->needPage('/server/server');
-            $index->openRowMenuByNumber($currentRow);
-            $index->chooseRowMenuOption('View');
-            $I->clickLink('Change tariff');
-            $I->waitForText('Affected items');
-
-            $sale->fillSaleFields($saleData);
-
-            $I->pressButton('Sell');
-            $I->waitForPageUpdate();
-            $I->closeNotification('Servers were sold');
-        }
-
-        $I->logout($I);
+        $I->pressButton('Sell');
+        $I->waitForPageUpdate();
+        $I->closeNotification('Servers were sold');
     }
 
     /**
@@ -144,11 +135,20 @@ class SalesIndexPageCest
 
     protected function getSaleDataForManager(): array
     {
-        return [
-            'sale' => [
+        return 
+        [
+            [
                 'client' => 'hipanel_test_user2',
                 'tariff' => 'PlanForkerViaLegacyApiTest / Plan to be clonned@hipanel_test_reseller',
+                'column' => 'DC',
+                'server' => 'TEST-DS-01',
             ],
+            [
+                'client' => 'hipanel_test_user2',
+                'tariff' => 'PlanForkerViaLegacyApiTest / Plan to be clonned@hipanel_test_reseller',
+                'column' => 'DC',
+                'server' => 'TEST-DS-02',
+            ]
         ];
     }
 }
