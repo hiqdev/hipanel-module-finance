@@ -11,7 +11,7 @@ use hipanel\tests\_support\Page\Widget\Input\MultipleSelect2;
 use hipanel\tests\_support\Helper\PressButtonHelper;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 
-class BillCteationCest
+class BillCreationCest
 {
     public $billId;
 
