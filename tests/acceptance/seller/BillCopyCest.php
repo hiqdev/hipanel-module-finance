@@ -40,10 +40,11 @@ class BillCopyCest
 
     private function ensurePreviousBillDidntChange(Seller $I, array $dataBill): void 
     {
+        $index = new Index($I);
         $I->needPage(Url::to('@bill/view?id=' . $dataBill['id']));
         $result = array_intersect_key($dataBill['charges']['charge2'], array_flip(['objectId', 'type']));
         $result[] = '$' . $dataBill['charges']['charge2']['sum'];
-        $this->indexPage->gridView->ensureBillViewContainData($result);
+        $index->ensureBillViewContainData($result);
     }
 
     private function createBill(Seller $I, array $billData): ?string
