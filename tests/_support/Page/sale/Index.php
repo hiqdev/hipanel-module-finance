@@ -23,4 +23,14 @@ class Index extends IndexPage
     {
         $this->tester->closeNotification('Sale was successfully deleted.');
     }
+
+    public function getRowIdByNumber(int $rowNumber): ?string
+    {
+        return $this->tester->grabAttributeFrom("//tbody/tr[$rowNumber]", 'data-key');
+    }
+
+    public function getValueFromCell(int $column, int $row): ?string
+    {
+        return $this->tester->grabValueFrom("//tbody/tr[$column]/td[$row]");
+    }
 }

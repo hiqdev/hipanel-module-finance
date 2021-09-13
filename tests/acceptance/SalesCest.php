@@ -13,7 +13,7 @@ use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 use hipanel\tests\_support\Step\Acceptance\Manager;
 
-class SalesIndexPageCest
+class SalesPageCest
 {
     /**
      * @dataProvider getSaleDataForManager
@@ -79,7 +79,7 @@ class SalesIndexPageCest
 
     public function ensureSaleDetailViewIsCorrect(Seller $I): void
     {
-        $index = new IndexPage($I);
+        $index = new Index($I);
         $edit = new Edit($I);
 
         $I->needPage(Url::to('@sale/index'));
