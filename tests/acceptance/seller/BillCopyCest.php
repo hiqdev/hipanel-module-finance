@@ -13,13 +13,13 @@ use hipanel\modules\finance\tests\_support\Page\bill\Copy;
 class BillCopyCest
 {
     private Create $createPage;
-    private IndexPage $indexPage;
+    private Index $index;
     private Copy $copyPage;
 
     public function _before(Seller $I): void
     {
         $this->createPage = new Create($I);
-        $this->indexPage = new IndexPage($I);
+        $this->index = new Index($I);
         $this->copyPage = new Copy($I);
     }
 
@@ -40,11 +40,10 @@ class BillCopyCest
 
     private function ensurePreviousBillDidntChange(Seller $I, array $dataBill): void 
     {
-        $index = new Index($I);
         $I->needPage(Url::to('@bill/view?id=' . $dataBill['id']));
         $result = array_intersect_key($dataBill['charges']['charge2'], array_flip(['objectId', 'type']));
         $result[] = '$' . $dataBill['charges']['charge2']['sum'];
-        $index->ensureBillViewContainData($result);
+        $this->index->ensureBillViewContainData($result);
     }
 
     private function createBill(Seller $I, array $billData): ?string
