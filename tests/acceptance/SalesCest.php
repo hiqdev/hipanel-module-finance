@@ -44,24 +44,16 @@ class SalesPageCest
      */
     public function ensureICanEditSeveralSales(Seller $I, Example $example): void
     {
-        $index = new IndexPage($I);
+        $index = new Index($I);
         $edit = new Edit($I);
 
         $I->login();
         $saleData = iterator_to_array($example->getIterator());
 
-        $I->needPage(Url::to('@sale/index'));
+        $this->searchForSales($I, $saleData);
 
-        $index->setAdvancedFilter(Select2::asAdvancedSearch($I, 'Tariff'), $saleData['tariff']);
-        $I->pressButton('Search');
-
-        $I->waitForPageUpdate();
-
-        $row[] = $index->getRowIdByNumber(1);
-        $row[] = $index->getRowIdByNumber(2);
-
-        foreach ($row as $rowId) {
-            $I->checkOption("//input[@value='$rowId']");
+        foreach ([1, 2] as $rowId) {
+            $I->checkOption(sprintf("//input[@value='%s']", $index->getRowIdByNumber($rowId)));
         }
 
         $I->pressButton('Edit');
@@ -85,7 +77,6 @@ class SalesPageCest
         $I->needPage(Url::to('@sale/index'));
         $column = $index->getColumnNumber('Time');
 
-
         $rowId = $index->getRowIdByNumber(1);
 
         $saleData = $I->grabMultiple("//tr[@data-key='$rowId']");
@@ -107,21 +98,25 @@ class SalesPageCest
         $index = new Index($I);
         $saleData = iterator_to_array($example->getIterator());
 
+        $this->searchForSales($I, $saleData);
+
+        foreach ([1, 2] as $rowId) {
+            $I->checkOption(sprintf("//input[@value='%s']", $index->getRowIdByNumber($rowId)));
+        }
+
+        $index->deleteSelectedSales();
+    }
+
+    private function searchForSales(Seller $I, array $saleData): void
+    {
+        $index = new Index($I);
+
         $I->needPage(Url::to('@sale/index'));
 
         $index->setAdvancedFilter(Select2::asAdvancedSearch($I, 'Tariff'), $saleData['tariff']);
         $I->pressButton('Search');
 
         $I->waitForPageUpdate();
-
-        $row[] = $index->getRowIdByNumber(1);
-        $row[] = $index->getRowIdByNumber(2);
-
-        foreach ($row as $rowId) {
-            $I->checkOption("//input[@value='$rowId']");
-        }
-
-        $index->deleteSelectedSales();
     }
 
     protected function getSaleDataForSeller(): array
@@ -148,7 +143,7 @@ class SalesPageCest
                 'tariff' => 'PlanForkerViaLegacyApiTest / Plan to be clonned@hipanel_test_reseller',
                 'column' => 'DC',
                 'server' => 'TEST-DS-02',
-            ]
+            ],
         ];
     }
 }
