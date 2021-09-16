@@ -4,7 +4,7 @@ namespace hipanel\modules\finance\models\proxy;
 
 use hipanel\base\Model;
 use hipanel\base\ModelTrait;
-use hipanel\modules\finance\helpers\ResourceConfigurator;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 use hipanel\modules\finance\models\decorators\DecoratedInterface;
 use hipanel\modules\finance\models\decorators\ResourceDecoratorInterface;
 use hiqdev\php\units\Quantity;
@@ -18,9 +18,20 @@ class Resource extends Model implements DecoratedInterface
 
     private DecoratedInterface $resourceModel;
 
+    /**
+     * @var ConsumptionConfigurator|object
+     */
+    private ConsumptionConfigurator $consumptionConfigurator;
+
     public static function tableName(): string
     {
         return 'use';
+    }
+
+    public function init()
+    {
+        parent::init();
+        $this->consumptionConfigurator = Yii::$container->get(ConsumptionConfigurator::class);
     }
 
     /**
@@ -31,19 +42,15 @@ class Resource extends Model implements DecoratedInterface
         return [
             [['id', 'object_id', 'type_id'], 'integer'],
             [['last', 'total'], 'number'],
-            [['type', 'aggregation', 'unit'], 'string'],
+            [['type', 'aggregation', 'unit', 'class'], 'string'],
             [['time_from', 'time_till', 'date'], 'datetime', 'format' => 'php:Y-m-d'],
         ];
     }
 
-    public function buildResourceModel(ResourceConfigurator $configurator): DecoratedInterface
+    public function buildResourceModel(): DecoratedInterface
     {
         if (!isset($this->resourceModel)) {
-            $this->resourceModel = $configurator->getResourceModel([
-                'type' => $this->type,
-                'unit' => $this->unit,
-                'quantity' => $this->getAmount(),
-            ]);
+            $this->resourceModel = $this->consumptionConfigurator->buildResourceModel($this);
         }
 
         return $this;

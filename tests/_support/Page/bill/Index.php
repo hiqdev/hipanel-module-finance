@@ -26,4 +26,11 @@ class Index extends IndexPage
             $this->tester->see($element, $selector);
         }
     }
+
+    public function ensureBillViewContainData(array $billData): void
+    {
+        foreach ($billData as $billInfo) {
+            $this->tester->see($billInfo, '//table');
+        }
+    }
 }

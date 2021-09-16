@@ -8,13 +8,14 @@
  * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
-namespace hipanel\modules\finance\tests\_support\Page\plan;
+namespace hipanel\modules\finance\models\decorators\server;
 
-class ViewGrouping extends View
+use Yii;
+
+class StorageDUResourceDecorator extends BackupResourceDecorator
 {
-    public function seePlan()
+    public function displayTitle()
     {
-        parent::seePlan();
-        $this->tester->see('Grouping', '//span');
+        return Yii::t('hipanel.finance.resource', 'Storage usage');
     }
 }
