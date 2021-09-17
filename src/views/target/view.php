@@ -51,15 +51,4 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-
-    <div class="col-md-9">
-        <?= ResourceDetailViewer::widget([
-            'dataProvider' => $dataProvider,
-            'originalContext' => $this->context,
-            'originalModel' => $originalModel,
-            'originalSearchModel' => $model,
-            'uiModel' => $uiModel,
-            'configurator' => Yii::$container->get('target-resource-config'),
-        ]) ?>
-    </div>
 </div>

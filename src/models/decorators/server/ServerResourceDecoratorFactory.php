@@ -35,6 +35,7 @@ class ServerResourceDecoratorFactory extends ResourceDecoratorFactory
             'server_traf_in' => TrafficResourceDecorator::class,
             'server_traf' => TrafficResourceDecorator::class,
             'server_du' => ServerDUResourceDecorator::class,
+            'storage_du' => StorageDUResourceDecorator::class,
             'server_ssd' => HddResourceDecorator::class,
             'server_sata' => ServerSataDUResourceDecorator::class,
             'rack_unit' => RackUnitResourceDecorator::class,

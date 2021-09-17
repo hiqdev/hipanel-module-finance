@@ -5,52 +5,10 @@ namespace hipanel\modules\finance\helpers;
 use hipanel\modules\finance\models\decorators\ResourceDecoratorInterface;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\Unit;
-use Yii;
-use yii\helpers\ArrayHelper;
-use hipanel\modules\finance\models\proxy\Resource;
+use hiqdev\yii\compat\yii;
 
 class ResourceHelper
 {
-    public const LOADER_HTML = '<div class="resource-spinner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div>';
-
-    /**
-     * @param Resource[] $resources
-     * @param ResourceConfigurator $configurator
-     * @return array
-     */
-    public static function aggregateByObject(array $resources, ResourceConfigurator $configurator): array
-    {
-        $result = [];
-        foreach ($resources as $resource) {
-            if (!in_array($resource->type, $configurator->getRawColumns(), true)) {
-                continue;
-            }
-            $result[$resource->object_id][$resource->type][] = $resource->buildResourceModel($configurator);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param Resource[] $models
-     * @return array
-     */
-    public static function groupResourcesForChart(array $models): array
-    {
-        $labels = [];
-        $data = [];
-        ArrayHelper::multisort($models, 'date');
-        foreach ($models as $model) {
-            $labels[$model->date] = $model;
-            $data[$model->type][] = $model->getChartAmount();
-        }
-        foreach ($labels as $date => $model) {
-            $labels[$date] = $model->getDisplayDate();
-        }
-
-        return [$labels, $data];
-    }
-
     /**
      * @param ResourceDecoratorInterface $decorator
      * @return int|float
@@ -76,149 +34,60 @@ class ResourceHelper
             'server_ssd',
         ];
         if (in_array($decorator->resource->type, $convertibleTypes, true)) {
-            $amount = Quantity::create(Unit::create($decorator->resource->unit), $amount)
-                ->convert(Unit::create($decorator->toUnit()))
-                ->getQuantity();
+            $from = Unit::create($decorator->resource->unit)->getName();
+            $to = Unit::create($decorator->toUnit());
+            $amount = sprintf('%.3F', Quantity::create($from, $amount)->convert($to)->getQuantity());
         }
 
         return $amount;
     }
 
-    public static function prepareDetailView(array $resources, $configurator): array
+    public static function prepareDetailView(array $resources): array
     {
         $result = [];
-        $resources = self::aggregateByObject($resources, $configurator);
-        foreach ($resources as $id => $types) {
-            foreach ($types as $type => $models) {
-                foreach ($models as $resource) {
-                    $decorator = $resource->decorator();
-                    $item = [
-                        'object_id' => $id,
-                        'date' => $resource->date,
-                        'type' => $resource->type,
-                        'type_label' => $decorator->displayTitle(),
-                        'qty' => self::convertAmount($decorator),
-                        'unit' => $decorator->displayUnit(),
-                    ];
-                    $result[$id][$type][] = $item;
-                }
-                self::normalizeQuantity($result[$id][$type]);
-            }
-        }
-
-        return [
-            'resources' => $result,
-            'totals' => self::calculateTotal($resources, $configurator),
-        ];
-    }
-
-    public static function prepare(array $resources): array
-    {
-        $result = [];
-        foreach ($resources as $id => $types) {
-            foreach ($types as $type => $models) {
-                foreach ($models as $resource) {
-                    $decorator = $resource->decorator();
-                    $result[$id][$type]['qty'] += self::convertAmount($decorator);
-                    $result[$id][$type]['unit'] = $decorator->displayUnit();
-                }
-            }
-            self::normalizeQuantity($result[$id]);
+        foreach (self::filterByAvailableTypes($resources) as $resource) {
+            $decorator = $resource->buildResourceModel()->decorator();
+            $result[] = [
+                'object_id' => $resource->object_id,
+                'date' => $resource->date,
+                'type' => $resource->type,
+                'type_label' => $decorator->displayTitle(),
+                'amount' => self::convertAmount($decorator),
+                'unit' => $decorator->displayUnit(),
+            ];
         }
 
         return $result;
     }
 
-    public static function calculateTotal(array $resources, ResourceConfigurator $configurator): array
+    public static function summarize(array $resources): string
     {
-        $total = [];
-        foreach ($resources as $types) {
-            foreach ($types as $type => $models) {
-                foreach ($models as $resource) {
-                    $decorator = $resource->decorator();
-                    $total[$type]['qty'] += self::convertAmount($decorator);
-                    $total[$type]['unit'] = $decorator->displayUnit();
-                }
-            }
+        $qty = '0';
+        foreach (self::filterByAvailableTypes($resources) as $resource) {
+            $decorator = $resource->buildResourceModel()->decorator();
+            $amount = self::convertAmount($decorator);
+            $qty = bcadd($qty, $amount, 3);
         }
-        $totalGroups = $configurator->getTotalGroups();
-        if (empty($totalGroups)) {
-            self::normalizeQuantity($total);
 
-            return $total;
-        }
-        $total = $configurator->modifyTotalGroups($total);
-        self::normalizeQuantity($total);
-
-        return $total;
+        return $qty;
     }
 
-    public static function normalizeQuantity(array &$data): void
+    public static function calculateTotal(array $resources): array
     {
-        array_walk($data, static function (&$item): void {
-            $item['qty'] = number_format($item['qty'], 3);
-        });
+        $totals = [];
+        foreach (self::filterByAvailableTypes($resources) as $resource) {
+            $decorator = $resource->buildResourceModel()->decorator();
+            $totals[$resource->type]['amount'] = bcadd($totals[$resource->type]['amount'], self::convertAmount($decorator), 3);
+            $totals[$resource->type]['unit'] = $decorator->displayUnit();
+        }
+
+        return $totals;
     }
 
-    public static function getResourceLoader(): string
+    public static function filterByAvailableTypes(array $resources): array
     {
-        Yii::$app->view->registerCss(<<<CSS
-.resource-spinner {
-  width: 50px;
-  height: 10px;
-  text-align: center;
-  font-size: 10px;
-  display: inline-block;
-}
+        $configurator = yii::getContainer()->get(ConsumptionConfigurator::class);
 
-.resource-spinner > div {
-  background-color: #b8c7ce;
-  height: 100%;
-  width: 6px;
-  display: inline-block;
-  margin-right: .1rem;
-  
-  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
-  animation: sk-stretchdelay 1.2s infinite ease-in-out;
-}
-
-.resource-spinner .rect2 {
-  -webkit-animation-delay: -1.1s;
-  animation-delay: -1.1s;
-}
-
-.resource-spinner .rect3 {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
-}
-
-.resource-spinner .rect4 {
-  -webkit-animation-delay: -0.9s;
-  animation-delay: -0.9s;
-}
-
-.resource-spinner .rect5 {
-  -webkit-animation-delay: -0.8s;
-  animation-delay: -0.8s;
-}
-
-@-webkit-keyframes sk-stretchdelay {
-  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
-  20% { -webkit-transform: scaleY(1.0) }
-}
-
-@keyframes sk-stretchdelay {
-  0%, 40%, 100% { 
-    transform: scaleY(0.4);
-    -webkit-transform: scaleY(0.4);
-  }  20% { 
-    transform: scaleY(1.0);
-    -webkit-transform: scaleY(1.0);
-  }
-}
-CSS
-            , [], 'resource_spinner_css');
-
-        return self::LOADER_HTML;
+        return array_filter($resources, static fn($resource) => in_array($resource->type, $configurator->getAllPossibleColumns(), true));
     }
 }
