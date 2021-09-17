@@ -4,7 +4,6 @@ namespace hipanel\modules\finance\tests\_support\Page\bill;
 
 use hipanel\helpers\Url;
 use hipanel\tests\_support\Page\Authenticated;
-use hipanel\tests\_support\Page\Widget\Input\TestableInput;
 use hipanel\tests\_support\Page\IndexPage;
 
 class Index extends IndexPage
