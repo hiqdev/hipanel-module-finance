@@ -28,16 +28,10 @@ class Index extends IndexPage
         }
     }
 
-<<<<<<< HEAD
-    public function setAdvancedFilter(TestableInput $filter, string $value): void
-    {
-        $filter->setValue($value);
-=======
     public function ensureBillViewContainData(array $billData): void
     {
         foreach ($billData as $billInfo) {
             $this->tester->see($billInfo, '//table');
         }
->>>>>>> c108d27bb4652ab6d7f165cc7d952ca0646c4674
     }
 }
