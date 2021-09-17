@@ -188,7 +188,7 @@ class BillCreationCest
 
         $I->needPage(Url::to('@bill/index'));
 
-        $index->setAdvancedFilter(MultipleSelect2::asAdvancedSearch($I, 'Type'), 'Feature');
+        MultipleSelect2::asAdvancedSearch($I, 'Type')->setValue('Feature');
         $I->pressButton('Search');
         $I->waitForPageUpdate();
 
