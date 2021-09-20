@@ -113,7 +113,7 @@ class SalesPageCest
 
         $I->needPage(Url::to('@sale/index'));
 
-        $index->setAdvancedFilter(Select2::asAdvancedSearch($I, 'Tariff'), $saleData['tariff']);
+        Select2::asAdvancedSearch($I, 'Tariff')->setValue($saleData['tariff']);
         $I->pressButton('Search');
 
         $I->waitForPageUpdate();
