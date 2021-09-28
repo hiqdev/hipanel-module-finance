@@ -11,12 +11,6 @@ use hipanel\modules\finance\tests\_support\Page\bill\Create;
 
 class BillBulkButtonCest
 {
-    public function enter(Manager $I): void
-    {
-        $I->login();
-        $I->needPage(Url::to('@bill/index/?sort=-time'));
-    }
-
     /**
      * @dataProvider BillDataProvider
      */
