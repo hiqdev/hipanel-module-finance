@@ -24,7 +24,7 @@ class SalesPageCest
         $sale = new Sale($I);
         $saleData = iterator_to_array($example->getIterator());
 
-        $I->needPage('/server/server');
+        $I->needPage(Url::to('@server/index'));
         $I->waitForPageUpdate();
         $row = $index->getRowNumberInColumnByValue($saleData['column'], $saleData['server']);
         $index->openRowMenuByNumber($row);
