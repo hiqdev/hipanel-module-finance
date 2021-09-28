@@ -17,19 +17,16 @@ use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 
-class SalesCest
+class SalesIndexPageCest
 {
-    /**
-     * @var IndexPage
-     */
-    private $index;
+    private IndexPage $index;
 
-    public function _before(Seller $I)
+    public function _before(Seller $I): void
     {
         $this->index = new IndexPage($I);
     }
 
-    public function ensureIndexPageWorks(Seller $I)
+    public function ensureIndexPageWorks(Seller $I): void
     {
         $I->login();
         $I->needPage(Url::to('@sale'));
@@ -38,7 +35,7 @@ class SalesCest
         $this->ensureICanSeeBulkBillSearchBox();
     }
 
-    private function ensureICanSeeAdvancedSearchBox(Seller $I)
+    private function ensureICanSeeAdvancedSearchBox(Seller $I): void
     {
         $this->index->containsFilters([
             Select2::asAdvancedSearch($I, 'Seller'),
@@ -55,7 +52,7 @@ class SalesCest
         ]);
     }
 
-    private function ensureICanSeeBulkBillSearchBox()
+    private function ensureICanSeeBulkBillSearchBox(): void
     {
         $this->index->containsBulkButtons([
             'Delete',
