@@ -39,7 +39,6 @@ class BillBulkButtonCest
         $this->checkDataInTable($I, $description);
     }
 
-
     private function ensureDeleteBulkButtonWorksCorrectly(Manager $I, array $description): void
     {
         $index = new IndexPage($I);
