@@ -12,31 +12,56 @@ use hipanel\modules\finance\tests\_support\Page\bill\Create;
 class BillBulkButtonCest
 {
     /**
-     * @dataProvider BillDataProvider
+     * @dataProvider updateDataProvider
      */
-    public function ensureBulkButtonsWorkCorrectly(Manager $I, Example $example): void
+    public function ensureUpdateBulkButtonsWorkCorrectly(Manager $I, Example $example): void
     {
         $I->login();
         $example = iterator_to_array($example->getIterator());
+
+        $this->goToBillPageAndPrepareForAction($I);
+
+        $I->pressButton('Update');
+
+        $this->fillDescriptionField($I, $example['descrp']);
+        $this->checkDataInTable($I, $example['descrp']);
+    }
+
+    /**
+     * @dataProvider copyAndDeleteDataProvider
+     */
+    public function ensureCopyBulkButtonsWorkCorrectly(Manager $I, Example $example): void
+    {
+        $I->login();
+        $example = iterator_to_array($example->getIterator());
+
+        $this->goToBillPageAndPrepareForAction($I);
+
+        $I->pressButton('Update');
+
+        $this->fillDescriptionField($I, $example['descrp']);
+        $this->checkDataInTable($I, $example['descrp']);
+    }
+
+    /**
+     * @dataProvider copyAndDeleteDataProvider
+     */
+    public function ensureDeleteBulkButtonsWorkCorrectly(Manager $I, Example $example): void
+    {
+        $I->login();
+        $example = iterator_to_array($example->getIterator());
+
+        $this->goToBillPageAndPrepareForAction($I);
+
+        $I->pressButton('Delete');
+    }
+
+    private function goToBillPageAndPrepareForAction(Manager $I): void
+    {
         $I->needPage(Url::to('@bill/index/?sort=-time'));
 
-        $this->checkRows($I, [1, 2]);
-        $I->pressButton($example['action']);
-
-        $this->{$example['method']}($I, $example['descrp']);
-    }
-
-    private function checkRows(Manager $I, array $rows): void
-    {
-        foreach ($rows as $row) {
-            $I->checkOption("//tbody//tr[$row]//input");
-        }
-    }
-
-    private function ensureUpdateAndCopyBulkButtonsWorkCorrectly(Manager $I, array $description): void
-    {
-        $this->fillDescriptionField($I, $description);
-        $this->checkDataInTable($I, $description);
+        $I->checkOption("//tbody//tr[1]//input");
+        $I->checkOption("//tbody//tr[2]//input");
     }
 
     private function ensureDeleteBulkButtonWorksCorrectly(Manager $I, array $description): void
@@ -74,28 +99,21 @@ class BillBulkButtonCest
         }
     }
 
-    protected function BillDataProvider(): array
+    protected function updateDataProvider(): array
     {
         return [
             [
-                'action' => 'Update',
-                'method' => 'ensureUpdateAndCopyBulkButtonsWorkCorrectly',
                 'descrp' => [
                     'Successful Update Test #1',
                     'Successful Update Test #2',
                 ],
             ],
+        ];
+    }
+    protected function copyAndDeleteDataProvider(): array
+    {
+        return [
             [
-                'action' => 'Copy',
-                'method' => 'ensureUpdateAndCopyBulkButtonsWorkCorrectly',
-                'descrp' => [
-                    'Successful Copy Test #1',
-                    'Successful Copy Test #2',
-                ],
-            ],
-            [
-                'action' => 'Delete',
-                'method' => 'ensureDeleteBulkButtonWorksCorrectly',
                 'descrp' => [
                     'Successful Copy Test #1',
                     'Successful Copy Test #2',

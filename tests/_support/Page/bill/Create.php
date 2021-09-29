@@ -40,9 +40,7 @@ class Create extends Authenticated
 
     public function fillBillDescriptionField(string $descr, int $billNo = 0): void
     {
-        $I = $this->tester;
-
-        (new Input($I, "#billform-$billNo-label"))->setValue($descr);
+        (new Input($this->tester, "#billform-$billNo-label"))->setValue($descr);
     }
 
     /**
