@@ -38,9 +38,9 @@ class Create extends Authenticated
         (new Input($I, '#billform-0-quantity'))->setValue($billData['quantity']);
     }
 
-    public function fillBillDescriptionField(string $descr, int $billNo = 0): void
+    public function fillBillDescriptionField(int $billNumber, string $descr): void
     {
-        (new Input($this->tester, "#billform-$billNo-label"))->setValue($descr);
+        (new Input($this->tester, "#billform-$billNumber-label"))->setValue($descr);
     }
 
     /**

@@ -83,7 +83,7 @@ class BillBulkButtonCest
         $create = new Create($I);
 
         foreach ($description as $key => $field) {
-            $create->fillBillDescriptionField($field, $key);
+            $create->fillBillDescriptionField($key, $field);
         }
 
         $I->pressButton('Save');
