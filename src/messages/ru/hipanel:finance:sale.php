@@ -20,4 +20,12 @@ return [
     'Tariff information' => 'Информация о тарифе',
     'Sale was successfully deleted.' => 'Продажа успешно удалена.',
     'Not sold' => 'Не продан',
+    'Close time' => 'Время закрытия',
+    'Closed sale' => 'Закрытая продажа',
+    'Opening time range' => 'Диапазон oткрытия',
+    'Closing time range' => 'Диапазон закрытия',
+    'Sale condition' => 'Состояние продажи',
+    'Show opened' => 'Показать открытые',
+    'Show closed' => 'Показать закрытые',
+    'Show all' => 'Показать все',
 ];

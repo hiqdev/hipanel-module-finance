@@ -1,6 +1,8 @@
 <?php
 
+use hipanel\modules\finance\grid\SaleGridLegend;
 use hipanel\modules\finance\grid\SaleGridView;
+use hipanel\widgets\gridLegend\GridLegend;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 
@@ -29,7 +31,7 @@ $this->registerCss('
         <?php $page->setSearchFormData([]) ?>
 
         <?php $page->beginContent('sorter-actions') ?>
-            <?= $page->renderSorter(['attributes' => ['id', 'time']]) ?>
+            <?= $page->renderSorter(['attributes' => ['id', 'time', 'unsale_time']]) ?>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('bulk-actions') ?>
@@ -41,6 +43,9 @@ $this->registerCss('
             <?php endif ?>
         <?php $page->endContent() ?>
 
+        <?php $page->beginContent('legend') ?>
+            <?= GridLegend::widget(['legendItem' => new SaleGridLegend($model)]) ?>
+        <?php $page->endContent() ?>
 
         <?php $page->beginContent('table') ?>
             <?php $page->beginBulkForm() ?>
@@ -49,8 +54,11 @@ $this->registerCss('
                     'dataProvider' => $dataProvider,
                     'filterModel' => $model,
                     'columns' => $representationCollection->getByName($uiModel->representation)->getColumns(),
+                    'rowOptions' => static function ($model): array {
+                        return GridLegend::create(new SaleGridLegend($model))->gridRowOptions();
+                    },
                 ]) ?>
-            <?php $page->endBulkForm() ?>
+<?php $page->endBulkForm() ?>
         <?php $page->endContent() ?>
     <?php $page->end() ?>
 <?php Pjax::end() ?>
