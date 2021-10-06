@@ -26,8 +26,8 @@ class Target extends Model
     public function getTypes(): array
     {
         return array_filter([
-            'anycastcdn' => Yii::t('hipanel:finance', 'AnycastCDN'),
-            'videocdn' => Yii::t('hipanel:finance', 'VideoCDN'),
+            'anycastcdn' => Yii::t('hipanel:finance', 'Anycast CDN'),
+            'videocdn' => Yii::t('hipanel:finance', 'Video CDN'),
         ]);
     }
 

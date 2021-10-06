@@ -12,7 +12,7 @@ namespace hipanel\modules\finance\tests\_support\Page\plan;
 
 class CreateGrouping extends Create
 {
-    protected function setGrouping()
+    protected function setGrouping(): void
     {
         $I = $this->tester;
 

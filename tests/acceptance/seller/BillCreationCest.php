@@ -11,7 +11,7 @@ use hipanel\tests\_support\Page\Widget\Input\MultipleSelect2;
 use hipanel\tests\_support\Helper\PressButtonHelper;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 
-class BillCteationCest
+class BillCreationCest
 {
     public $billId;
 
@@ -188,7 +188,7 @@ class BillCteationCest
 
         $I->needPage(Url::to('@bill/index'));
 
-        $index->setAdvancedFilter(MultipleSelect2::asAdvancedSearch($I, 'Type'), 'Feature');
+        MultipleSelect2::asAdvancedSearch($I, 'Type')->setValue('Feature');
         $I->pressButton('Search');
         $I->waitForPageUpdate();
 
