@@ -53,6 +53,7 @@ class Sale extends \hipanel\base\Model
                 'buyer',
                 'tariff',
                 'time',
+                'unsale_time',
                 'expires',
                 'renewed_num',
                 'sub_factor',
@@ -69,6 +70,7 @@ class Sale extends \hipanel\base\Model
     {
         return array_merge(parent::attributeLabels(), [
             'time' => Yii::t('hipanel:finance:sale', 'Time'),
+            'unsale_time' => Yii::t('hipanel:finance:sale', 'Close time'),
             'object' => Yii::t('hipanel:finance:sale', 'Object'),
             'object_like' => Yii::t('hipanel:finance:sale', 'Object'),
             'object_type' => Yii::t('hipanel:finance:sale', 'Object Type'),

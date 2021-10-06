@@ -39,6 +39,11 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                     return Html::a($time, ['@sale/view', 'id' => $model->id]);
                 },
             ],
+            'unsale_time' => [
+                'format' => ['datetime', 'php' => 'medium'],
+                'filter' => false,
+                'contentOptions' => ['class' => 'text-nowrap'],
+            ],
             'seller' => [
                 'class' => ClientColumn::class,
                 'idAttribute' => 'seller_id',

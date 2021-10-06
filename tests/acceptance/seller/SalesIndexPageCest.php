@@ -63,6 +63,7 @@ class SalesIndexPageCest
             'Buyer',
             'Tariff',
             'Time',
+            'Close time',
         ]);
     }
 }

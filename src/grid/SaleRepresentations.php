@@ -28,6 +28,7 @@ class SaleRepresentations extends RepresentationCollection
                     'buyer',
                     'tariff',
                     'time',
+                    'unsale_time',
                 ],
             ],
         ]);

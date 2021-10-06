@@ -33,6 +33,7 @@ $this->registerCss('
                         'object_v',
                         'object_label',
                         'time',
+                        'unsale_time',
                         'seller',
                         'buyer',
                         'tariff',
