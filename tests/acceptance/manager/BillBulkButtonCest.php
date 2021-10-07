@@ -54,6 +54,7 @@ class BillBulkButtonCest
         $this->goToBillPageAndPrepareForAction($I);
 
         $I->pressButton('Delete');
+        $I->acceptPopup();
     }
 
     private function goToBillPageAndPrepareForAction(Manager $I): void
