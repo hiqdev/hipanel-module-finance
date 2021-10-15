@@ -37,7 +37,7 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
             'data' => parent::getDataCellValue($model, $key, $index),
             'delimiter' => ' ',
             'formatter' => function ($doc) {
-                $fileName = Html::encode($doc->filename);
+                $fileName = urlencode($doc->filename);
                 return Html::a(
                     FontIcon::i('fa-file-pdf-o') . date(' M Y', strtotime($doc->validity_start)),
                     ["/file/{$doc->file_id}/{$fileName}", 'nocache' => 1],
