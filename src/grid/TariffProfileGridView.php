@@ -80,72 +80,44 @@ class TariffProfileGridView extends BoxedGridView
                     return $this->tariffLink($model->certificate, $model->tariff_names[$model->certificate]);
                 },
             ],
-            'svds_tariff' => [
-                'attribute' => 'svds',
-                'format' => 'raw',
-                'value' => function (TariffProfile $model) {
-                    if (empty($model->tariffs)) {
-                        return '';
-                    }
-
-                    if (empty($model->tariffs[Tariff::TYPE_XEN])) {
-                        return '';
-                    }
-
-                    foreach ($model->tariffs[Tariff::TYPE_XEN] as $id => $name) {
-                        $links[$id] = $this->tariffLink($id, $name);
-                    }
-
-                    return implode(', ', $links);
-                },
-            ],
-            'ovds_tariff' => [
-                'attribute' => 'ovds',
-                'format' => 'raw',
-                'value' => function (TariffProfile $model) {
-                    if (empty($model->tariffs)) {
-                        return '';
-                    }
-
-                    if (empty($model->tariffs[Tariff::TYPE_OPENVZ])) {
-                        return '';
-                    }
-
-                    foreach ($model->tariffs[Tariff::TYPE_OPENVZ] as $id => $name) {
-                        $links[$id] = $this->tariffLink($id, $name);
-                    }
-
-                    return implode(', ', $links);
-                },
-            ],
-            'server_tariff' => [
-                'attribute' => 'server',
-                'format' => 'raw',
-                'value' => function (TariffProfile $model) {
-                    if (empty($model->tariffs)) {
-                        return '';
-                    }
-
-                    if (empty($model->tariffs[Tariff::TYPE_SERVER])) {
-                        return '';
-                    }
-
-                    foreach ($model->tariffs[Tariff::TYPE_SERVER] as $id => $name) {
-                        $links[$id] = $this->tariffLink($id, $name);
-                    }
-
-                    return implode(', ', $links);
-                },
-            ],
             'actions' => [
                 'class' => MenuColumn::class,
                 'menuClass' => ProfileActionsMenu::class,
             ],
-        ]);
+        ], $this->getTariffColumns());
     }
 
     protected function tariffLink($id, $name)
     {
         return Html::a(Html::encode($name), ['@plan/view', 'id' => $id]);
+    }
+
+    private function getTariffColumns(): array
+    {
+        $model = new TariffProfile();
+        $columns = [];
+        foreach ($model->getTariffTypes() as $type) {
+            $columns[$type . '_tariff'] = [
+                'attribute' => $type,
+                'format' => 'raw',
+                'value' => function (TariffProfile $model) use ($type) {
+                    if (empty($model->tariffs)) {
+                        return '';
+                    }
+
+                    if (empty($model->tariffs[$type])) {
+                        return '';
+                    }
+
+                    foreach ($model->tariffs[$type] as $id => $name) {
+                        $links[$id] = $this->tariffLink($id, $name);
+                    }
+
+                    return implode(', ', $links ?? []);
+                },
+            ];
+        }
+
+        return $columns;
     }
 }
