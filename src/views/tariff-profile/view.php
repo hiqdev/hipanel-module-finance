@@ -1,14 +1,19 @@
 <?php
 
-/**
- * @var \yii\web\View
- * @var $manager \hipanel\modules\finance\logic\AbstractTariffManager
- */
 use hipanel\modules\finance\grid\TariffProfileGridView;
+use hipanel\modules\finance\logic\AbstractTariffManager;
 use hipanel\modules\finance\menus\ProfileDetailMenu;
+use hipanel\modules\finance\models\TariffProfile;
 use hipanel\widgets\Box;
 use hipanel\widgets\ClientSellerLink;
 use yii\helpers\Html;
+use yii\web\View;
+
+/**
+ * @var View
+ * @var $manager AbstractTariffManager
+ * @var $model TariffProfile
+ */
 
 $this->title = Html::encode($model->name);
 $this->params['subtitle'] = Yii::t('hipanel.finance.tariffprofile', 'Tariff profile detailed information');
@@ -48,14 +53,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= TariffProfileGridView::detailView([
             'boxed' => true,
             'model' => $model,
-            'columns' => [
+            'columns' => array_merge([
                 'name',
                 'domain_tariff',
                 'certificate_tariff',
-                'svds_tariff',
-                'ovds_tariff',
-                'server_tariff',
-            ],
+            ], array_map(static fn(string $type): string => $type . '_tariff', $model->getNotDomainTariffTypes())),
         ]) ?>
     </div>
 </div>

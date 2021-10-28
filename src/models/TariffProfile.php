@@ -44,16 +44,18 @@ class TariffProfile extends \hipanel\base\Model
             [['id'], 'required', 'on' => ['update', 'delete']],
             [['tariff_names'], 'safe'],
             [['seller_id', 'client_id'], 'integer'],
-            [['seller', 'client', 'items'], 'safe'],
+            [['seller', 'client'], 'safe'],
+            [['items'], 'safe', 'on' => ['create', 'update']],
             [['tariffs'], 'safe'],
         ];
 
-        $tariffTypes = [Tariff::TYPE_DOMAIN, Tariff::TYPE_CERT, Tariff::TYPE_XEN, Tariff::TYPE_OPENVZ, Tariff::TYPE_SERVER];
-        foreach ($tariffTypes as $type) {
-            if (in_array($type, [Tariff::TYPE_DOMAIN, Tariff::TYPE_CERT], true)) {
+        foreach ($this->getTariffTypes() as $type) {
+            if (in_array($type, $this->getDomainTariffTypes(), true)) {
                 $main[] = [[$type], 'integer'];
             } else {
-                $main[] = [[$type], 'filter', 'filter' => function ($value) { return explode(',', $value); }];
+                $main[] = [[$type], 'filter', 'filter' => static function (?string $value): array {
+                    return explode(',', $value);
+                }];
                 $main[] = [[$type], 'each', 'rule' => ['trim'], 'on' => ['update', 'create']];
                 $main[] = [[$type], 'each', 'rule' => ['integer'], 'on' => ['update', 'create']];
             }
@@ -64,7 +66,7 @@ class TariffProfile extends \hipanel\base\Model
 
     public function beforeValidate()
     {
-        foreach ([Tariff::TYPE_XEN, Tariff::TYPE_OPENVZ, Tariff::TYPE_SERVER] as $attribute) {
+        foreach ($this->getNotDomainTariffTypes() as $attribute) {
             if (empty($this->$attribute)) {
                 continue;
             }
@@ -82,11 +84,19 @@ class TariffProfile extends \hipanel\base\Model
         return $this->mergeAttributeLabels([
             'name' => Yii::t('hipanel.finance.tariffprofile', 'Name'),
             'tariff_names' => Yii::t('hipanel.finance.tariffprofile', 'Tariffs'),
-            'domain' => Yii::t('hipanel.finance.tariffprofile', 'Domain tariff'),
-            'certificate' => Yii::t('hipanel.finance.tariffprofile', 'Certificate tariff'),
-            'svds' => Yii::t('hipanel.finance.tariffprofile', 'XEN tariffs'),
-            'ovds' => Yii::t('hipanel.finance.tariffprofile', 'Open-VZ tariffs'),
-            'server' => Yii::t('hipanel.finance.tariffprofile', 'Server tariffs'),
+            Plan::TYPE_DOMAIN => Yii::t('hipanel.finance.tariffprofile', 'Domain tariff'),
+            Plan::TYPE_CERTIFICATE => Yii::t('hipanel.finance.tariffprofile', 'Certificate tariff'),
+            Plan::TYPE_SVDS => Yii::t('hipanel.finance.tariffprofile', 'XEN tariffs'),
+            Plan::TYPE_OVDS => Yii::t('hipanel.finance.tariffprofile', 'Open-VZ tariffs'),
+            Plan::TYPE_SERVER => Yii::t('hipanel.finance.tariffprofile', 'Server tariffs'),
+            Plan::TYPE_VPS => Yii::t('hipanel.finance.tariffprofile', 'VPS tariffs'),
+            Plan::TYPE_VCDN => Yii::t('hipanel.finance.tariffprofile', 'VideoCDN tariffs'),
+            Plan::TYPE_ANYCASTCDN => Yii::t('hipanel.finance.tariffprofile', 'AnycastCDN tariffs'),
+            Plan::TYPE_SNAPSHOT => Yii::t('hipanel.finance.tariffprofile', 'Snapshot tariffs'),
+            Plan::TYPE_VOLUME => Yii::t('hipanel.finance.tariffprofile', 'Volume tariffs'),
+            Plan::TYPE_STORAGE => Yii::t('hipanel.finance.tariffprofile', 'Storage tariffs'),
+            Plan::TYPE_PRIVATE_CLOUD => Yii::t('hipanel.finance.tariffprofile', 'Private cloud tariffs'),
+            Plan::TYPE_PRIVATE_CLOUD_BACKUP => Yii::t('hipanel.finance.tariffprofile', 'Private cloud backup tariffs'),
         ]);
     }
 
@@ -95,9 +105,9 @@ class TariffProfile extends \hipanel\base\Model
      *
      * @return bool
      */
-    public function isDefault() : bool
+    public function isDefault(): bool
     {
-        return (bool) ((string) $this->id === (string) $this->client_id);
+        return ((string)$this->id === (string)$this->client_id);
     }
 
     /**
@@ -108,5 +118,34 @@ class TariffProfile extends \hipanel\base\Model
     public function getTitle(): string
     {
         return $this->isDefault() ? Yii::t('hipanel.finance.tariffprofile', 'Default') : $this->name;
+    }
+
+    public function getTariffTypes(): array
+    {
+        return [
+            Plan::TYPE_DOMAIN,
+            Plan::TYPE_CERTIFICATE,
+            Plan::TYPE_SVDS,
+            Plan::TYPE_OVDS,
+            Plan::TYPE_SERVER,
+            Plan::TYPE_VPS,
+            Plan::TYPE_VCDN,
+            Plan::TYPE_ANYCASTCDN,
+            Plan::TYPE_SNAPSHOT,
+            Plan::TYPE_VOLUME,
+            Plan::TYPE_STORAGE,
+            Plan::TYPE_PRIVATE_CLOUD_BACKUP,
+            Plan::TYPE_PRIVATE_CLOUD,
+        ];
+    }
+
+    public function getDomainTariffTypes(): array
+    {
+        return [Plan::TYPE_DOMAIN, Plan::TYPE_CERTIFICATE];
+    }
+
+    public function getNotDomainTariffTypes(): array
+    {
+        return array_diff($this->getTariffTypes(), $this->getDomainTariffTypes());
     }
 }
