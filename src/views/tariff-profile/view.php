@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'name',
                 'domain_tariff',
                 'certificate_tariff',
-            ], array_map(static fn($type) => $type . '_tariff', $model->getNotDomainTariffTypes())),
+            ], array_map(static fn(string $type): string => $type . '_tariff', $model->getNotDomainTariffTypes())),
         ]) ?>
     </div>
 </div>
