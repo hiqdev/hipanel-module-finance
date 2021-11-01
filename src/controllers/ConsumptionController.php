@@ -12,20 +12,25 @@ use hipanel\base\Module;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 use hipanel\modules\finance\helpers\ResourceHelper;
-use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\ConsumptionSearch;
+use hipanel\modules\finance\providers\ConsumptionsProvider;
+use Yii;
 use yii\base\Event;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class ConsumptionController extends Controller
 {
     private ConsumptionConfigurator $consumptionConfigurator;
 
-    public function __construct(string $id, Module $module, ConsumptionConfigurator $consumptionConfigurator, array $config = [])
+    private ConsumptionsProvider $consumptionsProvider;
+
+    public function __construct(string $id, Module $module, ConsumptionConfigurator $consumptionConfigurator, ConsumptionsProvider $consumptionsProvider, array $config = [])
     {
         parent::__construct($id, $module, $config);
 
         $this->consumptionConfigurator = $consumptionConfigurator;
+        $this->consumptionsProvider = $consumptionsProvider;
     }
 
     public function behaviors()
@@ -65,12 +70,10 @@ class ConsumptionController extends Controller
 
     public function actionView(string $id): string
     {
-        $consumptions = Consumption::find()
-            ->select(null)
-            ->joinWith('resources')
-            ->where(['object_id' => $id, 'groupby' => 'year'])
-            ->all();
-        $consumption = reset($consumptions);
+        $consumption = $this->consumptionsProvider->findById($id);
+        if (!$consumption) {
+            throw new NotFoundHttpException(Yii::t('hipanel:finance', 'No consumption found for the requested resource'));
+        }
 
         return $this->render('view', [
             'mainObject' => $this->consumptionConfigurator->fillTheOriginalModel($consumption),
@@ -85,7 +88,7 @@ class ConsumptionController extends Controller
         $this->response->format = Response::FORMAT_JSON;
         $search = new ConsumptionSearch();
         if ($search->load($request->get(), '') && $search->validate()) {
-            $consumptions = Consumption::find()->joinWith('resources')->where($search->attributes)->all();
+            $consumptions = $this->consumptionsProvider->findAll($search->attributes);
             $consumption = reset($consumptions);
             $resources = ResourceHelper::prepareDetailView($consumption->resources);
 

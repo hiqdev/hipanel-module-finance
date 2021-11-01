@@ -3,10 +3,12 @@
 use hipanel\models\IndexPageUiOptions;
 use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\grid\PlanGridView;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator;
+use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\proxy\ResourceSearch;
 use hipanel\modules\finance\models\Target;
-use hipanel\modules\finance\widgets\ResourceDetailViewer;
+use hipanel\modules\finance\widgets\ConsumptionViewer;
 use yii\data\DataProviderInterface;
 use yii\helpers\Html;
 
@@ -16,6 +18,8 @@ use yii\helpers\Html;
 /** @var Client $client */
 /** @var DataProviderInterface $dataProvider */
 /** @var IndexPageUiOptions $uiModel */
+/** @var ConsumptionConfigurator $configurator */
+/** @var Consumption $consumption */
 
 $this->title = Html::encode($originalModel->name);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Targets'), 'url' => ['index']];
@@ -50,5 +54,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]) ?>
             </div>
         </div>
+
+    </div>
+    <div class="col-md-9">
+        <?= ConsumptionViewer::widget([
+            'configurator' => $configurator,
+            'consumption' => $consumption,
+            'mainObject' => $originalModel,
+        ]) ?>
     </div>
 </div>
