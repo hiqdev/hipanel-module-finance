@@ -8,11 +8,25 @@ use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\models\stub\ClientRelationFreeStub;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Target;
+use hipanel\modules\finance\providers\ConsumptionsProvider;
+use hipanel\base\Module;
 
 class TargetController extends CrudController
 {
+    private ConsumptionConfigurator $consumptionConfigurator;
+
+    private ConsumptionsProvider $consumptionsProvider;
+
+    public function __construct(string $id, Module $module, ConsumptionConfigurator $consumptionConfigurator, ConsumptionsProvider $consumptionsProvider, array $config = [])
+    {
+        parent::__construct($id, $module, $config);
+
+        $this->consumptionConfigurator = $consumptionConfigurator;
+        $this->consumptionsProvider = $consumptionsProvider;
+    }
     public function behaviors(): array
     {
         return array_merge(parent::behaviors(), [
@@ -43,7 +57,8 @@ class TargetController extends CrudController
 
     private function getData($action, $data)
     {
-        $target = Target::findOne($action->controller->request->get('id'));
+        $id = $action->controller->request->get('id');
+        $target = Target::findOne($id);
         $attributes = [
             'id' => $target->client_id,
             'login' => $target->client,
@@ -55,6 +70,8 @@ class TargetController extends CrudController
             'originalModel' => $target,
             'client' => $client,
             'tariff' => $tariff,
+            'consumption' => $this->consumptionsProvider->findById($id),
+            'configurator' => $this->consumptionConfigurator,
         ]);
     }
 }

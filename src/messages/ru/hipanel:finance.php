@@ -265,4 +265,6 @@ return [
     'Purses' => 'Кошельки',
     'Add purse' => 'Добавить кошелек',
     'Show deleted' => 'Отображать удаленные',
+
+    'No consumption found for the requested resource' => 'Для запрашиваемого ресурса потребление не найдено',
 ];

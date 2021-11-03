@@ -79,6 +79,7 @@ Vue.createApp({
       months: [],
       isLoading: false,
       existingCharts: {},
+      getConsumptionUrl: null,
     };
   },
   created: function () {
@@ -90,6 +91,7 @@ Vue.createApp({
     this.columns = data.columns;
     this.groups = data.groups;
     this.boxTitle = data.boxTitle;
+    this.getConsumptionUrl = data.getConsumptionUrl;
     this.extractYears(this.resources);
     this.setCache({resources: data.resources, totals: data.totals});
   },
@@ -207,7 +209,7 @@ Vue.createApp({
         return;
       }
       $.ajax({
-        url: "get-consumption",
+        url: this.getConsumptionUrl,
         method: "GET",
         data: this.requestData,
         dataType: "json",
