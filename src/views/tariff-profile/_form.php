@@ -58,6 +58,8 @@ use yii\helpers\Html;
                 <?php foreach ($model->getNotDomainTariffTypes() as $type) : ?>
                     <div class="col-md-4">
                         <?= $form->field($model, $type)->widget(TariffCombo::class, [
+                            'type' => 'tariff/name/' . $type,
+                            'name' => $type,
                             'tariffType' => $type,
                             'client' => $client,
                             'hasId' => true,

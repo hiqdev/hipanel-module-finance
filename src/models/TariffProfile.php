@@ -70,7 +70,7 @@ class TariffProfile extends \hipanel\base\Model
             if (empty($this->$attribute)) {
                 continue;
             }
-            $this->$attribute = reset($this->$attribute);
+            $this->$attribute = count($this->$attribute) > 1 ? implode(',', $this->$attribute) : reset($this->$attribute);
         }
 
         return parent::beforeValidate();
