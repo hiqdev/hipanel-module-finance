@@ -18,6 +18,7 @@ class SaleSearch extends Sale
 {
     private const SALE_CONDITION_OPEN = 'open';
     private const SALE_CONDITION_CLOSE = 'close';
+    private const SALE_CONDITION_UPCOMING_CLOSE = 'upcoming_close';
 
     use SearchModelTrait {
         searchAttributes as defaultSearchAttributes;
@@ -48,6 +49,7 @@ class SaleSearch extends Sale
         return [
             self::SALE_CONDITION_OPEN => Yii::t('hipanel:finance:sale', 'Show opened'),
             self::SALE_CONDITION_CLOSE => Yii::t('hipanel:finance:sale', 'Show closed'),
+            self::SALE_CONDITION_UPCOMING_CLOSE => Yii::t('hipanel:finance:sale', 'Upcoming closed'),
         ];
     }
 }
