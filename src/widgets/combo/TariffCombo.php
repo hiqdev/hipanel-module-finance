@@ -28,7 +28,7 @@ class TariffCombo extends Combo
     public $_return = ['id'];
 
     /** {@inheritdoc} */
-    public $_rename = ['text' => 'tariff'];
+    public $_rename = ['text' => 'name'];
 
     public $_primaryFilter = 'tariff_ilike';
 

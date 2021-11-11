@@ -1,7 +1,6 @@
 <?php
 
 use hipanel\helpers\Url;
-use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Tariffprofile;
 use hipanel\modules\finance\widgets\combo\TariffCombo;
 use yii\bootstrap\ActiveForm;
@@ -39,7 +38,7 @@ use yii\helpers\Html;
         <?= Html::activeHiddenInput($model, 'client') ?>
 
         <?php foreach ($model->getDomainTariffTypes() as $type) : ?>
-            <?php if (!Yii::getAlias("@{$type}", false)) : ?>
+            <?php if (!Yii::getAlias('@' . $type, false)) : ?>
                 <?php continue ?>
             <?php endif ?>
             <div class="row">
@@ -54,20 +53,23 @@ use yii\helpers\Html;
             </div>
         <?php endforeach ?>
         <?php if (Yii::getAlias('@server', false)) : ?>
-            <div class="row">
-                <?php foreach ($model->getNotDomainTariffTypes() as $type) : ?>
-                    <div class="col-md-4">
-                        <?= $form->field($model, $type)->widget(TariffCombo::class, [
-                            'type' => 'tariff/name/' . $type,
-                            'name' => $type,
-                            'tariffType' => $type,
-                            'client' => $client,
-                            'hasId' => true,
-                            'multiple' => true,
-                        ]) ?>
-                    </div>
-                <?php endforeach ?>
-            </div>
+            <?php foreach (array_chunk($model->getNotDomainTariffTypes(), 3) as $types) : ?>
+                <div class="row">
+                    <?php foreach ($types as $type) : ?>
+                        <div class="col-md-4">
+                            <?= $form->field($model, $type)->widget(TariffCombo::class, [
+                                'type' => 'tariff/name/' . $type,
+                                'name' => $type,
+                                'current' => $model->tariffs[$type],
+                                'tariffType' => $type,
+                                'client' => $client,
+                                'hasId' => true,
+                                'multiple' => true,
+                            ]) ?>
+                        </div>
+                    <?php endforeach ?>
+                </div>
+            <?php endforeach ?>
         <?php endif ?>
     </div>
 </div>
