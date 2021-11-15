@@ -74,8 +74,8 @@ class TariffProfileGridView extends BoxedGridView
             ],
             'actions' => [
                 'class' => DataColumn::class,
-                'format' => 'html',
-                'value' => fn($model) => Html::a(Yii::t('hipanel', 'Update'), ['@tariffprofile/update', 'id' => $model->id], ['class' => 'btn btn-default btn-sm']),
+                'format' => 'raw',
+                'value' => fn($model) => Html::a(Yii::t('hipanel', 'Update'), ['@tariffprofile/update', 'id' => Html::encode($model->id)], ['class' => 'btn btn-default btn-sm']),
             ],
         ], $this->getTariffColumns());
     }
