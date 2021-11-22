@@ -36,7 +36,7 @@ class TargetsCest
             Input::asAdvancedSearch($I, 'Name'),
             Dropdown::asAdvancedSearch($I, 'Type'),
             Select2::asAdvancedSearch($I, 'Client'),
-            Select2::asAdvancedSearch($I, 'Tariff Id'),
+            Select2::asAdvancedSearch($I, 'Tariff'),
         ]);
     }
 
