@@ -28,6 +28,12 @@ class Target extends Model
         return array_filter([
             'anycastcdn' => Yii::t('hipanel:finance', 'Anycast CDN'),
             'videocdn' => Yii::t('hipanel:finance', 'Video CDN'),
+            'vps' => Yii::t('hipanel:finance', 'VPS'),
+            'snapshot' => Yii::t('hipanel:finance', 'Snapshot'),
+            'volume' => Yii::t('hipanel:finance', 'Volume'),
+            'storage' => Yii::t('hipanel:finance', 'Storage'),
+            'private_cloud' => Yii::t('hipanel:finance', 'Private cloud'),
+            'private_cloud_backup' => Yii::t('hipanel:finance', 'Private cloud backup'),
         ]);
     }
 
@@ -35,6 +41,7 @@ class Target extends Model
     {
         return array_merge(parent::attributeLabels(), [
             'show_deleted' => Yii::t('hipanel:finance', 'Show deleted'),
+            'tariff_id' => Yii::t('hipanel:finance', 'Tariff'),
         ]);
     }
 }

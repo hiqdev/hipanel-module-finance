@@ -15,7 +15,7 @@ use hipanel\widgets\AdvancedSearch;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('type')->dropDownList($search->model->types, ['prompt' => '--']) ?>
+    <?= $search->field('type')->dropDownList($search->model->types, ['prompt' => $search->model->getAttributeLabel('type')]) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
