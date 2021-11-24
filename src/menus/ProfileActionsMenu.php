@@ -10,11 +10,12 @@
 
 namespace hipanel\modules\finance\menus;
 
+use hipanel\menus\AbstractDetailMenu;
 use hipanel\widgets\ModalButton;
 use Yii;
 use yii\helpers\Html;
 
-class ProfileActionsMenu extends \hiqdev\yii2\menus\Menu
+class ProfileActionsMenu extends AbstractDetailMenu
 {
     public $model;
 

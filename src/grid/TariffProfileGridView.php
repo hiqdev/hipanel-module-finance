@@ -11,10 +11,8 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\BoxedGridView;
-use hipanel\modules\finance\menus\ProfileActionsMenu;
-use hipanel\modules\finance\models\Tariff;
+use hipanel\grid\DataColumn;
 use hipanel\modules\finance\models\TariffProfile;
-use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\helpers\Html;
 
@@ -27,13 +25,7 @@ class TariffProfileGridView extends BoxedGridView
                 'class' => 'hipanel\grid\MainColumn',
                 'filterAttribute' => 'name_like',
                 'note' => null,
-                'value' => function (TariffProfile $model) {
-                    if (empty($model->name) || $model->isDefault()) {
-                        return Yii::t('hipanel.finance.tariffprofile', 'Default');
-                    }
-
-                    return $model->name;
-                },
+                'value' => fn(TariffProfile $model): string => Html::a($model->getTitle(), ['@tariffprofile/view', 'id' => $model->id], ['class' => 'text-bold']),
             ],
             'tariff_names' => [
                 'filter' => false,
@@ -81,8 +73,9 @@ class TariffProfileGridView extends BoxedGridView
                 },
             ],
             'actions' => [
-                'class' => MenuColumn::class,
-                'menuClass' => ProfileActionsMenu::class,
+                'class' => DataColumn::class,
+                'format' => 'raw',
+                'value' => fn($model) => Html::a(Yii::t('hipanel', 'Update'), ['@tariffprofile/update', 'id' => Html::encode($model->id)], ['class' => 'btn btn-default btn-sm']),
             ],
         ], $this->getTariffColumns());
     }

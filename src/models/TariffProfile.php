@@ -70,7 +70,7 @@ class TariffProfile extends \hipanel\base\Model
             if (empty($this->$attribute)) {
                 continue;
             }
-            $this->$attribute = reset($this->$attribute);
+            $this->$attribute = count($this->$attribute) > 1 ? implode(',', $this->$attribute) : reset($this->$attribute);
         }
 
         return parent::beforeValidate();
@@ -111,7 +111,7 @@ class TariffProfile extends \hipanel\base\Model
     }
 
     /**
-     * Human readable title
+     * Human-readable title
      *
      * @return string
      */
@@ -147,5 +147,16 @@ class TariffProfile extends \hipanel\base\Model
     public function getNotDomainTariffTypes(): array
     {
         return array_diff($this->getTariffTypes(), $this->getDomainTariffTypes());
+    }
+
+    public function reassignTariffTypeAttributes(): void
+    {
+        foreach ($this->getTariffTypes() as $type) {
+            if (empty($this->$type)) {
+                continue;
+            }
+            $ids = explode(',', $this->$type);
+            $this->$type = array_combine($ids, $ids);
+        }
     }
 }

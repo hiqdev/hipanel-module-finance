@@ -69,6 +69,7 @@ class TariffProfileController extends CrudController
                 'class' => SmartUpdateAction::class,
                 'data' => function (RenderAction $action, array $data): array {
                     $model = $data['model'];
+                    $model->reassignTariffTypeAttributes();
 
                     return [
                         'client' => $model->client,
