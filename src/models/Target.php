@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\models;
 
 use hipanel\base\Model;
 use hipanel\base\ModelTrait;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 use Yii;
 
 class Target extends Model
@@ -25,16 +26,17 @@ class Target extends Model
 
     public function getTypes(): array
     {
-        return array_filter([
-            'anycastcdn' => Yii::t('hipanel:finance', 'Anycast CDN'),
-            'videocdn' => Yii::t('hipanel:finance', 'Video CDN'),
-            'vps' => Yii::t('hipanel:finance', 'VPS'),
-            'snapshot' => Yii::t('hipanel:finance', 'Snapshot'),
-            'volume' => Yii::t('hipanel:finance', 'Volume'),
-            'storage' => Yii::t('hipanel:finance', 'Storage'),
-            'private_cloud' => Yii::t('hipanel:finance', 'Private cloud'),
-            'private_cloud_backup' => Yii::t('hipanel:finance', 'Private cloud backup'),
-        ]);
+        $configurator = Yii::$container->get(ConsumptionConfigurator::class);
+        $configurations = array_filter(
+            $configurator->getConfigurations(),
+            static fn(array $configuration): bool => $configuration['model'] instanceof self
+        );
+        $types = [];
+        foreach ($configurations as $type => $configuration) {
+            $types[$type] = $configuration['label'];
+        }
+
+        return $types;
     }
 
     public function attributeLabels(): array

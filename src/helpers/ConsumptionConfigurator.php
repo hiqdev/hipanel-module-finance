@@ -138,10 +138,18 @@ final class ConsumptionConfigurator
      */
     private function getConfigurationByClass(string $class): array
     {
-        return $this->getConfigurations()[$class];
+        $fallback = [
+            'label' => ['hipanel:finance', $class],
+            'columns' => [],
+            'groups' => [],
+            'model' => Target::class,
+            'resourceModel' => TargetResource::class,
+        ];
+
+        return $this->getConfigurations()[$class] ?? $fallback;
     }
 
-    private function getConfigurations(): array
+    public function getConfigurations(): array
     {
         return array_map(function (array $config): array {
             [$dictionary, $label] = $config['label'];

@@ -88,8 +88,12 @@ class ConsumptionController extends Controller
         $this->response->format = Response::FORMAT_JSON;
         $search = new ConsumptionSearch();
         if ($search->load($request->get(), '') && $search->validate()) {
+            $search->class = 'anycastcdn';
             $consumptions = $this->consumptionsProvider->findAll($search->attributes);
             $consumption = reset($consumptions);
+            if (!$consumption) {
+                return [];
+            }
             $resources = ResourceHelper::prepareDetailView($consumption->resources);
 
             return [

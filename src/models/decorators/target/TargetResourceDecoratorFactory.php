@@ -19,6 +19,11 @@ class TargetResourceDecoratorFactory extends ServerResourceDecoratorFactory
         return array_merge(parent::typeMap(), [
             'cdn_traf' => CdnTrafficResourceDecorator::class,
             'cdn_traf_max' => CdnTrafficResourceDecorator::class,
+            'snapshot_du' => SnapshotDuResourceDecorator::class,
+            'volume_du' => VolumeDuResourceDecorator::class,
+            'storage_du' => StorageDuResourceDecorator::class,
+            'storage_du95' => StorageDu95ResourceDecorator::class,
+            'private_cloud_backup_du' => PrivateCloudBackupDuResourceDecorator::class,
         ]);
     }
 }
