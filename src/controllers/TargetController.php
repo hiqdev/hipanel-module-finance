@@ -58,7 +58,8 @@ class TargetController extends CrudController
     private function getData($action, $data)
     {
         $id = $action->controller->request->get('id');
-        $target = Target::findOne($id);
+        $consumption = $this->consumptionsProvider->findById($id);
+        $target = $data['model'] ?? Target::findOne($action->controller->request->get('id'));
         $attributes = [
             'id' => $target->client_id,
             'login' => $target->client,
@@ -70,7 +71,7 @@ class TargetController extends CrudController
             'originalModel' => $target,
             'client' => $client,
             'tariff' => $tariff,
-            'consumption' => $this->consumptionsProvider->findById($id),
+            'consumption' => $consumption,
             'configurator' => $this->consumptionConfigurator,
         ]);
     }

@@ -90,6 +90,9 @@ class ConsumptionController extends Controller
         if ($search->load($request->get(), '') && $search->validate()) {
             $consumptions = $this->consumptionsProvider->findAll($search->attributes);
             $consumption = reset($consumptions);
+            if (!$consumption) {
+                return [];
+            }
             $resources = ResourceHelper::prepareDetailView($consumption->resources);
 
             return [
