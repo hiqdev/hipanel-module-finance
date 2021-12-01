@@ -15,8 +15,11 @@ class ResourceHelper
      */
     public static function convertAmount(ResourceDecoratorInterface $decorator)
     {
+        $configurator = yii::getContainer()->get(ConsumptionConfigurator::class);
         $amount = $decorator->getPrepaidQuantity();
-        $convertibleTypes = [
+        $targetTypes = $configurator->getAllPossibleColumns();
+        unset($targetTypes[array_search('referral', $targetTypes, true)], $targetTypes[array_search('ip_num', $targetTypes, true)]);
+        $convertibleTypes = array_merge([
             'backup_du',
             'hdd',
             'ram',
@@ -32,7 +35,7 @@ class ResourceHelper
             'cdn_traf_max',
             'server_sata',
             'server_ssd',
-        ];
+        ], $targetTypes);
         if (in_array($decorator->resource->type, $convertibleTypes, true)) {
             $from = Unit::create($decorator->resource->unit)->getName();
             $to = Unit::create($decorator->toUnit());
