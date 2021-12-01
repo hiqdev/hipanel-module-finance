@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\widgets;
 
+use hipanel\modules\finance\models\Target;
 use Yii;
 use yii\base\Model;
 use yii\base\Widget;
@@ -65,6 +66,14 @@ class LinkToObjectResolver extends Widget
         'model' => '@model/view',
         'config' => '@config/view',
     ];
+
+    public function init()
+    {
+        parent::init();
+        $targetTypes = array_keys((new Target())->getTypes());
+        $targetLinks = array_combine($targetTypes, array_fill(0, count($targetTypes), '@target/view'));
+        $this->links = array_merge($this->links, $targetLinks);
+    }
 
     /**
      * @return string
