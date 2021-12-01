@@ -4,11 +4,13 @@ use hipanel\models\IndexPageUiOptions;
 use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\grid\PlanGridView;
 use hipanel\modules\finance\helpers\ConsumptionConfigurator;
+use hipanel\modules\finance\menus\TargetDetailMenu;
 use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\proxy\ResourceSearch;
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\widgets\ConsumptionViewer;
+use hipanel\widgets\MainDetails;
 use yii\data\DataProviderInterface;
 use yii\helpers\Html;
 
@@ -29,6 +31,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="row">
     <div class="col-md-3">
+        <?= MainDetails::widget([
+            'title' => $this->title,
+            'icon' => 'fa-bullseye',
+            'menu' => TargetDetailMenu::widget(['model' => $model], ['linkTemplate' => '<a href="{url}" {linkOptions}><span class="pull-right">{icon}</span>&nbsp;{label}</a>']),
+        ]) ?>
 
         <?php if (Yii::$app->user->can('client.read') && Yii::$app->user->can('access-subclients')) : ?>
             <div class="row">
@@ -57,6 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     </div>
     <div class="col-md-9">
+        <?= $this->render('_sales', ['target' => $originalModel]) ?>
         <?= ConsumptionViewer::widget([
             'configurator' => $configurator,
             'consumption' => $consumption,
