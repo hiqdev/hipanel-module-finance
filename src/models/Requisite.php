@@ -34,11 +34,11 @@ class Requisite extends Contact
             [['id', 'client_id', 'recipient_id'], 'integer'],
             [['id'], 'required', 'on' => ['reserve-number', 'set-templates', 'set-serie']],
             [['client_id', 'recipient_id'], 'required', 'on' => ['reserve-number']],
-            [['invoice_id', 'acceptance_id', 'contract_id', 'probation_id', 'internal_invoice_id'], 'safe'],
+            [['invoice_id', 'acceptance_id', 'contract_id', 'probation_id', 'internal_invoice_id', 'proforma_invoice_id'], 'safe'],
             [['serie'], 'safe'],
             [['serie'], 'required', 'on' => ['set-serie', 'update']],
             [['invoice_id'], 'required', 'on' => ['set-templates', 'update']],
-            [['invoice_name', 'acceptance_name', 'contract_name', 'probation_name', 'internal_invoice_name'], 'safe'],
+            [['invoice_name', 'acceptance_name', 'contract_name', 'probation_name', 'internal_invoice_name', 'proforma_invoice_name'], 'safe'],
             [['balance', 'balances'], 'safe'],
         ]);
     }
