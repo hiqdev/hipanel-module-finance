@@ -62,7 +62,7 @@ use hipanel\widgets\RefCombo;
                         <b><?= "{$model->name} / {$model->organization}" ?></b>
                     </div>
                     <?= Html::activeHiddenInput($model, "[$model->id]id") ?>
-                    <?php foreach (['invoice', 'acceptance', 'contract', 'probation', 'internal_invoice'] as $template) : ?>
+                    <?php foreach (['invoice', 'acceptance', 'contract', 'probation', 'internal_invoice', 'proforma_invoice'] as $template) : ?>
                         <div class="col-md-6">
                             <?= $form->field($model, "[$model->id]{$template}_id")->widget(RefCombo::class, [
                                 'gtype' => "type,document,{$template}",
