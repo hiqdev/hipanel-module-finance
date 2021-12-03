@@ -10,7 +10,7 @@ $isEmployee = $client->type === $client::TYPE_EMPLOYEE;
 $documentType = $isEmployee ? 'acceptance' : 'invoice';
 
 $documents = ($user->can('document.read') && $user->can('bill.read'))
-                ? ($isEmployee ? ['acceptances'] : ['invoices', 'serviceInvoices', 'purchaseInvoices'])
+                ? ($isEmployee ? ['acceptances'] : ['invoices', 'serviceInvoices', 'purchaseInvoices', 'proformaInvoices'])
                 : [];
 
 ?>
