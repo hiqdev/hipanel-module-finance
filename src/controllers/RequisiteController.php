@@ -23,6 +23,7 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\base\CrudController;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\client\models\query\ContactQuery;
+use hipanel\modules\finance\models\Requisite;
 use hiqdev\higrid\representations\RepresentationCollection;
 use yii\base\Event;
 use Yii;
@@ -132,7 +133,7 @@ class RequisiteController extends CrudController
                     /** @var SmartPerformAction $action */
                     $data = Yii::$app->request->post($action->collection->getModel()->formName());
                     $attributes = [];
-                    foreach (['invoice_id', 'acceptance_id', 'contract_id', 'probation_id', 'nda_id', 'internal_invoice_id'] as $attribute) {
+                    foreach (Requisite::getTemplatesTypes() as $attribute) {
                         $attributes[$attribute] = $data[$attribute];
                         unset($data[$attribute]);
                     }
