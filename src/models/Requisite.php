@@ -23,6 +23,13 @@ class Requisite extends Contact
      */
     use \hipanel\base\ModelTrait;
 
+    const TEMPLATE_INVOICE = 'invoice';
+    const TEMPLATE_ACCEPTANCE = 'acceptance';
+    const TEMPLATE_CONTRACT = 'contract';
+    const TEMPLATE_PROBATION = 'probation';
+    const TEMPLATE_INTERNAL_INVOICE = 'internal_invoice';
+    const TEMPLATE_PROFORMA = 'proforma';
+
     public static function tableName()
     {
         return 'requisite';
@@ -34,11 +41,11 @@ class Requisite extends Contact
             [['id', 'client_id', 'recipient_id'], 'integer'],
             [['id'], 'required', 'on' => ['reserve-number', 'set-templates', 'set-serie']],
             [['client_id', 'recipient_id'], 'required', 'on' => ['reserve-number']],
-            [['invoice_id', 'acceptance_id', 'contract_id', 'probation_id', 'internal_invoice_id', 'proforma_invoice_id'], 'safe'],
+            [['invoice_id', 'acceptance_id', 'contract_id', 'probation_id', 'internal_invoice_id', 'proforma_id'], 'safe'],
             [['serie'], 'safe'],
             [['serie'], 'required', 'on' => ['set-serie', 'update']],
             [['invoice_id'], 'required', 'on' => ['set-templates', 'update']],
-            [['invoice_name', 'acceptance_name', 'contract_name', 'probation_name', 'internal_invoice_name', 'proforma_invoice_name'], 'safe'],
+            [['invoice_name', 'acceptance_name', 'contract_name', 'probation_name', 'internal_invoice_name', 'proforma_name'], 'safe'],
             [['balance', 'balances'], 'safe'],
         ]);
     }
@@ -79,5 +86,17 @@ class Requisite extends Contact
             'recipient_id' => Yii::t('hipanel:finance', 'Recipient'),
             'balance' => Yii::t('hipanel:finance', 'Balance'),
         ]);
+    }
+
+    public static function getTemplatesTypes(): array
+    {
+        return [
+            self::TEMPLATE_INVOICE => self::TEMPLATE_INVOICE,
+            self::TEMPLATE_ACCEPTANCE => self::TEMPLATE_ACCEPTANCE,
+            self::TEMPLATE_CONTRACT => self::TEMPLATE_CONTRACT,
+            self::TEMPLATE_PROBATION => self::TEMPLATE_PROBATION,
+            self::TEMPLATE_INTERNAL_INVOICE => self::TEMPLATE_INTERNAL_INVOICE,
+            self::TEMPLATE_PROFORMA => self::TEMPLATE_PROFORMA,
+        ];
     }
 }

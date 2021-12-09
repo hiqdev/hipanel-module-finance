@@ -4,6 +4,7 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 use yii\helpers\Url;
 use hipanel\widgets\RefCombo;
+use hipanel\modules\finance\models\Requisite;
 use yii\web\View;
 
 /**
@@ -30,7 +31,7 @@ use yii\web\View;
 
 <div class="row" style="padding: 1em 5px 0;">
     <?php $model = is_array($model) ? reset($model) : $model ?>
-    <?php foreach (['invoice', 'acceptance', 'contract', 'probation', 'internal_invoice', 'proforma_invoice'] as $reqtemplate) : ?>
+    <?php foreach (Requisite::getTemplatesTypes() as $reqtemplate) : ?>
         <div class="col-md-6">
             <?= $form->field($model, "{$reqtemplate}_id")->widget(RefCombo::class, [
                 'gtype' => "type,document,{$reqtemplate}",

@@ -37,6 +37,7 @@ return [
     'Invoices' => 'Инвойсы',
     'Service Invoices' => 'Инвойсы за услуги',
     'Purchase Invoices' => 'Инвойсы за покупки',
+    'Payment Request' => 'Запрос на оплату',
     'Acceptance reports' => 'Акты выполненных работ',
     'Document' => 'Документ',
     'Documents' => 'Документы',

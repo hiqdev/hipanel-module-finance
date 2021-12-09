@@ -38,7 +38,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
             ],
             'proformaInvoices' => [
                 'class' => MonthlyDocumentsColumn::class,
-                'type' => 'proforma_invoice',
+                'type' => 'proforma',
             ],
             'acceptances' => [
                 'class' => MonthlyDocumentsColumn::class,

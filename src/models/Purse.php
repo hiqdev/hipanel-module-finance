@@ -118,6 +118,11 @@ class Purse extends \hipanel\base\Model
         return $this->getDocumentsOfType('internal_invoice');
     }
 
+    public function getProformaInvoices()
+    {
+        return $this->getDocumentsOfType('proforma');
+    }
+
     public function getDocumentsOfType($type)
     {
         if (Yii::$app->user->can('document.read') === false) {
@@ -160,7 +165,7 @@ class Purse extends \hipanel\base\Model
             'invoices' => Yii::t('hipanel:finance', 'Invoices'),
             'serviceInvoices' => Yii::t('hipanel:finance', 'Service Invoices'),
             'purchaseInvoices' => Yii::t('hipanel:finance', 'Purchase Invoices'),
-            'proformaInvoices' => Yii::t('hipanel:finance', 'Proforma Invoices'),
+            'proformaInvoices' => Yii::t('hipanel:finance', 'Payment Request'),
             'acceptances' => Yii::t('hipanel:finance', 'Acceptance reports'),
             'contracts' => Yii::t('hipanel:finance', 'Contracts'),
             'probations' => Yii::t('hipanel:finance', 'Probation'),
