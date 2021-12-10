@@ -134,8 +134,8 @@ class RequisiteController extends CrudController
                     $data = Yii::$app->request->post($action->collection->getModel()->formName());
                     $attributes = [];
                     foreach (Requisite::getTemplatesTypes() as $attribute) {
-                        $attributes[$attribute] = $data[$attribute];
-                        unset($data[$attribute]);
+                        $attributes["{$attribute}_id"] = $data["{$attribute}_id"];
+                        unset($data["{$attribute}_id"]);
                     }
 
                     foreach ($data as &$item) {
