@@ -21,6 +21,7 @@ use yii\web\View;
 $this->title = $model->name ? Html::encode($model->name) : '&nbsp;';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerCss(".break-all-each-second-td tr > td:nth-child(2) { word-break: break-all; }");
 
 $this->registerCss(<<<'CSS'
 .profile-block {
@@ -76,7 +77,7 @@ CSS
                     <?= PlanDetailMenu::widget(['model' => $model]) ?>
                 </div>
             </div>
-            <div class="box-footer no-padding">
+            <div class="box-footer no-padding break-all-each-second-td">
                 <?= PlanGridView::detailView([
                     'model' => $model,
                     'boxed' => false,
