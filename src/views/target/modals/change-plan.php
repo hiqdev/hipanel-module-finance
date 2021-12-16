@@ -2,6 +2,7 @@
 
 use hipanel\assets\BootstrapDatetimepickerAsset;
 use hipanel\helpers\Url;
+use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\forms\TargetManagementForm;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
 use yii\bootstrap\ActiveForm;
@@ -35,9 +36,9 @@ JS
 <?= Html::activeHiddenInput($model, 'remoteid') ?>
 <?= Html::activeHiddenInput($model, 'type') ?>
 <?= Html::activeHiddenInput($model, 'name') ?>
-<?= Html::activeHiddenInput($model, 'customer_id') ?>
 
 <?= $form->field($model, 'plan_id')->widget(PlanCombo::class, ['hasId' => true, 'tariffType' => $model->type]) ?>
+<?= $form->field($model, 'customer_id')->widget(ClientCombo::class) ?>
 <?= $form->field($model, 'time') ?>
 
 <div class="row">

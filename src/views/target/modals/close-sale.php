@@ -38,7 +38,7 @@ use yii\helpers\Html;
 
 <div class="row">
     <div class="col-md-12">
-        <?= Html::submitButton(Yii::t('hipanel:finance', 'Change'), ['class' => 'btn btn-success']) ?> &nbsp;
+        <?= Html::submitButton(Yii::t('hipanel:finance', 'Close'), ['class' => 'btn btn-success']) ?> &nbsp;
         <?= Html::button(Yii::t('hipanel', 'Cancel'), ['class' => 'btn btn-default', 'data-dismiss' => 'modal']) ?>
     </div>
 </div>

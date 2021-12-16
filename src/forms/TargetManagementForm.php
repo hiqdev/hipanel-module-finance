@@ -41,7 +41,8 @@ final class TargetManagementForm extends Target
     {
         return array_merge(parent::attributeLabels(), [
             'plan_id' => Yii::t('hipanel:finance', 'Tariff plan'),
-            'time' => Yii::t('hipanel:finance', 'Time'),
+            'time' => Yii::t('hipanel', 'Time'),
+            'customer_id' => Yii::t('hipanel', 'Client'),
         ]);
     }
 
