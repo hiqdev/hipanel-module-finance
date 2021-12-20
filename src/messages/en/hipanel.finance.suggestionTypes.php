@@ -21,7 +21,7 @@ return [
     'switch' => 'Switch',
     'anycast_cdn' => 'Anycast CDN',
     'referral' => 'Referral',
-    'vps' => 'Cloud Servers',
+    'vps' => 'Virtual Private Servers',
     'snapshot' => 'Snapshot',
     'volume' => 'Volumes',
     'storage' => 'Storage',
