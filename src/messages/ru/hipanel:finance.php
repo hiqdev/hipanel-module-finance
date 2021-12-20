@@ -268,4 +268,14 @@ return [
     'Show deleted' => 'Отображать удаленные',
 
     'No consumption found for the requested resource' => 'Для запрашиваемого ресурса потребление не найдено',
+    'Change plan' => 'Изменить тарифный план',
+    'Change' => 'Изменить',
+    'Close sale' => 'Закрыть продажу',
+    'Close' => 'Закрыть',
+    'Sale' => 'Продать',
+    'Sales' => 'Продажи',
+    'Targets' => 'Таргеты',
+    'Target\'s plan has been changed' => 'План изменен',
+    'Target has been sold' => 'Таргет продан',
+    'Target\'s sale has been closed' => 'Продажа была закрыта',
 ];
