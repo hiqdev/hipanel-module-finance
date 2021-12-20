@@ -10,10 +10,9 @@
 
 namespace hipanel\modules\finance\models\decorators\target;
 
-use hipanel\modules\finance\models\decorators\server\Traffic95ResourceDecorator;
 use Yii;
 
-class StorageDu95ResourceDecorator extends Traffic95ResourceDecorator
+class StorageDu95ResourceDecorator extends StorageDuResourceDecorator
 {
     public function displayTitle()
     {
