@@ -278,4 +278,14 @@ return [
     'Target\'s plan has been changed' => 'План изменен',
     'Target has been sold' => 'Таргет продан',
     'Target\'s sale has been closed' => 'Продажа была закрыта',
+
+    'anycastcdn' => 'Anycast CDN',
+    'backup' => 'Бэкап',
+    'private_cloud' => 'Личное облако',
+    'private_cloud_backup' => 'Бэкап личного облака',
+    'snapshot' => 'Снимок',
+    'storage' => 'Хранилище',
+    'videocdn' => 'Video CDN',
+    'volume' => 'Раздел',
+    'vps' => 'VPS',
 ];
