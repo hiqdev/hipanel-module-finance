@@ -16,6 +16,7 @@ use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use Yii;
+use yii\base\InvalidArgumentException;
 use yii\helpers\Html;
 
 class SaleGridView extends \hipanel\grid\BoxedGridView
@@ -40,9 +41,18 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 },
             ],
             'unsale_time' => [
-                'format' => ['datetime', 'php' => 'medium'],
+                'format' => 'raw',
                 'filter' => false,
                 'contentOptions' => ['class' => 'text-nowrap'],
+                'value' => static function (Sale $sale): string {
+                    try {
+                        $asDateTime = Yii::$app->formatter->asDateTime($sale->unsale_time, 'medium');
+                    } catch (InvalidArgumentException $exception) {
+                        $asDateTime = $sale->unsale_time;
+                    }
+
+                    return $asDateTime;
+                },
             ],
             'seller' => [
                 'class' => ClientColumn::class,

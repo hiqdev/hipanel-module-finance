@@ -49,7 +49,7 @@ class SaleSearch extends Sale
         return [
             self::SALE_CONDITION_OPEN => Yii::t('hipanel:finance:sale', 'Show opened'),
             self::SALE_CONDITION_CLOSE => Yii::t('hipanel:finance:sale', 'Show closed'),
-            self::SALE_CONDITION_UPCOMING_CLOSE => Yii::t('hipanel:finance:sale', 'Upcoming closed'),
+            self::SALE_CONDITION_UPCOMING_CLOSE => Yii::t('hipanel:finance:sale', 'Upcoming close'),
         ];
     }
 }
