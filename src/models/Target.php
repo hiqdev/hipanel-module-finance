@@ -22,8 +22,8 @@ class Target extends Model
     public function rules()
     {
         return [
-            [['id', 'type_id', 'state_id', 'client_id', 'access_id', 'tariff_id'], 'integer'],
-            [['type', 'state', 'client', 'name', 'tariff'], 'string'],
+            [['id', 'type_id', 'state_id', 'client_id', 'access_id', 'tariff_id', 'seller_id'], 'integer'],
+            [['type', 'state', 'client', 'name', 'tariff', 'seller'], 'string'],
             [['show_deleted'], 'boolean'],
         ];
     }
