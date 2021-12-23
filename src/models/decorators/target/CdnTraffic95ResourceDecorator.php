@@ -10,13 +10,13 @@
 
 namespace hipanel\modules\finance\models\decorators\target;
 
-use hipanel\modules\finance\models\decorators\server\TrafficResourceDecorator;
+use hipanel\modules\finance\models\decorators\server\Traffic95ResourceDecorator;
 use Yii;
 
-class CdnTraffic95ResourceDecorator extends TrafficResourceDecorator
+class CdnTraffic95ResourceDecorator extends Traffic95ResourceDecorator
 {
     public function displayTitle()
     {
-        return $this->displayTitleWithDirection(Yii::t('hipanel.finance.resource', 'CDN Traffic 95'));
+        return $this->displayTitleWithDirection(Yii::t('hipanel.finance.resource', 'CDN Traffic 95 percentile'));
     }
 }

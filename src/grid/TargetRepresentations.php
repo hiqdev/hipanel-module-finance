@@ -24,6 +24,7 @@ class TargetRepresentations extends RepresentationCollection
                     'checkbox',
                     'name',
                     'client',
+                    'seller',
                     'type',
                     'tariff'
                 ]),
