@@ -25,6 +25,9 @@ class TargetResourceDecoratorFactory extends ServerResourceDecoratorFactory
             'storage_du95' => StorageDu95ResourceDecorator::class,
             'private_cloud_backup_du' => PrivateCloudBackupDuResourceDecorator::class,
             'cdn_cache' => CdnCacheResourceDecorator::class,
+            'cdn_cache95' => CdnCacheResourceDecorator::class,
+            'cdn_traf95' => CdnTraffic95ResourceDecorator::class,
+            'cdn_traf95_max' => CdnTraffic95ResourceDecorator::class,
         ]);
     }
 }
