@@ -117,7 +117,6 @@ class Price extends Model
             'overuse,cdn_traf_max'              => 'size',
             'overuse,cdn_traf95_max'            => 'speed',
             'overuse,cdn_cache95'               => 'size',
-            'overuse,storage_du'                => 'size',
             'overuse,server_du'                 => 'size',
             'overuse,server_ssd'                => 'size',
             'overuse,server_sata'               => 'size',
