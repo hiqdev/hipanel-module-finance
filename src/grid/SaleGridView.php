@@ -46,12 +46,10 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'contentOptions' => ['class' => 'text-nowrap'],
                 'value' => static function (Sale $sale): string {
                     try {
-                        $asDateTime = Yii::$app->formatter->asDateTime($sale->unsale_time, 'medium');
+                        return Yii::$app->formatter->asDateTime($sale->unsale_time, 'medium');
                     } catch (InvalidArgumentException $exception) {
-                        $asDateTime = $sale->unsale_time;
+                        return $sale->unsale_time;
                     }
-
-                    return $asDateTime;
                 },
             ],
             'seller' => [
