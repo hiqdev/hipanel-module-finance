@@ -28,7 +28,10 @@ use yii\web\View;
 // $this->render("../{$model->type}/suggestPricesModal", compact('form', 'model', 'plan'));
 ?>
 
-<?php if ($plan->type === Plan::TYPE_SERVER): ?>
+<?php if (in_array($plan->type, [
+        Plan::TYPE_SERVER,
+        Plan::TYPE_PRIVATE_CLOUD
+    ], true)): ?>
     <?php if ($model->isObjectPredefined()) : ?>
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
     <?php else : ?>
@@ -51,7 +54,6 @@ use yii\web\View;
     Plan::TYPE_VOLUME,
     Plan::TYPE_STORAGE,
     Plan::TYPE_PRIVATE_CLOUD_BACKUP,
-    Plan::TYPE_PRIVATE_CLOUD,
 ], true)) : ?>
     <?php if ($model->isObjectPredefined()) : ?>
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
