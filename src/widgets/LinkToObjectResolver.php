@@ -65,6 +65,8 @@ class LinkToObjectResolver extends Widget
         'model_group' => '@model-group/view',
         'model' => '@model/view',
         'config' => '@config/view',
+        'anycastcdn' => '@target/view',
+        'videocdn' => '@target/view',
     ];
 
     public function init()
