@@ -37,6 +37,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
         'server_traf95_max' => DefaultQuantityFormatter::class,
         'cdn_traf_max'      => DefaultQuantityFormatter::class,
         'cdn_traf95_max'    => DefaultQuantityFormatter::class,
+        'cdn_cache95'       => DefaultQuantityFormatter::class,
         'backup_du'         => DefaultQuantityFormatter::class,
         'server_du'         => DefaultQuantityFormatter::class,
         'storage_du'        => DefaultQuantityFormatter::class,
