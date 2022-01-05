@@ -8,6 +8,6 @@ class CdnCacheResourceDecorator extends CdnTrafficResourceDecorator
 {
     public function displayTitle()
     {
-        return $this->displayTitleWithDirection(Yii::t('hipanel.finance.resource', 'CDN Cache'));
+        return Yii::t('hipanel.finance.resource', 'CDN Cache');
     }
 }

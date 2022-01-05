@@ -143,7 +143,6 @@ return [
                         'columns' => [
                             'cdn_traf',
                             'cdn_traf95',
-                            'cdn_traf_max',
                             'storage_du',
                             'cdn_cache',
                         ],
@@ -156,7 +155,6 @@ return [
                         'columns' => [
                             'cdn_traf',
                             'cdn_traf95',
-                            'cdn_traf_max',
                             'server_du',
                             'server_ssd',
                             'server_sata',
@@ -193,7 +191,7 @@ return [
                     ],
                     'storage' => [
                         'label' => ['hipanel:finance', 'Storage'],
-                        'columns' => ['storage_du', 'storage_du95'],
+                        'columns' => ['storage_du'],
                         'groups' => [],
                         'model' => Target::class,
                         'resourceModel' => TargetResource::class,
