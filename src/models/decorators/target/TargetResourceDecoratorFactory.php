@@ -18,6 +18,8 @@ class TargetResourceDecoratorFactory extends ServerResourceDecoratorFactory
     {
         return array_merge(parent::typeMap(), [
             'cdn_traf' => CdnTrafficResourceDecorator::class,
+            'cdn_traf_plain' => CdnTrafficPlainResourceDecorator::class,
+            'cdn_traf_ssl' => CdnTrafficSSLResourceDecorator::class,
             'cdn_traf_max' => CdnTrafficResourceDecorator::class,
             'cdn_traf95' => CdnTraffic95ResourceDecorator::class,
             'snapshot_du' => SnapshotDuResourceDecorator::class,
