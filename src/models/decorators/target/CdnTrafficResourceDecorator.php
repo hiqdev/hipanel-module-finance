@@ -17,6 +17,6 @@ class CdnTrafficResourceDecorator extends TrafficResourceDecorator
 {
     public function displayTitle()
     {
-        return $this->displayTitleWithDirection(Yii::t('hipanel.finance.resource', 'CDN Traffic'));
+        return Yii::t('hipanel.finance.resource', 'CDN Traffic');
     }
 }
