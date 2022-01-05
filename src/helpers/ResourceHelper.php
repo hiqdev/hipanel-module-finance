@@ -21,20 +21,26 @@ class ResourceHelper
         unset($targetTypes[array_search('referral', $targetTypes, true)], $targetTypes[array_search('ip_num', $targetTypes, true)]);
         $convertibleTypes = array_merge([
             'backup_du',
+            'cdn_cache',
+            'cdn_cache95',
+            'cdn_traf',
+            'cdn_traf_plain',
+            'cdn_traf_ssl',
+            'cdn_traf_max',
             'hdd',
             'ram',
             'speed',
-            'server_traf95_max',
-            'server_traf95_in',
-            'server_traf95',
-            'server_traf_max',
-            'server_traf_in',
-            'server_traf',
             'server_du',
-            'cdn_traf',
-            'cdn_traf_max',
             'server_sata',
             'server_ssd',
+            'server_traf95',
+            'server_traf95_in',
+            'server_traf95_max',
+            'server_traf',
+            'server_traf_in',
+            'server_traf_max',
+            'storage_du',
+            'storage_du95',
         ], $targetTypes);
         if (in_array($decorator->resource->type, $convertibleTypes, true)) {
             $from = Unit::create($decorator->resource->unit)->getName();
@@ -78,9 +84,24 @@ class ResourceHelper
     public static function calculateTotal(array $resources): array
     {
         $totals = [];
+        $totalsOverMax = [
+            'cdn_cache',
+            'cdn_cache95',
+            'cdn_traf95',
+            'cdn_traf95_max',
+            'server_traf95',
+            'server_traf95_in',
+            'server_traf95_max',
+            'storage_du',
+            'storage_du95',
+        ];
         foreach (self::filterByAvailableTypes($resources) as $resource) {
             $decorator = $resource->buildResourceModel()->decorator();
-            $totals[$resource->type]['amount'] = bcadd($totals[$resource->type]['amount'], self::convertAmount($decorator), 3);
+            if (!in_array($resource->type, $totalsOverMax, true)) {
+                $totals[$resource->type]['amount'] = max($totals[$resource->type]['amount'], self::convertAmount($decorator));
+            } else {
+                $totals[$resource->type]['amount'] = bcadd($totals[$resource->type]['amount'], self::convertAmount($decorator), 3);
+            }
             $totals[$resource->type]['unit'] = $decorator->displayUnit();
         }
 
