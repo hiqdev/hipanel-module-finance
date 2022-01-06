@@ -20,17 +20,16 @@ class TargetResourceDecoratorFactory extends ServerResourceDecoratorFactory
             'cdn_traf' => CdnTrafficResourceDecorator::class,
             'cdn_traf_plain' => CdnTrafficPlainResourceDecorator::class,
             'cdn_traf_ssl' => CdnTrafficSSLResourceDecorator::class,
-            'cdn_traf_max' => CdnTrafficResourceDecorator::class,
-            'cdn_traf95' => CdnTraffic95ResourceDecorator::class,
+            'cdn_traf_max' => CdnTrafficMaxResourceDecorator::class,
             'snapshot_du' => SnapshotDuResourceDecorator::class,
             'volume_du' => VolumeDuResourceDecorator::class,
             'storage_du' => StorageDuResourceDecorator::class,
             'storage_du95' => StorageDu95ResourceDecorator::class,
             'private_cloud_backup_du' => PrivateCloudBackupDuResourceDecorator::class,
             'cdn_cache' => CdnCacheResourceDecorator::class,
-            'cdn_cache95' => CdnCacheResourceDecorator::class,
+            'cdn_cache95' => CdnCache95ResourceDecorator::class,
             'cdn_traf95' => CdnTraffic95ResourceDecorator::class,
-            'cdn_traf95_max' => CdnTraffic95ResourceDecorator::class,
+            'cdn_traf95_max' => CdnTraffic95MaxResourceDecorator::class,
         ]);
     }
 }
