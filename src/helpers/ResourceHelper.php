@@ -97,7 +97,7 @@ class ResourceHelper
         ];
         foreach (self::filterByAvailableTypes($resources) as $resource) {
             $decorator = $resource->buildResourceModel()->decorator();
-            if (!in_array($resource->type, $totalsOverMax, true)) {
+            if (in_array($resource->type, $totalsOverMax, true)) {
                 $totals[$resource->type]['amount'] = max($totals[$resource->type]['amount'], self::convertAmount($decorator));
             } else {
                 $totals[$resource->type]['amount'] = bcadd($totals[$resource->type]['amount'], self::convertAmount($decorator), 3);
