@@ -142,8 +142,9 @@ return [
                         'label' => ['hipanel:finance', 'Anycast CDN'],
                         'columns' => [
                             'cdn_traf',
+                            'cdn_traf_plain',
+                            'cdn_traf_ssl',
                             'cdn_traf95',
-                            'cdn_traf_max',
                             'storage_du',
                             'cdn_cache',
                         ],
@@ -155,8 +156,9 @@ return [
                         'label' => ['hipanel:finance', 'Video CDN'],
                         'columns' => [
                             'cdn_traf',
+                            'cdn_traf_plain',
+                            'cdn_traf_ssl',
                             'cdn_traf95',
-                            'cdn_traf_max',
                             'server_du',
                             'server_ssd',
                             'server_sata',
@@ -169,9 +171,11 @@ return [
                     'vps' => [
                         'label' => ['hipanel:finance', 'VPS'],
                         'columns' => [
-                            'cdn_cache',
                             'cdn_traf',
+                            'cdn_traf_plain',
+                            'cdn_traf_ssl',
                             'cdn_traf95',
+                            'cdn_cache',
                         ],
                         'groups' => [],
                         'model' => Target::class,
@@ -193,7 +197,7 @@ return [
                     ],
                     'storage' => [
                         'label' => ['hipanel:finance', 'Storage'],
-                        'columns' => ['storage_du', 'storage_du95'],
+                        'columns' => ['storage_du'],
                         'groups' => [],
                         'model' => Target::class,
                         'resourceModel' => TargetResource::class,

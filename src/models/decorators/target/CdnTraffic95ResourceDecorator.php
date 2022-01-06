@@ -17,6 +17,6 @@ class CdnTraffic95ResourceDecorator extends Traffic95ResourceDecorator
 {
     public function displayTitle()
     {
-        return $this->displayTitleWithDirection(Yii::t('hipanel.finance.resource', 'CDN Traffic 95 percentile'));
+        return Yii::t('hipanel.finance.resource', 'CDN Traffic 95 percentile');
     }
 }
