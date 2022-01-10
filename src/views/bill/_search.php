@@ -75,6 +75,10 @@ use yii\web\View;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('object_name_ilike') ?>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field('tariff_id')->widget(PlanCombo::class) ?>
 </div>
 
