@@ -35,7 +35,7 @@ class BillSearch extends Bill
         return ArrayHelper::merge($this->defaultSearchAttributes(), [
             'time_from', 'time_till',
             'servers', 'server_ids',
-            'ftype',
+            'ftype', 'object_name_ilike'
         ]);
     }
 
@@ -43,6 +43,7 @@ class BillSearch extends Bill
     {
         return $this->mergeAttributeLabels([
             'servers' => Yii::t('hipanel:finance', 'Servers'),
+            'object_name_ilike' => Yii::t('hipanel:finance', 'Object name'),
         ]);
     }
 }
