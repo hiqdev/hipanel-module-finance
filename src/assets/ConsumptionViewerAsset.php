@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\assets;
 
 use dosamigos\chartjs\ChartJsAsset;
+use hipanel\assets\HipanelAsset;
 use hipanel\assets\MomentAsset;
 use yii\web\AssetBundle;
 
@@ -19,5 +20,6 @@ class ConsumptionViewerAsset extends AssetBundle
     public $depends = [
         MomentAsset::class,
         ChartJsAsset::class,
+        HipanelAsset::class,
     ];
 }
