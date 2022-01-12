@@ -223,13 +223,6 @@ Vue.createApp({
           _this.resources = data.resources;
           _this.totals = data.totals;
           _this.setCache(data);
-          // if (data.resources[_this.object_id]) {
-          // _this.resources = _.sortBy(data.resources[_this.object_id][_this.type], r => r.date);
-          // _this.setCache(_this.resourceCacheKey, _this.resources);
-          // _this.setCache(_this.totalCacheKey, data.totals);
-          // } else {
-          //   _this.resources = [];
-          // }
         },
         error: function (error) {
           hipanel.notify.error(error.responseText);
@@ -271,14 +264,16 @@ Vue.createApp({
         };
         let color = 1;
         _.forEach(group, (label, type) => {
+          let unit = '';
           const resourceData = [];
           _.forEach(this.tableData, (rows, date) => {
             const row = _.find(rows, (row) => row.type === type);
             const amount = row ? row.amount : 0;
+            unit = row ? row.unit : '';
             resourceData.push(amount);
           });
           chartData.datasets.push({
-            label: label,
+            label: [label, unit].join(', '),
             data: resourceData,
             backgroundColor: Chart.helpers.color(chartColors[color]).alpha(0.5).rgbString(),
             borderColor: Chart.helpers.color(chartColors[color]).alpha(0.7).rgbString(),
