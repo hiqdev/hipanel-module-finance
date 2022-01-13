@@ -155,7 +155,7 @@ return [
                         'resourceModel' => TargetResource::class,
                     ],
                     'videocdn' => [
-                        'label' => ['hipanel:finance', 'Video CDN'],
+                        'label' => ['hipanel:finance', 'VideoCDN'],
                         'columns' => [
                             'cdn_traf_plain',
                             'cdn_traf_ssl',

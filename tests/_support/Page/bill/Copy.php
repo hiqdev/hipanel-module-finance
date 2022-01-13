@@ -10,7 +10,7 @@ class Copy extends Authenticated
     public function copyBill(string $billId): void
     {
         $I = $this->tester;
-        
+
         $I->needPage(Url::to('@bill/copy?id=' . $billId));
         $I->pressButton('Save');
     }

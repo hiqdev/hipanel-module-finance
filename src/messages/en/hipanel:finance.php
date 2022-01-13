@@ -15,7 +15,7 @@ return [
     'private_cloud_backup' => 'Private Cloud Backup',
     'snapshot' => 'Snapshot',
     'storage' => 'Storage',
-    'videocdn' => 'Video CDN',
+    'videocdn' => 'VideoCDN',
     'volume' => 'Volume',
     'vps' => 'VPS',
 ];

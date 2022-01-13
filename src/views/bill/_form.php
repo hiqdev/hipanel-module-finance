@@ -20,6 +20,14 @@ use yii\helpers\Html;
 /** @var array $billGroupLabels */
 
 $model = reset($models);
+$timeResolver = static function ($model): ?string {
+    $formatter = Yii::$app->formatter;
+    if (!isset($model->time)) {
+        return $formatter->asDatetime(new DateTime(), 'php:Y-m-d H:i:s');
+    }
+
+    return $model->time !== false ? $formatter->asDatetime($model->time, 'php:Y-m-d H:i:s') : null;
+};
 
 $this->registerCss("
 #bill-dynamic-form .charge-item .col-md-1,
@@ -163,11 +171,10 @@ $form = ActiveForm::begin([
                                 'clientOptions' => [
                                     'autoclose' => true,
                                     'format' => 'yyyy-mm-dd hh:ii:ss',
+                                    'todayBtn' => true,
                                 ],
                                 'options' => [
-                                    'value' => isset($model->time)
-                                        ? ($model->time !== false ? Yii::$app->formatter->asDatetime($model->time, 'php:Y-m-d H:i:s') : null)
-                                        : Yii::$app->formatter->asDatetime(new DateTime(), 'php:Y-m-d H:i:s'),
+                                    'value' => $timeResolver($model),
                                 ],
                             ]) ?>
                         </div>
@@ -251,10 +258,12 @@ $form = ActiveForm::begin([
                                                             'format' => 'yyyy-mm-dd hh:ii:ss',
                                                             'autoclose' => true,
                                                             'clearBtn' => true,
+                                                            'todayBtn' => true,
                                                             'minView' => 2,
                                                         ],
                                                         'options' => [
                                                             'placeholder' => Yii::t('hipanel', 'Select date'),
+                                                            'value' => $timeResolver($charge),
                                                         ],
                                                     ]) ?>
                                                 </div>

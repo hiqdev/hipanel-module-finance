@@ -61,7 +61,7 @@ class Create extends Plan
         $I = $this->tester;
 
         $I->click(['name' => 'Plan[type]']);
-        $I->click("//select/option[.='{$this->type}']");
+        $I->click("//select/option[contains(text(), '$this->type')]");
     }
 
     protected function setGrouping(): void

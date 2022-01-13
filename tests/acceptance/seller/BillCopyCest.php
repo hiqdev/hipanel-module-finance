@@ -4,7 +4,6 @@ namespace hipanel\modules\finance\tests\acceptance\seller;
 
 use hipanel\helpers\Url;
 use Codeception\Example;
-use hipanel\tests\_support\Page\IndexPage;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 use hipanel\modules\finance\tests\_support\Page\bill\Create;
 use hipanel\modules\finance\tests\_support\Page\bill\Index;
@@ -13,7 +12,9 @@ use hipanel\modules\finance\tests\_support\Page\bill\Copy;
 class BillCopyCest
 {
     private Create $createPage;
+
     private Index $index;
+
     private Copy $copyPage;
 
     public function _before(Seller $I): void
@@ -38,7 +39,7 @@ class BillCopyCest
         $this->ensurePreviousBillDidntChange($I, $exampleArray);
     }
 
-    private function ensurePreviousBillDidntChange(Seller $I, array $dataBill): void 
+    private function ensurePreviousBillDidntChange(Seller $I, array $dataBill): void
     {
         $I->needPage(Url::to('@bill/view?id=' . $dataBill['id']));
         $result = array_intersect_key($dataBill['charges']['charge2'], array_flip(['objectId', 'type']));
@@ -53,8 +54,8 @@ class BillCopyCest
         if (isset($billData['charges'])) {
             $this->createPage->addCharges($billData['charges']);
         }
-
         $I->pressButton('Save');
+
         return $this->createPage->seeActionSuccess();
     }
 
@@ -62,24 +63,24 @@ class BillCopyCest
     {
         return [
             'bill' => [
-                'login'     => 'hipanel_test_user',
-                'type'      => 'HDD',
-                'currency'  => '$',
-                'sum'       =>  -762.7,
-                'quantity'  =>  1,
-                'charges'   => [
-                    'charge1'    => [
-                        'class'    => 'Client',
+                'login' => 'hipanel_test_user',
+                'type' => 'HDD',
+                'currency' => '$',
+                'sum' => -762.7,
+                'quantity' => 1,
+                'charges' => [
+                    'charge1' => [
+                        'class' => 'Client',
                         'objectId' => 'hipanel_test_user1',
-                        'type'     => 'Cash',
-                        'sum'      => 712.80,
+                        'type' => 'Cash',
+                        'sum' => 712.80,
                         'quantity' => '1',
                     ],
-                    'charge2'      =>[
-                        'class'    => 'Client',
+                    'charge2' => [
+                        'class' => 'Client',
                         'objectId' => 'hipanel_test_user2',
-                        'type'     => 'PayPal',
-                        'sum'      => 49.90,
+                        'type' => 'PayPal',
+                        'sum' => 49.90,
                         'quantity' => '1',
                     ],
                 ],

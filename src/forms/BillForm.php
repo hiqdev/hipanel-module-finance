@@ -154,6 +154,9 @@ class BillForm extends Model
 
         $form->charges = array_map(function ($model) use ($scenario) {
             $model->scenario = $scenario;
+            if ($model->scenario === 'create' && !empty($model->time)) {
+                $model->time = null;
+            }
 
             return $model;
         }, $bill->charges);

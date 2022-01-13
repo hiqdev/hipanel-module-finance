@@ -59,6 +59,7 @@ class Plan extends Model
     public const TYPE_PRIVATE_CLOUD_BACKUP = 'private_cloud_backup';
     public const TYPE_PRIVATE_CLOUD = 'private_cloud';
     public const TYPE_CALCULATOR = 'calculator';
+    public const TYPE_VIDECDN = 'videocdn';
 
     protected $knownTypes = [
         self::TYPE_SERVER               => self::TYPE_SERVER,
@@ -82,6 +83,7 @@ class Plan extends Model
         self::TYPE_PRIVATE_CLOUD        => self::TYPE_PRIVATE_CLOUD,
         self::TYPE_REFERRAL             => self::TYPE_REFERRAL,
         self::TYPE_CALCULATOR           => self::TYPE_CALCULATOR,
+        self::TYPE_VIDECDN              => self::TYPE_VIDECDN,
     ];
 
     use ModelTrait;
