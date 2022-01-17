@@ -175,11 +175,11 @@ class BillManagementAction extends Action
     private function addSuccessFlash()
     {
         if ($this->scenario === BillForm::SCENARIO_CREATE) {
-            return Yii::$app->session->addFlash('success', Yii::t('hipanel:finance', 'Bill was created successfully'));
+            Yii::$app->session->addFlash('success', Yii::t('hipanel:finance', 'Bill was created successfully'));
         }
 
         if ($this->scenario === BillForm::SCENARIO_UPDATE) {
-            return Yii::$app->session->addFlash('success', Yii::t('hipanel:finance', 'Bill was updated successfully'));
+            Yii::$app->session->addFlash('success', Yii::t('hipanel:finance', 'Bill was updated successfully'));
         }
     }
 

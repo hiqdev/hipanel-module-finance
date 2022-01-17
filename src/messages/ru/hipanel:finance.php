@@ -285,7 +285,7 @@ return [
     'private_cloud_backup' => 'Бэкап личного облака',
     'snapshot' => 'Снимок',
     'storage' => 'Хранилище',
-    'videocdn' => 'Video CDN',
+    'videocdn' => 'VideoCDN',
     'volume' => 'Раздел',
     'vps' => 'VPS',
 ];

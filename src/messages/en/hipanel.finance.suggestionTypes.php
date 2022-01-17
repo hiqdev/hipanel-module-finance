@@ -15,7 +15,7 @@ return [
     'model_groups' => 'Model groups',
     'dedicated_server' => 'Dedicated Server',
     'p_cdn' => 'pCDN',
-    'v_cdn' => 'Video CDN',
+    'v_cdn' => 'VideoCDN',
     'certificate' => 'Certificate',
     'domain' => 'Domain',
     'switch' => 'Switch',

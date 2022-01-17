@@ -14,9 +14,13 @@ class TariffProfilesCest
     private string $testProfileName = 'Test tariff profile 1';
     private string $testPlanName = 'Test Suit AnycastCDN tariff 1';
 
-    public function ensureIndexPageWorks(Seller $I): void
+    public function _before(Seller $I): void
     {
         $I->login();
+    }
+
+    public function ensureIndexPageWorks(Seller $I): void
+    {
         $I->needPage(Url::to('@tariffprofile/index'));
         $I->see('Tariff profiles', 'h1');
         $this->ensureICanSeeAdvancedSearchBox($I);
@@ -25,20 +29,19 @@ class TariffProfilesCest
 
     public function ensureISeeDefaultProfile(Seller $I): void
     {
-        $I->login();
         $I->needPage(Url::to('@tariffprofile'));
         $I->see('Default', 'a');
     }
 
     public function ensureIChangeDefaultProfile(Seller $I): void
     {
-        $I->login();
         $I->needPage(Url::to('@tariffprofile'));
         $I->click('Default');
         $I->seeInCurrentUrl('/finance/tariff-profile/view?id');
         $I->click('Update');
         $I->seeInCurrentUrl('/finance/tariff-profile/update?id');
         (new Select2($I, '#tariffprofile-anycastcdn'))->setValue($this->testPlanName);
+        $I->click('//body');
         $I->pressButton('Save');
         $I->closeNotification('success');
         $I->seeInCurrentUrl('/finance/tariff-profile/view?id');
@@ -48,23 +51,21 @@ class TariffProfilesCest
 
     public function ensureICreateNewProfile(Seller $I): void
     {
-        $testPlanName = 'Test AnycastCDN tariff 1';
-        $I->login();
         $I->needPage(Url::to('@tariffprofile/create'));
         $I->seeInCurrentUrl('/finance/tariff-profile/create');
         (new Input($I, '#tariffprofile-name'))->setValue($this->testProfileName);
-        (new Select2($I, '#tariffprofile-anycastcdn'))->setValue($testPlanName);
+        (new Select2($I, '#tariffprofile-anycastcdn'))->setValue($this->testPlanName);
+        $I->click('//body');
         $I->pressButton('Save');
         $I->waitForPageUpdate();
         $I->closeNotification('success');
         $I->seeInCurrentUrl('/finance/tariff-profile/view?id');
         $I->see($this->testProfileName, 'h1');
-        $I->see($testPlanName);
+        $I->see($this->testPlanName);
     }
 
     public function ensureICanDeleteProfile(Seller $I)
     {
-        $I->login();
         $I->needPage(Url::to('@tariffprofile'));
         $I->see($this->testProfileName);
         $I->click($this->testProfileName);

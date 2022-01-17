@@ -15,7 +15,7 @@ return [
     'model_groups' => 'Группы моделей',
     'dedicated_server' => 'Dedicated Server',
     'p_cdn' => 'pCDN',
-    'v_cdn' => 'Video CDN',
+    'v_cdn' => 'VideoCDN',
     'certificate' => 'Сертификат',
     'domain' => 'Домен',
     'switch' => 'Свитчи',

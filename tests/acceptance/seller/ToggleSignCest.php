@@ -1,8 +1,7 @@
 <?php
 
-namespace hipanel\modules\finance\tests\acceptance\client;
+namespace hipanel\modules\finance\tests\acceptance\seller;
 
-use hipanel\helpers\Url;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 use hipanel\modules\finance\tests\_support\Page\bill\Create;
 use Codeception\Example;

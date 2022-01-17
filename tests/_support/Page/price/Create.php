@@ -53,7 +53,7 @@ class Create extends View
     public function createSharedPrice(array $priceData): void
     {
         $I = $this->tester;
-        
+
         $I->clickLink('Create price');
         $I->clickLink('Create shared price');
         $I->waitForElement('#template_plan_id');
@@ -81,9 +81,7 @@ class Create extends View
     public function chooseTemplate(string $templateName): void
     {
         $this->tester->click("//span[@id='select2-template_plan_id-container']");
-        (new Select2($this->tester, '#template_plan_id'))
-            ->fillSearchField($templateName)
-            ->chooseOptionLike($templateName);
+        (new Select2($this->tester, '#template_plan_id'))->setValue($templateName);
     }
 
     public function choosePriceType(string $priceType): void
@@ -151,7 +149,7 @@ class Create extends View
     {
         $I = $this->tester;
 
-        $I->needPage(Url::to('@plan/update?id='. $planId));
+        $I->needPage(Url::to('@plan/update?id=' . $planId));
         (new Select2($I, '#plan-currency'))
             ->setValueLike($currency);
         $I->click('Save');
