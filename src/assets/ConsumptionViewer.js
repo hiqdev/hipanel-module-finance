@@ -263,13 +263,13 @@ Vue.createApp({
           datasets: [],
         };
         let color = 1;
+        let unit = '';
         _.forEach(group, (label, type) => {
-          let unit = '';
           const resourceData = [];
           _.forEach(this.tableData, (rows, date) => {
             const row = _.find(rows, (row) => row.type === type);
             const amount = row ? row.amount : 0;
-            unit = row ? row.unit : '';
+            unit = row && !unit ? row.unit : unit;
             resourceData.push(amount);
           });
           chartData.datasets.push({
