@@ -11,7 +11,7 @@ use hipanel\tests\_support\Step\Acceptance\Seller;
 
 class TariffProfilesCest
 {
-    private string $testProfileName = 'Test tariff profile 1';
+    private string $testProfileName;
     private string $testPlanName = 'Test Suit AnycastCDN tariff 1';
 
     public function _before(Seller $I): void
@@ -51,6 +51,7 @@ class TariffProfilesCest
 
     public function ensureICreateNewProfile(Seller $I): void
     {
+        $this->testProfileName = 'Test profile ' . mt_rand();
         $I->needPage(Url::to('@tariffprofile/create'));
         $I->seeInCurrentUrl('/finance/tariff-profile/create');
         (new Input($I, '#tariffprofile-name'))->setValue($this->testProfileName);
@@ -64,7 +65,7 @@ class TariffProfilesCest
         $I->see($this->testPlanName);
     }
 
-    public function ensureICanDeleteProfile(Seller $I)
+    public function ensureICanDeleteProfile(Seller $I): void
     {
         $I->needPage(Url::to('@tariffprofile'));
         $I->see($this->testProfileName);
