@@ -84,7 +84,7 @@ class TemplatePlanCombo extends Combo
                     if (!data.id.length) {
                         return data.text;
                     }
-                    
+
                     return data.name + ' &mdash; <small>' +  data.reason + '</small>';
                 }"),
                 'escapeMarkup' => new JsExpression('function (markup) {
@@ -92,29 +92,5 @@ class TemplatePlanCombo extends Combo
                 }'),
             ],
         ]));
-    }
-
-    public function registerClientConfig()
-    {
-        parent::registerClientConfig();
-
-        if (empty($this->object_input_type)) {
-            return;
-        }
-
-        $object_input_type = Json::encode($this->object_input_type);
-        $id = Json::encode('#' . $this->inputOptions['id']);
-
-        $this->view->registerJs(<<<JS
-        (function () {
-            var form = $($id).closest('{$this->formElementSelector}');
-            form.combo().getField($object_input_type).element.on('select2:selecting', function () {
-                setTimeout(function () {
-                    form.combo().getField('{$this->type}').element.select2('open');
-                }, 0);
-            });
-        })()
-JS
-);
     }
 }

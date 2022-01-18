@@ -65,7 +65,6 @@ class Create extends View
 
     public function createTemplatePrices(array $priceData): void
     {
-        $I = $this->tester;
         $this->openModal();
 
         $this->choosePriceType($priceData['type']);
@@ -80,8 +79,7 @@ class Create extends View
 
     public function chooseTemplate(string $templateName): void
     {
-        $this->tester->click("//span[@id='select2-template_plan_id-container']");
-        (new Select2($this->tester, '#template_plan_id'))->setValue($templateName);
+        (new Select2($this->tester, '#template_plan_id'))->setValueLike($templateName);
     }
 
     public function choosePriceType(string $priceType): void
