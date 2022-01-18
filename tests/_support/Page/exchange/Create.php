@@ -4,7 +4,6 @@ namespace hipanel\modules\finance\tests\_support\Page\exchange;
 
 use hipanel\tests\_support\Page\Authenticated;
 use hipanel\tests\_support\Page\Widget\Input\Input;
-use hipanel\tests\_support\Helper\PressButtonHelper;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
 
 class Create extends Authenticated
@@ -15,7 +14,7 @@ class Create extends Authenticated
 
        (new Select2($I, "#currencyexchangeform-client_id"))->setValue($exchangeData['client']);
 
-       if (isset($exchangeData['currencyFrom']) && isset($exchangeData['currencyTo'])) {
+       if (isset($exchangeData['currencyFrom'], $exchangeData['currencyTo'])) {
             (new Select2($I, "#currencyexchangeform-from"))->setValue($exchangeData['currencyFrom']);
             (new Select2($I, "#currencyexchangeform-to"))->setValue($exchangeData['currencyTo']);
         }
