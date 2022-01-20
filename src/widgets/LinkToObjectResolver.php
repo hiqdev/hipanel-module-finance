@@ -75,7 +75,7 @@ class LinkToObjectResolver extends Widget
         parent::init();
         $targetTypes = array_keys((new Target())->getTypes());
         $targetLinks = array_combine($targetTypes, array_fill(0, count($targetTypes), '@target/view'));
-        $this->links = array_merge($this->links, $targetLinks);
+        $this->links = array_merge($targetLinks, $this->links);
     }
 
     /**
