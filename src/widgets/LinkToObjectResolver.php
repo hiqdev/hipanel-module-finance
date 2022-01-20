@@ -56,6 +56,7 @@ class LinkToObjectResolver extends Widget
         'client' => '@client/view',
         'account' => '@account/view',
         'server' => '@server/view',
+        'private_cloud' => '@server/view',
         'pcdn' => '@server/view',
         'vcdn' => '@server/view',
         'device' => '@server/view',
