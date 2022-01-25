@@ -1,27 +1,15 @@
 <?php
 
-use hipanel\assets\BootstrapDatetimepickerAsset;
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\forms\TargetManagementForm;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
+use hipanel\widgets\DateTimePicker;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
 /** @var TargetManagementForm $model */
 
-BootstrapDatetimepickerAsset::register($this);
-$locale = Yii::$app->language;
-$this->registerJs(/* @lang JavaScript */ <<<"JS"
-    const dateInput = $('input[name*=time]');
-    dateInput.datetimepicker({
-      date: moment(),
-      locale: '$locale',
-      viewMode: 'months',
-      format: 'YYYY-MM-01'
-    });
-JS
-);
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -39,7 +27,16 @@ JS
 
 <?= $form->field($model, 'plan_id')->widget(PlanCombo::class, ['hasId' => true, 'tariffType' => $model->type]) ?>
 <?= $form->field($model, 'customer_id')->widget(ClientCombo::class) ?>
-<?= $form->field($model, 'time') ?>
+<?= $form->field($model, 'time')->widget(DateTimePicker::class, [
+    'model' => $model,
+    'clientOptions' => [
+        'autoclose' => true,
+        'format' => 'yyyy-mm-dd hh:ii:ss',
+    ],
+    'options' => [
+        'value' => Yii::$app->formatter->asDatetime(new DateTime(), 'php:Y-m-d H:i:s'),
+    ],
+]) ?>
 
 <div class="row">
     <div class="col-md-12">
