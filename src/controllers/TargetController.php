@@ -78,6 +78,7 @@ class TargetController extends CrudController
             ],
             'validate-form' => [
                 'class' => ValidateFormAction::class,
+                'validatedInputId' => false,
                 'collection' => [
                     'class' => Collection::class,
                     'model' => new TargetManagementForm(),

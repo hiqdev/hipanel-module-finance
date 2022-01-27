@@ -34,6 +34,7 @@ final class TargetManagementForm extends Target
             [['remoteid', 'type', 'name', 'plan_id', 'time', 'customer_id'], 'required', 'on' => 'change-plan'],
             [['target_id', 'plan_id', 'time', 'customer_id'], 'required', 'on' => 'close-sale'],
             [['remoteid', 'type', 'name', 'plan_id', 'time', 'customer_id'], 'required', 'on' => 'sale'],
+            [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
         ];
     }
 
