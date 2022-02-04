@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\tests\acceptance;
 
+use Codeception\Exception\ModuleException;
+use Exception;
 use hipanel\helpers\Url;
 use Codeception\Example;
 use hipanel\tests\_support\Page\IndexPage;
@@ -13,10 +15,11 @@ use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 use hipanel\tests\_support\Step\Acceptance\Manager;
 
-class SalesPageCest
+class SalesCest
 {
     /**
      * @dataProvider getSaleDataForManager
+     * @throws ModuleException
      */
     public function ensureICanCreateSeveralSales(Manager $I, Example $example): void
     {
@@ -41,13 +44,15 @@ class SalesPageCest
 
     /**
      * @dataProvider getSaleDataForSeller
+     * @throws ModuleException
+     * @throws Exception
      */
     public function ensureICanEditSeveralSales(Seller $I, Example $example): void
     {
+        $I->login();
         $index = new Index($I);
         $edit = new Edit($I);
 
-        $I->login();
         $saleData = iterator_to_array($example->getIterator());
 
         $this->searchForSales($I, $saleData);
@@ -57,12 +62,6 @@ class SalesPageCest
         }
 
         $I->pressButton('Edit');
-        $edit->fillSaleFields($saleData);
-    }
-
-    private function fillSaleEditFields(Seller $I, array $saleData): void
-    {
-        $edit = new Edit($I);
 
         $edit->fillSaleFields($saleData);
         $I->pressButton('Apply changes');
@@ -92,6 +91,7 @@ class SalesPageCest
 
     /**
      * @dataProvider getSaleDataForSeller
+     * @throws ModuleException
      */
     public function ensureICanDeleteSeveralSales(Seller $I, Example $example): void
     {
@@ -107,10 +107,11 @@ class SalesPageCest
         $index->deleteSelectedSales();
     }
 
+    /**
+     * @throws ModuleException
+     */
     private function searchForSales(Seller $I, array $saleData): void
     {
-        $index = new Index($I);
-
         $I->needPage(Url::to('@sale/index'));
 
         Select2::asAdvancedSearch($I, 'Tariff')->setValue($saleData['tariff']);
@@ -130,20 +131,20 @@ class SalesPageCest
 
     protected function getSaleDataForManager(): array
     {
-        return 
-        [
+        return
             [
-                'client' => 'hipanel_test_user2',
-                'tariff' => 'PlanForkerViaLegacyApiTest / Plan to be clonned@hipanel_test_reseller',
-                'column' => 'DC',
-                'server' => 'TEST-DS-01',
-            ],
-            [
-                'client' => 'hipanel_test_user2',
-                'tariff' => 'PlanForkerViaLegacyApiTest / Plan to be clonned@hipanel_test_reseller',
-                'column' => 'DC',
-                'server' => 'TEST-DS-02',
-            ],
-        ];
+                [
+                    'client' => 'hipanel_test_user2',
+                    'tariff' => 'PlanForkerViaLegacyApiTest / Plan to be clonned@hipanel_test_reseller',
+                    'column' => 'DC',
+                    'server' => 'TEST-DS-01',
+                ],
+                [
+                    'client' => 'hipanel_test_user2',
+                    'tariff' => 'PlanForkerViaLegacyApiTest / Plan to be clonned@hipanel_test_reseller',
+                    'column' => 'DC',
+                    'server' => 'TEST-DS-02',
+                ],
+            ];
     }
 }
