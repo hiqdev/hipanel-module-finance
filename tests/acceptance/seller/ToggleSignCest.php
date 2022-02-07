@@ -2,37 +2,58 @@
 
 namespace hipanel\modules\finance\tests\acceptance\seller;
 
+use Exception;
+use hipanel\helpers\Url;
+use Codeception\Example;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 use hipanel\modules\finance\tests\_support\Page\bill\Create;
-use Codeception\Example;
 
 class ToggleSignCest
 {
+    private string $billId;
+
+    /**
+     * @dataProvider provideDataBill
+     * @throws Exception
+     */
+    public function ensureToggleSignWorksAndICanCreateBill(Seller $I, Example $example): void
+    {
+        $I->login();
+        $create = new Create($I);
+
+        $I->needPage(Url::to('@bill/create'));
+        $I->see('Create payment', 'h1');
+        $I->see('Save', 'button');
+
+        $billData = iterator_to_array($example->getIterator());
+
+        $create->fillMainBillFields($billData);
+        $create->addCharge($billData['charge']);
+        $create->clickToggleSign();
+
+        $I->click('Save');
+        $this->billId = $create->seeActionSuccess();
+    }
+
     /**
      * @dataProvider provideDataBill
      */
-    public function ensureIndexPageWorks(Seller $I, Example $example): void
+    public function ensureBillWasCreatedCorrectlyAndDeleteIt(Seller $I, Example $example): void
     {
-        $createPage = new Create($I);
-        $createPage->visit();
-        $I->see('Create payment', 'h1');
-        $I->see('Save', 'button');
-        $createPage->fillMainBillFields(iterator_to_array($example->getIterator()));
-        $createPage->addCharge($example['charge']);
-        $createPage->clickToggleSign();
-        $I->click('Save');
-        $this->ensureBillWasCreatedAndDeleteIt($I, $example['charge']);
-    }
+        $I->login();
 
-    private function ensureBillWasCreatedAndDeleteIt(Seller $I, array $chargeData): void
-    {
-        $newId = new Create($I);
-        $id = $newId->seeActionSuccess();
+        $billData = iterator_to_array($example->getIterator());
+        $chargeData = $billData['charge'];
+
+        $create = new Create($I);
+
+        $I->needPage(Url::to('@bill'). '?view=' . $this->billId);
         $I->see('$' . $chargeData['sum']);
-        $newId->deleteBillById($id);
+
+        $create->deleteBillById($this->billId);
     }
 
-    public function provideDataBill(): array
+    protected function provideDataBill(): array
     {
         return [
             'client' => [
