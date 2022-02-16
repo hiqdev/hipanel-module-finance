@@ -48,6 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="box-title"><?= Yii::t('hipanel:finance:sale', 'Tariff information') ?></h3>
             </div>
             <div class="box-body no-padding">
+                <?php if (!empty($tariff)) : ?>
                 <?= PlanGridView::detailView([
                     'model' => $tariff,
                     'boxed' => false,
@@ -59,6 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'note',
                     ],
                 ]) ?>
+                <?php endif; ?>
             </div>
         </div>
 

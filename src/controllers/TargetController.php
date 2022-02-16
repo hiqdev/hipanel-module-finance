@@ -97,7 +97,7 @@ class TargetController extends CrudController
             'login' => $target->client,
         ];
         $client = new ClientRelationFreeStub($attributes);
-        $tariff = Plan::find()->where(['id' => $target->tariff_id])->one();
+        $tariff = (!empty($target->tariff_id)) ? Plan::find()->where(['id' => $target->tariff_id])->one() : null;
 
         return array_merge($data, [
             'originalModel' => $target,
