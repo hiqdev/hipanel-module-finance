@@ -8,15 +8,17 @@ use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillFromPricesForm;
 use hipanel\modules\finance\helpers\PriceChargesEstimator;
+use hipanel\modules\finance\helpers\LightPriceChargesEstimator;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\providers\BillTypesProvider;
-use RuntimeException;
 use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\Session;
+use RuntimeException;
+use hiqdev\hiart\ResponseErrorException;
 
 class CreateFromPricesAction extends BillManagementAction
 {
@@ -89,12 +91,21 @@ class CreateFromPricesAction extends BillManagementAction
         }
     }
 
-    private function getCalculations(int $planId, string $period): array
+    private function getCalculations(int $planId, string $time): array
     {
-        $periods = [$period];
-        $values = Plan::perform('calculate-values', ['id' => $planId, 'times' => $periods]);
-        $calculator = Yii::$container->get(PriceChargesEstimator::class, [$values]);
-        $calculations = $calculator->calculateForPeriods($periods);
+        $times = [$time];
+        try {
+            $values = Plan::perform('calculate-values', [
+                'id' => $planId,
+                'times' => $times,
+                'panel' => true,
+            ]);
+
+            $calculator = Yii::$container->get(LightPriceChargesEstimator::class, [$values]);
+            $calculations = $calculator->calculateForPeriods($times);
+        } catch (ResponseErrorException $e) {
+            return [];
+        }
 
         return reset($calculations)['targets'] ?? [];
     }
