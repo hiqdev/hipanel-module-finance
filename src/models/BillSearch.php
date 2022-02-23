@@ -25,7 +25,7 @@ class BillSearch extends Bill
     {
         return ArrayHelper::merge($this->defaultRules(), [
             [['time_from', 'time_till'], 'date', 'format' => 'php:Y-m-d'],
-            [['servers', 'server_ids'], 'safe'],
+            [['servers', 'server_ids', 'object_types'], 'safe'],
             [['ftype'], 'safe'],
         ]);
     }
@@ -35,7 +35,8 @@ class BillSearch extends Bill
         return ArrayHelper::merge($this->defaultSearchAttributes(), [
             'time_from', 'time_till',
             'servers', 'server_ids',
-            'ftype', 'object_name_ilike'
+            'ftype', 'object_name_ilike',
+            'object_types',
         ]);
     }
 
@@ -44,6 +45,22 @@ class BillSearch extends Bill
         return $this->mergeAttributeLabels([
             'servers' => Yii::t('hipanel:finance', 'Servers'),
             'object_name_ilike' => Yii::t('hipanel:finance', 'Object name'),
+            'object_types' => Yii::t('hipanel:finance', 'Object types'),
         ]);
+    }
+
+    public function getObjectTypes()
+    {
+        return [
+            'volume' => Yii::t('hipanel:finance', 'Volumes'),
+            'anycastcdn' => Yii::t('hipanel:finance', 'AnycastCDN'),
+            'videocdn' => Yii::t('hipanel:finance', 'VideoCDN'),
+            'private_cloud' => Yii::t('hipanel:finance', 'Private cloud'),
+            'private_cloud_backup' => Yii::t('hipanel:finance', 'Private cloud backup'),
+            'snapshot' => Yii::t('hipanel:finance', 'Snapshot'),
+            'storage' => Yii::t('hipanel:finance', 'Storage'),
+            'backup' => Yii::t('hipanel:finance', 'Backup'),
+            'cloudservers' => Yii::t('hipanel:finance', 'Cloud servers'),
+        ];
     }
 }

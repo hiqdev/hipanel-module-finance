@@ -89,5 +89,9 @@ use yii\web\View;
 <?php endif ?>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('is_payed')->widget(BillIsPayedDropdown::class) ?>
+    <?= $search->field('object_types')->widget(StaticCombo::class, [
+        'data' => $search->model->getObjectTypes(),
+        'hasId' => false,
+        'multiple' => true,
+    ]) ?>
 </div>
