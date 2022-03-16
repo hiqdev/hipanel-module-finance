@@ -11,7 +11,9 @@
 namespace hipanel\modules\finance\actions;
 
 use hipanel\modules\finance\forms\BillForm;
+use hipanel\modules\finance\helpers\BillServiceEmailFormatter;
 use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\Module;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use hiqdev\hiart\Collection;
 use hiqdev\hiart\ResponseErrorException;
@@ -160,6 +162,7 @@ class BillManagementAction extends Action
             try {
                 $collection->save();
                 $this->addSuccessFlash();
+                $this->sendBillServiceEmail();
 
                 return $this->controller->redirect(['@bill', 'id_in' => $collection->getIds()]);
             } catch (ResponseErrorException $e) {
@@ -197,5 +200,14 @@ class BillManagementAction extends Action
     public function setView($view)
     {
         $this->_view = $view;
+    }
+
+    private function sendBillServiceEmail(): void
+    {
+        $subject = BillServiceEmailFormatter::prepareSubject($this->collection->models);
+        $body = BillServiceEmailFormatter::prepareBody($this->collection->models);
+        /** @var Module $module */
+        $module = Module::getInstance();
+        $module->sendBillServiceEmail(mb_strtoupper($this->scenario), $subject, $body);
     }
 }
