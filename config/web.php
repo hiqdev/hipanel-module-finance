@@ -31,6 +31,7 @@ return [
     'modules' => [
         'finance' => [
             'class' => \hipanel\modules\finance\Module::class,
+            'billServiceEmail' => $params['module.finance.bill.service.email'] ?? null,
         ],
         'cart' => array_filter([
             'class' => \hiqdev\yii2\cart\Module::class,
