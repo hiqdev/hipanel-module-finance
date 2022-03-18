@@ -47,11 +47,18 @@ class LightPriceChargesEstimator extends PriceChargesEstimator
         foreach ($this->calculations as $period => &$chargesByTargetAndAction) {
             foreach ($chargesByTargetAndAction['targets'] as $target => &$actions) {
                 foreach ($actions as &$action) {
+                    foreach ($action['charges'] as &$charge) {
+                        $money = new Money($charge['sum'], new Currency($charge['currency']));
+                        $charge['price'] = $this->moneyFormatter->format($money);
+                        $charge['formattedPrice'] = $this->yiiFormatter->asCurrency($charge['price'], $charge['currency']);
+                        $chargesByTargetAndAction['sum'] += $charge['price'];
+                    }
                     $this->decorateAction($action);
                 }
             }
 
-            $result[$period] = $chargesByTargetAndAction;
+            $chargesByTargetAndAction['sumFormatted'] = $this->yiiFormatter->asCurrency($chargesByTargetAndAction['sum'], $chargesByTargetAndAction['currency']);
+            $result[$this->yiiFormatter->asDate(strtotime($period), 'php:M Y')] = $chargesByTargetAndAction;
         }
 
         return $result;
@@ -59,6 +66,7 @@ class LightPriceChargesEstimator extends PriceChargesEstimator
 
     private function decorateAction(&$action)
     {
+        $action['sumFormatted'] = $this->yiiFormatter->asCurrency($action['sum'], $action['currency']);
         $action['detailsTable'] = PriceChargesEstimationTable::widget(['charges' => $action['charges']]);
     }
 }
