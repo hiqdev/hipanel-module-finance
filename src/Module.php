@@ -41,14 +41,14 @@ class Module extends \hipanel\base\Module
         return Yii::$app->getModule('merchant');
     }
 
-    public function sendBillServiceEmail(string $scenario, string $subject, string $body): void
+    public function sendBillServiceEmail(string $source, string $scenario, string $subject, string $body): void
     {
         if ($this->billServiceEmail !== null) {
             $mailer = Yii::$container->get(MailerInterface::class);
             $mailer->compose()
                 ->setFrom(Yii::$app->params['adminEmail'])
                 ->setTo($this->billServiceEmail)
-                ->setSubject("PANEL BILL $scenario: $subject")
+                ->setSubject("$source $scenario: $subject")
                 ->setTextBody($body)
                 ->send();
         }

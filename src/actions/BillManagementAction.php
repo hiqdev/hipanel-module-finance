@@ -159,10 +159,11 @@ class BillManagementAction extends Action
             && $collection->load($payload)
             && $collection->validate()
         ) {
+            $this->sendBillServiceEmail('From Panel');
             try {
                 $collection->save();
                 $this->addSuccessFlash();
-                $this->sendBillServiceEmail();
+                $this->sendBillServiceEmail('Updated from API');
 
                 return $this->controller->redirect(['@bill', 'id_in' => $collection->getIds()]);
             } catch (ResponseErrorException $e) {
@@ -202,12 +203,12 @@ class BillManagementAction extends Action
         $this->_view = $view;
     }
 
-    private function sendBillServiceEmail(): void
+    private function sendBillServiceEmail(string $source): void
     {
         $subject = BillServiceEmailFormatter::prepareSubject($this->collection->models);
         $body = BillServiceEmailFormatter::prepareBody($this->collection->models);
         /** @var Module $module */
         $module = Module::getInstance();
-        $module->sendBillServiceEmail(mb_strtoupper($this->scenario), $subject, $body);
+        $module->sendBillServiceEmail($source, mb_strtoupper($this->scenario), $subject, $body);
     }
 }
