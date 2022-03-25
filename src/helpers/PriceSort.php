@@ -108,7 +108,7 @@ class PriceSort
         $order = ['SERVER', 'CHASSIS', 'MOTHERBOARD', 'CPU', 'RAM', 'HDD', 'SSD'];
 
         return function (Price $price) use ($order) {
-            $type = substr($price->object->name, 0, strpos($price->object->name, ':'));
+            $type = substr((string)$price->object->name, 0, strpos((string)$price->object->name, ':'));
             if (($key = array_search($type, $order, true)) !== false) {
                 return $key;
             }
@@ -119,8 +119,8 @@ class PriceSort
 
     private static function byTargetObjectName(): Closure
     {
-        return function (Price $a, Price $b) {
-            return strnatcasecmp($a->object->name, $b->object->name);
+        return static function (Price $a, Price $b) {
+            return strnatcasecmp((string)$a->object->name, (string)$b->object->name);
         };
     }
 

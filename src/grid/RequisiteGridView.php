@@ -37,6 +37,7 @@ class RequisiteGridView extends ContactGridView
         $labelColors = [
             'debit' => '#ECFDF5',
             'credit' => '#FEF2F2',
+            'balance' => 'inherit',
         ];
         foreach (array_keys($currencies) as $currency) {
             $curColumns[$currency] = [

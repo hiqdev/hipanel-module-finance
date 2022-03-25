@@ -9,7 +9,7 @@ use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\tests\_support\Page\Widget\Input\MultipleSelect2;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 
-class PursesCest
+class PursesIndexCest
 {
     public function ensureIndexPageWorks(Seller $I): void
     {

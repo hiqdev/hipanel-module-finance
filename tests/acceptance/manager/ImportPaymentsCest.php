@@ -14,14 +14,14 @@ class ImportPaymentsCest
     /**
      * @dataProvider provideImportData
      */
-    public function enureImportPaymentsWorksCorrectly(Manager $I, Example $example): void
+    public function ensureImportPaymentsWorksCorrectly(Manager $I, Example $example): void
     {
         $importCreate = new ImportCreate($I);
         $billCreate = new BillCreate($I);
         $view = new View($I);
 
         $I->login();
-        $importData = iterator_to_array($example->getIterator()); 
+        $importData = iterator_to_array($example->getIterator());
 
         $I->needPage(Url::to('@bill/import'));
 
@@ -66,12 +66,12 @@ class ImportPaymentsCest
 
         return [
             'importData' => [
-                'client'      => 'hipanel_test_user',
-                'time'        => strftime("%l:%M:%S"),
-                'amount'      => 300,
-                'currency'    => 'USD',
-                'type'        => 'PayPal',
-                'description' => 'description' . uniqid(),
+                'client' => 'hipanel_test_user',
+                'time' => date('g:i:s'),
+                'amount' => 300,
+                'currency' => 'USD',
+                'type' => 'PayPal',
+                'description' => 'description' . uniqid('', true),
             ],
         ];
     }

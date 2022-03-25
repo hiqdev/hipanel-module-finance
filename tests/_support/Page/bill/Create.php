@@ -48,7 +48,7 @@ class Create extends Authenticated
      */
     public function setBillTotalSum(int $sum): void
     {
-        $this->tester->fillField(['billform-0-sum'], $sum);
+        (new Input($this->tester, '#billform-0-sum'))->setValue($sum);
     }
 
     /**
@@ -130,18 +130,16 @@ class Create extends Authenticated
      */
     public function getChargesTotalSum(): int
     {
-        $sum = $this->tester->executeJS(<<<JS
+        return $this->tester->executeJS(<<<JS
             var sum = 0;
             var selector = 'div.bill-charges div[class*=sum] input';
             var chargesSum = document.querySelectorAll(selector);
             chargesSum.forEach(function(chargeSum) {
-               sum += parseInt(chargeSum.value); 
+               sum += parseInt(chargeSum.value);
             });
             return sum
 JS
         );
-
-        return $sum;
     }
 
     public function deleteLastCharge(): void

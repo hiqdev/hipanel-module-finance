@@ -17,10 +17,7 @@ use hipanel\modules\finance\controllers\TariffController;
  */
 class TariffControllerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var TariffController
-     */
-    protected $object;
+    protected TariffController $object;
 
     protected function setUp(): void
     {
@@ -31,8 +28,8 @@ class TariffControllerTest extends \PHPUnit\Framework\TestCase
     {
     }
 
-    public function testActions()
+    public function testActions(): void
     {
-        $this->assertInternalType('array', $this->object->actions());
+        $this->assertIsArray($this->object->actions());
     }
 }

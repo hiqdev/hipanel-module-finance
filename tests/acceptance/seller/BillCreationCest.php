@@ -8,7 +8,6 @@ use hipanel\modules\finance\tests\_support\Page\bill\Create;
 use hipanel\modules\finance\tests\_support\Page\bill\Update;
 use hipanel\modules\finance\tests\_support\Page\bill\Index;
 use hipanel\tests\_support\Page\Widget\Input\MultipleSelect2;
-use hipanel\tests\_support\Helper\PressButtonHelper;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 
 class BillCreationCest
@@ -181,7 +180,7 @@ class BillCreationCest
     /**
      * @dataProvider getBillData
      */
-    public function ensureAdvansedFilterWorksCorrectly(Seller $I, Example $example): void
+    public function ensureAdvancedFilterWorksCorrectly(Seller $I, Example $example): void
     {
         $index = new Index($I);
         $billData = iterator_to_array($example->getIterator());

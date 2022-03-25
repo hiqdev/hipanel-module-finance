@@ -60,7 +60,7 @@ use yii\helpers\Html;
                             <?= $form->field($model, $type)->widget(TariffCombo::class, [
                                 'type' => 'tariff/name/' . $type,
                                 'name' => $type,
-                                'current' => $model->tariffs[$type],
+                                'current' => $model->tariffs[$type] ?? null,
                                 'tariffType' => $type,
                                 'client' => $client,
                                 'hasId' => true,

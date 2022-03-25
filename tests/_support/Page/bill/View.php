@@ -36,10 +36,11 @@ class View extends Authenticated
     {
         if (isset($billData['currency'])) {
             unset($billData['currency']);
+            $billData['amount'] = '$' . $billData['amount'] . '.00';
         }
 
-        foreach ($billData as $element) {
-            $this->tester->see($element, "table[class *= 'detail-view']");
+        foreach ($billData as $value) {
+            $this->tester->see($value, "table[class *= 'detail-view']");
         }
     }
 

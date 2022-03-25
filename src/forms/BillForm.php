@@ -185,7 +185,7 @@ class BillForm extends Model
     public function load($data, $formName = null)
     {
         $this->setAttributes($data);
-        $this->loadCharges($data['charges']);
+        $this->loadCharges($data['charges'] ?? []);
 
         return true;
     }

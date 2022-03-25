@@ -113,10 +113,13 @@ class LinkToObjectResolver extends Widget
     private function getLink()
     {
         $type = $this->model->{$this->typeAttribute};
-        if (!Yii::getAlias($this->links[$type], false)) {
+        if (empty($type)) {
             return null;
         }
         if (!isset($this->links[$type])) {
+            return null;
+        }
+        if (!Yii::getAlias($this->links[$type], false)) {
             return null;
         }
         if (!isset($this->model->{$this->idAttribute})) {

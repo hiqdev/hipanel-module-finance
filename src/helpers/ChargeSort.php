@@ -34,8 +34,8 @@ class ChargeSort
     {
         $order = ['SERVER', 'CHASSIS', 'MOTHERBOARD', 'CPU', 'RAM', 'HDD', 'SSD'];
 
-        return function (Charge $charge) use ($order) {
-            if ($charge->class === 'part') {
+        return static function (Charge $charge) use ($order) {
+            if ($charge->class === 'part' && !empty($charge->name)) {
                 $type = substr($charge->name, 0, strpos($charge->name, ':'));
                 if (($key = array_search($type, $order, true)) !== false) {
                     return $key;
@@ -62,7 +62,7 @@ class ChargeSort
             'win_license',
         ];
 
-        return function (Charge $charge) use ($order) {
+        return static function (Charge $charge) use ($order) {
             if (($key = array_search($charge->type, $order, true)) !== false) {
                 return $key;
             }
@@ -73,19 +73,15 @@ class ChargeSort
 
     private static function keepDiscountsWithParents(): \Closure
     {
-        return function (Charge $charge) {
-            $a = $charge->parent_id !== null
+        return static function (Charge $charge) {
+            return $charge->parent_id !== null
                 ? $charge->parent_id * 10 + 2
                 : $charge->id * 10 + 1;
-
-            return $a;
         };
     }
 
     private static function byName(): \Closure
     {
-        return function (Charge $a, Charge $b) {
-            return strnatcasecmp($a->name, $b->name);
-        };
+        return static fn(Charge $a, Charge $b) => strnatcasecmp($a->name ?? '', $b->name ?? '');
     }
 }

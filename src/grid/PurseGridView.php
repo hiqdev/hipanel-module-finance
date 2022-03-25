@@ -67,7 +67,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'raw',
                 'label' => Yii::t('hipanel:finance', 'Contact'),
                 'value' => function ($model) {
-                    $organization = $model->contact->organization;
+                    $organization = $model->contact->organization ?? '';
                     $result = $organization . ($organization ? ' / ' : '') . $model->contact->name;
 
                     if (!Yii::$app->user->can('purse.update')) {
@@ -102,8 +102,11 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'raw',
                 'label' => Yii::t('hipanel:finance', 'Payment details'),
                 'value' => function ($model) {
-                    $organization = $model->requisite->organization;
-                    $result = $organization . ($organization ? ' / ' : '') . $model->requisite->name;
+                    $result = '';
+                    if (isset($model->requisite)) {
+                        $organization = $model->requisite->organization;
+                        $result = $organization . ($organization ? ' / ' : '') . $model->requisite->name;
+                    }
 
                     if (!Yii::$app->user->can('purse.update')) {
                         return $result;

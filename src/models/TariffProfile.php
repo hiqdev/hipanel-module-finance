@@ -53,9 +53,7 @@ class TariffProfile extends \hipanel\base\Model
             if (in_array($type, $this->getDomainTariffTypes(), true)) {
                 $main[] = [[$type], 'integer'];
             } else {
-                $main[] = [[$type], 'filter', 'filter' => static function (?string $value): array {
-                    return explode(',', $value);
-                }];
+                $main[] = [[$type], 'filter', 'filter' => static fn(?string $value): array => explode(',', (string)$value)];
                 $main[] = [[$type], 'each', 'rule' => ['trim'], 'on' => ['update', 'create']];
                 $main[] = [[$type], 'each', 'rule' => ['integer'], 'on' => ['update', 'create']];
             }

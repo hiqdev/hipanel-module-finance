@@ -17,10 +17,7 @@ use hipanel\modules\finance\controllers\PayController;
  */
 class PayControllerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var PayController
-     */
-    protected $object;
+    protected PayController $object;
 
     protected function setUp(): void
     {
@@ -31,8 +28,8 @@ class PayControllerTest extends \PHPUnit\Framework\TestCase
     {
     }
 
-    public function testActions()
+    public function testActions(): void
     {
-        $this->assertInternalType('array', $this->object->actions());
+        $this->assertIsArray($this->object->actions());
     }
 }

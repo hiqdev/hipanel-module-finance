@@ -23,8 +23,6 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
 
 <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
 
-    <?php $page->setSearchFormData(compact('billTypes', 'billGroupLabels')) ?>
-
     <?php $page->beginContent('main-actions') ?>
         <?php if (Yii::$app->user->can('purse.update')) : ?>
             <?= Html::a(Yii::t('hipanel:finance', 'Add purse'), ['@purse/create'], ['class' => 'btn btn-sm btn-success']) ?>

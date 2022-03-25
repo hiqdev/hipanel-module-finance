@@ -166,6 +166,7 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
     }
 
     /** {@inheritdoc} */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         $this->open();
@@ -174,6 +175,7 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
     }
 
     /** {@inheritdoc} */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         $this->open();
@@ -182,6 +184,7 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
     }
 
     /** {@inheritdoc} */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $item)
     {
         $this->open();
@@ -190,6 +193,7 @@ class RemoteCartStorage extends MultiFieldSession implements CartStorageInterfac
     }
 
     /** {@inheritdoc} */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         $this->open();

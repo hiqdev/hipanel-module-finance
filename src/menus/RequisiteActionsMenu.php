@@ -41,7 +41,7 @@ class RequisiteActionsMenu extends Menu
                     'ajaxModalOptions' => [
                         'id' => 'reserve-number-modal-' . $this->model->id,
                         'bulkPage' => false,
-                        'header' => Html::tag('h4', $item['label'], ['class' => 'modal-title']),
+                        'header' => Html::tag('h4', Yii::t('hipanel:finance', 'Reserve number'), ['class' => 'modal-title']),
                         'scenario' => 'default',
                         'actionUrl' => ['reserve-number', 'id' => $this->model->id],
                         'size' => Modal::SIZE_LARGE,

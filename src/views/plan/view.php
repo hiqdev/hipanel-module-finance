@@ -110,7 +110,12 @@ CSS
                     <h4 class="box-title" style="display: inline-block;">
                         &nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>
                     <?php $page->endContent() ?>
-                    <?= $this->render($model->type . '/view', compact('model', 'grouper', 'page', 'parentPrices')) ?>
+                    <?= $this->render($model->type . '/view', [
+                        'model' => $model,
+                        'grouper' => $grouper,
+                        'page' => $page,
+                        'parentPrices' => $parentPrices ?? []
+                    ]) ?>
                 <?php else: ?>
                     <?php $page->beginContent('table') ?>
                     <div class="col-md-12">

@@ -22,13 +22,14 @@ class FinanceSidebarMenuCest
         $menu->ensureContains('Finance', [
             'Payments' => '@bill/index',
             'Recharge account' => '@pay/deposit',
+            'Sales' => '@sale/index',
+            'Targets' => '@target/index',
 //            'Tariffs' => '@plan/index', TODO: when changed links from `tariffs` to `plans` - uncomment!
         ]);
 
         $menu->ensureDoesNotContain('Finance', [
             'Requisites',
             'Held payments',
-            'Sales',
         ]);
     }
 }

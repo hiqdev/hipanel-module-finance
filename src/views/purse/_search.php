@@ -16,8 +16,6 @@ use yii\web\View;
 /**
  * @var View
  * @var AdvancedSearch $search
- * @var array $billTypes
- * @var array $billGroupLabels
  */
 ?>
 

@@ -21,7 +21,6 @@ class AccountRechargingCest
         $I->needPage(Url::to('@pay/deposit'));
         $I->see('Account recharging', 'h1');
         $this->ensureICanSeeDepositBox($I);
-        $this->ensureICanSeePaymentBox($I);
         $this->ensureICanSeeWarningBox($I);
     }
 
@@ -34,12 +33,6 @@ class AccountRechargingCest
         $text = 'Enter the amount of the replenishment in USD. For example: 8.79';
         $I->see($text, $form);
         $I->see('Proceed', "$form/button[@type='submit']");
-    }
-
-    private function ensureICanSeePaymentBox(Seller $I)
-    {
-        $I->see('Available payment methods', 'h3');
-        $I->see('We support fully automatic account depositing with the following payment systems:');
     }
 
     private function ensureICanSeeWarningBox(Seller $I)

@@ -16,7 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
-    <?php $page->setSearchFormData(compact(['types'])) ?>
 
         <?php $page->beginContent('main-actions') ?>
             <?= Html::a(Yii::t('hipanel.finance.tariffprofile', 'Create profile'), ['@tariffprofile/create'], ['class' => 'btn btn-sm btn-success']) ?>

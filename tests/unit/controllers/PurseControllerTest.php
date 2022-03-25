@@ -17,10 +17,7 @@ use hipanel\modules\finance\controllers\PurseController;
  */
 class PurseControllerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var PurseController
-     */
-    protected $object;
+    protected PurseController $object;
 
     protected function setUp(): void
     {
@@ -31,8 +28,8 @@ class PurseControllerTest extends \PHPUnit\Framework\TestCase
     {
     }
 
-    public function testActions()
+    public function testActions(): void
     {
-        $this->assertInternalType('array', $this->object->actions());
+        $this->assertIsArray($this->object->actions());
     }
 }

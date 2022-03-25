@@ -33,7 +33,7 @@ class ProfileActionsMenu extends AbstractDetailMenu
                     'model' => $this->model,
                     'scenario' => 'delete',
                     'button' => ['label' => '<i class="fa fa-fw fa-trash-o"></i>' . Yii::t('hipanel', 'Delete')],
-                    'body' => Yii::t('hipanel.finance.tariffprofile', 'Tariff must be unlinked form all objects before. Are you sure you want to delete tariffprofile {name}?', ['name' => $model->name]),
+                    'body' => Yii::t('hipanel.finance.tariffprofile', 'Tariff must be unlinked form all objects before. Are you sure you want to delete tariffprofile {name}?', ['name' => $this->model->name]),
                     'modal' => [
                         'header' => Html::tag('h4', Yii::t('hipanel:finance:tariff', 'Confirm tariff profile deleting')),
                         'headerOptions' => ['class' => 'label-danger'],
