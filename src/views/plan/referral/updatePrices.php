@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 
 $this->title = Yii::t('hipanel.finance.price', 'Update prices');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $plan->name, 'url' => ['view', 'id' => $plan->id]];
+$this->params['breadcrumbs'][] = ['label' => Html::encode($plan->name), 'url' => ['view', 'id' => $plan->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
 $models = $grouper->group();

@@ -11,12 +11,15 @@
 namespace hipanel\modules\finance;
 
 use Yii;
+use yii\mail\MailerInterface;
 
 /**
  * Class Module.
  */
 class Module extends \hipanel\base\Module
 {
+    public ?string $billServiceEmail = null;
+
     /**
      * Returns Cart component from Cart module.
      * @return \hiqdev\yii2\cart\ShoppingCart
@@ -36,5 +39,18 @@ class Module extends \hipanel\base\Module
     public function getMerchant()
     {
         return Yii::$app->getModule('merchant');
+    }
+
+    public function sendBillServiceEmail(string $source, string $scenario, string $subject, string $body): void
+    {
+        if ($this->billServiceEmail !== null) {
+            $mailer = Yii::$container->get(MailerInterface::class);
+            $mailer->compose()
+                ->setFrom(Yii::$app->params['adminEmail'])
+                ->setTo($this->billServiceEmail)
+                ->setSubject("$source $scenario: $subject")
+                ->setTextBody($body)
+                ->send();
+        }
     }
 }

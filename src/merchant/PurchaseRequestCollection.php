@@ -40,6 +40,7 @@ class PurchaseRequestCollection extends Collection
         'ikajo' => 1,
         'coingate' => 1,
         'yandexkassa' => 1,
+        'cashew' => 1,
     ];
 
     public function init()
@@ -78,10 +79,13 @@ class PurchaseRequestCollection extends Collection
         }
 
         if ($depositRequest->merchant !== null) {
-            // When the Request contains concrete merchant name,
-            // parameters `finishUrl`, `cancelUrl`, `notifyUrl` contain
-            // correct URLs, adjusted by [[hiqdev\yii2-merchant\Module::prepareRequestData()]]
-            // and they must be used as success, failure and confirm URLs
+            /**
+             * When the Request contains concrete merchant name,
+             * parameters `finishUrl`, `cancelUrl`, `notifyUrl` contain
+             * correct URLs, adjusted by {@see \hiqdev\yii2\merchant\Module::prepareRequestData()}
+             * and they must be used as success, failure and confirm URLs
+             */
+            $params['merchant'] = $depositRequest->merchant;
             $params['success_url'] = $depositRequest->returnUrl;
             $params['failure_url'] = $depositRequest->cancelUrl;
             $params['confirm_url'] = $depositRequest->notifyUrl;
