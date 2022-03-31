@@ -29,7 +29,12 @@ use yii\widgets\ActiveForm;
         <?= Html::activeHiddenInput($model, "[$i]object", ['value' => $model->object->name ?? '']) ?>
         <?= Html::activeHiddenInput($model, "[$i]quantity") ?>
         <?= Html::activeHiddenInput($model, "[$i]unit") ?>
-        <?= Html::activeHiddenInput($model, "[$i]note", ['data' => ['attribute' => 'note', 'pk' => $model->object_id]]) ?>
+        <?= Html::activeHiddenInput($model, "[$i]note", [
+            'data' => [
+                'attribute' => 'note',
+                'pk' => $model->object_id,
+            ],
+        ]) ?>
 
         <div class="form-group">
             <?php if ($model->object->name === null): ?>
@@ -54,20 +59,22 @@ use yii\widgets\ActiveForm;
                 'field' => 'type',
             ]) ?>
             <br/>
-            <?= XEditable::widget([
-                'model' => $model->object,
-                'attribute' => 'note',
-                'pluginOptions' => [
-                    'selector' => ".editable[data-pk={$model->object_id}][data-name=note]",
-                    'url' => new JsExpression(<<<"JS"
-                    function(params) {
-                        $(this).closest('.form-instance').find('input[data-attribute=note]').val(params.value);
-                        return $.Deferred().resolve();
-                    }
+            <?php if ($model->object_id) : ?>
+                <?= XEditable::widget([
+                    'model' => $model->object,
+                    'attribute' => 'note',
+                    'pluginOptions' => [
+                        'selector' => ".editable[data-pk={$model->object_id}][data-name=note]",
+                        'url' => new JsExpression(<<<"JS"
+                        function(params) {
+                            $(this).closest('.form-instance').find('input[data-attribute=note]').val(params.value);
+                            return $.Deferred().resolve();
+                        }
 JS
                     ),
                 ],
-            ]) ?>
+                ]) ?>
+            <?php endif ?>
         </div>
     </div>
     <div class="col-md-1">
