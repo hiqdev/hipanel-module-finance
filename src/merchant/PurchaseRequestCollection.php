@@ -23,7 +23,7 @@ class PurchaseRequestCollection extends Collection
     protected const DEFAULT_DEPOSIT_REQUEST_AMOUNT = 10.0;
 
     public array $supportedSystems = [
-        'webmoney' => 0,
+        'webmoney' => 1,
         'paypal' => 1,
         'yandex' => 1,
         'yandexmoney' => 1,
