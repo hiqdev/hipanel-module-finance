@@ -66,6 +66,7 @@ class SalePricesActionsMenu extends \hiqdev\yii2\menus\Menu
     {
         switch ($this->model->tariff_type) {
             case Sale::SALE_TYPE_SERVER:
+            case Sale::SALE_TYPE_PRIVATE_CLOUD:
             case Sale::SALE_TYPE_SWITCH:
                 return array_filter([
                     [

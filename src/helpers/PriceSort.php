@@ -81,6 +81,8 @@ class PriceSort
             'rack_unit',
             'ip_num',
             'support_time',
+            'private_cloud',
+            'websa_private_cloud',
             'backup_du',
             'server_traf_max',
             'cdn_traf_max',

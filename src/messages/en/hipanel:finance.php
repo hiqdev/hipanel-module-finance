@@ -12,6 +12,7 @@ return [
     'anycastcdn' => 'Anycast CDN',
     'backup' => 'Backup',
     'private_cloud' => 'Private Cloud',
+    'websa_private_cloud' => 'Websa Private Cloud',
     'private_cloud_backup' => 'Private Cloud Backup',
     'snapshot' => 'Snapshot',
     'storage' => 'Storage',

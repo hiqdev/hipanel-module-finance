@@ -38,6 +38,7 @@ class Sale extends \hipanel\base\Model
     const SALE_TYPE_CLIENT = 'client';
     const SALE_TYPE_PART = 'part';
     const SALE_TYPE_HARDWARE = 'model_group';
+    const SALE_TYPE_PRIVATE_CLOUD = 'private_cloud';
 
     public function rules()
     {

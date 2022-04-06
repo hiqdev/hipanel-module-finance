@@ -53,6 +53,8 @@ class ChargeSort
             'rack_unit',
             'ip_num',
             'support_time',
+            'private_cloud',
+            'websa_private_cloud',
             'backup_du',
             'server_traf_max',
             'server_traf95_max',
