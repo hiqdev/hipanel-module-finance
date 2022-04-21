@@ -45,8 +45,8 @@ class BillCest
     private function ensureImportPaymentsContainsData(Seller $I)
     {
         $I->click("//a[contains(text(), 'Import payments')]");
-        $I->seeLink('Import payments', Url::to('@finance/bill/import'));
-        $I->seeLink('Import from a file');
+        $I->seeElement('.//a[contains(text(),"Import payments")]', ['href' => Url::to(['@finance/bill/import'])]);
+        $I->seeElement('.//a[contains(text(),"Import from a file")]', ['href' => '#']);
     }
 
     private function ensureICanSeeAdvancedSearchBox(Seller $I)

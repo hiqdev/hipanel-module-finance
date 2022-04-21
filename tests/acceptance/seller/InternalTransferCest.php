@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace hipanel\modules\finance\tests\acceptance\seller;
 
@@ -16,7 +16,7 @@ class InternalTransferCest
     private BillCreate $billCreate;
     private Index $index;
 
-    public function _before(Seller $I): void
+    public function _before(Seller $I, $scenario): void
     {
         $this->transferCreate = new TransferCreate($I);
         $this->billCreate = new BillCreate($I);
@@ -30,7 +30,7 @@ class InternalTransferCest
      */
     public function rechargeAccount(Seller $I, Example $example): void
     {
-        $billData = iterator_to_array($example->getIterator()); 
+        $billData = iterator_to_array($example->getIterator());
         $billData = $this->updateBillIfUserHaveNegativeBalance($I, $billData);
 
         $I->needPage(Url::to('@bill/create'));
@@ -93,11 +93,12 @@ class InternalTransferCest
     {
         $repl = [',' => ''];
 
-        if (!strstr($currentBalance, '-')) {
+        if (!str_contains($currentBalance, '-')) {
             return null;
         }
 
         $currentBalance = substr_replace($currentBalance, '', 0, 2);
+
         return (int)strtr($currentBalance, $repl);
     }
 
@@ -106,16 +107,16 @@ class InternalTransferCest
         return [
             'payments' => [
                 'transfer' => [
-                    'sum'        => 1000,
-                    'client'     => 'hipanel_test_user1',
+                    'sum' => 1000,
+                    'client' => 'hipanel_test_user1',
                     'receiverId' => 'hipanel_test_user2',
                 ],
                 'bill' => [
-                    'login'     => 'hipanel_test_user1',
-                    'type'      => 'Monthly fee',
-                    'currency'  => '$',
-                    'sum'       =>  1000,
-                    'quantity'  =>  1,
+                    'login' => 'hipanel_test_user1',
+                    'type' => 'Monthly fee',
+                    'currency' => '$',
+                    'sum' => 1000,
+                    'quantity' => 1,
                 ],
             ],
         ];
