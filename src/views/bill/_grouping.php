@@ -1,20 +1,24 @@
 <?php
+declare(strict_types=1);
 
 use hipanel\modules\finance\grid\GroupedByServerChargesGridView;
+use hipanel\modules\finance\helpers\ChargesGrouper;
 use hipanel\modules\finance\models\Charge;
 use hipanel\widgets\IndexPage;
 use yii\data\ArrayDataProvider;
 
 /**
- * @var \hipanel\modules\finance\models\Charge $model
+ * @var Charge $model
  * @var IndexPage $page
- * @var \hipanel\modules\finance\helpers\ChargesGrouper $grouper
+ * @var ChargesGrouper $grouper
  * @var Charge[] $idToNameObject
  * @var Charge[][] $chargesByMainObject
  */
+
 [$idToNameObject, $chargesByMainObject] = $grouper->group();
 
 ?>
+
 <?php $page->beginContent('table') ?>
     <?php $page->beginBulkForm() ?>
         <?= GroupedByServerChargesGridView::widget([
@@ -25,9 +29,7 @@ use yii\data\ArrayDataProvider;
                 'allModels' => $idToNameObject,
                 'pagination' => false,
             ]),
-            'summaryRenderer' => function () {
-                return ''; // remove unnecessary summary
-            },
+            'summaryRenderer' => static fn(): string => '',
             'columns' => [
                 'common_object_link',
             ],

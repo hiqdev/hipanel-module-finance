@@ -38,7 +38,7 @@ class ChargesGrouper
      * 0: commonObject->id => commonObject->id, commonObject->name
      * 1: commonObject->id => array Charge[][] by commonObject->id
      */
-    public function group()
+    public function group(): array
     {
         /** @var Charge[] $idToNameObject */
         $idToNameObject = [];

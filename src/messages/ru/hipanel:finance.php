@@ -282,6 +282,7 @@ return [
     'anycastcdn' => 'Anycast CDN',
     'backup' => 'Бэкап',
     'private_cloud' => 'Личное облако',
+    'websa_private_cloud' => 'Личное облако от Websa',
     'private_cloud_backup' => 'Бэкап личного облака',
     'snapshot' => 'Снимок',
     'storage' => 'Хранилище',
