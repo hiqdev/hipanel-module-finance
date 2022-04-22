@@ -43,4 +43,5 @@ return [
     'Private Cloud monthly fee' => 'Private Cloud',
     'Private Cloud backup disk usage' => 'Private Cloud backup',
     'Automatic VPS backup monthly fee' => 'Autobackup',
+    'Websa Private Cloud monthly fee' => 'Websa Private Cloud',
 ];

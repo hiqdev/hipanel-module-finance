@@ -53,7 +53,7 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
         ]) ?>
         <?= BillGridView::detailView([
             'model' => $model,
-            'boxOptions' => ['bodyOptions' => ['class' => 'no-padding']],
+            'boxOptions' => ['bodyOptions' => ['class' => 'no-padding table-responsive']],
             'columns' => [
                 'client_id', 'seller_id',
                 'time', 'description',
@@ -74,7 +74,7 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
                     <?php endif ?>
                 <?php $page->endContent() ?>
                 <?= $this->render('_grouping', compact('model', 'grouper', 'page')) ?>
-            <?php $page->end() ?>
+            <?php IndexPage::end() ?>
         </div>
     <?php endif; ?>
 </div>
