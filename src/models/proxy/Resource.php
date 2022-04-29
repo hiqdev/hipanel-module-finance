@@ -128,7 +128,7 @@ class Resource extends Model implements DecoratedInterface
         if (in_array($type, $this->getLastTypes(), true)) {
             return true;
         }
-        if (str_contains($type, 'traf95')) {
+        if (str_contains($type, '95')) {
             return true;
         }
 
