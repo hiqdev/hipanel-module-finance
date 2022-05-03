@@ -69,7 +69,7 @@ class Resource extends Model implements DecoratedInterface
 
     public function getAmount()
     {
-        if (in_array($this->type, $this->getBandwidthTypes(), true)) {
+        if ($this->isLast($this->type)) {
             return $this->last;
         }
 
@@ -83,10 +83,10 @@ class Resource extends Model implements DecoratedInterface
 
     public function getChartAmount()
     {
-        if (in_array($this->type, $this->getBandwidthTypes(), true)) {
+        if (in_array($this->type, $this->getLastTypes(), true)) {
             return round($this->getAmount() / (10 ** 6), 2);
         }
-        if (in_array($this->type, $this->getTrafficTypes(), true)) {
+        if (in_array($this->type, $this->getTotalTypes(), true)) {
             return round($this->getAmount() / (10 ** 9), 2);
         }
 
@@ -108,18 +108,30 @@ class Resource extends Model implements DecoratedInterface
         return Yii::$app->formatter->asDate(strtotime($this->date));
     }
 
-    private function getTrafficTypes(): array
+    private function getTotalTypes(): array
     {
         return ['server_traf_in', 'server_traf_max', 'server_traf'];
     }
 
-    private function getBandwidthTypes(): array
+    private function getLastTypes(): array
     {
-        return ['server_traf95_in', 'server_traf95_max', 'server_traf95'];
+        return ['server_traf95_in', 'server_traf95_max', 'server_traf95', 'ip_num'];
     }
 
     public function decorator(): ResourceDecoratorInterface
     {
         return $this->resourceModel->decorator();
+    }
+
+    private function isLast(string $type): bool
+    {
+        if (in_array($type, $this->getLastTypes(), true)) {
+            return true;
+        }
+        if (str_contains($type, '95')) {
+            return true;
+        }
+
+        return false;
     }
 }
