@@ -24,6 +24,7 @@ return [
     'Storage tariffs' => 'Storage тарифы',
     'Private cloud tariffs' => 'Private cloud тарифы',
     'Private cloud backup tariffs' => 'Private cloud backup тарифы',
+    'Load balancer tariffs' => 'Load balancer тарифы',
     'Tariffs' => 'Тарифы',
     'Create profile' => 'Создать профайл',
     'Update' => 'Редактировать',
