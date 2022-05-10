@@ -23,6 +23,7 @@ use hipanel\modules\finance\models\Purse;
 use hipanel\modules\finance\widgets\StatisticTableGenerator;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
+use yii\base\Event;
 
 class PurseController extends \hipanel\base\CrudController
 {
@@ -45,6 +46,12 @@ class PurseController extends \hipanel\base\CrudController
         return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
+                'on beforePerform' => static function (Event $event): void {
+                    /** @var \hipanel\actions\SearchAction $action */
+                    $action = $event->sender;
+                    $query = $action->getDataProvider()->query;
+                    $query->joinWith(['contact', 'requisite'])->addSelect(['*', 'contact', 'requisite']);
+                },
             ],
             'view' => [
                 'class' => ViewAction::class,
