@@ -18,7 +18,11 @@ class ResourceHelper
         $configurator = yii::getContainer()->get(ConsumptionConfigurator::class);
         $amount = $decorator->getPrepaidQuantity();
         $targetTypes = $configurator->getAllPossibleColumns();
-        unset($targetTypes[array_search('referral', $targetTypes, true)], $targetTypes[array_search('ip_num', $targetTypes, true)]);
+        unset(
+            $targetTypes[array_search('referral', $targetTypes, true)],
+            $targetTypes[array_search('ip_num', $targetTypes, true)],
+            $targetTypes[array_search('server_files', $targetTypes, true)]
+        );
         $convertibleTypes = array_merge([
             'backup_du',
             'cdn_cache',
@@ -94,6 +98,10 @@ class ResourceHelper
             'server_traf95_max',
             'storage_du',
             'storage_du95',
+            'server_du',
+            'server_sata',
+            'server_ssd',
+            'server_files',
         ];
         foreach (self::filterByAvailableTypes($resources) as $resource) {
             $decorator = $resource->buildResourceModel()->decorator();

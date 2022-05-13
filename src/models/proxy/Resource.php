@@ -115,7 +115,7 @@ class Resource extends Model implements DecoratedInterface
 
     private function getLastTypes(): array
     {
-        return ['server_traf95_in', 'server_traf95_max', 'server_traf95', 'ip_num'];
+        return ['server_traf95_in', 'server_traf95_max', 'server_traf95', 'ip_num', 'server_files'];
     }
 
     public function decorator(): ResourceDecoratorInterface
