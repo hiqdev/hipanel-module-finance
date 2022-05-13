@@ -175,6 +175,7 @@ $form = ActiveForm::begin([
                                 ],
                                 'options' => [
                                     'value' => $timeResolver($model),
+                                    'class' => 'bill-time',
                                 ],
                             ]) ?>
                         </div>
@@ -218,19 +219,19 @@ $form = ActiveForm::begin([
                                         <?php endif ?>
                                         <div class="row input-row margin-bottom">
                                             <div class="form-instance">
-                                                <div class="col-md-2">
+                                                <div class="col-md-3">
                                                     <?= $form->field($charge, "[$i][$j]object_id")->widget(ObjectCombo::class, [
                                                         'class_attribute_name' => "[$i][$j]class",
                                                         'selectedAttributeName' => 'name',
                                                     ]) ?>
                                                 </div>
-                                                <div class="col-md-1">
+                                                <div class="col-md-3">
                                                     <?= $form->field($charge, "[$i][$j]type")->dropDownList($billTypes, [
                                                         'groups' => $billGroupLabels,
                                                         'value' => $charge->ftype ?? $charge->type,
                                                     ]) ?>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-5">
                                                     <div class="row">
                                                         <div class="col-md-4">
                                                             <?= Html::activeHiddenInput($charge, "[$i][$j]unit") ?>
@@ -249,30 +250,34 @@ $form = ActiveForm::begin([
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-2">
-                                                    <?= $form->field($charge, "[$i][$j]label") ?>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <?= $form->field($charge, "[$i][$j]time")->widget(DateTimePicker::class, [
-                                                        'clientOptions' => [
-                                                            'format' => 'yyyy-mm-dd hh:ii:ss',
-                                                            'autoclose' => true,
-                                                            'clearBtn' => true,
-                                                            'todayBtn' => true,
-                                                            'minView' => 2,
-                                                        ],
-                                                        'options' => [
-                                                            'placeholder' => Yii::t('hipanel', 'Select date'),
-                                                            'value' => $timeResolver($charge),
-                                                        ],
-                                                    ]) ?>
-                                                </div>
                                                 <div class="col-md-1" style="padding-top: 25px;">
                                                     <label>&nbsp;</label>
                                                     <button type="button"
                                                             class="remove-charge btn bg-maroon btn-sm btn-flat">
                                                         <i class="glyphicon glyphicon-minus"></i>
                                                     </button>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <?= $form->field($charge, "[$i][$j]label") ?>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <?= $form->field($charge, "[$i][$j]time")->widget(DateTimePicker::class, [
+                                                                'clientOptions' => [
+                                                                    'format' => 'yyyy-mm-dd hh:ii:ss',
+                                                                    'autoclose' => true,
+                                                                    'clearBtn' => true,
+                                                                    'todayBtn' => true,
+                                                                    'minView' => 2,
+                                                                ],
+                                                                'options' => [
+                                                                    'placeholder' => Yii::t('hipanel', 'Select date'),
+                                                                    'value' => $timeResolver($charge),
+                                                                ],
+                                                            ]) ?>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -290,11 +295,35 @@ $form = ActiveForm::begin([
 </div>
 
 <?php $this->registerJs(<<<JS
+  (() => {
     $('#bill-dynamic-form').on('change', '.bill-charges .charge-item input[data-attribute=sum]', function () {
         $(this).closest('.bill-item').find('input[data-bill-sum]').blur();
     });
+    // auto-update charges time
+    const updateChargesTime = () => {
+      $('.bill-item').each((idx, billItemContainerElement) => {
+        const billTimeInputValue = $(billItemContainerElement).find('.bill-time').val();
+        if (moment(billTimeInputValue).isValid()) {
+          const billTime = moment(billTimeInputValue);
+          let chargeTime = null;
+          $(billItemContainerElement).find('.charge-item :input[id$=time]').each((idx, chargeTimeInput) => {
+            chargeTime = (chargeTime ?? billTime).add(1, 'seconds');
+            $(chargeTimeInput).val(chargeTime.format('YYYY-MM-DD HH:mm:ss'));
+          });
+        }
+      });
+    };
+    $(document).on('change', '.bill-time', updateChargesTime);
+    $('.charges_dynamicform_wrapper').on('afterInsert', updateChargesTime);
+    $('.bills_dynamicform_wrapper').on('afterInsert', (event, el) => {
+      $(el).find('.charges_dynamicform_wrapper').on('afterInsert', updateChargesTime);
+      updateChargesTime();
+    });
+    // ---
+  })();
 JS
 ) ?>
+
 <?php DynamicFormWidget::end() ?>
 
 <div class="row">
