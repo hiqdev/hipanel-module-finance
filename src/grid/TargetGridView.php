@@ -18,7 +18,7 @@ class TargetGridView extends ContactGridView
                 'class' => MainColumn::class,
             ],
             'type' => [
-                'filter' => $this->filterModel->types,
+                'filter' => $this->filterModel?->types,
                 'filterInputOptions' => ['class' => 'form-control'],
                 'value' => static fn(Target $target): string => Yii::t('hipanel:finance', $target->type),
             ],
