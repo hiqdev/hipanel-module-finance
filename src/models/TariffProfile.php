@@ -95,6 +95,7 @@ class TariffProfile extends \hipanel\base\Model
             Plan::TYPE_STORAGE => Yii::t('hipanel.finance.tariffprofile', 'Storage tariffs'),
             Plan::TYPE_PRIVATE_CLOUD => Yii::t('hipanel.finance.tariffprofile', 'Private cloud tariffs'),
             Plan::TYPE_PRIVATE_CLOUD_BACKUP => Yii::t('hipanel.finance.tariffprofile', 'Private cloud backup tariffs'),
+            Plan::TYPE_LOAD_BALANCER => Yii::t('hipanel.finance.tariffprofile', 'Load balancer tariffs'),
         ]);
     }
 
@@ -134,6 +135,7 @@ class TariffProfile extends \hipanel\base\Model
             Plan::TYPE_STORAGE,
             Plan::TYPE_PRIVATE_CLOUD_BACKUP,
             Plan::TYPE_PRIVATE_CLOUD,
+            Plan::TYPE_LOAD_BALANCER,
         ];
     }
 
