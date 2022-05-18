@@ -52,7 +52,7 @@ $this->registerCss('
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('table') ?>
-            <?php $page->beginBulkForm(); ?>
+            <?php $page->beginBulkForm() ?>
                 <?= SaleGridView::widget([
                     'boxed' => false,
                     'dataProvider' => $dataProvider,
