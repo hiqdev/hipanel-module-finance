@@ -15,6 +15,7 @@ use hipanel\modules\finance\models\FakeGroupingSale;
 use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
+use hipanel\modules\server\grid\BindingColumn;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\helpers\Html;
@@ -28,7 +29,8 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'raw',
                 'filterAttribute' => 'tariff_like',
                 'value' => function ($model) {
-                    return Html::a(Html::encode($model->tariff), ['@plan/view', 'id' => $model->tariff_id]);
+                    $label = $model->tariff . ' (' . $model->currency . ')';
+                    return Html::a(Html::encode($label), ['@plan/view', 'id' => $model->tariff_id]);
                 },
             ],
             'time' => [
@@ -113,6 +115,27 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                         'typeAttribute' => 'tariff_type',
                         'idAttribute' => 'object_id',
                     ]);
+                },
+            ],
+            'hwsummary' => [
+                'filter' => false,
+                'enableSorting' => false,
+                'format' => 'raw',
+                'contentOptions' => ['style' => 'max-width: 200px;'],
+            ],
+            'rack' => [
+                'filter' => false,
+                'enableSorting' => false,
+                'format' => 'raw',
+                'contentOptions' => ['style' => 'max-width: 200px;'],
+            ],
+            'tariff_change' => [
+                'label' => 'Tariff Last Change Date',
+                'filter' => false,
+                'enableSorting' => false,
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Yii::$app->formatter->asDateTime($model->time);
                 },
             ],
         ]);

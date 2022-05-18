@@ -43,7 +43,7 @@ class Sale extends \hipanel\base\Model
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['id', 'buyer_id', 'seller_id', 'object_id', 'tariff_id'], 'integer'],
+            [['id', 'buyer_id', 'seller_id', 'object_id', 'tariff_id', 'currency_id'], 'integer'],
             [[
                 'object',
                 'object_like',
@@ -61,6 +61,10 @@ class Sale extends \hipanel\base\Model
                 'tariff_type',
                 'is_grouping',
                 'from_old',
+                'currency',
+                'rack',
+                'hwsummary',
+                'tariff_change'
             ], 'string'],
             [['id'], 'required', 'on' => 'delete'],
             [['id', 'tariff_id', 'time'], 'required', 'on' => 'update'],
@@ -82,6 +86,9 @@ class Sale extends \hipanel\base\Model
             'seller_id' => Yii::t('hipanel:finance:sale', 'Seller'),
             'tariff_id' => Yii::t('hipanel:finance', 'Tariff'),
             'tariff_type' => Yii::t('hipanel', 'Type'),
+            'currency' => Yii::t('hipanel', 'Currency'),
+            'rack' => Yii::t('hipanel:server', 'Rack'),
+            'hwsummary' => Yii::t('hipanel:server', 'Hardware Summary'),
         ]);
     }
 

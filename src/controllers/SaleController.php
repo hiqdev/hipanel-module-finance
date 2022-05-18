@@ -19,6 +19,7 @@ use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\models\stub\ClientRelationFreeStub;
 use hipanel\modules\finance\models\Plan;
 use Yii;
+use yii\base\Event;
 
 class SaleController extends \hipanel\base\CrudController
 {
@@ -41,6 +42,13 @@ class SaleController extends \hipanel\base\CrudController
         return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
+                'on beforePerform' => function (Event $event) {
+                    $action = $event->sender;
+                    $representation = $action->controller->indexPageUiOptionsModel->representation;
+                    if (in_array($representation, ['servers'], true)) {
+                        $action->getDataProvider()->query->addSelect('serversData');
+                    }
+                },
             ],
             'view' => [
                 'class' => ViewAction::class,
