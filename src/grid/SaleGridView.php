@@ -131,12 +131,10 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
             ],
             'tariff_change' => [
                 'label' => 'Tariff Last Change Date',
+                'attribute' => 'time',
                 'filter' => false,
                 'enableSorting' => false,
-                'format' => 'raw',
-                'value' => function ($model) {
-                    return Yii::$app->formatter->asDateTime($model->time);
-                },
+                'format' => 'datetime',
             ],
         ]);
     }
