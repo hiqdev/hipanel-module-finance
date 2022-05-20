@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\modules\server\models\Server;
 use Yii;
 
 /**
@@ -63,8 +64,8 @@ class Sale extends \hipanel\base\Model
                 'from_old',
                 'currency',
                 'rack',
-                'hwsummary',
-                'tariff_change'
+                'summary',
+                'tariff_updated_at'
             ], 'string'],
             [['id'], 'required', 'on' => 'delete'],
             [['id', 'tariff_id', 'time'], 'required', 'on' => 'update'],
@@ -88,7 +89,7 @@ class Sale extends \hipanel\base\Model
             'tariff_type' => Yii::t('hipanel', 'Type'),
             'currency' => Yii::t('hipanel', 'Currency'),
             'rack' => Yii::t('hipanel:server', 'Rack'),
-            'hwsummary' => Yii::t('hipanel:server', 'Hardware Summary'),
+            'summary' => Yii::t('hipanel:server', 'Hardware Summary'),
         ]);
     }
 
@@ -101,5 +102,12 @@ class Sale extends \hipanel\base\Model
             self::SALE_TYPE_CLIENT => Yii::t('hipanel', 'Clients'),
             self::SALE_TYPE_PART => Yii::getAlias('@part', false) ? Yii::t('hipanel:stock', 'Parts') : null,
         ]);
+    }
+
+    public function getServer()
+    {
+        return $this->hasOne(Server::class, ['id' => 'object_id'])
+            ->withBindings()
+            ->withHardwareSettings();
     }
 }

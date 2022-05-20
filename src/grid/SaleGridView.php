@@ -117,19 +117,23 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                     ]);
                 },
             ],
-            'hwsummary' => [
+            'summary' => [
+                'label' => 'Configuration',
                 'filter' => false,
                 'enableSorting' => false,
                 'format' => 'raw',
                 'contentOptions' => ['style' => 'max-width: 200px;'],
+                'value' => 'server.hardwareSettings.summary'
             ],
             'rack' => [
+                'label' => 'Location',
                 'filter' => false,
                 'enableSorting' => false,
                 'format' => 'raw',
                 'contentOptions' => ['style' => 'max-width: 200px;'],
+                'value' => 'server.bindings.rack.switch'
             ],
-            'tariff_change' => [
+            'tariff_updated_at' => [
                 'label' => 'Tariff Last Change Date',
                 'attribute' => 'time',
                 'filter' => false,

@@ -40,9 +40,9 @@ class SaleRepresentations extends RepresentationCollection
                     'seller',
                     'buyer',
                     'tariff',
-                    'hwsummary',
+                    'summary',
                     'rack',
-                    'tariff_change',
+                    'tariff_updated_at',
                 ],
             ],
         ]);
