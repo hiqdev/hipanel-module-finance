@@ -10,7 +10,9 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\modules\finance\models\query\SaleQuery;
 use hipanel\modules\server\models\Server;
+use hiqdev\hiart\ActiveQuery;
 use Yii;
 
 /**
@@ -63,8 +65,6 @@ class Sale extends \hipanel\base\Model
                 'is_grouping',
                 'from_old',
                 'currency',
-                'rack',
-                'summary',
                 'tariff_updated_at'
             ], 'string'],
             [['id'], 'required', 'on' => 'delete'],
@@ -88,8 +88,6 @@ class Sale extends \hipanel\base\Model
             'tariff_id' => Yii::t('hipanel:finance', 'Tariff'),
             'tariff_type' => Yii::t('hipanel', 'Type'),
             'currency' => Yii::t('hipanel', 'Currency'),
-            'rack' => Yii::t('hipanel:server', 'Rack'),
-            'summary' => Yii::t('hipanel:server', 'Hardware Summary'),
         ]);
     }
 
@@ -104,7 +102,14 @@ class Sale extends \hipanel\base\Model
         ]);
     }
 
-    public function getServer()
+    public static function find(array $options = []): SaleQuery
+    {
+        return new SaleQuery(get_called_class(), [
+            'options' => $options,
+        ]);
+    }
+
+    public function getServer(): ActiveQuery
     {
         return $this->hasOne(Server::class, ['id' => 'object_id'])
             ->withBindings()

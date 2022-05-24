@@ -18,6 +18,7 @@ use hipanel\actions\ViewAction;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\models\stub\ClientRelationFreeStub;
 use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\models\query\SaleQuery;
 use Yii;
 use yii\base\Event;
 
@@ -46,7 +47,8 @@ class SaleController extends \hipanel\base\CrudController
                     $action = $event->sender;
                     $representation = $action->controller->indexPageUiOptionsModel->representation;
                     if (in_array($representation, ['servers'], true)) {
-                        $action->getDataProvider()->query->addSelect('serversData');
+                        $action->getDataProvider()->query->withServer();
+                        $action->getDataProvider()->query->addSelect('tariff_updated_at');
                     }
                 },
             ],
