@@ -10,6 +10,9 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\modules\finance\models\query\SaleQuery;
+use hipanel\modules\server\models\Server;
+use hiqdev\hiart\ActiveQuery;
 use Yii;
 
 /**
@@ -43,7 +46,7 @@ class Sale extends \hipanel\base\Model
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['id', 'buyer_id', 'seller_id', 'object_id', 'tariff_id'], 'integer'],
+            [['id', 'buyer_id', 'seller_id', 'object_id', 'tariff_id', 'currency_id'], 'integer'],
             [[
                 'object',
                 'object_like',
@@ -61,6 +64,8 @@ class Sale extends \hipanel\base\Model
                 'tariff_type',
                 'is_grouping',
                 'from_old',
+                'currency',
+                'tariff_updated_at'
             ], 'string'],
             [['id'], 'required', 'on' => 'delete'],
             [['id', 'tariff_id', 'time'], 'required', 'on' => 'update'],
@@ -82,6 +87,7 @@ class Sale extends \hipanel\base\Model
             'seller_id' => Yii::t('hipanel:finance:sale', 'Seller'),
             'tariff_id' => Yii::t('hipanel:finance', 'Tariff'),
             'tariff_type' => Yii::t('hipanel', 'Type'),
+            'currency' => Yii::t('hipanel', 'Currency'),
         ]);
     }
 
@@ -94,5 +100,19 @@ class Sale extends \hipanel\base\Model
             self::SALE_TYPE_CLIENT => Yii::t('hipanel', 'Clients'),
             self::SALE_TYPE_PART => Yii::getAlias('@part', false) ? Yii::t('hipanel:stock', 'Parts') : null,
         ]);
+    }
+
+    public static function find(array $options = []): SaleQuery
+    {
+        return new SaleQuery(get_called_class(), [
+            'options' => $options,
+        ]);
+    }
+
+    public function getServer(): ActiveQuery
+    {
+        return $this->hasOne(Server::class, ['id' => 'object_id'])
+            ->withBindings()
+            ->withHardwareSettings();
     }
 }

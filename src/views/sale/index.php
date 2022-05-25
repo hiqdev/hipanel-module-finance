@@ -34,6 +34,10 @@ $this->registerCss('
             <?= $page->renderSorter(['attributes' => ['id', 'time', 'unsale_time']]) ?>
         <?php $page->endContent() ?>
 
+        <?php $page->beginContent('representation-actions') ?>
+            <?= $page->renderRepresentations($representationCollection) ?>
+        <?php $page->endContent() ?>
+
         <?php $page->beginContent('bulk-actions') ?>
             <?php if (Yii::$app->user->can('sale.update')) : ?>
                 <?= $page->renderBulkButton('@sale/update', Yii::t('hipanel', 'Edit')) ?>

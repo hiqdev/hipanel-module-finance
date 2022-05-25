@@ -31,6 +31,20 @@ class SaleRepresentations extends RepresentationCollection
                     'unsale_time',
                 ],
             ],
+            'servers' => [
+                'label' => Yii::t('hipanel', 'Servers'),
+                'columns' => [
+                    'checkbox',
+                    'object_type',
+                    'object',
+                    'seller',
+                    'buyer',
+                    'tariff',
+                    'summary',
+                    'rack',
+                    'tariff_updated_at',
+                ],
+            ],
         ]);
     }
 }
