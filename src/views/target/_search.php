@@ -27,6 +27,6 @@ use hipanel\widgets\AdvancedSearch;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('show_deleted')->checkbox() ?>
+    <?= $search->field('show_deleted', ['options' => ['class' => 'form-group checkbox']])->checkbox() ?>
 </div>
 
