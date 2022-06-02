@@ -78,4 +78,5 @@ return [
     '{operation} for {duration}' => '{operation} на {duration}',
 
     'View as plan' => 'Смотреть как план',
+    'This target is deleted' => 'Этот таргет удален',
 ];

@@ -42,7 +42,7 @@ class TargetDetailMenu extends AbstractDetailMenu
                     ],
                     'toggleButtonTemplate' => '<li>{toggleButton}</li>',
                 ]),
-                'visible' => $hasActiveSale,
+                'visible' => $hasActiveSale && !$this->model->isDeleted(),
                 'encode' => false,
             ],
             [
@@ -64,7 +64,7 @@ class TargetDetailMenu extends AbstractDetailMenu
                     ],
                     'toggleButtonTemplate' => '<li>{toggleButton}</li>',
                 ]),
-                'visible' => !$hasSales,
+                'visible' => !$hasSales && !$this->model->isDeleted(),
                 'encode' => false,
             ],
             [
@@ -86,7 +86,7 @@ class TargetDetailMenu extends AbstractDetailMenu
                     ],
                     'toggleButtonTemplate' => '<li>{toggleButton}</li>',
                 ]),
-                'visible' => $hasActiveSale,
+                'visible' => $hasActiveSale && !$this->model->isDeleted(),
                 'encode' => false,
             ],
         ]);
