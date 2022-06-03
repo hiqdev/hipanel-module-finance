@@ -7,14 +7,13 @@ use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 use hipanel\modules\finance\menus\TargetDetailMenu;
 use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\Plan;
-use hipanel\modules\finance\models\proxy\ResourceSearch;
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\widgets\ConsumptionViewer;
 use hipanel\widgets\MainDetails;
 use yii\data\DataProviderInterface;
 use yii\helpers\Html;
 
-/** @var ResourceSearch $model */
+/** @var Target $model */
 /** @var Target $originalModel */
 /** @var Plan $tariff */
 /** @var Client $client */
@@ -32,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row">
     <div class="col-md-3">
         <?php if ($model->isDeleted()) : ?>
-            <?= Html::tag('div', Yii::t('hipanel:finance', 'This target is deleted'), ['class' => 'alert alert-danger text-center']) ?>
+            <?= Html::tag('div', Yii::t('hipanel:finance:tariff', 'This target is deleted'), ['class' => 'alert alert-danger text-center']) ?>
         <?php endif ?>
         <?= MainDetails::widget([
             'title' => $this->title,
