@@ -31,6 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="row">
     <div class="col-md-3">
+        <?php if ($model->isDeleted()) : ?>
+            <?= Html::tag('div', Yii::t('hipanel:finance', 'This target is deleted'), ['class' => 'alert alert-danger text-center']) ?>
+        <?php endif ?>
         <?= MainDetails::widget([
             'title' => $this->title,
             'icon' => 'fa-bullseye',
@@ -43,26 +46,26 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         <?php endif ?>
 
-        <div class="box box-widget">
-            <div class="box-header with-border">
-                <h3 class="box-title"><?= Yii::t('hipanel:finance:sale', 'Tariff information') ?></h3>
+        <?php if ($tariff !== null && !$model->isDeleted()) : ?>
+            <div class="box box-widget">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><?= Yii::t('hipanel:finance:sale', 'Tariff information') ?></h3>
+                </div>
+                <div class="box-body no-padding">
+                    <?= PlanGridView::detailView([
+                        'model' => $tariff,
+                        'boxed' => false,
+                        'columns' => [
+                            'simple_name',
+                            'client',
+                            'type',
+                            'state',
+                            'note',
+                        ],
+                    ]) ?>
+                </div>
             </div>
-            <div class="box-body no-padding">
-                <?php if (!empty($tariff)) : ?>
-                <?= PlanGridView::detailView([
-                    'model' => $tariff,
-                    'boxed' => false,
-                    'columns' => [
-                        'simple_name',
-                        'client',
-                        'type',
-                        'state',
-                        'note',
-                    ],
-                ]) ?>
-                <?php endif; ?>
-            </div>
-        </div>
+        <?php endif ?>
 
     </div>
     <div class="col-md-9">

@@ -72,4 +72,9 @@ class Target extends Model
             'options' => $options,
         ]);
     }
+
+    public function isDeleted(): bool
+    {
+        return $this->state === 'deleted';
+    }
 }

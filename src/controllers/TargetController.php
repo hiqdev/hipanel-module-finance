@@ -72,7 +72,7 @@ class TargetController extends CrudController
                     $action = $event->sender;
                     /** @var TargetQuery $action */
                     $query = $action->getDataProvider()->query;
-                    $query->withSales()->select(['*']);
+                    $query->withSales()->andWhere(['show_deleted' => true])->select(['*']);
                 },
                 'data' => fn($action, $data): array => $this->getData($action, $data),
             ],
