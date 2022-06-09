@@ -289,4 +289,6 @@ return [
     'videocdn' => 'VideoCDN',
     'volume' => 'Раздел',
     'vps' => 'VPS',
+
+    'Tariff type suggester' => 'Подсказчик типа тарифа',
 ];
