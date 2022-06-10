@@ -54,6 +54,7 @@ use yii\web\View;
     Plan::TYPE_VOLUME,
     Plan::TYPE_STORAGE,
     Plan::TYPE_PRIVATE_CLOUD_BACKUP,
+    Plan::TYPE_VCDN,
 ], true)) : ?>
     <?php if ($model->isObjectPredefined()) : ?>
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
@@ -106,7 +107,7 @@ use yii\web\View;
             'calculator_storage' => Yii::t('hipanel.finance.suggestionTypes', 'calculator_storage'),
         ],
     ]) ?>
-<?php elseif (in_array($plan->type, [Plan::TYPE_VCDN, Plan::TYPE_PCDN, Plan::TYPE_ANYCASTCDN, Plan::TYPE_VIDECDN], true)): ?>
+<?php elseif (in_array($plan->type, [Plan::TYPE_PCDN, Plan::TYPE_ANYCASTCDN, Plan::TYPE_VIDECDN], true)): ?>
     <?php if ($model->isObjectPredefined()) : ?>
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
     <?php else : ?>
