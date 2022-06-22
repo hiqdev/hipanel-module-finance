@@ -8,6 +8,7 @@ use hipanel\widgets\ClientSellerLink;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\MainDetails;
 use hipanel\widgets\Pjax;
+use yii\helpers\Html;
 use yii\helpers\StringHelper;
 use yii\web\View;
 
@@ -20,13 +21,13 @@ use yii\web\View;
  * @var Charge[][] $chargesByMainObject
  */
 
-$this->title = StringHelper::truncateWords(sprintf(
+$this->title = Html::encode(StringHelper::truncateWords(sprintf(
     '%s: %s %s %s',
     $model->client,
     $model->sum,
     $model->currency,
     $model->label
-), 7) ?: '&nbsp;';
+), 7) ?: '&nbsp;');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Payments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 

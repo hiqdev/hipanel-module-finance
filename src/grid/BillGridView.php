@@ -283,7 +283,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'raw',
                 'value' => function (Bill $model) {
                     $requisite = $model->requisite ? Html::tag('small', Html::encode($model->requisite), ['class' => 'label bg-purple']) : null;
-                    $descr = $model->descr ?? $model->label ?? '';
+                    $descr = Html::encode($model->descr ?? $model->label ?? '');
                     $text = mb_strlen($descr) > 70 ? ArraySpoiler::widget(['data' => $descr]) : $descr;
                     $tariff = $model->tariff ? Html::tag('span',
                         Yii::t('hipanel', 'Tariff') . ': ' . $this->tariffLink($model), ['class' => 'pull-right']) : '';
