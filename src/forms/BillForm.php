@@ -223,7 +223,7 @@ class BillForm extends Model
             [['sum', 'quantity'], 'number', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
             [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
             [['label', 'currency', 'unit', 'type', 'object', 'class'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
-            [['label'], 'filter', 'filter' => 'strip_tags'],
+            [['label'], 'filter', 'filter' => static fn(string $value) => htmlspecialchars_decode(HtmlPurifier::process($value, ['HTML.Allowed' => '']))],
             [['sum'], BillChargesSumValidator::class],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]], // TODO: should be probably replaced with input on client side
             [['object_id', 'requisite_id'], 'integer', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
