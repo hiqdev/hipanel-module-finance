@@ -111,11 +111,6 @@ class BillForm extends Model
     public $class;
 
     /**
-     * @var string
-     */
-    public $txn;
-
-    /**
      * @var Charge[]
      */
     public $charges = [];
@@ -286,7 +281,6 @@ class BillForm extends Model
             'object_id' => Yii::t('hipanel', 'Object'),
             'requisite' => Yii::t('hipanel:finance', 'Requisite'),
             'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
-            'txn' => Yii::t('hipanel:finance', 'TXN'),
         ];
     }
 
