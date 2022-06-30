@@ -10,7 +10,7 @@ use hipanel\modules\finance\tests\_support\Page\bill\Create;
 
 class ToggleSignCest
 {
-    private string $billId;
+    private ?string $billId = null;
 
     /**
      * @dataProvider provideDataBill
@@ -37,6 +37,7 @@ class ToggleSignCest
 
     /**
      * @dataProvider provideDataBill
+     * @depends ensureToggleSignWorksAndICanCreateBill
      */
     public function ensureBillWasCreatedCorrectlyAndDeleteIt(Seller $I, Example $example): void
     {

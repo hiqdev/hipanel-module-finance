@@ -12,9 +12,8 @@ class Create extends Authenticated
     {
         $I = $this->tester;
 
+        (new Select2($I, 'field-bill-0-sum'))->chooseCurrency('$');
         (new Input($I, '#bill-0-sum'))->setValue($transferData['sum']);
-        $I->click('//div[@class=\'input-group-btn\']/button[2]');
-        $I->click('//li/a[contains(text(),\'$\')]');
 
         (new Select2($I, '#bill-0-client_id'))->setValue($transferData['client']);
         (new Select2($I, '#bill-0-receiver_id'))->setValue($transferData['receiverId']);
