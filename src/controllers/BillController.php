@@ -23,6 +23,7 @@ use hipanel\modules\client\controllers\ContactController;
 use hipanel\modules\finance\actions\BillImportFromFileAction;
 use hipanel\modules\finance\actions\BillManagementAction;
 use hipanel\modules\finance\actions\CreateFromPricesAction;
+use hipanel\modules\finance\actions\GenerateInvoiceAction;
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\forms\CurrencyExchangeForm;
@@ -128,6 +129,9 @@ class BillController extends \hipanel\base\CrudController
             ],
             'create-from-prices' => [
                 'class' => CreateFromPricesAction::class,
+            ],
+            'generate-invoice' => [
+                'class' => GenerateInvoiceAction::class,
             ],
             'import-from-file' => [
                 'class' => BillImportFromFileAction::class,

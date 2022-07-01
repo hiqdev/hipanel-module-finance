@@ -4,6 +4,7 @@ use hipanel\modules\finance\grid\BillGridView;
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\widgets\BillImportDropdownButton;
 use hipanel\modules\finance\widgets\ExchangeRatesLine;
+use hipanel\modules\finance\widgets\GenerateInvoiceButton;
 use hipanel\widgets\IndexPage;
 use hiqdev\hiart\ActiveDataProvider;
 use hiqdev\hiart\ActiveRecord;
@@ -58,6 +59,7 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
     <?php $page->beginContent('bulk-actions') ?>
         <?php if (Yii::$app->user->can('bill.create')) : ?>
             <?= $page->renderBulkButton('copy', Yii::t('hipanel', 'Copy')) ?>
+            <?= GenerateInvoiceButton::widget([]) ?>
         <?php endif ?>
         <?php if (Yii::$app->user->can('bill.update')) : ?>
             <?= $page->renderBulkButton('@bill/update', Yii::t('hipanel', 'Update')) ?>

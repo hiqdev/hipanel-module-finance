@@ -53,7 +53,7 @@ class Bill extends \hipanel\base\Model
     public function rules()
     {
         return [
-            [['client_id', 'seller_id', 'id', 'requisite_id'], 'integer'],
+            [['client_id', 'seller_id', 'id', 'requisite_id', 'purse_id'], 'integer'],
             [['object_id', 'tariff_id'], 'integer'],
             [['client', 'seller', 'bill', 'unit', 'requisite'], 'safe'],
             [['domain', 'server'], 'safe'],
