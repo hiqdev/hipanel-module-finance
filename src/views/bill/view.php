@@ -20,13 +20,7 @@ use yii\web\View;
  * @var Charge[][] $chargesByMainObject
  */
 
-$this->title = StringHelper::truncateWords(sprintf(
-    '%s: %s %s %s',
-    $model->client,
-    $model->sum,
-    $model->currency,
-    $model->label
-), 7) ?: '&nbsp;';
+$this->title = $model->pageTitle;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Payments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 

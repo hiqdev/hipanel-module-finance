@@ -4,7 +4,6 @@ use hipanel\modules\finance\grid\BillGridView;
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\widgets\BillImportDropdownButton;
 use hipanel\modules\finance\widgets\ExchangeRatesLine;
-use hipanel\modules\finance\widgets\GenerateInvoiceButton;
 use hipanel\widgets\IndexPage;
 use hiqdev\hiart\ActiveDataProvider;
 use hiqdev\hiart\ActiveRecord;
@@ -42,7 +41,7 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
             <?= Html::a(Yii::t('hipanel:finance', 'Currency exchange'), ['@bill/create-exchange'], ['class' => 'btn btn-sm btn-default']) ?>
         <?php endif ?>
         <?= BillImportDropdownButton::widget() ?>
-<?php $page->endContent() ?>
+    <?php $page->endContent() ?>
 
     <?php $page->beginContent('sorter-actions') ?>
         <?= $page->renderSorter([
@@ -59,7 +58,7 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
     <?php $page->beginContent('bulk-actions') ?>
         <?php if (Yii::$app->user->can('bill.create')) : ?>
             <?= $page->renderBulkButton('copy', Yii::t('hipanel', 'Copy')) ?>
-            <?= GenerateInvoiceButton::widget([]) ?>
+            <?= $page->renderBulkButton('generate-invoice', Yii::t('hipanel:finance', 'Generate invoice')) ?>
         <?php endif ?>
         <?php if (Yii::$app->user->can('bill.update')) : ?>
             <?= $page->renderBulkButton('@bill/update', Yii::t('hipanel', 'Update')) ?>
