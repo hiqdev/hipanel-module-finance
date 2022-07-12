@@ -8,6 +8,7 @@ use hipanel\widgets\ClientSellerLink;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\MainDetails;
 use hipanel\widgets\Pjax;
+use yii\helpers\Html;
 use yii\helpers\StringHelper;
 use yii\web\View;
 
