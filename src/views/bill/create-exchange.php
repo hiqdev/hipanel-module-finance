@@ -120,14 +120,17 @@ Plugin.prototype = {
 
         this.attachListeners();
         this.updateCurrency();
-    },
-    attachListeners: function () {
+        const that = this;
         $('#currencyexchangeform-client_id').on('change', function() {
             $.get("/finance/bill/get-exchange-rates?client_id="+$(this).val(), function(data) {
                 $("#rates-form").attr("data-rates", data.rates);
                 $('#rates-form').currencyExchanger();
+                that.rates = JSON.parse(data.rates);
+                that.updateCurrency();
             });
         });
+    },
+    attachListeners: function () {
         this.currency.on('change', this.updateTargetCurrency.bind(this));
         this.targetCurrency.on('change', this.updateTargetSum.bind(this));
         this.sum.on('keyup change', this.updateTargetSum.bind(this));
