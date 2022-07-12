@@ -12,6 +12,7 @@ namespace hipanel\modules\finance\models;
 
 use hipanel\modules\finance\behaviors\BillNegation;
 use Yii;
+use yii\helpers\StringHelper;
 
 /**
  * Class Bill.
@@ -53,7 +54,7 @@ class Bill extends \hipanel\base\Model
     public function rules()
     {
         return [
-            [['client_id', 'seller_id', 'id', 'requisite_id'], 'integer'],
+            [['client_id', 'seller_id', 'id', 'requisite_id', 'purse_id'], 'integer'],
             [['object_id', 'tariff_id'], 'integer'],
             [['client', 'seller', 'bill', 'unit', 'requisite'], 'safe'],
             [['domain', 'server'], 'safe'],
@@ -133,5 +134,15 @@ class Bill extends \hipanel\base\Model
             'overuse,server_traf_max',
             'overuse,support_time',
         ];
+    }
+
+    public function getPageTitle(): string
+    {
+        $title = StringHelper::truncateWords(sprintf('%s: %s %s %s', $this->client, $this->sum, $this->currency, $this->label), 7);
+        if (empty($title)) {
+            return '&nbsp;';
+        }
+
+        return $title;
     }
 }
