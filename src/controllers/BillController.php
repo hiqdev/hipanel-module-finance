@@ -236,6 +236,17 @@ class BillController extends \hipanel\base\CrudController
         ]);
     }
 
+    public function actionGetExchangeRates(?int $client_id = null)
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $rates = $this->getExchangeRates($client_id);
+        $model = new CurrencyExchangeForm();
+        $data = array_map(static fn(ExchangeRate $model) => $model->getAttributes(), $rates);
+        return [
+            'rates' => json_encode($data),
+        ];
+    }
+
     /**
      * @return array
      */
@@ -252,10 +263,14 @@ class BillController extends \hipanel\base\CrudController
         return $this->billTypesProvider->getGroupedList();
     }
 
-    private function getExchangeRates()
+    private function getExchangeRates(?int $client_id = null)
     {
-        return Yii::$app->cache->getOrSet(['exchange-rates', Yii::$app->user->id], function () {
-            return ExchangeRate::find()->select(['from', 'to', 'rate'])->all();
+        $client_id = $client_id ?? Yii::$app->user->id;
+        return Yii::$app->cache->getOrSet(['exchange-rates', $client_id], function () use ($client_id) {
+            return ExchangeRate::find()
+                ->select(['from', 'to', 'rate'])
+                ->where(['client_id' => $client_id])
+                ->all();
         }, 3600);
     }
 }

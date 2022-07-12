@@ -33,7 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row">
             <div class="col-lg-6 col-md-8">
                 <?php Box::begin() ?>
-                <?= $canSupport ? $form->field($model, 'client_id')->widget(ClientCombo::class) : Html::activeHiddenInput($model, 'client_id') ?>
+                <?= $canSupport
+                    ? $form->field($model, 'client_id')
+                        ->widget(ClientCombo::class)
+                    : Html::activeHiddenInput($model, 'client_id') ?>
                 <div class="row">
                     <div class="col-md-2">
                         <?= $form->field($model, 'sum')->textInput([
@@ -117,6 +120,15 @@ Plugin.prototype = {
 
         this.attachListeners();
         this.updateCurrency();
+        const that = this;
+        $('#currencyexchangeform-client_id').on('change', function() {
+            $.get("/finance/bill/get-exchange-rates?client_id="+$(this).val(), function(data) {
+                $("#rates-form").attr("data-rates", data.rates);
+                $('#rates-form').currencyExchanger();
+                that.rates = JSON.parse(data.rates);
+                that.updateCurrency();
+            });
+        });
     },
     attachListeners: function () {
         this.currency.on('change', this.updateTargetCurrency.bind(this));
