@@ -32,9 +32,7 @@ class Create extends Authenticated
         (new Dropdown($I, '#billform-0-type'))->setValue($billData['type']);
         (new Input($I, '#billform-0-sum'))->setValue($billData['sum']);
 
-        $I->click('//div[@class=\'input-group-btn\']/button[2]');
-        $I->click('//li/a[contains(text(),\'$\')]');
-
+        (new Select2($I, 'field-billform-0-sum'))->chooseCurrency('$');
         (new Input($I, '#billform-0-quantity'))->setValue($billData['quantity']);
     }
 

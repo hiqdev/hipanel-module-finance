@@ -61,6 +61,26 @@ abstract class PriceCest
         }
     }
 
+    public function ensureICanUpdatePrices(Manager $I, Scenario $scenario): void
+    {
+        if ($this->id === null) {
+            $scenario->incomplete('ID of the target plan must be set');
+        }
+
+        $page = new PriceUpdatePage($I, $this->id);
+        $page->updatePrices();
+    }
+
+    public function ensureICanDeletePrices(Manager $I, Scenario $scenario): void
+    {
+        if ($this->id === null) {
+            $scenario->incomplete('ID of the target plan must be set');
+        }
+
+        $page = new PriceDeletePage($I, $this->id);
+        $page->deleteTemplatePrices();
+    }
+
     /**
      * @param Manager $I
      * @param string $name
@@ -80,25 +100,5 @@ abstract class PriceCest
         $page = new PlanCreatePage($I, $fields);
 
         return $page->createPlan();
-    }
-
-    public function ensureICanUpdatePrices(Manager $I, Scenario $scenario): void
-    {
-        if ($this->id === null) {
-            $scenario->incomplete('ID of the target plan must be set');
-        }
-
-        $page = new PriceUpdatePage($I, $this->id);
-        $page->updatePrices();
-    }
-
-    public function ensureICanDeletePrices(Manager $I, Scenario $scenario): void
-    {
-        if ($this->id === null) {
-            $scenario->incomplete('ID of the target plan must be set');
-        }
-
-        $page = new PriceDeletePage($I, $this->id);
-        $page->deleteTemplatePrices();
     }
 }

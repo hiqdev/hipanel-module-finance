@@ -8,9 +8,7 @@ class Index extends IndexPage
 {
     public function seeTransferActionSuccess(): void
     {
-        $I = $this->tester;
-
-        $I->closeNotification('Transfer was completed');
-        $I->seeInCurrentUrl('finance/bill/index');
+        $this->tester->closeNotification('Transfer was completed', 'Not enought balance');
+        $this->tester->seeInCurrentUrl('finance/bill/index');
     }
 }

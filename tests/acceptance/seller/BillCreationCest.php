@@ -12,7 +12,7 @@ use hipanel\tests\_support\Step\Acceptance\Seller;
 
 class BillCreationCest
 {
-    public $billId;
+    public ?string $billId;
 
     public function ensureBillPageWorks(Seller $I): void
     {
@@ -127,6 +127,8 @@ class BillCreationCest
      *
      * @param Seller $I
      * @throws \Codeception\Exception\ModuleException
+     *
+     * @depends ensureICanCreateDetailedBill
      */
     public function ensureICanUpdateBill(Seller $I): void
     {
@@ -158,6 +160,8 @@ class BillCreationCest
      *
      * @param Seller $I
      * @throws \Exception
+     *
+     * @depends ensureICanCreateDetailedBill
      */
     public function ensureBillWasSuccessfullyUpdated(Seller $I): void
     {
@@ -201,15 +205,15 @@ class BillCreationCest
                 'login'     => 'hipanel_test_user',
                 'type'      => 'Premium renewal',
                 'currency'  => '$',
-                'sum'       =>  750,
-                'quantity'  =>  1,
+                'sum'       =>  '750',
+                'quantity'  =>  '1',
             ],
             [
                 'login'     => 'hipanel_test_user',
                 'type'      => 'Premium purchase',
                 'currency'  => '$',
-                'sum'       =>  250,
-                'quantity'  =>  1,
+                'sum'       =>  '250',
+                'quantity'  =>  '1',
             ],
         ];
     }
@@ -224,8 +228,8 @@ class BillCreationCest
             'class'     => 'Client',
             'objectId'  => $objectId,
             'type'      => 'Monthly fee',
-            'sum'       => -250,
-            'quantity'  => 1,
+            'sum'       => '-250',
+            'quantity'  => '1',
         ];
     }
 }

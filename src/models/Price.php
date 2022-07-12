@@ -17,6 +17,7 @@ use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\query\PriceQuery;
 use Money\Money;
 use Money\MoneyParser;
+use Money\Currency;
 use Yii;
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
@@ -240,7 +241,7 @@ class Price extends Model
     {
         // TODO: decide how to get MoneyParser correctly
         return Yii::$container->get(MoneyParser::class)
-            ->parse((string)$this->price, strtoupper($this->currency));
+            ->parse((string)$this->price, new Currency(strtoupper($this->currency)));
     }
 
     public function getFormulaLines(): array
