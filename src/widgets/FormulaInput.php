@@ -123,19 +123,21 @@ $('.formula-input').each(function () {
     const foldExpiredFormulaLines = () => {
         try {
             let foldStartLine = null;
-            const activeLines = $(this).data('activeFormulaLines');
+            const activeLines = $(this).data('activeFormulaLines') || {};
             const linesLength = Object.keys(activeLines).length;
-            for (let i = 0; i <= linesLength-1; i++) {
-                if (foldStartLine === null) {
-                    if (!activeLines[i]) {
-                        foldStartLine = i;
-                    }
-                } else {
-                    if (activeLines[i]) {
-                        editor.getSession().addFold('...', new Range(foldStartLine, 0, i-1, 99))
-                        foldStartLine = null;
-                    } else if (i === linesLength-1) {
-                        editor.getSession().addFold('...', new Range(foldStartLine, 0, i, 99))
+            if (linesLength > 0) {
+                for (let i = 0; i <= linesLength-1; i++) {
+                    if (foldStartLine === null) {
+                        if (!activeLines[i]) {
+                            foldStartLine = i;
+                        }
+                    } else {
+                        if (activeLines[i]) {
+                            editor.getSession().addFold('...', new Range(foldStartLine, 0, i-1, 99))
+                            foldStartLine = null;
+                        } else if (i === linesLength-1) {
+                            editor.getSession().addFold('...', new Range(foldStartLine, 0, i, 99))
+                        }
                     }
                 }
             }

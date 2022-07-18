@@ -339,7 +339,7 @@
             let firstPeriod = Object.keys(rows)[0];
             let period = rows[firstPeriod];
 
-            if (period.targets) {
+            if (typeof period !== 'undefined' && period.hasOwnProperty('targets') && period.targets) {
                 Object.keys(period.targets).forEach(object_id => {
                     let objectActions = period.targets[object_id];
 
