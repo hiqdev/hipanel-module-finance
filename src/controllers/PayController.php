@@ -29,6 +29,9 @@ class PayController extends \hiqdev\yii2\merchant\controllers\PayController
 {
     const SESSION_MERCHANT_LATEST_TRANSACTION_ID = 'MERCHANT_LATEST_TRANSACTION_ID';
 
+    public ?array $successPaymentRedirectRoute = ['@bill/index'];
+    public ?array $failedPaymentRedirectRoute = ['@pay/deposit'];
+
     public function actions()
     {
         return array_merge(parent::actions(), [
