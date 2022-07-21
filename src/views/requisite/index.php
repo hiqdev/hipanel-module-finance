@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $page->setSearchFormData(compact(['uiModel'])) ?>
 
         <?php $page->beginContent('main-actions') ?>
-            <?= Html::a(Yii::t('hipanel', 'Create'), '@contact/create', ['class' => 'btn btn-sm btn-success']) ?>
+            <?= Html::a(Yii::t('hipanel', 'Create'), '@requisite/create', ['class' => 'btn btn-sm btn-success']) ?>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('sorter-actions') ?>
