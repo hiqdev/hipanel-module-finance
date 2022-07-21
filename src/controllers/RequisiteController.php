@@ -22,9 +22,9 @@ use hipanel\filters\EasyAccessControl;
 use hipanel\actions\ValidateFormAction;
 use hipanel\base\CrudController;
 use hipanel\helpers\ArrayHelper;
+use hipanel\modules\client\actions\ContactCreateAction;
 use hipanel\modules\client\models\query\ContactQuery;
 use hipanel\modules\finance\models\Requisite;
-use hiqdev\higrid\representations\RepresentationCollection;
 use yii\base\Event;
 use Yii;
 
@@ -67,6 +67,14 @@ class RequisiteController extends CrudController
             ],
             'search' => [
                 'class' => ComboSearchAction::class,
+            ],
+            'create' => [
+                'class' => ContactCreateAction::class,
+                'data' => function ($action) {
+                    return [
+                        'countries' => $action->controller->getRefs('country_code'),
+                    ];
+                },
             ],
             'view' => [
                 'class' => ViewAction::class,

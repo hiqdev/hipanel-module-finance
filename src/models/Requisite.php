@@ -37,7 +37,8 @@ class Requisite extends Contact
 
     public function rules()
     {
-        return array_merge(parent::rules(), [
+        $rules = array_merge(parent::rules(), [
+            [['client_id', 'country', 'first_name', 'email', 'postal_code', 'city', 'street1'], 'required', 'on' => 'create'],
             [['id', 'client_id', 'recipient_id'], 'integer'],
             [['id'], 'required', 'on' => ['reserve-number', 'set-templates', 'set-serie']],
             [['client_id', 'recipient_id'], 'required', 'on' => ['reserve-number']],
@@ -48,18 +49,26 @@ class Requisite extends Contact
             [['invoice_name', 'acceptance_name', 'contract_name', 'probation_name', 'internal_invoice_name', 'proforma_name'], 'safe'],
             [['balance', 'balances'], 'safe'],
         ]);
+        $templatesTypes = [];
+        foreach (self::getTemplatesTypes() as $templatesType) {
+            $templatesTypes[] = "{$templatesType}_id";
+        }
+        $rules[] = [$templatesTypes, 'string', 'on' => 'create'];
+        $rules[] = [['invoice_id'], 'required', 'on' => 'create'];
+
+        return $rules;
     }
 
     public function isRequisite()
     {
-        return (boolean) $this->is_requisite;
+        return (boolean)$this->is_requisite;
     }
 
-    public function isEmpty($fields) : bool
+    public function isEmpty($fields): bool
     {
-        $fields = is_string($fields) ? array_map(function($v) {
+        $fields = is_string($fields) ? array_map(function ($v) {
             return trim($v);
-        },  explode(",", $fields)) : $fields;
+        }, explode(",", $fields)) : $fields;
 
         foreach ($fields as $field) {
             if (!empty($this->$field)) {
