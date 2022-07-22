@@ -27,6 +27,7 @@ return [
         '@target' => '/finance/target',
         '@target-resource' => '/finance/targetresource',
         '@consumption' => '/finance/consumption',
+        '@pay/check-return' => '/finance/pay/check-return',
     ],
     'modules' => [
         'finance' => [
