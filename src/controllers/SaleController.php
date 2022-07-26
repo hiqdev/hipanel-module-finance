@@ -17,6 +17,7 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\models\stub\ClientRelationFreeStub;
+use hipanel\modules\finance\actions\ChangeBuyerAction;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\query\SaleQuery;
 use Yii;
@@ -75,6 +76,10 @@ class SaleController extends \hipanel\base\CrudController
             'delete' => [
                 'class' => SmartDeleteAction::class,
                 'success' => Yii::t('hipanel:finance:sale', 'Sale was successfully deleted.'),
+            ],
+            'change-buyer' => [
+                'class' => ChangeBuyerAction::class,
+                'scenario' => 'change-buyer',
             ],
             'validate-form' => [
                 'class' => ValidateFormAction::class,

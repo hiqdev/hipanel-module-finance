@@ -61,9 +61,9 @@ final class TargetManagementAction extends Action
     public function getSuccessMessage(string $scenario): string
     {
         $variants = [
-            'change-plan' => Yii::t('hipanel:finance', 'Target\'s plan has been changed'),
-            'sale' => Yii::t('hipanel:finance', 'Target has been sold'),
-            'close-sale' => Yii::t('hipanel:finance', 'Target\'s sale has been closed'),
+            TargetManagementForm::SCENARIO_CHANGE_PLAN => Yii::t('hipanel:finance', 'Target\'s plan has been changed'),
+            TargetManagementForm::SCENARIO_CLOSE_SALE => Yii::t('hipanel:finance', 'Target\'s sale has been closed'),
+            TargetManagementForm::SCENARIO_SALE => Yii::t('hipanel:finance', 'Target has been sold'),
         ];
 
         return $variants[$scenario];
