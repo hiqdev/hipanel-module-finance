@@ -61,7 +61,7 @@ class Requisite extends Contact
 
     public function isRequisite()
     {
-        return (boolean)$this->is_requisite;
+        return (bool)$this->is_requisite;
     }
 
     public function isEmpty($fields): bool
