@@ -13,6 +13,10 @@ final class TargetManagementForm extends Target
 {
     use ModelTrait;
 
+    public const SCENARIO_CHANGE_PLAN = 'change-plan';
+    public const SCENARIO_CLOSE_SALE = 'close-sale';
+    public const SCENARIO_SALE = 'sale';
+
     public static function tableName()
     {
         return 'target';
@@ -50,9 +54,9 @@ final class TargetManagementForm extends Target
     public function submit(Connection $api): ResponseInterface
     {
         $actionsMap = [
-            'change-plan' => 'api/v1/target/sale',
-            'close-sale' => 'api/v1/sale/close',
-            'sale' => 'api/v1/target',
+            self::SCENARIO_CHANGE_PLAN => 'api/v1/target/sale',
+            self::SCENARIO_CLOSE_SALE => 'api/v1/sale/close',
+            self::SCENARIO_SALE => 'api/v1/target',
         ];
 
         return $api->post($actionsMap[$this->scenario], [], $this->attributes);

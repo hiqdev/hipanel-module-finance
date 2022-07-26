@@ -1,16 +1,22 @@
 <?php
 
+use hipanel\models\IndexPageUiOptions;
 use hipanel\modules\finance\grid\SaleGridLegend;
 use hipanel\modules\finance\grid\SaleGridView;
+use hipanel\modules\finance\grid\SaleRepresentations;
+use hipanel\modules\finance\models\SaleSearch;
+use hipanel\modules\finance\widgets\ChangeBuyerButton;
 use hipanel\widgets\gridLegend\GridLegend;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
+use yii\data\ActiveDataProvider;
+use yii\web\View;
 
-/** @var \yii\web\View $this */
-/** @var \hipanel\modules\finance\models\SaleSearch $model */
-/** @var \hipanel\models\IndexPageUiOptions $uiModel */
-/** @var \hipanel\modules\finance\grid\SaleRepresentations $representationCollection */
-/** @var \yii\data\ActiveDataProvider $dataProvider */
+/** @var View $this */
+/** @var SaleSearch $model */
+/** @var IndexPageUiOptions $uiModel */
+/** @var SaleRepresentations $representationCollection */
+/** @var ActiveDataProvider $dataProvider */
 $this->title = Yii::t('hipanel:finance:sale', 'Sales');
 $this->params['breadcrumbs'][] = $this->title;
 $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
@@ -41,6 +47,7 @@ $this->registerCss('
         <?php $page->beginContent('bulk-actions') ?>
             <?php if (Yii::$app->user->can('sale.update')) : ?>
                 <?= $page->renderBulkButton('@sale/update', Yii::t('hipanel', 'Edit')) ?>
+                <?= ChangeBuyerButton::widget() ?>
             <?php endif ?>
             <?php if (Yii::$app->user->can('sale.delete')) : ?>
                 <?= $page->renderBulkDeleteButton('@sale/delete') ?>
