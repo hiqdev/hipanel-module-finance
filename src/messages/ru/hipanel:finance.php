@@ -36,6 +36,7 @@ return [
     'Show invoice' => 'Показать счет',
     'Create document' => 'Создать документ',
     'VAT rate' => 'Ставка НДС',
+    'What types of tariffs will be found in the tariff selection field' => 'Какие типы тарифов будут найдены в поле выбора тарифа',
 
     '<b>{currency}</b> account' => '<b>{currency}</b> счёт',
     'Are you sure you want to update invoice?' => 'Вы уверены что хотите обновить инвойс',

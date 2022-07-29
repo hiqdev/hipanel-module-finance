@@ -23,7 +23,7 @@ class TariffComboWithTypeSuggester extends Widget
     public string $suggestAttribute = 'class';
     public string $htmlTemplate = '<div class="row"><div class="col-md-6">{typeSelector}</div><div class="col-md-6">{tariffSelector}</div></div>';
     public bool $withLabels = true;
-    private ?array $suggested = null;
+    public array $suggested = [];
     private ?array $selectedValues = null;
     private ?string $suggesterSelectorId = null;
     private static array $suggester = [
@@ -76,7 +76,8 @@ class TariffComboWithTypeSuggester extends Widget
             'inputOptions' => [
                 'id' => $this->suggesterSelectorId,
             ],
-        ])->label($this->withLabels);
+        ])->label($this->withLabels)->hint(Yii::t('hipanel:finance',
+            'What types of tariffs will be found in the tariff selection field'));
     }
 
     private function renderTariffSelector()
@@ -97,7 +98,9 @@ class TariffComboWithTypeSuggester extends Widget
                 $suggested = [...$suggested, ...self::$suggester[$group]];
             }
         }
-        $this->suggested = $suggested;
+        if (!empty($suggested)) {
+            $this->suggested = $suggested;
+        }
     }
 
     private function registerClientScript(): void
