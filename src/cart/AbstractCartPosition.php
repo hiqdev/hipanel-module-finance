@@ -176,9 +176,14 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
         $this->_value = (float) $value;
     }
 
-    public function serialize()
+    public function serialize(): string
     {
-        return serialize($this->serializationMap());
+        return serialize($this->__serialize());
+    }
+
+    public function __serialize(): array
+    {
+        return $this->serializationMap();
     }
 
     /**
@@ -215,10 +220,15 @@ abstract class AbstractCartPosition extends ActiveRecord implements CartPosition
         ];
     }
 
-    public function unserialize($serialized)
+    public function unserialize(string $data): void
+    {
+        $this->__unserialize(unserialize($data, ['allow_class' => true]));
+    }
+
+    public function __unserialize(array $serialized): void
     {
         $map = $this->unserializationMap();
-        $array = unserialize($serialized);
+        $array = $serialized;
         foreach ($array as $key => $value) {
             if (!isset($map[$key])) {
                 $this->{$key} = $value;
