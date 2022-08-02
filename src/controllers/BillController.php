@@ -35,10 +35,12 @@ use hipanel\modules\finance\widgets\BillSummaryTable;
 use hipanel\widgets\SynchronousCountEnabler;
 use hiqdev\hiart\ActiveQuery;
 use hiqdev\hiart\Collection;
+use Tuck\Sort\Sort;
 use Yii;
 use yii\base\Event;
 use yii\base\Module;
 use yii\grid\GridView;
+use yii\web\Response;
 
 class BillController extends \hipanel\base\CrudController
 {
@@ -223,12 +225,13 @@ class BillController extends \hipanel\base\CrudController
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($id = $model->save()) {
+            if ($model->save()) {
                 Yii::$app->session->addFlash('success', Yii::t('hipanel:finance', 'Currency was exchanged successfully'));
 
                 return $this->redirect(['@bill']);
             }
         }
+
         return $this->render('create-exchange', [
             'model' => $model,
             'canSupport' => $canSupport,
@@ -236,15 +239,11 @@ class BillController extends \hipanel\base\CrudController
         ]);
     }
 
-    public function actionGetExchangeRates(?int $client_id = null)
+    public function actionGetExchangeRates(?int $client_id = null): array
     {
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $rates = $this->getExchangeRates($client_id);
-        $model = new CurrencyExchangeForm();
-        $data = array_map(static fn(ExchangeRate $model) => $model->getAttributes(), $rates);
-        return [
-            'rates' => json_encode($data),
-        ];
+        $this->response->format = Response::FORMAT_JSON;
+
+        return $this->getExchangeRates($client_id);
     }
 
     /**
@@ -263,14 +262,25 @@ class BillController extends \hipanel\base\CrudController
         return $this->billTypesProvider->getGroupedList();
     }
 
-    private function getExchangeRates(?int $client_id = null)
+    private function getExchangeRates(?int $client_id = null): array
     {
-        $client_id = $client_id ?? Yii::$app->user->id;
-        return Yii::$app->cache->getOrSet(['exchange-rates', $client_id], function () use ($client_id) {
+        $client_id ??= Yii::$app->user->id;
+        $currencies = Yii::$app->cache->getOrSet(['exchange-rates', $client_id, mt_rand()], function () use ($client_id) {
             return ExchangeRate::find()
                 ->select(['from', 'to', 'rate'])
                 ->where(['client_id' => $client_id])
                 ->all();
         }, 3600);
+
+        return Sort::by($currencies, static function (ExchangeRate $rate) {
+            if ($rate->from === 'EUR' && $rate->to === 'USD') {
+                return 1;
+            }
+            if ($rate->from === 'USD' && $rate->to === 'EUR') {
+                return 2;
+            }
+
+            return INF;
+        });
     }
 }

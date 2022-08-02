@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'id' => 'rates-form',
     'enableClientValidation' => true,
     'options' => [
-        'data-rates' => array_map(static fn(ExchangeRate $model) => $model->getAttributes(), $rates),
+        'data-rates' => $rates,
     ],
 ]) ?>
     <div class="bill-create-exchange">
@@ -122,10 +122,11 @@ Plugin.prototype = {
         this.updateCurrency();
         const that = this;
         $('#currencyexchangeform-client_id').on('change', function() {
-            $.get("/finance/bill/get-exchange-rates?client_id="+$(this).val(), function(data) {
-                $("#rates-form").attr("data-rates", data.rates);
+            const client_id = $(this).val();
+            $.get(`/finance/bill/get-exchange-rates?client_id=${client_id}`, function(rates) {
+                $("#rates-form").attr("data-rates", rates);
                 $('#rates-form').currencyExchanger();
-                that.rates = JSON.parse(data.rates);
+                that.rates = rates;
                 that.updateCurrency();
             });
         });
