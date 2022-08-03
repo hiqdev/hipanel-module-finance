@@ -265,7 +265,7 @@ class BillController extends \hipanel\base\CrudController
     private function getExchangeRates(?int $client_id = null): array
     {
         $client_id ??= Yii::$app->user->id;
-        $currencies = Yii::$app->cache->getOrSet(['exchange-rates', $client_id, mt_rand()], function () use ($client_id) {
+        $currencies = Yii::$app->cache->getOrSet(['exchange-rates', $client_id], function () use ($client_id) {
             return ExchangeRate::find()
                 ->select(['from', 'to', 'rate'])
                 ->where(['client_id' => $client_id])
