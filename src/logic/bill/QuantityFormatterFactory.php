@@ -32,6 +32,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
         'monthly,rack_unit' => RackUnitQuantity::class,
         'ip_num'            => IPNumQuantity::class,
         'support_time'      => SupportTimeQuantity::class,
+        'devops_support'    => SupportTimeQuantity::class,
         'referral'          => MoneyQuantity::class,
         'server_traf_max'   => DefaultQuantityFormatter::class,
         'server_traf95_max' => DefaultQuantityFormatter::class,
