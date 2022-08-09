@@ -20,6 +20,9 @@ final class TargetManagementForm extends Target
 
     public function fillFromTarget(Target $target): void
     {
+        if ($target === null) {
+            return ;
+        }
         $this->setAttribute('remoteid', $target->id);
         $this->setAttribute('target_id', $target->id);
         $this->setAttribute('plan_id', $target->tariff_id);
