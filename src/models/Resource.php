@@ -16,6 +16,7 @@ use hipanel\modules\finance\models\decorators\ResourceDecoratorInterface;
 use hipanel\modules\stock\models\Part;
 use Money\Money;
 use Money\MoneyParser;
+use Money\Currency;
 use Yii;
 use yii\base\InvalidConfigException;
 
@@ -108,8 +109,12 @@ class Resource extends Model
      */
     public function getMoney(): Money
     {
+        $currency = $this->currency;
+        if (!($currency instanceof Currency)) {
+            $currency = new Currency(strtoupper($this->currency));
+        }
         // TODO: decide how to get MoneyParser correctly
         return Yii::$container->get(MoneyParser::class)
-            ->parse((string)$this->price, strtoupper($this->currency));
+            ->parse((string)$this->price, strtoupper($currency));
     }
 }
