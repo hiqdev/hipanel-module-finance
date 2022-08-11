@@ -119,7 +119,7 @@ class BatchPurchaseStrategy implements PurchaseStrategyInterface
 
     protected function analyzeResponse($response)
     {
-        if ($response['_error'] === 'not enough money') {
+        if (isset($response['_error']) && $response['_error'] === 'not enough money') {
             foreach ($this->purchases as $key => $purchase) {
                 $error = Yii::t('hipanel:finance', 'Insufficient funds on the balance');
                 if ($this->user->can('support')) {
