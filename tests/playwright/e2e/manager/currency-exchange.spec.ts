@@ -1,7 +1,7 @@
-import { test } from "@hipanel-core/tests/fixtures";
+import { test } from "@hipanel-core/fixtures";
 import { expect } from "@playwright/test";
-import Select2 from "@hipanel-core/tests/input/Select2";
-import Alert from "@hipanel-core/tests/ui/Alert";
+import Select2 from "@hipanel-core/input/Select2";
+import Alert from "@hipanel-core/ui/Alert";
 
 test("Test the currency exchange operation are works and creates a bill @hipanel-module-finance @manager", async ({ managerPage }) => {
   await managerPage.goto("/finance/bill/index");
