@@ -31,6 +31,7 @@ class BillCest
 
     public function ensureIndexPageWorks(Seller $I)
     {
+        $I->markTestSkipped("Moved to PW");
         $I->login();
         $I->needPage(Url::to('@bill'));
         $I->see('Bills', 'h1');
