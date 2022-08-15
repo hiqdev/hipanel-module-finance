@@ -17,6 +17,7 @@ class AccountRechargingCest
 {
     public function ensureIndexPageWorks(Seller $I)
     {
+        $I->markTestSkipped('Moved to PW');
         $I->login();
         $I->needPage(Url::to('@pay/deposit'));
         $I->see('Account recharging', 'h1');
