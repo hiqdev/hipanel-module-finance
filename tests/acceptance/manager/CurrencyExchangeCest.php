@@ -13,6 +13,7 @@ class CurrencyExchangeCest
 
     public function _before(Manager $I): void
     {
+        $I->markTestSkipped('Moved to Playwright');
         $I->login();
         $I->needPage(Url::to('@bill/create-exchange'));
         $this->create = new Create($I);

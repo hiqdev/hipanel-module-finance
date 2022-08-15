@@ -16,6 +16,7 @@ class AddingChargesCest
      */
     public function ensureBillWillBeEditedWithNewChargesCorrectly(Seller $I, Example $example): void
     {
+        $I->markTestSkipped("Moved to PW");
         $I->login();
         $createPage = new Create($I);
         $updatePage = new Update($I);
