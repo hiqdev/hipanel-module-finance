@@ -62,4 +62,8 @@ export default class BillForm {
   async hasValidationError(msg: string) {
     await expect(this.page.locator(`.help-block-error:has-text("${msg}")`).first()).toBeVisible();
   }
+
+  async toggleSign(nth: number = 0) {
+    await this.page.locator(".bill-item >> text=\"Toggle sign\"").nth(nth).click();
+  }
 }
