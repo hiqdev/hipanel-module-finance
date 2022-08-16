@@ -14,6 +14,11 @@ class BillCreationCest
 {
     public ?string $billId;
 
+    public function _before(Seller $I): void
+    {
+        $I->markTestSkipped("Moved to PW");
+    }
+
     public function ensureBillPageWorks(Seller $I): void
     {
         $I->login();
@@ -45,7 +50,7 @@ class BillCreationCest
      *
      * @param Seller $I
      * @throws \Exception
-     * 
+     *
      * @dataProvider getBillData
      */
     public function ensureICanCreateSimpleBill(Seller $I, Example $example): void
@@ -202,18 +207,18 @@ class BillCreationCest
     {
         return [
             [
-                'login'     => 'hipanel_test_user',
-                'type'      => 'Premium renewal',
-                'currency'  => '$',
-                'sum'       =>  '750',
-                'quantity'  =>  '1',
+                'login' => 'hipanel_test_user',
+                'type' => 'Premium renewal',
+                'currency' => '$',
+                'sum' => '750',
+                'quantity' => '1',
             ],
             [
-                'login'     => 'hipanel_test_user',
-                'type'      => 'Premium purchase',
-                'currency'  => '$',
-                'sum'       =>  '250',
-                'quantity'  =>  '1',
+                'login' => 'hipanel_test_user',
+                'type' => 'Premium purchase',
+                'currency' => '$',
+                'sum' => '250',
+                'quantity' => '1',
             ],
         ];
     }
@@ -225,11 +230,11 @@ class BillCreationCest
     protected function getChargeData(string $objectId): array
     {
         return [
-            'class'     => 'Client',
-            'objectId'  => $objectId,
-            'type'      => 'Monthly fee',
-            'sum'       => '-250',
-            'quantity'  => '1',
+            'class' => 'Client',
+            'objectId' => $objectId,
+            'type' => 'Monthly fee',
+            'sum' => '-250',
+            'quantity' => '1',
         ];
     }
 }

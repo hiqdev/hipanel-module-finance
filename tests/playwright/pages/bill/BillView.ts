@@ -1,6 +1,6 @@
 import { expect, Page } from "@playwright/test";
-import Charge from "@hipanel-module-finance/tests/models/Charge";
-import Bill from "@hipanel-module-finance/tests/models/Bill";
+import Charge from "@hipanel-module-finance/models/Charge";
+import Bill from "@hipanel-module-finance/models/Bill";
 
 export default class BillView {
   private page: Page;

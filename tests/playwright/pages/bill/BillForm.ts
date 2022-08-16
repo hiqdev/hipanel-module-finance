@@ -1,8 +1,8 @@
 import { expect, Locator, Page } from "@playwright/test";
-import Select2 from "@hipanel-core/tests/input/Select2";
-import SumWithCurrency from "@hipanel-core/tests/input/SumWithCurrency";
-import Bill from "@hipanel-module-finance/tests/models/Bill";
-import Charge from "@hipanel-module-finance/tests/models/Charge";
+import Select2 from "@hipanel-core/input/Select2";
+import SumWithCurrency from "@hipanel-core/input/SumWithCurrency";
+import Bill from "@hipanel-module-finance/models/Bill";
+import Charge from "@hipanel-module-finance/models/Charge";
 
 export default class BillForm {
   private page: Page;
@@ -57,5 +57,9 @@ export default class BillForm {
     expect(this.page.url()).toContain("finance/bill?id_in");
 
     return await this.page.locator("div[role=grid]").first().locator(":scope tbody > tr").nth(nth).getAttribute("data-key");
+  }
+
+  async hasValidationError(msg: string) {
+    await expect(this.page.locator(`.help-block-error:has-text("${msg}")`).first()).toBeVisible();
   }
 }
