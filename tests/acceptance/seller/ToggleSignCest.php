@@ -12,6 +12,11 @@ class ToggleSignCest
 {
     private ?string $billId = null;
 
+    public function _before(Seller $I): void
+    {
+        $I->markTestSkipped("Moved to PW");
+    }
+
     /**
      * @dataProvider provideDataBill
      * @throws Exception
@@ -37,7 +42,7 @@ class ToggleSignCest
 
     /**
      * @dataProvider provideDataBill
-     * @depends ensureToggleSignWorksAndICanCreateBill
+     * @depends      ensureToggleSignWorksAndICanCreateBill
      */
     public function ensureBillWasCreatedCorrectlyAndDeleteIt(Seller $I, Example $example): void
     {
@@ -48,7 +53,7 @@ class ToggleSignCest
 
         $create = new Create($I);
 
-        $I->needPage(Url::to('@bill'). '?view=' . $this->billId);
+        $I->needPage(Url::to('@bill') . '?view=' . $this->billId);
         $I->see('$' . $chargeData['sum']);
 
         $create->deleteBillById($this->billId);
