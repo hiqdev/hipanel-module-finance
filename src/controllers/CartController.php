@@ -127,7 +127,7 @@ class CartController extends \yii\web\Controller
             'success' => $finisher->getSuccess(),
             'error' => $finisher->getError(),
             'pending' => $finisher->getPending(),
-            'remarks' => (array) Yii::$app->getView()->params['remarks'],
+            'remarks' => isset(Yii::$app->getView()->params['remarks']) ? (array)Yii::$app->getView()->params['remarks'] : [],
         ]);
     }
 
