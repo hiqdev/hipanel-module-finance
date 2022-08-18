@@ -1,8 +1,8 @@
 import { test } from "@hipanel-core/fixtures";
 import { expect } from "@playwright/test";
-import BillForm from "@hipanel-module-finance/pages/bill/BillForm";
+import BillForm from "@hipanel-module-finance/page/bill/BillForm";
 import Alert from "@hipanel-core/ui/Alert";
-import BillView from "@hipanel-module-finance/pages/bill/BillView";
+import BillView from "@hipanel-module-finance/page/bill/BillView";
 
 test("Test we add the charges to created bill @hipanel-module-finance @seller", async ({ sellerPage }) => {
   await sellerPage.goto("/finance/bill/create");

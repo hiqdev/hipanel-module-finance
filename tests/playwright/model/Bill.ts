@@ -1,4 +1,4 @@
-import Charge from "@hipanel-module-finance/models/Charge";
+import Charge from "@hipanel-module-finance/model/Charge";
 
 export default class Bill {
   public client: string;

@@ -1,8 +1,8 @@
 import { expect, Locator, Page } from "@playwright/test";
 import Select2 from "@hipanel-core/input/Select2";
 import SumWithCurrency from "@hipanel-core/input/SumWithCurrency";
-import Bill from "@hipanel-module-finance/models/Bill";
-import Charge from "@hipanel-module-finance/models/Charge";
+import Bill from "@hipanel-module-finance/model/Bill";
+import Charge from "@hipanel-module-finance/model/Charge";
 
 export default class BillForm {
   private page: Page;

@@ -10,7 +10,7 @@ test("Test the currency exchange operation are works and creates a bill @hipanel
   await managerPage.locator("a:has-text(\"Currency exchange\")").click();
   await expect(managerPage).toHaveTitle("Create currency exchange");
 
-  await Select2.field(managerPage, "#currencyexchangeform-client_id").setValue("hipanel_test_user1");
+  await Select2.field(managerPage, "#currencyexchangeform-client_id").setValue("hipanel_test_user");
   await Select2.field(managerPage, "#currencyexchangeform-from").setValue("USD");
   await Select2.field(managerPage, "#currencyexchangeform-to").setValue("UAH");
   await managerPage.locator("input[name=\"CurrencyExchangeForm\\[sum\\]\"]").fill("200");
@@ -19,11 +19,11 @@ test("Test the currency exchange operation are works and creates a bill @hipanel
 
   await Alert.on(managerPage).hasText("Currency was exchanged successfully");
 
-  await Select2.field(managerPage, "#billsearch-client_id").setValue("hipanel_test_user1");
+  await Select2.field(managerPage, "#billsearch-client_id").setValue("hipanel_test_user");
 
   await managerPage.goto(managerPage.url() + "&sort=-time");
 
   await managerPage.locator("div[role=grid] a:has-text(\"-$200.00\")").first().click();
 
-  await expect(managerPage).toHaveTitle(/^hipanel_test_user1: -200.00 usd Exchanging 200.00 USD.*/);
+  await expect(managerPage).toHaveTitle(/^hipanel_test_user: -200.00 usd Exchanging 200.00 USD.*/);
 });

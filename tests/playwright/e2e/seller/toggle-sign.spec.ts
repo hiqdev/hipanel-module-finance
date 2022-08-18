@@ -1,6 +1,6 @@
 import { test } from "@hipanel-core/fixtures";
 import { expect } from "@playwright/test";
-import BillForm from "@hipanel-module-finance/pages/bill/BillForm";
+import BillForm from "@hipanel-module-finance/page/bill/BillForm";
 import Alert from "@hipanel-core/ui/Alert";
 
 const bill = {
