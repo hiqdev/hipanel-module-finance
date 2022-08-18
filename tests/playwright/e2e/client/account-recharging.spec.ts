@@ -1,7 +1,7 @@
 import { test } from "@hipanel-core/fixtures";
 import { expect } from "@playwright/test";
 
-test("Test the Account recharging page works @hipanel-module-finance @client", async ({ clientPage, sellerPage }) => {
+test("Test the Account recharging page works @hipanel-module-finance @client @seller", async ({ clientPage, sellerPage }) => {
   const pageUrl = "/merchant/pay/deposit";
   for (let page of [clientPage, sellerPage]) {
     await page.goto(pageUrl);
