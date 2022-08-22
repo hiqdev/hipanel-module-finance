@@ -15,7 +15,4 @@ export default class BillView {
     await expect(this.page.locator(`tr td span >> text=/.*${charge.sum}.*/i`).first()).toBeVisible();
   }
 
-  public async checkBill(bill: Bill) {
-
-  }
 }

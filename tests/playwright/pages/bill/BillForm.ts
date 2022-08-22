@@ -31,7 +31,7 @@ export default class BillForm {
     if (bill.charges !== null) {
       for (const charge of bill.charges) {
         let j = bill.charges.indexOf(charge) + 1;
-        await this.addChargeBtn.click();
+        await this.addCharge();
         await this.fillCharge(charge, k, j);
       }
     }
@@ -43,6 +43,13 @@ export default class BillForm {
     await this.page.locator(`#charge-${k}-${j}-type`).selectOption({ label: charge.type });
     await this.page.locator(`#charge-${k}-${j}-quantity`).fill(charge.quantity.toString());
     await this.page.locator(`#charge-${k}-${j}-sum`).fill(charge.sum.toString());
+  }
+
+  async createBill(): Promise<string> {
+    await this.submit();
+    await expect(this.page).toHaveTitle("Bills");
+
+    return await this.getSavedBillId();
   }
 
   async submit() {

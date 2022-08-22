@@ -4,6 +4,6 @@ export default class Charge {
   public type: string;
   public quantity: number;
   public sum: number;
-  public description: string | null = null;
-  public time: string | null = null;
+  public description?: string | null = null;
+  public time?: string | null = null;
 }
