@@ -10,7 +10,11 @@ test("Test the currency exchange operation are works and creates a bill @hipanel
   await managerPage.locator("a:has-text(\"Currency exchange\")").click();
   await expect(managerPage).toHaveTitle("Create currency exchange");
 
-  await Select2.field(managerPage, "#currencyexchangeform-client_id").setValue("hipanel_test_user");
+  await Promise.all([
+    managerPage.waitForResponse(response => response.status() === 200 && response.url().includes("get-exchange-rates")),
+    Select2.field(managerPage, "#currencyexchangeform-client_id").setValue("hipanel_test_user"),
+  ]);
+
   await Select2.field(managerPage, "#currencyexchangeform-from").setValue("USD");
   await Select2.field(managerPage, "#currencyexchangeform-to").setValue("UAH");
   await managerPage.locator("input[name=\"CurrencyExchangeForm\\[sum\\]\"]").fill("200");
