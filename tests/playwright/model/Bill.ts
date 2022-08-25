@@ -6,9 +6,9 @@ export default class Bill {
   public currency: string;
   public sum: number;
   public quantity: number;
-  public time: string | null = null;
-  public description: string | null = null;
-  public class: string | null = null;
-  public object: string | null = null;
-  public charges: Array<Charge> | null = null;
+  public time?: string | null;
+  public description?: string | null;
+  public class?: string | null;
+  public object?: string | null;
+  public charges?: Array<Charge> | null;
 }
