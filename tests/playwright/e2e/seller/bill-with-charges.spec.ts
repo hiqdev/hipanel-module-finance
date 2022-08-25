@@ -23,7 +23,7 @@ test("Test we add the charges to created bill @hipanel-module-finance @seller", 
 
   for (const charge of charges) {
     let j = charges.indexOf(charge) + 1;
-    await billForm.addCharge();
+    await billForm.addDetalizationForm();
     await billForm.fillCharge(charge, 0, j);
   }
   await billForm.submit();

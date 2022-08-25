@@ -45,11 +45,18 @@ export default class BillForm {
     await this.page.locator(`#charge-${k}-${j}-sum`).fill(charge.sum.toString());
   }
 
+  async saveBill(): Promise<string> {
+    await this.submit();
+    await expect(this.page).toHaveTitle("Bills");
+
+    return await this.getSavedBillId();
+  }
+
   async submit() {
     await this.submitBtn.click();
   }
 
-  async addCharge() {
+  async addDetalizationForm() {
     await this.addChargeBtn.click();
   }
 
@@ -60,7 +67,7 @@ export default class BillForm {
   }
 
   async hasValidationError(msg: string) {
-    await expect(this.page.locator(`.help-block-error:has-text("${msg}")`).first()).toBeVisible();
+    await expect(this.page.locator(`.help-block-error:text-is("${msg}")`).first()).toBeVisible();
   }
 
   async toggleSign(nth: number = 0) {

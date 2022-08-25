@@ -62,7 +62,7 @@ test("Test I can`t create bill with charges without completing all the required 
 
   const billForm = new BillForm(sellerPage);
   await billForm.fill([bill]);
-  await billForm.addCharge();
+  await billForm.addDetalizationForm();
   await billForm.submit();
 
   await billForm.hasValidationError("Object Id cannot be blank.");
@@ -77,7 +77,7 @@ test("Test I can create bill with charges @hipanel-module-finance @seller", asyn
 
   const billForm = new BillForm(sellerPage);
   await billForm.fill([bill]);
-  await billForm.addCharge();
+  await billForm.addDetalizationForm();
   await billForm.fillCharge(charge, 0, 1);
   await billForm.submit();
   await Alert.on(sellerPage).hasText("Bill was created successfully");
