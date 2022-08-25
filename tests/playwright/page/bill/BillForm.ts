@@ -1,8 +1,8 @@
 import { expect, Locator, Page } from "@playwright/test";
-import Select2 from "@hipanel-core/tests/input/Select2";
-import SumWithCurrency from "@hipanel-core/tests/input/SumWithCurrency";
-import Bill from "@hipanel-module-finance/tests/models/Bill";
-import Charge from "@hipanel-module-finance/tests/models/Charge";
+import Select2 from "@hipanel-core/input/Select2";
+import SumWithCurrency from "@hipanel-core/input/SumWithCurrency";
+import Bill from "@hipanel-module-finance/model/Bill";
+import Charge from "@hipanel-module-finance/model/Charge";
 
 export default class BillForm {
   private page: Page;
@@ -31,7 +31,7 @@ export default class BillForm {
     if (bill.charges !== null) {
       for (const charge of bill.charges) {
         let j = bill.charges.indexOf(charge) + 1;
-        await this.addCharge();
+        await this.addChargeBtn.click();
         await this.fillCharge(charge, k, j);
       }
     }
@@ -45,7 +45,7 @@ export default class BillForm {
     await this.page.locator(`#charge-${k}-${j}-sum`).fill(charge.sum.toString());
   }
 
-  async createBill(): Promise<string> {
+  async saveBill(): Promise<string> {
     await this.submit();
     await expect(this.page).toHaveTitle("Bills");
 
@@ -56,7 +56,7 @@ export default class BillForm {
     await this.submitBtn.click();
   }
 
-  async addCharge() {
+  async addDetalizationForm() {
     await this.addChargeBtn.click();
   }
 
@@ -64,5 +64,13 @@ export default class BillForm {
     expect(this.page.url()).toContain("finance/bill?id_in");
 
     return await this.page.locator("div[role=grid]").first().locator(":scope tbody > tr").nth(nth).getAttribute("data-key");
+  }
+
+  async hasValidationError(msg: string) {
+    await expect(this.page.locator(`.help-block-error:has-text("${msg}")`).first()).toBeVisible();
+  }
+
+  async toggleSign(nth: number = 0) {
+    await this.page.locator(".bill-item >> text=\"Toggle sign\"").nth(nth).click();
   }
 }

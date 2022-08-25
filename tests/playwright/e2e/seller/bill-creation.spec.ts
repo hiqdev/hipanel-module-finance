@@ -1,9 +1,9 @@
 import { test } from "@hipanel-core/fixtures";
 import { expect } from "@playwright/test";
-import BillForm from "@hipanel-module-finance/pages/bill/BillForm";
+import BillForm from "@hipanel-module-finance/page/bill/BillForm";
 import Alert from "@hipanel-core/ui/Alert";
-import Bill from "@hipanel-module-finance/models/Bill";
-import Charge from "@hipanel-module-finance/models/Charge";
+import Bill from "@hipanel-module-finance/model/Bill";
+import Charge from "@hipanel-module-finance/model/Charge";
 
 let billId;
 
@@ -64,7 +64,7 @@ test("Test I can`t create bill with charges without completing all the required 
 
   const billForm = new BillForm(sellerPage);
   await billForm.fill([bill]);
-  await billForm.addCharge();
+  await billForm.addDetalizationForm();
   await billForm.submit();
 
   await billForm.hasValidationError("Object Id cannot be blank.");
@@ -79,7 +79,7 @@ test("Test I can create bill with charges @hipanel-module-finance @seller", asyn
 
   const billForm = new BillForm(sellerPage);
   await billForm.fill([bill]);
-  await billForm.addCharge();
+  await billForm.addDetalizationForm();
   await billForm.fillCharge(charge, 0, 1);
   await billForm.submit();
   await Alert.on(sellerPage).hasText("Bill was created successfully");

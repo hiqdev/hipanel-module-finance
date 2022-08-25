@@ -18,6 +18,7 @@ class InternalTransferCest
 
     public function _before(Seller $I, $scenario): void
     {
+        $I->markTestSkipped('Moved to Playwright');
         $this->transferCreate = new TransferCreate($I);
         $this->billCreate = new BillCreate($I);
         $this->index = new Index($I);
@@ -58,13 +59,11 @@ class InternalTransferCest
     private function updateBillIfUserHaveNegativeBalance(Seller $I, array $billInfo): array
     {
         $sum = $this->getTotalSumOnUserAccount($I, $billInfo);
-
         $sum = $this->transformSum($sum);
         if ($sum === null) {
             return $billInfo;
         }
         $billInfo['bill']['sum'] += ++$sum;
-
         return $billInfo;
     }
 
@@ -74,7 +73,6 @@ class InternalTransferCest
 
         $this->index->filterBy(Select2::asTableFilter($I, 'Client'), $billInfo['transfer']['client']);
         $rowNumber = $this->index->gridView->getRowNumberByNameFromSummary('Total');
-
         return $I->grabTextFrom("//div[@class='summary']//tbody//tr[$rowNumber]//td//span");
     }
 

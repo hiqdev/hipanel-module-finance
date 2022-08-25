@@ -19,6 +19,7 @@ class BillCopyCest
 
     public function _before(Seller $I): void
     {
+        $I->markTestSkipped('Moved to Playwright');
         $this->createPage = new Create($I);
         $this->index = new Index($I);
         $this->copyPage = new Copy($I);
