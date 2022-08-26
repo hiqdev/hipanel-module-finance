@@ -45,7 +45,7 @@ test("Create and copy bill with charges @hipanel-module-finance @seller", async 
 
   await indexPage.chooseNumberRowOnTable(1);
   await billHelper.copyBill();
-  await billForm.getSavedBillId();
+  const billId = await billForm.getSavedBillId();
 
   await billHelper.ensureBillDidntChange(bill, billId);
 
