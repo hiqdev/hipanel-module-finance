@@ -25,13 +25,12 @@ export default class BillHelper {
     async copyBill() {
         await this.page.locator("button:has-text(\"Copy\")").click();
         await this.page.locator("text=Save").click();
-        await this.page.waitForTimeout(2000);
     }
 
     async ensureBillDidntChange(billData: Bill, billId: string) {
         await this.page.goto(`/finance/bill/view?id=${billId}`);
 
-        billData.charges.forEach(charge => this.view.checkCharge(charge));
+        await billData.charges.forEach(charge => this.view.checkCharge(charge));
     }
 
     async filterByClient(client: string) {
