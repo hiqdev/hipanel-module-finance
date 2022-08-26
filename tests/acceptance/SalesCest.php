@@ -58,7 +58,7 @@ class SalesCest
         $this->searchForSales($I, $saleData);
 
         foreach ([1, 2] as $rowId) {
-            $I->checkOption(sprintf("//input[@value='%s']", $index->getRowIdByNumber($rowId)));
+            $I->checkOption("//tbody/tr[$rowId]//input");
         }
 
         $I->pressButton('Edit');
@@ -101,7 +101,7 @@ class SalesCest
         $this->searchForSales($I, $saleData);
 
         foreach ([1, 2] as $rowId) {
-            $I->checkOption(sprintf("//input[@value='%s']", $index->getRowIdByNumber($rowId)));
+            $I->checkOption("//tbody/tr[$rowId]//input");
         }
 
         $index->deleteSelectedSales();
