@@ -61,7 +61,7 @@ export default class BillForm {
   }
 
   async getSavedBillId(nth = 0): Promise<string> {
-    expect(this.page.url()).toContain("finance/bill?id_in");
+    await expect(this.page.url()).toContain("finance/bill?id_in");
 
     return await this.page.locator("div[role=grid]").first().locator(":scope tbody > tr").nth(nth).getAttribute("data-key");
   }
