@@ -6,6 +6,7 @@ import Bill from "@hipanel-module-finance/model/Bill";
 import Charge from "@hipanel-module-finance/model/Charge";
 import BillView from "@hipanel-module-finance/page/bill/BillView";
 import Index from "@hipanel-core/page/Index";
+import Alert from "@hipanel-core/ui/Alert";
 
 let billId;
 
@@ -45,7 +46,8 @@ test("Create and copy bill with charges @hipanel-module-finance @seller", async 
 
   await indexPage.chooseNumberRowOnTable(1);
   await billHelper.copyBill();
-  const billId = await billForm.getSavedBillId();
+  await Alert.on(sellerPage).hasText('Bill was created successfully');
+  await expect(sellerPage.url()).toContain("finance/bill?id_in");
 
   await billHelper.ensureBillDidntChange(bill, billId);
 
