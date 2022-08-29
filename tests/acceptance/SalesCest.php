@@ -17,6 +17,10 @@ use hipanel\tests\_support\Step\Acceptance\Manager;
 
 class SalesCest
 {
+    public function _before(Seller $I): void
+    {
+        $I->markTestSkipped("Moved to Playwright");
+    }
     /**
      * @dataProvider getSaleDataForManager
      * @throws ModuleException
