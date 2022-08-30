@@ -28,9 +28,11 @@ sales.forEach((sale, index) => {
 
         const serverHelper = new ServerHelper(managerPage);
         const serverView = new ServerView(managerPage);
+        const indexPage = new Index(managerPage);
 
         await serverHelper.gotoIndexServer();
-        await serverHelper.gotoServerView(index)
+        const rowNumber = await indexPage.getRowNumberInColumnByValue(sale.column, sale.server);
+        await serverHelper.gotoServerView(rowNumber);
         await serverView.changeTariff(sale);
 
         await Alert.on(managerPage).hasText('Servers were sold');
