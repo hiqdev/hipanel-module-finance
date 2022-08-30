@@ -3,10 +3,10 @@ import {expect, Page} from "@playwright/test";
 import ServerHelper from "@hipanel-module-finance/Helper/ServerHelper";
 import Sale from "@hipanel-module-finance/model/Sale";
 import ServerView from "@hipanel-module-finance/page/bill/ServerView";
-import Alert from "../../../../hipanel-core/tests/playwright/ui/Alert";
 import SaleHelper from "@hipanel-module-finance/Helper/SaleHelper";
 import Index from "@hipanel-core/page/Index";
 import SaleUpdate from "@hipanel-module-finance/page/bill/SaleUpdate";
+import Alert from "@hipanel-core/ui/Alert";
 
 const sales: Array<Sale> = [
     {
@@ -60,6 +60,7 @@ test(`Ensure sale detail view is correct`, async ({ sellerPage }) => {
     await saleHelper.gotoIndexSale();
     await saleHelper.filterByTariff(sales[0].tariff);
     await indexPage.clickColumnOnTable('Time', 1);
+    await sellerPage.locator('text=Tariff information').waitFor();
     await saleHelper.checkDetailViewData(sales[0]);
 });
 
