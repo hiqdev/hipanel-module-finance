@@ -13,8 +13,8 @@ export default class ServerHelper {
         await expect(this.page).toHaveTitle("Servers");
     }
 
-    async gotoServerView(index: number) {
-        await this.page.locator('tr td button').nth(index).click();
+    async gotoServerView(rowNumber: number) {
+        await this.page.locator('tr td button').nth(rowNumber - 1).click();
         await this.page.locator('div[role="tooltip"] >> text=View').click();
     }
 }
