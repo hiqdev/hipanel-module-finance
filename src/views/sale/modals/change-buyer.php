@@ -4,6 +4,7 @@ use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
+use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\widgets\ArraySpoiler;
 use hipanel\widgets\DateTimePicker;
 use yii\bootstrap\Html;
@@ -41,8 +42,12 @@ use yii\widgets\ActiveForm;
                     'li',
                     sprintf(
                         "%s / %s",
-                        Html::tag('span', $model->object, ['class' => 'text-bold']),
-                        Html::a($model->tariff, ['@plan/view', 'id' => $model->tariff_id], ['target' => '_blank'])
+                        LinkToObjectResolver::widget([
+                            'model' => $model,
+                            'typeAttribute' => 'object_type',
+                            'idAttribute' => 'object_id',
+                        ]),
+                        Html::encode($model->object_label)
                     ),
                     ['class' => 'list-group-item']
                 ),
