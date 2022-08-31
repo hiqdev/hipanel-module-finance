@@ -81,8 +81,9 @@ class RequisiteGridView extends ContactGridView
                 ],
                 'value' => function (Requisite $model) use ($attribute, $formatter): string {
                     $balance = $model->balance[$attribute];
+                    $currency = $model->balance->currency ?? $model->balance['currency'] ?? 'usd';
                     if (!empty($balance)) {
-                        return Html::tag('span', $formatter->asCurrency($balance, $model->balance->currency ?? 'usd'));
+                        return Html::tag('span', $formatter->asCurrency($balance, $currency));
                     }
 
                     return '';
