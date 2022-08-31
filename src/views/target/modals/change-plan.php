@@ -10,6 +10,10 @@ use yii\helpers\Html;
 
 /** @var TargetManagementForm $model */
 
+$map = [
+    'videocdn' => ['vcdn', 'videocdn'],
+];
+
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -25,7 +29,10 @@ use yii\helpers\Html;
 <?= Html::activeHiddenInput($model, 'type') ?>
 <?= Html::activeHiddenInput($model, 'name') ?>
 
-<?= $form->field($model, 'plan_id')->widget(PlanCombo::class, ['hasId' => true, 'tariffType' => $model->type]) ?>
+<?= $form->field($model, 'plan_id')->widget(PlanCombo::class, [
+    'hasId' => true,
+    'tariffType' => !empty($map[$model->type]) ? $map[$model->type] : $model->type,
+]) ?>
 <?= $form->field($model, 'customer_id')->widget(ClientCombo::class) ?>
 <?= $form->field($model, 'time')->widget(DateTimePicker::class, [
     'model' => $model,
