@@ -61,13 +61,13 @@ $this->registerCss('
                         'encodeLabels' => false,
                         'options' => ['class' => 'pull-right'],
                         'items' => [
-                            ChangeBuyerButton::widget(),
                             ChangeBuyerButton::widget([
                                 'scenario' => 'change-buyer-by-one',
                                 'url' => ['@sale/change-buyer-by-one'],
                                 'modalName' => 'change-buyer-by-one-from-modal-',
                                 'modalTitle' => 'Change buyer by one',
                             ]),
+                            ChangeBuyerButton::widget(),
                         ],
                     ]) ?>
                 </div>

@@ -31,7 +31,7 @@ use yii\widgets\ActiveForm;
         'delimiter' => '',
     ]) ?>
     <div class="panel panel-default">
-        <div class="panel-heading" style="text-transform: uppercase; font-weight: bold;">
+        <div class="panel-heading text-sm text-muted" style="text-transform: uppercase; font-weight: bold;">
             <?= $tariffType ?>
         </div>
         <ul class="list-group">
@@ -40,16 +40,15 @@ use yii\widgets\ActiveForm;
                 'visibleCount' => count($models),
                 'formatter' => static fn(Sale $model): string => Html::tag(
                     'li',
-                    sprintf(
-                        "%s / %s",
+                    implode(" / ", array_filter([
                         LinkToObjectResolver::widget([
                             'model' => $model,
                             'typeAttribute' => 'object_type',
                             'idAttribute' => 'object_id',
                         ]),
-                        Html::encode($model->object_label)
-                    ),
-                    ['class' => 'list-group-item']
+                        !empty($model->object_label) ? Html::encode($model->object_label) : null
+                    ])),
+                    ['class' => 'list-group-item text-muted text-sm']
                 ),
                 'delimiter' => '',
             ]) ?>

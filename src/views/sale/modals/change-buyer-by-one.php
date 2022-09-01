@@ -25,28 +25,28 @@ use yii\widgets\ActiveForm;
 <?php foreach ($salesByTariffType as $tariffType => $models) : ?>
     <?php foreach ($models as $idx => $model) : ?>
         <?= Html::activeHiddenInput($model, "[$tariffType][$idx]id", ['value' => $model->id]) ?>
+        <?= Html::activeHiddenInput($model, "[$tariffType][$idx]tariff_id", ['value' => $model->tariff_id]) ?>
         <div class="panel panel-default">
-            <div class="panel-heading" style="text-transform: uppercase; font-weight: bold;">
-                <?= sprintf(
-                    "%s / %s",
-                    LinkToObjectResolver::widget([
-                        'model' => $model,
-                        'typeAttribute' => 'object_type',
-                        'idAttribute' => 'object_id',
-                    ]),
-                    Html::encode($model->object_label)
+            <div class="panel-heading" style="display: flex; justify-content: space-between; text-transform: uppercase; font-weight: bold;">
+                <span class="text-sm text-muted">
+                <?= implode(" / ",
+                    array_filter([
+                        LinkToObjectResolver::widget([
+                            'model' => $model,
+                            'typeAttribute' => 'object_type',
+                            'idAttribute' => 'object_id',
+                        ]),
+                        !empty($model->object_label) ? Html::encode($model->object_label) : null,
+                    ])
                 ) ?>
+                </span>
+                <span class="text-maroon text-sm">
+                    <?= Html::encode($model->tariff) ?>
+                </span>
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-4">
-                        <?= $form->field($model, "[$tariffType][$idx]tariff_id")->widget(PlanCombo::class, [
-                            'hasId' => true,
-                            'tariffType' => $tariffType,
-                            'inputOptions' => ['id' => "sale-$tariffType-$idx-tariff_id"],
-                        ]) ?>
-                    </div>
-                    <div class="col-md-4">
+                    <div class="col-md-8">
                         <?= $form->field($model, "[$tariffType][$idx]buyer_id")->widget(ClientCombo::class, [
                             'hasId' => true,
                             'inputOptions' => ['id' => "sale-$tariffType-$idx-buyer_id"],
