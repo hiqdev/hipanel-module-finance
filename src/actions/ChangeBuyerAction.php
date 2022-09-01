@@ -17,6 +17,7 @@ use RuntimeException;
 
 final class ChangeBuyerAction extends Action
 {
+    public string $view = 'modals/change-buyer';
     private readonly Session $session;
 
     public function __construct(
@@ -40,16 +41,16 @@ final class ChangeBuyerAction extends Action
                 $payload = [];
                 $sales = ArrayHelper::index($this->getSales($formData), 'id');
                 foreach ($formData as $datum) {
-                    foreach ($datum['id'] as $id) {
-                        $sale = $sales[$id];
-                        $payload[$id] = [
-                            'object_id' => $sale->object_id,
-                            'tariff_id' => $datum['tariff_id'],
-                            'buyer_id' => $datum['buyer_id'],
-                            'time' => $datum['time'],
-                            'object_type' => $sale->object_type,
-                            'object_name' => $sale->object,
-                        ];
+                    if (isset($datum['id'])) {
+                        foreach ($datum['id'] as $id) {
+                            $sale = $sales[$id];
+                            $payload[$id] = $this->fillWith($sale, $datum);
+                        }
+                    } else {
+                        foreach ($datum as $row) {
+                            $sale = $sales[$row['id']];
+                            $payload[$row['id']] = $this->fillWith($sale, $row);
+                        }
                     }
                 }
                 try {
@@ -69,7 +70,7 @@ final class ChangeBuyerAction extends Action
             }
             $sales = $this->getSales($selection);
 
-            return $this->controller->renderAjax('modals/change-buyer', [
+            return $this->controller->renderAjax($this->view, [
                 'model' => $model,
                 'salesByTariffType' => ArrayHelper::index($sales, null, 'tariff_type'),
 
@@ -81,15 +82,33 @@ final class ChangeBuyerAction extends Action
         }
     }
 
-    private function getSales(array $params): array
+    private function fillWith(Sale $sale, array $datum): array
+    {
+        return [
+            'object_id' => $sale->object_id,
+            'tariff_id' => $datum['tariff_id'],
+            'buyer_id' => $datum['buyer_id'],
+            'time' => $datum['time'],
+            'object_type' => $sale->object_type,
+            'object_name' => $sale->object,
+        ];
+    }
+
+    private function getSales(array $data): array
     {
         $ids = [];
-        if (ArrayHelper::isIndexed($params)) {
-            $ids = array_values($params);
-        } else {
-            foreach ($params as $param) {
-                if (isset($param['id']) && !empty($param['id'])) {
-                    $ids = array_merge($ids, $param['id']);
+        if (ArrayHelper::isIndexed($data)) {
+            $ids = array_values($data);
+        } else if (1) {
+            foreach ($data as $datum) {
+                if (isset($datum['id']) && !empty($datum['id'])) {
+                    $ids = array_merge($ids, $datum['id']);
+                } else {
+                    foreach ($datum as $model) {
+                        if (isset($model['id']) && !empty($model['id'])) {
+                            $ids[] = $model['id'];
+                        }
+                    }
                 }
             }
         }

@@ -81,6 +81,11 @@ class SaleController extends \hipanel\base\CrudController
                 'class' => ChangeBuyerAction::class,
                 'scenario' => 'change-buyer',
             ],
+            'change-buyer-by-one' => [
+                'class' => ChangeBuyerAction::class,
+                'scenario' => 'change-buyer-by-one',
+                'view' => 'modals/change-buyer-by-one',
+            ],
             'validate-form' => [
                 'class' => ValidateFormAction::class,
             ],

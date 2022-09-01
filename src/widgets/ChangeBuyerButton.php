@@ -15,18 +15,22 @@ use yii\web\View;
 
 class ChangeBuyerButton extends Widget
 {
+    public string|array $url = ['@sale/change-buyer'];
+    public string $modalName = 'change-buyer-from-modal-';
+    public string $modalTitle = 'Change buyer';
+    public string $scenario = 'change-buyer';
     private ?string $modalId = null;
 
     public function init(): void
     {
         parent::init();
-        $this->modalId = 'change-buyer-from-modal-' . $this->getId();
-        $url = Url::to(['@sale/change-buyer']);
+        $this->modalId = $this->modalName . $this->getId();
+        $url = Url::to($this->url);
         $this->view->on(View::EVENT_END_BODY, function () use ($url) {
             echo AjaxModal::widget([
                 'id' => $this->modalId,
-                'header' => Html::tag('h4', Yii::t('hipanel:finance', 'Change buyer'), ['class' => 'modal-title']),
-                'scenario' => 'change-buyer',
+                'header' => Html::tag('h4', Yii::t('hipanel:finance', $this->modalTitle), ['class' => 'modal-title']),
+                'scenario' => $this->scenario,
                 'actionUrl' => $url,
                 'toggleButton' => false,
                 'size' => Modal::SIZE_LARGE,
@@ -37,10 +41,10 @@ class ChangeBuyerButton extends Widget
                         $(':checked[name^=\"selection\"]').not('.select-on-check-all').each(function (index) {
                             selection.push(this.value);
                         });
-                        $.post('{$url}', {
+                        $.post('$url', {
                             selection: selection
                         }).done(function (data) {
-                            $('#{$this->modalId} .modal-body').html(data);
+                            $('#$this->modalId .modal-body').html(data);
                         });
                     }"),
                 ],
@@ -50,12 +54,11 @@ class ChangeBuyerButton extends Widget
 
     public function run(): string
     {
-        return Html::button(Yii::t('hipanel:finance', 'Change buyer'), [
-            'class' => 'btn btn-default btn-sm',
+        return Html::tag('li', Html::tag('a', Yii::t('hipanel:finance', $this->modalTitle), [
             'data' => [
                 'toggle' => 'modal',
                 'target' => '#' . $this->modalId,
             ],
-        ]);
+        ]));
     }
 }

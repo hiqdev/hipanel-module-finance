@@ -9,6 +9,7 @@ use hipanel\modules\finance\widgets\ChangeBuyerButton;
 use hipanel\widgets\gridLegend\GridLegend;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
+use yii\bootstrap\Dropdown;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
 
@@ -17,6 +18,8 @@ use yii\web\View;
 /** @var IndexPageUiOptions $uiModel */
 /** @var SaleRepresentations $representationCollection */
 /** @var ActiveDataProvider $dataProvider */
+
+$user = Yii::$app->user;
 $this->title = Yii::t('hipanel:finance:sale', 'Sales');
 $this->params['breadcrumbs'][] = $this->title;
 $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
@@ -47,7 +50,28 @@ $this->registerCss('
         <?php $page->beginContent('bulk-actions') ?>
             <?php if (Yii::$app->user->can('sale.update')) : ?>
                 <?= $page->renderBulkButton('@sale/update', Yii::t('hipanel', 'Edit')) ?>
-                <?= ChangeBuyerButton::widget() ?>
+
+                <div class="dropdown" style="display: inline-block">
+                    <button type="button" class="btn btn-sm btn-default dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <?= Yii::t('hipanel:finance', 'Change buyer') ?>
+                        <span class="caret"></span>
+                    </button>
+                    <?= Dropdown::widget([
+                        'encodeLabels' => false,
+                        'options' => ['class' => 'pull-right'],
+                        'items' => [
+                            ChangeBuyerButton::widget(),
+                            ChangeBuyerButton::widget([
+                                'scenario' => 'change-buyer-by-one',
+                                'url' => ['@sale/change-buyer-by-one'],
+                                'modalName' => 'change-buyer-by-one-from-modal-',
+                                'modalTitle' => 'Change buyer by one',
+                            ]),
+                        ],
+                    ]) ?>
+                </div>
+
             <?php endif ?>
             <?php if (Yii::$app->user->can('sale.delete')) : ?>
                 <?= $page->renderBulkDeleteButton('@sale/delete') ?>
