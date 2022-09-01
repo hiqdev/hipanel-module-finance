@@ -25,6 +25,11 @@ export default class SaleHelper {
         await this.page.waitForLoadState('networkidle');
     }
 
+    async filterByBuyer(buyer: string) {
+        await Select2.filterBy(this.page, 'Buyer').setValue(buyer);
+        await this.page.waitForLoadState('networkidle');
+    }
+
     async checkDetailViewData(sale: Sale) {
         await expect(this.page.locator('//div[@class="box box-widget"]')).toContainText(sale.server);
         await expect(this.page.locator('//div[@class="box box-widget"]')).toContainText(sale.client);
@@ -36,4 +41,14 @@ export default class SaleHelper {
         await this.indexPage.clickBulkButton('Delete');
     }
 
+    async checkDataOnTable(sales: Array<Sale>) {
+        for (let i = 0; i < sales.length; i++) {
+            let receivedServer = await this.indexPage.getValueInColumnByNumberRow('Object', i + 1);
+            expect(receivedServer).toEqual(sales[i].server);
+            let receivedClient = await this.indexPage.getValueInColumnByNumberRow('Buyer', i + 1);
+            expect(receivedClient).toEqual(sales[i].client);
+            let receivedTariff = await this.indexPage.getValueInColumnByNumberRow('Tariff', i + 1)
+            expect(receivedTariff).toContain(sales[i].tariff.split('@')[0]);
+        }
+    }
 }

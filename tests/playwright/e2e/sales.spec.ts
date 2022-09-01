@@ -46,7 +46,10 @@ test(`Ensure I can edit several sales`, async ({ sellerPage }) => {
     const saleUpdate = new SaleUpdate(sellerPage);
 
     await saleHelper.gotoIndexSale();
-    await saleHelper.filterByTariff(sales[0].tariff);
+    await saleHelper.filterByBuyer(sales[0].client);
+    await indexPage.hasRowsOnTable(sales.length);
+    await saleHelper.checkDataOnTable(sales);
+
     await indexPage.chooseRangeOfRowsOnTable(1, 2);
     await indexPage.clickBulkButton('Edit');
     await saleUpdate.changeTariff(sales);
@@ -60,7 +63,8 @@ test(`Ensure sale detail view is correct`, async ({ sellerPage }) => {
     const indexPage = new Index(sellerPage);
 
     await saleHelper.gotoIndexSale();
-    await saleHelper.filterByTariff(sales[0].tariff);
+    await saleHelper.filterByBuyer(sales[0].client);
+
     await indexPage.clickColumnOnTable('Time', 1);
     await sellerPage.locator('text=Tariff information').waitFor();
     await saleHelper.checkDetailViewData(sales[0]);
@@ -72,7 +76,8 @@ test(`Ensure I can delete several sales`, async ({ sellerPage }) => {
     const indexPage = new Index(sellerPage);
 
     await saleHelper.gotoIndexSale();
-    await saleHelper.filterByTariff(sales[0].tariff);
+    await saleHelper.filterByBuyer(sales[0].client);
+
     await indexPage.chooseRangeOfRowsOnTable(1, 2);
     await saleHelper.deleteSales();
 
