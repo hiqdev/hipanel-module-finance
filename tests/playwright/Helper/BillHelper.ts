@@ -34,7 +34,7 @@ export default class BillHelper {
     }
 
     async filterByClient(client: string) {
-        await Select2.field(this.page, `tr.filters select[id*=client]`).setValue(client);
+        await Select2.filterBy(this.page, 'Client').setValue(client);
     }
 
     async getTotalSum() {
