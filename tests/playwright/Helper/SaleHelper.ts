@@ -2,6 +2,8 @@ import { expect, Locator, Page } from "@playwright/test";
 import Select2 from "@hipanel-core/input/Select2";
 import Sale from "@hipanel-module-finance/model/Sale";
 import Index from "@hipanel-core/page/Index";
+import Input from "@hipanel-core/input/Input";
+import DateHelper from "@hipanel-core/helper/DateHelper";
 
 export default class SaleHelper {
     private page: Page;
@@ -30,6 +32,10 @@ export default class SaleHelper {
         await this.page.waitForLoadState('networkidle');
     }
 
+    async filterByObject(object: string) {
+        await Input.filterBy(this.page, 'Inilike').setValue(object);
+    }
+
     async checkDetailViewData(sale: Sale) {
         await expect(this.page.locator('//div[@class="box box-widget"]')).toContainText(sale.server);
         await expect(this.page.locator('//div[@class="box box-widget"]')).toContainText(sale.client);
@@ -50,5 +56,35 @@ export default class SaleHelper {
             let receivedTariff = await this.indexPage.getValueInColumnByNumberRow('Tariff', i + 1)
             expect(receivedTariff).toContain(sales[i].tariff.split('@')[0]);
         }
+    }
+
+    async changeBuyer(buyer: string, date: string) {
+        await Select2.field(this.page, '#sale-server-0-buyer_id').setValue(buyer);
+        await this.page.locator('.glyphicon >> nth=0').click();
+        await this.page.locator('input[name="Sale[server][0][time]"]').first().fill(date);
+        await this.page.locator('#content-pjax >> text=Submit').click();
+    }
+
+    async checkOldBuyer(buyer: string, date: Date) {
+        await this.filterByBuyer(buyer);
+        await this.indexPage.hasRowsOnTable(1);
+        const closeTime = await this.indexPage.getValueInColumnByNumberRow('Close time', 1);
+        const expactedDate = DateHelper.date(date).formatDate('MMM d, yyyy, h:mm:ss TT');
+        expect(closeTime).toEqual(expactedDate);
+    }
+
+    async checkNewBuyer(buyer: string, date: Date) {
+        await this.filterByBuyer(buyer);
+        await this.page.waitForTimeout(3000);
+        await this.indexPage.hasRowsOnTable(1);
+        const time = await this.indexPage.getValueInColumnByNumberRow('Time', 1);
+        const expactedDate = DateHelper.date(date).formatDate('MMM d, yyyy, h:mm:ss TT');
+        expect(time).toEqual(expactedDate);
+        await this.checkEmptyCloseTimeByRow(1);
+    }
+
+    async checkEmptyCloseTimeByRow(row: number) {
+        const closeTime = await this.indexPage.getValueInColumnByNumberRow('Close time', row);
+        expect(closeTime).toEqual("");
     }
 }
