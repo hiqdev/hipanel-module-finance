@@ -22,6 +22,7 @@ class ChargeRepresentations extends RepresentationCollection
                 'label' => Yii::t('hipanel', 'common'),
                 'columns' => [
                     'checkbox',
+                    'bill_id',
                     'client_id',
                     'seller',
                     'tariff',
