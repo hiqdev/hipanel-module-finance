@@ -83,10 +83,8 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
 
 
 <?php $this->registerJs(<<<JS
-        $(document).on('ready', function () {
-            let chargeId = getAnchor();
-            $('tr [data-key="' + chargeId + '"]').css('background-color', 'lightblue').css('border', '1pt solid #8cb7c5');
-        });
+        let chargeId = getAnchor();
+        $('tr [data-key="' + chargeId + '"]').css('background-color', 'lightblue').css('border', '1pt solid #8cb7c5');
 
         function getAnchor() {
             var currentUrl = document.URL,
