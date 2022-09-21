@@ -12,6 +12,7 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\CurrencyColumn;
 use hipanel\grid\MainColumn;
+use hipanel\helpers\Url;
 use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\models\Charge;
@@ -97,6 +98,9 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 'filter' => false,
                 'contentOptions' => function ($model) {
                     return ['class' => 'text-right' . ($model->sum > 0 ? ' text-bold' : '')];
+                },
+                'urlCallback' => function ($model) {
+                    return $this->sumLink($model);
                 },
             ],
             'name' => [
@@ -206,5 +210,12 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
         }
 
         return '';
+    }
+
+    public function sumLink(Charge $model): ?string
+    {
+        return Yii::$app->user->can('bill.read')
+            ? Url::to(['@bill/view', 'id' => $model->bill_id, '#' => $model->id])
+            : null;
     }
 }

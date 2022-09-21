@@ -41,8 +41,10 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
             'model' => $model,
             'boxOptions' => ['bodyOptions' => ['class' => 'no-padding']],
             'columns' => [
-                'type_label', 'quantity',
-                'sum_editable', 'balance',
+                'type_label',
+                'quantity',
+                'sum_editable',
+                'balance',
                 'payment_status',
             ],
         ]) ?>
@@ -50,9 +52,13 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
             'model' => $model,
             'boxOptions' => ['bodyOptions' => ['class' => 'no-padding table-responsive']],
             'columns' => [
-                'client_id', 'seller_id',
-                'time', 'description',
-                'object', 'tariff_link', 'requisite'
+                'client_id',
+                'seller_id',
+                'time',
+                'description',
+                'object',
+                'tariff_link',
+                'requisite'
             ],
         ]) ?>
     </div>
@@ -74,3 +80,17 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
     <?php endif; ?>
 </div>
 <?php Pjax::end() ?>
+
+
+<?php $this->registerJs(<<<JS
+        let chargeId = getAnchor();
+        $('tr [data-key="' + chargeId + '"]').css('background-color', 'lightblue').css('border', '1pt solid #8cb7c5');
+
+        function getAnchor() {
+            var currentUrl = document.URL,
+            urlParts   = currentUrl.split('#');
+                
+            return (urlParts.length > 1) ? urlParts[1] : null;
+        }
+JS
+) ?>
