@@ -7,9 +7,6 @@ use hipanel\modules\finance\models\Charge;
 use hipanel\widgets\ClientSellerLink;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\MainDetails;
-use hipanel\widgets\Pjax;
-use yii\helpers\Html;
-use yii\helpers\StringHelper;
 use yii\web\View;
 
 /**
@@ -27,7 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $detalizationAllowed = Yii::$app->params['module.finance.bill.detalization.allowed'] || Yii::$app->user->can('bill.charges.read');
 
-Pjax::begin(Yii::$app->params['pjax']) ?>
+?>
+
 <div class="row">
 
     <div class="col-md-3">
@@ -79,8 +77,6 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
         </div>
     <?php endif; ?>
 </div>
-<?php Pjax::end() ?>
-
 
 <?php $this->registerJs(<<<JS
         let chargeId = getAnchor();
@@ -89,7 +85,7 @@ Pjax::begin(Yii::$app->params['pjax']) ?>
         function getAnchor() {
             var currentUrl = document.URL,
             urlParts   = currentUrl.split('#');
-                
+
             return (urlParts.length > 1) ? urlParts[1] : null;
         }
 JS
