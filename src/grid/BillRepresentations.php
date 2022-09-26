@@ -21,6 +21,7 @@ class BillRepresentations extends RepresentationCollection
             'common' => [
                 'label' => Yii::t('hipanel', 'common'),
                 'columns' => [
+                    'id',
                     'checkbox',
                     'actions',
                     'client_id',
