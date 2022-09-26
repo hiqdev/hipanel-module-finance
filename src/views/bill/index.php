@@ -9,6 +9,8 @@ use hiqdev\hiart\ActiveDataProvider;
 use hiqdev\hiart\ActiveRecord;
 use yii\helpers\Html;
 use yii\web\View;
+use hipanel\models\IndexPageUiOptions;
+use hipanel\modules\finance\grid\BillRepresentations;
 
 /**
  * @var View $this
@@ -17,7 +19,10 @@ use yii\web\View;
  * @var ActiveDataProvider $dataProvider
  * @var ActiveRecord $model
  * @var ExchangeRate[] $rates
+ * @var IndexPageUiOptions $uiModel
+ * @var BillRepresentations $representationCollection
  */
+
 $this->title = Yii::t('hipanel:finance', 'Bills');
 $this->params['breadcrumbs'][] = $this->title;
 $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
@@ -87,7 +92,16 @@ HTML,
             'dataProvider' => $dataProvider,
             'filterModel'  => $model,
             'currencies' => $this->context->getCurrencyTypes(),
-            'columns' => $representationCollection->getByName($uiModel->representation)->getColumns(),
+            'columns' => [
+                'checkbox',
+                'actions',
+                'client_id',
+                'time',
+                'sum_editable',
+                'index_page_balance',
+                'type_label',
+                'description',
+            ],
         ]) ?>
     <?php $page->endBulkForm() ?>
     <?php $page->endContent() ?>
