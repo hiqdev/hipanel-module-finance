@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\grid;
 use hipanel\grid\CurrencyColumn;
 use hipanel\grid\MainColumn;
 use hipanel\helpers\Url;
+use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\menus\BillActionsMenu;
@@ -24,6 +25,7 @@ use hipanel\modules\finance\widgets\BillTypeFilter;
 use hipanel\modules\finance\widgets\ColoredBalance;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\widgets\ArraySpoiler;
+use hipanel\widgets\ClientSellerLink;
 use hipanel\widgets\IconStateLabel;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
@@ -94,6 +96,14 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'class' => MainColumn::class,
                 'attribute' => 'bill',
                 'filterAttribute' => 'bill_like',
+            ],
+            'client_id' => [
+                'class' => ClientColumn::class,
+                'exportedColumns' => ['export_bill_id', 'client_id'],
+            ],
+            'export_bill_id' => [
+                'label' => Yii::t('hipanel', 'Bill ID'),
+                'value' => static fn($bill): string => $bill->id ?? '',
             ],
             'time' => [
                 'format' => 'raw',

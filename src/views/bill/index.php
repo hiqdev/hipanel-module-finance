@@ -9,6 +9,8 @@ use hiqdev\hiart\ActiveDataProvider;
 use hiqdev\hiart\ActiveRecord;
 use yii\helpers\Html;
 use yii\web\View;
+use hipanel\models\IndexPageUiOptions;
+use hipanel\modules\finance\grid\BillRepresentations;
 
 /**
  * @var View $this
@@ -17,7 +19,10 @@ use yii\web\View;
  * @var ActiveDataProvider $dataProvider
  * @var ActiveRecord $model
  * @var ExchangeRate[] $rates
+ * @var IndexPageUiOptions $uiModel
+ * @var BillRepresentations $representationCollection
  */
+
 $this->title = Yii::t('hipanel:finance', 'Bills');
 $this->params['breadcrumbs'][] = $this->title;
 $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
@@ -25,9 +30,9 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
 
 ?>
 
-<?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
+<?php $page = IndexPage::begin(['model' => $model, 'dataProvider' => $dataProvider]) ?>
 
-    <?php $page->setSearchFormData(compact('billTypes', 'billGroupLabels')) ?>
+    <?php $page->setSearchFormData(['billTypes' => $billTypes, 'billGroupLabels' => $billGroupLabels]) ?>
 
     <?php $page->beginContent('main-actions') ?>
         <?php if (Yii::$app->user->can('deposit')) : ?>
