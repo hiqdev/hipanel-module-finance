@@ -30,9 +30,9 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
 
 ?>
 
-<?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
+<?php $page = IndexPage::begin(['model' => $model, 'dataProvider' => $dataProvider]) ?>
 
-    <?php $page->setSearchFormData(compact('billTypes', 'billGroupLabels')) ?>
+    <?php $page->setSearchFormData(['billTypes' => $billTypes, 'billGroupLabels' => $billGroupLabels]) ?>
 
     <?php $page->beginContent('main-actions') ?>
         <?php if (Yii::$app->user->can('deposit')) : ?>
@@ -92,16 +92,7 @@ HTML,
             'dataProvider' => $dataProvider,
             'filterModel'  => $model,
             'currencies' => $this->context->getCurrencyTypes(),
-            'columns' => [
-                'checkbox',
-                'actions',
-                'client_id',
-                'time',
-                'sum_editable',
-                'index_page_balance',
-                'type_label',
-                'description',
-            ],
+            'columns' => $representationCollection->getByName($uiModel->representation)->getColumns(),
         ]) ?>
     <?php $page->endBulkForm() ?>
     <?php $page->endContent() ?>
