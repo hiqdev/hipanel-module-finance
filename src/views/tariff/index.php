@@ -2,20 +2,24 @@
 
 use hipanel\modules\finance\grid\TariffGridView;
 use hipanel\widgets\IndexPage;
-use hipanel\widgets\Pjax;
+use hiqdev\hiart\ActiveDataProvider;
+use yii\base\Model;
 use yii\bootstrap\Dropdown;
+use yii\web\View;
 
 /**
- * @var \yii\web\View
+ * @var View $this
  * @var array $types
+ * @var ActiveDataProvider $dataProvider
+ * @var Model $model
  */
+
 $this->title = Yii::t('hipanel', 'Tariffs');
 $this->params['subtitle'] = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<?php Pjax::begin(array_merge(Yii::$app->params['pjax'], ['enablePushState' => true])) ?>
 <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
     <?php $page->setSearchFormData(compact(['types'])) ?>
 
@@ -70,4 +74,3 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $page->endBulkForm() ?>
     <?php $page->endContent() ?>
 <?php $page->end() ?>
-<?php Pjax::end() ?>
