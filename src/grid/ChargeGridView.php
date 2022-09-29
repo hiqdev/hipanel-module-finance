@@ -19,6 +19,7 @@ use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\models\ChargeSearch;
 use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\BillTypeFilter;
+use hipanel\modules\finance\widgets\ColoredBalance;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\widgets\IconStateLabel;
 use hiqdev\combo\StaticCombo;
@@ -90,17 +91,37 @@ class ChargeGridView extends \hipanel\grid\BoxedGridView
                 },
             ],
             'sum' => [
-                'class' => CurrencyColumn::class,
+                'class' => DataColumn::class,
                 'attribute' => 'sum',
-                'sortAttribute' => 'sum',
-                'colors' => ['danger' => 'warning'],
-                'headerOptions' => ['class' => 'text-right'],
+                'label' => Yii::t('hipanel:finance', 'Sum'),
                 'filter' => false,
-                'contentOptions' => function ($model) {
-                    return ['class' => 'text-right' . ($model->sum > 0 ? ' text-bold' : '')];
-                },
-                'urlCallback' => function ($model) {
-                    return $this->sumLink($model);
+                'format' => 'raw',
+                'contentOptions' => fn($m, $a, $k): array => ['class' => 'text-right' . ($m->sum > 0 ? ' text-bold' : '')],
+                'headerOptions' => ['class' => 'text-right'],
+                'value' => function (Charge $model): string {
+                    $chargeSum = ColoredBalance::widget([
+                        'model' => $model,
+                        'attribute' => 'sum',
+                        'nameAttribute' => 'sum',
+                        'url' => $this->sumLink($model),
+                    ]);
+                    if (
+                        Yii::getAlias('@costprice', false) &&
+                        str_contains($model->ftype, 'expense,') &&
+                        Yii::$app->user->can('test.beta')
+                    ) {
+                        $costPriceSum = ColoredBalance::widget([
+                            'model' => $model,
+                            'attribute' => 'costpriceSum',
+                            'nameAttribute' => 'costpriceSum',
+                            'url' => Url::to(['@costprice/charge', 'id' => $model->id]),
+                        ]);
+
+                        return implode(' / ', [$chargeSum, $costPriceSum]);
+                    }
+
+                    return $chargeSum;
+
                 },
             ],
             'name' => [

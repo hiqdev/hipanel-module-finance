@@ -72,7 +72,7 @@ $detalizationAllowed = Yii::$app->params['module.finance.bill.detalization.allow
                         <?= $page->renderBulkDeleteButton('charge-delete') ?>
                     <?php endif ?>
                 <?php $page->endContent() ?>
-                <?= $this->render('_grouping', compact('model', 'grouper', 'page')) ?>
+                <?= $this->render('_grouping', ['model' => $model, 'grouper' => $grouper, 'page' => $page]) ?>
             <?php IndexPage::end() ?>
         </div>
     <?php endif; ?>

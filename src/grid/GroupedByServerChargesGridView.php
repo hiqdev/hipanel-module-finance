@@ -12,6 +12,7 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\finance\helpers\ChargeSort;
 use hipanel\modules\finance\models\Charge;
+use Throwable;
 use Yii;
 use yii\data\ArrayDataProvider;
 
@@ -51,6 +52,7 @@ class GroupedByServerChargesGridView extends BillGridView
         /**
          * @param Charge $obj
          * @return string
+         * @throws Throwable
          */
         $this->afterRow = function (Charge $obj) {
             $models = $this->chargesByMainObject[$obj->commonObject->id];

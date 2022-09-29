@@ -40,6 +40,7 @@ class Charge extends Resource
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
 
+    public int $costpriceSum = 0;
     private $isNewRecord;
 
     /**
