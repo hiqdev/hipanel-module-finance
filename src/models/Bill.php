@@ -11,8 +11,8 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\modules\finance\behaviors\BillNegation;
+use hipanel\modules\client\models\Client;
 use Yii;
-use yii\helpers\StringHelper;
 
 /**
  * Class Bill.
@@ -54,7 +54,7 @@ class Bill extends \hipanel\base\Model
     public function rules()
     {
         return [
-            [['client_id', 'seller_id', 'id', 'requisite_id', 'purse_id'], 'integer'],
+            [['client_id', 'seller_id', 'id', 'requisite_id'], 'integer'],
             [['object_id', 'tariff_id'], 'integer'],
             [['client', 'seller', 'bill', 'unit', 'requisite'], 'safe'],
             [['domain', 'server'], 'safe'],
@@ -115,6 +115,22 @@ class Bill extends \hipanel\base\Model
         return $this->hasMany(Charge::class, ['bill_id' => 'id'])->inverseOf('bill');
     }
 
+    public function canDelete(): bool
+    {
+        return !$this->checkClientIsOwner() && $this->canUser('bill.delete');
+    }
+
+
+    public function canEdit(): bool
+    {
+        return !$this->checkClientIsOwner() && $this->canUser('bill.update');
+    }
+
+    public function canCopy(): bool
+    {
+        return !$this->checkClientIsOwner() && $this->canUser('bill.create');
+    }
+
     public static function negativeTypes()
     {
         return [
@@ -136,13 +152,14 @@ class Bill extends \hipanel\base\Model
         ];
     }
 
-    public function getPageTitle(): string
+    protected function checkClientIsOwner(): bool
     {
-        $title = StringHelper::truncateWords(sprintf('%s: %s %s %s', $this->client, $this->sum, $this->currency, $this->label), 7);
-        if (empty($title)) {
-            return '&nbsp;';
-        }
+        $user = Yii::$app->user->identity;
+        return in_array($this->client, [$user->username, $user->seller], true);
+    }
 
-        return $title;
+    protected function canUser(string $role): bool
+    {
+        return Yii::$app->user->can($role);
     }
 }

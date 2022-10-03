@@ -31,7 +31,7 @@ class BillActionsMenu extends \hiqdev\yii2\menus\Menu
                 'label' => Yii::t('hipanel', 'Copy'),
                 'icon' => 'fa-copy',
                 'url' => ['@bill/copy', 'id' => $this->model->id],
-                'visible' => Yii::$app->user->can('bill.create'),
+                'visible' => $this->model->canCopy(),
                 'linkOptions' => [
                     'data-pjax' => 0,
                 ],
@@ -40,7 +40,7 @@ class BillActionsMenu extends \hiqdev\yii2\menus\Menu
                 'label' => Yii::t('hipanel', 'Update'),
                 'icon' => 'fa-pencil',
                 'url' => ['@bill/update', 'id' => $this->model->id],
-                'visible' => Yii::$app->user->can('bill.update'),
+                'visible' => $this->model->canEdit(),
                 'linkOptions' => [
                     'data-pjax' => 0,
                 ],
