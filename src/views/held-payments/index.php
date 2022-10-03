@@ -4,30 +4,26 @@ use hipanel\modules\finance\grid\HeldPaymentsGridView;
 use hipanel\modules\finance\models\Change;
 use hipanel\widgets\AjaxModal;
 use hipanel\widgets\IndexPage;
-use hipanel\widgets\Pjax;
 use hiqdev\hiart\ActiveDataProvider;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\web\View;
 
 /**
- * @var View
+ * @var View $this
  * @var array $states
  * @var Change $model
  * @var ActiveDataProvider $dataProvider
  */
+
 $this->title = Yii::t('hipanel:finance:change', 'Pending confirmation payments');
 $this->params['subtitle'] = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<?php Pjax::begin(array_merge(Yii::$app->params['pjax'], ['enablePushState' => true])); ?>
-<?php $page = IndexPage::begin([
-    'model' => $model,
-    'dataProvider' => $dataProvider,
-]) ?>
-    <?= $page->setSearchFormData(compact(['states'])) ?>
+<?php $page = IndexPage::begin(['model' => $model, 'dataProvider' => $dataProvider,]) ?>
+    <?php $page->setSearchFormData(['states' => $states]) ?>
     <?php $page->beginContent('main-actions') ?>
         <?php // TODO: add actions?>
     <?php $page->endContent() ?>
@@ -93,5 +89,3 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $page->endBulkForm() ?>
     <?php $page->endContent() ?>
 <?php $page->end() ?>
-
-<?php Pjax::end() ?>
