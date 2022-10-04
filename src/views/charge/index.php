@@ -12,6 +12,7 @@ use yii\web\View;
  * @var ChargeSearch $model
  * @var array $billTypes
  * @var array $billGroupLabels
+ * @var array $clientTypes
  */
 
 $this->title = Yii::t('hipanel:finance', 'Charges');
@@ -22,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php $page = IndexPage::begin(['model' => $model, 'dataProvider' => $dataProvider]) ?>
 
-    <?php $page->setSearchFormData(['billTypes' => $billTypes, 'billGroupLabels' => $billGroupLabels]) ?>
+    <?php $page->setSearchFormData(['billTypes' => $billTypes, 'billGroupLabels' => $billGroupLabels, 'clientTypes' => $clientTypes]) ?>
 
     <?php $page->beginContent('sorter-actions') ?>
         <?= $page->renderSorter([

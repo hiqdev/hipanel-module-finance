@@ -68,17 +68,24 @@ class ChargeController extends CrudController
                 'data' => function (RenderAction $action, array $data): array {
                     [$billTypes, $billGroupLabels] = $this->getTypesAndGroups();
 
-                    return compact('billTypes', 'billGroupLabels');
+                    return [
+                        'billTypes' => $billTypes,
+                        'billGroupLabels' => $billGroupLabels,
+                        'clientTypes' => $this->getClientTypes(),
+                        ];
                 },
             ],
         ]);
     }
 
-    /**
-     * @return array
-     */
-    private function getTypesAndGroups()
+
+    private function getTypesAndGroups(): array
     {
         return $this->billTypesProvider->getGroupedList();
+    }
+
+    private function getClientTypes(): array
+    {
+        return $this->getRefs('type,client', 'hipanel:client');
     }
 }

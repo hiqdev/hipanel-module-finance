@@ -20,6 +20,8 @@ use yii\helpers\ArrayHelper;
  */
 class ChargeSearch extends Charge
 {
+    public $client_type;
+
     use SearchModelTrait {
         searchAttributes as defaultSearchAttributes;
     }
@@ -50,6 +52,7 @@ class ChargeSearch extends Charge
             'ftype' => Yii::t('hipanel', 'Type'),
             'type_in' => Yii::t('hipanel', 'Type'),
             'tariff_id' => Yii::t('hipanel', 'Plan'),
+            'client_type' => Yii::t('hipanel:mailing', 'Client type'),
         ]);
     }
 }
