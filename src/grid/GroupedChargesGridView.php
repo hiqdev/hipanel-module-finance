@@ -29,6 +29,7 @@ class GroupedChargesGridView extends ChargeGridView
      * @var int|null
      */
     public $allowedParentId;
+    public array $chargesByMainObject = [];
     /**
      * @var string[]|null array of columns that were originally requested to render.
      * Used to generate nested grids with the same columns.
