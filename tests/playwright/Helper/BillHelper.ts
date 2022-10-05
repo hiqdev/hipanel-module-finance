@@ -30,7 +30,9 @@ export default class BillHelper {
     async ensureBillDidntChange(billData: Bill, billId: string) {
         await this.page.goto(`/finance/bill/view?id=${billId}`);
 
-        await billData.charges.forEach(charge => this.view.checkCharge(charge));
+        for (let i = 0; billData.charges.length > i; i++) {
+            await this.view.checkCharge(billData.charges[i]);
+        }
     }
 
     async filterByClient(client: string) {
