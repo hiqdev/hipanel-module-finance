@@ -12,7 +12,7 @@ export default class BillView {
   public async checkCharge(charge: Charge) {
     await expect(this.page.locator(`tr td a:text("${charge.object}")`).first()).toBeVisible();
     await expect(this.page.locator(`tr td b:text("${charge.type}")`).first()).toBeVisible();
-    await expect(this.page.locator(`tr td span >> text=/.*${charge.sum}.*/i`).first()).toBeVisible();
+    await expect(this.page.locator(`tr td a >> text=/.*${charge.sum}.*/i`).first()).toBeVisible();
   }
 
   public async checkBill(bill: Bill) {

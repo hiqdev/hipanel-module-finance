@@ -59,10 +59,10 @@ export default class SaleHelper {
     }
 
     async changeBuyer(buyer: string, date: string) {
-        await Select2.field(this.page, '#sale-server-0-buyer_id').setValue(buyer);
+        await Select2.field(this.page, '#sale-client-0-buyer_id').setValue(buyer);
         await this.page.locator('.glyphicon >> nth=0').click();
-        await this.page.locator('input[name="Sale[server][0][time]"]').first().fill(date);
-        await this.page.locator('#content-pjax >> text=Submit').click();
+        await this.page.locator('input[name="Sale[client][0][time]"]').first().fill(date);
+        await this.page.locator('button:has-text("Submit")').first().click();
     }
 
     async checkOldBuyer(buyer: string, date: Date) {
@@ -76,7 +76,6 @@ export default class SaleHelper {
     async checkNewBuyer(buyer: string, date: Date) {
         await this.filterByBuyer(buyer);
         await this.page.waitForTimeout(3000);
-        await this.indexPage.hasRowsOnTable(1);
         const time = await this.indexPage.getValueInColumnByNumberRow('Time', 1);
         const expactedDate = DateHelper.date(date).formatDate('MMM d, yyyy, h:mm:ss TT');
         expect(time).toEqual(expactedDate);

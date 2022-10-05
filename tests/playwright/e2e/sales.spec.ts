@@ -27,9 +27,9 @@ const sales: Array<Sale> = [
 ];
 
 const changeBuyerData = {
-    oldClient: 'hipanel_test_user',
+    oldClient: 'hipanel_test_admin',
     newClient: 'hipanel_test_user2',
-    server: 'BTEST001',
+    object: 'hipanel_test_admin',
     date: null,
 };
 
@@ -100,22 +100,19 @@ test(`Ensure I can change buyer @hipanel-module-finance @seller`, async ({ selle
     const indexPage = new Index(sellerPage);
 
     await saleHelper.gotoIndexSale();
-    await saleHelper.filterByObject(changeBuyerData.server);
+    await saleHelper.filterByObject(changeBuyerData.object);
     await saleHelper.checkEmptyCloseTimeByRow(1);
 
     await indexPage.chooseNumberRowOnTable(1);
     await indexPage.clickDropdownBulkButton('Change buyer', 'Change buyer by one');
 
-    let timestamp = new Date().getTime();
-    // // round up to a minute
-    let dateNow = new Date(Math.floor(new Date(timestamp).getTime()/(60*1000)) *(60*1000));
-    let formatedDate = DateHelper.date(dateNow).formatDate('yyyy-MM-dd HH:mm:ss');
-    changeBuyerData.date = dateNow;
+    // round up to a minute
+    changeBuyerData.date = new Date(Math.floor(new Date().getTime()/(60*1000)) *(60*1000));
+    let formatedDate = DateHelper.date(changeBuyerData.date).formatDate('yyyy-MM-dd HH:mm:ss');
     await saleHelper.changeBuyer(changeBuyerData.newClient, formatedDate);
 
     await Alert.on(sellerPage).hasText("Object's buyer has been changed");
-
-    await saleHelper.filterByObject(changeBuyerData.server);
+    await saleHelper.filterByObject(changeBuyerData.object);
     await saleHelper.checkOldBuyer(changeBuyerData.oldClient, changeBuyerData.date);
     await saleHelper.checkNewBuyer(changeBuyerData.newClient, changeBuyerData.date);
 });
