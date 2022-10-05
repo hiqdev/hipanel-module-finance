@@ -1,21 +1,24 @@
 <?php
 
-/**
- * @var \yii\base\View $this
- * @var \hipanel\widgets\AdvancedSearch $search
- * @var array $billTypes
- * @var array $billGroupLabels
- */
-
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\widgets\combo\MultipleBillTypeCombo;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
 use hipanel\modules\stock\widgets\combo\OrderCombo;
+use hipanel\widgets\AdvancedSearch;
 use hiqdev\combo\StaticCombo;
 use hiqdev\yii2\daterangepicker\DateRangePicker;
+use yii\base\View;
 use yii\bootstrap\Html;
+
+/**
+ * @var View $this
+ * @var AdvancedSearch $search
+ * @var array $billTypes
+ * @var array $billGroupLabels
+ * @var array $clientTypes
+ */
 
 $currencies = $this->context->getCurrencyTypes();
 $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
@@ -45,6 +48,14 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field('label_ilike') ?>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('client_type_in')->widget(StaticCombo::class, [
+        'hasId' => true,
+        'data' => $clientTypes,
+        'multiple' => true,
+    ]) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
