@@ -17,6 +17,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var hipanel\modules\finance\forms\BillForm[] $models */
 /** @var array $billTypes */
+/** @var array $billTypesList */
 /** @var array $billGroupLabels */
 
 $model = reset($models);
@@ -128,11 +129,8 @@ $form = ActiveForm::begin([
                                 ]) ?>
                             </div>
                             <div class="col-md-3">
-                                <?= $form->field($model, "[$i]type")->widget(MultipleBillTypeCombo::class, [
-                                    'billTypes' => $billTypes,
-                                    'billGroupLabels' => $billGroupLabels,
-                                    'multiple' => false,
-                                    'useFullType' => true,
+                                <?= $form->field($model, "[$i]type")->widget(\hipanel\modules\finance\widgets\BillTypeTreeselect::class, [
+                                    'billTypes' => $billTypesList,
                                 ]) ?>
                             </div>
                             <div class="col-md-2 <?= AmountWithCurrency::$widgetClass ?>">
@@ -223,6 +221,7 @@ $form = ActiveForm::begin([
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-3">
+                                                    <?php // TODO: Refactor to use Treeselect ?>
                                                     <?= $form->field($charge, "[$i][$j]type")->dropDownList($billTypes, [
                                                         'groups' => $billGroupLabels,
                                                         'value' => $charge->ftype ?? $charge->type,
