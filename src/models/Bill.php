@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\models;
 use hipanel\modules\finance\behaviors\BillNegation;
 use hipanel\modules\client\models\Client;
 use Yii;
+use yii\helpers\StringHelper;
 
 /**
  * Class Bill.
@@ -161,5 +162,20 @@ class Bill extends \hipanel\base\Model
     protected function canUser(string $role): bool
     {
         return Yii::$app->user->can($role);
+    }
+
+    public function getPageTitle(): string
+    {
+        $title = StringHelper::truncateWords(sprintf('%s: %s %s %s',
+            $this->client,
+            $this->sum,
+            $this->currency,
+            $this->label),
+            7);
+        if (empty($title)) {
+            return '&nbsp;';
+        }
+
+        return $title;
     }
 }
