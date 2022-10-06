@@ -33,7 +33,7 @@ use Yii;
  * @property TargetObject $latestCommonObject
  * @property Bill $bill
  */
-class Charge extends Resource
+class Charge extends Resource implements HasSumAndCurrencyAttributesInterface
 {
     use \hipanel\base\ModelTrait;
 

@@ -10,6 +10,7 @@ use hipanel\widgets\MainDetails;
 use yii\web\View;
 
 /**
+ * @var array $currencies
  * @var View $this
  * @var Charge $model
  * @var IndexPage $page
@@ -72,7 +73,12 @@ $detalizationAllowed = Yii::$app->params['module.finance.bill.detalization.allow
                         <?= $page->renderBulkDeleteButton('charge-delete') ?>
                     <?php endif ?>
                 <?php $page->endContent() ?>
-                <?= $this->render('_grouping', compact('model', 'grouper', 'page')) ?>
+                <?= $this->render('_grouping', [
+                    'model' => $model,
+                    'grouper' => $grouper,
+                    'page' => $page,
+                    'currencies' => $currencies,
+                ]) ?>
             <?php IndexPage::end() ?>
         </div>
     <?php endif; ?>
