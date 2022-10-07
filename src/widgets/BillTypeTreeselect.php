@@ -34,7 +34,7 @@ new Vue({
 JS
             , View::POS_READY);
 
-        $activeInput = Html::activeInput('hidden', $this->model, $this->attribute, ['v-model' => 'value']);
+        $activeInput = Html::activeHiddenInput($this->model, $this->attribute, ['v-model' => 'value']);
 
         return <<<HTML
 <div id="$id">
