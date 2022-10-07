@@ -28,6 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $page->beginContent('sorter-actions') ?>
         <?= $page->renderSorter([
             'attributes' => [
+                'client',
+                'seller',
+                'tariff',
+                'type_label',
+                'sum',
+                'quantity',
                 'time',
             ],
         ]) ?>
