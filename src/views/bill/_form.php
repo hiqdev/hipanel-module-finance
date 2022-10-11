@@ -3,8 +3,8 @@
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\widgets\BillTypeTreeselect;
 use hipanel\modules\finance\widgets\PricePerUnitWidget;
-use hipanel\modules\finance\widgets\combo\MultipleBillTypeCombo;
 use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
 use hipanel\modules\finance\widgets\SumSignToggleButton;
 use hipanel\widgets\AmountWithCurrency;
@@ -129,7 +129,7 @@ $form = ActiveForm::begin([
                                 ]) ?>
                             </div>
                             <div class="col-md-3">
-                                <?= $form->field($model, "[$i]type")->widget(\hipanel\modules\finance\widgets\BillTypeTreeselect::class, [
+                                <?= $form->field($model, "[$i]type")->widget(BillTypeTreeselect::class, [
                                     'billTypes' => $billTypesList,
                                 ]) ?>
                             </div>
@@ -185,7 +185,7 @@ $form = ActiveForm::begin([
                                 'widgetBody' => '.bill-charges', // required: css class selector
                                 'widgetItem' => '.charge-item', // required: css class
                                 'limit' => 99, // the maximum times, an element can be cloned (default 999)
-                                'min' => 1,
+                                'min' => 0,
                                 'insertButton' => '.add-charge',
                                 'deleteButton' => '.remove-charge',
                                 'model' => $charge,
@@ -221,11 +221,9 @@ $form = ActiveForm::begin([
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <?= $form->field($charge, "[$i][$j]type")->widget(MultipleBillTypeCombo::class, [
-                                                        'billTypes' => $billTypes,
-                                                        'billGroupLabels' => $billGroupLabels,
-                                                        'multiple' => false,
-                                                        'useFullType' => true,
+                                                    <?= $form->field($charge, "[$i][$j]type")->widget(BillTypeTreeselect::class, [
+                                                        'billTypes' => $billTypesList,
+                                                        'replaceAttribute' => 'ftype',
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-5">
