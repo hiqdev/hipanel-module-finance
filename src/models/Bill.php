@@ -25,7 +25,7 @@ use yii\helpers\StringHelper;
  * @property string $quantity
  * @property Charge[] charges
  */
-class Bill extends \hipanel\base\Model
+class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInterface
 {
     use \hipanel\base\ModelTrait;
 
