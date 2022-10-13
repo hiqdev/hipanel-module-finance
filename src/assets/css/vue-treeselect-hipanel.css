@@ -16,7 +16,7 @@
 .vue-treeselect__label {
     margin-bottom: inherit;
     font-weight: inherit;
-    color: inherit!important;
+    color: inherit !important;
 }
 
 div.required label.vue-treeselect__label:after {
@@ -26,4 +26,13 @@ div.required label.vue-treeselect__label:after {
 
 treeselect > * {
     display: none;
+}
+
+.vue-treeselect__single-value span:after {
+    content: " / ";
+}
+
+.vue-treeselect__single-value span {
+    color: #ccc;
+    letter-spacing: -0.04rem;
 }

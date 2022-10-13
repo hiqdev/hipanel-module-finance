@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\widgets;
 
+use hipanel\helpers\StringHelper;
 use hipanel\modules\finance\assets\VueTreeselectAsset;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -44,7 +45,7 @@ class BillTypeTreeselect extends InputWidget
                   placeholder="----"
                   v-model="value"
                 >
-                    <div slot="value-label" slot-scope="{ node }">{{ node.raw.treeLabel ?? node.raw.label }}</div>
+                    <div slot="value-label" slot-scope="{ node }" v-html="node.raw.treeLabel ?? node.raw.label"></div>
                 </treeselect>
                 %s
             </div>
@@ -99,6 +100,7 @@ class BillTypeTreeselect extends InputWidget
                 'id' => $type,
                 'label' => $label,
                 'treeLabel' => str_contains($type, ',') ? $this->findTreeLabel($type, $types) : null,
+                'isDisabled' => str_contains($type, 'delimiter'),
             ];
         }
 
@@ -124,11 +126,11 @@ class BillTypeTreeselect extends InputWidget
         $parts = [];
         foreach (explode(',', $type) as $part) {
             if (isset($types[$part]) && !array_key_exists($type, $parts)) {
-                $parts[$part] = $types[$part];
+                $parts[$part] = Html::tag('span', StringHelper::truncate($types[$part], 10));
             }
         }
         $parts[] = $types[$type];
 
-        return !empty($parts) ? implode(" / ", $parts) : null;
+        return !empty($parts) ? implode("", $parts) : null;
     }
 }
