@@ -6,7 +6,6 @@ namespace hipanel\modules\finance\widgets;
 use hipanel\modules\finance\assets\VueTreeselectAsset;
 use yii\helpers\Html;
 use yii\helpers\Json;
-use yii\web\View;
 use yii\widgets\InputWidget;
 
 class BillTypeTreeselect extends InputWidget
@@ -15,33 +14,61 @@ class BillTypeTreeselect extends InputWidget
      * @var array<string, string> $billTypes - list of bill types, where key – is name and value – is label
      */
     public array $billTypes = [];
+    public ?string $replaceAttribute = null;
 
-    public function run()
+    public function run(): string
     {
         VueTreeselectAsset::register($this->view);
         $id = $this->getId();
+        $options = $this->buildOptionsArray();
+        $value = Html::getAttributeValue($this->model, $this->replaceAttribute ?? $this->attribute);
+        $this->registerJs($id);
+        $activeInput = Html::activeHiddenInput($this->model, $this->attribute, [
+            'v-model' => 'value',
+            'value' => null,
+            'data' => [
+                'value' => $value,
+                'options' => Json::encode($options),
+            ],
+        ]);
 
-        $optionsJson = Json::encode($this->buildOptionsArray());
-        $value = Json::htmlEncode(Html::getAttributeValue($this->model, $this->attribute));
-        $this->view->registerJs(<<<JS
-new Vue({
-  el: '#$id',
-  data: { 
-      value: $value,
-      options: $optionsJson 
-  }
-})
-JS
-            , View::POS_READY);
+        return sprintf(/** @lang HTML */ '
+            <div id="%s">
+                <treeselect
+                  :options="options"
+                  :disable-branch-nodes="true"
+                  :show-count="true"
+                  :always-open="false"
+                  :append-to-body="true"
+                  search-nested
+                  placeholder="----"
+                  v-model="value"
+                >
+                    <div slot="value-label" slot-scope="{ node }">{{ node.raw.treeLabel ?? node.raw.label }}</div>
+                </treeselect>
+                %s
+            </div>
+        ', $id, $activeInput);
+    }
 
-        $activeInput = Html::activeHiddenInput($this->model, $this->attribute, ['v-model' => 'value', 'value' => null]);
-
-        return <<<HTML
-<div id="$id">
-  $activeInput
-  <treeselect v-model="value" :options="options" :disable-branch-nodes="true" :show-count="true" search-nested/>
-</div>
-HTML;
+    public function registerJs(string $widgetId): void
+    {
+        $this->view->registerJs(
+            sprintf( /** @lang JavaScript */ "
+                ;(() => {
+                    const container = $('#%s');
+                    new Vue({
+                        el: container.get(0),
+                        data: {
+                            value: container.find('input[type=hidden]').data('value'),
+                            options: container.find('input[type=hidden]').data('options')
+                        }
+                    });
+                })();
+                ",
+                $widgetId
+            )
+        );
     }
 
     private function buildOptionsArray(): array
@@ -71,6 +98,7 @@ HTML;
             $currentLevel = [
                 'id' => $type,
                 'label' => $label,
+                'treeLabel' => str_contains($type, ',') ? $this->findTreeLabel($type, $types) : null,
             ];
         }
 
@@ -89,5 +117,18 @@ HTML;
         }
 
         return $items;
+    }
+
+    private function findTreeLabel(string $type, array $types): ?string
+    {
+        $parts = [];
+        foreach (explode(',', $type) as $part) {
+            if (isset($types[$part]) && !array_key_exists($type, $parts)) {
+                $parts[$part] = $types[$part];
+            }
+        }
+        $parts[] = $types[$type];
+
+        return !empty($parts) ? implode(" / ", $parts) : null;
     }
 }
