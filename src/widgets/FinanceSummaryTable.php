@@ -4,17 +4,18 @@ namespace hipanel\modules\finance\widgets;
 
 use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\models\HasSumAndCurrencyAttributesInterface;
 use Yii;
 use yii\base\Widget;
 use yii\helpers\Html;
 
-class BillSummaryTable extends Widget
+class FinanceSummaryTable extends Widget
 {
-    /** @var Bill[] */
-    public array $onPageBills = [];
+    /** @var HasSumAndCurrencyAttributesInterface[] */
+    public array $onPageModels = [];
 
-    /** @var Bill[] */
-    public array $allBills = [];
+    /** @var HasSumAndCurrencyAttributesInterface[] */
+    public array $allModels = [];
 
     public array $currencies = [];
 
@@ -22,13 +23,13 @@ class BillSummaryTable extends Widget
 
     private string $tableName;
 
-    private array $displayBills = [];
+    private array $displayModels = [];
 
     public function init(): void
     {
         parent::init();
 
-        $this->tableName = empty($this->onPageBills) ? 'Summary' : 'Page summary';
+        $this->tableName = empty($this->onPageModels) ? 'Summary' : 'Page summary';
         $this->rows = [
             'positive' => Yii::t('hipanel:finance', 'Positive'),
             'negative' => Yii::t('hipanel:finance', 'Negative'),
@@ -36,17 +37,17 @@ class BillSummaryTable extends Widget
             'total' => Yii::t('hipanel:finance', 'Total'),
             'closingBalance' => Yii::t('hipanel:finance', 'Closing balance'),
         ];
-        $this->displayBills = empty($this->onPageBills) ? $this->allBills : $this->onPageBills;
+        $this->displayModels = empty($this->onPageModels) ? $this->allModels : $this->onPageModels;
     }
 
     public function run(): string
     {
-        if (empty($this->displayBills)) {
+        if (empty($this->displayModels)) {
             return Html::tag('div', '', ['class' => 'summary']);
         }
 
         $values =  $this->calculate();
-        return $this->render('BillSummaryTable', [
+        return $this->render('FinanceSummaryTable', [
             'currencies' => $this->filterCurrencies($values),
             'tableName' => $this->tableName,
             'rows' => $this->rows,
@@ -73,8 +74,8 @@ class BillSummaryTable extends Widget
     private function calculate(): array
     {
         $positive = $negative = $total = $openingBalance = $closingBalance = [];
-        foreach ($this->displayBills as $bill) {
-            if ($this->isGrouped($bill)) {
+        foreach ($this->displayModels as $bill) {
+            if ($bill instanceof Bill && $this->isGrouped($bill)) {
                 $positive[$bill->currency] = $bill->positive;
                 $negative[$bill->currency] = $bill->negative;
                 $total[$bill->currency] = $bill->sum;

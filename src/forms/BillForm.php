@@ -77,6 +77,11 @@ class BillForm extends Model
     public $gtype;
 
     /**
+     * @var string
+     */
+    public $ftype;
+
+    /**
      * @var float
      */
     public $quantity;
@@ -140,13 +145,15 @@ class BillForm extends Model
     public static function createFromBill($bill, $scenario)
     {
         $attributes = $bill->getAttributes([
-            'id', 'object_id', 'client_id', 'client', 'currency', 'type',
+            'id', 'object_id', 'client_id', 'client', 'currency', 'type', 'ftype',
             'gtype', 'sum', 'time', 'quantity', 'unit', 'label', 'object', 'class', 'requisite_id', 'txn'
         ]);
 
         $form = new self(['scenario' => $scenario]);
         $form->setAttributes($attributes, false);
-        $form->type = $form->gtype && strpos($form->type, ',') === false ? implode(',', [$form->gtype, $form->type]) : $form->type;
+        $form->type = $form->ftype && strpos($form->type, ',') === false
+            ? $form->ftype
+            : $form->type;
 
         $form->charges = array_map(function ($model) use ($scenario) {
             $model->scenario = $scenario;

@@ -1,0 +1,38 @@
+.vue-treeselect__control {
+    height: 30px;
+    border-radius: 0;
+    border-color: #d2d6de;
+}
+
+.vue-treeselect__placeholder,
+.vue-treeselect__single-value {
+    line-height: 30px;
+}
+
+.vue-treeselect__control-arrow {
+    color: #888;
+}
+
+.vue-treeselect__label {
+    margin-bottom: inherit;
+    font-weight: inherit;
+    color: inherit !important;
+}
+
+div.required label.vue-treeselect__label:after {
+    color: inherit;
+    content: none;
+}
+
+treeselect > * {
+    display: none;
+}
+
+.vue-treeselect__single-value span:after {
+    content: " / ";
+}
+
+.vue-treeselect__single-value span {
+    color: #ccc;
+    letter-spacing: -0.04rem;
+}

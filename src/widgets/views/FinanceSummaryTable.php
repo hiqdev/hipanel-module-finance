@@ -1,7 +1,7 @@
 <?php
 
-use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\widgets\ColoredBalance;
+use yii\base\DynamicModel;
 
 /**
  * @var string $tableName
@@ -31,10 +31,7 @@ use hipanel\modules\finance\widgets\ColoredBalance;
                         <?php foreach ($currencies as $currency => $sign): ?>
                             <td class="text-right">
                                 <?= ColoredBalance::widget([
-                                    'model' => new Bill([
-                                        'sum' => $values[$type][$currency] ?? '',
-                                        'currency' => $currency,
-                                    ]),
+                                    'model' => new DynamicModel(['sum' => $values[$type][$currency] ?? '', 'currency' => $currency]),
                                     'attribute' => 'sum',
                                 ]) ?>
                             </td>

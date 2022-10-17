@@ -31,7 +31,7 @@ use hipanel\modules\finance\helpers\ChargesGrouper;
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\models\Resource;
 use hipanel\modules\finance\providers\BillTypesProvider;
-use hipanel\modules\finance\widgets\BillSummaryTable;
+use hipanel\modules\finance\widgets\FinanceSummaryTable;
 use hipanel\widgets\SynchronousCountEnabler;
 use hiqdev\hiart\ActiveQuery;
 use hiqdev\hiart\Collection;
@@ -90,9 +90,9 @@ class BillController extends \hipanel\base\CrudController
                         $dataProvider = $action->parent->getDataProvider();
                         $defaultSummary = (new SynchronousCountEnabler($dataProvider, fn(GridView $grid): string => $grid->renderSummary()))();
 
-                        return $defaultSummary . BillSummaryTable::widget([
+                        return $defaultSummary . FinanceSummaryTable::widget([
                             'currencies' => $action->controller->getCurrencyTypes(),
-                            'allBills' => $dataProvider->query->andWhere(['groupby' => 'sum_by_currency'])->all(),
+                            'allModels' => $dataProvider->query->andWhere(['groupby' => 'sum_by_currency'])->all(),
                         ]);
                     },
                 ],
@@ -113,6 +113,7 @@ class BillController extends \hipanel\base\CrudController
                 'data' => function (Action $action, array $data) {
                     return array_merge($data, [
                         'grouper' => new ChargesGrouper($data['model']->charges),
+                        'currencies' => $action->controller->getCurrencyTypes(),
                     ]);
                 },
             ],

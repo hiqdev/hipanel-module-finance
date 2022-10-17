@@ -4,6 +4,7 @@
  * @var yii\web\View
  * @var $models \hipanel\modules\finance\models\Bill[]
  * @var $billTypes array
+ * @var $billTypesList array
  * @var $billGroupLabels array
  */
 $this->title = Yii::t('hipanel:finance', 'Create payment');
@@ -16,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_form', [
         'models' => $models,
         'billTypes' => $billTypes,
+        'billTypesList' => $billTypesList,
         'billGroupLabels' => $billGroupLabels,
     ]) ?>
 </div>
