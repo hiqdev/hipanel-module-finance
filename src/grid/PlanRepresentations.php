@@ -40,7 +40,7 @@ class PlanRepresentations extends RepresentationCollection
                     'type',
                     'state',
                     'fee',
-                    'is_saled',
+                    'is_sold',
                     'custom_attributes',
                 ],
             ],

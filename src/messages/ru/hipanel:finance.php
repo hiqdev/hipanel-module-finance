@@ -304,7 +304,7 @@ return [
     'Subscription fee' => 'Абонплата',
     'Subscription fee from' => 'Абонплата от',
     'Subscription fee to' => 'Абонплата до',
-    'Is saled' => 'Продан',
-    'Is saled?' =>  'Продан?',
+    'Is sold' => 'Продан',
+    'Is sold?' =>  'Продан?',
 
 ];

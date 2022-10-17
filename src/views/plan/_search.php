@@ -77,7 +77,7 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 
 <?php if ($uiModel->representation === 'manager'): ?>
     <div class="col-md-4 col-sm-6 col-xs-12 checkbox">
-        <?= $search->field('is_saled')->widget(StaticCombo::class, [
+        <?= $search->field('is_sold')->widget(StaticCombo::class, [
             'hasId' => true,
             'multiple' => false,
             'data' => [

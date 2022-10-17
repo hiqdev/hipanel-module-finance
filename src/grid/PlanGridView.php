@@ -93,15 +93,15 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                     return ['class' => 'text-right'];
                 },
             ],
-            'is_saled' => [
+            'is_sold' => [
                 'format' => 'raw',
-                'label' => Yii::t('hipanel:finance', 'Is saled'),
+                'label' => Yii::t('hipanel:finance', 'Is sold'),
                 'filter' => false,
                 'headerOptions' => ['class' => 'narrow-filter text-center'],
                 'contentOptions' => ['class' => 'text-center'],
                 'value' => fn(Plan $model): string => IconStateLabel::widget([
                     'model' => $model,
-                    'attribute' => 'is_saled',
+                    'attribute' => 'is_sold',
                     'icons' => ['fa-check-circle', 'fa-times-circle'],
                     'colors' => ['#00a65a', '#d73925'],
                     'messages' => [
