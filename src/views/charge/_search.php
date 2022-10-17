@@ -27,7 +27,12 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?= Html::tag('label', Yii::t('hipanel', 'Type'), ['class' => 'control-label']); ?>
-    <?= $search->field('type_in')->widget(MultipleBillTypeCombo::class, compact('billTypes', 'billGroupLabels')) ?>
+    <?= $search->field('type_in')->widget(MultipleBillTypeCombo::class, [
+            'billTypes' => $billTypes,
+            'billGroupLabels' => $billGroupLabels,
+            'isFlatList' => true,
+        ]
+    ) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
