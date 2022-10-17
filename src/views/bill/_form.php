@@ -49,6 +49,8 @@ $this->registerCss("
   margin-right: -10px;
   margin-left: -10px;
 }
+.bill-charges > :nth-child(2) button {
+    display: none;
 }
 ");
 
@@ -357,12 +359,6 @@ $form = ActiveForm::begin([
       $(el).find('.charges_dynamicform_wrapper').on('afterInsert', updateChargesTime).on('afterInsert', copyObject);
       updateChargesTime();
     });
-    $(".charges_dynamicform_wrapper").on("beforeDelete", function(e, item) {
-        if ($('.charge-item').length === 1  && !confirm("You want to delete the last charge item. Are you sure?")) {
-            return false;
-        }
-        return true;
-});
     // ---
   })();
 JS
