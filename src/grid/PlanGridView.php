@@ -105,8 +105,8 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                     'icons' => ['fa-check-circle', 'fa-times-circle'],
                     'colors' => ['#00a65a', '#d73925'],
                     'messages' => [
-                        Yii::t('hipanel:finance', 'Plan is saled'),
-                        Yii::t('hipanel:finance', 'Plan is not saled'),
+                        Yii::t('hipanel:finance', 'Plan is sold'),
+                        Yii::t('hipanel:finance', 'Plan is not sold'),
                     ],  
                 ]),
             ],
