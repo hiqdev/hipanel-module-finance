@@ -49,13 +49,15 @@ class BillTypeTreeselect extends InputWidget
                 </treeselect>
                 %s
             </div>
-        ', $id, $activeInput);
+        ',
+            $id,
+            $activeInput);
     }
 
     public function registerJs(string $widgetId): void
     {
         $this->view->registerJs(
-            sprintf( /** @lang JavaScript */ "
+            sprintf(/** @lang JavaScript */ "
                 ;(() => {
                     const container = $('#%s');
                     new Vue({
@@ -126,11 +128,20 @@ class BillTypeTreeselect extends InputWidget
         $parts = [];
         foreach (explode(',', $type) as $part) {
             if (isset($types[$part]) && !array_key_exists($type, $parts)) {
-                $parts[$part] = Html::tag('span', StringHelper::truncate($types[$part], 10));
+                $parts[$part] = Html::tag('span', StringHelper::truncate($this->fixLang($types[$part]), 10));
             }
         }
-        $parts[] = $types[$type];
+        $parts[] = $this->fixLang($types[$type]);
 
         return !empty($parts) ? implode("", $parts) : null;
+    }
+
+    private function fixLang(string $text): string
+    {
+        if (empty($text)) {
+            return $text;
+        }
+
+        return preg_replace('/{lang:([^}<>]*)}/i', '$1', $text);
     }
 }
