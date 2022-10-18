@@ -45,7 +45,6 @@ class SalesIndexPageCest
                 'IP',
                 'Accounts',
                 'Clients',
-                'Parts',
             ]),
             Select2::asAdvancedSearch($I, 'Tariff'),
             Input::asAdvancedSearch($I, 'Object'),

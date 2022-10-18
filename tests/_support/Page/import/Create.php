@@ -11,9 +11,7 @@ class Create extends Authenticated
     {
         $I = $this->tester;
 
-        foreach ($importData as $element) {
-            $importString = implode(';', $importData);
-        }
+        $importString = implode(';', $importData);
 
         (new Input($I, '#billimportform-data'))->setValue($importString);
     }
