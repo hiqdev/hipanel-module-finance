@@ -37,6 +37,9 @@ class PlanSearch extends Plan
             'note_ilike'          => Yii::t('hipanel', 'Note'),
             'object_id_in'        => Yii::t('hipanel:finance', 'Object name'),
             'object_inilike'      => Yii::t('hipanel:finance', 'Object name'),
+            'fee_ge'              => Yii::t('hipanel:finance', 'Subscription fee from'),
+            'fee_le'              => Yii::t('hipanel:finance', 'Subscription fee to'),
+            'currency_in'         => Yii::t('hipanel:finance', 'Currency'),
         ]);
     }
 }

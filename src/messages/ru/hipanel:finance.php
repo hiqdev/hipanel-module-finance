@@ -300,4 +300,11 @@ return [
     'vps' => 'VPS',
 
     'Tariff type suggester' => 'Подсказчик типа тарифа',
+
+    'Subscription fee' => 'Абонплата',
+    'Subscription fee from' => 'Абонплата от',
+    'Subscription fee to' => 'Абонплата до',
+    'Is sold' => 'Продан',
+    'Is sold?' =>  'Продан?',
+
 ];

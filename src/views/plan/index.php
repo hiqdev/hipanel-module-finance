@@ -9,6 +9,8 @@ use yii\web\View;
 
 /**
  * @var View $this
+ * @var RepresentationCollection $representationCollection
+ * @var IndexPageUiOptions $uiModel
  * @var array $states
  * @var PlanSearch $model
  * @var ActiveDataProvider $dataProvider
@@ -21,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php $page = IndexPage::begin(['model' => $model, 'dataProvider' => $dataProvider]) ?>
 
-    <?php $page->setSearchFormData([]) ?>
+    <?php $page->setSearchFormData(['uiModel' => $uiModel]) ?>
 
     <?php $page->beginContent('main-actions') ?>
         <?php if (Yii::$app->user->can('plan.create')) : ?>
@@ -31,6 +33,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $page->beginContent('sorter-actions') ?>
         <?= $page->renderSorter(['attributes' => ['id']]) ?>
+    <?php $page->endContent() ?>
+    <?php $page->beginContent('representation-actions') ?>
+        <?= $page->renderRepresentations($representationCollection) ?>
     <?php $page->endContent() ?>
 
     <?php $page->beginContent('bulk-actions') ?>
@@ -48,15 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'boxed' => false,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $model,
-                'columns' => [
-                    'checkbox',
-                    'actions',
-                    'name',
-                    'client',
-                    'type',
-                    'state',
-                    'custom_attributes',
-                ],
+                'columns' => $representationCollection->getByName($uiModel->representation)->getColumns(),
             ]) ?>
         <?php $page->endBulkForm() ?>
     <?php $page->endContent() ?>

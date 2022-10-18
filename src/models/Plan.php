@@ -107,7 +107,8 @@ class Plan extends Model
             [['id'], 'required', 'on' => ['update', 'delete', 'set-note']],
             [['id'], 'required', 'on' => ['delete', 'restore']],
             [['id', 'server_ids'], 'safe', 'on' => ['copy']],
-            [['your_tariff'], 'boolean'],
+            [['your_tariff', 'is_sold'], 'boolean'],
+            [['fee'], 'number'],
             [['custom_attributes', 'data'], 'safe', 'on' => ['create', 'update']],
         ]);
     }
@@ -128,6 +129,8 @@ class Plan extends Model
             'monthly' => Yii::t('hipanel.finance.plan', 'Monthly'),
             'is_grouping' => Yii::t('hipanel.finance.plan', 'Grouping'),
             'currency' => Yii::t('hipanel:finance', 'Currency'),
+            'is_sold' => Yii::t('hipanel:finance', 'Is sold?'),
+            'fee' => Yii::t('hipanel:finance', 'Subscription fee'),
         ]);
     }
 

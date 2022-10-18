@@ -13,11 +13,13 @@ namespace hipanel\modules\finance\grid;
 use hipanel\grid\DataColumn;
 use hipanel\grid\MainColumn;
 use hipanel\grid\RefColumn;
+use hipanel\grid\CurrencyColumn;
 use hipanel\helpers\Url;
 use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\menus\PlanActionsMenu;
 use hipanel\modules\finance\models\Plan;
 use hipanel\widgets\CustomAttributesViewer;
+use hipanel\widgets\IconStateLabel;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\helpers\Html;
@@ -81,7 +83,33 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'raw',
                 'contentOptions' => ['style' => 'padding: 0;'],
                 'value' => static fn(Plan $plan): string => CustomAttributesViewer::widget(['owner' => $plan]),
-            ]
+            ],
+            'fee' => [
+                'class' => CurrencyColumn::class,
+                'attribute' => 'fee',
+                'colors' => ['danger' => 'warning'],
+                'headerOptions' => ['class' => 'text-right'],
+                'contentOptions' => function (Plan $model) {
+                    return ['class' => 'text-right'];
+                },
+            ],
+            'is_sold' => [
+                'format' => 'raw',
+                'label' => Yii::t('hipanel:finance', 'Is sold'),
+                'filter' => false,
+                'headerOptions' => ['class' => 'narrow-filter text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+                'value' => fn(Plan $model): string => IconStateLabel::widget([
+                    'model' => $model,
+                    'attribute' => 'is_sold',
+                    'icons' => ['fa-check-circle', 'fa-times-circle'],
+                    'colors' => ['#00a65a', '#d73925'],
+                    'messages' => [
+                        Yii::t('hipanel:finance', 'Plan is sold'),
+                        Yii::t('hipanel:finance', 'Plan is not sold'),
+                    ],  
+                ]),
+            ],
         ]);
     }
 
