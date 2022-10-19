@@ -12,7 +12,7 @@ use hipanel\tests\_support\Step\Acceptance\Seller;
 class TariffProfilesCest
 {
     private string $testProfileName;
-    private string $testPlanName = 'tariff634e94800de4e';
+    private string $testPlanName = 'Test Suit AnycastCDN tariff 1';
 
     public function _before(Seller $I): void
     {
