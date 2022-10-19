@@ -5,6 +5,7 @@ namespace hipanel\modules\finance\widgets;
 
 use hipanel\helpers\StringHelper;
 use hipanel\modules\finance\assets\VueTreeselectAsset;
+use Yii;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\widgets\InputWidget;
@@ -142,6 +143,6 @@ class BillTypeTreeselect extends InputWidget
             return $text;
         }
 
-        return preg_replace('/{lang:([^}<>]*)}/i', '$1', $text);
+        return Yii::$app->getI18n()->removeLegacyLangTags($text);
     }
 }
