@@ -127,9 +127,12 @@ class BillTypeTreeselect extends InputWidget
     private function findTreeLabel(string $type, array $types): ?string
     {
         $parts = [];
-        foreach (explode(',', $type) as $part) {
-            if (isset($types[$part]) && !array_key_exists($type, $parts)) {
-                $parts[$part] = Html::tag('span', StringHelper::truncate($this->fixLang($types[$part]), 10));
+        $chunks = explode(',', $type);
+        $key = '';
+        foreach ($chunks as $part) {
+            $key .= empty($key) ? $part : ',' . $part;
+            if (isset($types[$key]) && $key !== $type) {
+                $parts[$key] = Html::tag('span', StringHelper::truncate($this->fixLang($types[$key]), 10));
             }
         }
         $parts[] = $this->fixLang($types[$type]);
