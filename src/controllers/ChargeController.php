@@ -71,6 +71,7 @@ class ChargeController extends CrudController
                     return [
                         'billTypes' => $billTypes,
                         'billGroupLabels' => $billGroupLabels,
+                        'billTypesList' => $this->billTypesProvider->getTypesList(),
                         'clientTypes' => $this->getClientTypes(),
                         ];
                 },
