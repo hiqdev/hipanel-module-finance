@@ -42,6 +42,7 @@ class SaleRepresentations extends RepresentationCollection
                     'tariff',
                     'summary',
                     'rack',
+                    'tariff_created_at',
                     'tariff_updated_at',
                 ],
             ],

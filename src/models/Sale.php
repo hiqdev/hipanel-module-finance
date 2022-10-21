@@ -65,6 +65,7 @@ class Sale extends \hipanel\base\Model
                 'is_grouping',
                 'from_old',
                 'currency',
+                'tariff_created_at',
                 'tariff_updated_at'
             ], 'string'],
             [['id'], 'required', 'on' => 'delete'],

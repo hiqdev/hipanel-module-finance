@@ -133,6 +133,13 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'contentOptions' => ['style' => 'max-width: 200px;'],
                 'value' => 'server.bindings.rack.switch'
             ],
+            'tariff_created_at' => [
+                'label' => 'Tariff Created Date',
+                'attribute' => 'time',
+                'filter' => false,
+                'enableSorting' => false,
+                'format' => 'datetime',
+            ],
             'tariff_updated_at' => [
                 'label' => 'Tariff Last Change Date',
                 'attribute' => 'time',
