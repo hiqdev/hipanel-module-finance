@@ -2,6 +2,7 @@
 
 /** @var \hipanel\widgets\AdvancedSearch $search */
 use hipanel\helpers\StringHelper;
+use hipanel\widgets\RefCombo;
 
 ?>
 
@@ -35,6 +36,13 @@ use hipanel\helpers\StringHelper;
 
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field('type')->dropDownList($search->model->typeOptions, ['prompt' => '--']) ?>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('plan_type_in')->widget(RefCombo::class, [
+        'gtype' => 'type,tariff',
+        'multiple' => true,
+    ]) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">

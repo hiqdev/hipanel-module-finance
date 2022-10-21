@@ -27,6 +27,7 @@ class PriceSearch extends Price
             'plan_owner_ilike',
             'model_group_name_ilike',
             'model_partno_ilike',
+            'plan_type_in',
         ]);
     }
 
@@ -40,6 +41,7 @@ class PriceSearch extends Price
             'plan_owner_ilike' => Yii::t('hipanel.finance.price', 'Tariff plan owner'),
             'model_group_name_ilike' => Yii::t('hipanel.finance.price', 'Group model name'),
             'model_partno_ilike' => Yii::t('hipanel.finance.price', 'Model partno'),
+            'plan_type_in' => Yii::t('hipanel.finance.price', 'Tariff plan type'),
         ]);
     }
 }
