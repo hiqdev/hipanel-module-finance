@@ -41,6 +41,7 @@ class CreateFromPricesAction extends BillManagementAction
                 throw new BadRequestHttpException('No prices selected');
             }
             [$billTypes, $billGroupLabels] = $this->billTypesProvider->getGroupedList();
+            $billTypesList = $this->billTypesProvider->getTypesList();
             $prices = Price::find()->select(['*', 'main_object_id'])->joinWith(['object'])->withFormulaLines()->where(['id_in' => $priceIds])->limit(-1)->all();
             $pricesByObjectId = ArrayHelper::index($prices, null, 'main_object_id');
             if ($this->controller->request->isAjax) {
@@ -48,6 +49,7 @@ class CreateFromPricesAction extends BillManagementAction
                     'model' => $form,
                     'billTypes' => $billTypes,
                     'billGroupLabels' => $billGroupLabels,
+                    'billTypesList' => $billTypesList,
                     'prices' => $prices,
                 ]);
             }
@@ -80,6 +82,7 @@ class CreateFromPricesAction extends BillManagementAction
                 return $this->controller->render('create', [
                     'models' => $this->collection->getModels(),
                     'billTypes' => $billTypes,
+                    'billTypesList' => $billTypesList,
                     'billGroupLabels' => $billGroupLabels,
                 ]);
             }

@@ -58,6 +58,7 @@ class BillImportFromFileAction extends BillManagementAction
             'models' => $billForms,
             'model' => reset($billForms),
             'billTypes' => $billTypes,
+            'billTypesList' => $this->billTypesProvider->getTypesList(),
             'billGroupLabels' => $billGroupLabels,
         ]);
     }

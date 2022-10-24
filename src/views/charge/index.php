@@ -23,7 +23,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php $page = IndexPage::begin(['model' => $model, 'dataProvider' => $dataProvider]) ?>
 
-    <?php $page->setSearchFormData(['billTypes' => $billTypes, 'billGroupLabels' => $billGroupLabels, 'clientTypes' => $clientTypes]) ?>
+    <?php $page->setSearchFormData(
+        ['billTypes' => $billTypes,
+        'billGroupLabels' => $billGroupLabels,
+        'clientTypes' => $clientTypes,
+        'billTypesList' => $billTypesList,
+    ]) ?>
 
     <?php $page->beginContent('sorter-actions') ?>
         <?= $page->renderSorter([
