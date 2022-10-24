@@ -50,6 +50,8 @@ $this->registerCss("
   margin-right: -10px;
   margin-left: -10px;
 }
+.bill-charges > :nth-child(2) button {
+    display: none;
 }
 ");
 
@@ -185,7 +187,7 @@ $form = ActiveForm::begin([
                                 'widgetBody' => '.bill-charges', // required: css class selector
                                 'widgetItem' => '.charge-item', // required: css class
                                 'limit' => 99, // the maximum times, an element can be cloned (default 999)
-                                'min' => 0,
+                                'min' => 1,
                                 'insertButton' => '.add-charge',
                                 'deleteButton' => '.remove-charge',
                                 'model' => $charge,
@@ -353,12 +355,6 @@ $form = ActiveForm::begin([
       $(el).find('.charges_dynamicform_wrapper').on('afterInsert', updateChargesTime).on('afterInsert', copyObject);
       updateChargesTime();
     });
-    $(".charges_dynamicform_wrapper").on("beforeDelete", function(e, item) {
-        if ($('.charge-item').length === 1  && !confirm("You want to delete the last charge item. Are you sure?")) {
-            return false;
-        }
-        return true;
-});
     // ---
   })();
 JS
