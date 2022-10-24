@@ -307,4 +307,5 @@ return [
     'Is sold' => 'Продан',
     'Is sold?' =>  'Продан?',
 
+    'Exclude with zero-sum' => 'Исключить с нулевой суммой',
 ];
