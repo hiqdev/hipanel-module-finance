@@ -26,7 +26,6 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 ?>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= Html::tag('label', Yii::t('hipanel', 'Type'), ['class' => 'control-label']); ?>
     <?= $search->field('type_in')->widget(MultipleBillTypeCombo::class, [
             'billTypes' => $billTypes,
             'billGroupLabels' => $billGroupLabels,
@@ -81,15 +80,19 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 
 <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="form-group">
-        <?= Html::tag('label', Yii::t('hipanel', 'Time'), ['class' => 'control-label']); ?>
         <?= DateRangePicker::widget([
             'model' => $search->model,
             'attribute' => 'time_from',
             'attribute2' => 'time_till',
             'options' => [
                 'class' => 'form-control',
+                'placeholder' => Yii::t('hipanel', 'Time'),
             ],
             'dateFormat' => 'yyyy-MM-dd',
         ]) ?>
     </div>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('sum_not_zero', ['options' => ['class' => 'form-group checkbox']])->checkbox(['class' => 'option-input']) ?>
 </div>
