@@ -1,10 +1,9 @@
 <?php
 
-
 namespace hipanel\modules\finance\widgets\combo;
 
-
 use hipanel\helpers\ArrayHelper;
+use hipanel\modules\finance\widgets\BillTypeTreeselect;
 use hiqdev\combo\StaticCombo;
 use yii\helpers\Json;
 use yii\web\JsExpression;
@@ -12,6 +11,7 @@ use yii\web\JsExpression;
 /**
  * Class MultipleBillTypeCombo
  * @package hipanel\modules\finance\widgets\combo
+ * @deprecated Use {@see BillTypeTreeselect} instead
  */
 class MultipleBillTypeCombo extends StaticCombo
 {
