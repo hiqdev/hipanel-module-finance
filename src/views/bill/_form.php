@@ -50,9 +50,7 @@ $this->registerCss("
   margin-right: -10px;
   margin-left: -10px;
 }
-.bill-charges > :nth-child(2) button {
-    display: none;
-}
+
 ");
 
 $form = ActiveForm::begin([
@@ -187,7 +185,7 @@ $form = ActiveForm::begin([
                                 'widgetBody' => '.bill-charges', // required: css class selector
                                 'widgetItem' => '.charge-item', // required: css class
                                 'limit' => 99, // the maximum times, an element can be cloned (default 999)
-                                'min' => 1,
+                                'min' => 0,
                                 'insertButton' => '.add-charge',
                                 'deleteButton' => '.remove-charge',
                                 'model' => $charge,
