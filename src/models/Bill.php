@@ -113,7 +113,7 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
 
     public function getCharges()
     {
-        return $this->hasMany(Charge::class, ['bill_id' => 'id'])->inverseOf('bill');
+        return $this->hasMany(Charge::class, ['bill_id' => 'id']);
     }
 
     public function canDelete(): bool

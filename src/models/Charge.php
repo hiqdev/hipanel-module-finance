@@ -100,7 +100,7 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface
 
     public function getBill()
     {
-        return $this->hasOne(Bill::class, ['id' => 'id'])->inverseOf('charges');
+        return $this->hasOne(Bill::class, ['id' => 'id']);
     }
 
     public function isMonthly(): bool
