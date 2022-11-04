@@ -29,6 +29,7 @@ use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\forms\CurrencyExchangeForm;
 use hipanel\modules\finance\helpers\ChargesGrouper;
 use hipanel\modules\finance\models\ExchangeRate;
+use hipanel\modules\finance\models\query\ChargeQuery;
 use hipanel\modules\finance\models\Resource;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use hipanel\modules\finance\widgets\FinanceSummaryTable;
@@ -104,12 +105,11 @@ class BillController extends \hipanel\base\CrudController
                     /** @var \hipanel\actions\SearchAction $action */
                     $action = $event->sender;
                     $dataProvider = $action->getDataProvider();
-                    $dataProvider->query
-                        ->joinWith(['charges' => function (ActiveQuery $query) {
-                            $query->joinWith('commonObject');
-                            $query->joinWith('latestCommonObject');
-                        }])
-                        ->andWhere(['with_charges' => true]);
+                    $dataProvider->query->joinWith(['charges' => function (ChargeQuery $query) {
+                        $query->withCommonObject();
+                        $query->withLatestCommonObject();
+                        $query->withBill();
+                    }])->andWhere(['with_charges' => true]);
                 },
                 'data' => function (Action $action, array $data) {
                     return array_merge($data, [
