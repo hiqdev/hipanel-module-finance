@@ -33,4 +33,12 @@ class ChargeQuery extends ActiveQuery
 
         return $this;
     }
+
+    public function withBill(): self
+    {
+        $this->joinWith('bill');
+        $this->andWhere(['with_bill' => true]);
+
+        return $this;
+    }
 }
