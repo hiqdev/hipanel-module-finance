@@ -108,7 +108,6 @@ class BillController extends \hipanel\base\CrudController
                     $dataProvider->query->joinWith(['charges' => function (ChargeQuery $query) {
                         $query->withCommonObject();
                         $query->withLatestCommonObject();
-                        $query->withBill();
                     }])->andWhere(['with_charges' => true]);
                 },
                 'data' => function (Action $action, array $data) {

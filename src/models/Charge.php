@@ -57,7 +57,7 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface
             [['class', 'name', 'unit', 'tariff', 'order_name', 'client', 'seller', 'client_type'], 'string'],
             [['type', 'label', 'ftype', 'time', 'type_label', 'currency'], 'safe'],
             [['is_payed'], 'boolean'],
-            [['sum', 'quantity'], 'number'],
+            [['sum', 'quantity', 'bill_quantity'], 'number'],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['object_id', 'sum', 'type', 'quantity', 'unit'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['id'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
@@ -100,7 +100,7 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface
 
     public function getBill()
     {
-        return $this->hasOne(Bill::class, ['id' => 'id']);
+        return $this->hasOne(Bill::class, ['id' => 'id'])->inverseOf('charges');
     }
 
     public function isMonthly(): bool
