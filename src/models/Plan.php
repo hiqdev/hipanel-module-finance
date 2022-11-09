@@ -88,6 +88,11 @@ class Plan extends Model
         self::TYPE_LOAD_BALANCER        => self::TYPE_LOAD_BALANCER,
     ];
 
+    public $deprecatedTariff = [
+        self::TYPE_PCDN                 => self::TYPE_PCDN,
+        self::TYPE_VCDN                 => self::TYPE_VCDN,
+    ];
+
     use ModelTrait;
 
     /**
@@ -164,7 +169,14 @@ class Plan extends Model
 
     public function getTypeOptions()
     {
-        return Ref::getList('type,tariff');
+        $result = [];
+        $tariffs = Ref::getList('type,tariff');
+        foreach ($tariffs as $key => $type) {
+            if (!in_array($key, $this->deprecatedTariff)) {
+                $result[$key] = $type;
+            }
+        }
+        return $result;
     }
 
     public function getStateOptions()
