@@ -12,6 +12,7 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\CurrencyColumn;
 use hipanel\grid\MainColumn;
+use hipanel\grid\RefColumn;
 use hipanel\helpers\Url;
 use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\helpers\CurrencyFilter;
@@ -289,8 +290,10 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'value' => static fn(Bill $bill): string => Yii::t('hipanel.finance.billTypes', explode(',', $bill->ftype)[0]),
             ],
             'description' => [
+                'class' => RefColumn::class,
                 'attribute' => 'descr',
                 'format' => 'raw',
+                'i18nDictionary' => 'hipanel:finance',
                 'value' => function (Bill $model) {
                     $requisite = $model->requisite ? Html::tag('small', Html::encode($model->requisite), ['class' => 'label bg-purple']) : null;
                     $descr = Html::encode($model->descr ?? $model->label ?? '');

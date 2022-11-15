@@ -83,7 +83,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                         'labelAttribute' => 'name',
                     ]);
 
-                    return $link ?: Yii::t('hipanel.finance.price', 'Any');
+                    return Yii::t('hipanel.finance.price', $link) ?: Yii::t('hipanel.finance.price', 'Any');
                 },
             ],
             'object->name-any' => [

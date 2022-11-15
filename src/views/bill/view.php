@@ -31,7 +31,7 @@ $detalizationAllowed = Yii::$app->params['module.finance.bill.detalization.allow
 
     <div class="col-md-3">
         <?= MainDetails::widget([
-            'title' => $model->gtype_label,
+            'title' => Yii::t('hipanel:finance', $model->gtype_label),
             'icon' => 'fa-money',
             'subTitle' => ClientSellerLink::widget(['model' => $model]),
             'menu' => BillDetailMenu::widget(['model' => $model], ['linkTemplate' => '<a href="{url}" {linkOptions}><span class="pull-right">{icon}</span>&nbsp;{label}</a>']),
