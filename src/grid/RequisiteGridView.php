@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\MainColumn;
+use hipanel\grid\RefColumn;
 use hipanel\helpers\Url;
 use hipanel\modules\finance\menus\RequisiteActionsMenu;
 use hipanel\modules\finance\models\Requisite;
@@ -115,6 +116,15 @@ class RequisiteGridView extends ContactGridView
                 'class' => MenuColumn::class,
                 'menuClass' => RequisiteActionsMenu::class,
                 'contentOptions' => ['style' => 'width: 1%; white-space: nowrap;'],
+            ],
+            'invoice_name' => [
+                'class' => RefColumn::class,
+                'filter' => false,
+                'format' => 'raw',
+                'i18nDictionary' => 'hipanel:finance',
+                'value' => function ($model) {
+                    return Html::encode($model->invoice_name);
+                },
             ],
         ], $curColumns ?? [],
             $balanceColumns ?? []
