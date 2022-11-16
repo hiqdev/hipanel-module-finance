@@ -104,7 +104,7 @@ class LinkToObjectResolver extends Widget
      */
     private function getLabel()
     {
-        return Html::encode($this->model->{$this->labelAttribute});
+        return Yii::t('hipanel.finance.price', Html::encode($this->model->{$this->labelAttribute}));
     }
 
     /**
