@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\widgets;
 
+use hipanel\modules\finance\assets\VueTreeselectAsset;
 use hipanel\modules\finance\models\Plan;
 use hipanel\widgets\AjaxModal;
 use Yii;
@@ -21,6 +22,7 @@ class CreateBillFromHardwareButton extends Widget
     public function init(): void
     {
         parent::init();
+        VueTreeselectAsset::register($this->view);
         $this->modalId = 'create-bill-from-prices-modal-' . $this->getId();
         $url = Url::to(['@bill/create-from-prices']);
         $this->view->on(View::EVENT_END_BODY, function () use ($url) {

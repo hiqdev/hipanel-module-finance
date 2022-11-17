@@ -274,7 +274,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'value' => function (Bill $model) {
                     return BillType::widget([
                         'model' => $model,
-                        'field' => 'ftype',
+                        'field' => 'type',
                         'labelField' => 'type_label',
                     ]);
                 },

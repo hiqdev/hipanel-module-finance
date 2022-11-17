@@ -66,11 +66,8 @@ class ChargeController extends CrudController
                     $query->withCommonObject()->withLatestCommonObject();
                 },
                 'data' => function (RenderAction $action, array $data): array {
-                    [$billTypes, $billGroupLabels] = $this->getTypesAndGroups();
 
                     return [
-                        'billTypes' => $billTypes,
-                        'billGroupLabels' => $billGroupLabels,
                         'billTypesList' => $this->billTypesProvider->getTypesList(),
                         'clientTypes' => $this->getClientTypes(),
                         ];

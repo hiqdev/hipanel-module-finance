@@ -1,19 +1,20 @@
 <?php
 
+use hipanel\models\IndexPageUiOptions;
 use hipanel\modules\finance\grid\PurseGridView;
 use hipanel\widgets\IndexPage;
 use hiqdev\hiart\ActiveDataProvider;
 use hiqdev\hiart\ActiveRecord;
+use hiqdev\higrid\representations\RepresentationCollection;
 use yii\helpers\Html;
 use yii\web\View;
 
 /**
  * @var View $this
- * @var array $billTypes
- * @var array $billGroupLabels
+ * @var IndexPageUiOptions $uiModel
+ * @var RepresentationCollection $representationCollection
  * @var ActiveDataProvider $dataProvider
  * @var ActiveRecord $model
- * @var ExchangeRate[] $rates
  */
 $this->title = Yii::t('hipanel:finance', 'Purses');
 $this->params['breadcrumbs'][] = $this->title;

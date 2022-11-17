@@ -81,11 +81,13 @@ class BillController extends \hipanel\base\CrudController
             'index' => [
                 'class' => IndexAction::class,
                 'data' => function () {
-                    [$billTypes, $billGroupLabels] = $this->getTypesAndGroups();
                     $billTypesList = $this->billTypesProvider->getTypesList();
                     $rates = $this->getExchangeRates();
 
-                    return compact('billTypes', 'billGroupLabels', 'rates', 'billTypesList');
+                    return [
+                        'rates' => $rates,
+                        'billTypesList' => $billTypesList,
+                    ];
                 },
                 'responseVariants' => [
                     IndexAction::VARIANT_SUMMARY_RESPONSE => static function (VariantsAction $action): string {
@@ -203,14 +205,11 @@ class BillController extends \hipanel\base\CrudController
 
             if ($models !== null) {
                 $models = BillForm::createMultipleFromBills($models, 'create');
-                [$billTypes, $billGroupLabels] = $this->getTypesAndGroups();
 
                 return $this->render('create', [
                     'models' => $models,
                     'model' => reset($models),
-                    'billTypes' => $billTypes,
                     'billTypesList' => $this->billTypesProvider->getTypesList(),
-                    'billGroupLabels' => $billGroupLabels,
                 ]);
             }
         }

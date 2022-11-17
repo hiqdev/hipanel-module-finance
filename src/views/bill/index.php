@@ -14,8 +14,7 @@ use hipanel\modules\finance\grid\BillRepresentations;
 
 /**
  * @var View $this
- * @var array $billTypes
- * @var array $billGroupLabels
+ * @var array $billTypesList
  * @var ActiveDataProvider $dataProvider
  * @var ActiveRecord $model
  * @var ExchangeRate[] $rates
@@ -32,7 +31,7 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
 
 <?php $page = IndexPage::begin(['model' => $model, 'dataProvider' => $dataProvider]) ?>
 
-    <?php $page->setSearchFormData(['billTypes' => $billTypes, 'billGroupLabels' => $billGroupLabels]) ?>
+    <?php $page->setSearchFormData(['billTypesList' => $billTypesList]) ?>
 
     <?php $page->beginContent('main-actions') ?>
         <?php if (Yii::$app->user->can('deposit')) : ?>

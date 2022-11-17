@@ -2,6 +2,7 @@
 
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
+use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\widgets\BillTypeTreeselect;
 use hipanel\modules\finance\widgets\PricePerUnitWidget;
@@ -13,12 +14,14 @@ use hipanel\widgets\DynamicFormWidget;
 use hipanel\widgets\combo\ObjectCombo;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use yii\web\View;
 
-/** @var yii\web\View $this */
-/** @var hipanel\modules\finance\forms\BillForm[] $models */
-/** @var array $billTypes */
-/** @var array $billTypesList */
-/** @var array $billGroupLabels */
+/**
+ * @var View $this
+ * @var BillForm[] $models
+ * @var array $billTypesList
+ */
+
 
 $model = reset($models);
 $timeResolver = static function ($model): ?string {

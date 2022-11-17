@@ -49,7 +49,7 @@ class BillImportFromFileAction extends BillManagementAction
 
             return $this->redirect();
         }
-        [$billTypes, $billGroupLabels] = $this->billTypesProvider->getGroupedList();
+
         $billForms = BillForm::createMultipleFromBills($bills, $this->scenario);
         $this->createCollection();
         $this->collection->set($billForms);
@@ -57,9 +57,7 @@ class BillImportFromFileAction extends BillManagementAction
         return $this->controller->render('create', [
             'models' => $billForms,
             'model' => reset($billForms),
-            'billTypes' => $billTypes,
             'billTypesList' => $this->billTypesProvider->getTypesList(),
-            'billGroupLabels' => $billGroupLabels,
         ]);
     }
 

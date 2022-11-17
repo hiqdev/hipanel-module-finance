@@ -10,8 +10,7 @@ use yii\web\View;
  * @var ActiveDataProvider $dataProvider
  * @var View $this
  * @var ChargeSearch $model
- * @var array $billTypes
- * @var array $billGroupLabels
+ * @var array $billTypesList
  * @var array $clientTypes
  */
 
@@ -24,8 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $page = IndexPage::begin(['model' => $model, 'dataProvider' => $dataProvider]) ?>
 
     <?php $page->setSearchFormData(
-        ['billTypes' => $billTypes,
-        'billGroupLabels' => $billGroupLabels,
+        [
         'clientTypes' => $clientTypes,
         'billTypesList' => $billTypesList,
     ]) ?>
