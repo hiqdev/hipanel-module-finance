@@ -3,8 +3,8 @@ Vue.createApp({
     <div class="col-md-12">
         <div class="box box-widget">
             <div class="box-header with-border">
-                <h3 class="box-title">{{boxTitle}}</h3>
-                <div class="box-tools pull-right">
+                <h3 class="box-title pull-right">{{boxTitle}}</h3>
+                <div class="box-tools" style="right: inherit">
                     <small>
                         <ol class="breadcrumb" style="padding: 5px 15px 0; background-color: transparent;">
                             <li v-if="year" class="active"><a v-on:click="selectYear(null)" class="clickable"><i
