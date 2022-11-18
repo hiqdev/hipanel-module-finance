@@ -36,3 +36,7 @@ treeselect > * {
     color: #ccc;
     letter-spacing: -0.04rem;
 }
+
+.vue-treeselect {
+    z-index: 1100 !important;
+}

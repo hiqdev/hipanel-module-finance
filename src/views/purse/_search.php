@@ -3,18 +3,14 @@
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\helpers\CurrencyFilter;
-use hipanel\modules\finance\widgets\BillIsPayedDropdown;
 use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
-use hipanel\modules\finance\widgets\combo\MultipleBillTypeCombo;
-use hipanel\modules\finance\widgets\combo\PlanCombo;
 use hipanel\widgets\AdvancedSearch;
 use hiqdev\combo\StaticCombo;
-use hiqdev\yii2\daterangepicker\DateRangePicker;
 use yii\helpers\Html;
 use yii\web\View;
 
 /**
- * @var View
+ * @var View $this
  * @var AdvancedSearch $search
  */
 ?>

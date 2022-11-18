@@ -2,19 +2,18 @@
 
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
-use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\DateTimePicker;
 use hipanel\widgets\DynamicFormWidget;
-
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use yii\web\View;
 
-/** @var yii\web\View $this */
-/** @var hipanel\modules\finance\forms\Bill[] $models */
-/** @var array $billTypes */
-/** @var array $billGroupLabels */
+/**
+ * @var View $this
+ * @var Bill[] $models
+ */
 
 $this->title = Yii::t('hipanel:finance', 'Add internal transfer');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Payments'), 'url' => ['index']];

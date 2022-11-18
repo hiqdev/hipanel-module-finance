@@ -3,7 +3,7 @@
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\helpers\CurrencyFilter;
-use hipanel\modules\finance\widgets\combo\MultipleBillTypeCombo;
+use hipanel\modules\finance\widgets\BillTypeTreeselect;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
 use hipanel\modules\stock\widgets\combo\OrderCombo;
 use hipanel\widgets\AdvancedSearch;
@@ -15,9 +15,8 @@ use yii\bootstrap\Html;
 /**
  * @var View $this
  * @var AdvancedSearch $search
- * @var array $billTypes
- * @var array $billGroupLabels
  * @var array $clientTypes
+ * @var array $billTypesList
  */
 
 $currencies = $this->context->getCurrencyTypes();
@@ -26,12 +25,10 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 ?>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('type_in')->widget(MultipleBillTypeCombo::class, [
-            'billTypes' => $billTypes,
-            'billGroupLabels' => $billGroupLabels,
-            'isFlatList' => true,
-        ]
-    ) ?>
+    <?= Html::label(Yii::t('hipanel', 'Type')) ?>
+    <?= $search->field( "type_in")->widget(BillTypeTreeselect::class, [
+        'billTypes' => $billTypesList,
+    ]) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">

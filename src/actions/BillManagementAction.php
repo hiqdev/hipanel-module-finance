@@ -81,13 +81,9 @@ class BillManagementAction extends Action
             return $result;
         }
 
-        [$billTypes, $billGroupLabels] = $this->billTypesProvider->getGroupedList();
-
         return $this->controller->render($this->view, [
             'models' => $this->collection->getModels(),
             'billTypesList' => $this->billTypesProvider->getTypesList(),
-            'billTypes' => $billTypes,
-            'billGroupLabels' => $billGroupLabels,
         ]);
     }
 
