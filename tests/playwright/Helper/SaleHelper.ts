@@ -30,10 +30,12 @@ export default class SaleHelper {
     async filterByBuyer(buyer: string) {
         await Select2.filterBy(this.page, 'Buyer').setValue(buyer);
         await this.page.waitForLoadState('networkidle');
+        await this.page.goto(this.page.url() + '&sort=-time');
     }
 
     async filterByObject(object: string) {
         await Input.filterBy(this.page, 'Inilike').setValue(object);
+        await this.page.goto(this.page.url() + '&sort=-time');
     }
 
     async checkDetailViewData(sale: Sale) {
@@ -69,16 +71,16 @@ export default class SaleHelper {
         await this.filterByBuyer(buyer);
         await this.indexPage.hasRowsOnTable(1);
         const closeTime = await this.indexPage.getValueInColumnByNumberRow('Close time', 1);
-        const expactedDate = DateHelper.date(date).formatDate('MMM d, yyyy, h:mm:ss TT');
-        expect(closeTime).toEqual(expactedDate);
+        const expectedDate = DateHelper.date(date).formatDate('MMM d, yyyy, h:mm:ss TT');
+        expect(closeTime).toEqual(expectedDate);
     }
 
     async checkNewBuyer(buyer: string, date: Date) {
         await this.filterByBuyer(buyer);
         await this.page.waitForTimeout(3000);
         const time = await this.indexPage.getValueInColumnByNumberRow('Time', 1);
-        const expactedDate = DateHelper.date(date).formatDate('MMM d, yyyy, h:mm:ss TT');
-        expect(time).toEqual(expactedDate);
+        const expectedDate = DateHelper.date(date).formatDate('MMM d, yyyy, h:mm:ss TT');
+        expect(time).toEqual(expectedDate);
         await this.checkEmptyCloseTimeByRow(1);
     }
 

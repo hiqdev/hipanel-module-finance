@@ -1,16 +1,10 @@
 import { test } from "@hipanel-core/fixtures";
-import {expect, Page} from "@playwright/test";
 import BillForm from "@hipanel-module-finance/page/bill/BillForm";
 import BillHelper from "@hipanel-module-finance/Helper/BillHelper";
 import Bill from "@hipanel-module-finance/model/Bill";
-import Charge from "@hipanel-module-finance/model/Charge";
-import BillView from "@hipanel-module-finance/page/bill/BillView";
-import Select2 from "@hipanel-core/input/Select2";
 import TransferForm from "@hipanel-module-finance/page/bill/TransferForm";
 import Transfer from "@hipanel-module-finance/model/Transfer";
 import Alert from "@hipanel-core/ui/Alert";
-
-let billId;
 
 const transfer: Transfer = {
   sum: 100,

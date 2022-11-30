@@ -1,5 +1,6 @@
 import { expect, Locator, Page } from "@playwright/test";
 import Select2 from "@hipanel-core/input/Select2";
+import TreeSelect from "@hipanel-core/input/TreeSelect";
 import SumWithCurrency from "@hipanel-core/input/SumWithCurrency";
 import Bill from "@hipanel-module-finance/model/Bill";
 import Charge from "@hipanel-module-finance/model/Charge";
@@ -24,7 +25,7 @@ export default class BillForm {
 
   async fillBill(bill: Bill, k: number = 0) {
     await Select2.field(this.page, `#billform-${k}-client_id`).setValue(bill.client);
-    await this.page.locator(`#billform-${k}-type`).selectOption({ label: bill.type });
+    await TreeSelect.field(this.page, `billform-${k}-type`).setValue(bill.type);
     await SumWithCurrency.field(this.page, "billform", k).setSumAndCurrency(bill.sum, bill.currency);
     await this.page.locator(`#billform-${k}-quantity`).fill(bill.quantity.toString());
 
@@ -40,7 +41,7 @@ export default class BillForm {
   async fillCharge(charge: Charge, k: number = 0, j: number = 1) {
     await this.page.locator(`#charge-${k}-${j}-class`).selectOption({ label: charge.class });
     await Select2.field(this.page, `#charge-${k}-${j}-object_id`).setValue(charge.object);
-    await this.page.locator(`#charge-${k}-${j}-type`).selectOption({ label: charge.type });
+    await TreeSelect.field(this.page, `charge-${k}-${j}-type`).setValue(charge.type);
     await this.page.locator(`#charge-${k}-${j}-quantity`).fill(charge.quantity.toString());
     await this.page.locator(`#charge-${k}-${j}-sum`).fill(charge.sum.toString());
   }

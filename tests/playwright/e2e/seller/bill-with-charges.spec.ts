@@ -1,25 +1,25 @@
-import { test } from "@hipanel-core/fixtures";
-import { expect } from "@playwright/test";
+import { test, expect } from "@hipanel-core/fixtures";
 import BillForm from "@hipanel-module-finance/page/bill/BillForm";
 import Alert from "@hipanel-core/ui/Alert";
 import BillView from "@hipanel-module-finance/page/bill/BillView";
 
-test("Test we add the charges to created bill @hipanel-module-finance @seller", async ({ sellerPage }) => {
-  await sellerPage.goto("/finance/bill/create");
-  await expect(sellerPage).toHaveTitle("Create payment");
+test("Test we add the charges to created bill @hipanel-module-finance @seller", async ({ page }) => {
+  await page.goto("/finance/bill/create");
+  await expect(page).toHaveTitle("Create payment");
 
-  const billForm = new BillForm(sellerPage);
+  const billForm = new BillForm(page);
   await billForm.fill([bill]);
   await billForm.submit();
-  await expect(sellerPage).toHaveTitle("Bills");
+  await expect(page).toHaveTitle("Bills");
   const createdBillId = await billForm.getSavedBillId();
 
   expect(Number(createdBillId)).toBeGreaterThan(0);
 
-  await sellerPage.goto(`/finance/bill/view?id=${createdBillId}`);
-  await expect(sellerPage).toHaveTitle("hipanel_test_user: -1050.00 usd");
+  await page.goto(`/finance/bill/view?id=${createdBillId}`);
+  await expect(page).toHaveTitle("hipanel_test_user: -1050.00 usd");
 
-  await sellerPage.locator("a:has-text(\"Update\")").click();
+  await page.locator("a:has-text(\"Update\")").click();
+  await page.locator(".remove-charge").click();
 
   for (const charge of charges) {
     let j = charges.indexOf(charge) + 1;
@@ -28,11 +28,11 @@ test("Test we add the charges to created bill @hipanel-module-finance @seller", 
   }
   await billForm.submit();
 
-  await Alert.on(sellerPage).hasText("Bill was updated successfully");
+  await Alert.on(page).hasText("Bill was updated successfully");
 
-  await sellerPage.goto(`/finance/bill/view?id=${createdBillId}`);
+  await page.goto(`/finance/bill/view?id=${createdBillId}`);
 
-  const billView = new BillView(sellerPage);
+  const billView = new BillView(page);
   for (const charge of charges) {
     await billView.checkCharge(charge);
   }

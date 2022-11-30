@@ -39,5 +39,5 @@ test("Test I can create bill after pressing Toggle sign button and sums will be 
 
   await sellerPage.goto("/finance/bill/view?id=" + billId);
   await expect(sellerPage).toHaveTitle("hipanel_test_user: 777.00 usd");
-  await expect(sellerPage.locator("td >> text=-$777.00")).toBeVisible();
+  await expect(sellerPage.locator("td >> text=-$777.00").first()).toBeVisible();
 });
