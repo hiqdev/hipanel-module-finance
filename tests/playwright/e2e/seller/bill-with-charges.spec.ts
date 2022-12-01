@@ -19,7 +19,10 @@ test("Test we add the charges to created bill @hipanel-module-finance @seller", 
   await expect(page).toHaveTitle("hipanel_test_user: -1050.00 usd");
 
   await page.locator("a:has-text(\"Update\")").click();
-  await page.locator(".remove-charge").click();
+  const defaultCharge = await page.isVisible(".remove-charge");
+  if (defaultCharge) {
+    await page.locator(".remove-charge").click();
+  }
 
   for (const charge of charges) {
     let j = charges.indexOf(charge) + 1;
