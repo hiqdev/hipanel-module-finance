@@ -14,6 +14,7 @@ use hipanel\helpers\Url;
 use hipanel\tests\_support\Page\IndexPage;
 use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Page\Widget\Input\Select2;
+use hipanel\tests\_support\Page\Widget\Input\VueTreeSelect;
 use hipanel\tests\_support\Step\Acceptance\Client;
 
 class BillCest
@@ -42,7 +43,7 @@ class BillCest
     {
         $this->index->containsFilters([
             Select2::asAdvancedSearch($I, 'Currency'),
-            Select2::asAdvancedSearch($I, 'Type'),
+            VueTreeSelect::asAdvancedSearch($I, 'Type'),
             Input::asAdvancedSearch($I, 'Servers'),
             Input::asAdvancedSearch($I, 'Description'),
             Select2::asAdvancedSearch($I, 'Tariff'),
