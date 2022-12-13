@@ -4,7 +4,7 @@ use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
-use hipanel\modules\finance\widgets\BillTypeTreeselect;
+use hipanel\modules\finance\widgets\BillTypeVueTreeSelect;
 use hipanel\modules\finance\widgets\PricePerUnitWidget;
 use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
 use hipanel\modules\finance\widgets\SumSignToggleButton;
@@ -132,7 +132,7 @@ $form = ActiveForm::begin([
                                 ]) ?>
                             </div>
                             <div class="col-md-3">
-                                <?= $form->field($model, "[$i]type")->widget(BillTypeTreeselect::class, [
+                                <?= $form->field($model, "[$i]type_id")->widget(BillTypeVueTreeSelect::class, [
                                     'billTypes' => $billTypesList,
                                 ]) ?>
                             </div>
@@ -224,9 +224,8 @@ $form = ActiveForm::begin([
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <?= $form->field($charge, "[$i][$j]type")->widget(BillTypeTreeselect::class, [
+                                                    <?= $form->field($charge, "[$i][$j]type_id")->widget(BillTypeVueTreeSelect::class, [
                                                         'billTypes' => $billTypesList,
-                                                        'replaceAttribute' => 'ftype',
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-5">

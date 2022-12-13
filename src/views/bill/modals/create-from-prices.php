@@ -3,7 +3,7 @@
 use hipanel\modules\finance\forms\BillFromPricesForm;
 use hipanel\modules\finance\grid\PriceGridView;
 use hipanel\modules\finance\models\Price;
-use hipanel\modules\finance\widgets\BillTypeTreeselect;
+use hipanel\modules\finance\widgets\BillTypeVueTreeSelect;
 use hipanel\widgets\DateTimePicker;
 use yii\bootstrap\ActiveForm;
 use yii\data\ArrayDataProvider;
@@ -13,7 +13,7 @@ use yii\helpers\Url;
 /**
  * @var BillFromPricesForm $model
  * @var Price[] $prices
- * @var array $billTypesList
+ * @var array $billTypes
  */
 
 
@@ -31,8 +31,8 @@ use yii\helpers\Url;
 
 <div class="row">
     <div class="col-md-6">
-        <?= $form->field($model, "type")->widget(BillTypeTreeselect::class, [
-            'billTypes' => $billTypesList,
+        <?= $form->field($model, "type_id")->widget(BillTypeVueTreeSelect::class, [
+            'billTypes' => $billTypes,
         ]) ?>
     </div>
     <div class="col-md-6">

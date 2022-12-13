@@ -258,18 +258,18 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'gtype',
             ],
             'type_label' => [
+                'label' => Yii::t('hipanel:finance', 'Type'),
                 'filterOptions' => ['class' => 'text-right'],
                 'filter' => function ($column, $filterModel) {
                     return BillTypeFilter::widget([
-                        'options' => ['class' => 'form-control text-right', 'style' => 'max-width: 12em'],
-                        'attribute' => 'ftype',
+                        'attribute' => 'type_id',
                         'model' => $filterModel,
                     ]);
                 },
-                'sortAttribute' => 'type',
+                'sortAttribute' => 'type_id',
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'text-right'],
-                'contentOptions' => function (Bill $model) {
+                'headerOptions' => ['class' => 'text-right', 'style' => 'min-width: 15em; max-width: 25em'],
+                'contentOptions' => function () {
                     return ['class' => 'text-right'];
                 },
                 'value' => function (Bill $model) {

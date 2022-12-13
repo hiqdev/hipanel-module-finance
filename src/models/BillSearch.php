@@ -36,7 +36,7 @@ class BillSearch extends Bill
             'time_from', 'time_till',
             'servers', 'server_ids',
             'ftype', 'object_name_ilike',
-            'object_types',
+            'object_types', 'type_ids',
         ]);
     }
 
@@ -46,6 +46,7 @@ class BillSearch extends Bill
             'servers' => Yii::t('hipanel:finance', 'Servers'),
             'object_name_ilike' => Yii::t('hipanel:finance', 'Object name'),
             'object_types' => Yii::t('hipanel:finance', 'Object types'),
+            'type_id' => Yii::t('hipanel:finance', 'Type'),
         ]);
     }
 

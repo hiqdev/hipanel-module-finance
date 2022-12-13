@@ -59,7 +59,7 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface
             [['is_payed'], 'boolean'],
             [['sum', 'quantity', 'bill_quantity'], 'number'],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
-            [['object_id', 'sum', 'type', 'quantity', 'unit'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['object_id', 'sum', 'type_id', 'quantity', 'unit'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['id'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
         ];
     }
@@ -75,6 +75,7 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface
             'object_id' => Yii::t('hipanel', 'Object Id'),
             'order_id' => Yii::t('hipanel', 'Order'),
             'is_payed' => Yii::t('hipanel:finance', 'Is paid?'),
+            'type_id' => Yii::t('hipanel:finance', 'Type'),
         ]);
     }
 

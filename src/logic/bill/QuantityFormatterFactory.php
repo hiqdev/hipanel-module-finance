@@ -10,9 +10,11 @@
 
 namespace hipanel\modules\finance\logic\bill;
 
+use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
+use hipanel\modules\finance\providers\BillTypesProvider;
 use hipanel\modules\server\models\Consumption;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\yii2\formatters\IntlFormatter;
@@ -49,14 +51,9 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
         'server_sata'       => DefaultQuantityFormatter::class,
         'drenewal'          => DomainRenewalQuantity::class,
     ];
-    /**
-     * @var IntlFormatter
-     */
-    private $intlFormatter;
 
-    public function __construct(IntlFormatter $intlFormatter)
+    public function __construct(private readonly IntlFormatter $intlFormatter, private readonly BillTypesProvider $billTypesProvider)
     {
-        $this->intlFormatter = $intlFormatter;
     }
 
     /** {@inheritdoc} */
@@ -79,22 +76,32 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
      */
     public function forBill($bill): ?QuantityFormatterInterface
     {
-        return $this->createByType($bill->type, Quantity::create($bill->unit, $bill->quantity), $bill);
+        $qty = Quantity::create($bill->unit, $bill->quantity);
+
+        return $this->createByType($bill->type, $qty, $bill);
     }
 
     public function forCharge(Charge $charge): ?QuantityFormatterInterface
     {
-        return $this->createByType($charge->ftype ?? $charge->type, Quantity::create($charge->unit, $charge->quantity), $charge);
+        $qty = Quantity::create($charge->unit, $charge->quantity);
+
+        return $this->createByType($charge->ftype ?? $charge->type, $qty, $charge);
     }
 
     public function forConsumption(Consumption $consumption): ?QuantityFormatterInterface
     {
-        return $this->createByType($consumption->type, Quantity::create($consumption->unit, $consumption->quantity), $consumption);
+        $qty = Quantity::create($consumption->unit, $consumption->quantity);
+
+        return $this->createByType($consumption->type, $qty, $consumption);
     }
 
     /** {@inheritdoc} */
-    public function createByType(string $type, Quantity $quantity, $context = null): ?QuantityFormatterInterface
+    public function createByType(?string $type, Quantity $quantity, $context = null): ?QuantityFormatterInterface
     {
+        if (empty($type)) {
+            $types = ArrayHelper::index($this->billTypesProvider->getTypes(), 'id');
+            $type = $types[$context->id]->name;
+        }
         if (!isset($this->types[$type])) {
             if (strpos($type, 'monthly,') === 0) {
                 $type = 'monthly';
@@ -117,9 +124,9 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
         return null;
     }
 
-    private function fixType($type): string
+    private function fixType($type): ?string
     {
-        if (strpos($type, ',') !== false) {
+        if (str_contains($type, ',')) {
             $types = explode(',', $type);
 
             return end($types);

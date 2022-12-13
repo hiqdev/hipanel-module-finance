@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\widgets;
 
+use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use hipanel\widgets\RefFilter;
 use Yii;
@@ -21,6 +22,7 @@ class BillTypeFilter extends RefFilter
         /** @var BillTypesProvider $provider */
         $provider = Yii::createObject(BillTypesProvider::class);
 
+        return $provider->getTypes();
         return $this->prefixBillTypes($provider->getTypesList());
     }
 
@@ -40,5 +42,14 @@ class BillTypeFilter extends RefFilter
         }
 
         return $types;
+    }
+
+    protected function renderInput()
+    {
+        return BillTypeVueTreeSelect::widget([
+            'attribute' => $this->attribute,
+            'model' => $this->model,
+            'billTypes' => $this->getRefs(),
+        ]);
     }
 }
