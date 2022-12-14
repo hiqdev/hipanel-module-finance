@@ -39,13 +39,13 @@ class CreateFromPricesAction extends BillManagementAction
             if (empty($priceIds)) {
                 throw new BadRequestHttpException('No prices selected');
             }
-            $billTypesList = $this->billTypesProvider->getTypesList();
+            $billTypes = $this->billTypesProvider->getTypes();
             $prices = Price::find()->select(['*', 'main_object_id'])->joinWith(['object'])->withFormulaLines()->where(['id_in' => $priceIds])->limit(-1)->all();
             $pricesByObjectId = ArrayHelper::index($prices, null, 'main_object_id');
             if ($this->controller->request->isAjax) {
                 return $this->controller->renderAjax('modals/create-from-prices', [
                     'model' => $form,
-                    'billTypesList' => $billTypesList,
+                    'billTypes' => $billTypes,
                     'prices' => $prices,
                 ]);
             }
@@ -77,7 +77,7 @@ class CreateFromPricesAction extends BillManagementAction
 
                 return $this->controller->render('create', [
                     'models' => $this->collection->getModels(),
-                    'billTypesList' => $billTypesList,
+                    'billTypesList' => $billTypes,
                 ]);
             }
             throw new BadRequestHttpException('unknown error while creating invoice');

@@ -40,6 +40,7 @@ class ChargeSearch extends Charge
             'is_payed',
             'type_in',
             'sum_not_zero',
+            'type_ids',
         ]);
     }
 

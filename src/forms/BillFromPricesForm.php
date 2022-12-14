@@ -18,11 +18,11 @@ class BillFromPricesForm extends Model
     public function attributes(): array
     {
         return [
-            'type',
             'time',
             'currency',
             'object_id',
             'client_id',
+            'type_id',
         ];
     }
 
@@ -30,15 +30,15 @@ class BillFromPricesForm extends Model
     {
         return [
             'time' => Yii::t('hipanel', 'Time'),
-            'type' => Yii::t('hipanel', 'Type'),
+            'type_id' => Yii::t('hipanel', 'Type'),
         ];
     }
 
     public function rules(): array
     {
         return [
-            [['type', 'time'], 'string'],
-            [['type', 'time'], 'required'],
+            [['time'], 'string'],
+            [['type_id', 'time'], 'required'],
         ];
     }
 
@@ -50,7 +50,7 @@ class BillFromPricesForm extends Model
         $bill->object_id = $mainObjectId;
         $bill->class = $mainObjectClass;
         $bill->client_id = $buyer_id;
-        $bill->type = $this->type;
+        $bill->type_id = $this->type_id;
         $bill->time = $this->time;
         $bill->currency = reset($prices)->currency;
         $bill->unit = 'days';
@@ -74,8 +74,7 @@ class BillFromPricesForm extends Model
                 'class' => $classMap[$price->type],
                 'object_id' => $price->object_id,
                 'name' => $price->object->label,
-                'ftype' => $this->type,
-                'type' => $this->type,
+                'type_id' => $this->type_id,
                 'sum' => $this->calculateSum($price, $bill),
                 'quantity' => 1,
             ]);

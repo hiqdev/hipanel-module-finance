@@ -28,15 +28,14 @@ treeselect > * {
     display: none;
 }
 
-.vue-treeselect__single-value span:after {
+.vue-treeselect__single-value span:after,
+.vue-treeselect__multi-value-label span:after {
     content: " / ";
 }
 
-.vue-treeselect__single-value span {
-    color: #ccc;
+.vue-treeselect__single-value span,
+.vue-treeselect__multi-value-label span
+{
+    opacity: .5;
     letter-spacing: -0.04rem;
-}
-
-.vue-treeselect {
-    z-index: 1100 !important;
 }

@@ -56,7 +56,7 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
     {
         return [
             [['client_id', 'seller_id', 'id', 'requisite_id'], 'integer'],
-            [['object_id', 'tariff_id'], 'integer'],
+            [['object_id', 'tariff_id', 'type_id'], 'integer'],
             [['client', 'seller', 'bill', 'unit', 'requisite'], 'safe'],
             [['domain', 'server'], 'safe'],
             [['sum', 'balance', 'quantity', 'positive', 'negative', 'opening_balance', 'closing_balance'], 'number'],

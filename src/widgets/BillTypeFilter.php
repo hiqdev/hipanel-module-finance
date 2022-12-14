@@ -21,7 +21,7 @@ class BillTypeFilter extends RefFilter
         /** @var BillTypesProvider $provider */
         $provider = Yii::createObject(BillTypesProvider::class);
 
-        return $this->prefixBillTypes($provider->getTypesList());
+        return $provider->getTypes();
     }
 
     /**
@@ -40,5 +40,14 @@ class BillTypeFilter extends RefFilter
         }
 
         return $types;
+    }
+
+    protected function renderInput()
+    {
+        return BillTypeVueTreeSelect::widget([
+            'attribute' => $this->attribute,
+            'model' => $this->model,
+            'billTypes' => $this->getRefs(),
+        ]);
     }
 }

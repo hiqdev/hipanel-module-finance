@@ -3,7 +3,7 @@
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\helpers\CurrencyFilter;
-use hipanel\modules\finance\widgets\BillTypeTreeselect;
+use hipanel\modules\finance\widgets\BillTypeVueTreeSelect;
 use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
 use hipanel\widgets\AdvancedSearch;
@@ -43,13 +43,13 @@ use yii\web\View;
 
 <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="form-group">
-        <?= Html::label(Yii::t('hipanel', 'Date')) ?>
         <?= DateRangePicker::widget([
             'model' => $search->model,
             'attribute' => 'time_from',
             'attribute2' => 'time_till',
             'options' => [
                 'class' => 'form-control',
+                'placeholder' => Yii::t('hipanel', 'Date'),
             ],
             'dateFormat' => 'yyyy-MM-dd',
         ]) ?>
@@ -57,9 +57,9 @@ use yii\web\View;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= Html::label(Yii::t('hipanel', 'Type')) ?>
-    <?= $search->field('type_in')->widget(BillTypeTreeselect::class, [
+    <?= $search->field('type_ids')->widget(BillTypeVueTreeSelect::class, [
         'billTypes' => $billTypesList,
+        'multiple' => true
     ]) ?>
 </div>
 

@@ -25,10 +25,7 @@ use yii\base\Event;
  */
 class ChargeController extends CrudController
 {
-    /**
-     * @var BillTypesProvider
-     */
-    private $billTypesProvider;
+    private BillTypesProvider $billTypesProvider;
 
     public function __construct($id, $module, BillTypesProvider $billTypesProvider, $config = [])
     {
@@ -68,7 +65,7 @@ class ChargeController extends CrudController
                 'data' => function (RenderAction $action, array $data): array {
 
                     return [
-                        'billTypesList' => $this->billTypesProvider->getTypesList(),
+                        'billTypesList' => $this->billTypesProvider->getTypes(),
                         'clientTypes' => $this->getClientTypes(),
                         ];
                 },

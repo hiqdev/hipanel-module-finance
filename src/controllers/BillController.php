@@ -34,7 +34,6 @@ use hipanel\modules\finance\models\Resource;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use hipanel\modules\finance\widgets\FinanceSummaryTable;
 use hipanel\widgets\SynchronousCountEnabler;
-use hiqdev\hiart\ActiveQuery;
 use hiqdev\hiart\Collection;
 use Tuck\Sort\Sort;
 use Yii;
@@ -81,7 +80,7 @@ class BillController extends \hipanel\base\CrudController
             'index' => [
                 'class' => IndexAction::class,
                 'data' => function () {
-                    $billTypesList = $this->billTypesProvider->getTypesList();
+                    $billTypesList = $this->billTypesProvider->getTypes();
                     $rates = $this->getExchangeRates();
 
                     return [

@@ -3,14 +3,13 @@
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\helpers\CurrencyFilter;
-use hipanel\modules\finance\widgets\BillTypeTreeselect;
+use hipanel\modules\finance\widgets\BillTypeVueTreeSelect;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
 use hipanel\modules\stock\widgets\combo\OrderCombo;
 use hipanel\widgets\AdvancedSearch;
 use hiqdev\combo\StaticCombo;
 use hiqdev\yii2\daterangepicker\DateRangePicker;
 use yii\base\View;
-use yii\bootstrap\Html;
 
 /**
  * @var View $this
@@ -25,9 +24,9 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 ?>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= Html::label(Yii::t('hipanel', 'Type')) ?>
-    <?= $search->field( "type_in")->widget(BillTypeTreeselect::class, [
+    <?= $search->field( "type_ids")->widget(BillTypeVueTreeSelect::class, [
         'billTypes' => $billTypesList,
+        'multiple' => true
     ]) ?>
 </div>
 

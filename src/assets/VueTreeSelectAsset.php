@@ -6,7 +6,7 @@ namespace hipanel\modules\finance\assets;
 
 use yii\web\AssetBundle;
 
-class VueTreeselectAsset extends AssetBundle
+class VueTreeSelectAsset extends AssetBundle
 {
     public $sourcePath = __DIR__;
     public $js = [

@@ -71,6 +71,9 @@ class BillForm extends Model
      */
     public $type;
 
+    /** @var int */
+    public $type_id;
+
     /**
      * @var string
      */
@@ -145,7 +148,7 @@ class BillForm extends Model
     public static function createFromBill($bill, $scenario)
     {
         $attributes = $bill->getAttributes([
-            'id', 'object_id', 'client_id', 'client', 'currency', 'type', 'ftype',
+            'id', 'object_id', 'client_id', 'client', 'currency', 'type', 'type_id', 'ftype',
             'gtype', 'sum', 'time', 'quantity', 'unit', 'label', 'object', 'class', 'requisite_id', 'txn'
         ]);
 
@@ -224,7 +227,7 @@ class BillForm extends Model
             [['id', 'object_id'], 'integer', 'on' => [self::SCENARIO_UPDATE]],
             [['sum', 'quantity'], 'number', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
             [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
-            [['label', 'currency', 'unit', 'type', 'object', 'class'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
+            [['label', 'currency', 'unit', 'type', 'type_id', 'object', 'class'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
             [['label'], 'filter', 'filter' => static fn(string $value) => htmlspecialchars_decode(HtmlPurifier::process($value, ['HTML.Allowed' => '']))],
             [['sum'], BillChargesSumValidator::class],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]], // TODO: should be probably replaced with input on client side
@@ -233,13 +236,13 @@ class BillForm extends Model
             [['currency'], 'currencyValidate', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
             [['id'], 'required', 'on' => [self::SCENARIO_UPDATE]],
             [
-                ['client_id', 'sum', 'quantity', 'unit', 'time', 'currency', 'type'],
+                ['client_id', 'sum', 'quantity', 'unit', 'time', 'currency', 'type_id'],
                 'required',
                 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY],
             ],
             [['!charges'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE, self::SCENARIO_COPY]],
 
-            [['time', 'object_id', 'type'], function ($attribute) {
+            [['time', 'object_id', 'type_id'], function ($attribute) {
                 try {
                     Bill::perform('check-unique', $this->attributes);
                 } catch (\Exception $e) {
@@ -249,7 +252,7 @@ class BillForm extends Model
             [['charges'], function ($attribute) {
                 $charges = $this->getChargesAsArray();
                 $chargeStrings = array_unique(array_map(
-                    static fn($charge): string => $charge['object_id'] . $charge['type'] . $charge['sum'] . $charge['unit'] . $charge['time'],
+                    static fn($charge): string => $charge['object_id'] . $charge['type_id'] . $charge['sum'] . $charge['unit'] . $charge['time'],
                     $charges,
                 ));
 
@@ -286,6 +289,7 @@ class BillForm extends Model
             'sum' => Yii::t('hipanel:finance', 'Sum'),
             'label' => Yii::t('hipanel', 'Description'),
             'type' => Yii::t('hipanel', 'Type'),
+            'type_id' => Yii::t('hipanel', 'Type'),
             'quantity' => Yii::t('hipanel', 'Quantity'),
             'object_id' => Yii::t('hipanel', 'Object'),
             'requisite' => Yii::t('hipanel:finance', 'Requisite'),
@@ -327,6 +331,7 @@ class BillForm extends Model
             'sum',
             'time',
             'type',
+            'type_id',
             'quantity',
             'label',
             'object',

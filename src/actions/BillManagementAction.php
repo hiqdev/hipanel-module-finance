@@ -83,7 +83,7 @@ class BillManagementAction extends Action
 
         return $this->controller->render($this->view, [
             'models' => $this->collection->getModels(),
-            'billTypesList' => $this->billTypesProvider->getTypesList(),
+            'billTypesList' => $this->billTypesProvider->getTypes(),
         ]);
     }
 
