@@ -27,7 +27,7 @@ class ChargeRepresentations extends RepresentationCollection
                     'seller',
                     'tariff',
                     'name',
-                    'type',
+                    'type_label',
                     'currency',
                     'sum',
                     'quantity',
