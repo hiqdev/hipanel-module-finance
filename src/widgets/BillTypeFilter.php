@@ -10,7 +10,6 @@
 
 namespace hipanel\modules\finance\widgets;
 
-use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use hipanel\widgets\RefFilter;
 use Yii;
@@ -23,7 +22,6 @@ class BillTypeFilter extends RefFilter
         $provider = Yii::createObject(BillTypesProvider::class);
 
         return $provider->getTypes();
-        return $this->prefixBillTypes($provider->getTypesList());
     }
 
     /**
