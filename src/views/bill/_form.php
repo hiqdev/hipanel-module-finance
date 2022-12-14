@@ -134,6 +134,7 @@ $form = ActiveForm::begin([
                             <div class="col-md-3">
                                 <?= $form->field($model, "[$i]type_id")->widget(BillTypeVueTreeSelect::class, [
                                     'billTypes' => $billTypesList,
+                                    'replaceAttribute' => 'type_id',
                                 ]) ?>
                             </div>
                             <div class="col-md-2 <?= AmountWithCurrency::$widgetClass ?>">
@@ -226,6 +227,7 @@ $form = ActiveForm::begin([
                                                 <div class="col-md-3">
                                                     <?= $form->field($charge, "[$i][$j]type_id")->widget(BillTypeVueTreeSelect::class, [
                                                         'billTypes' => $billTypesList,
+                                                        'replaceAttribute' => 'type_id',
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-5">
