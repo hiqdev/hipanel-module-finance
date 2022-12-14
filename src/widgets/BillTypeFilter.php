@@ -1,5 +1,4 @@
-<?php
-/**
+<?php /**
  * Finance module for HiPanel
  *
  * @link      https://github.com/hiqdev/hipanel-module-finance
@@ -42,7 +41,7 @@ class BillTypeFilter extends RefFilter
         return $types;
     }
 
-    protected function renderInput()
+    protected function renderInput(): string
     {
         return BillTypeVueTreeSelect::widget([
             'attribute' => $this->attribute,
