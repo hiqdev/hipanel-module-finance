@@ -74,21 +74,22 @@ test.describe("Bill creation", () => {
 
     billId = await billForm.getSavedBillId();
   });
+
+  test("Test I can update bill @hipanel-module-finance @seller", async ({ page }) => {
+    const billDescr = "Test bill description", chargeDescr = "Test charge description";
+    await page.goto("/finance/bill/update?id=" + billId);
+    await expect(page).toHaveTitle("Update payments");
+
+    const billForm = new BillForm(page);
+    await page.locator("#billform-0-label").fill(billDescr);
+    await page.locator("#charge-0-0-label").fill(chargeDescr);
+    await billForm.submit();
+    await Alert.on(page).hasText("Bill was updated successfully");
+
+    await page.goto("/finance/bill/view?id=" + billId);
+
+    await expect(page.locator(`table >> text=${billDescr}`)).toBeVisible();
+    await expect(page.locator(`table >> text=${chargeDescr}`)).toBeVisible();
+  });
 });
 
-test("Test I can update bill @hipanel-module-finance @seller", async ({ page }) => {
-  const billDescr = "Test bill description", chargeDescr = "Test charge description";
-  await page.goto("/finance/bill/update?id=" + billId);
-  await expect(page).toHaveTitle("Update payments");
-
-  const billForm = new BillForm(page);
-  await page.locator("#billform-0-label").fill(billDescr);
-  await page.locator("#charge-0-0-label").fill(chargeDescr);
-  await billForm.submit();
-  await Alert.on(page).hasText("Bill was updated successfully");
-
-  await page.goto("/finance/bill/view?id=" + billId);
-
-  await expect(page.locator(`table >> text=${billDescr}`)).toBeVisible();
-  await expect(page.locator(`table >> text=${chargeDescr}`)).toBeVisible();
-});

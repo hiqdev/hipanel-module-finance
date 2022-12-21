@@ -6,6 +6,7 @@ export default class Bill {
   public currency: string;
   public sum: number;
   public quantity: number;
+  public requisite?: string;
   public time?: string | null;
   public description?: string | null;
   public class?: string | null;

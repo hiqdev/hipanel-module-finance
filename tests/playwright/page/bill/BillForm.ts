@@ -4,6 +4,7 @@ import TreeSelect from "@hipanel-core/input/TreeSelect";
 import SumWithCurrency from "@hipanel-core/input/SumWithCurrency";
 import Bill from "@hipanel-module-finance/model/Bill";
 import Charge from "@hipanel-module-finance/model/Charge";
+import Alert from "@hipanel-core/ui/Alert";
 
 export default class BillForm {
   private page: Page;
@@ -28,8 +29,11 @@ export default class BillForm {
     await TreeSelect.field(this.page, `billform-${k}-type_id`).setValue(bill.type);
     await SumWithCurrency.field(this.page, "billform", k).setSumAndCurrency(bill.sum, bill.currency);
     await this.page.locator(`#billform-${k}-quantity`).fill(bill.quantity.toString());
+    if (bill.requisite) {
+      await Select2.field(this.page, `#billform-${k}-requisite_id`).setValue(bill.requisite)
+    }
 
-    if (bill.charges !== null) {
+    if (bill.charges) {
       for (const charge of bill.charges) {
         let j = bill.charges.indexOf(charge) + 1;
         await this.addChargeBtn.click();
@@ -73,5 +77,9 @@ export default class BillForm {
 
   async toggleSign(nth: number = 0) {
     await this.page.locator(".bill-item >> text=\"Toggle sign\"").nth(nth).click();
+  }
+
+  async seeSuccessAlert() {
+    await Alert.on(this.page).hasText("Bill was created successfully");
   }
 }

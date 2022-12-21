@@ -86,7 +86,11 @@ class GenerateInvoiceAction extends BillManagementAction
 
     private function getPurseId(array $bills): ?int
     {
-        $ids = array_unique(array_filter(ArrayHelper::getColumn($bills, 'purse_id')));
+        $purseColumn = array_filter(ArrayHelper::getColumn($bills, 'purse_id'));
+        if (empty($purseColumn)) {
+            return null;
+        }
+        $ids = array_unique($purseColumn);
         if (count($ids) > 1) {
             throw  new RuntimeException('Purses more than one!');
         }
