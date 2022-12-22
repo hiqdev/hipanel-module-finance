@@ -268,7 +268,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 },
                 'sortAttribute' => 'type_id',
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'text-right', 'style' => 'min-width: 15em; max-width: 25em'],
+                'headerOptions' => ['class' => 'text-right', 'style' => 'max-width: 25em'],
                 'contentOptions' => function () {
                     return ['class' => 'text-right'];
                 },

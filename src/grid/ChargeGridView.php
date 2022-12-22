@@ -71,7 +71,7 @@ class ChargeGridView extends BoxedGridView
             ],
             'type_label' => [
                 'label' => Yii::t('hipanel', 'Type'),
-                'headerOptions' => ['class' => 'text-right', 'style' => 'min-width: 15em; max-width: 25em'],
+                'headerOptions' => ['class' => 'text-right', 'style' => 'max-width: 25em'],
                 'format' => 'raw',
                 'value' => function (Charge $model) {
                     return BillType::widget([
