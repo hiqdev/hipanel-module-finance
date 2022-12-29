@@ -49,6 +49,7 @@ class BillType extends Type
         $this->getView()->registerCss(<<<CSS
 .flex-space-beetween {
     display: flex;
+    flex-wrap: wrap-reverse;
     justify-content: space-between;
 }
 .align-center {
