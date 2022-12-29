@@ -41,6 +41,7 @@ class ChargeSearch extends Charge
             'type_in',
             'sum_not_zero',
             'type_ids',
+            'id_in',
         ]);
     }
 

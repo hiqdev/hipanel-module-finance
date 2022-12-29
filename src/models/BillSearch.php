@@ -36,7 +36,7 @@ class BillSearch extends Bill
             'time_from', 'time_till',
             'servers', 'server_ids',
             'ftype', 'object_name_ilike',
-            'object_types', 'type_ids',
+            'object_types', 'type_ids', 'charge_type_ids',
         ]);
     }
 
