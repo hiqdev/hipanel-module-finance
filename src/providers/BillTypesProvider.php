@@ -54,7 +54,7 @@ class BillTypesProvider
     public function getTypes()
     {
         $options = ['select' => 'full', 'orderby' => 'name_asc', 'with_hierarchy' => true];
-        $types = Ref::findCached('type,bill', 'hipanel:finance', $options);
+        $types = Ref::findCached('type,bill', 'hipanel.finance.billTypes', $options);
 
         if (!$this->app->user->can('support')) {
             $types = $this->removeUnusedTypes($types);
