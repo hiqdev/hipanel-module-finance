@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\controllers;
 use Closure;
 use hipanel\actions\Action;
 use hipanel\actions\IndexAction;
+use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartCreateAction;
 use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartPerformAction;
@@ -78,6 +79,7 @@ class PlanController extends CrudController
                     'create-prices' => 'plan.create',
                     'delete' => 'plan.delete',
                     '*' => 'plan.read',
+                    'plan-fork' => 'plan.create',
                 ],
             ],
         ]);
@@ -359,6 +361,16 @@ class PlanController extends CrudController
 
         return $this->render($plan->type . '/' . 'updatePrices',
             compact('plan', 'grouper', 'parentPrices'));
+    }
+
+    public function actionFork(int $id): Response
+    {
+        try {
+            $fork = Plan::perform('fork', ['id' => $id]);
+            return $this->redirect(['@plan/view', 'id' => $fork['id']]);
+        } catch (\Exception $e) {
+            throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
+        }
     }
 
     /**

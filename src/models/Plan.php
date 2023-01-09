@@ -38,6 +38,8 @@ use Yii;
  */
 class Plan extends Model
 {
+    public const SCENARIO_PLAN_FORK = 'fork';
+
     public const TYPE_SERVER = 'server';
     public const TYPE_PCDN = 'pcdn';
     public const TYPE_VCDN = 'vcdn';
@@ -102,6 +104,13 @@ class Plan extends Model
 
     public $servers = [];
 
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_PLAN_FORK] = ['id'];
+        return $scenarios;
+    }
+
     public function rules()
     {
         return array_merge(parent::rules(), [
@@ -136,6 +145,7 @@ class Plan extends Model
             'currency' => Yii::t('hipanel:finance', 'Currency'),
             'is_sold' => Yii::t('hipanel:finance', 'Is sold?'),
             'fee' => Yii::t('hipanel:finance', 'Subscription fee'),
+            'fork' => Yii::t('hipanel:finance', 'Fork tariff plan')
         ]);
     }
 

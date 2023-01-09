@@ -70,6 +70,11 @@ class PlanDetailMenu extends \hipanel\menus\AbstractDetailMenu
                 'icon' => 'fa-money',
                 'url' => Url::toSearch('bill', ['tariff_id' => $this->model->id]),
             ],
+            'fork' => [
+                'label' => Yii::t('hipanel:finance', 'Fork tariff plan'),
+                'icon' => 'fa-code-fork',
+                'url' => ['@plan/fork', 'id' => $this->model->id],
+            ]
         ]);
         unset($items['view']);
 
