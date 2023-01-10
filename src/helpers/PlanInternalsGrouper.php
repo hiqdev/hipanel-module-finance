@@ -109,6 +109,9 @@ class PlanInternalsGrouper
             ]);
         }
         foreach ($model->sales as $sale) {
+            if ($sale->unsale_time && (strtotime($sale->unsale_time) < time())) {
+                continue;
+            }
             $salesByObject[$sale->object_id] = $sale;
         }
 
