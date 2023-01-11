@@ -55,6 +55,7 @@ use yii\web\View;
     Plan::TYPE_STORAGE,
     Plan::TYPE_PRIVATE_CLOUD_BACKUP,
     Plan::TYPE_VCDN,
+    Plan::TYPE_VIDECDN,
 ], true)) : ?>
     <?php if ($model->isObjectPredefined()) : ?>
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
