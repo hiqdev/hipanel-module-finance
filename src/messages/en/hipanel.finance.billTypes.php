@@ -11,13 +11,11 @@
 return [
     'Hardware monthly fee' => 'Hardware',
     'Hardware leasing monthly fee' => 'Leasing',
-    'Server traffic overuse' => 'Traffic',
     'Number of IP addresses' => 'IP addresses',
     'Server traffic 95% overuse' => '95-th traffic overuse',
     'Rack unit monthly fee' => 'Unit in rack',
     'Support time monthly fee' => 'Support time',
     'Backup disk usage' => 'Backups',
-    'Server traffic monthly fee' => 'Traffic',
     'IP addresses monthly fee' => 'IP addresses',
     'Server traffic 95% monthly fee' => '95-th traffic',
     'Backup disk usage monthly fee' => 'Auto backups',
