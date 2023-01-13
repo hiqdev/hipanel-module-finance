@@ -68,7 +68,7 @@ class Target extends Model
 
     public static function find(array $options = []): TargetQuery
     {
-        return new TargetQuery(get_called_class(), [
+        return new TargetQuery(static::class, [
             'options' => $options,
         ]);
     }
@@ -76,5 +76,10 @@ class Target extends Model
     public function isDeleted(): bool
     {
         return $this->state === 'deleted';
+    }
+
+    public function showConsumption(): bool
+    {
+        return !in_array($this->type, ['vps', 'anycastcdn'], true);
     }
 }
