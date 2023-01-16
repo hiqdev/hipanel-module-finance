@@ -307,7 +307,7 @@ return [
     'Is sold' => 'Продан',
     'Is sold?' =>  'Продан?',
 
-    'Fork tariff plan' => 'Дублирование тарифного плана',
+    'Fork tariff plan' => 'Ответвить тариф',
 
     'Exclude with zero-sum' => 'Исключить с нулевой суммой',
 ];
