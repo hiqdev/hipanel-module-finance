@@ -15,26 +15,26 @@ use yii\helpers\Html;
 class ConsumptionViewer extends Widget
 {
     public ActiveRecordInterface $mainObject;
-
     public ConsumptionConfigurator $configurator;
-
     public ?Consumption $consumption;
-
     public string $getConsumptionUrl = '@finance/consumption/get-consumption';
 
     public function run(): string
     {
-        ConsumptionViewerAsset::register($this->view);
         if (!$this->consumption) {
             return Html::tag('div', Yii::t('hipanel:finance', 'No consumption found for the requested resource'), ['class' => 'alert alert-warning text-center']);
+        }
+        $columns = $this->configurator->getColumnsWithLabels($this->consumption->class);
+        if (empty($columns)) {
+            return '';
         }
 
         return $this->render('ConsumptionViewer', [
             'initialData' => [
+                'columns' => $columns,
                 'boxTitle' => Yii::t('hipanel:finance', 'Resource consumption'),
                 'resources' => ResourceHelper::prepareDetailView($this->consumption->resources),
                 'totals' => ResourceHelper::calculateTotal($this->consumption->resources),
-                'columns' => $this->configurator->getColumnsWithLabels($this->consumption->class),
                 'groups' => $this->configurator->getGroupsWithLabels($this->consumption->class),
                 'object_id' => $this->mainObject->id,
                 'class' => $this->consumption->class,

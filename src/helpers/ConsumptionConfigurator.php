@@ -68,7 +68,13 @@ final class ConsumptionConfigurator
 
     public function getClassesDropDownOptions(): array
     {
-        return ArrayHelper::getColumn($this->getConfigurations(), 'label');
+        return array_filter(ArrayHelper::getColumn($this->getConfigurations(), static function (array $config): ?string {
+            if (isset($config['columns']) && !empty($config['columns'])) {
+                return $config['label'];
+            }
+
+            return null;
+        }));
     }
 
     public function getAllPossibleColumns(): array
