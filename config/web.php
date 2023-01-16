@@ -140,22 +140,6 @@ return [
             \hipanel\modules\finance\helpers\ConsumptionConfigurator::class => [
                 'class' => \hipanel\modules\finance\helpers\ConsumptionConfigurator::class,
                 'configurations' => [
-                    'anycastcdn' => [
-                        'label' => ['hipanel:finance', 'Anycast CDN'],
-                        'columns' => [
-                            'cdn_traf_plain',
-                            'cdn_traf_ssl',
-                            'cdn_traf',
-                            'cdn_traf_max',
-                            'cdn_traf95',
-                            'cdn_traf95_max',
-                            'cdn_cache',
-                            'cdn_cache95',
-                        ],
-                        'groups' => [],
-                        'model' => Target::class,
-                        'resourceModel' => TargetResource::class,
-                    ],
                     'videocdn' => [
                         'label' => ['hipanel:finance', 'VideoCDN'],
                         'columns' => [
@@ -169,22 +153,6 @@ return [
                             'server_sata',
                         ],
                         'groups' => [['server_traf', 'server_traf_in'], ['server_traf95', 'server_traf95_in']],
-                        'model' => Target::class,
-                        'resourceModel' => TargetResource::class,
-                    ],
-                    'vps' => [
-                        'label' => ['hipanel:finance', 'VPS'],
-                        'columns' => [
-                            'cdn_traf_plain',
-                            'cdn_traf_ssl',
-                            'cdn_traf',
-                            'cdn_traf_max',
-                            'cdn_traf95',
-                            'cdn_traf95_max',
-                            'cdn_cache',
-                            'cdn_cache95',
-                        ],
-                        'groups' => [],
                         'model' => Target::class,
                         'resourceModel' => TargetResource::class,
                     ],

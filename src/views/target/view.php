@@ -69,10 +69,12 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="col-md-9">
         <?= $this->render('_sales', ['target' => $originalModel]) ?>
-        <?= ConsumptionViewer::widget([
-            'configurator' => $configurator,
-            'consumption' => $consumption,
-            'mainObject' => $originalModel,
-        ]) ?>
+        <?php if ($model->showConsumption()) : ?>
+            <?= ConsumptionViewer::widget([
+                'configurator' => $configurator,
+                'consumption' => $consumption,
+                'mainObject' => $originalModel,
+            ]) ?>
+        <?php endif ?>
     </div>
 </div>
