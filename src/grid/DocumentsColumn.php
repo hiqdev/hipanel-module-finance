@@ -78,7 +78,7 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
             'modalHeader' => Yii::t('hipanel:finance', 'See new'),
             'buttonLabel' => Yii::t('hipanel:finance', 'See new'),
             'model' => $model,
-            'action' => $this->getRouteForSeeNew(),
+            'action' => $this->getRouteForSeeNew($model->client_id),
             'type' => $this->type,
         ]);
     }
@@ -102,11 +102,12 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
         ]);
     }
 
-    protected function getRouteForSeeNew()
+    protected function getRouteForSeeNew($clientId)
     {
         return [
             '@purse/pre-generate-document',
             'type' => $this->type,
+            'client_id' => $clientId,
         ];
     }
 
