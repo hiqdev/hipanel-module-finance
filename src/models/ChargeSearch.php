@@ -42,6 +42,7 @@ class ChargeSearch extends Charge
             'sum_not_zero',
             'type_ids',
             'id_in',
+            'hide_internal_clients',
         ]);
     }
 
@@ -57,6 +58,7 @@ class ChargeSearch extends Charge
             'tariff_id' => Yii::t('hipanel', 'Plan'),
             'client_type' => Yii::t('hipanel:mailing', 'Client type'),
             'sum_not_zero' => Yii::t('hipanel:finance', 'Exclude with zero-sum'),
+            'hide_internal_clients' => Yii::t('hipanel:finance', 'Hide internal client'),
         ]);
     }
 }

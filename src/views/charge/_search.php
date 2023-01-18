@@ -92,3 +92,7 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field('sum_not_zero', ['options' => ['class' => 'form-group checkbox']])->checkbox(['class' => 'option-input']) ?>
 </div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('hide_internal_clients', ['options' => ['class' => 'form-group checkbox']])->checkbox(['class' => 'option-input']) ?>
+</div>
