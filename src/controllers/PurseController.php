@@ -117,12 +117,17 @@ class PurseController extends \hipanel\base\CrudController
 
     public function actionGenerateMonthlyDocument($id, $type, $client_id, $month = null)
     {
-        return $this->generateDocument('generate-monthly-document', compact('id', 'type', 'client_id', 'month'));
+        return $this->generateDocument('generate-monthly-document', [
+            'id' => $id,
+            'type' => $type,
+            'client_id' => $client_id,
+            'month' => $month
+        ]);
     }
 
     public function actionGenerateDocument($id, $type)
     {
-        return $this->generateDocument('generate-document', compact('id', 'type'));
+        return $this->generateDocument('generate-document', ['id' => $id, 'type' => $type]);
     }
 
     public function generateDocument($action, $params)
