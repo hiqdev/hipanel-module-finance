@@ -115,14 +115,19 @@ class PurseController extends \hipanel\base\CrudController
         }
     }
 
-    public function actionGenerateMonthlyDocument($id, $type, $month = null)
+    public function actionGenerateMonthlyDocument($id, $type, $client_id, $month = null)
     {
-        return $this->generateDocument('generate-monthly-document', compact('id', 'type', 'month'));
+        return $this->generateDocument('generate-monthly-document', [
+            'id' => $id,
+            'type' => $type,
+            'client_id' => $client_id,
+            'month' => $month
+        ]);
     }
 
     public function actionGenerateDocument($id, $type)
     {
-        return $this->generateDocument('generate-document', compact('id', 'type'));
+        return $this->generateDocument('generate-document', ['id' => $id, 'type' => $type]);
     }
 
     public function generateDocument($action, $params)
@@ -132,7 +137,7 @@ class PurseController extends \hipanel\base\CrudController
         } catch (ResponseErrorException $e) {
             Yii::$app->getSession()->setFlash('error', Yii::t('hipanel:finance', 'Failed to generate document! Check requisites!'));
 
-            return $this->redirect(['@client/view', 'id' => $params['id']]);
+            return $this->redirect(['@client/view', 'id' => $params['client_id']]);
         }
         $this->asPdf();
 
@@ -146,7 +151,7 @@ class PurseController extends \hipanel\base\CrudController
         $response->getHeaders()->add('content-type', 'application/pdf');
     }
 
-    public function actionPreGenerateDocument($type)
+    public function actionPreGenerateDocument($type, $client_id)
     {
         $purse = new Purse(['scenario' => 'generate-and-save-monthly-document']);
         if ($purse->load(Yii::$app->request->post()) && $purse->validate()) {
@@ -154,6 +159,7 @@ class PurseController extends \hipanel\base\CrudController
                 '@purse/generate-monthly-document',
                 'id' => $purse->id,
                 'type' => $type,
+                'client_id' => $client_id,
                 'month' => $purse->month,
             ]);
         }
