@@ -94,6 +94,7 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
             ],
             'object->label' => [
                 'class' => RefColumn::class,
+                'attribute' => 'object_name_ilike',
                 'label' => Yii::t('hipanel', 'Details'),
                 'i18nDictionary' => 'hipanel.finance.plan',
                 'value' => function (Price $model) {
