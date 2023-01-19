@@ -43,7 +43,6 @@ class BillCest
     {
         $this->index->containsFilters([
             Select2::asAdvancedSearch($I, 'Currency'),
-            VueTreeSelect::asAdvancedSearch($I, 'Type'),
             Input::asAdvancedSearch($I, 'Servers'),
             Input::asAdvancedSearch($I, 'Description'),
             Select2::asAdvancedSearch($I, 'Tariff'),
