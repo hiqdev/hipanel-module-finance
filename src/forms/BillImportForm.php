@@ -141,7 +141,7 @@ final class BillImportForm extends \yii\base\Model
             foreach ($bills as $bill) {
                 $time = $this->resolveTime($bill->time);
                 $bill->time = $time !== false ? \Yii::$app->formatter->asDatetime($time, 'php:d.m.Y H:i:s') : false;
-                $bill->type_id = $this->getTypeIdByTypeLabel($bill->type);
+                $bill->type_id = $this->resolveType($bill->type);
                 $bill->client_id = $this->convertClientToId($bill->client);
                 if ($bill->requisite !== null) {
                     $bill->requisite_id = $this->convertRequisiteNameToId($bill->requisite, $bill->client);
@@ -218,15 +218,15 @@ final class BillImportForm extends \yii\base\Model
     }
 
     /**
-     * Searches for type ID by its label
+     * Searches for type ID by its label or name
      *
-     * @param string $typeLabel
+     * @param string $typeString
      * @return int|null
      */
-    private function getTypeIdByTypeLabel(string $typeLabel): ?int
+    private function resolveType(string $typeString): ?int
     {
         foreach ($this->billTypes as $type) {
-            if ($type->label === $typeLabel) {
+            if ($type->name === $typeString || $type->label === $typeString) {
                 return $type->id;
             }
         }
