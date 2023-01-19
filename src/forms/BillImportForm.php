@@ -52,7 +52,7 @@ final class BillImportForm extends \yii\base\Model
      * Key - full bill type
      * Value - bill type title
      */
-    public $billTypes = [];
+    public array $billTypes = [];
     /**
      * @var array map to find client id by login.
      * Key - login
@@ -122,8 +122,16 @@ final class BillImportForm extends \yii\base\Model
                 } else {
                     [$client, $time, $sum, $currency, $type, $label, $requisite] = $splitted;
                 }
-                $quantity = self::BILL_DEFAULT_QUANTITY;
-                $bill->setAttributes(compact('client', 'time', 'sum', 'currency', 'type', 'label', 'quantity', 'requisite'));
+                $bill->setAttributes([
+                    'client' => $client,
+                    'time' => $time,
+                    'sum' => $sum,
+                    'currency' => $currency,
+                    'type' => $type,
+                    'label'=> $label,
+                    'quantity' =>self::BILL_DEFAULT_QUANTITY,
+                    'requisite' => $requisite,
+                ]);
                 $bill->populateRelation('charges', []);
                 $bills[] = $bill;
             }
@@ -133,7 +141,7 @@ final class BillImportForm extends \yii\base\Model
             foreach ($bills as $bill) {
                 $time = $this->resolveTime($bill->time);
                 $bill->time = $time !== false ? \Yii::$app->formatter->asDatetime($time, 'php:d.m.Y H:i:s') : false;
-                $bill->type = $this->resolveType($bill->type);
+                $bill->type_id = $this->getTypeIdByTypeLabel($bill->type);
                 $bill->client_id = $this->convertClientToId($bill->client);
                 if ($bill->requisite !== null) {
                     $bill->requisite_id = $this->convertRequisiteNameToId($bill->requisite, $bill->client);
@@ -210,44 +218,20 @@ final class BillImportForm extends \yii\base\Model
     }
 
     /**
-     * Resolves payment $type to a normal form.
+     * Searches for type ID by its label
      *
-     * @param string $type
-     * @throws InvalidValueException
-     * @return string
+     * @param string $typeLabel
+     * @return int|null
      */
-    private function resolveType(string $type): string
+    private function getTypeIdByTypeLabel(string $typeLabel): ?int
     {
-        $types = $this->billTypes;
-
-        // Type is a normal key
-        if (isset($types[$type])) {
-            return $type;
-        }
-
-        // Type is a title of type instead of its key
-        if (in_array($type, $types, true)) {
-            return array_search($type, $types, true);
-        }
-
-        // Assuming only second part is passed. Match from the end
-        $foundKey = null;
-        foreach ($types as $key => $title) {
-            list(, $name) = explode(',', $key);
-            if ($name === $type) {
-                if ($foundKey !== null) {
-                    throw new InvalidValueException('Payment type "' . $type . '" is ambiguous');
-                }
-
-                $foundKey = $key;
+        foreach ($this->billTypes as $type) {
+            if ($type->label === $typeLabel) {
+                return $type->id;
             }
         }
 
-        if ($foundKey) {
-            return $foundKey;
-        }
-
-        throw new InvalidValueException('Payment type "' . $type . '" is not recognized');
+        return null;
     }
 
     /**

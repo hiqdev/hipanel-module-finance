@@ -19,6 +19,7 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\actions\VariantsAction;
 use hipanel\actions\ViewAction;
 use hipanel\filters\EasyAccessControl;
+use hipanel\models\Ref;
 use hipanel\modules\client\controllers\ContactController;
 use hipanel\modules\finance\actions\BillImportFromFileAction;
 use hipanel\modules\finance\actions\BillManagementAction;
@@ -192,11 +193,10 @@ class BillController extends \hipanel\base\CrudController
 
     public function actionImport()
     {
+        $billTypes = $this->billTypesProvider->getTypes();
         $model = new BillImportForm([
-            'billTypes' => array_filter($this->getPaymentTypes(), function ($key) {
-                // Kick out items that are categories names, but not real types
-                return strpos($key, ',') !== false;
-            }, ARRAY_FILTER_USE_KEY),
+            // Kick out items that are categories names, but not real types
+            'billTypes' => array_filter($billTypes, static fn(Ref $type) => str_contains($type->name, ',')),
         ]);
 
         if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post())) {
@@ -208,7 +208,7 @@ class BillController extends \hipanel\base\CrudController
                 return $this->render('create', [
                     'models' => $models,
                     'model' => reset($models),
-                    'billTypesList' => $this->billTypesProvider->getTypesList(),
+                    'billTypesList' => $billTypes,
                 ]);
             }
         }
