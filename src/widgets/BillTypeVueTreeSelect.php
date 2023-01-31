@@ -138,7 +138,8 @@ class BillTypeVueTreeSelect extends InputWidget
         }
 
         // Remove all keys in children array recursively, because vue-treeselect expects only array of options
-        $result = $this->removeKeysRecursively(array_values($options['children']));
+        $children = $options['children'] ?? [];
+        $result = $this->removeKeysRecursively(array_values($children));
 
         return $result;
     }
