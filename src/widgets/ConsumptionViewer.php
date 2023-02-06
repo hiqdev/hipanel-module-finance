@@ -21,6 +21,7 @@ class ConsumptionViewer extends Widget
 
     public function run(): string
     {
+        ConsumptionViewerAsset::register($this->view);
         if (!$this->consumption) {
             return Html::tag('div', Yii::t('hipanel:finance', 'No consumption found for the requested resource'), ['class' => 'alert alert-warning text-center']);
         }

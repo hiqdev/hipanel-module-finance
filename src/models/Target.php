@@ -80,6 +80,6 @@ class Target extends Model
 
     public function showConsumption(): bool
     {
-        return !in_array($this->type, ['vps', 'anycastcdn'], true);
+        return $this->type !== 'vps';
     }
 }
