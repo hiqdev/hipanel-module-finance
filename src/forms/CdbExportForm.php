@@ -47,9 +47,9 @@ class CdbExportForm extends Model
             'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03 pain.001.001.03.xsd'));
         $document->setAttributeNode(new DOMAttr('xmlns', 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03'));
         $document->setAttributeNode(new DOMAttr('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance'));
-        $costumer = $dom->createElement('CstmrCdtTrfInitn');
+        $customer = $dom->createElement('CstmrCdtTrfInitn');
         $header = $dom->createElement('GrpHdr');
-        $costumer->appendChild($header);
+        $customer->appendChild($header);
 
         // Header
         $header->appendChild($dom->createElement('MsgId', $firstRow['MsgId']));
@@ -123,9 +123,9 @@ class CdbExportForm extends Model
 
 
             $info->appendChild($CdtTrfTxInf);
-            $costumer->appendChild($info);
+            $customer->appendChild($info);
         }
-        $document->appendChild($costumer);
+        $document->appendChild($customer);
         $dom->appendChild($document);
 
         return $dom->saveXML();
