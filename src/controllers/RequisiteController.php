@@ -24,6 +24,7 @@ use hipanel\base\CrudController;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\client\actions\ContactCreateAction;
 use hipanel\modules\client\models\query\ContactQuery;
+use hipanel\modules\finance\actions\CdbExportAction;
 use hipanel\modules\finance\models\Requisite;
 use yii\base\Event;
 use Yii;
@@ -46,6 +47,7 @@ class RequisiteController extends CrudController
                     'set-templates' => 'requisites.update',
                     'bulk-set-templates' => 'requisites.update',
                     'set-serie' => 'requisites.update',
+                    'cdb-export' => 'bill.update',
                     '*' => 'requisites.read',
                 ],
             ],
@@ -213,6 +215,9 @@ class RequisiteController extends CrudController
             'validate-form' => [
                 'class' => ValidateFormAction::class,
             ],
+            'cdb-export' => [
+                'class' => CdbExportAction::class,
+            ]
         ]);
     }
 }

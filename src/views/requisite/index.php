@@ -3,6 +3,7 @@
 use hipanel\models\IndexPageUiOptions;
 use hipanel\modules\finance\grid\RequisiteGridView;
 use hipanel\modules\finance\models\RequisiteSearch;
+use hipanel\modules\finance\widgets\CdbExportModalButton;
 use hipanel\modules\server\grid\HubRepresentations;
 use hipanel\widgets\IndexPage;
 use hiqdev\hiart\ActiveDataProvider;
@@ -37,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $page->beginContent('main-actions') ?>
         <?= Html::a(Yii::t('hipanel', 'Create'), '@requisite/create', ['class' => 'btn btn-sm btn-success']) ?>
+        <?= CdbExportModalButton::widget() ?>
     <?php $page->endContent() ?>
 
     <?php $page->beginContent('sorter-actions') ?>
