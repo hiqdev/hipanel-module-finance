@@ -47,6 +47,8 @@ class BillTypeFilter extends RefFilter
             'attribute' => $this->attribute,
             'model' => $this->model,
             'billTypes' => $this->getRefs(),
+            'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
+            'behavior' => BillTypeVueTreeSelect::BEHAVIOR_DEPRECATED,
         ]);
     }
 }

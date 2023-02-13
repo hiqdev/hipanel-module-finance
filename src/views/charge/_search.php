@@ -26,7 +26,9 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field( "type_ids")->widget(BillTypeVueTreeSelect::class, [
         'billTypes' => $billTypesList,
-        'multiple' => true
+        'multiple' => true,
+        'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
+        'behavior' => BillTypeVueTreeSelect::BEHAVIOR_DEPRECATED,
     ]) ?>
 </div>
 

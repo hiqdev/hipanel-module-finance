@@ -135,6 +135,8 @@ $form = ActiveForm::begin([
                                 <?= $form->field($model, "[$i]type_id")->widget(BillTypeVueTreeSelect::class, [
                                     'billTypes' => $billTypesList,
                                     'replaceAttribute' => 'type_id',
+                                    'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
+                                    'behavior' => BillTypeVueTreeSelect::BEHAVIOR_DISABLED,
                                 ]) ?>
                             </div>
                             <div class="col-md-2 <?= AmountWithCurrency::$widgetClass ?>">
@@ -228,6 +230,8 @@ $form = ActiveForm::begin([
                                                     <?= $form->field($charge, "[$i][$j]type_id")->widget(BillTypeVueTreeSelect::class, [
                                                         'billTypes' => $billTypesList,
                                                         'replaceAttribute' => 'type_id',
+                                                        'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
+                                                        'behavior' => BillTypeVueTreeSelect::BEHAVIOR_DISABLED,
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-5">

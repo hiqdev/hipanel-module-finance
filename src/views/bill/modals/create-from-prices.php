@@ -33,6 +33,8 @@ use yii\helpers\Url;
     <div class="col-md-6">
         <?= $form->field($model, "type_id")->widget(BillTypeVueTreeSelect::class, [
             'billTypes' => $billTypes,
+            'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
+            'behavior' => BillTypeVueTreeSelect::BEHAVIOR_DISABLED,
         ]) ?>
     </div>
     <div class="col-md-6">
