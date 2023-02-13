@@ -12,6 +12,8 @@ namespace hipanel\modules\finance\actions;
 
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\helpers\BillServiceEmailFormatter;
+use hipanel\modules\finance\logic\bill\BillTemplateManager;
+use hipanel\modules\finance\logic\bill\template\TemplateInterface;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\Module;
 use hipanel\modules\finance\providers\BillTypesProvider;
@@ -20,39 +22,19 @@ use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\Action;
 use yii\web\Controller;
+use yii\web\Request;
 use yii\web\Response;
 use yii\web\UnprocessableEntityHttpException;
 
 class BillManagementAction extends Action
 {
-    /**
-     * @var \yii\web\Request
-     */
-    protected $request;
-
-    /**
-     * @var Collection
-     */
-    protected $collection;
-    /**
-     * @var BillTypesProvider
-     */
-    protected $billTypesProvider;
-
-    /**
-     * @var string
-     */
-    public $scenario;
-
-    /**
-     * @var string The view that represents current update action
-     */
+    public string $scenario;
     public $_view;
-
-    /**
-     * @var bool
-     */
-    public $forceNewRecord = false;
+    public bool $forceNewRecord = false;
+    public Request $request;
+    protected Collection $collection;
+    protected BillTypesProvider $billTypesProvider;
+    private BillTemplateManager $billTemplateManager;
 
     public function __construct($id, Controller $controller, BillTypesProvider $billTypesProvider, array $config = [])
     {
@@ -60,15 +42,23 @@ class BillManagementAction extends Action
 
         $this->request = Yii::$app->request;
         $this->billTypesProvider = $billTypesProvider;
+        $this->billTemplateManager = new BillTemplateManager($this);
     }
 
     public function init()
     {
         parent::init();
 
-        if (!isset($this->scenario) || !in_array($this->scenario, [BillForm::SCENARIO_CREATE, BillForm::SCENARIO_UPDATE, BillForm::SCENARIO_COPY], true)) {
+        if (!isset($this->scenario) || !in_array($this->scenario,
+                [BillForm::SCENARIO_CREATE, BillForm::SCENARIO_UPDATE, BillForm::SCENARIO_COPY],
+                true)) {
             $this->scenario = $this->id;
         }
+    }
+
+    public function getBillTemplate(): ?TemplateInterface
+    {
+        return $this->billTemplateManager->getTemplate();
     }
 
     public function run()
@@ -82,7 +72,7 @@ class BillManagementAction extends Action
         }
 
         return $this->controller->render($this->view, [
-            'models' => $this->collection->getModels(),
+            'models'        => $this->collection->getModels(),
             'billTypesList' => $this->billTypesProvider->getTypes(),
         ]);
     }
@@ -92,6 +82,12 @@ class BillManagementAction extends Action
         $ids = $this->getRequestedIds();
 
         if ($ids === false) {
+            return;
+        }
+        if ($this->billTemplateManager->isAcceptable()) {
+            $billTemplatedForm = $this->billTemplateManager->getTemplatedForm();
+            $this->collection->set($billTemplatedForm);
+
             return;
         }
 
@@ -133,8 +129,8 @@ class BillManagementAction extends Action
     protected function createCollection(): void
     {
         $this->collection = new Collection([
-            'model' => new BillForm(['scenario' => $this->scenario]),
-            'scenario' => $this->scenario,
+            'model'         => new BillForm(['scenario' => $this->scenario]),
+            'scenario'      => $this->scenario,
             'loadFormatter' => function (BillForm $baseModel, $key, $value) {
                 $charges = $this->request->post($baseModel->newCharge()->formName());
                 $value['charges'] = $charges[$key] ?? [];

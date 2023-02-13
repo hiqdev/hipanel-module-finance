@@ -24,6 +24,7 @@ use yii\web\View;
 
 
 $model = reset($models);
+$allowedTypes = $this->context->action->getBillTemplate()?->allowedTypes() ?? [];
 $timeResolver = static function ($model): ?string {
     $formatter = Yii::$app->formatter;
     if (!isset($model->time)) {
@@ -135,6 +136,7 @@ $form = ActiveForm::begin([
                                 <?= $form->field($model, "[$i]type_id")->widget(BillTypeVueTreeSelect::class, [
                                     'billTypes' => $billTypesList,
                                     'replaceAttribute' => 'type_id',
+                                    'leaveOnlyTypes' => $allowedTypes,
                                 ]) ?>
                             </div>
                             <div class="col-md-2 <?= AmountWithCurrency::$widgetClass ?>">
@@ -228,6 +230,7 @@ $form = ActiveForm::begin([
                                                     <?= $form->field($charge, "[$i][$j]type_id")->widget(BillTypeVueTreeSelect::class, [
                                                         'billTypes' => $billTypesList,
                                                         'replaceAttribute' => 'type_id',
+                                                        'leaveOnlyTypes' => $allowedTypes,
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-5">
