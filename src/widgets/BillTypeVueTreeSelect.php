@@ -15,8 +15,6 @@ use yii\widgets\InputWidget;
 
 class BillTypeVueTreeSelect extends InputWidget
 {
-    const BEHAVIOR_DEPRECATED = 'deprecated';
-    const BEHAVIOR_DISABLED = 'disabled';
     /**
      * @var array<Ref> $billTypes - list of bill types Ref objects
      */
@@ -24,7 +22,7 @@ class BillTypeVueTreeSelect extends InputWidget
     public ?string $replaceAttribute = null;
     public bool $multiple = false;
     public array $deprecatedTypes = [];
-    public ?string $behavior = null;
+    public ?TreeSelectBehavior $behavior = null;
 
     public function run(): string
     {
@@ -123,6 +121,9 @@ class BillTypeVueTreeSelect extends InputWidget
         // We need to split it by comma and build a recursive array of options for vue-treeselect, where ID is a type name
         $options = [];
         foreach ($types as $id => $type) {
+            if ($this->behavior === TreeSelectBehavior::Hidden && $this->isDeprecatedType($type->name)) {
+                continue;
+            }
             $typeParts = explode(',', $type->name);
             $currentLevel = &$options;
             foreach ($typeParts as $i => $typePart) {
@@ -146,7 +147,7 @@ class BillTypeVueTreeSelect extends InputWidget
                 'treeLabel' => str_contains($type->name, ',') ? $this->findTreeLabel($type) : null,
                 'isDisabled' => $this->isDisabled($type->name),
             ];
-            if ($this->behavior === self::BEHAVIOR_DEPRECATED && $this->isDeprecatedType($type->name)) {
+            if ($this->behavior === TreeSelectBehavior::Deprecated && $this->isDeprecatedType($type->name)) {
                 $currentLevel['deprecated'] = true;
             }
         }
@@ -212,7 +213,7 @@ class BillTypeVueTreeSelect extends InputWidget
 
     private function isDisabled(string $typeName): bool
     {
-        if (str_contains($typeName, 'delimiter') || ($this->behavior === self::BEHAVIOR_DISABLED && $this->isDeprecatedType($typeName))) {
+        if (str_contains($typeName, 'delimiter') || ($this->behavior === TreeSelectBehavior::Disabled && $this->isDeprecatedType($typeName))) {
             return true;
         }
 

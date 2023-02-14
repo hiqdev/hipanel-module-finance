@@ -6,6 +6,7 @@ use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\widgets\BillTypeVueTreeSelect;
 use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
+use hipanel\modules\finance\widgets\TreeSelectBehavior;
 use hipanel\widgets\AdvancedSearch;
 use hiqdev\combo\StaticCombo;
 use hiqdev\yii2\daterangepicker\DateRangePicker;
@@ -61,7 +62,7 @@ use yii\web\View;
         'billTypes' => $billTypesList,
         'multiple' => true,
         'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
-        'behavior' => BillTypeVueTreeSelect::BEHAVIOR_DEPRECATED,
+        'behavior' => TreeSelectBehavior::Deprecated,
     ]) ?>
 </div>
 
