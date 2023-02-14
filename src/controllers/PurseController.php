@@ -107,7 +107,7 @@ class PurseController extends \hipanel\base\CrudController
                         'client_types' => $type === 'acceptance' ? 'employee' : null,
                     ]);
                 } catch (ResponseErrorException $e) {
-                    Yii::$app->getSession()->setFlash('error', Yii::t('hipanel:finance', 'Failed to generate document! Check requisites!'));
+                    Yii::$app->getSession()->setFlash('error', Yii::t('hipanel:finance', "Failed find templates for this requisite and document's type. Please, set templates for requisite"));
                 }
             }
 
