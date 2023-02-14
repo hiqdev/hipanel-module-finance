@@ -8,6 +8,7 @@ use hipanel\modules\finance\widgets\BillTypeVueTreeSelect;
 use hipanel\modules\finance\widgets\PricePerUnitWidget;
 use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
 use hipanel\modules\finance\widgets\SumSignToggleButton;
+use hipanel\modules\finance\widgets\TreeSelectBehavior;
 use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\DateTimePicker;
 use hipanel\widgets\DynamicFormWidget;
@@ -135,6 +136,8 @@ $form = ActiveForm::begin([
                                 <?= $form->field($model, "[$i]type_id")->widget(BillTypeVueTreeSelect::class, [
                                     'billTypes' => $billTypesList,
                                     'replaceAttribute' => 'type_id',
+                                    'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
+                                    'behavior' => $model->isNewRecord ? TreeSelectBehavior::Hidden : TreeSelectBehavior::Disabled,
                                 ]) ?>
                             </div>
                             <div class="col-md-2 <?= AmountWithCurrency::$widgetClass ?>">
@@ -228,6 +231,8 @@ $form = ActiveForm::begin([
                                                     <?= $form->field($charge, "[$i][$j]type_id")->widget(BillTypeVueTreeSelect::class, [
                                                         'billTypes' => $billTypesList,
                                                         'replaceAttribute' => 'type_id',
+                                                        'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
+                                                        'behavior' => $model->isNewRecord ? TreeSelectBehavior::Hidden : TreeSelectBehavior::Disabled,
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-5">
