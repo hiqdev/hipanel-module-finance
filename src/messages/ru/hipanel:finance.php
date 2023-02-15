@@ -96,7 +96,9 @@ return [
     'Bill was updated successfully' => 'Счёт был успешно изменён',
     'Charge was deleted successfully' => 'Списание было успешно удалено',
 
-    'Failed find templates for this requisite and document\'s type. Please, set templates for requisite' => 'Не удалось найти шаблоны для реквизита и типа документа. Пожалуйста, установите шаблоны для реквизита',
+    'No templates for requisite. Follow this link' => 'Нет шаблонов для реквизита. Перейдите по этой ссылке',
+    'and set template of type' => 'и установите шаблон типа',
+    'No templates for requisite. Please contact finance department' => 'Нет шаблонов для реквизита. Пожалуйста, свяжитесь с финансовым отделом',
 
     'The entered value for the selected payment type can not be negative.' => 'Для выбранного типа платежа введенное значение не может быть отрицательным числом.',
 

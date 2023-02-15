@@ -2,8 +2,8 @@
 
 use hipanel\modules\finance\grid\RequisiteGridView;
 use hipanel\modules\finance\menus\RequisiteDetailMenu;
-use hipanel\modules\client\widgets\ForceVerificationBlock;
 use hipanel\modules\document\widgets\StackedDocumentsView;
+use hipanel\modules\finance\models\Requisite;
 use hipanel\widgets\Box;
 use hipanel\widgets\ClientSellerLink;
 use hiqdev\assets\flagiconcss\FlagIconCssAsset;
@@ -12,7 +12,7 @@ use yii\helpers\Html;
 use yii\helpers\Inflector;
 
 /**
- * @var \hipanel\modules\finance\models\Requisite
+ * @var Requisite $model
  */
 $this->title = Inflector::titleize($model->name, true);
 $this->params['subtitle'] = Yii::t('hipanel:finance', 'Requisite detailed information') . ' #' . $model->id;

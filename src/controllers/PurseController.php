@@ -18,12 +18,14 @@ use hipanel\actions\SmartCreateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\filters\EasyAccessControl;
+use hipanel\helpers\Url;
 use hipanel\modules\document\models\Statistic as DocumentStatisticModel;
 use hipanel\modules\finance\models\Purse;
 use hipanel\modules\finance\widgets\StatisticTableGenerator;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\Event;
+use yii\helpers\Html;
 
 class PurseController extends \hipanel\base\CrudController
 {
@@ -135,7 +137,18 @@ class PurseController extends \hipanel\base\CrudController
         try {
             $data = Purse::perform($action, $params);
         } catch (ResponseErrorException $e) {
-            Yii::$app->getSession()->setFlash('error', Yii::t('hipanel:finance', 'Failed to generate document! Check requisites!'));
+            $contactUrl = Html::a(Url::toRoute(['@contact/view', 'id' => $e->getResponse()->getData()['_error_ops']['requisite_id']], true),
+                ['@contact/view', 'id' => $e->getResponse()->getData()['_error_ops']['requisite_id']]);
+            $type = $e->getResponse()->getData()['_error_ops']['type'];
+
+            if (Yii::$app->user->can('requisites.update')) {
+                Yii::$app->getSession()->setFlash('error',
+                    Yii::t('hipanel:finance', "No templates for requisite. Follow this link") . ' ' . $contactUrl . ' ' .
+                    Yii::t('hipanel:finance', "and set template of type") . " '$type'");
+            } else {
+                Yii::$app->getSession()->setFlash('error',
+                    Yii::t('hipanel:finance', 'No templates for requisite. Please contact finance department'));
+            }
 
             return $this->redirect(['@client/view', 'id' => $params['client_id']]);
         }
