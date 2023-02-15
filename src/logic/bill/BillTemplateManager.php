@@ -16,7 +16,7 @@ readonly class BillTemplateManager
     public function __construct(private BillManagementAction $action)
     {
         $template = $this->action->request->get('template');
-        $this->template = Template::tryFrom($template);
+        $this->template = $template ? Template::tryFrom($template) : null;
     }
 
     public function isAcceptable(): bool
