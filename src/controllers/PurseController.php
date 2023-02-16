@@ -143,8 +143,11 @@ class PurseController extends \hipanel\base\CrudController
 
             if (Yii::$app->user->can('requisites.update')) {
                 Yii::$app->getSession()->setFlash('error',
-                    Yii::t('hipanel:finance', "No templates for requisite. Follow this link") . ' ' . $contactUrl . ' ' .
-                    Yii::t('hipanel:finance', "and set template of type") . " '$type'");
+                    Yii::t('hipanel:finance',
+                        "No templates for requisite. Follow this link {contactUrl} and set template of type '{type}'", [
+                                'contactUrl' => $contactUrl,
+                                'type' => $type,
+                            ]));
             } else {
                 Yii::$app->getSession()->setFlash('error',
                     Yii::t('hipanel:finance', 'No templates for requisite. Please contact finance department'));
