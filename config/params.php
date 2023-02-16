@@ -18,4 +18,7 @@ return [
         'requisite.types' => null,
         'client.substrings' => [],
     ],
+    'module.finance.bill.types' => [
+        'deprecated.types' => [],
+    ]
 ];

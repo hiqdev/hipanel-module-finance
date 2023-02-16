@@ -1,13 +1,13 @@
 <?php
 
 use hipanel\modules\finance\grid\BillGridView;
+use hipanel\modules\finance\models\BillSearch;
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\widgets\BillImportDropdownButton;
 use hipanel\modules\finance\widgets\CreateBillWithSplitDropdownButton;
 use hipanel\modules\finance\widgets\ExchangeRatesLine;
 use hipanel\widgets\IndexPage;
 use hiqdev\hiart\ActiveDataProvider;
-use hiqdev\hiart\ActiveRecord;
 use yii\helpers\Html;
 use yii\web\View;
 use hipanel\models\IndexPageUiOptions;
@@ -17,7 +17,7 @@ use hipanel\modules\finance\grid\BillRepresentations;
  * @var View $this
  * @var array $billTypesList
  * @var ActiveDataProvider $dataProvider
- * @var ActiveRecord $model
+ * @var BillSearch $model
  * @var ExchangeRate[] $rates
  * @var IndexPageUiOptions $uiModel
  * @var BillRepresentations $representationCollection

@@ -4,6 +4,7 @@ use hipanel\modules\finance\forms\BillFromPricesForm;
 use hipanel\modules\finance\grid\PriceGridView;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\widgets\BillTypeVueTreeSelect;
+use hipanel\modules\finance\widgets\TreeSelectBehavior;
 use hipanel\widgets\DateTimePicker;
 use yii\bootstrap\ActiveForm;
 use yii\data\ArrayDataProvider;
@@ -33,6 +34,8 @@ use yii\helpers\Url;
     <div class="col-md-6">
         <?= $form->field($model, "type_id")->widget(BillTypeVueTreeSelect::class, [
             'billTypes' => $billTypes,
+            'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
+            'behavior' => TreeSelectBehavior::Hidden,
         ]) ?>
     </div>
     <div class="col-md-6">

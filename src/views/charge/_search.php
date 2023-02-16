@@ -5,6 +5,7 @@ use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\widgets\BillTypeVueTreeSelect;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
+use hipanel\modules\finance\widgets\TreeSelectBehavior;
 use hipanel\modules\stock\widgets\combo\OrderCombo;
 use hipanel\widgets\AdvancedSearch;
 use hiqdev\combo\StaticCombo;
@@ -26,7 +27,9 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field( "type_ids")->widget(BillTypeVueTreeSelect::class, [
         'billTypes' => $billTypesList,
-        'multiple' => true
+        'multiple' => true,
+        'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
+        'behavior' => TreeSelectBehavior::Deprecated,
     ]) ?>
 </div>
 

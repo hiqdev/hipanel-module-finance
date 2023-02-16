@@ -22,6 +22,8 @@ class BillTypeVueTreeSelect extends InputWidget
     public ?string $replaceAttribute = null;
     public bool $multiple = false;
     public array $leaveOnlyTypes = [];
+    public array $deprecatedTypes = [];
+    public ?TreeSelectBehavior $behavior = null;
 
     public function run(): string
     {
@@ -64,6 +66,10 @@ class BillTypeVueTreeSelect extends InputWidget
                   @deselect="typeChange"
                   :before-clear-all="typeChange"
                 >
+                    <label slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }" :class="labelClassName">
+                        <span v-html="node.raw.deprecated ? s(node.label) : node.label"></span>
+                        <span v-if="shouldShowCount" :class="countClassName">({{ count }})</span>
+                    </label>
                     <div slot="value-label" slot-scope="{ node }" v-html="node.raw.treeLabel ?? node.raw.label"></div>
                 </treeselect>
                 %s
@@ -96,6 +102,9 @@ class BillTypeVueTreeSelect extends InputWidget
                               const el = this.\$el.querySelector('input:not(.vue-treeselect__input)');
                               $(el).trigger('change');
                             });
+                          },
+                          s(text) {
+                              return '<s>' + text + '</s>';
                           }
                         }
                     });
@@ -113,6 +122,9 @@ class BillTypeVueTreeSelect extends InputWidget
         // We need to split it by comma and build a recursive array of options for vue-treeselect, where ID is a type name
         $options = [];
         foreach ($types as $id => $type) {
+            if ($this->behavior === TreeSelectBehavior::Hidden && $this->isDeprecatedType($type->name)) {
+                continue;
+            }
             $typeParts = explode(',', $type->name);
             $currentLevel = &$options;
             foreach ($typeParts as $i => $typePart) {
@@ -137,6 +149,9 @@ class BillTypeVueTreeSelect extends InputWidget
                 'treeLabel'  => str_contains($type->name, ',') ? $this->findTreeLabel($type) : null,
                 'isDisabled' => str_contains($type->name, 'delimiter'),
             ];
+            if ($this->behavior === TreeSelectBehavior::Deprecated && $this->isDeprecatedType($type->name)) {
+                $currentLevel['deprecated'] = true;
+            }
         }
 
         // Remove all keys in children array recursively, because vue-treeselect expects only array of options
@@ -170,7 +185,11 @@ class BillTypeVueTreeSelect extends InputWidget
                 $parts[$key] = Html::tag('span', StringHelper::truncate($this->fixLang($types[$key]->label), 10));
             }
         }
-        $parts[] = $this->fixLang($types[$type->name]->label);
+        if ($this->isDeprecatedType($type->name)) {
+            $parts[] = Html::tag('s', $this->fixLang($types[$type->name]->label));
+        } else {
+            $parts[] = $this->fixLang($types[$type->name]->label);
+        }
 
         return !empty($parts) ? implode("", $parts) : null;
     }
@@ -187,6 +206,20 @@ class BillTypeVueTreeSelect extends InputWidget
     private function getAttribute(): string
     {
         return $this->replaceAttribute ?? $this->attribute;
+    }
+
+    private function isDeprecatedType(string $typeName): bool
+    {
+        return ($this->deprecatedTypes && in_array($typeName, $this->deprecatedTypes));
+    }
+
+    private function isDisabled(string $typeName): bool
+    {
+        if (str_contains($typeName, 'delimiter') || ($this->behavior === TreeSelectBehavior::Disabled && $this->isDeprecatedType($typeName))) {
+            return true;
+        }
+
+        return false;
     }
 
     private function filter(array $children, array $remained = []): array
