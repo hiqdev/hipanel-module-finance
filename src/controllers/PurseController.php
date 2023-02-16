@@ -18,12 +18,14 @@ use hipanel\actions\SmartCreateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\filters\EasyAccessControl;
+use hipanel\helpers\Url;
 use hipanel\modules\document\models\Statistic as DocumentStatisticModel;
 use hipanel\modules\finance\models\Purse;
 use hipanel\modules\finance\widgets\StatisticTableGenerator;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\Event;
+use yii\helpers\Html;
 
 class PurseController extends \hipanel\base\CrudController
 {
@@ -107,7 +109,7 @@ class PurseController extends \hipanel\base\CrudController
                         'client_types' => $type === 'acceptance' ? 'employee' : null,
                     ]);
                 } catch (ResponseErrorException $e) {
-                    Yii::$app->getSession()->setFlash('error', Yii::t('hipanel:finance', 'Failed to generate document! Check requisites!'));
+                    Yii::$app->getSession()->setFlash('error', Yii::t('hipanel:finance', "Failed find templates for this requisite and document's type. Please, set templates for requisite"));
                 }
             }
 
@@ -135,7 +137,21 @@ class PurseController extends \hipanel\base\CrudController
         try {
             $data = Purse::perform($action, $params);
         } catch (ResponseErrorException $e) {
-            Yii::$app->getSession()->setFlash('error', Yii::t('hipanel:finance', 'Failed to generate document! Check requisites!'));
+            $contactUrl = Html::a(Url::toRoute(['@requisite/view', 'id' => $e->getResponse()->getData()['_error_ops']['requisite_id']], true),
+                ['@requisite/view', 'id' => $e->getResponse()->getData()['_error_ops']['requisite_id']]);
+            $type = $e->getResponse()->getData()['_error_ops']['type'];
+
+            if (Yii::$app->user->can('requisites.update')) {
+                Yii::$app->getSession()->setFlash('error',
+                    Yii::t('hipanel:finance',
+                        "No templates for requisite. Follow this link {contactUrl} and set template of type '{type}'", [
+                                'contactUrl' => $contactUrl,
+                                'type' => $type,
+                            ]));
+            } else {
+                Yii::$app->getSession()->setFlash('error',
+                    Yii::t('hipanel:finance', 'No templates for requisite. Please contact finance department'));
+            }
 
             return $this->redirect(['@client/view', 'id' => $params['client_id']]);
         }
