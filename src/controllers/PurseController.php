@@ -137,8 +137,8 @@ class PurseController extends \hipanel\base\CrudController
         try {
             $data = Purse::perform($action, $params);
         } catch (ResponseErrorException $e) {
-            $contactUrl = Html::a(Url::toRoute(['@contact/view', 'id' => $e->getResponse()->getData()['_error_ops']['requisite_id']], true),
-                ['@contact/view', 'id' => $e->getResponse()->getData()['_error_ops']['requisite_id']]);
+            $contactUrl = Html::a(Url::toRoute(['@requisite/view', 'id' => $e->getResponse()->getData()['_error_ops']['requisite_id']], true),
+                ['@requisite/view', 'id' => $e->getResponse()->getData()['_error_ops']['requisite_id']]);
             $type = $e->getResponse()->getData()['_error_ops']['type'];
 
             if (Yii::$app->user->can('requisites.update')) {
