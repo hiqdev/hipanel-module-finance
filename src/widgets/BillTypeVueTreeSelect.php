@@ -21,7 +21,7 @@ class BillTypeVueTreeSelect extends InputWidget
     public array $billTypes = [];
     public ?string $replaceAttribute = null;
     public bool $multiple = false;
-    public array $leaveOnlyTypes = [];
+    public array $allowedTypes = [];
     public array $deprecatedTypes = [];
     public ?TreeSelectBehavior $behavior = null;
 
@@ -224,10 +224,10 @@ class BillTypeVueTreeSelect extends InputWidget
 
     private function filter(array $children, array $remained = []): array
     {
-        if (empty($children) || empty($this->leaveOnlyTypes)) {
+        if (empty($children) || empty($this->allowedTypes)) {
             return $children;
         }
-        foreach ($this->leaveOnlyTypes as $remainType) {
+        foreach ($this->allowedTypes as $remainType) {
             foreach ($children as $typeName => $child) {
                 if (isset($child['type']) && $child['type'] === $remainType) {
                     $remained[$typeName] = $child;

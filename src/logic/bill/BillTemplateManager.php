@@ -37,6 +37,7 @@ readonly class BillTemplateManager
 
     public function getTemplate(): ?TemplateInterface
     {
-        return $this->template->create();
+        return $this->template?->create();
+
     }
 }

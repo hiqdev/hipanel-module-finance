@@ -8,7 +8,7 @@ enum Template: string
 {
     case Expense = 'expense';
 
-    public function create(): ?TemplateInterface
+    public function create(): TemplateInterface
     {
         return match ($this) {
             self::Expense => new ExpenseTemplate(),

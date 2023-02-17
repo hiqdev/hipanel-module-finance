@@ -21,11 +21,11 @@ use yii\web\View;
  * @var View $this
  * @var BillForm[] $models
  * @var array $billTypesList
+ * @var array $allowedTypes
  */
 
 
 $model = reset($models);
-$allowedTypes = $this->context->action->getBillTemplate()?->allowedTypes() ?? [];
 $timeResolver = static function ($model): ?string {
     $formatter = Yii::$app->formatter;
     if (!isset($model->time)) {
@@ -139,7 +139,7 @@ $form = ActiveForm::begin([
                                     'replaceAttribute' => 'type_id',
                                     'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
                                     'behavior' => $model->isNewRecord ? TreeSelectBehavior::Hidden : TreeSelectBehavior::Disabled,
-                                    'leaveOnlyTypes' => $allowedTypes,
+                                    'allowedTypes' => $allowedTypes,
                                 ]) ?>
                             </div>
                             <div class="col-md-2 <?= AmountWithCurrency::$widgetClass ?>">
@@ -235,7 +235,7 @@ $form = ActiveForm::begin([
                                                         'replaceAttribute' => 'type_id',
                                                         'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
                                                         'behavior' => $model->isNewRecord ? TreeSelectBehavior::Hidden : TreeSelectBehavior::Disabled,
-                                                        'leaveOnlyTypes' => $allowedTypes,
+                                                        'allowedTypes' => $allowedTypes,
                                                     ]) ?>
                                                 </div>
                                                 <div class="col-md-5">
@@ -259,9 +259,13 @@ $form = ActiveForm::begin([
                                                 </div>
                                                 <div class="col-md-1" style="padding-top: 25px;">
                                                     <label>&nbsp;</label>
-                                                    <button type="button"
+                                                    <button type="button" title="<?= Yii::t('hipanel:finance', 'Delete charge') ?>"
                                                             class="remove-charge btn bg-maroon btn-sm btn-flat">
                                                         <i class="glyphicon glyphicon-minus"></i>
+                                                    </button>
+                                                    <button type="button" title="<?= Yii::t('hipanel:finance', 'Repeat charge') ?>"
+                                                            class="add-charge repeat-charge btn btn-warning btn-sm btn-flat">
+                                                        <i class="fa fa-repeat fa-fw"></i>
                                                     </button>
                                                 </div>
                                                 <div class="col-md-12">
@@ -302,71 +306,103 @@ $form = ActiveForm::begin([
 </div>
 
 <?php $this->registerJs(<<<JS
-  (() => {
-    $('#bill-dynamic-form').on('change', '.bill-charges .charge-item input[data-attribute=sum]', function () {
-        $(this).closest('.bill-item').find('input[data-bill-sum]').blur();
-    });
-    // auto-update charges time
-    const updateChargesTime = () => {
-      $('.bill-item').each((idx, billItemContainerElement) => {
-        const billTimeInputValue = $(billItemContainerElement).find('.bill-time').val();
-        if (moment(billTimeInputValue).isValid()) {
-          const billTime = moment(billTimeInputValue);
-          let chargeTime = null;
-          $(billItemContainerElement).find('.charge-item :input[id$=time]').each((idx, chargeTimeInput) => {
-            chargeTime = (chargeTime ?? billTime).add(1, 'seconds');
-            $(chargeTimeInput).val(chargeTime.format('YYYY-MM-DD HH:mm:ss'));
-          });
-        }
-      });
-    };
-    
-    const copyObject = function() {
-        var objectSelectorInputs = $(this).find('[data-object-selector-field]');
-        var lengthObjects = objectSelectorInputs.length;
-        objectSelectorInputs.each(function(i, elem) {
-            var objectInputId = $(elem).attr('id');
-            var changerInputId = $(elem).prev('select').attr('id');
-            
-            if (!objectInputId || objectInputId.includes('billform')) {
-                return ;
-            }
-            initObjectSelectorChanger(changerInputId, objectInputId);
-            
-            var objectNumber = getBillAndChargeNumber(objectInputId);
-            var objectType = null;
-            var objectValue = null;
-            if (lengthObjects === 1) {
-                var objectType = $('#billform-' + objectNumber.billNumber + '-class').val();
-                var objectValue = $('#billform-' + objectNumber.billNumber + '-object_id').val();
-                var objectTitle = $('#billform-' + objectNumber.billNumber + '-object_id option:selected').text();
-            } else if (lengthObjects === (i + 1)) {
-                var objectType = $('#charge-' + objectNumber.billNumber + '-' + i + '-class').val();
-                var objectValue = $('#charge-' + objectNumber.billNumber + '-' + i + '-object_id').val();
-                var objectTitle = $('#charge-' + objectNumber.billNumber + '-' + i + '-object_id option:selected').text();
-            }
-            
-            if (objectType && objectValue) {
-                $('#' + changerInputId).val(objectType).change();
-                setTimeout(() => {
-                    $('#' + objectInputId).append(new Option(objectTitle, objectValue)).change();
-                }, 0)
-            }
+(() => {
+  let repeatedCharge = null;
+  $("#bill-dynamic-form").on("change", ".bill-charges .charge-item input[data-attribute=sum]", function () {
+    $(this).closest(".bill-item").find("input[data-bill-sum]").blur();
+  });
+  // auto-update charges time
+  const updateChargesTime = () => {
+    $(".bill-item").each((idx, billItemContainerElement) => {
+      const billTimeInputValue = $(billItemContainerElement).find(".bill-time").val();
+      if (moment(billTimeInputValue).isValid()) {
+        const billTime = moment(billTimeInputValue);
+        let chargeTime = null;
+        $(billItemContainerElement).find(".charge-item :input[id$=time]").each((idx, chargeTimeInput) => {
+          chargeTime = (chargeTime ?? billTime).add(1, "seconds");
+          $(chargeTimeInput).val(chargeTime.format("YYYY-MM-DD HH:mm:ss"));
         });
-        function getBillAndChargeNumber(objectInputId) {
-            var splitInput = objectInputId.split('-');
-            
-            return {'billNumber': splitInput[1], 'chargeNumber': splitInput[2]};
-        }
-    }
-    $(document).on('change', '.bill-time', updateChargesTime);
-    $('.charges_dynamicform_wrapper').on('afterInsert', updateChargesTime).on('afterInsert', copyObject);
-    $('.bills_dynamicform_wrapper').on('afterInsert', (event, el) => {
-      $(el).find('.charges_dynamicform_wrapper').on('afterInsert', updateChargesTime).on('afterInsert', copyObject);
-      updateChargesTime();
+      }
     });
-    // ---
-  })();
+  };
+
+  const copyObject = function () {
+    if (repeatedCharge !== null) {
+      return;
+    }
+    var objectSelectorInputs = $(this).find("[data-object-selector-field]");
+    var lengthObjects = objectSelectorInputs.length;
+    objectSelectorInputs.each(function (i, elem) {
+      var objectInputId = $(elem).attr("id");
+      var changerInputId = $(elem).prev("select").attr("id");
+
+      if (!objectInputId || objectInputId.includes("billform")) {
+        return;
+      }
+      initObjectSelectorChanger(changerInputId, objectInputId);
+
+      var objectNumber = getBillAndChargeNumber(objectInputId);
+      var objectType = null;
+      var objectValue = null;
+      if (lengthObjects === 1) {
+        var objectType = $("#billform-" + objectNumber.billNumber + "-class").val();
+        var objectValue = $("#billform-" + objectNumber.billNumber + "-object_id").val();
+        var objectTitle = $("#billform-" + objectNumber.billNumber + "-object_id option:selected").text();
+      } else if (lengthObjects === (i + 1)) {
+        var objectType = $("#charge-" + objectNumber.billNumber + "-" + i + "-class").val();
+        var objectValue = $("#charge-" + objectNumber.billNumber + "-" + i + "-object_id").val();
+        var objectTitle = $("#charge-" + objectNumber.billNumber + "-" + i + "-object_id option:selected").text();
+      }
+
+      if (objectType && objectValue) {
+        $("#" + changerInputId).val(objectType).change();
+        setTimeout(() => {
+          $("#" + objectInputId).append(new Option(objectTitle, objectValue)).change();
+        }, 0);
+      }
+    });
+
+    function getBillAndChargeNumber(objectInputId) {
+      var splitInput = objectInputId.split("-");
+
+      return {"billNumber": splitInput[1], "chargeNumber": splitInput[2]};
+    }
+  };
+  $(document).on("change", ".bill-time", updateChargesTime);
+  // repeat charge
+  const repeatCharge = function (e, newCharge) {
+    if (repeatedCharge !== null) {
+      $(newCharge).find(":input[id$=label]").val($(repeatedCharge).find(":input[id$=label]").val());
+      $(newCharge).find(":input[id$=quantity]").val($(repeatedCharge).find(":input[id$=quantity]").val());
+      $(newCharge).find(":input[id^=price_per_unit]").val('');
+      $(newCharge).find(":input[id$=sum]").val('');
+      // object
+      const objectClass = $(repeatedCharge).find(":input[id*=class]").val();
+      const objectLabel = $(repeatedCharge).find(":input[id*=object_id] option:selected").text();
+      const objectValue = $(repeatedCharge).find(":input[id*=object_id]").val();
+      if (objectClass && objectValue) {
+        $(newCharge).find(":input[id*=class]").val(objectClass).change();
+        setTimeout(() => {
+          $(newCharge).find(":input[id*=object_id]").append(new Option(objectLabel, objectValue)).change();
+        }, 0);
+      }
+      // type
+      const typeId = $(repeatedCharge).find('div.vue-treeselect').parents('div').eq(0).find('input:hidden').data('value');
+      $(newCharge).find('div.vue-treeselect').parents('div').get(0).__vue__.typeChange({id: String(typeId)});
+    }
+    repeatedCharge = null;
+  };
+  $(".charges_dynamicform_wrapper").on('beforeInsert', function (e, charge) {
+    if (charge.context.classList.contains('repeat-charge')) {
+      repeatedCharge = charge.closest('.charge-item').get(0);
+    }
+  });
+  $(".charges_dynamicform_wrapper").on("afterInsert", updateChargesTime).on("afterInsert", copyObject).on('afterInsert', repeatCharge);
+  $(".bills_dynamicform_wrapper").on("afterInsert", (event, el) => {
+    $(el).find(".charges_dynamicform_wrapper").on("afterInsert", updateChargesTime).on("afterInsert", copyObject).on('afterInsert', repeatCharge);
+    updateChargesTime();
+  });
+})();
 JS
 ) ?>
 

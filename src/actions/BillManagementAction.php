@@ -31,6 +31,7 @@ class BillManagementAction extends Action
     public string $scenario;
     public $_view;
     public bool $forceNewRecord = false;
+    public bool $withZeroSums = false;
     public Request $request;
     protected Collection $collection;
     protected BillTypesProvider $billTypesProvider;
@@ -65,6 +66,9 @@ class BillManagementAction extends Action
     {
         $this->createCollection();
         $this->findBills();
+        if ($this->withZeroSums) {
+            $this->resetSums();
+        }
 
         $result = $this->saveBills();
         if ($result instanceof Response) {
@@ -72,8 +76,9 @@ class BillManagementAction extends Action
         }
 
         return $this->controller->render($this->view, [
-            'models'        => $this->collection->getModels(),
+            'models' => $this->collection->getModels(),
             'billTypesList' => $this->billTypesProvider->getTypes(),
+            'allowedTypes' => $this->getBillTemplate()?->allowedTypes() ?? [],
         ]);
     }
 
@@ -203,5 +208,17 @@ class BillManagementAction extends Action
         /** @var Module $module */
         $module = Module::getInstance();
         $module->sendBillServiceEmail($source, mb_strtoupper($this->scenario), $subject, $body);
+    }
+
+    private function resetSums(): void
+    {
+        foreach ($this->collection->getModels() as $bill) {
+            $bill->sum = null;
+            if ($bill->charges !== []) {
+                foreach ($bill->charges as $charge) {
+                    $charge->sum = null;
+                }
+            }
+        }
     }
 }

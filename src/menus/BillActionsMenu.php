@@ -36,6 +36,15 @@ class BillActionsMenu extends \hiqdev\yii2\menus\Menu
                     'data-pjax' => 0,
                 ],
             ],
+            'copy-with-zero-sums' => [
+                'label' => Yii::t('hipanel', 'Copy with zero sums'),
+                'icon' => 'fa-clone',
+                'url' => ['@bill/copy-with-zero-sums', 'id' => $this->model->id],
+                'visible' => $this->model->canCopy(),
+                'linkOptions' => [
+                    'data-pjax' => 0,
+                ],
+            ],
             'update' => [
                 'label' => Yii::t('hipanel', 'Update'),
                 'icon' => 'fa-pencil',
