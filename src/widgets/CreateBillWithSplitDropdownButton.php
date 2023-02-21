@@ -21,19 +21,21 @@ class CreateBillWithSplitDropdownButton extends Widget
             ['@bill/create'],
             ['class' => 'btn btn-sm btn-success']
         );
-        $html .= Html::button(
-            Html::tag('span', null, ['class' => 'caret']) .
-            Html::tag('span', Yii::t('hipanel', 'Toggle dropdown'), ['class' => 'sr-only']),
-            ['class' => 'btn btn-success btn-sm dropdown-toggle', 'data-toggle' => 'dropdown']
-        );
-        $html .= Dropdown::widget([
-            'items' => $this->dropdownItems === [] ? [
-                [
-                    'label' => Yii::t('hipanel:finance', 'Expense template'),
-                    'url'   => ['@finance/bill/create', 'template' => 'expense'],
-                ],
-            ] : $this->dropdownItems,
-        ]);
+        if (Yii::$app->user->can('test.alpha')) {
+            $html .= Html::button(
+                Html::tag('span', null, ['class' => 'caret']) .
+                Html::tag('span', Yii::t('hipanel', 'Toggle dropdown'), ['class' => 'sr-only']),
+                ['class' => 'btn btn-success btn-sm dropdown-toggle', 'data-toggle' => 'dropdown']
+            );
+            $html .= Dropdown::widget([
+                'items' => $this->dropdownItems === [] ? [
+                    [
+                        'label' => Yii::t('hipanel:finance', 'Expense template'),
+                        'url'   => ['@finance/bill/create', 'template' => 'expense'],
+                    ],
+                ] : $this->dropdownItems,
+            ]);
+        }
         $html .= Html::endTag('div');
 
         return $html;
