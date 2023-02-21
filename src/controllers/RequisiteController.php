@@ -93,6 +93,7 @@ class RequisiteController extends CrudController
                     }
 
                     $query->addSelect('balances');
+                    $query->andWhere(['show_nonrequisite' => 1]);
                     $query->withLocalizations();
                 },
             ],
