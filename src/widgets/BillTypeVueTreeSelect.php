@@ -21,6 +21,7 @@ class BillTypeVueTreeSelect extends InputWidget
     public array $billTypes = [];
     public ?string $replaceAttribute = null;
     public bool $multiple = false;
+    public array $allowedTypes = [];
     public array $deprecatedTypes = [];
     public ?TreeSelectBehavior $behavior = null;
 
@@ -38,9 +39,9 @@ class BillTypeVueTreeSelect extends InputWidget
         $this->registerJs($id);
         $activeInput = Html::activeHiddenInput($this->model, $this->attribute, [
             'v-model' => 'value',
-            'value' => null,
-            'data' => [
-                'value' => $value,
+            'value'   => null,
+            'data'    => [
+                'value'   => $value,
                 'options' => Json::encode($options),
             ],
         ]);
@@ -134,18 +135,19 @@ class BillTypeVueTreeSelect extends InputWidget
                 }
                 if (!isset($currentLevel['children'][$typePart])) {
                     $currentLevel['children'][$typePart] = [
-                        'id' => $typePart,
-                        'label' => $typePart,
+                        'id'       => $typePart,
+                        'label'    => $typePart,
                         'children' => [],
                     ];
                 }
                 $currentLevel = &$currentLevel['children'][$typePart];
             }
             $currentLevel = [
-                'id' => (string)$id,
-                'label' => $type->label,
-                'treeLabel' => str_contains($type->name, ',') ? $this->findTreeLabel($type) : null,
-                'isDisabled' => $this->isDisabled($type->name),
+                'id'         => (string)$id,
+                'label'      => $type->label,
+                'type'       => $type->name,
+                'treeLabel'  => str_contains($type->name, ',') ? $this->findTreeLabel($type) : null,
+                'isDisabled' => str_contains($type->name, 'delimiter'),
             ];
             if ($this->behavior === TreeSelectBehavior::Deprecated && $this->isDeprecatedType($type->name)) {
                 $currentLevel['deprecated'] = true;
@@ -154,9 +156,9 @@ class BillTypeVueTreeSelect extends InputWidget
 
         // Remove all keys in children array recursively, because vue-treeselect expects only array of options
         $children = $options['children'] ?? [];
-        $result = $this->removeKeysRecursively(array_values($children));
+        $children = $this->filter($children);
 
-        return $result;
+        return $this->removeKeysRecursively(array_values($children));
     }
 
 
@@ -218,5 +220,23 @@ class BillTypeVueTreeSelect extends InputWidget
         }
 
         return false;
+    }
+
+    private function filter(array $children, array $remained = []): array
+    {
+        if (empty($children) || empty($this->allowedTypes)) {
+            return $children;
+        }
+        foreach ($this->allowedTypes as $remainType) {
+            foreach ($children as $typeName => $child) {
+                if (isset($child['type']) && $child['type'] === $remainType) {
+                    $remained[$typeName] = $child;
+                } else if (isset($child['children'])) {
+                    $remained = $this->filter($child['children'], $remained);
+                }
+            }
+        }
+
+        return $remained;
     }
 }

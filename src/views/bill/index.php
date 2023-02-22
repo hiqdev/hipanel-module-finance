@@ -4,6 +4,7 @@ use hipanel\modules\finance\grid\BillGridView;
 use hipanel\modules\finance\models\BillSearch;
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\widgets\BillImportDropdownButton;
+use hipanel\modules\finance\widgets\CreateBillWithSplitDropdownButton;
 use hipanel\modules\finance\widgets\ExchangeRatesLine;
 use hipanel\widgets\IndexPage;
 use hiqdev\hiart\ActiveDataProvider;
@@ -38,7 +39,7 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
             <?= Html::a(Yii::t('hipanel:finance', 'Recharge account'), ['@pay/deposit'], ['class' => 'btn btn-sm btn-success']) ?>
         <?php endif ?>
         <?php if (Yii::$app->user->can('bill.create')) : ?>
-            <?= Html::a(Yii::t('hipanel:finance', 'Add payment'), ['@bill/create'], ['class' => 'btn btn-sm btn-success']) ?>
+            <?= CreateBillWithSplitDropdownButton::widget() ?>
             <?= Html::a(Yii::t('hipanel:finance', 'Add internal transfer'), ['@bill/create-transfer'], ['class' => 'btn btn-sm btn-default']) ?>
         <?php endif ?>
         <?php if (Yii::$app->user->can('bill.create-exchange')) : ?>

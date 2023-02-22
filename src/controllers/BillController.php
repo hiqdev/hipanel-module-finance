@@ -18,6 +18,7 @@ use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\VariantsAction;
 use hipanel\actions\ViewAction;
+use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\models\Ref;
 use hipanel\modules\client\controllers\ContactController;
@@ -43,7 +44,7 @@ use yii\base\Module;
 use yii\grid\GridView;
 use yii\web\Response;
 
-class BillController extends \hipanel\base\CrudController
+class BillController extends CrudController
 {
     /**
      * @var BillTypesProvider
@@ -63,13 +64,13 @@ class BillController extends \hipanel\base\CrudController
             'access-bill' => [
                 'class' => EasyAccessControl::class,
                 'actions' => [
-                    'create,copy,create-from-prices' => 'bill.create',
-                    'create-transfer'                => 'bill.create',
-                    'import'                         => 'bill.import',
-                    'import-from-file'               => 'bill.import',
-                    'update,charge-delete'           => 'bill.update',
-                    'delete'                         => 'bill.delete',
-                    '*'                              => 'bill.read',
+                    'create,copy,copy-with-zero-sums,create-from-prices' => 'bill.create',
+                    'create-transfer'                                    => 'bill.create',
+                    'import'                                             => 'bill.import',
+                    'import-from-file'                                   => 'bill.import',
+                    'update,charge-delete'                               => 'bill.update',
+                    'delete'                                             => 'bill.delete',
+                    '*'                                                  => 'bill.read',
                 ],
             ],
         ]);
@@ -149,6 +150,13 @@ class BillController extends \hipanel\base\CrudController
                 'view' => 'create',
                 'scenario' => 'create',
                 'forceNewRecord' => true,
+            ],
+            'copy-with-zero-sums' => [
+                'class' => BillManagementAction::class,
+                'view' => 'create',
+                'scenario' => 'create',
+                'forceNewRecord' => true,
+                'withZeroSums' => true,
             ],
             'create-transfer' => [
                 'class' => SmartCreateAction::class,
