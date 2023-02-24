@@ -78,6 +78,7 @@ class CreateFromPricesAction extends BillManagementAction
                 return $this->controller->render('create', [
                     'models' => $this->collection->getModels(),
                     'billTypesList' => $billTypes,
+                    'allowedTypes' => [],
                 ]);
             }
             throw new BadRequestHttpException('unknown error while creating invoice');
