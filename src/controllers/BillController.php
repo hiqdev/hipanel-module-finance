@@ -217,6 +217,7 @@ class BillController extends CrudController
                     'models' => $models,
                     'model' => reset($models),
                     'billTypesList' => $billTypes,
+                    'allowedTypes' => [],
                 ]);
             }
         }
