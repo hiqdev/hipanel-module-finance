@@ -7,7 +7,6 @@ namespace hipanel\modules\finance\widgets;
 use hipanel\helpers\ArrayHelper;
 use hipanel\helpers\StringHelper;
 use hipanel\models\Ref;
-use hipanel\modules\finance\assets\VueTreeSelectAsset;
 use hipanel\widgets\VueTreeSelectInput;
 use Yii;
 use yii\helpers\Html;
