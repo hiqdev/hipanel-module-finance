@@ -110,7 +110,9 @@ class PlanController extends CrudController
                     $query
                         ->withSales()
                         ->withPrices()
-                        ->withPriceHistory();
+                        ->withPriceHistory()
+                        ->andWhere(['show_deleted' => 1])
+                    ;
                 },
                 'data' => function (Action $action, array $data) {
                     return array_merge($data, array_filter([
