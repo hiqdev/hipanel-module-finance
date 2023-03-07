@@ -95,6 +95,11 @@ class PlanController extends CrudController
             'update' => [
                 'class' => SmartUpdateAction::class,
                 'success' => Yii::t('hipanel.finance.plan', 'Plan was successfully updated'),
+                'on beforeFetch' => function (Event $event) {
+                    $event->sender->getDataProvider()->query
+                        ->andWhere(['show_deleted' => 1])
+                    ;
+                },
             ],
             'index' => [
                 'responseVariants' => [
