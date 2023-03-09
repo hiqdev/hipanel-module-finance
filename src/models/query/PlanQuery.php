@@ -64,11 +64,17 @@ class PlanQuery extends \hiqdev\hiart\ActiveQuery
     /**
      * @return $this
      */
-    public function withSales()
+    public function withSales(?array $filter = null)
     {
         $this
             ->joinWith('sales')
             ->andWhere(['states' => ['ok', 'deleted']]);
+        if ($filter && isset($filter['saleObjectInilike'])) {
+            $this->andWhere(['sale_object_inilike' => $filter['saleObjectInilike']]);
+        }
+        if ($filter && isset($filter['saleBuyerId'])) {
+            $this->andWhere(['sale_buyer_id' => $filter['saleBuyerId']]);
+        }
 
         return $this;
     }

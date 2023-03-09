@@ -6,4 +6,6 @@ echo $this->render('../server/view', [
     'grouper' => $grouper,
     'salesByObject' => $salesByObject ?? [],
     'pricesByMainObject' => $pricesByMainObject ?? [],
+    'searchModel' => $searchModel,
+    'pageSize' => $pageSize,
 ]);

@@ -5,6 +5,7 @@ use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\menus\PlanDetailMenu;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\PriceHistory;
+use hipanel\modules\finance\models\SaleSearch;
 use hipanel\modules\finance\widgets\PriceHistoryWidget;
 use hipanel\widgets\CustomAttributesViewer;
 use hipanel\widgets\IndexPage;
@@ -17,6 +18,7 @@ use yii\web\View;
  * @var PlanInternalsGrouper $grouper
  * @var array $parentPrices
  * @var PriceHistory[] $plansHistory
+ * @var SaleSearch $searchModel
  */
 $this->title = $model->name ? Html::encode($model->name) : '&nbsp;';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Tariff plans'), 'url' => ['index']];
@@ -114,7 +116,9 @@ CSS
                         'model' => $model,
                         'grouper' => $grouper,
                         'page' => $page,
-                        'parentPrices' => $parentPrices ?? []
+                        'parentPrices' => $parentPrices ?? [],
+                        'searchModel' => $searchModel,
+                        'pageSize' => 100,
                     ]) ?>
                 <?php else: ?>
                     <?php $page->beginContent('table') ?>

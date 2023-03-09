@@ -1,20 +1,26 @@
 <?php
 
 use hipanel\modules\finance\grid\SalesInPlanGridView;
+use hipanel\modules\finance\helpers\PlanInternalsGrouper;
+use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
+use hipanel\modules\finance\models\SaleSearch;
 use hipanel\modules\finance\widgets\CreateBillFromHardwareButton;
 use hipanel\modules\finance\widgets\CreatePricesButton;
 use hipanel\widgets\IndexPage;
 use yii\data\ArrayDataProvider;
+use yii\web\View;
 
 /**
- * @var \yii\web\View $this
- * @var \hipanel\modules\finance\models\Plan $model
+ * @var View $this
+ * @var Plan $model
  * @var IndexPage $page
- * @var \hipanel\modules\finance\helpers\PlanInternalsGrouper $grouper
+ * @var PlanInternalsGrouper $grouper
  * @var Sale[] $salesByObject
  * @var Price[][] $pricesByMainObject
+ * @var SaleSearch $searchModel
+ * @var int $pageSize
  */
 [$salesByObject, $pricesByMainObject] = $grouper->group();
 
@@ -44,11 +50,14 @@ use yii\data\ArrayDataProvider;
 <?php $page->beginBulkForm() ?>
     <?= SalesInPlanGridView::widget([
         'boxed' => false,
-        'showHeader' => false,
+        'showHeader' => true,
         'pricesBySoldObject' => $pricesByMainObject,
+        'filterModel' => $searchModel,
         'dataProvider' => new ArrayDataProvider([
             'allModels' => $salesByObject,
-            'pagination' => false,
+            'pagination' => [
+                'pageSize' => $pageSize,
+            ],
         ]),
         'summaryRenderer' => function () {
             return ''; // remove unnecessary summary
