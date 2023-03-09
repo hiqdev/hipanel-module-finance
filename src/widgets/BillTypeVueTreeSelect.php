@@ -7,13 +7,12 @@ namespace hipanel\modules\finance\widgets;
 use hipanel\helpers\ArrayHelper;
 use hipanel\helpers\StringHelper;
 use hipanel\models\Ref;
-use hipanel\modules\finance\assets\VueTreeSelectAsset;
+use hipanel\widgets\VueTreeSelectInput;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Json;
-use yii\widgets\InputWidget;
 
-class BillTypeVueTreeSelect extends InputWidget
+class BillTypeVueTreeSelect extends VueTreeSelectInput
 {
     /**
      * @var array<Ref> $billTypes - list of bill types Ref objects
@@ -27,7 +26,6 @@ class BillTypeVueTreeSelect extends InputWidget
 
     public function run(): string
     {
-        VueTreeSelectAsset::register($this->view);
         $id = $this->getId();
         $options = $this->buildOptionsArray();
         $value = Html::getAttributeValue($this->model, $this->replaceAttribute ?? $this->attribute);
@@ -159,18 +157,6 @@ class BillTypeVueTreeSelect extends InputWidget
         $children = $this->filter($children);
 
         return $this->removeKeysRecursively(array_values($children));
-    }
-
-
-    private function removeKeysRecursively(array $items): array
-    {
-        foreach ($items as &$item) {
-            if (isset($item['children'])) {
-                $item['children'] = $this->removeKeysRecursively(array_values($item['children']));
-            }
-        }
-
-        return $items;
     }
 
     private function findTreeLabel(Ref $type): ?string
