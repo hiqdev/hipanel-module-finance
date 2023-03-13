@@ -35,6 +35,7 @@ use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\PriceSuggestionRequestForm;
 use hipanel\modules\finance\models\query\PlanQuery;
+use hipanel\modules\finance\models\SaleSearch;
 use hipanel\modules\finance\models\TargetObject;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
@@ -113,16 +114,22 @@ class PlanController extends CrudController
                     /** @var PlanQuery $query */
                     $query = $event->sender->getDataProvider()->query;
                     $query
-                        ->withSales()
+                        ->withSales([
+                            'saleObjectInilike' => $this->request->get('SaleSearch')['object_like'] ?? null,
+                            'saleBuyerId' => $this->request->get('SaleSearch')['buyer_id'] ?? null,
+                        ])
                         ->withPrices()
                         ->withPriceHistory()
                         ->andWhere(['show_deleted' => 1])
                     ;
                 },
                 'data' => function (Action $action, array $data) {
+                    $searchModel = new SaleSearch();
+                    $searchModel->search($this->request->getQueryParams());
                     return array_merge($data, array_filter([
                         'grouper' => new PlanInternalsGrouper($data['model']),
                         'parentPrices' => Yii::$app->user->can('plan.update') ? $this->getParentPrices($data['model']['id']) : null,
+                        'searchModel' => $searchModel,
                     ]));
                 },
             ],

@@ -14,4 +14,6 @@ echo $this->render('../client/view', [
     'grouper' => $grouper,
     'salesByObject' => $salesByObject ?? [],
     'pricesByMainObject' => $pricesByMainObject ?? [],
+    'searchModel' => $searchModel,
+    'pageSize' => $pageSize,
 ]);

@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\menus\SalePricesActionsMenu;
 use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Sale;
@@ -52,6 +53,7 @@ class SalesInPlanGridView extends SaleGridView
         return array_merge(parent::columns(), [
             'object_label' => [
                 'format' => 'raw',
+                'filter' => false,
                 'value' => function (Sale $sale, $key) {
                     if ($sale instanceof FakeSale) {
                         return Label::widget([
@@ -87,6 +89,13 @@ class SalesInPlanGridView extends SaleGridView
                     return  Html::tag('span', Yii::t('hipanel:finance', 'Total:')) . '&nbsp;&nbsp;' .
                             Html::tag('span', '', ['class' => 'total-per-object']);
                 },
+            ],
+            'seller' => [
+                'class' => ClientColumn::class,
+                'idAttribute' => 'seller_id',
+                'attribute' => 'seller_id',
+                'nameAttribute' => 'seller',
+                'filter' => false,
             ],
         ]);
     }
