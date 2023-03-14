@@ -52,6 +52,10 @@ final class ResourceUnitWidget extends Widget
                 'units' => Yii::t('hipanel.finance.units', 'Units'),
                 'files' => Yii::t('hipanel.finance.units', 'Files'),
             ],
+            'power' => [
+                'w' => Yii::t('hipanel.finance.units', 'W'),
+                'kW' => Yii::t('hipanel.finance.units', 'kW'),
+            ]
         ];
 
         $resource = [
@@ -73,6 +77,7 @@ final class ResourceUnitWidget extends Widget
             'ip_traf_max' => $unitGroup['size'],
             'account_traf' => $unitGroup['size'],
             'server_traf95_max' => $unitGroup['speed'],
+            'power' => $unitGroup['power'],
         ];
 
         return isset($resource[$this->resource->type]) ? $resource[$this->resource->type] : [];
