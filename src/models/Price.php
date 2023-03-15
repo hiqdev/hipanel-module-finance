@@ -107,6 +107,7 @@ class Price extends Model
             'items' => ['items'],
             'speed' => ['bps', 'kbps', 'mbps', 'gbps', 'tbps'],
             'size'  => ['mb', 'mb10', 'mb100', 'gb', 'tb'],
+            'power' => ['w', 'kw'],
         ];
 
         $type2group = [
@@ -134,6 +135,7 @@ class Price extends Model
             'overuse,volume_du'                 => 'size',
             'overuse,snapshot_du'               => 'size',
             'overuse,private_cloud_backup_du'   => 'size',
+            'overuse,power'                     => 'power',
         ];
 
         foreach ($type2group as $type => $group) {
