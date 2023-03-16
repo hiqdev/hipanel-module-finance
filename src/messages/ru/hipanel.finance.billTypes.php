@@ -239,7 +239,7 @@ return [
     'VPS monthly fee' => 'Абонплата VPS',
     'Websa private Cloud monthly fee' => 'Абонплата частного хранилища Websa',
     'Windows License monthly fee' => 'Лицензия Windows',
-    'Power monthly fee' => 'Абонплата за электроэнергию',
+    'Power monthly fee' => 'Абонплата за мощность',
 
     'Other payment' => 'Другой платеж',
     'Colocation' => 'Размещение',
@@ -308,7 +308,7 @@ return [
     'Storage disk usage 95 percentile' => 'Хранилище 95%',
     'Support time' => 'Поддержка',
     'Volume disk usage' => 'Раздел',
-    'Power overuse' => 'Перерасход электроэнергии',
+    'Power overuse' => 'Превышение мощности',
 
     'Partnership' => 'Сотрудничество',
     'Partnership fee' => 'Парнёрская комиссия',
