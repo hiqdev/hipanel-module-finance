@@ -101,6 +101,7 @@ return [
     'Electricity' => 'Электричество',
     'Internet' => 'Интернет',
     'Water' => 'Вода',
+    'HW compensation' => 'Компенсация HW',
 
     'Bookkeeping' => 'Бухгалтерия',
     'Accounting' => 'Бухгалтерский учет',
