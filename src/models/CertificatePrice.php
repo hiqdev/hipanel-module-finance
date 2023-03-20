@@ -75,7 +75,7 @@ class CertificatePrice extends Price
                     'sums' => function ($sums) {
                         foreach ($sums as $key => $value) {
                             $sums[$key] = $this->moneyParser
-                                ->parse($value, strtoupper($this->currency))
+                                ->parse($value, new Currency($this->currency))
                                 ->getAmount();
                         }
 
