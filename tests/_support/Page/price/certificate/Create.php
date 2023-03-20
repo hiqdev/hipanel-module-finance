@@ -11,6 +11,8 @@
 namespace hipanel\modules\finance\tests\_support\Page\price\certificate;
 
 use hipanel\modules\finance\tests\_support\Page\price\Create as PriceCreate;
+use hipanel\tests\_support\Page\Widget\Input\Select2;
+use hipanel\tests\_support\Step\Acceptance\Client;
 
 class Create extends PriceCreate
 {
@@ -47,9 +49,7 @@ class Create extends PriceCreate
 
     public function chooseTemplate(string $templateName): void
     {
-        $this->select2->open('#template_plan_id');
-        $this->select2->fillSearchField($templateName);
-        $this->select2->chooseOption($templateName);
+        (new Select2($this->tester, '#template_plan_id'))->setValue($templateName);
     }
 
     public function ensureThereNoSuggestions(string $templateName): void
@@ -66,5 +66,17 @@ class Create extends PriceCreate
         $I->see('We could not suggest any new prices of type "Certificate" for the selected object.');
         $I->see('Probably, they were already created earlier or this suggestion type is not compatible with this object type');
         $I->see('You can return back to plan');
+    }
+
+    public function seeRandomPrices(): void
+    {
+        if (empty($this->priceValues)) {
+            throw new \LogicException('Prices were not created yet');
+        }
+
+        $I = $this->tester;
+        foreach ($this->priceValues as $value) {
+            $I->seeInSource('$' . number_format($value, 2));
+        }
     }
 }
