@@ -226,7 +226,7 @@ return [
     'IP addresses monthly fee' => 'Абонплата IP адреса',
     'Hardware leasing monthly fee' => 'Лизинг',
     'Load balancer monthly fee' => 'Абонплата за балансировщик нагрузки',
-    'Private Cloud monthly fee' => 'Абонплата частного хранилища',
+    'Private Cloud monthly fee' => 'Абонплата приватного облака',
     'Rack monthly fee' => 'Стойка',
     'Rack unit monthly fee' => 'Юнит в стойке',
     'CDN disk usage monthly fee' => 'Диск',
@@ -238,7 +238,7 @@ return [
     'Support time monthly fee' => 'Поддержка',
     'Volume disk usage monthly fee' => 'Абонплата использования памяти диска',
     'VPS monthly fee' => 'Абонплата VPS',
-    'Websa private Cloud monthly fee' => 'Абонплата частного хранилища Websa',
+    'Websa private Cloud monthly fee' => 'Абонплата приватного облака Websa',
     'Windows License monthly fee' => 'Лицензия Windows',
     'Power monthly fee' => 'Абонплата за мощность',
 
