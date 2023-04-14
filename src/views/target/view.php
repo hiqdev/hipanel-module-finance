@@ -63,6 +63,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                     ]) ?>
                 </div>
+                <?= Html::a(
+                    '<i class="fa fa-info-circle" style="font-size: 120%"></i> &nbsp;&nbsp;' . Yii::t('hipanel:finance:tariff', 'Tariff details'),
+                    ['@plan/view', 'id' => $tariff->id],
+                    ['class' => 'btn bg-olive btn-sm btn-block btn-flat']
+                ) ?>
             </div>
         <?php endif ?>
 
