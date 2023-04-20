@@ -93,7 +93,8 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
             ],
         ];
 
-        if (empty($result['finance']['items']) || !$user->can('finance.read')) {
+        $canSeeFinance = $user->can('finance.read') || $user->can('bill.read');
+        if (empty($result['finance']['items']) || !$canSeeFinance) {
             return [];
         }
 
