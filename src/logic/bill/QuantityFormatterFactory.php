@@ -18,6 +18,7 @@ use hipanel\modules\finance\providers\BillTypesProvider;
 use hipanel\modules\server\models\Consumption;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\yii2\formatters\IntlFormatter;
+use InvalidArgumentException;
 
 /**
  * Class QuantityFormatterFactory.
@@ -49,6 +50,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
         'hw_purchase'       => DefaultQuantityFormatter::class,
         'server_ssd'        => DefaultQuantityFormatter::class,
         'server_sata'       => DefaultQuantityFormatter::class,
+        'power'             => DefaultQuantityFormatter::class,
         'drenewal'          => DomainRenewalQuantity::class,
     ];
 
@@ -67,7 +69,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
             return $this->forCharge($model);
         }
 
-        throw new \InvalidArgumentException('Create is not supported for the passed model');
+        throw new InvalidArgumentException('Create is not supported for the passed model');
     }
 
     /**
