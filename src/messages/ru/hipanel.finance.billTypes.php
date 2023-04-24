@@ -102,6 +102,8 @@ return [
     'Internet' => 'Интернет',
     'Water' => 'Вода',
     'HW compensation' => 'Компенсация HW',
+    'Consulting' => 'Консалтинг',
+    'Consulting services' => 'Консалтинговые услуги',
 
     'Bookkeeping' => 'Бухгалтерия',
     'Accounting' => 'Бухгалтерский учет',
@@ -327,6 +329,7 @@ return [
     'Returns' => 'Возврат',
     'Trade' => 'Торговля',
     'Trademark' => 'Торговая марка',
+    'Corporate' => 'Корпоративный',
 
     'Transaction fee' => 'Комиссия за перевод',
     'BitPay transaction fee' => 'BitPay комиссия за перевод',
