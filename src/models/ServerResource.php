@@ -60,6 +60,8 @@ class ServerResource extends Resource implements DecoratedInterface
 
     const TYPE_SERVER_DU = 'server_du';
 
+    const TYPE_POWER = 'power';
+
     const TYPE_MONTHLY = 'monthly';
 
     public function rules()
