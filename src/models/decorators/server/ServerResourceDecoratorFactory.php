@@ -41,6 +41,7 @@ class ServerResourceDecoratorFactory extends ResourceDecoratorFactory
             'server_files' => ServerFilesResourceDecorator::class,
             'rack_unit' => RackUnitResourceDecorator::class,
             'location' => LocationResourceDecorator::class,
+            'power' => PowerResourceDecorator::class,
             'monthly' => MonthlyResourceDecorator::class,
         ];
     }
