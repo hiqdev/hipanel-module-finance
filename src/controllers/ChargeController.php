@@ -13,11 +13,15 @@ namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
 use hipanel\actions\RenderAction;
+use hipanel\actions\VariantsAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\query\ChargeQuery;
 use hipanel\modules\finance\providers\BillTypesProvider;
+use hipanel\modules\finance\widgets\ChargeFinanceSummaryTable;
+use hipanel\widgets\SynchronousCountEnabler;
 use yii\base\Event;
+use yii\grid\GridView;
 
 /**
  * Class ChargeController
@@ -69,6 +73,17 @@ class ChargeController extends CrudController
                         'clientTypes' => $this->getClientTypes(),
                         ];
                 },
+                'responseVariants' => [
+                  IndexAction::VARIANT_SUMMARY_RESPONSE => static function (VariantsAction $action): string {
+                      $dataProvider = $action->parent->getDataProvider();
+                      $defaultSummary = (new SynchronousCountEnabler($dataProvider, fn(GridView $grid): string => $grid->renderSummary()))();
+
+                      return $defaultSummary . ChargeFinanceSummaryTable::widget([
+                          'currencies' => $action->controller->getCurrencyTypes(),
+                          'allModels' => $dataProvider->query->andWhere(['groupby' => 'sum_by_currency'])->all(),
+                        ]);
+                  },
+                ],
             ],
         ]);
     }
