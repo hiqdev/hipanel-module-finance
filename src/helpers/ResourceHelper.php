@@ -21,7 +21,8 @@ class ResourceHelper
         unset(
             $targetTypes[array_search('referral', $targetTypes, true)],
             $targetTypes[array_search('ip_num', $targetTypes, true)],
-            $targetTypes[array_search('server_files', $targetTypes, true)]
+            $targetTypes[array_search('server_files', $targetTypes, true)],
+            $targetTypes[array_search('power', $targetTypes, true)],
         );
         $convertibleTypes = array_merge([
             'backup_du',
