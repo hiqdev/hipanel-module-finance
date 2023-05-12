@@ -57,7 +57,7 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface
             [['class', 'name', 'unit', 'tariff', 'order_name', 'client', 'seller', 'client_type'], 'string'],
             [['type', 'label', 'ftype', 'time', 'type_label', 'currency'], 'safe'],
             [['is_payed'], 'boolean'],
-            [['sum', 'quantity', 'bill_quantity'], 'number'],
+            [['sum', 'quantity', 'bill_quantity', 'positive', 'negative',], 'number'],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['object_id', 'sum', 'type_id', 'quantity', 'unit'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['id'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],

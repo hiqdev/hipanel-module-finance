@@ -45,6 +45,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $page->beginContent('table') ?>
         <?php $page->beginBulkForm() ?>
             <?= ChargeGridView::widget([
+                'layout' => <<<"HTML"
+                    <div class='row'>
+                        <div class='col-xs-11'>{sorter}</div>
+                    </div>
+                    <div class='table-responsive'>{items}</div>
+                    <div class='row'>
+                        <div class='col-xs-12' style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between;">
+                            <div class='dataTables_info'>{summary}</div>
+                            <div class='dataTables_paginate paging_bootstrap'>{pager}</div>
+                        </div>
+                    </div>
+                HTML,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $model,
                 'boxed' => false,

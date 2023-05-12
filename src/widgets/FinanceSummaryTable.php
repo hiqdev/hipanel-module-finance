@@ -19,11 +19,11 @@ class FinanceSummaryTable extends Widget
 
     public array $currencies = [];
 
-    private array $rows = [];
+    protected array $rows = [];
 
-    private string $tableName;
+    protected string $tableName;
 
-    private array $displayModels = [];
+    protected array $displayModels = [];
 
     public function init(): void
     {
@@ -55,7 +55,7 @@ class FinanceSummaryTable extends Widget
         ]);
     }
 
-    private function filterCurrencies(array $tableValues): array
+    protected function filterCurrencies(array $tableValues): array
     {
         return array_filter(
             CurrencyFilter::addSymbolAndFilter($this->currencies),
@@ -71,7 +71,7 @@ class FinanceSummaryTable extends Widget
         );
     }
 
-    private function calculate(): array
+    protected function calculate(): array
     {
         $positive = $negative = $total = $openingBalance = $closingBalance = [];
         foreach ($this->displayModels as $bill) {
