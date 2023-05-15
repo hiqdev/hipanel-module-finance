@@ -21,22 +21,17 @@ class PowerResourceDecorator extends AbstractServerResourceDecorator
 
     public function displayValue()
     {
-        return Yii::t('yii', '{nFormatted} W', ['nFormatted' => $this->getPrepaidQuantity()]);
+        return Yii::t('yii', '{nFormatted} W', ['nFormatted' => $this->resource->quantity]);
     }
 
     public function displayUnit()
     {
-        return Yii::t('hipanel:finance:tariff', 'kW');
+        return Yii::t('hipanel.finance.units', 'W');
     }
 
     public function toUnit(): string
     {
-        return 'kW';
-    }
-
-    public function getPrepaidQuantity()
-    {
-        return 1;
+        return 'W';
     }
 
     public function getOverusePrice()
