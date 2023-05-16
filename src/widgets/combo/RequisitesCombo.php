@@ -5,6 +5,7 @@ namespace hipanel\modules\finance\widgets\combo;
 
 use hiqdev\combo\Combo;
 use yii\web\JsExpression;
+use Yii;
 
 class RequisitesCombo extends Combo
 {
@@ -48,6 +49,9 @@ class RequisitesCombo extends Combo
     /** {@inheritdoc} */
     public function getFilter()
     {
+        if (Yii::$app->user->can('owner-staff')) {
+            return parent::getFilter();
+        }
         return \hipanel\helpers\ArrayHelper::merge(parent::getFilter(), [
             'client' => 'client/client',
         ]);
