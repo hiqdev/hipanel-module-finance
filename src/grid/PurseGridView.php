@@ -122,7 +122,7 @@ class PurseGridView extends \hipanel\grid\BoxedGridView
                         'combo' => [
                             'class' => RequisitesCombo::class,
                             'filter' => [
-                                'client_id' => ['format' => $model->seller_id],
+                                'client_id' => Yii::$app->user->can('owner-staff') ? [] : ['format' => $model->seller_id],
                             ],
                             'current' => [
                                 $model->requisite_id => $result,
