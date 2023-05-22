@@ -14,7 +14,7 @@ export default class ServerHelper {
     }
 
     async gotoServerView(rowNumber: number) {
-        await this.page.locator('tr td button').nth(rowNumber - 1).click();
+        await this.page.locator('tr td button').nth(rowNumber).click();
         await this.page.locator('div[role="tooltip"] >> text=View').click();
     }
 }
