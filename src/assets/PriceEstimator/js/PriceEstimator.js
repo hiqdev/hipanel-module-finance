@@ -62,7 +62,7 @@
                     type: price.type,
                     object_id: price.object_id,
                     unit: price.unit,
-                    amount: 1,
+                    amount: Math.min(1, price.quantity),
                 };
             }
 
