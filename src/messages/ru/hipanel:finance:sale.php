@@ -28,5 +28,6 @@ return [
     'Show opened' => 'Показать открытые',
     'Show closed' => 'Показать закрытые',
     'Show all' => 'Показать все',
-    'Upcoming close' => 'Скоро закроются'
+    'Upcoming close' => 'Скоро закроются',
+    'Sale has been successfully created' => 'Продажа была успешно создана',
 ];

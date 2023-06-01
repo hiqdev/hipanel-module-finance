@@ -76,7 +76,7 @@ class SaleController extends \hipanel\base\CrudController
             ],
             'create' => [
                 'class' => SmartCreateAction::class,
-                'success' => Yii::t('hipanel.finance.plan', 'Sale has been successfully created'),
+                'success' => Yii::t('hipanel:finance:sale', 'Sale has been successfully created'),
             ],
             'update' => [
                 'class' => SmartUpdateAction::class,
