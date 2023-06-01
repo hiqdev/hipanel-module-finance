@@ -9,6 +9,7 @@ use hipanel\modules\finance\widgets\ChangeBuyerButton;
 use hipanel\widgets\gridLegend\GridLegend;
 use hipanel\widgets\IndexPage;
 use yii\bootstrap\Dropdown;
+use yii\bootstrap\Html;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
 
@@ -38,6 +39,12 @@ $this->registerCss('
 <?php $page = IndexPage::begin(['model' => $model, 'dataProvider' => $dataProvider]) ?>
 
     <?php $page->setSearchFormData([]) ?>
+
+    <?php $page->beginContent('main-actions') ?>
+        <?php if (Yii::$app->user->can('sale.create')) : ?>
+            <?= Html::a(Yii::t('hipanel:finance:sale', 'Create'), ['@sale/create'], ['class' => 'btn btn-sm btn-success']) ?>
+        <?php endif ?>
+    <?php $page->endContent() ?>
 
     <?php $page->beginContent('sorter-actions') ?>
         <?= $page->renderSorter(['attributes' => ['id', 'time', 'unsale_time']]) ?>
