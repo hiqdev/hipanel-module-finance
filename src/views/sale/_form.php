@@ -2,8 +2,11 @@
 
 use hipanel\assets\BootstrapDatetimepickerAsset;
 use hipanel\helpers\Url;
+use hipanel\modules\client\widgets\combo\ClientCombo;
+use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
+use hipanel\widgets\combo\ObjectCombo;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
@@ -53,11 +56,32 @@ $this->registerCss(/** @lang CSS */ "
             </thead>
             <tbody>
             <?php foreach ($models as $idx => $sale) : ?>
-                <?= Html::activeHiddenInput($sale, "[$idx]id") ?>
                 <tr>
-                    <td><?= $sale->object ?></td>
-                    <td><?= $sale->seller ?></td>
-                    <td><?= $sale->buyer ?></td>
+                    <?php if ($model->isNewRecord) : ?>
+                        <td>
+                            <?= $form->field($model, "[$idx]object_id")->widget(ObjectCombo::class, [
+                                'class_attribute' => "object_type",
+                                'class_attribute_name' => "[$idx]object_type",
+                            ])->label(false) ?>
+                        </td>
+                        <td>
+                            <?= $form->field($sale, "[$idx]seller_id")->widget(SellerCombo::class, [
+                                'hasId' => true,
+                                'formElementSelector' => 'td',
+                            ])->label(false) ?>
+                        </td>
+                        <td>
+                            <?= $form->field($sale, "[$idx]buyer_id")->widget(ClientCombo::class, [
+                                'hasId' => true,
+                                'formElementSelector' => 'td',
+                            ])->label(false) ?>
+                        </td>
+                    <?php else : ?>
+                        <?= Html::activeHiddenInput($sale, "[$idx]id") ?>
+                        <td><?= $sale->object ?></td>
+                        <td><?= $sale->seller ?></td>
+                        <td><?= $sale->buyer ?></td>
+                    <?php endif ?>
                     <td>
                         <?= $form->field($sale, "[$idx]tariff_id")->widget(PlanCombo::class, [
                             'hasId' => true,
@@ -69,11 +93,9 @@ $this->registerCss(/** @lang CSS */ "
                     </td>
                     <?php if (Yii::$app->user->can('sale.update')) : ?>
                         <td>
-                            <?=
-                                $form
-                                    ->field($sale, "[$idx]unsale_time")
-                                    ->textInput(['class' => 'form-control datetime'])
-                                    ->label(false)
+                            <?= $form->field($sale, "[$idx]unsale_time")
+                                ->textInput(['class' => 'form-control datetime'])
+                                ->label(false)
                             ?>
                         </td>
                     <?php endif ?>
@@ -84,7 +106,7 @@ $this->registerCss(/** @lang CSS */ "
     </div>
 </div>
 
-<?= Html::submitButton(Yii::t('hipanel:finance:sale', 'Apply changes'), ['class' => 'btn btn-success']) ?>
+<?= Html::submitButton(Yii::t('hipanel:finance:sale', 'Save'), ['class' => 'btn btn-success']) ?>
 &nbsp;
 <?= Html::button(Yii::t('hipanel', 'Cancel'), ['class' => 'btn btn-default', 'onclick' => 'history.go(-1)']) ?>
 
