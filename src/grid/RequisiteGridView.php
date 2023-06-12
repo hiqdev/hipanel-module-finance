@@ -13,6 +13,7 @@ namespace hipanel\modules\finance\grid;
 use hipanel\grid\MainColumn;
 use hipanel\grid\RefColumn;
 use hipanel\helpers\Url;
+use hipanel\modules\finance\forms\GenerateInvoiceForm;
 use hipanel\modules\finance\menus\RequisiteActionsMenu;
 use hipanel\modules\finance\models\Requisite;
 use hiqdev\yii2\menus\grid\MenuColumn;
@@ -126,8 +127,42 @@ class RequisiteGridView extends ContactGridView
                     return Html::encode($model->invoice_name);
                 },
             ],
+            'templates' => [
+                'class' => RequisiteTemplateColumn::class,
+            ],
         ], $curColumns ?? [],
             $balanceColumns ?? []
         );
+    }
+
+    public static function getRequisiteColumns(Requisite $requisite): array
+    {
+        $columns = [];
+        $documents = $requisite->getDocumentsByTypes();
+        $form = new GenerateInvoiceForm();
+        foreach ($documents as $documentName => $document) {
+            $columnName = "{$documentName}_name";
+            $columns[$columnName] = [
+                'attribute' => $columnName,
+                'format' => 'raw',
+                'value' => function (Requisite $model) use ($columnName, $form, $document) {
+                    return Html::a(
+                        Yii::t('hipanel:finance', $model->{$columnName}),
+                        '@document/generate-document',
+                        [
+                            'data' => [
+                                'method' => 'POST',
+                                'params' => [
+                                    "{$form->formName()}[id]" => $document->id,
+                                ],
+                            ],
+                        ]
+
+                    );
+                }
+            ];
+        }
+
+        return $columns;
     }
 }

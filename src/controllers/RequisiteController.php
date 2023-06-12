@@ -56,14 +56,19 @@ class RequisiteController extends CrudController
 
     public function actions()
     {
+        $canSeeDocuments = Yii::getAlias('@document', false) && Yii::$app->user->can('document.read');
         return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
-                'on beforePerform' => function (Event $event) {
+                'on beforePerform' => function (Event $event) use ($canSeeDocuments) {
                     $action = $event->sender;
                     $representation = $action->controller->indexPageUiOptionsModel->representation;
+                    $query = $action->getDataProvider()->query;
                     if (in_array($representation, ['balance', 'balances'], true)) {
-                        $action->getDataProvider()->query->addSelect('balances');
+                        $query->addSelect('balances');
+                    }
+                    if ($canSeeDocuments) {
+                        $query->withDocuments();
                     }
                 },
             ],
@@ -81,14 +86,14 @@ class RequisiteController extends CrudController
             'view' => [
                 'class' => ViewAction::class,
                 'findOptions' => ['with_counters' => 1],
-                'on beforePerform' => function ($event) {
+                'on beforePerform' => function ($event) use ($canSeeDocuments) {
                     /** @var ViewAction $action */
                     $action = $event->sender;
 
                     /** @var ContactQuery $query */
                     $query = $action->getDataProvider()->query;
 
-                    if (Yii::getAlias('@document', false)) {
+                    if ($canSeeDocuments) {
                         $query->withDocuments();
                     }
 

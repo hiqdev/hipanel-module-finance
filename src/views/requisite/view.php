@@ -2,13 +2,11 @@
 
 use hipanel\modules\finance\grid\RequisiteGridView;
 use hipanel\modules\finance\menus\RequisiteDetailMenu;
-use hipanel\modules\document\widgets\StackedDocumentsView;
 use hipanel\modules\finance\models\Requisite;
 use hipanel\widgets\Box;
 use hipanel\widgets\ClientSellerLink;
 use hiqdev\assets\flagiconcss\FlagIconCssAsset;
 use yii\base\ViewNotFoundException;
-use yii\helpers\Html;
 use yii\helpers\Inflector;
 
 /**
@@ -117,25 +115,6 @@ FlagIconCssAsset::register($this);
                     <?php $box->endBody() ?>
                 <?php $box->end() ?>
 
-                <?php $box = Box::begin([
-                    'renderBody' => false,
-                    'collapsed' => false,
-                    'title' => Yii::t('hipanel:finance', 'Requisite templates'),
-                ]) ?>
-                    <?php $box->beginBody() ?>
-                        <?= RequisiteGridView::detailView([
-                            'boxed'   => false,
-                            'model'   => $model,
-                            'columns' => [
-                                'invoice_name',
-                                'acceptance_name',
-                                'contract_name',
-                                'probation_name',
-                            ],
-                        ]) ?>
-                    <?php $box->endBody() ?>
-                <?php $box->end() ?>
-
                 <?php $box = Box::begin(['renderBody' => false]) ?>
                     <?php $box->beginHeader() ?>
                         <?= $box->renderTitle(Yii::t('hipanel:client', 'Postal information')) ?>
@@ -155,22 +134,31 @@ FlagIconCssAsset::register($this);
 
             <div class="col-md-6">
                 <?php if (Yii::getAlias('@document', false) !== false && Yii::$app->user->can('document.read')) : ?>
-                    <?php $box = Box::begin(['renderBody' => false]) ?>
-                        <?php $box->beginHeader() ?>
-                            <?= $box->renderTitle(Yii::t('hipanel:client', 'Documents')) ?>
-                            <?php $box->beginTools() ?>
-                                <?= Html::a(Yii::t('hipanel', 'Details'), ['@contact/attach-documents', 'id' => $model->id], ['class' => 'btn btn-default btn-xs']) ?>
-                                <?= Html::a(Yii::t('hipanel', 'Upload'), ['@contact/attach-documents', 'id' => $model->id], ['class' => 'btn btn-default btn-xs']) ?>
-                            <?php $box->endTools() ?>
-                        <?php $box->endHeader() ?>
-                        <?php $box->beginBody() ?>
-                            <?= StackedDocumentsView::widget([
-                                'models' => $model->documents,
-                            ]); ?>
-                        <?php $box->endBody() ?>
-                    <?php $box->end() ?>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="box box-widget">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">
+                                        <?= Yii::t('hipanel:finance', 'Requisite templates') ?>
+                                    </h3>
+                                    <div class="box-tools pull-right">
+                                        <button data-toggle="modal" data-target="#set-templates-modal" type="button" class="btn btn-box-tool">
+                                            <i class="fa fa-fw fa-exchange"></i>&nbsp;
+                                            <?= Yii::t('hipanel:finance', 'Set templates') ?>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="box-body no-padding">
+                                    <?= RequisiteGridView::detailView([
+                                        'boxed'   => false,
+                                        'model'   => $model,
+                                        'columns' => RequisiteGridView::getRequisiteColumns($model),
+                                    ]) ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 <?php endif; ?>
-
                 <?php foreach ($model->balances ?? [] as $currency => $data) : ?>
                     <?php $box = Box::begin(['renderBody' => false]) ?>
                         <?php $box->beginHeader() ?>
