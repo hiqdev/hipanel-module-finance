@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\modules\client\models\Contact;
+use hipanel\modules\document\models\Document;
 use Yii;
 
 /**
@@ -47,7 +48,7 @@ class Requisite extends Contact
             [['serie'], 'required', 'on' => ['set-serie', 'update']],
             [['invoice_id'], 'required', 'on' => ['set-templates', 'update']],
             [['invoice_name', 'acceptance_name', 'contract_name', 'probation_name', 'internal_invoice_name', 'proforma_name'], 'safe'],
-            [['balance', 'balances'], 'safe'],
+            [['balance', 'balances', 'documents_by_types'], 'safe'],
         ]);
         $templatesTypes = [];
         foreach (self::getTemplatesTypes() as $templatesType) {
@@ -92,6 +93,7 @@ class Requisite extends Contact
             'acceptance_name' => Yii::t('hipanel:finance', 'Acceptance template'),
             'contract_name' => Yii::t('hipanel:finance', 'Contract template'),
             'probation_name' => Yii::t('hipanel:finance', 'Probation template'),
+            'proforma_name' => Yii::t('hipanel:finance', 'Proforma template'),
             'recipient_id' => Yii::t('hipanel:finance', 'Recipient'),
             'balance' => Yii::t('hipanel:finance', 'Balance'),
         ]);
@@ -107,5 +109,17 @@ class Requisite extends Contact
             self::TEMPLATE_INTERNAL_INVOICE => self::TEMPLATE_INTERNAL_INVOICE,
             self::TEMPLATE_PROFORMA => self::TEMPLATE_PROFORMA,
         ];
+    }
+
+    public function getDocumentsByTypes(): array
+    {
+        $documents = [];
+        foreach ($this->documents_by_types as $type => $rawData) {
+            $document = new Document();
+            $document->setAttributes($rawData, false);
+            $documents[$type] = $document;
+        }
+
+        return $documents;
     }
 }
