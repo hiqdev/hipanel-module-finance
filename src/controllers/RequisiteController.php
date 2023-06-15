@@ -70,6 +70,7 @@ class RequisiteController extends CrudController
                     if ($canSeeDocuments) {
                         $query->withDocuments();
                     }
+                    $query->joinWith('bankDetails');
                 },
             ],
             'search' => [
@@ -77,11 +78,6 @@ class RequisiteController extends CrudController
             ],
             'create' => [
                 'class' => ContactCreateAction::class,
-                'data' => function ($action) {
-                    return [
-                        'countries' => $action->controller->getRefs('country_code'),
-                    ];
-                },
             ],
             'view' => [
                 'class' => ViewAction::class,
@@ -96,6 +92,7 @@ class RequisiteController extends CrudController
                     if ($canSeeDocuments) {
                         $query->withDocuments();
                     }
+                    $query->joinWith('bankDetails');
 
                     $query->addSelect('balances');
                     $query->andWhere(['show_nonrequisite' => 1]);
