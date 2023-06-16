@@ -56,13 +56,18 @@
             let result = {};
             for (let i in prices) {
                 let price = prices[i],
-                    key = price.type + '_' + price.object_id;
+                    key = price.type + '_' + price.object_id,
+                    amount = 1;
+
+                if (price.type.startsWith('overuse')) {
+                    amount = Math.min(1, price.quantity);
+                }
 
                 result[key] = {
                     type: price.type,
                     object_id: price.object_id,
                     unit: price.unit,
-                    amount: Math.min(1, price.quantity),
+                    amount
                 };
             }
 
