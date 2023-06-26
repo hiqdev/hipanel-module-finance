@@ -43,12 +43,34 @@ class Requisite extends Contact
             [['id', 'client_id', 'recipient_id'], 'integer'],
             [['id'], 'required', 'on' => ['reserve-number', 'set-templates', 'set-serie']],
             [['client_id', 'recipient_id'], 'required', 'on' => ['reserve-number']],
-            [['invoice_id', 'acceptance_id', 'contract_id', 'probation_id', 'internal_invoice_id', 'proforma_id'], 'safe'],
             [['serie'], 'safe'],
             [['serie'], 'required', 'on' => ['set-serie', 'update']],
             [['invoice_id'], 'required', 'on' => ['set-templates', 'update']],
-            [['invoice_name', 'acceptance_name', 'contract_name', 'probation_name', 'internal_invoice_name', 'proforma_name'], 'safe'],
             [['balance', 'balances', 'documents_by_types'], 'safe'],
+            [
+                [
+                    'invoice_id',
+                    'acceptance_id',
+                    'contract_id',
+                    'probation_id',
+                    'internal_invoice_id',
+                    'proforma_id',
+                    'nda_id',
+                ],
+                'string', // template2pdf ID
+            ],
+            [
+                [
+                    'invoice_name',
+                    'acceptance_name',
+                    'contract_name',
+                    'probation_name',
+                    'internal_invoice_name',
+                    'proforma_name',
+                    'nda_name',
+                ],
+                'string',
+            ],
         ]);
         $templatesTypes = [];
         foreach (self::getTemplatesTypes() as $templatesType) {
