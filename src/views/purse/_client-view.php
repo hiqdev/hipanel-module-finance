@@ -1,17 +1,23 @@
 <?php
 
 use hipanel\modules\finance\grid\PurseGridView;
+use hipanel\modules\finance\models\Purse;
 use hipanel\widgets\Box;
 use yii\helpers\Html;
+
+/**
+ * @var Purse $model
+ */
 
 $user = Yii::$app->user;
 $client = $model->clientModel;
 $isEmployee = $client->type === $client::TYPE_EMPLOYEE;
 $documentType = $isEmployee ? 'acceptance' : 'invoice';
 
-$documents = ($user->can('document.read') && $user->can('bill.read'))
-                ? ($isEmployee ? ['acceptances'] : ['invoices', 'serviceInvoices', 'purchaseInvoices', 'proformaInvoices'])
-                : [];
+$documents = [];
+if ($user->can('document.read') && $user->can('bill.read')) {
+    $documents = ($isEmployee ? ['acceptances'] : ['invoices', 'serviceInvoices', 'purchaseInvoices', 'proformaInvoices']);
+}
 
 ?>
 

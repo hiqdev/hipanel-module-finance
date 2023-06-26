@@ -10,12 +10,13 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\grid\BoxedGridView;
 use hipanel\modules\client\widgets\combo\ContactCombo;
 use hipanel\modules\finance\widgets\combo\RequisitesCombo;
 use hiqdev\xeditable\widgets\ComboXEditable;
 use Yii;
 
-class PurseGridView extends \hipanel\grid\BoxedGridView
+class PurseGridView extends BoxedGridView
 {
     public function columns()
     {
