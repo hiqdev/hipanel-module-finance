@@ -64,7 +64,8 @@ class DocumentsColumn extends DataColumn
 
     protected function generateManagementButtons($model)
     {
-        if (!Yii::$app->user->can('document.generate')) {
+        $user = Yii::$app->user;
+        if (!$user->can('document.generate') || $user->identity->hasOwnSeller($model->client_id)) {
             return null;
         }
 
