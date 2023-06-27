@@ -1,5 +1,6 @@
 <?php
 
+use hipanel\modules\client\grid\ContactGridView;
 use hipanel\modules\finance\grid\RequisiteGridView;
 use hipanel\modules\finance\menus\RequisiteDetailMenu;
 use hipanel\modules\finance\models\Requisite;
@@ -92,7 +93,7 @@ FlagIconCssAsset::register($this);
                             'model'   => $model,
                             'columns' => [
                                 'reg_data', 'vat_rate', 'invoice_last_no',
-                                'serie',
+                                'serie', 'registration_number', 'tic',
                             ],
                         ]) ?>
                     <?php $box->endBody() ?>
@@ -103,13 +104,14 @@ FlagIconCssAsset::register($this);
                     'collapsed' => $model->isEmpty('bank_details'),
                     'collapsable' => true,
                     'title' => Yii::t('hipanel:client', 'Bank details'),
+                    'bodyOptions' => ['class' => 'no-padding']
                 ]) ?>
                     <?php $box->beginBody() ?>
-                        <?= RequisiteGridView::detailView([
+                        <?= ContactGridView::detailView([
                             'boxed'   => false,
                             'model'   => $model,
                             'columns' => [
-                                'bank_account', 'bank_name', 'bank_address', 'bank_swift',
+                                'requisites'
                             ],
                         ]) ?>
                     <?php $box->endBody() ?>

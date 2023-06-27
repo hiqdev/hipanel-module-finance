@@ -34,10 +34,14 @@ class RequisiteTemplateColumn extends DataColumn
         /** @var Requisite $model */
         $documents = array_filter($model->getDocumentsByTypes(), fn($document) => !empty($document->templateid));
         $html[] = Html::beginTag('dl');
+        $user = Yii::$app->user;
         foreach ($documents as $document) {
             $form = new GenerateInvoiceForm();
             $html[] = Html::tag('dt', StringHelper::mb_ucfirst($document->title));
-            $templateName = $document->template_name ?? $document->templateid ?? '';
+            $templateName = implode(" ", [
+                $document->template_name ?? $document->templateid,
+                $user->can('test.beta') ? "<span class='text-monospace text-muted'>$document->templateid</span>" : "",
+            ]);
             $html[] = Html::tag('dd',
                 Html::a(Yii::t('hipanel', $templateName), '@document/generate-document', [
                     'target' => '_blank',

@@ -1,8 +1,11 @@
 <?php
 
+use hipanel\modules\finance\models\Purse;
+use hipanel\modules\finance\widgets\BankAccountField;
 use hipanel\widgets\ModalButton;
 use hipanel\widgets\DateTimePicker;
 use yii\helpers\Html;
+use yii\web\View;
 
 /** @var string $prepend */
 /** @var string $append */
@@ -10,8 +13,13 @@ use yii\helpers\Html;
 /** @var string $modalHeader */
 /** @var string $modalHeaderColor */
 /** @var DateTime $dt */
-/** @var \hipanel\modules\finance\models\Purse $model */
+/** @var Purse $model */
+/** @var string $type */
+/** @var array $action */
+/** @var View $this */
+
 ?>
+
 <?php $modalButton = ModalButton::begin([
     'id' => sprintf('modal-%s-%s-%s', $model->id, $type, uniqid()),
     'model' => $model,
@@ -40,7 +48,7 @@ use yii\helpers\Html;
 
 <?= $modalButton->form->field($model, 'month')->widget(DateTimePicker::class, [
     'options' => [
-        'id' => 'purse-month-' . uniqid(),
+        'id' => 'purse-month-' . $this->context->id,
     ],
     'clientOptions' => [
         'format' => 'yyyy-mm',
@@ -50,6 +58,10 @@ use yii\helpers\Html;
         'endDate' => $dt->modify('next month')->format('Y-m'),
     ],
 ]) ?>
+
+<?= BankAccountField::widget(['purse' => $model, 'contact' => $model->requisite, 'form' => $modalButton->form]) ?>
+<?= BankAccountField::widget(['purse' => $model, 'contact' => $model->contact, 'form' => $modalButton->form]) ?>
+
 <?= $append ?>
 
 <?php ModalButton::end() ?>

@@ -17,6 +17,7 @@ use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\SmartCreateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
+use hipanel\components\Response;
 use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\Url;
 use hipanel\modules\document\models\Statistic as DocumentStatisticModel;
@@ -117,14 +118,9 @@ class PurseController extends \hipanel\base\CrudController
         }
     }
 
-    public function actionGenerateMonthlyDocument($id, $type, $client_id, $month = null)
+    public function actionGenerateMonthlyDocument()
     {
-        return $this->generateDocument('generate-monthly-document', [
-            'id' => $id,
-            'type' => $type,
-            'client_id' => $client_id,
-            'month' => $month
-        ]);
+        return $this->generateDocument('generate-monthly-document', $this->request->get());
     }
 
     public function actionGenerateDocument($id, $type)
@@ -135,7 +131,7 @@ class PurseController extends \hipanel\base\CrudController
     public function generateDocument($action, $params)
     {
         try {
-            $data = Purse::perform($action, $params);
+            $content = Purse::perform($action, $params);
         } catch (ResponseErrorException $e) {
             $contactUrl = Html::a(Url::toRoute(['@requisite/view', 'id' => $e->getResponse()->getData()['_error_ops']['requisite_id']], true),
                 ['@requisite/view', 'id' => $e->getResponse()->getData()['_error_ops']['requisite_id']]);
@@ -157,27 +153,26 @@ class PurseController extends \hipanel\base\CrudController
         }
         $this->asPdf();
 
-        return $data;
+        return $content;
     }
 
-    protected function asPdf()
+    protected function asPdf(): void
     {
-        $response = Yii::$app->getResponse();
-        $response->format = $response::FORMAT_RAW;
-        $response->getHeaders()->add('content-type', 'application/pdf');
+        $this->response->format = Response::FORMAT_RAW;
+        $this->response->getHeaders()->add('content-type', 'application/pdf');
     }
 
     public function actionPreGenerateDocument($type, $client_id)
     {
         $purse = new Purse(['scenario' => 'generate-and-save-monthly-document']);
-        if ($purse->load(Yii::$app->request->post()) && $purse->validate()) {
-            return $this->redirect([
+        if ($purse->load($this->request->post()) && $purse->validate()) {
+            $payload = array_merge([
                 '@purse/generate-monthly-document',
-                'id' => $purse->id,
                 'type' => $type,
                 'client_id' => $client_id,
-                'month' => $purse->month,
-            ]);
+            ], $purse->toArray());
+
+            return $this->redirect($payload);
         }
     }
 }

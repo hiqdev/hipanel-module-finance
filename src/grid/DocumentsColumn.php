@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\grid\DataColumn;
 use hipanel\helpers\FontIcon;
 use hipanel\modules\finance\widgets\DocumentByMonthButton;
 use hipanel\widgets\ArraySpoiler;
@@ -17,7 +18,7 @@ use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 
-class DocumentsColumn extends \hipanel\grid\DataColumn
+class DocumentsColumn extends DataColumn
 {
     public $format = 'raw';
 
@@ -38,6 +39,7 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
             'delimiter' => ' ',
             'formatter' => function ($doc) {
                 $fileName = urlencode($doc->filename);
+
                 return Html::a(
                     FontIcon::i('fa-file-pdf-o') . date(' M Y', strtotime($doc->validity_start)),
                     ["/file/{$doc->file_id}/{$fileName}", 'nocache' => 1],
@@ -96,8 +98,8 @@ class DocumentsColumn extends \hipanel\grid\DataColumn
             'prepend' => implode('', [
                 Html::activeHiddenInput($model, 'type', ['value' => $this->type]),
                 Html::beginTag('blockquote', ['class' => 'text-warning']),
-                    Html::tag('h5', Yii::t('hipanel:finance', 'Are you sure you want to update document?')),
-                    Html::tag('h5', Yii::t('hipanel:finance', 'Current document will be substituted with newer version!')),
+                Html::tag('h5', Yii::t('hipanel:finance', 'Are you sure you want to update document?')),
+                Html::tag('h5', Yii::t('hipanel:finance', 'Current document will be substituted with newer version!')),
                 Html::endTag('blockquote'),
             ]),
         ]);

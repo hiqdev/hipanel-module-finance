@@ -77,11 +77,6 @@ class RequisiteController extends CrudController
             ],
             'create' => [
                 'class' => ContactCreateAction::class,
-                'data' => function ($action) {
-                    return [
-                        'countries' => $action->controller->getRefs('country_code'),
-                    ];
-                },
             ],
             'view' => [
                 'class' => ViewAction::class,

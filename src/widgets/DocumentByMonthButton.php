@@ -10,7 +10,10 @@
 
 namespace hipanel\modules\finance\widgets;
 
-class DocumentByMonthButton extends \yii\base\Widget
+use DateTime;
+use yii\base\Widget;
+
+class DocumentByMonthButton extends Widget
 {
     public $model;
 
@@ -30,7 +33,7 @@ class DocumentByMonthButton extends \yii\base\Widget
 
     public function run()
     {
-        $dt = new \DateTime();
+        $dt = new DateTime();
         $this->model->month = $dt->format('Y-m'); // Set default value
 
         return $this->render('DocumentByMonthButton', [
