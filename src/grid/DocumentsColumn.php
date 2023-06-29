@@ -39,9 +39,9 @@ class DocumentsColumn extends DataColumn
             'delimiter' => ' ',
             'formatter' => function ($doc) {
                 $fileName = urlencode($doc->filename);
-
+                $date = isset($doc->validity_start) ? date(' M Y', strtotime($doc->validity_start)) : '';
                 return Html::a(
-                    FontIcon::i('fa-file-pdf-o') . date(' M Y', strtotime($doc->validity_start)),
+                  FontIcon::i('fa-file-pdf-o') . $date,
                     ["/file/{$doc->file_id}/{$fileName}", 'nocache' => 1],
                     [
                         'target' => '_blank',

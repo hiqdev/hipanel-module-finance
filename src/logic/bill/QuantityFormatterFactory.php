@@ -102,9 +102,9 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
     {
         if (empty($type)) {
             $types = ArrayHelper::index($this->billTypesProvider->getTypes(), 'id');
-            $type = $types[$context->id]->name;
+            $type = $types[$context->id]?->name;
         }
-        if (!isset($this->types[$type])) {
+        if ($type !== null && !isset($this->types[$type])) {
             if (strpos($type, 'monthly,') === 0) {
                 $type = 'monthly';
             } else {
@@ -112,7 +112,8 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
             }
         }
 
-        if ($className = $this->types[$type] ?? null) {
+        if (isset($this->types[$type])) {
+            $className = $this->types[$type];
             /** @var QuantityFormatterInterface $formatter */
             $formatter = new $className($quantity, $this->intlFormatter);
 
@@ -126,7 +127,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
         return null;
     }
 
-    private function fixType($type): ?string
+    private function fixType(string $type): ?string
     {
         if (str_contains($type, ',')) {
             $types = explode(',', $type);
