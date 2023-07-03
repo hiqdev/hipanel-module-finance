@@ -51,10 +51,9 @@ class LightPriceChargesEstimator extends PriceChargesEstimator
                         $money = new Money($charge['sum'], new Currency($charge['currency']));
                         $charge['price'] = $this->moneyFormatter->format($money);
                         $charge['formattedPrice'] = $this->yiiFormatter->asCurrency($charge['price'], $charge['currency']);
-                        if (!isset($chargesByTargetAndAction['sum'])) {
-                            $chargesByTargetAndAction['sum'] = 0;
-                        }
-                        $chargesByTargetAndAction['sum'] += $charge['price'];
+                        $chargesByTargetAndAction['sum'] ??= 0;
+
+                        $chargesByTargetAndAction['sum'] += (int) $charge['price'];
                     }
                     $this->decorateAction($action);
                 }

@@ -41,7 +41,7 @@ class DocumentsColumn extends DataColumn
                 $fileName = urlencode($doc->filename);
                 $date = isset($doc->validity_start) ? date(' M Y', strtotime($doc->validity_start)) : '';
                 return Html::a(
-                  FontIcon::i('fa-file-pdf-o') . $date,
+                    FontIcon::i('fa-file-pdf-o') . $date,
                     ["/file/{$doc->file_id}/{$fileName}", 'nocache' => 1],
                     [
                         'target' => '_blank',
