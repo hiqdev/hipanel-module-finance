@@ -75,6 +75,10 @@ class FinanceSummaryTable extends Widget
     {
         $positive = $negative = $total = $openingBalance = $closingBalance = [];
         foreach ($this->displayModels as $bill) {
+            $positive[$bill->currency] ??= 0;
+            $negative[$bill->currency] ??= 0;
+            $total[$bill->currency] ??= 0;
+
             if ($bill instanceof Bill && $this->isGrouped($bill)) {
                 $positive[$bill->currency] = $bill->positive;
                 $negative[$bill->currency] = $bill->negative;
