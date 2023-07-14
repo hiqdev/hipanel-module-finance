@@ -33,4 +33,11 @@ class ChargeQuery extends ActiveQuery
 
         return $this;
     }
+
+    public function withRootChargeType(): self
+    {
+        $this->andWhere(['with_rootChargeType' => true]);
+
+        return $this;
+    }
 }
