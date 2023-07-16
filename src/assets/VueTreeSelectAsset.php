@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\assets;
 
+use hipanel\assets\Vue2CdnAsset;
 use yii\web\AssetBundle;
+use yii\web\JqueryAsset;
 
 class VueTreeSelectAsset extends AssetBundle
 {
     public $sourcePath = __DIR__;
     public $js = [
-        'https://cdn.jsdelivr.net/npm/vue@^2',
         'https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@^0.4.0/dist/vue-treeselect.umd.min.js',
     ];
     public $css = [
@@ -18,10 +19,8 @@ class VueTreeSelectAsset extends AssetBundle
         'css/vue-treeselect-hipanel.css',
     ];
 
-    public static function register($view)
-    {
-        $view->registerJs("Vue.component('treeselect', VueTreeselect.Treeselect)");
-
-        return parent::register($view);
-    }
+    public $depends = [
+        Vue2CdnAsset::class,
+        JqueryAsset::class,
+    ];
 }

@@ -89,6 +89,9 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
                     const container = $('#%s');
                     new Vue({
                         el: container.get(0),
+                        components: {
+                          'treeselect': VueTreeselect.Treeselect,
+                        },
                         data: {
                             value: container.find('input[type=hidden]').data('value'),
                             options: container.find('input[type=hidden]').data('options')

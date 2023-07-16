@@ -4,6 +4,8 @@ namespace hipanel\modules\finance\models;
 
 use hipanel\base\Model;
 use hipanel\base\ModelTrait;
+use hipanel\behaviors\TaggableBehavior;
+use hipanel\models\TaggableInterface;
 use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 use hipanel\modules\finance\models\query\TargetQuery;
 use Yii;
@@ -11,9 +13,16 @@ use Yii;
 /**
  * @property Sale[] $sales
  */
-class Target extends Model
+class Target extends Model implements TaggableInterface
 {
     use ModelTrait;
+
+    public function behaviors()
+    {
+        return [
+            TaggableBehavior::class,
+        ];
+    }
 
     /**
      * {@inheritdoc}
