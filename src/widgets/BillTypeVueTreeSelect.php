@@ -90,7 +90,7 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
                     new Vue({
                         el: container.get(0),
                         components: {
-                          'treeselect': VueTreeselect.Treeselect,
+                            'treeselect': VueTreeselect.Treeselect,
                         },
                         data: {
                             value: container.find('input[type=hidden]').data('value'),
