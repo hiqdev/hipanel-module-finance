@@ -11,6 +11,11 @@ class TargetSearch extends Target
         searchAttributes as defaultSearchAttributes;
     }
 
+    public static function tableName()
+    {
+        return 'target';
+    }
+
     public function searchAttributes()
     {
         return ArrayHelper::merge($this->defaultSearchAttributes(), ['tags']);
