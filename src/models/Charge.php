@@ -54,7 +54,7 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface
     {
         return [
             [['id', 'type_id', 'object_id', 'bill_id', 'parent_id', 'client_id', 'tariff_id', 'seller_id', 'order_id'], 'integer'],
-            [['class', 'name', 'unit', 'tariff', 'order_name', 'client', 'seller', 'client_type'], 'string'],
+            [['class', 'name', 'unit', 'tariff', 'order_name', 'client', 'seller', 'client_type', 'root_ftype'], 'string'],
             [['type', 'label', 'ftype', 'time', 'type_label', 'currency'], 'safe'],
             [['is_payed'], 'boolean'],
             [['sum', 'quantity', 'bill_quantity', 'positive', 'negative',], 'number'],

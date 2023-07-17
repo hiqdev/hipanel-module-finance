@@ -28,6 +28,7 @@ class ChargeRepresentations extends RepresentationCollection
                     'tariff',
                     'name',
                     'type_label',
+                    'root_ftype',
                     'currency',
                     'sum',
                     'quantity',

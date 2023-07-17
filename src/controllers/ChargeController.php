@@ -64,7 +64,10 @@ class ChargeController extends CrudController
                 'on beforePerform' => function (Event $event) {
                     /** @var ChargeQuery $query */
                     $query = $event->sender->getDataProvider()->query;
-                    $query->withCommonObject()->withLatestCommonObject();
+                    $query
+                      ->withCommonObject()
+                      ->withLatestCommonObject()
+                      ->withRootChargeType();
                 },
                 'data' => function (RenderAction $action, array $data): array {
 
