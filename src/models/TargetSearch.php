@@ -13,7 +13,7 @@ class TargetSearch extends Target
 
     public static function tableName()
     {
-        return 'target';
+        return Target::tableName();
     }
 
     public function searchAttributes()
