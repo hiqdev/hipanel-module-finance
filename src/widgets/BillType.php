@@ -61,6 +61,10 @@ CSS
 
     protected function getModelLabel(): string
     {
+        if ($this->getFieldValue() === null) {
+            return Yii::t('hipanel.finance.billTypes', 'Unknown');
+        }
+
         $billTypes = Ref::getListRecursively('type,bill', false);
 
         return $billTypes[$this->getFieldValue()] ?? $this->getFieldValue();
@@ -68,6 +72,10 @@ CSS
 
     public function renderLabel(): string
     {
+        if ($this->getFieldValue() === null) {
+            return Yii::t('hipanel.finance.billTypes', 'Unknown');
+        }
+
         $label = parent::renderLabel();
         $color = $this->pickColor();
         $paymentType = Html::tag('span', Yii::t('hipanel.finance.billTypes', explode(',', $this->getFieldValue())[0]), ['class' => "label label-{$color}"]);
