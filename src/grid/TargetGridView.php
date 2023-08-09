@@ -16,6 +16,7 @@ class TargetGridView extends ContactGridView
         return array_merge(parent::columns(), [
             'name' => [
                 'class' => MainColumn::class,
+                'exportedColumns' => ['tags', 'name'],
             ],
             'type' => [
                 'filter' => $this->filterModel?->types,
