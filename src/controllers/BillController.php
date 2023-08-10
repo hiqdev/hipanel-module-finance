@@ -88,6 +88,7 @@ class BillController extends CrudController
                     return [
                         'rates' => $rates,
                         'billTypesList' => $billTypesList,
+                        'clientTypes' => $this->getRefs('type,client', 'hipanel:client'),
                     ];
                 },
                 'responseVariants' => [

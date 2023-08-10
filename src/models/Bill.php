@@ -10,8 +10,9 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\behaviors\TaggableBehavior;
+use hipanel\models\TaggableInterface;
 use hipanel\modules\finance\behaviors\BillNegation;
-use hipanel\modules\client\models\Client;
 use Yii;
 use yii\helpers\StringHelper;
 
@@ -25,7 +26,7 @@ use yii\helpers\StringHelper;
  * @property string $quantity
  * @property Charge[] charges
  */
-class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInterface
+class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInterface, TaggableInterface
 {
     use \hipanel\base\ModelTrait;
 
@@ -39,12 +40,15 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
 
     public static $i18nDictionary = 'hipanel:finance';
 
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             [
                 'class' => BillNegation::class,
                 'negativeTypes' => static::negativeTypes(),
+            ],
+            [
+              'class' => TaggableBehavior::class,
             ],
         ];
     }
@@ -52,7 +56,7 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['client_id', 'seller_id', 'id', 'requisite_id', 'purse_id'], 'integer'],
@@ -132,7 +136,7 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
         return !$this->checkClientIsOwner() && $this->canUser('bill.create');
     }
 
-    public static function negativeTypes()
+    public static function negativeTypes(): array
     {
         return [
             'transfer,minus',

@@ -21,7 +21,7 @@ class BillSearch extends Bill
         rules as defaultRules;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return ArrayHelper::merge($this->defaultRules(), [
             [['time_from', 'time_till'], 'date', 'format' => 'php:Y-m-d'],
@@ -30,27 +30,41 @@ class BillSearch extends Bill
         ]);
     }
 
-    public function searchAttributes()
+    public static function tableName(): string
+    {
+        return Bill::tableName();
+    }
+
+    public function searchAttributes(): array
     {
         return ArrayHelper::merge($this->defaultSearchAttributes(), [
-            'time_from', 'time_till',
-            'servers', 'server_ids',
-            'ftype', 'object_name_ilike',
-            'object_types', 'type_ids', 'charge_type_ids',
+            'time_from',
+            'time_till',
+            'servers',
+            'server_ids',
+            'ftype',
+            'object_name_ilike',
+            'object_types',
+            'type_ids',
+            'charge_type_ids',
+            'client_types',
+            'tags',
         ]);
     }
 
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return $this->mergeAttributeLabels([
             'servers' => Yii::t('hipanel:finance', 'Servers'),
             'object_name_ilike' => Yii::t('hipanel:finance', 'Object name'),
             'object_types' => Yii::t('hipanel:finance', 'Object types'),
             'type_id' => Yii::t('hipanel:finance', 'Type'),
+            'client_types' => Yii::t('hipanel:finance', 'Client types'),
+            'tags' => Yii::t('hipanel:finance', 'Client tags'),
         ]);
     }
 
-    public function getObjectTypes()
+    public function getObjectTypes(): array
     {
         return [
             'volume' => Yii::t('hipanel:finance', 'Volumes'),

@@ -8,6 +8,7 @@ use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
 use hipanel\modules\finance\widgets\TreeSelectBehavior;
 use hipanel\widgets\AdvancedSearch;
+use hipanel\widgets\TagsInput;
 use hiqdev\combo\StaticCombo;
 use hiqdev\yii2\daterangepicker\DateRangePicker;
 use yii\helpers\Html;
@@ -17,6 +18,7 @@ use yii\web\View;
  * @var $this View
  * @var AdvancedSearch $search
  * @var array $billTypesList
+ * @var array $clientTypes
  */
 ?>
 
@@ -93,5 +95,19 @@ use yii\web\View;
         'data' => $search->model->getObjectTypes(),
         'hasId' => false,
         'multiple' => true,
+    ]) ?>
+</div>
+
+<?php if (Yii::$app->user->can('client.update')) : ?>
+  <div class="col-md-4 col-sm-6 col-xs-12">
+      <?= $search->field('tags')->widget(TagsInput::class) ?>
+  </div>
+<?php endif ?>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('client_types')->widget(StaticCombo::class, [
+      'data' => $clientTypes,
+      'hasId' => true,
+      'multiple' => true,
     ]) ?>
 </div>
