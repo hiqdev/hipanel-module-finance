@@ -48,7 +48,7 @@ class BillSearch extends Bill
             'type_ids',
             'charge_type_ids',
             'client_types',
-            'tags',
+            'client_tags',
         ]);
     }
 
@@ -60,7 +60,7 @@ class BillSearch extends Bill
             'object_types' => Yii::t('hipanel:finance', 'Object types'),
             'type_id' => Yii::t('hipanel:finance', 'Type'),
             'client_types' => Yii::t('hipanel:finance', 'Client types'),
-            'tags' => Yii::t('hipanel:finance', 'Client tags'),
+            'client_tags' => Yii::t('hipanel:finance', 'Client tags'),
         ]);
     }
 
