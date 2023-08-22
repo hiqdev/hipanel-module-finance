@@ -5,12 +5,21 @@ namespace hipanel\modules\finance\tests\acceptance\manager;
 
 use hipanel\helpers\Url;
 use Codeception\Example;
+use hipanel\modules\finance\tests\_support\Page\bill\Index;
 use hipanel\tests\_support\Page\IndexPage;
+use hipanel\tests\_support\Page\Widget\Input\Select2;
 use hipanel\tests\_support\Step\Acceptance\Manager;
 use hipanel\modules\finance\tests\_support\Page\bill\Create;
 
 class BillBulkButtonCest
 {
+    private Index $index;
+
+    public function _before(Manager $I): void
+    {
+        $this->index = new Index($I);
+    }
+
     /**
      * @dataProvider updateDataProvider
      */
@@ -19,7 +28,7 @@ class BillBulkButtonCest
         $I->login();
         $example = iterator_to_array($example->getIterator());
 
-        $this->goToBillPageAndPrepareForAction($I);
+        $this->goToBillPageAndPrepareForAction($I, $example['client']);
 
         $I->pressButton('Update');
 
@@ -35,7 +44,7 @@ class BillBulkButtonCest
         $I->login();
         $example = iterator_to_array($example->getIterator());
 
-        $this->goToBillPageAndPrepareForAction($I);
+        $this->goToBillPageAndPrepareForAction($I, $example['client']);
 
         $I->pressButton('Update');
 
@@ -51,15 +60,17 @@ class BillBulkButtonCest
         $I->login();
         $example = iterator_to_array($example->getIterator());
 
-        $this->goToBillPageAndPrepareForAction($I);
+        $this->goToBillPageAndPrepareForAction($I, $example['client']);
 
         $I->pressButton('Delete');
         $I->acceptPopup();
     }
 
-    private function goToBillPageAndPrepareForAction(Manager $I): void
+    private function goToBillPageAndPrepareForAction(Manager $I, $client): void
     {
         $I->needPage(Url::to('@bill/index/?sort=-time'));
+
+        $this->index->filterBy(Select2::asTableFilter($I, 'Client'), $client);
 
         $I->checkOption("//tbody//tr[1]//input");
         $I->checkOption("//tbody//tr[2]//input");
@@ -108,6 +119,7 @@ class BillBulkButtonCest
                     'Successful Update Test #1',
                     'Successful Update Test #2',
                 ],
+                'client' => 'hipanel_test_user',
             ],
         ];
     }
@@ -119,6 +131,7 @@ class BillBulkButtonCest
                     'Successful Copy Test #1',
                     'Successful Copy Test #2',
                 ],
+                'client' => 'hipanel_test_user',
             ],
         ];
     }
