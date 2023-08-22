@@ -182,4 +182,9 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
 
         return $title;
     }
+
+    public function fetchTags(?string $tagLike = null): mixed
+    {
+        return static::getDb()->createCommand()->perform('get-available-tags', 'client', ['tags' => $tagLike])->getData();
+    }
 }
