@@ -5,14 +5,10 @@ declare(strict_types=1);
 namespace hipanel\modules\finance\helpers;
 
 use hipanel\helpers\ArrayHelper;
-use hipanel\modules\client\models\Client;
-use hipanel\modules\finance\models\ClientResource;
 use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\decorators\ResourceDecoratorInterface;
-use hipanel\modules\finance\models\ServerResource;
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\models\TargetResource;
-use hipanel\modules\server\models\Server;
 use yii\db\ActiveRecordInterface;
 use Yii;
 

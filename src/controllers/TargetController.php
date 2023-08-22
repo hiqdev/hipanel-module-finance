@@ -12,7 +12,6 @@ use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\models\stub\ClientRelationFreeStub;
 use hipanel\modules\finance\actions\TargetManagementAction;
 use hipanel\modules\finance\forms\TargetManagementForm;
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\query\TargetQuery;
 use hipanel\modules\finance\models\Target;
@@ -23,16 +22,14 @@ use yii\base\Event;
 
 class TargetController extends CrudController
 {
-    private ConsumptionConfigurator $consumptionConfigurator;
-
-    private ConsumptionsProvider $consumptionsProvider;
-
-    public function __construct(string $id, Module $module, ConsumptionConfigurator $consumptionConfigurator, ConsumptionsProvider $consumptionsProvider, array $config = [])
+    public function __construct(
+        string $id,
+        Module $module,
+        readonly private ConsumptionsProvider $consumptionsProvider,
+        array $config = []
+    )
     {
         parent::__construct($id, $module, $config);
-
-        $this->consumptionConfigurator = $consumptionConfigurator;
-        $this->consumptionsProvider = $consumptionsProvider;
     }
 
     public function behaviors(): array
@@ -104,7 +101,6 @@ class TargetController extends CrudController
             'client' => $client,
             'tariff' => $tariff,
             'consumption' => $consumption,
-            'configurator' => $this->consumptionConfigurator,
         ]);
     }
 }

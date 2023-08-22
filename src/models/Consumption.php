@@ -60,4 +60,9 @@ class Consumption extends Model
     {
         return $this->consumptionConfigurator->getColumnsWithLabels($this->class);
     }
+
+    public function getGroupsWithLabels(): array
+    {
+        return $this->consumptionConfigurator->getGroupsWithLabels($this->class);
+    }
 }

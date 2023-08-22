@@ -3,7 +3,6 @@
 use hipanel\models\IndexPageUiOptions;
 use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\grid\PlanGridView;
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 use hipanel\modules\finance\menus\TargetDetailMenu;
 use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\Plan;
@@ -19,7 +18,6 @@ use yii\helpers\Html;
 /** @var Client $client */
 /** @var DataProviderInterface $dataProvider */
 /** @var IndexPageUiOptions $uiModel */
-/** @var ConsumptionConfigurator $configurator */
 /** @var Consumption $consumption */
 
 $this->title = Html::encode($originalModel->name);
@@ -76,7 +74,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $this->render('_sales', ['target' => $originalModel]) ?>
         <?php if ($model->showConsumption()) : ?>
             <?= ConsumptionViewer::widget([
-                'configurator' => $configurator,
                 'consumption' => $consumption,
                 'mainObject' => $originalModel,
             ]) ?>
