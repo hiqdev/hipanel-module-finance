@@ -21,16 +21,15 @@ use yii\web\Response;
 
 class ConsumptionController extends Controller
 {
-    private ConsumptionConfigurator $consumptionConfigurator;
-
-    private ConsumptionsProvider $consumptionsProvider;
-
-    public function __construct(string $id, Module $module, ConsumptionConfigurator $consumptionConfigurator, ConsumptionsProvider $consumptionsProvider, array $config = [])
+    public function __construct(
+        string $id,
+        Module $module,
+        readonly private ConsumptionConfigurator $consumptionConfigurator,
+        readonly private ConsumptionsProvider $consumptionsProvider,
+        array $config = []
+    )
     {
         parent::__construct($id, $module, $config);
-
-        $this->consumptionConfigurator = $consumptionConfigurator;
-        $this->consumptionsProvider = $consumptionsProvider;
     }
 
     public function behaviors()
@@ -54,13 +53,10 @@ class ConsumptionController extends Controller
                     /** @var SearchAction $action */
                     $action = $event->sender;
                     $query = $action->getDataProvider()->query;
-                    $query
-                        ->joinWith('resources')
-                        ->groupBy('month');
+                    $query->joinWith('resources')->groupBy('month');
                 },
                 'data' => function (RenderAction $action, array $data): array {
                     return array_merge($data, [
-                        'configurator' => $this->consumptionConfigurator,
                         'searchModel' => $action->parent->getSearchModel(),
                     ]);
                 },
@@ -72,7 +68,8 @@ class ConsumptionController extends Controller
     {
         $consumption = $this->consumptionsProvider->findById($id);
         if (!$consumption) {
-            throw new NotFoundHttpException(Yii::t('hipanel:finance', 'No consumption found for the requested resource'));
+            throw new NotFoundHttpException(Yii::t('hipanel:finance',
+                'No consumption found for the requested resource'));
         }
 
         return $this->render('view', [

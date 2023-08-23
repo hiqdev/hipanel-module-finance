@@ -38,7 +38,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'boxed' => false,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
-                'configurator' => $configurator,
             ]) ?>
         <?php $page->endBulkForm() ?>
     <?php $page->endContent() ?>

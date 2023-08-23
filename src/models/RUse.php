@@ -36,7 +36,7 @@ class RUse extends \hipanel\base\Model
     {
         return [
             [['id', 'type_id', 'last', 'total'], 'integer'],
-            [['date', 'type', 'aggregation'], 'safe'],
+            [['date', 'type', 'aggregation', 'unit', 'object_id'], 'safe'],
         ];
     }
 

@@ -49,7 +49,7 @@ Vue.createApp({
             <div v-if="isLoading" class="overlay"></div>
         </div>
     </div>
-    <div v-for="(header, group) in charts" class="col-md-6" :style="{display: isChartVisible(group)}">
+    <div v-if="showCharts" v-for="(header, group) in charts" class="col-md-6" :style="{display: isChartVisible(group)}">
         <div class="box box-widget">
             <div class="box-header with-border">
                 <h3 class="box-title">{{header}}</h3>
@@ -80,6 +80,7 @@ Vue.createApp({
       isLoading: false,
       existingCharts: {},
       getConsumptionUrl: null,
+                  showCharts: true,
     };
   },
   created: function () {
@@ -92,11 +93,14 @@ Vue.createApp({
     this.groups = data.groups;
     this.boxTitle = data.boxTitle;
     this.getConsumptionUrl = data.getConsumptionUrl;
+    this.showCharts = data.showCharts;
     this.extractYears(this.resources);
     this.setCache({resources: data.resources, totals: data.totals});
   },
   mounted: function () {
-    this.renderCharts();
+    if (this.showCharts) {
+      this.renderCharts();
+    }
   },
   methods: {
     isChartVisible(group) {
@@ -283,7 +287,7 @@ Vue.createApp({
         if (this.existingCharts[chartId]) {
           this.existingCharts[chartId].data = chartData;
           this.existingCharts[chartId].update();
-        } else {
+        } else if (this.showCharts) {
           const ctx = this.$refs[chartId];
           this.existingCharts[chartId] = new Chart(ctx, {
             type: "bar",

@@ -18,14 +18,17 @@ class ConsumptionViewer extends Widget
     public ConsumptionConfigurator $configurator;
     public ?Consumption $consumption;
     public string $getConsumptionUrl = '@finance/consumption/get-consumption';
+    public bool $showCharts = true;
 
     public function run(): string
     {
         ConsumptionViewerAsset::register($this->view);
         if (!$this->consumption) {
-            return Html::tag('div', Yii::t('hipanel:finance', 'No consumption found for the requested resource'), ['class' => 'alert alert-warning text-center']);
+            return Html::tag('div',
+                Yii::t('hipanel:finance', 'No consumption found for the requested resource'),
+                ['class' => 'alert alert-warning text-center']);
         }
-        $columns = $this->configurator->getColumnsWithLabels($this->consumption->class);
+        $columns = $this->consumption->getColumnsWithLabels();
         if (empty($columns)) {
             return '';
         }
@@ -36,10 +39,11 @@ class ConsumptionViewer extends Widget
                 'boxTitle' => Yii::t('hipanel:finance', 'Resource consumption'),
                 'resources' => ResourceHelper::prepareDetailView($this->consumption->resources),
                 'totals' => ResourceHelper::calculateTotal($this->consumption->resources),
-                'groups' => $this->configurator->getGroupsWithLabels($this->consumption->class),
+                'groups' => $this->consumption->getGroupsWithLabels(),
                 'object_id' => $this->mainObject->id,
                 'class' => $this->consumption->class,
                 'getConsumptionUrl' => Url::toRoute($this->getConsumptionUrl),
+                'showCharts' => $this->showCharts,
             ],
         ]);
     }
