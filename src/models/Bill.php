@@ -11,7 +11,6 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\modules\finance\behaviors\BillNegation;
-use hipanel\modules\client\models\Client;
 use Yii;
 use yii\helpers\StringHelper;
 
@@ -39,7 +38,7 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
 
     public static $i18nDictionary = 'hipanel:finance';
 
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             [
@@ -52,7 +51,7 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['client_id', 'seller_id', 'id', 'requisite_id', 'purse_id'], 'integer'],
@@ -132,7 +131,7 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
         return !$this->checkClientIsOwner() && $this->canUser('bill.create');
     }
 
-    public static function negativeTypes()
+    public static function negativeTypes(): array
     {
         return [
             'transfer,minus',
