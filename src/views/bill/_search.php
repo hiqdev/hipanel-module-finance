@@ -1,5 +1,6 @@
 <?php
 
+use hipanel\modules\client\models\ClientSearch;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\helpers\CurrencyFilter;
@@ -100,7 +101,9 @@ use yii\web\View;
 
 <?php if (Yii::$app->user->can('client.update')) : ?>
   <div class="col-md-4 col-sm-6 col-xs-12">
-      <?= $search->field('client_tags')->widget(TagsInput::class) ?>
+      <?= $search->field('client_tags')->widget(TagsInput::class, [
+        'searchModel' => new ClientSearch(),
+      ]) ?>
   </div>
 <?php endif ?>
 

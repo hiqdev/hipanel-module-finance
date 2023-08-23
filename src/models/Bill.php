@@ -10,8 +10,6 @@
 
 namespace hipanel\modules\finance\models;
 
-use hipanel\behaviors\TaggableBehavior;
-use hipanel\models\TaggableInterface;
 use hipanel\modules\finance\behaviors\BillNegation;
 use Yii;
 use yii\helpers\StringHelper;
@@ -46,9 +44,6 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
             [
                 'class' => BillNegation::class,
                 'negativeTypes' => static::negativeTypes(),
-            ],
-            [
-              'class' => TaggableBehavior::class,
             ],
         ];
     }
@@ -181,10 +176,5 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
         }
 
         return $title;
-    }
-
-    public function fetchTags(?string $tagLike = null): mixed
-    {
-        return static::getDb()->createCommand()->perform('get-available-tags', 'client', ['tags' => $tagLike])->getData();
     }
 }
