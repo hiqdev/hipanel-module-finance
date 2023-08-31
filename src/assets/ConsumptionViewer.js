@@ -1,4 +1,5 @@
-Vue.createApp({
+const app = new Vue({
+  el: "#consumption-view",
   template: `<div class="row">
     <div class="col-md-12">
         <div class="box box-widget">
@@ -63,39 +64,39 @@ Vue.createApp({
         </div>
     </div>
 </div>`,
-  data() {
-    return {
-      boxTitle: 'Resource consumption',
-      cache: {},
-      resources: [],
-      totals: {},
-      columns: {},
-      groups: {},
-      object_id: null,
-      class: null,
-      year: null,
-      month: null,
-      years: [],
-      months: [],
-      isLoading: false,
-      existingCharts: {},
-      getConsumptionUrl: null,
-                  showCharts: true,
-    };
+  data: {
+    boxTitle: "Resource consumption",
+    cache: {},
+    resources: [],
+    totals: {},
+    columns: {},
+    groups: {},
+    object_id: null,
+    class: null,
+    year: null,
+    month: null,
+    years: [],
+    months: [],
+    isLoading: false,
+    existingCharts: {},
+    getConsumptionUrl: null,
+    showCharts: true,
   },
   created: function () {
     const data = window._INITIAL_DATA;
-    this.resources = data.resources;
-    this.totals = data.totals;
-    this.object_id = data.object_id;
-    this.class = data.class;
-    this.columns = data.columns;
-    this.groups = data.groups;
-    this.boxTitle = data.boxTitle;
-    this.getConsumptionUrl = data.getConsumptionUrl;
-    this.showCharts = data.showCharts;
-    this.extractYears(this.resources);
-    this.setCache({resources: data.resources, totals: data.totals});
+    if (data) {
+      this.resources = data.resources;
+      this.totals = data.totals;
+      this.object_id = data.object_id;
+      this.class = data.class;
+      this.columns = data.columns;
+      this.groups = data.groups;
+      this.boxTitle = data.boxTitle;
+      this.getConsumptionUrl = data.getConsumptionUrl;
+      this.showCharts = data.showCharts;
+      this.extractYears(this.resources);
+      this.setCache({ resources: data.resources, totals: data.totals });
+    }
   },
   mounted: function () {
     if (this.showCharts) {
@@ -161,6 +162,9 @@ Vue.createApp({
       return row ? `${row.amount} ${row.unit}` : "";
     },
     findTotal(type) {
+      if (!this.totals) {
+        return "";
+      }
       const total = this.totals[type];
 
       return total ? `${total.amount} ${total.unit}` : "";
@@ -267,7 +271,7 @@ Vue.createApp({
           datasets: [],
         };
         let color = 1;
-        let unit = '';
+        let unit = "";
         _.forEach(group, (label, type) => {
           const resourceData = [];
           _.forEach(this.tableData, (rows, date) => {
@@ -277,7 +281,7 @@ Vue.createApp({
             resourceData.push(amount);
           });
           chartData.datasets.push({
-            label: [label, unit].join(', '),
+            label: [label, unit].join(", "),
             data: resourceData,
             backgroundColor: Chart.helpers.color(chartColors[color]).alpha(0.5).rgbString(),
             borderColor: Chart.helpers.color(chartColors[color]).alpha(0.7).rgbString(),
@@ -371,4 +375,4 @@ Vue.createApp({
       return Object.values(this.requestData).join(".");
     },
   },
-}).mount("#consumption-view");
+});

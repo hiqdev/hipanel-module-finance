@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace hipanel\modules\finance\widgets;
 
@@ -22,7 +23,6 @@ class ConsumptionViewer extends Widget
 
     public function run(): string
     {
-        ConsumptionViewerAsset::register($this->view);
         if (!$this->consumption) {
             return Html::tag('div',
                 Yii::t('hipanel:finance', 'No consumption found for the requested resource'),
@@ -32,6 +32,7 @@ class ConsumptionViewer extends Widget
         if (empty($columns)) {
             return '';
         }
+        ConsumptionViewerAsset::register($this->view);
 
         return $this->render('ConsumptionViewer', [
             'initialData' => [
