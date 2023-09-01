@@ -112,7 +112,7 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
 
                     return LinkToObjectResolver::widget([
                         'model' => $model,
-                        'typeAttribute' => 'tariff_type',
+                        'typeAttribute' => 'object_type',
                         'idAttribute' => 'object_id',
                     ]);
                 },
