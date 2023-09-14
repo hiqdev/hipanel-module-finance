@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\controllers;
 
+use advancedhosters\hipanel\modules\costprice\models\Costprice;
 use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartPerformAction;
@@ -89,6 +90,20 @@ class PurseController extends \hipanel\base\CrudController
         ]);
     }
 
+    public function actionSystemTools()
+    {
+        return $this->render('system-tools');
+    }
+
+    public function actionCalculateCostprice()
+    {
+        $request = Yii::$app->request;
+        if ($request->isAjax) {
+            return StatisticTableGenerator::widget(['type' => 'costprice', 'statistic' => Costprice::class]);
+        }
+        return $this->render('calculate-costprice');
+    }
+
     public function actionGenerateAll()
     {
         $request = Yii::$app->request;
@@ -141,9 +156,9 @@ class PurseController extends \hipanel\base\CrudController
                 Yii::$app->getSession()->setFlash('error',
                     Yii::t('hipanel:finance',
                         "No templates for requisite. Follow this link {contactUrl} and set template of type '{type}'", [
-                                'contactUrl' => $contactUrl,
-                                'type' => $type,
-                            ]));
+                            'contactUrl' => $contactUrl,
+                            'type' => $type,
+                        ]));
             } else {
                 Yii::$app->getSession()->setFlash('error',
                     Yii::t('hipanel:finance', 'No templates for requisite. Please contact finance department'));
