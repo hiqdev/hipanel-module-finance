@@ -54,6 +54,15 @@ class BillActionsMenu extends \hiqdev\yii2\menus\Menu
                     'data-pjax' => 0,
                 ],
             ],
+            [
+                'label' => Yii::t('hipanel:finance', 'Charges'),
+                'icon' => 'fa-th-list',
+                'url' => Url::toSearch('charge', ['bill_id_in' => $this->model->id]),
+                'linkOptions' => [
+                    'data-pjax' => 0,
+                ],
+                'visible' => Yii::$app->user->can('bill.charges.read'),
+            ],
         ];
     }
 }
