@@ -56,7 +56,7 @@ class BillActionsMenu extends \hiqdev\yii2\menus\Menu
             ],
             [
                 'label' => Yii::t('hipanel:finance', 'Charges'),
-                'icon' => 'fa-user',
+                'icon' => 'fa-th-list',
                 'url' => Url::toSearch('charge', ['bill_id_in' => $this->model->id]),
                 'linkOptions' => [
                     'data-pjax' => 0,
