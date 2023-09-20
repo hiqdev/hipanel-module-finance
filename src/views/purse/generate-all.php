@@ -7,7 +7,7 @@ use yii\helpers\Html;
 
 $this->title = Yii::t('hipanel:finance', 'Generate documents');
 $this->params['subtitle'] = $this->title;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:document', 'Documents'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:document', 'Documents'), 'url' => ['system-tools']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

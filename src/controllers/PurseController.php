@@ -23,6 +23,7 @@ use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\Url;
 use hipanel\modules\document\models\Statistic as DocumentStatisticModel;
 use hipanel\modules\finance\models\Purse;
+use hipanel\modules\finance\widgets\ProcessTableGenerator;
 use hipanel\modules\finance\widgets\StatisticTableGenerator;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
@@ -98,10 +99,20 @@ class PurseController extends \hipanel\base\CrudController
     public function actionCalculateCostprice()
     {
         $request = Yii::$app->request;
-        if ($request->isAjax) {
-            return StatisticTableGenerator::widget(['type' => 'costprice', 'statistic' => Costprice::class]);
+        if ($request->isPost) {
+            $param = ($request->post('Costprice')) ? $request->post('Costprice') : [];
+            $param['month'] = $param['month'] ?? date('Y-m-01');
+            Costprice::perform('recalculate', $param);
         }
-        return $this->render('calculate-costprice');
+        $statistic =  Costprice::perform('monitor');
+        $model = new Costprice();
+        if ($request->isAjax) {
+            return ProcessTableGenerator::widget(['statistic' => $statistic]);
+        }
+        return $this->render('calculate-costprice', [
+            'model' => $model,
+            'statistic' => $statistic
+        ]);
     }
 
     public function actionGenerateAll()
