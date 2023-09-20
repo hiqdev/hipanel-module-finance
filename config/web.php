@@ -22,6 +22,7 @@ return [
         '@finance' => '/finance',
         '@plan' => '/finance/plan',
         '@price' => '/finance/price',
+        '@charge' => '/finance/charge',
         '@tariffprofile' => '/finance/tariff-profile',
         '@requisite' => '/finance/requisite',
         '@target' => '/finance/target',

@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\menus;
 
+use hipanel\helpers\Url;
 use Yii;
 
 class BillActionsMenu extends \hiqdev\yii2\menus\Menu
