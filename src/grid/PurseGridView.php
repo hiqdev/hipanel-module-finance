@@ -15,6 +15,7 @@ use hipanel\modules\client\widgets\combo\ContactCombo;
 use hipanel\modules\finance\widgets\combo\RequisitesCombo;
 use hiqdev\xeditable\widgets\ComboXEditable;
 use Yii;
+use yii\helpers\Html;
 
 class PurseGridView extends BoxedGridView
 {
@@ -69,7 +70,7 @@ class PurseGridView extends BoxedGridView
                 'label' => Yii::t('hipanel:finance', 'Contact'),
                 'value' => function ($model) {
                     $organization = $model->contact->organization ?? '';
-                    $result = $organization . ($organization ? ' / ' : '') . $model->contact->name;
+                    $result = Html::encode($organization . ($organization ? ' / ' : '') . $model->contact->name);
 
                     if (!Yii::$app->user->can('purse.update')) {
                         return $result;
@@ -106,7 +107,7 @@ class PurseGridView extends BoxedGridView
                     $result = '';
                     if (isset($model->requisite)) {
                         $organization = $model->requisite->organization;
-                        $result = $organization . ($organization ? ' / ' : '') . $model->requisite->name;
+                        $result = Html::encode($organization . ($organization ? ' / ' : '') . $model->requisite->name);
                     }
 
                     if (!Yii::$app->user->can('purse.update')) {
