@@ -69,6 +69,9 @@ class BillManagementAction extends Action
         if ($this->withZeroSums) {
             $this->resetSums();
         }
+        if ($this->id === 'copy') {
+            $this->resetDeprecatedTypes();
+        }
 
         $result = $this->saveBills();
         if ($result instanceof Response) {
@@ -134,8 +137,8 @@ class BillManagementAction extends Action
     protected function createCollection(): void
     {
         $this->collection = new Collection([
-            'model'         => new BillForm(['scenario' => $this->scenario]),
-            'scenario'      => $this->scenario,
+            'model' => new BillForm(['scenario' => $this->scenario]),
+            'scenario' => $this->scenario,
             'loadFormatter' => function (BillForm $baseModel, $key, $value) {
                 $charges = $this->request->post($baseModel->newCharge()->formName());
                 $value['charges'] = $charges[$key] ?? [];
@@ -217,6 +220,23 @@ class BillManagementAction extends Action
             if ($bill->charges !== []) {
                 foreach ($bill->charges as $charge) {
                     $charge->sum = null;
+                }
+            }
+        }
+    }
+
+    private function resetDeprecatedTypes(): void
+    {
+        $deprecatedTypes = Yii::$app->params['module.finance.bill.types']['deprecated.types'] ?? [];
+        foreach ($this->collection->getModels() as $bill) {
+            if (in_array($bill->type, $deprecatedTypes, true)) {
+                $bill->type_id = $bill->type = null;
+            }
+            if ($bill->charges !== []) {
+                foreach ($bill->charges as $charge) {
+                    if (in_array($charge->ftype, $deprecatedTypes, true)) {
+                        $charge->type_id = $charge->type = $charge->ftype = null;
+                    }
                 }
             }
         }
