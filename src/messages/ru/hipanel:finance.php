@@ -315,4 +315,5 @@ return [
     'Salaries' => 'Зарплата',
     'Calculate costprice' => 'Расчитать costprice',
     'Finance tools' => 'Финансовые инструменты',
+    'Process' => 'Процесс',
 ];

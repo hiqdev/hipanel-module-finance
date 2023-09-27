@@ -8,8 +8,8 @@
     <table id="<?= $id ?>" class="table no-margin">
         <thead>
         <tr>
-            <th><?= Yii::t('hipanel:document', 'Process') ?></th>
-            <th><?= Yii::t('hipanel:document', 'Status') ?></th>
+            <th><?= Yii::t('hipanel:finance', 'Process') ?></th>
+            <th><?= Yii::t('hipanel', 'Status') ?></th>
         </tr>
         </thead>
         <tbody>

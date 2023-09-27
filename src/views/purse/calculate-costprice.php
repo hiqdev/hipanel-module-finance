@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         onclick="sendRecalculate()"
                         class="btn btn-default btn-box-tool"
                     >
-                        <?= Yii::t('hipanel:document', 'Calculate costprice') ?>
+                        <?= Yii::t('hipanel:finance', 'Calculate costprice') ?>
                     </button>
                 </div>
                 <?php ActiveForm::end() ?>

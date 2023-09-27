@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         formmethod="GET"
                         formaction="/finance/purse/calculate-costprice"
                     >
-                        <?= Yii::t('hipanel:document', 'Calculate costprice') ?>
+                        <?= Yii::t('hipanel:finance', 'Calculate costprice') ?>
                     </button>
                 </div>
                 <?php ActiveForm::end() ?>
