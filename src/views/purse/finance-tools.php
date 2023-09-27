@@ -1,12 +1,11 @@
 <?php
 /** @var array $statisticByTypes */
-use hipanel\modules\finance\widgets\StatisticTableGenerator;
-use yii\bootstrap\ActiveForm;
-use yii\helpers\Html;
 
-$this->title = Yii::t('hipanel:finance', 'System tools');
+use yii\bootstrap\ActiveForm;
+
+$this->title = Yii::t('hipanel:finance', 'Finance tools');
 $this->params['subtitle'] = $this->title;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:document', 'Documents'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Documents'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

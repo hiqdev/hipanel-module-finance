@@ -91,23 +91,44 @@ class PurseController extends \hipanel\base\CrudController
         ]);
     }
 
-    public function actionSystemTools()
+    public function actionFinanceTools()
     {
-        return $this->render('system-tools');
+        return $this->render('finance-tools');
+    }
+
+    public function actionRecalculate()
+    {
+        $request = $this->request;
+        if ($request->isAjax) {
+            $params = $request->post();
+            $params['month'] = (!empty($params['month'])) ? $params['month'] : date('Y-m-01');
+            ignore_user_abort(true);
+            ini_set('memory_limit', '2G');
+
+            ob_start();
+
+            header('Connection: close');
+            header('Content-Length: ' . ob_get_length());
+            ob_end_flush();
+            @ob_flush();
+            flush();
+            fastcgi_finish_request(); // required for PHP-FPM (PHP > 5.3.3)
+            Costprice::perform('recalculate', $params);
+        }
+        die();
     }
 
     public function actionCalculateCostprice()
     {
-        $request = Yii::$app->request;
-        if ($request->isPost) {
-            $param = ($request->post('Costprice')) ? $request->post('Costprice') : [];
-            $param['month'] = $param['month'] ?? date('Y-m-01');
-            Costprice::perform('recalculate', $param);
-        }
+        $request = $this->request;
         $statistic =  Costprice::perform('monitor');
         $model = new Costprice();
         if ($request->isAjax) {
             return ProcessTableGenerator::widget(['statistic' => $statistic]);
+//            return $this->renderAjax('calculate-costprice', [
+//                'model' => $model,
+//                'statistic' => $statistic
+//            ]);
         }
         return $this->render('calculate-costprice', [
             'model' => $model,

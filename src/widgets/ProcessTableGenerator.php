@@ -40,7 +40,7 @@ class ProcessTableGenerator extends Widget
         $id = $this->getId();
         $url = Url::to(['@purse/calculate-costprice']);
 
-        $this->view->registerJs(<<<"JS"
+        $this->view->registerJs(<<<JS
         (function() {
             function updateTable() {
                 var table = $('#{$id}');
@@ -50,14 +50,36 @@ class ProcessTableGenerator extends Widget
                     method: 'POST',
                     dataType: 'html',
                     beforeSend: function( xhr ) {
-                        loading.show();
+                        loading.css('display','inline-block');
                     }
                 }).done(function (data) {
                     loading.hide();
+                    $('#{$id} .costprice-table').html(data);
                 });
             }
-            setInterval(updateTable, 10000);
+            setInterval(updateTable, 2000);
         })();
+JS
+            , View::POS_END);
+
+        $urlRecalculate = Url::to(['@purse/recalculate']);
+
+        $this->view->registerJs(<<<JS
+            function sendRecalculate() {
+                var table = $('#{$id}');
+                var loading = table.parents('.box').find('.loading');
+                $.ajax({
+                    url: '{$urlRecalculate}',
+                    method: 'POST',
+                    dataType: "json",
+                    data:{'type': $('#costprice-type').val(),'month':$('#costprice-month').val()},
+                    beforeSend: function( xhr ) {
+                        loading.css('display','inline-block');
+                    }
+                }).done(function (data) {
+                    loading.hide();
+                })
+            };
 JS
             , View::POS_END);
     }

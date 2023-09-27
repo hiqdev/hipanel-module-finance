@@ -4,7 +4,7 @@
 /** @var array $statistic */
 ?>
 
-<div class="table-responsive">
+<div class="table-responsive costprice-table">
     <table id="<?= $id ?>" class="table no-margin">
         <thead>
         <tr>
@@ -15,16 +15,23 @@
         <tbody>
         <?php if (!empty($statistic['mask'])) : ?>
             <?php foreach ($statistic['mask'] as $key => $data) : ?>
-                <?php
-                    $result = json_decode($data, true);
-                    foreach ($result as $processStatus => $value) {
-                        $printData =  ($processStatus === 'in_progress') ? $processStatus . ': ' . $value : $processStatus;
-                    }
-                ?>
-                <tr>
-                    <td><?= explode(':', $key)[2] ?></td>
-                    <td><?= $printData ?></td>
-                </tr>
+            <tr>
+                <td><?= $key?></td>
+                <?php foreach ($data as $status => $value) : ?>
+                    <?php if ($status !== 'name') : ?>
+                    <tr>
+                        <?php if (is_array($value)) {
+                            $result = (!empty($value['date'])) ? $value['date'] : 0;
+                        } else {
+                            $result = $value;
+                        }
+                        ?>
+                        <td><?= $status ?></td>
+                        <td><?= $result ?></td>
+                    </tr>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </tr>
             <?php endforeach; ?>
         <?php endif; ?>
         </tbody>

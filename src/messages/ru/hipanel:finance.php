@@ -311,4 +311,8 @@ return [
     'Fork tariff plan' => 'Ответвить тариф',
 
     'Exclude with zero-sum' => 'Исключить с нулевой суммой',
+    'HW' => 'Оборудование',
+    'Salaries' => 'Зарплата',
+    'Calculate costprice' => 'Расчитать costprice',
+    'Finance tools' => 'Финансовые инструменты',
 ];
