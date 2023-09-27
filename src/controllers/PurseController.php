@@ -125,10 +125,6 @@ class PurseController extends \hipanel\base\CrudController
         $model = new Costprice();
         if ($request->isAjax) {
             return ProcessTableGenerator::widget(['statistic' => $statistic]);
-//            return $this->renderAjax('calculate-costprice', [
-//                'model' => $model,
-//                'statistic' => $statistic
-//            ]);
         }
         return $this->render('calculate-costprice', [
             'model' => $model,
