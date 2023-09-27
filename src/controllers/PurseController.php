@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\controllers;
 
+use advancedhosters\hipanel\modules\costprice\models\Costprice;
 use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartPerformAction;
@@ -22,6 +23,7 @@ use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\Url;
 use hipanel\modules\document\models\Statistic as DocumentStatisticModel;
 use hipanel\modules\finance\models\Purse;
+use hipanel\modules\finance\widgets\ProcessTableGenerator;
 use hipanel\modules\finance\widgets\StatisticTableGenerator;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
@@ -89,6 +91,47 @@ class PurseController extends \hipanel\base\CrudController
         ]);
     }
 
+    public function actionFinanceTools()
+    {
+        return $this->render('finance-tools');
+    }
+
+    public function actionRecalculate()
+    {
+        $request = $this->request;
+        if ($request->isAjax) {
+            $params = $request->post();
+            $params['month'] = (!empty($params['month'])) ? $params['month'] : date('Y-m-01');
+            ignore_user_abort(true);
+            ini_set('memory_limit', '2G');
+
+            ob_start();
+
+            header('Connection: close');
+            header('Content-Length: ' . ob_get_length());
+            ob_end_flush();
+            @ob_flush();
+            flush();
+            fastcgi_finish_request(); // required for PHP-FPM (PHP > 5.3.3)
+            Costprice::perform('recalculate', $params);
+        }
+        die();
+    }
+
+    public function actionCalculateCostprice()
+    {
+        $request = $this->request;
+        $statistic =  Costprice::perform('monitor');
+        $model = new Costprice();
+        if ($request->isAjax) {
+            return ProcessTableGenerator::widget(['statistic' => $statistic]);
+        }
+        return $this->render('calculate-costprice', [
+            'model' => $model,
+            'statistic' => $statistic
+        ]);
+    }
+
     public function actionGenerateAll()
     {
         $request = Yii::$app->request;
@@ -141,9 +184,9 @@ class PurseController extends \hipanel\base\CrudController
                 Yii::$app->getSession()->setFlash('error',
                     Yii::t('hipanel:finance',
                         "No templates for requisite. Follow this link {contactUrl} and set template of type '{type}'", [
-                                'contactUrl' => $contactUrl,
-                                'type' => $type,
-                            ]));
+                            'contactUrl' => $contactUrl,
+                            'type' => $type,
+                        ]));
             } else {
                 Yii::$app->getSession()->setFlash('error',
                     Yii::t('hipanel:finance', 'No templates for requisite. Please contact finance department'));

@@ -54,9 +54,9 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                         'url'     => ['/finance/purse/index'],
                         'visible' => $user->can('purse.read'),
                     ],
-                    'generate' => [
-                        'label'   => Yii::t('hipanel:finance', 'Generate documents'),
-                        'url'     => ['/finance/purse/generate-all'],
+                    'tools' => [
+                        'label'   => Yii::t('hipanel:finance', 'Finance tools'),
+                        'url'     => ['/finance/purse/finance-tools'],
                         'visible' => $user->can('document.generate-all'),
                     ],
                     'plans' => [
