@@ -13,7 +13,7 @@ export default class SaleUpdate {
     for (let i = 0; i < sales.length; i++) {
       await Select2.field(this.page, `select[id*='sale-${i}-tariff_id']`).setValue(sales[i].tariff);
     }
-    await this.page.locator('button:has-text("Apply changes")').click();
+    await this.page.locator('button:has-text("Save")').click();
   }
 
 }
