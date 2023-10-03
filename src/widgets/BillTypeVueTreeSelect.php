@@ -53,9 +53,9 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
                   :append-to-body="true"
                   :disable-branch-nodes="%s"
                   :multiple="%s"
+                  :auto-select-ancestors="true"
                   value-consists-of="LEAF_PRIORITY"
                   delimiter=","
-                  auto-select-ancestors="true"
                   search-nested
                   placeholder="%s"
                   v-model="value"
