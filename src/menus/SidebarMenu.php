@@ -57,7 +57,8 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     'tools' => [
                         'label'   => Yii::t('hipanel:finance', 'Finance tools'),
                         'url'     => ['/finance/purse/finance-tools'],
-                        'visible' => $user->can('document.generate-all'),
+                        'visible' => $user->can('document.generate-all')
+                                     || $user->can('costprice.read'),
                     ],
                     'plans' => [
                         'label'   => Yii::t('hipanel:finance', 'Tariff plans'),

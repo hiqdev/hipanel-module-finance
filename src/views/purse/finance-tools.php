@@ -16,22 +16,27 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header with-border">
                 <?php $form = ActiveForm::begin() ?>
                 <div class="box-tools pull-left">
-                    <button
-                        type="submit"
-                        class="btn btn-default btn-box-tool"
-                        formmethod="GET"
-                        formaction="/finance/purse/generate-all"
-                    >
-                        <?= Yii::t('hipanel:document', 'Generate documents') ?>
-                    </button>
-                    <button
-                        type="submit"
-                        class="btn btn-default btn-box-tool"
-                        formmethod="GET"
-                        formaction="/finance/purse/calculate-costprice"
-                    >
-                        <?= Yii::t('hipanel:finance', 'Calculate costprice') ?>
-                    </button>
+                    <?php if (Yii::$app->user->can('document.generate-all')): ?>
+                        <button
+                            type="submit"
+                            class="btn btn-default btn-box-tool"
+                            formmethod="GET"
+                            formaction="/finance/purse/generate-all"
+                        >
+                            <?= Yii::t('hipanel:document', 'Generate documents') ?>
+                        </button>
+                    <?php endif ?>
+
+                    <?php if (Yii::$app->user->can('costprice.read')): ?>
+                        <button
+                            type="submit"
+                            class="btn btn-default btn-box-tool"
+                            formmethod="GET"
+                            formaction="/finance/purse/calculate-costprice"
+                        >
+                            <?= Yii::t('hipanel:finance', 'Calculate costprice') ?>
+                        </button>
+                    <?php endif ?>
                 </div>
                 <?php ActiveForm::end() ?>
             </div>

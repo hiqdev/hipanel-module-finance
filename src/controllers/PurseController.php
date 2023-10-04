@@ -40,6 +40,8 @@ class PurseController extends \hipanel\base\CrudController
                 'actions' => [
                     'update,update-requisite,update-contact' => 'purse.update',
                     'pre-generate-document,generate-monthly-document,generate-document' => 'document.generate',
+                    'calculate-costprice' => 'costprice.read',
+                    'finance-tools' => ['document.generate-all', 'costprice.read'],
                     '*' => 'bill.read',
                 ],
             ],
