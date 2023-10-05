@@ -4,36 +4,20 @@
 /** @var array $statistic */
 ?>
 
-<div class="table-responsive costprice-table">
-    <table id="<?= $id ?>" class="table no-margin">
-        <thead>
-        <tr>
-            <th><?= Yii::t('hipanel:finance', 'Process') ?></th>
-            <th><?= Yii::t('hipanel', 'Status') ?></th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php if (!empty($statistic['mask'])) : ?>
-            <?php foreach ($statistic['mask'] as $key => $data) : ?>
-            <tr>
-                <td><?= $key?></td>
-                <?php foreach ($data as $status => $value) : ?>
-                    <?php if ($status !== 'name') : ?>
-                    <tr>
-                        <?php if (is_array($value)) {
-                            $result = (!empty($value['date'])) ? $value['date'] : 0;
-                        } else {
-                            $result = $value;
-                        }
-                        ?>
-                        <td><?= $status ?></td>
-                        <td><?= $result ?></td>
-                    </tr>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </tr>
-            <?php endforeach; ?>
-        <?php endif; ?>
-        </tbody>
-    </table>
-</div>
+<?php foreach ($statistic as $name => $data) : ?>
+    <div class="progress-group">
+        <span class="progress-text" style="text-transform: uppercase;"><?= $name ?></span>
+        <span class="progress-number"><b><?= $data['count'] ?></b>/<?= $data['total'] ?></span>
+        <div class="progress-description text-muted">
+            <ol class="breadcrumb" style="margin: 0; padding: 0; background-color: transparent;">
+                <li><?= Yii::t('hipanel:finance', 'Started at: {0,time}', [$data['startedAt'] ?? 0]) ?></li>
+                <li><?= Yii::t('hipanel:finance', 'Update at: {0,time}', [$data['updatedAt'] ?? 0]) ?></li>
+                <li class="active"><?= Yii::t('hipanel:finance', 'Status: {0}', [$data['status']]) ?></li>
+            </ol>
+        </div>
+        <div class="progress sm">
+            <div class="progress-bar progress-bar-green"
+                 style="width: <?= $data['total'] > 0 ? number_format($data['count'] / $data['total'] * 100) : 0 ?>%"></div>
+        </div>
+    </div>
+<?php endforeach ?>
