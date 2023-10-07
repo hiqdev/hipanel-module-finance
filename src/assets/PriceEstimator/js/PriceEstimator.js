@@ -316,6 +316,7 @@
                     this.drawEstimates();
                     this.drawTotalPerSaleObject();
                     this.drawPlanTotal()
+                    this.removeUnusedSpinners();
                 },
                 error: xhr => {
                     hipanel.notify.error(xhr.statusText);
@@ -325,6 +326,11 @@
                 }
             }).then(() => {
                 this.activatePopovers();
+            });
+        },
+        removeUnusedSpinners: () => {
+            document.querySelectorAll('.fa-spin.fa-refresh').forEach(elem => {
+                elem.parentElement.innerText = "--";
             });
         },
         activatePopovers() {
