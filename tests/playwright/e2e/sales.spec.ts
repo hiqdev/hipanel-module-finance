@@ -1,4 +1,4 @@
-import { test } from "@hipanel-core/fixtures";
+import { test, expect } from "@hipanel-core/fixtures";
 import ServerHelper from "@hipanel-module-finance/Helper/ServerHelper";
 import Sale from "@hipanel-module-finance/model/Sale";
 import ServerView from "@hipanel-module-finance/page/bill/ServerView";
@@ -88,8 +88,14 @@ test(`Ensure I can delete several sales @hipanel-module-finance @seller`, async 
 
   await indexPage.chooseRangeOfRowsOnTable(1, 2);
   await saleHelper.deleteSales();
+  const closeTime1 = await indexPage.getValueInColumnByNumberRow('Close time', 1);
+  const closeTime2 = await indexPage.getValueInColumnByNumberRow('Close time', 2);
 
-  await Alert.on(page).hasText("Sale was successfully deleted.");
+  const date = new Date();
+  const year= String(date.getFullYear());
+
+  expect(closeTime1).toContain(year);
+  expect(closeTime2).toContain(year);
 });
 
 test('Ensure I can change buyer @hipanel-module-finance @seller', async ({ page }) => {
