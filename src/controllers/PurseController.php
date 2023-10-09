@@ -93,11 +93,6 @@ class PurseController extends \hipanel\base\CrudController
         ]);
     }
 
-    public function actionFinanceTools()
-    {
-        return $this->render('finance-tools');
-    }
-
     public function actionRecalculate()
     {
         $request = $this->request;
@@ -123,14 +118,15 @@ class PurseController extends \hipanel\base\CrudController
     public function actionCalculateCostprice()
     {
         $request = $this->request;
-        $statistic =  Costprice::perform('monitor');
+        $statistic = Costprice::perform('monitor');
         $model = new Costprice();
         if ($request->isAjax) {
             return ProcessTableGenerator::widget(['statistic' => $statistic]);
         }
+
         return $this->render('calculate-costprice', [
             'model' => $model,
-            'statistic' => $statistic
+            'statistic' => $statistic,
         ]);
     }
 
