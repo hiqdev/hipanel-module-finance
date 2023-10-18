@@ -61,12 +61,12 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                             'generate-all' => [
                                 'label' => Yii::t('hipanel:document', 'Generate documents'),
                                 'url' => ['/finance/purse/generate-all'],
-                                'visible' => $user->can('costprice.read'),
+                                'visible' => $user->can('document.generate-all'),
                             ],
                             'costprice-monitoring' => [
                                 'label' => Yii::t('hipanel:finance', 'Calculate costprice'),
                                 'url' => ['/finance/purse/calculate-costprice'],
-                                'visible' => $user->can('document.generate-all'),
+                                'visible' => $user->can('costprice.read'),
                             ],
                         ],
                         'visible' => $user->can('document.generate-all') || $user->can('costprice.read'),

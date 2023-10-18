@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -17,62 +18,33 @@ use yii\web\View;
 
 class StatisticTableGenerator extends Widget
 {
-    /**
-     * @var array
-     */
-    public $statistic = [];
-
-    /**
-     * @var string
-     */
-    public $type;
+    public array $statistic = [];
+    public ?string $type = null;
 
     public function init()
     {
         if (!$this->type) {
             throw new InvalidConfigException('Attribute `type` must be set.');
         }
-        if (!empty($this->statistic)) {
-            $this->sortStatistic();
-        }
-        $this->initClientScript();
     }
 
     public function run()
     {
-        return $this->render('statisticTableGenerator', ['id' => $this->getId(), 'statistic' => $this->statistic]);
-    }
+        $this->initClientScript();
 
-    protected function sortStatistic()
-    {
+        return $this->render('statisticTableGenerator', ['type' => $this->type, 'statistic' => $this->statistic]);
     }
 
     protected function initClientScript()
     {
-        $id = $this->getId();
-        $type = $this->type;
-        $url = Url::to(['@purse/generate-all']);
+        $url = Url::to(['@purse/generation-progress', 'type' => $this->type]);
 
         $this->view->registerJs(<<<"JS"
-        (function() {
-            function updateTable() {
-                var table = $('#{$id}');
-                var loading = table.parents('.box').find('.loading');
-                $.ajax({
-                    url: '{$url}',
-                    method: 'POST',
-                    data: {type: '{$type}'},
-                    dataType: 'html',
-                    beforeSend: function( xhr ) {
-                        loading.show();
-                    }
-                }).done(function (data) {
-                    loading.hide();
-                });
-            }
-            setInterval(updateTable, 10000);
-        })();
+          hipanel.progress("$url").onMessage((event) => {
+            $(".box-statistic-table.{$this->type}").html(event.data);
+          });
 JS
-            , View::POS_END);
+            ,
+            View::POS_END);
     }
 }
