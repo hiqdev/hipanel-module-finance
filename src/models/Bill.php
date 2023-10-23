@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\modules\finance\behaviors\BillNegation;
+use hipanel\modules\finance\models\query\BillQuery;
 use Yii;
 use yii\helpers\StringHelper;
 
@@ -176,5 +177,10 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
         }
 
         return $title;
+    }
+
+    public static function find(): BillQuery
+    {
+        return new BillQuery(static::class);
     }
 }
