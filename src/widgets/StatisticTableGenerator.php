@@ -40,9 +40,9 @@ class StatisticTableGenerator extends Widget
         $url = Url::to(['@purse/generation-progress', 'type' => $this->type]);
 
         $this->view->registerJs(<<<"JS"
-          hipanel.progress("$url").onMessage((event) => {
-            $(".box-statistic-table.{$this->type}").html(event.data);
-          });
+//          hipanel.progress("$url").onMessage((event) => {
+//            $(".box-statistic-table.{$this->type}").html(event.data);
+//          });
 JS
             ,
             View::POS_END);

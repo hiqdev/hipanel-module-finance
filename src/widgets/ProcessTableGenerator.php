@@ -26,6 +26,11 @@ class ProcessTableGenerator extends Widget
         $this->view->registerJs(/* @lang JavaScript */ <<<JS
         (() => {
           const loading = $(".costprice-box .loading");
+          const runProgress = () => {
+            hipanel.progress("$calculateUrl").onMessage((event) => {
+              $(".costprice-box .box-body").html(event.data);
+            });
+          }
           function sendRecalculate(e) {
             e.preventDefault();
             if (loading.is(":visible")) {
@@ -39,13 +44,12 @@ class ProcessTableGenerator extends Widget
               },
               () => {
                 loading.hide();
+                runProgress();
                 hipanel.notify.success(`Recalculation request has been sent`);
               }
             );
           }
-          hipanel.progress("$calculateUrl").onMessage((event) => {
-            $(".costprice-box .box-body").html(event.data);
-          });
+          runProgress();
           $(".costprice-box form").on("submit", sendRecalculate);
         })();
 JS

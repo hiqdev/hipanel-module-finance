@@ -20,13 +20,25 @@ $normalizeDate = static function (?array $date): ?string {
         <span class="progress-number"><b><?= $data['count'] ?></b>/<?= $data['total'] ?></span>
         <div class="progress-description text-muted">
             <ol class="breadcrumb" style="margin: 0; padding: 0; background-color: transparent;">
-                <li>
-                    <?= Yii::t('hipanel:finance', 'Started at: {0,date,yyyy-mm-dd HH:mm}', [$normalizeDate($data['startedAt'])]) ?>
-                </li>
-                <li>
-                    <?= Yii::t('hipanel:finance', 'Update at: {0,date,yyyy-mm-dd HH:mm}', [$normalizeDate($data['updatedAt'])]) ?>
-                </li>
-                <li class="active"><?= Yii::t('hipanel:finance', 'Status: {0}', [$data['status']]) ?></li>
+                <?php if ($data['startedAt']) : ?>
+                    <li>
+                        <?= Yii::t('hipanel:finance',
+                            'Started at: {0,date,yyyy-mm-dd HH:mm}',
+                            [$normalizeDate($data['startedAt'])]) ?>
+                    </li>
+                <?php endif ?>
+                <?php if ($data['updatedAt']) : ?>
+                    <li>
+                        <?= Yii::t('hipanel:finance',
+                            'Update at: {0,date,yyyy-mm-dd HH:mm}',
+                            [$normalizeDate($data['updatedAt'])]) ?>
+                    </li>
+                <?php endif ?>
+                <?php if ($data['status']) : ?>
+                    <li class="active">
+                        <?= Yii::t('hipanel:finance', 'Status: {0}', [$data['status']]) ?>
+                    </li>
+                <?php endif ?>
             </ol>
         </div>
         <div class="progress sm">
