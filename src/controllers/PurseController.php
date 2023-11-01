@@ -12,7 +12,9 @@ namespace hipanel\modules\finance\controllers;
 
 use advancedhosters\hipanel\modules\costprice\models\Costprice;
 use hipanel\actions\IndexAction;
+use hipanel\actions\ProgressAction;
 use hipanel\actions\RedirectAction;
+use hipanel\actions\RunProcessAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\SmartCreateAction;
@@ -29,6 +31,7 @@ use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\Event;
 use yii\helpers\Html;
+use function Clue\StreamFilter\fun;
 
 class PurseController extends \hipanel\base\CrudController
 {
@@ -90,39 +93,65 @@ class PurseController extends \hipanel\base\CrudController
                 'class' => SmartPerformAction::class,
                 'success' => Yii::t('hipanel:finance', 'Document updated'),
             ],
+            'calculate' => [
+                'class' => ProgressAction::class,
+                'onProgress' => function () {
+                    $statistic = Costprice::perform('monitor');
+
+                    return ProcessTableGenerator::widget(['statistic' => $statistic]);
+                },
+            ],
+            'recalculate' => [
+                'class' => RunProcessAction::class,
+                'onRunProcess' => function (RunProcessAction $action) {
+                    $request = $action->controller->request;
+                    $params = $request->post();
+                    $params['month'] = (!empty($params['month'])) ? $params['month'] : date('Y-m-01');
+                    Costprice::perform('recalculate', $params);
+                },
+            ],
+            'generation-perform' => [
+                'class' => RunProcessAction::class,
+                'onRunProcess' => function (RunProcessAction $action) {
+                    $request = $action->controller->request;
+                    if (!$request->isPost) {
+                        return;
+                    }
+                    $type = $request->post('type');
+                    Purse::batchPerform('generate-and-save-all-monthly-documents', [
+                        'type' => $type,
+                        'client_types' => $type === 'acceptance' ? 'employee' : null,
+                    ]);
+                }
+            ],
+            'generation-progress' => [
+                'class' => ProgressAction::class,
+                'onGettingId' => static fn(ProgressAction $action) => $action->controller->request->get('type'),
+                'onProgress' => static function (ProgressAction $action) {
+                    $request = $action->controller->request;
+                    $type = $request->get('type');
+                    $model = new DocumentStatisticModel();
+                    $statisticByTypes = DocumentStatisticModel::batchPerform('get-stats',
+                        $model->getAttributes([
+                            'types',
+                            'since',
+                        ])
+                    );
+                    if ($type && in_array($type, explode(',', $model->types), true)) {
+                        return StatisticTableGenerator::widget([
+                            'type' => $type,
+                            'statistic' => $statisticByTypes[$type],
+                        ]);
+                    }
+                },
+            ],
         ]);
     }
 
-    public function actionRecalculate()
+    public function actionCalculateCostprice(): string
     {
-        $request = $this->request;
-        if ($request->isAjax) {
-            $params = $request->post();
-            $params['month'] = (!empty($params['month'])) ? $params['month'] : date('Y-m-01');
-            ignore_user_abort(true);
-            ini_set('memory_limit', '2G');
-
-            ob_start();
-
-            header('Connection: close');
-            header('Content-Length: ' . ob_get_length());
-            ob_end_flush();
-            @ob_flush();
-            flush();
-            fastcgi_finish_request(); // required for PHP-FPM (PHP > 5.3.3)
-            Costprice::perform('recalculate', $params);
-        }
-        die();
-    }
-
-    public function actionCalculateCostprice()
-    {
-        $request = $this->request;
         $statistic = Costprice::perform('monitor');
         $model = new Costprice();
-        if ($request->isAjax) {
-            return ProcessTableGenerator::widget(['statistic' => $statistic]);
-        }
 
         return $this->render('calculate-costprice', [
             'model' => $model,
@@ -130,33 +159,17 @@ class PurseController extends \hipanel\base\CrudController
         ]);
     }
 
-    public function actionGenerateAll()
+    public function actionGenerateAll(): string
     {
-        $request = Yii::$app->request;
         $model = new DocumentStatisticModel();
-        $statisticByTypes = DocumentStatisticModel::batchPerform('get-stats', $model->getAttributes([
-            'types',
-            'since',
-        ]));
+        $statisticByTypes = DocumentStatisticModel::batchPerform('get-stats',
+            $model->getAttributes([
+                'types',
+                'since',
+            ])
+        );
 
-        $type = $request->post('type');
-        if ($request->isAjax && $type && in_array($type, explode(',', $model->types), true)) {
-            return StatisticTableGenerator::widget(['type' => $type, 'statistic' => $statisticByTypes[$type]]);
-        } else {
-            if ($request->isPost) {
-                try {
-                    session_write_close();
-                    Purse::batchPerform('generate-and-save-all-monthly-documents', [
-                        'type' => $type,
-                        'client_types' => $type === 'acceptance' ? 'employee' : null,
-                    ]);
-                } catch (ResponseErrorException $e) {
-                    Yii::$app->getSession()->setFlash('error', Yii::t('hipanel:finance', "Failed find templates for this requisite and document's type. Please, set templates for requisite"));
-                }
-            }
-
-            return $this->render('generate-all', ['statisticByTypes' => $statisticByTypes]);
-        }
+        return $this->render('generate-all', ['statisticByTypes' => $statisticByTypes]);
     }
 
     public function actionGenerateMonthlyDocument()

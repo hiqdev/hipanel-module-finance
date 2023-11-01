@@ -1,11 +1,11 @@
 <?php
 
-/** @var integer $id */
 /** @var array $statistic */
+
 ?>
 
 <div class="table-responsive">
-    <table id="<?= $id ?>" class="table no-margin">
+    <table class="table no-margin">
         <thead>
         <tr>
             <th><?= Yii::t('hipanel:document', 'Date') ?></th>

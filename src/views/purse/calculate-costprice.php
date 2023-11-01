@@ -8,36 +8,19 @@
 use hipanel\modules\finance\models\Costprice;
 use hipanel\modules\finance\widgets\ProcessTableGenerator;
 use hipanel\widgets\DateTimePicker;
-use hipanel\widgets\DynamicFormWidget;
 use yii\bootstrap\ActiveForm;
 
 $this->title = Yii::t('hipanel:finance', 'Calculate costprice');
-$this->params['subtitle'] = $this->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Finance tools'), 'url' => ['finance-tools']];
 $this->params['breadcrumbs'][] = $this->title;
-?>
 
-<?php DynamicFormWidget::begin([
-    'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
-    'widgetBody' => '.container-items', // required: css class selector
-    'widgetItem' => '.item', // required: css class
-    'limit' => 99, // the maximum times, an element can be cloned (default 999)
-    'min' => 1, // 0 or 1 (default 1)
-    'insertButton' => '.add-item', // css class
-    'deleteButton' => '.remove-item', // css class
-    'model' => $model,
-    'formId' => 'costprice-form',
-    'formFields' => [
-        'type',
-    ],
-]) ?>
+?>
 
 <div class="row">
     <div class="col-md-6">
         <div class="box box-success costprice-box">
             <div class="box-header with-border">
                 <?php $form = ActiveForm::begin(); ?>
-
                 <div class="col-md-3">
                     <?= $form->field($model, 'type')->dropDownList(Costprice::getAvailableType())->label(false) ?>
                 </div>
