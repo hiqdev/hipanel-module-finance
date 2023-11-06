@@ -92,7 +92,6 @@ class Plan extends Model
 
     public $deprecatedTariff = [
         self::TYPE_PCDN                 => self::TYPE_PCDN,
-        self::TYPE_VCDN                 => self::TYPE_VCDN,
     ];
 
     use ModelTrait;
