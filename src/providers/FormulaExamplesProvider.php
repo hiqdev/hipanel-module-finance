@@ -54,6 +54,7 @@ class FormulaExamplesProvider
             sprintf("discount.since('%s').grows('10%%').every('month').max('100%%').reason('because')", date('m.Y')),
             sprintf("discount.since('%s').grows('20 %s').every('2 months').min('30 %s').max('80 %s')", date('m.Y'), $this->currencyCode, $this->currencyCode, $this->currencyCode),
             sprintf("discount.since('%s').grows('1%%').every('1 months').min('5%%').max('25%%')", date('m.Y')),
+            sprintf("increase.since('%s').grows('10%%').every('year')", date('m.Y')) => Yii::t('hipanel.finance.price', 'The example will <b>increase</b> the price by 10% every year instead of decreasing it. You can use all the same options as for <code>discount</code> formula such as <code>min</code>, <code>max</code>, <code>reason</code>.'),
         ];
     }
 
