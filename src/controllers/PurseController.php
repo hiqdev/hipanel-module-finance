@@ -31,7 +31,6 @@ use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\Event;
 use yii\helpers\Html;
-use function Clue\StreamFilter\fun;
 
 class PurseController extends \hipanel\base\CrudController
 {

@@ -8,8 +8,6 @@ use yii\helpers\Html;
 /** @var array $statisticByTypes */
 
 $this->title = Yii::t('hipanel:finance', 'Generate documents');
-$this->params['subtitle'] = $this->title;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:document', 'Documents'), 'url' => ['finance-tools']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $performGenerationUrl = Url::toRoute('@purse/generation-perform');

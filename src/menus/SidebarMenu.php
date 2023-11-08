@@ -71,6 +71,21 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                         ],
                         'visible' => $user->can('document.generate-all') || $user->can('costprice.read'),
                     ],
+                    'pnl' => [
+                        'label' => Yii::t('hipanel:finance', 'P&L tools'),
+                        'url' => '#',
+                        'items' => [
+                            'report' => [
+                                'label' => Yii::t('hipanel:finance', 'Report'),
+                                'url' => ['/finance/pnl/report'],
+                            ],
+                            'calculation' => [
+                                'label' => Yii::t('hipanel:finance', 'Calculation'),
+                                'url' => ['/finance/pnl/calculation'],
+                            ],
+                        ],
+                        'visible' => $user->can('costprice.read'),
+                    ],
                     'plans' => [
                         'label'   => Yii::t('hipanel:finance', 'Tariff plans'),
                         'url'     => ['@plan/index'],

@@ -17,7 +17,7 @@ use yii\helpers\ArrayHelper;
 class PlanSearch extends Plan
 {
     use SearchModelTrait {
-        searchAttributes as defaultSearchAttributes;
+        SearchModelTrait::searchAttributes as defaultSearchAttributes;
     }
 
     public function searchAttributes()
