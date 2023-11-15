@@ -74,18 +74,21 @@ function startCalculation(event) {
         results.forEach((set) => {
           if (set.uncategorized > 0) {
             const date = set.month;
-            const cell = $(`#\${date} .uncategorized`);
+            const cell = $(`.\${date} .uncategorized`);
             $(".glyphicon", cell).show();
-            cell.addClass("clickable");
-            cell.click((event) => {
-              $(event.target).toggleClass("active");
-            });
-            cell.popover({
-              container: "body",
-              content: set.chargesInfo.join("<br>"),
-              sanitize: false,
-              html: true,
-              trigger: "click",
+            $(".glyphicon", cell).addClass("clickable");
+            const tbody = $(`.\${date} tbody`).get(0);
+            const template = document.querySelector("#charge-info-row");
+            set.chargesInfo.forEach(charge => {
+              const clone = template.content.cloneNode(true);
+              let td = clone.querySelectorAll("td");
+              td[0].firstChild.href = `/finance/charge/view?id=\${charge.id}`;
+              td[0].firstChild.textContent = charge.id;
+              td[1].textContent = charge.label;
+              td[2].textContent = charge.type;
+              td[3].textContent = charge.object;
+
+              tbody.appendChild(clone);
             });
           }
         });

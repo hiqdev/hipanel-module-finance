@@ -12,12 +12,12 @@ class Pnl extends Model
 {
     use ModelTrait;
 
-    public function rules(): array
+    public function rules()
     {
         return array_merge(parent::rules(), [
-            [['id', 'charge_id', 'type_id', 'currency_id', 'sum', 'charge_sum', 'discount_sum'], 'integer'],
+            [['id', 'charge_id', 'type_id', 'currency_id', 'sum', 'charge_sum', 'discount_sum', 'bill_id'], 'integer'],
             [['type', 'currency'], 'string'],
-            [['update_time', 'month'], 'date'],
+            [['update_time', 'month'], 'date', 'format' => 'php:Y-m-d'],
             [['data'], 'safe'],
         ]);
     }

@@ -12,8 +12,10 @@
 namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
+use hipanel\actions\RedirectAction;
 use hipanel\actions\RenderAction;
 use hipanel\actions\VariantsAction;
+use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\query\ChargeQuery;
@@ -86,6 +88,20 @@ class ChargeController extends CrudController
                           'allModels' => $dataProvider->query->andWhere(['groupby' => 'sum_by_currency'])->all(),
                         ]);
                   },
+                ],
+            ],
+            'view' => [
+                'class' => ViewAction::class,
+                'GET html' => [
+                    'save' => true,
+                    'success' => [
+                        'class' => RedirectAction::class,
+                        'url' => function ($action) {
+                            $charge = $action->parent->collection->first;
+
+                            return ['@bill/view', 'id' => $charge->bill_id, '#' => $charge->id];
+                        },
+                    ],
                 ],
             ],
         ]);

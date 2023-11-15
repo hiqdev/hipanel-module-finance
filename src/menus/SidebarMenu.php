@@ -68,23 +68,27 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                                 'url' => ['/finance/purse/calculate-costprice'],
                                 'visible' => $user->can('costprice.read'),
                             ],
+                            'pnl' => [
+                                'visible' => $user->can('costprice.read'),
+                                'label' => Yii::t('hipanel:finance', 'P&L'),
+                                'url' => '#',
+                                'items' => [
+                                    'index' => [
+                                        'label' => Yii::t('hipanel:finance', 'All records'),
+                                        'url' => ['/finance/pnl/index'],
+                                    ],
+                                    'report' => [
+                                        'label' => Yii::t('hipanel:finance', 'Report'),
+                                        'url' => ['/finance/pnl/report'],
+                                    ],
+                                    'calculation' => [
+                                        'label' => Yii::t('hipanel:finance', 'Calculation'),
+                                        'url' => ['/finance/pnl/calculation'],
+                                    ],
+                                ],
+                            ],
                         ],
                         'visible' => $user->can('document.generate-all') || $user->can('costprice.read'),
-                    ],
-                    'pnl' => [
-                        'label' => Yii::t('hipanel:finance', 'P&L tools'),
-                        'url' => '#',
-                        'items' => [
-                            'report' => [
-                                'label' => Yii::t('hipanel:finance', 'Report'),
-                                'url' => ['/finance/pnl/report'],
-                            ],
-                            'calculation' => [
-                                'label' => Yii::t('hipanel:finance', 'Calculation'),
-                                'url' => ['/finance/pnl/calculation'],
-                            ],
-                        ],
-                        'visible' => $user->can('costprice.read'),
                     ],
                     'plans' => [
                         'label'   => Yii::t('hipanel:finance', 'Tariff plans'),
