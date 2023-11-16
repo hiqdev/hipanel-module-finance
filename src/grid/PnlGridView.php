@@ -24,6 +24,10 @@ class PnlGridView extends BoxedGridView
             'type' => [
                 'attribute' => 'type',
             ],
+            'currency' => [
+                'attribute' => 'currency',
+                'enableSorting' => false,
+            ],
             'month' => [
                 'attribute' => 'month',
                 'format' => ['date', 'php:Y-m-d'],
