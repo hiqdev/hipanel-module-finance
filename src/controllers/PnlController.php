@@ -10,6 +10,7 @@ use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\Pnl;
 use hipanel\modules\finance\widgets\PnlAggregateDataTable;
+use Yii;
 use yii\base\Event;
 use yii\web\Response;
 
@@ -55,10 +56,14 @@ class PnlController extends CrudController
     public function actionReport(): string
     {
         $this->layout = 'mobile-manager';
-        $initialState = [];
-        foreach (['years', 'sections', 'directions', 'sets', 'items', 'details'] as $name) {
-            $initialState[$name] = array_values(array_filter(Pnl::batchPerform('search', ['groupby' => $name])));
-        }
+        $initialState = Yii::$app->cache->getOrSet([__CLASS__, __METHOD__], static function (): array {
+            $initialState = [];
+            foreach (['years', 'sections', 'directions', 'sets', 'items', 'details'] as $name) {
+                $initialState[$name] = array_values(array_filter(Pnl::batchPerform('search', ['groupby' => $name])));
+            }
+
+            return $initialState;
+        }, 1800);
 
         return $this->render('report', ['initialState' => $initialState]);
     }
