@@ -56,14 +56,11 @@ class PnlController extends CrudController
     public function actionReport(): string
     {
         $this->layout = 'mobile-manager';
-        $initialState = Yii::$app->cache->getOrSet([__CLASS__, __METHOD__], static function (): array {
-            $initialState = [];
-            foreach (['years', 'sections', 'directions', 'sets', 'items', 'details'] as $name) {
-                $initialState[$name] = array_values(array_filter(Pnl::batchPerform('search', ['groupby' => $name])));
-            }
+        $initialState = [];
+        foreach (['years', 'sections', 'directions', 'sets', 'items', 'details'] as $name) {
+            $initialState[$name] = array_values(array_filter(Pnl::batchPerform('search', ['groupby' => $name])));
+        }
 
-            return $initialState;
-        }, 900);
 
         return $this->render('report', ['initialState' => $initialState]);
     }
