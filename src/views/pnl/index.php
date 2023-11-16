@@ -29,15 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'boxed' => false,
             'dataProvider' => $dataProvider,
             'filterModel' => $model,
-            'columns' => [
-                'charge_id',
-                'type',
-                'month',
-                'currency',
-                'sum',
-                'charge_sum',
-                'discount_sum',
-            ],
+            'columns' => $representationCollection->getByName($uiModel->representation)->getColumns(),
         ]) ?>
     <?php $page->endBulkForm() ?>
 <?php $page->endContent() ?>

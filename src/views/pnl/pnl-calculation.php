@@ -71,27 +71,29 @@ function startCalculation(event) {
     btn.button("reset");
     loading.hide();
     $(".pnl-box .box-body").load("$mainUrl", function () {
-        results.forEach((set) => {
-          if (set.uncategorized > 0) {
-            const date = set.month;
-            const cell = $(`.\${date} .uncategorized`);
-            $(".glyphicon", cell).show();
-            $(".glyphicon", cell).addClass("clickable");
-            const tbody = $(`.\${date} tbody`).get(0);
-            const template = document.querySelector("#charge-info-row");
-            set.chargesInfo.forEach(charge => {
-              const clone = template.content.cloneNode(true);
-              let td = clone.querySelectorAll("td");
-              td[0].firstChild.href = `/finance/charge/view?id=\${charge.id}`;
-              td[0].firstChild.textContent = charge.id;
-              td[1].textContent = charge.label;
-              td[2].textContent = charge.type;
-              td[3].textContent = charge.object;
+      results.forEach((set) => {
+        if (set.uncategorized > 0) {
+          const date = set.month;
+          const cell = $(`.\${date} .uncategorized`);
+          $(".glyphicon", cell).show();
+          $(".glyphicon", cell).addClass("clickable");
+          const linkToCharges = $(`.\${date} caption a`).get(0);
+          const tbody = $(`.\${date} tbody`).get(0);
+          const template = document.querySelector("#charge-info-row");
+          set.chargesInfo.forEach(charge => {
+            const clone = template.content.cloneNode(true);
+            let td = clone.querySelectorAll("td");
+            td[0].firstChild.href = `/finance/charge/view?id=\${charge.id}`;
+            td[0].firstChild.textContent = charge.id;
+            td[1].textContent = charge.label;
+            td[2].textContent = charge.type;
+            td[3].textContent = charge.object;
 
-              tbody.appendChild(clone);
-            });
-          }
-        });
+            tbody.appendChild(clone);
+          });
+          linkToCharges.href = "/finance/charge/index?ChargeSearch[ids]=" + set.chargesInfo.map(c => c.id).join(",");
+        }
+      });
       });
     });
 
@@ -113,7 +115,7 @@ JS
                         <?php foreach ($attributes as $id => $label) : ?>
                             <div class="col-md-3">
                                 <div class="form-group has-feedback">
-                                    <input type="text" class="form-control" id="<?= $id ?>" name="<?= $id ?>" placeholder="<?= $label ?>">
+                                    <input type="text" class="form-control" id="<?= $id ?>" name="<?= $id ?>" placeholder="<?= $label ?>" required>
                                     <span class="glyphicon glyphicon-calendar form-control-feedback text-muted"></span>
                                 </div>
                             </div>

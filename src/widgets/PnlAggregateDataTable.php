@@ -50,17 +50,18 @@ class PnlAggregateDataTable extends Widget
                 ]),
                 Html::endTag('span'),
                 '
-                    <table id="' . $datum['month'] . '" class="table table-striped table-condensed collapse table-bordered" style="margin-top: 1em;">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Label</th>
-                                <th>Type</th>
-                                <th>Object</th>
-                            </tr>                
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                <table id="' . $datum['month'] . '" class="table table-striped table-condensed collapse" style="margin-top: 1em;">
+                    <caption><a href="#" class="btn btn-xs btn-block btn-link" target="_blank">Move to uncategorized charges&nbsp;<i class="fa fa-external-link fa-fw"></i></a></caption>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Label</th>
+                            <th>Type</th>
+                            <th>Object</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
                 ',
                 Html::endTag('td'),
                 Html::endTag('tr'),

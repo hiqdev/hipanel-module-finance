@@ -28,7 +28,7 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
         <?php if (Yii::$app->user->can('purse.update')) : ?>
             <?= Html::a(Yii::t('hipanel:finance', 'Add purse'), ['@purse/create'], ['class' => 'btn btn-sm btn-success']) ?>
         <?php endif ?>
-<?php $page->endContent() ?>
+    <?php $page->endContent() ?>
 
     <?php $page->beginContent('sorter-actions') ?>
         <?= $page->renderSorter([

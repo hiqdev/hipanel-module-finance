@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useRef, useCallback } from "react";
 import "./App.css";
 import find from "lodash/find";
 import Paper from "@mui/material/Paper";
@@ -16,6 +16,8 @@ import Pager from "@mui/material/Paper";
 import LayoutGrid from "@mui/material/Grid";
 import Fab from "@mui/material/Fab";
 import HomeIcon from "@mui/icons-material/KeyboardArrowLeft";
+import { GridExporter } from "@devexpress/dx-react-grid-export";
+import saveAs from "file-saver";
 import {
   SearchState,
   FilteringState,
@@ -25,7 +27,6 @@ import {
   IntegratedSummary,
   PagingState,
   IntegratedPaging,
-  RowDetailState,
 } from "@devexpress/dx-react-grid";
 import {
   Grid,
@@ -38,14 +39,22 @@ import {
   PagingPanel,
   ColumnChooser,
   TableColumnVisibility,
-  TableRowDetail,
+  ExportPanel,
 } from "@devexpress/dx-react-grid-material-ui";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 
 import { Loading } from "./components/Loading";
 import { reducer } from "./reducer";
 
 const initialState = {
   rows: [], loading: false, ...__initial_state,
+};
+
+const onSave = (workbook) => {
+  workbook.xlsx.writeBuffer().then((buffer) => {
+    saveAs(new Blob([buffer], { type: "application/octet-stream" }), "pnl-report.xlsx");
+  });
 };
 
 const Theme = createTheme({
@@ -85,10 +94,18 @@ const initYear = new Date().getFullYear();
 const initColumns = [
   { name: "section", title: "Section" }, // section
   { name: "direction", title: "Direction" }, // direction
-  { name: "set", title: "Set" }, { name: "item", title: "Item" }, { name: "detail", title: "Detail" },
+  { name: "set", title: "Set" },
+  { name: "item", title: "Item" },
+  { name: "detail", title: "Detail" },
 ];
 const initCurrencyColumns = [];
-const initColumnExtensions = [];
+const initColumnExtensions = [
+  { columnName: "section", width: "8%" },
+  { columnName: "direction", width: "8%" },
+  { columnName: "set", width: "8%" },
+  { columnName: "item", width: "10%" },
+  { columnName: "detail", width: "8%" },
+];
 const initTotalSummaryColumns = [];
 const date = moment(initYear).startOf("year");
 while (date < moment(initYear).endOf("year")) {
@@ -123,19 +140,20 @@ const SelectYear = ({ handleChange, value }) => (<Box>
 const DropdownFilterCell = ({ filter, onFilter, column }) => {
   const filterValues = __initial_state[column.name + "s"] || [];
 
-  return (<TableCell sx={{ width: "100%", p: 1 }}>
-    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <Select
-        value={filter ? filter.value : ""}
-        onChange={e => onFilter(e.target.value ? { value: e.target.value } : null)}
-      >
-        <MenuItem value="">
-          <em>None</em>
-        </MenuItem>
-        {filterValues.map(value => (<MenuItem key="value" value={value || null}>{value}</MenuItem>))}
-      </Select>
-    </FormControl>
-  </TableCell>);
+  return (
+    <TableCell>
+      <Autocomplete
+        disablePortal
+        value={filter ? filter.value : null}
+        onChange={(event, newValue) => {
+          onFilter(newValue ? { value: newValue } : null);
+        }}
+        id={column.name}
+        options={filterValues}
+        renderInput={(params) => <TextField {...params} label={column.title}/>}
+      />
+    </TableCell>
+  );
 };
 
 const FilterCell = (props) => {
@@ -146,77 +164,26 @@ const FilterCell = (props) => {
   return "";
 };
 
-const RowDetail = ({ row }) => {
-  const [rows, setRows] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const abortController = new AbortController();
-    const fetchData = async () => {
-      setLoading(true);
-      // const url = new URL("fetch-data", window.location.href);
-      // url.searchParams.set("year", year);
-      // const response = await fetch(url, { signal: abortController.signal });
-      // const rows = await response.json();
-      console.log("calling");
-      const result = await resolveAfter2Seconds();
-      console.log(result);
-      row.details = 1;
-      setRows([{ id: "123", mt: "321" }]);
-      setLoading(false);
-    };
-    if (row.details === null) {
-      fetchData();
-    }
-
-    return () => {
-      abortController.abort();
-    };
-  }, [row.id]);
-
-  if (loading || row.details === null) {
-    return (<Box sx={{ width: "100%" }}>
-      <LinearProgress color={"inherit"}/>
-    </Box>);
-  }
-
-  return (<div>
-    Details for
-    {" "}
-    {row.id}
-    {" "}
-    from
-    {" "}
-    {row.type}
-  </div>);
+const customizeSummaryCell = (cell) => {
+  cell.style = { numFmt: "0" };
 };
-
-function resolveAfter2Seconds() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve("resolved");
-    }, 1000);
-  });
-};
-
 
 export default () => {
   const [columns] = useState(initColumns);
   const [year, setYear] = useState("");
   const [currencyColumns] = useState(initCurrencyColumns);
   const [tableColumnExtensions] = useState(initColumnExtensions);
-  const [filteringStateColumnExtensions] = useState([
-    { columnName: "section", filteringEnabled: true },
-    { columnName: "direction", filteringEnabled: true },
-    { columnName: "set", filteringEnabled: true },
-    { columnName: "item", filteringEnabled: true },
-    { columnName: "detail", filteringEnabled: true },
-  ]);
   const [totalSummaryItems] = useState(initTotalSummaryColumns);
   const [pageSizes] = useState([50, 100, 200, 500, 0]);
   const [defaultHiddenColumnNames] = useState([]);
-  const [expandedRowIds, setExpandedRowIds] = useState([]);
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  const [filters, setFilters] = useState([]);
+
+  const exporterRef = useRef();
+  const startExport = useCallback((options) => {
+    exporterRef.current.exportGrid(options);
+  }, [exporterRef]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -264,9 +231,8 @@ export default () => {
           <CurrencyTypeProvider for={currencyColumns}/>
           <SearchState defaultValue=""/>
           <FilteringState
-            defaultFilters={[]}
-            columnFilteringEnabled={false}
-            columnExtensions={filteringStateColumnExtensions}
+            filters={filters}
+            onFiltersChange={setFilters}
           />
           <IntegratedFiltering/>
           <SummaryState totalItems={totalSummaryItems}/>
@@ -276,10 +242,6 @@ export default () => {
             defaultPageSize={50}
           />
           <IntegratedPaging/>
-          <RowDetailState
-            expandedRowIds={expandedRowIds}
-            onExpandedRowIdsChange={setExpandedRowIds}
-          />
           <Table columnExtensions={tableColumnExtensions}/>
           <TableHeaderRow/>
           <TableSummaryRow/>
@@ -293,10 +255,17 @@ export default () => {
           <PagingPanel
             pageSizes={pageSizes}
           />
-          {/*<TableRowDetail*/}
-          {/*  contentComponent={RowDetail}*/}
-          {/*/>*/}
+          <ExportPanel startExport={startExport}/>
         </Grid>
+        <GridExporter
+          ref={exporterRef}
+          columns={columns}
+          rows={rows}
+          totalSummaryItems={totalSummaryItems}
+          filters={filters}
+          customizeSummaryCell={customizeSummaryCell}
+          onSave={onSave}
+        />
         {loading && <Loading/>}
       </Paper>
     </ThemeProvider>

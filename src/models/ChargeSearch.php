@@ -23,7 +23,7 @@ class ChargeSearch extends Charge
     public $client_type;
 
     use SearchModelTrait {
-        searchAttributes as defaultSearchAttributes;
+        SearchModelTrait::searchAttributes as defaultSearchAttributes;
     }
 
     /**
@@ -42,6 +42,7 @@ class ChargeSearch extends Charge
             'sum_not_zero',
             'type_ids',
             'id_in',
+            'ids',
             'hide_internal_clients',
         ]);
     }
