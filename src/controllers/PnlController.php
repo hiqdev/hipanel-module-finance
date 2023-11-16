@@ -63,7 +63,7 @@ class PnlController extends CrudController
             }
 
             return $initialState;
-        }, 1800);
+        }, 900);
 
         return $this->render('report', ['initialState' => $initialState]);
     }
