@@ -63,6 +63,7 @@ class Plan extends Model
     public const TYPE_CALCULATOR = 'calculator';
     public const TYPE_VIDECDN = 'videocdn';
     public const TYPE_LOAD_BALANCER = 'load_balancer';
+    public const TYPE_IP = 'ip';
 
     protected $knownTypes = [
         self::TYPE_SERVER               => self::TYPE_SERVER,
