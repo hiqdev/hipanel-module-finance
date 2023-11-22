@@ -30,6 +30,10 @@ class Requisite extends Contact
     const TEMPLATE_PROBATION = 'probation';
     const TEMPLATE_INTERNAL_INVOICE = 'internal_invoice';
     const TEMPLATE_PROFORMA = 'proforma';
+    const TEMPLATE_PURCHASE_INVOICE = 'purchase_invoice';
+    const TEMPLATE_SERVICE_INVOICE = 'service_invoice';
+    const TEMPLATE_PURCHASE_PROFORMA = 'purchase_invoice';
+    const TEMPLATE_SERVICE_PROFORMA = 'service_proforma';
 
     public static function tableName()
     {
