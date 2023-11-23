@@ -92,19 +92,19 @@ const CurrencyTypeProvider = props => (<DataTypeProvider formatterComponent={Sum
 
 const initYear = new Date().getFullYear();
 const initColumns = [
-  { name: "section", title: "Section" }, // section
-  { name: "direction", title: "Direction" }, // direction
-  { name: "set", title: "Set" },
-  { name: "item", title: "Item" },
-  { name: "detail", title: "Detail" },
+  { name: "level1", title: "Level 1" },
+  { name: "level2", title: "Level 2" },
+  { name: "level3", title: "Level 3" },
+  { name: "level4", title: "Level 4" },
+  { name: "level5", title: "Level 5" },
 ];
 const initCurrencyColumns = [];
 const initColumnExtensions = [
-  { columnName: "section", width: "8%" },
-  { columnName: "direction", width: "8%" },
-  { columnName: "set", width: "8%" },
-  { columnName: "item", width: "10%" },
-  { columnName: "detail", width: "8%" },
+  { columnName: "level1", width: "8%" },
+  { columnName: "level2", width: "8%" },
+  { columnName: "level3", width: "8%" },
+  { columnName: "level4", width: "10%" },
+  { columnName: "level5", width: "8%" },
 ];
 const initTotalSummaryColumns = [];
 const date = moment(initYear).startOf("year");
@@ -138,7 +138,7 @@ const SelectYear = ({ handleChange, value }) => (<Box>
 </Box>);
 
 const DropdownFilterCell = ({ filter, onFilter, column }) => {
-  const filterValues = __initial_state[column.name + "s"] || [];
+  const filterValues = __initial_state[column.name] || [];
 
   return (
     <TableCell>
@@ -157,7 +157,7 @@ const DropdownFilterCell = ({ filter, onFilter, column }) => {
 };
 
 const FilterCell = (props) => {
-  if (["section", "direction", "set", "item", "detail"].includes(props.column.name)) {
+  if (["level1", "level2", "level3", "level4", "level5"].includes(props.column.name)) {
     return (<DropdownFilterCell {...props} />);
   }
 
@@ -176,6 +176,7 @@ export default () => {
   const [totalSummaryItems] = useState(initTotalSummaryColumns);
   const [pageSizes] = useState([50, 100, 200, 500, 0]);
   const [defaultHiddenColumnNames] = useState([]);
+
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const [filters, setFilters] = useState([]);

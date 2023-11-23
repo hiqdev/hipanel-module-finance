@@ -190,7 +190,28 @@ class ChargeGridView extends BoxedGridView
                         ],
                     ]);
                 }
-            ]
+            ],
+            'discount_sum' => [
+                'attribute' => 'discount_sum',
+                'headerOptions' => ['class' => 'text-right'],
+                'value' => fn($charge): string => $charge->discount_sum ? $this->formatter->asCurrency($charge->discount_sum, $charge->currency) : '',
+                'enableSorting' => false,
+                'filter' => false,
+            ],
+            'net_amount' => [
+                'attribute' => 'net_amount',
+                'headerOptions' => ['class' => 'text-right'],
+                'value' => fn($charge): string => $charge->net_amount ? $this->formatter->asCurrency($charge->net_amount, $charge->currency) : '',
+                'enableSorting' => false,
+                'filter' => false,
+            ],
+            'eur_amount' => [
+                'attribute' => 'eur_amount',
+                'headerOptions' => ['class' => 'text-right'],
+                'value' => fn($charge): string => $charge->eur_amount ? $this->formatter->asCurrency($charge->eur_amount, 'eur') : '',
+                'enableSorting' => false,
+                'filter' => false,
+            ],
         ]);
     }
 

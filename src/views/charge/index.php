@@ -1,6 +1,8 @@
 <?php
 
+use hipanel\models\IndexPageUiOptions;
 use hipanel\modules\finance\grid\ChargeGridView;
+use hipanel\modules\finance\grid\ChargeRepresentations;
 use hipanel\modules\finance\models\ChargeSearch;
 use hipanel\widgets\IndexPage;
 use yii\data\ActiveDataProvider;
@@ -12,6 +14,8 @@ use yii\web\View;
  * @var ChargeSearch $model
  * @var array $billTypesList
  * @var array $clientTypes
+ * @var ChargeRepresentations $representationCollection
+ * @var IndexPageUiOptions $uiModel
  */
 
 $this->title = Yii::t('hipanel:finance', 'Charges');
@@ -42,6 +46,10 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     <?php $page->endContent() ?>
 
+    <?php $page->beginContent('representation-actions') ?>
+        <?= $page->renderRepresentations($representationCollection) ?>
+    <?php $page->endContent() ?>
+
     <?php $page->beginContent('table') ?>
         <?php $page->beginBulkForm() ?>
             <?= ChargeGridView::widget([
@@ -60,18 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'dataProvider' => $dataProvider,
                 'filterModel' => $model,
                 'boxed' => false,
-                'columns' => [
-                    'client',
-                    'seller',
-                    'tariff',
-                    'type_label',
-                    'sum',
-                    'name',
-                    'quantity',
-                    'time',
-                    'is_payed',
-                    'label',
-                ],
+                'columns' => $representationCollection->getByName($uiModel->representation)->getColumns(),
             ]) ?>
         <?php $page->endBulkForm() ?>
     <?php $page->endContent() ?>
