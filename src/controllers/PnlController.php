@@ -10,6 +10,7 @@ use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\Pnl;
 use hipanel\modules\finance\widgets\PnlAggregateDataTable;
+use Yii;
 use yii\base\Event;
 use yii\web\Response;
 
@@ -86,6 +87,7 @@ class PnlController extends CrudController
                 'sort' => $this->toSortString($row['type']),
                 'key' => $type,
                 'type' => $type,
+                'type_label' => Yii::$app->getI18n()->removeLegacyLangTags($row['type_label']),
                 'month' => $row['month'],
             ];
             $this->fillWithMonths($data[$type]);
@@ -103,6 +105,7 @@ class PnlController extends CrudController
                 $this->fillWithMonths($nodeRow);
                 $nodeRow['sort'] = $this->toSortString($nodeType);
                 $nodeRow['type'] = $nodeType;
+                $nodeRow['type_label'] = strtoupper(str_contains($nodeType, ',') ? ltrim(strrchr($nodeType, ','), ',') : (string)$nodeType);
                 $data[$nodeType] = $nodeRow;
             }
             $month = (new DateTime($leaf['month']))->format('M Y');

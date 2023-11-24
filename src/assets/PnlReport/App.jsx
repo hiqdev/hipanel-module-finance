@@ -24,9 +24,7 @@ const initialColumns = [
     key: "type",
     dataIndex: "type",
     title: "Type",
-    render: (value, row, idx) => {
-      return '123';
-    }
+    render: (value, row, idx) => <Text style={{ width: "200px" }} ellipsis={{ tooltip: row.type }}>{row.type_label}</Text>
     // filters: __initial_state.filtersTree,
     // filterMode: "tree",
     // filterSearch: true,
