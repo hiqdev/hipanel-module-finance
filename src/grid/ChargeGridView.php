@@ -212,6 +212,11 @@ class ChargeGridView extends BoxedGridView
                 'enableSorting' => false,
                 'filter' => false,
             ],
+            'rate' => [
+                'attribute' => 'rate',
+                'enableSorting' => false,
+                'filter' => false,
+            ]
         ]);
     }
 
