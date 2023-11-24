@@ -78,6 +78,10 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('sellers')->widget(SellerCombo::class, ['multiple' => true]) ?>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field('tariff_id')->widget(PlanCombo::class) ?>
 </div>
 
@@ -107,5 +111,8 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 <?php if (Yii::$app->user->can('bill.create')) : ?>
     <div class="col-md-4 col-sm-6 col-xs-12">
         <?= $search->field('hide_internal_clients', ['options' => ['class' => 'form-group checkbox']])->checkbox(['class' => 'option-input']) ?>
+    </div>
+    <div class="col-md-4 col-sm-6 col-xs-12">
+        <?= $search->field('hide_child_charges', ['options' => ['class' => 'form-group checkbox']])->checkbox(['class' => 'option-input']) ?>
     </div>
 <?php endif ?>
