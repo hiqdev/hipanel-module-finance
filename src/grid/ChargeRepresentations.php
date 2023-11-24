@@ -54,6 +54,7 @@ class ChargeRepresentations extends RepresentationCollection
                     'client',
                     'seller',
                     'tariff',
+                    'name',
                     'type_label',
                     'time',
                     'sum',
