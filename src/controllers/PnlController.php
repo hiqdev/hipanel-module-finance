@@ -10,7 +10,6 @@ use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\Pnl;
 use hipanel\modules\finance\widgets\PnlAggregateDataTable;
-use Yii;
 use yii\base\Event;
 use yii\web\Response;
 
@@ -40,15 +39,13 @@ class PnlController extends CrudController
         ]);
     }
 
-    public function actionFetchData($year): Response
+    public function actionFetchData(?string $months = null): Response
     {
         $data = [];
-        $result = Pnl::perform('sums', ['year' => $year])['year'];
-        foreach ($result as $row) {
-            $this->appendLeaf($data, $row);
-            $this->appendNodesFromLeaf($data, $row);
+        if ($months) {
+            $result = Pnl::perform('sums', ['months' => $months]);
+            $data = $this->prepareResult($result);
         }
-        usort($data, static fn(array $a, array $b): int => strcmp($a['sort'], $b['sort']));
 
         return $this->asJson(array_values($data));
     }
@@ -57,9 +54,9 @@ class PnlController extends CrudController
     {
         $this->layout = 'mobile-manager';
         $initialState = [];
-        foreach (['years', 'sections', 'directions', 'sets', 'items', 'details'] as $name) {
-            $initialState[$name] = array_values(array_filter(Pnl::batchPerform('search', ['groupby' => $name])));
-        }
+        $initialState['monthTreeData'] = $this->prepareMonth(Pnl::batchPerform('search', ['groupby' => 'month']));
+        $pnlTypes = array_filter(Pnl::batchPerform('search', ['groupby' => 'types']));
+        $initialState['filtersTree'] = $this->buildFilersTree($pnlTypes);
 
 
         return $this->render('report', ['initialState' => $initialState]);
@@ -86,33 +83,14 @@ class PnlController extends CrudController
         $type = $row['type'];
         if (!isset($data[$type])) {
             $data[$type] = [
-                'section' => $row['section'],
-                'direction' => $row['direction'],
-                'set' => $row['set'],
-                'item' => $row['item'],
-                'detail' => $row['detail'],
-                'sort' => $this->toSortString($row),
+                'sort' => $this->toSortString($row['type']),
+                'key' => $type,
                 'type' => $type,
                 'month' => $row['month'],
             ];
             $this->fillWithMonths($data[$type]);
         }
-        $data[$type][(new DateTime($row['month']))->format('M')] = (float)$sum;
-    }
-
-    private function toSortString(array $row): string
-    {
-        return implode('', [$row['section'], $row['direction'], $row['set'], $row['item'], $row['detail']]);
-    }
-
-    private function fillWithMonths(array &$row): void
-    {
-        for ($m = 1; $m <= 12; $m++) {
-            $month = date('M', mktime(0, 0, 0, $m, 1));
-            if (!isset($row[$month])) {
-                $row[$month] = 0;
-            }
-        }
+        $data[$type][(new DateTime($row['month']))->format('M Y')] = (float)$sum;
     }
 
     public function appendNodesFromLeaf(array &$data, $leaf): void
@@ -121,19 +99,145 @@ class PnlController extends CrudController
         while (str_contains($nodeType, ',')) {
             $nodeType = str_replace(strrchr($nodeType, ','), '', $nodeType);
             if (!isset($data[$nodeType])) {
-                [$section, $direction, $set, $item, $detail] = explode(',', $nodeType);
-                $nodeRow = compact('section', 'direction', 'set', 'item', 'detail');
+                $nodeRow = [];
                 $this->fillWithMonths($nodeRow);
-                $nodeRow['sort'] = $this->toSortString($nodeRow);
+                $nodeRow['sort'] = $this->toSortString($nodeType);
                 $nodeRow['type'] = $nodeType;
                 $data[$nodeType] = $nodeRow;
             }
-            $month = (new DateTime($leaf['month']))->format('M');
+            $month = (new DateTime($leaf['month']))->format('M Y');
             if (isset($data[$nodeType][$month])) {
                 $data[$nodeType][$month] = (float)bcadd((string)$data[$nodeType][$month], (string)$leaf['sum']);
             } else {
                 $data[$nodeType][$month] = $leaf['sum'];
             }
         }
+    }
+
+    private function toSortString(string $type): string
+    {
+        return str_replace(',', '', $type);
+    }
+
+    private function fillWithMonths(array &$row): void
+    {
+        for ($m = 1; $m <= 12; $m++) {
+            $month = date('M Y', mktime(0, 0, 0, $m, 1));
+            if (!isset($row[$month])) {
+                $row[$month] = 0;
+            }
+        }
+    }
+
+    private function prepareMonth(array $months = []): array
+    {
+        $result = $items = [];
+        foreach ($months as $data) {
+            $items[] = [
+                'key' => $data['month'],
+                'value' => $data['month'],
+                'title' => (new DateTime($data['month']))->format('M Y'),
+            ];
+        }
+        foreach ($items as $item) {
+            $year = (new DateTime($item['key']))->format('Y');
+            if (isset($result[$year])) {
+                $result[$year]['children'][] = $item;
+            } else {
+                $result[$year] = [
+                    'key' => $year,
+                    'value' => $year,
+                    'title' => $year,
+                    'children' => [
+                        $item,
+                    ],
+                ];
+            }
+        }
+
+        return array_values($result);
+    }
+
+    private function prepareResult(mixed $result): array
+    {
+        $data = [];
+        foreach ($result as $row) {
+            $this->appendLeaf($data, $row);
+            $this->appendNodesFromLeaf($data, $row);
+        }
+        usort($data, static fn(array $a, array $b): int => strcmp($a['sort'], $b['sort']));
+
+        return $this->buildRowsTree($data);
+//        return $data;
+    }
+
+    private function buildRowsTree(array $rows): array
+    {
+        $tree = [];
+
+        foreach ($rows as $row) {
+            $keys = explode(',', $row['type']);
+            $currentLevel = &$tree;
+
+            foreach ($keys as $key) {
+                $found = false;
+
+                foreach ($currentLevel as &$node) {
+                    if ($node['tree'] === $key) {
+                        $found = true;
+                        $currentLevel = &$node['children'];
+                        break;
+                    }
+                }
+                unset($node);
+
+                if (!$found) {
+                    $currentLevel[] = [
+                        ...$row,
+                        'tree' => $key,
+                        'key' => $row['type'],
+                    ];
+                    $currentLevel = &$currentLevel[count($currentLevel) - 1]['children'];
+                }
+            }
+        }
+
+        return $tree;
+    }
+
+    private function buildFilersTree(array $paths): array
+    {
+        $tree = [];
+
+        foreach ($paths as $path) {
+            $keys = explode(',', $path);
+            $currentLevel = &$tree;
+
+            foreach ($keys as $key) {
+                $found = false;
+
+                foreach ($currentLevel as &$node) {
+                    if ($node['text'] === $key) {
+                        $found = true;
+                        $currentLevel = &$node['children'];
+                        break;
+                    }
+                }
+                unset($node);
+
+                if (!$found) {
+                    $currentLevel[] = [
+                        'text' => $key, // Добавляем дополнительные данные
+                        'value' => $path, // Добавляем дополнительные данные
+                        'key' => $path,
+                        'dataIndex' => $path,
+                        'children' => [],
+                    ];
+                    $currentLevel = &$currentLevel[count($currentLevel) - 1]['children'];
+                }
+            }
+        }
+
+        return $tree;
     }
 }

@@ -22,12 +22,17 @@ class PnlRepresentations extends RepresentationCollection
                 'label' => Yii::t('hipanel', 'common'),
                 'columns' => [
                     'charge_id',
+                    'seller',
                     'type',
                     'month',
                     'currency',
                     'sum',
                     'charge_sum',
                     'discount_sum',
+                    'eur_amount',
+                    'rate',
+                    'exchange_date',
+                    'charge_date',
                 ],
             ],
         ]);

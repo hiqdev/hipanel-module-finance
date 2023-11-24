@@ -2,6 +2,18 @@ import map from "lodash/map";
 
 export function reducer(state, { type, payload }) {
   switch (type) {
+    case "UPDATE_COLUMNS":
+      return {
+        ...state,
+        ...payload,
+        loading: false,
+      };
+    case "UPDATE_MONTH":
+      return {
+        ...state,
+        ...payload,
+        loading: false,
+      };
     case "UPDATE_ROWS":
       return {
         ...state,
