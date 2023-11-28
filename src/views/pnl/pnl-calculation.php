@@ -36,8 +36,8 @@ function startCalculation(event) {
   const btn = $("button", this).button("loading");
   loading.show();
   const formData = new FormData(event.target);
-  const from = moment(formData.get("month_from"));
-  const till = moment(formData.get("month_till"));
+  const from = moment().month(formData.get("month_from"));
+  const till = moment().month(formData.get("month_till"));
   const betweenMonths = [];
   if (from < till) {
    const date = from.startOf("month");
@@ -52,27 +52,37 @@ function startCalculation(event) {
   betweenMonths.forEach(month => {
     urls.push(`$mainUrl?month=\${month}`);
   });
+
   Promise.allSettled(urls.map(url => fetch(url)))
   .then(results => {
-    results.forEach((result, num) => {
-      const date = moment(urls[num].split("=")[1]).format("MMMM YYYY");
-      if (result.status == "fulfilled") {
-        hipanel.notify.success(`The request for \${date} has been successfully calculated`)
-      }
-      if (result.status == "rejected") {
-        hipanel.notify.error(`The request for \${date} has failed`)
-      }
-    });
+    const fulfilled = results.filter(result => result.status === 'fulfilled');
+    const rejected = results.filter(result => result.status === 'rejected').map(result => result.reason);
+    console.error(rejected);
 
-    return results;
+    return fulfilled;
   })
-  .then(results => Promise.all(results.map(r => r.value.json())))
+  .then(results => {
+    return Promise.all(results.map(r => {
+      const date = moment(r.value.url.split("=")[1]).format("MMMM YYYY");
+      if (r.value.ok) {
+        hipanel.notify.success(`\${date} has been calculated`);
+
+        return r.value.json();
+      } else {
+        hipanel.notify.error(`\${date} has been failed, error: ` + r.value.statusText);
+
+        return r.value.text();
+      }
+    }));
+  })
   .then(results => {
     btn.button("reset");
     loading.hide();
     $(".pnl-box .box-body").load("$mainUrl", function () {
       results.forEach((set) => {
-        if (set.uncategorized > 0) {
+        if (typeof set === "string") {
+          console.error(set);
+        } else if (set.uncategorized > 0) {
           const date = set.month;
           const cell = $(`.\${date} .uncategorized`);
           $(".glyphicon", cell).show();

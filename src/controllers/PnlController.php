@@ -40,15 +40,18 @@ class PnlController extends CrudController
         ]);
     }
 
-    public function actionFetchData(?string $months = null): Response
+    public function actionFetchRows(?string $months = null): Response
     {
-        $data = [];
+        $rows = [];
         if ($months) {
             $result = Pnl::perform('sums', ['months' => $months]);
-            $data = $this->prepareResult($result);
+            $rows = $this->prepareResult($result);
         }
 
-        return $this->asJson(array_values($data));
+        return $this->asJson([
+            'rows' => $this->buildRowsTree($rows),
+            'flatRows' => $rows,
+        ]);
     }
 
     public function actionReport(): string
@@ -99,7 +102,8 @@ class PnlController extends CrudController
     {
         $nodeType = $leaf['type'];
         while (str_contains($nodeType, ',')) {
-            $nodeType = str_replace(strrchr($nodeType, ','), '', $nodeType);
+            $nodeType = preg_replace('/,[^,]+$/', '', $nodeType);
+
             if (!isset($data[$nodeType])) {
                 $nodeRow = [];
                 $this->fillWithMonths($nodeRow);
@@ -163,15 +167,14 @@ class PnlController extends CrudController
 
     private function prepareResult(mixed $result): array
     {
-        $data = [];
+        $rows = [];
         foreach ($result as $row) {
-            $this->appendLeaf($data, $row);
-            $this->appendNodesFromLeaf($data, $row);
+            $this->appendLeaf($rows, $row);
+            $this->appendNodesFromLeaf($rows, $row);
         }
-        usort($data, static fn(array $a, array $b): int => strcmp($a['sort'], $b['sort']));
+        usort($rows, static fn(array $a, array $b): int => strcmp($a['sort'], $b['sort']));
 
-        return $this->buildRowsTree($data);
-//        return $data;
+        return $rows;
     }
 
     private function buildRowsTree(array $rows): array
@@ -211,6 +214,7 @@ class PnlController extends CrudController
     private function buildFilersTree(array $paths): array
     {
         $tree = [];
+        usort($paths, static fn($a, $b): int => strcmp($a, $b));
 
         foreach ($paths as $path) {
             $keys = explode(',', $path);
@@ -230,8 +234,8 @@ class PnlController extends CrudController
 
                 if (!$found) {
                     $currentLevel[] = [
-                        'text' => $key, // Добавляем дополнительные данные
-                        'value' => $path, // Добавляем дополнительные данные
+                        'text' => $key,
+                        'value' => $path,
                         'key' => $path,
                         'dataIndex' => $path,
                         'children' => [],
