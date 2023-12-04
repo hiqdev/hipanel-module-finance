@@ -199,7 +199,7 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
 
     private function isDeprecatedType(string $typeName): bool
     {
-        return ($this->deprecatedTypes && in_array($typeName, $this->deprecatedTypes));
+        return ($this->deprecatedTypes && in_array($typeName, $this->deprecatedTypes, true));
     }
 
     private function isDisabled(string $typeName): bool

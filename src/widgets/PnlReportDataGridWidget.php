@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\widgets;
 
-use hipanel\modules\finance\assets\PnlReport\PnlReportAsset;
+use hipanel\modules\finance\assets\PnlApp\PnlReportAsset;
 use Yii;
 use yii\base\Widget;
 use yii\helpers\Html;

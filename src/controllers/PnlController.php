@@ -9,7 +9,6 @@ use hipanel\actions\IndexAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\Pnl;
-use hipanel\modules\finance\widgets\PnlAggregateDataTable;
 use Yii;
 use yii\base\Event;
 use yii\web\Response;
@@ -62,23 +61,41 @@ class PnlController extends CrudController
         $pnlTypes = array_filter(Pnl::batchPerform('search', ['groupby' => 'types']));
         $initialState['filtersTree'] = $this->buildFilersTree($pnlTypes);
 
-
         return $this->render('report', ['initialState' => $initialState]);
     }
 
-    public function actionCalculation(?string $month = null): string|Response
+    public function actionCalculation(): string|Response
+    {
+        $this->layout = 'mobile-manager';
+        $pnlRows = Pnl::batchPerform('search', ['groupby' => 'month']);
+        $this->prepareCalculationRows($pnlRows);
+        $osrcRows = Pnl::batchPerform('search', ['groupby' => 'osrc']);
+        $this->prepareCalculationRows($osrcRows);
+        if ($this->request->isAjax) {
+            return $this->asJson(['pnlRows' => $pnlRows, 'osrcRows' => $osrcRows]);
+        }
+
+        return $this->render('calculation', [
+            'initialState' => ['pnlRows' => $pnlRows, 'osrcRows' => $osrcRows],
+        ]);
+    }
+
+    public function actionCalculatePnlRows(?string $month = null)
     {
         if ($month) {
             $calculateResult = Pnl::perform('calculate', ['month' => $month]);
 
             return $this->asJson($calculateResult);
         }
-        $aggregateData = Pnl::batchPerform('search', ['groupby' => 'month']);
-        if ($this->request->isAjax) {
-            return PnlAggregateDataTable::widget(['aggregateData' => $aggregateData]);
-        }
+    }
 
-        return $this->render('pnl-calculation', ['aggregateData' => $aggregateData]);
+    public function actionImportOsrcRows(?string $month = null)
+    {
+        if ($month) {
+            $importResult = Pnl::perform('import-osrc', ['month' => $month]);
+
+            return $this->asJson($importResult);
+        }
     }
 
     private function appendLeaf(array &$data, array $row): void
@@ -246,5 +263,12 @@ class PnlController extends CrudController
         }
 
         return $tree;
+    }
+
+    private function prepareCalculationRows(mixed &$rows): void
+    {
+        foreach ($rows as &$row) {
+            $row['key'] = $row['month'];
+        }
     }
 }
