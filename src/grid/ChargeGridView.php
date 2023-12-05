@@ -195,7 +195,7 @@ class ChargeGridView extends BoxedGridView
                 'attribute' => 'discount_sum',
                 'headerOptions' => ['class' => 'text-right'],
                 'value' => fn($charge): string => $charge->discount_sum ? $this->formatter->asCurrency($charge->discount_sum, $charge->currency) : '',
-                'enableSorting' => false,
+                'enableSorting' => true,
                 'filter' => false,
             ],
             'net_amount' => [

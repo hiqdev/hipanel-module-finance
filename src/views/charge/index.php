@@ -42,6 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'sum',
                 'quantity',
                 'time',
+                'discount_sum',
             ],
         ]) ?>
     <?php $page->endContent() ?>

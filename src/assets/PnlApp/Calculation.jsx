@@ -45,9 +45,9 @@ const osrcColumns = [
     dataIndex: "month",
     key: "month",
   }, {
-    title: "Categorized",
-    dataIndex: "categorized",
-    key: "categorized",
+    title: "Employees",
+    dataIndex: "employees",
+    key: "employees",
     render: (value, row, idx) => {
       return (
         <Link target={"_blank"} href={`/client/client/index?ClientSearch[ids]=${row.categorized_ids}`}>
@@ -150,7 +150,7 @@ const Calculation = () => {
             </Col>
             <Col span={10}>
               <MonthRangeInput
-                disabledDate={(current) => current < moment("2023-01-01") || current > moment().endOf("month")}
+                disabledDate={(current) => current < moment("2023-01-01") || current > moment('2023-09-01').endOf("month")}
                 icon={<ImportOutlined/>}
                 label={"Import OSRC data"}
                 loading={loading}

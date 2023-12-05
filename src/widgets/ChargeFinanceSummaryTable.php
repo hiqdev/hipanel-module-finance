@@ -17,6 +17,7 @@ class ChargeFinanceSummaryTable extends FinanceSummaryTable
             'positive' => Yii::t('hipanel:finance', 'Positive'),
             'negative' => Yii::t('hipanel:finance', 'Negative'),
             'total' => Yii::t('hipanel:finance', 'Total'),
+            'eurAmount' => Yii::t('hipanel:finance', 'EUR Amount'),
         ];
         $this->displayModels = empty($this->onPageModels) ? $this->allModels : $this->onPageModels;
     }
@@ -27,7 +28,8 @@ class ChargeFinanceSummaryTable extends FinanceSummaryTable
             return Html::tag('div', '', ['class' => 'summary']);
         }
 
-        $values =  $this->calculate();
+        $values = $this->calculate();
+
         return $this->render('FinanceSummaryTable', [
             'currencies' => $this->filterCurrencies($values),
             'tableName' => $this->tableName,
@@ -38,17 +40,19 @@ class ChargeFinanceSummaryTable extends FinanceSummaryTable
 
     protected function calculate(): array
     {
-        $positive = $negative = $total = [];
+        $positive = $negative = $discount = $netAmount = $eurAmount = $total = [];
         /** @var $charge Charge */
         foreach ($this->displayModels as $charge) {
             $positive[$charge->currency] = $charge->positive;
             $negative[$charge->currency] = $charge->negative;
             $total[$charge->currency] = $charge->sum;
+            $eurAmount['eur'] += $charge->eur_amount;
         }
 
         return [
             'positive' => $positive,
             'negative' => $negative,
+            'eurAmount' => $eurAmount,
             'total' => $total,
         ];
     }

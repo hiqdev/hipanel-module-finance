@@ -28,14 +28,20 @@ use yii\base\DynamicModel;
                 <?php foreach ($rows as $type => $label): ?>
                     <tr>
                         <td class="text-right"><?= $label ?></td>
-                        <?php foreach ($currencies as $currency => $sign): ?>
-                            <td class="text-right">
-                                <?= ColoredBalance::widget([
-                                    'model' => new DynamicModel(['sum' => $values[$type][$currency] ?? '', 'currency' => $currency]),
-                                    'attribute' => 'sum',
-                                ]) ?>
+                        <?php if ($type === 'eurAmount') : ?>
+                            <td class="text-center text-bold" colspan="<?= count($currencies) ?>">
+                                <?= Yii::$app->formatter->asCurrency($values[$type]['eur'], 'eur') ?>
                             </td>
-                        <?php endforeach ?>
+                        <?php else : ?>
+                            <?php foreach (array_keys($currencies) as $currency): ?>
+                                <td class="text-right">
+                                    <?= isset($values[$type][$currency]) ? ColoredBalance::widget([
+                                        'model' => new DynamicModel(['sum' => $values[$type][$currency], 'currency' => $currency]),
+                                        'attribute' => 'sum',
+                                    ]) : '' ?>
+                                </td>
+                            <?php endforeach ?>
+                        <?php endif ?>
                     </tr>
                 <?php endforeach ?>
                 </tbody>
