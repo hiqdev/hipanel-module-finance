@@ -43,7 +43,7 @@ class PnlSetNoteButton extends Widget
     public function run()
     {
         return Html::button(Yii::t('hipanel:finance', 'Set note'), [
-            'class' => 'btn',
+            'class' => 'btn btn-success btn-sm',
             'data' => [
                 'toggle' => 'modal',
                 'target' => '#pnl-set-note-modal',
