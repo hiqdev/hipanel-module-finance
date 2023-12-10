@@ -67,7 +67,8 @@ JS
     <?php foreach ($models as $idx => $model) : ?>
         <div class="col-md-6 item">
             <?= $form->field($model, "[$idx]id")->hiddenInput(['vlaue' => $model->id])->label(false) ?>
-            <?= $form->field($model, "[$idx]note")->textInput(['placeholder' => 'Note'])->label($model->charge_id)->hint($model->describePnl) ?>
+            <?= $form->field($model,
+                "[$idx]note")->textInput(['placeholder' => 'Note'])->label($model->charge_id)->hint($model->describePnl) ?>
         </div>
     <?php endforeach ?>
 </div>
@@ -76,7 +77,7 @@ JS
     <div class="col-md-12 no">
         <?= Html::submitButton(Yii::t('hipanel', 'Save'), ['class' => 'btn btn-success']) ?>
         &nbsp;
-        <?= Html::button(Yii::t('hipanel', 'Cancel'), ['class' => 'btn btn-default', 'onclick' => 'history.go(-1)']) ?>
+        <?= Html::button(Yii::t('hipanel', 'Cancel'), ['class' => 'btn btn-default', 'data-dismiss' => 'modal']) ?>
     </div>
 </div>
 
