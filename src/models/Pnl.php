@@ -16,11 +16,11 @@ class Pnl extends Model
     {
         return array_merge(parent::rules(), [
             [
-                ['id', 'charge_id', 'seller_id', 'type_id', 'currency_id', 'sum', 'charge_sum', 'discount_sum', 'bill_id', 'eur_amount'],
+                ['id', 'charge_id', 'client_id', 'type_id', 'currency_id', 'sum', 'charge_sum', 'discount_sum', 'bill_id', 'eur_amount'],
                 'integer',
             ],
             [['rate'], 'number'],
-            [['type', 'currency', 'exchange_date', 'charge_date', 'charge_label', 'charge_type', 'seller', 'note'], 'string'],
+            [['type', 'currency', 'exchange_date', 'charge_date', 'charge_label', 'charge_type', 'client', 'note'], 'string'],
             [['commonObject'], 'safe'],
             [['update_time', 'month'], 'date', 'format' => 'php:Y-m-d'],
             [['data'], 'safe'],

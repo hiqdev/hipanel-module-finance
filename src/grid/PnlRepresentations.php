@@ -22,8 +22,9 @@ class PnlRepresentations extends RepresentationCollection
                 'label' => Yii::t('hipanel', 'common'),
                 'columns' => [
                     'checkbox',
+                    'note',
                     'charge_id',
-                    'seller',
+                    'client',
                     'type',
                     'month',
                     'currency',
@@ -34,7 +35,6 @@ class PnlRepresentations extends RepresentationCollection
                     'rate',
                     'exchange_date',
                     'charge_date',
-                    'note',
                 ],
             ],
         ]);

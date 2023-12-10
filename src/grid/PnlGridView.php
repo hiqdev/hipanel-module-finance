@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\BoxedGridView;
-use hipanel\modules\client\grid\SellerColumn;
+use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\models\Pnl;
 use Yii;
 use yii\helpers\Html;
@@ -59,9 +59,9 @@ class PnlGridView extends BoxedGridView
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'enableSorting' => false,
             ],
-            'seller' => [
-                'class' => SellerColumn::class,
-                'attribute' => 'seller_id',
+            'client' => [
+                'class' => ClientColumn::class,
+                'attribute' => 'client_id',
                 'label' => 'Customer',
             ],
             'type' => [
