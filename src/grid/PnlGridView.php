@@ -18,6 +18,7 @@ class PnlGridView extends BoxedGridView
             'charge_id' => [
                 'format' => 'raw',
                 'attribute' => 'charge_id',
+                'enableSorting' => false,
                 'label' => Yii::t('hipanel:finance', 'Charge'),
                 'value' => function (Pnl $model): string {
                     $id = Html::a(
@@ -63,6 +64,7 @@ class PnlGridView extends BoxedGridView
                 'class' => ClientColumn::class,
                 'attribute' => 'client_id',
                 'label' => 'Customer',
+                'enableSorting' => false,
             ],
             'type' => [
                 'attribute' => 'type',
