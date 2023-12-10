@@ -6,11 +6,13 @@ namespace hipanel\modules\finance\controllers;
 
 use DateTime;
 use hipanel\actions\IndexAction;
+use hipanel\actions\SmartPerformAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\Pnl;
 use Yii;
 use yii\base\Event;
+use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
 class PnlController extends CrudController
@@ -35,6 +37,10 @@ class PnlController extends CrudController
                 'on beforePerform' => function (Event $event) {
                     $event->sender->getDataProvider()->enableSynchronousCount();
                 },
+            ],
+            'set-note' => [
+                'class' => SmartPerformAction::class,
+                'success' => Yii::t('hipanel', 'Note changed'),
             ],
         ]);
     }
@@ -95,6 +101,20 @@ class PnlController extends CrudController
             $importResult = Pnl::perform('import-osrc', ['month' => $month]);
 
             return $this->asJson($importResult);
+        }
+    }
+
+    public function actionSetNoteForm(): string
+    {
+        $ids = $this->request->post('selection', []);
+        if (empty($ids)) {
+            throw new BadRequestHttpException('No prices selected');
+        }
+        $models = Pnl::find()->where(['charge_ids' => implode(',', $ids)])->limit(-1)->all();
+        if ($this->request->isAjax) {
+            return $this->renderAjax('modals/set-note-form', [
+                'models' => $models,
+            ]);
         }
     }
 

@@ -4,6 +4,7 @@ use hipanel\models\IndexPageUiOptions;
 use hipanel\modules\finance\grid\BillRepresentations;
 use hipanel\modules\finance\grid\PnlGridView;
 use hipanel\modules\finance\models\PnlSearch;
+use hipanel\modules\finance\widgets\PnlSetNoteButton;
 use hipanel\widgets\IndexPage;
 use hiqdev\hiart\ActiveDataProvider;
 use yii\web\View;
@@ -22,6 +23,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php $page = IndexPage::begin(['model' => $model, 'dataProvider' => $dataProvider]) ?>
+
+<?php $page->beginContent('bulk-actions') ?>
+    <?= PnlSetNoteButton::widget() ?>
+<?php $page->endContent() ?>
 
 <?php $page->beginContent('table') ?>
     <?php $page->beginBulkForm() ?>

@@ -15,11 +15,16 @@ class Pnl extends Model
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['id', 'charge_id', 'seller_id', 'type_id', 'currency_id', 'sum', 'charge_sum', 'discount_sum', 'bill_id', 'eur_amount'], 'integer'],
+            [
+                ['id', 'charge_id', 'seller_id', 'type_id', 'currency_id', 'sum', 'charge_sum', 'discount_sum', 'bill_id', 'eur_amount'],
+                'integer',
+            ],
             [['rate'], 'number'],
-            [['type', 'currency', 'exchange_date', 'charge_date', 'seller'], 'string'],
+            [['type', 'currency', 'exchange_date', 'charge_date', 'charge_label', 'charge_type', 'seller', 'note'], 'string'],
+            [['commonObject'], 'safe'],
             [['update_time', 'month'], 'date', 'format' => 'php:Y-m-d'],
             [['data'], 'safe'],
+            [['id', 'note'], 'safe', 'on' => 'set-note'],
         ]);
     }
 
@@ -34,7 +39,13 @@ class Pnl extends Model
             'formula' => Yii::t('hipanel.finance.price', 'Formula'),
             'note' => Yii::t('hipanel', 'Note'),
             'type' => Yii::t('hipanel', 'Type'),
-            'eur_amount' => Yii::t('hipanel', 'EUR amount'),
+            'eur_amount' => Yii::t('hipanel', 'EUR'),
+            'discount_sum' => Yii::t('hipanel:finance', 'Discount'),
         ];
+    }
+
+    public function getDescribePnl(): string
+    {
+        return implode(" / ", [$this->type, $this->month, $this->sum / 100, $this->currency]);
     }
 }
