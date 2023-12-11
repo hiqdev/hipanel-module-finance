@@ -242,7 +242,7 @@ const Report = () => {
                     {map({
                       total_before_taxes: "Total before taxes",
                       profit: "Profit",
-                      gross_prfit_margin: "Gross total margin",
+                      // gross_prfit_margin: "Gross total margin",
                     }, (label, key) => {
                       let amount = 0;
                       if (key === "gross_prfit_margin") {
