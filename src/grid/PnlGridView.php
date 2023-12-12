@@ -61,10 +61,12 @@ class PnlGridView extends BoxedGridView
                 'enableSorting' => false,
             ],
             'client' => [
-                'class' => ClientColumn::class,
-                'attribute' => 'client_id',
+                'attribute' => 'client',
                 'label' => 'Customer',
                 'enableSorting' => false,
+                'format' => 'raw',
+                'filterAttribute' => 'client',
+                'value' => fn($model): string => Html::a($model->client, ['@client/view', 'id' => $model->client_id]),
             ],
             'type' => [
                 'attribute' => 'type',
