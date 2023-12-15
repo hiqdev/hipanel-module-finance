@@ -180,7 +180,7 @@ class ResourceHelper
                         Hub::class => 'switch',
                         Server::class => 'server'
                     ];
-                    $model = self::transformToConsumptionModel($model, $map[$model::class]);
+                    $model = $model instanceof Consumption ? $model : self::transformToConsumptionModel($model, $map[$model::class]);
                     if (!$model->isRelationPopulated('resources') || !$model->resources) {
                         return null;
                     }

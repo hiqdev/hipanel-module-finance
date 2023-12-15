@@ -3,6 +3,7 @@
 use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\widgets\ConsumptionViewer;
+use yii\base\ViewNotFoundException;
 use yii\db\ActiveRecordInterface;
 
 /** @var ConsumptionConfigurator $configurator */
@@ -15,11 +16,17 @@ if (Yii::$app->user->can('test.beta')) {
 }
 $this->params['breadcrumbs'][] = $this->title;
 
+try {
+    $content = $this->render(sprintf("views/_%s", $consumption->class), ['mainObject' => $mainObject]);
+} catch (ViewNotFoundException $exception) {
+    $content = $this->render("views/_videocdn", ['mainObject' => $mainObject]);
+}
+
 ?>
 
 <div class="row">
     <div class="col-md-3">
-        <?= $this->render(sprintf("views/_%s", $consumption->class), ['mainObject' => $mainObject]) ?>
+        <?= $content ?>
     </div>
     <div class="col-md-9">
         <?= ConsumptionViewer::widget([
