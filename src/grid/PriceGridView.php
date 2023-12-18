@@ -159,7 +159,6 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
             ],
             'value' => [
                 'class' => ValueColumn::class,
-                'visible' => Yii::$app->user->can('charge.read'),
             ],
             'rate' => [
                 'label' => Yii::t('hipanel.finance.price', 'Referral rate'),
