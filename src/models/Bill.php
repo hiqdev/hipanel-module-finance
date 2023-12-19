@@ -24,6 +24,13 @@ use yii\helpers\StringHelper;
  * @property string $unit
  * @property string $quantity
  * @property Charge[] charges
+ * @property mixed|null $time
+ * @property int|mixed|null $object_id
+ * @property mixed|string|null $class
+ * @property int|mixed|null $client_id
+ * @property mixed|null $type_id
+ * @property mixed|null $currency
+ * @property float|mixed|null $sum
  */
 class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInterface
 {
