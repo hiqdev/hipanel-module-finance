@@ -13,22 +13,27 @@ $provides = [
     'interkassa' => ['visa', 'maestro2'],
 ];
 
-foreach ($merchants as $merchant) {
-    $methods[] = $name = $merchant->system;
-    if (isset($provides[$name])) {
-        $methods = array_merge($provides[$name], $methods);
+if (Yii::$app->getModule('merchant')->cashewOnly) {
+
+    foreach ($merchants as $merchant) {
+        $methods[] = $name = $merchant->system;
+        if (isset($provides[$name])) {
+            $methods = array_merge($provides[$name], $methods);
+        }
     }
+} else {
+    $hideBlock = true;
 }
-
 $methods = array_unique($methods);
-
 ?>
-    <p class="lead"><?= Yii::t('cart', 'Payment methods') ?>:</p>
 
-<?php if (empty($methods)) :
-    echo Yii::t('cart', 'No available payment methods');
-else :
-    foreach ($methods as $name) : ?>
-        <i class="pi pi-<?= strtolower($name) ?>"></i>
-    <?php endforeach;
-endif; ?>
+<?php if ($hideBlock !== true) : ?>
+    <p class="lead"><?= Yii::t('cart', 'Payment methods') ?>:</p>
+    <?php if (empty($methods)) : ?>
+        <?= Yii::t('cart', 'No available payment methods') ?>
+    <?php else : ?>
+        <?php foreach ($methods as $name) : ?>
+            <i class="pi pi-<?= strtolower($name) ?>"></i>
+        <?php endforeach ?>
+    <?php endif ?>
+<?php endif ?>
