@@ -30,7 +30,6 @@ use hipanel\modules\finance\models\TargetObject;
 use Yii;
 use yii\base\DynamicModel;
 use yii\base\Event;
-use function Webmozart\Assert\Tests\StaticAnalysis\string;
 
 /**
  * Class PriceController.

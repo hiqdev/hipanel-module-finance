@@ -37,6 +37,7 @@ use yii\helpers\StringHelper;
  * @property string $quantity
  * @property string $formula
  * @property int|null parent_id
+ * @property int $type_id
  *
  * @property TargetObject $object
  * @property Plan $plan

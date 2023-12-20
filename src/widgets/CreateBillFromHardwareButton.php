@@ -9,6 +9,7 @@ use hipanel\widgets\AjaxModal;
 use Yii;
 use yii\base\Widget;
 use yii\bootstrap\Html;
+use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\web\View;
@@ -32,6 +33,7 @@ class CreateBillFromHardwareButton extends Widget
                 'scenario' => 'create-from-prices',
                 'actionUrl' => $url,
                 'toggleButton' => false,
+                'size' => Modal::SIZE_LARGE,
                 'clientEvents' => [
                     'show.bs.modal' => new JsExpression("function(evt) {
                         if (evt.namespace !== 'bs.modal') return true;

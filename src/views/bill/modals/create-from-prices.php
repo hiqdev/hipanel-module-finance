@@ -52,6 +52,9 @@ use yii\helpers\Url;
         ]) ?>
     </div>
     <div class="col-md-12">
+        <?= $form->field($model, 'charges_description')->textarea() ?>
+    </div>
+    <div class="col-md-12">
         <?= PriceGridView::widget([
             'boxed' => false,
             'showHeader' => false,
@@ -60,6 +63,7 @@ use yii\helpers\Url;
             'columns' => [
                 'object->name',
                 'object->label',
+                'type',
                 'price',
             ],
         ]) ?>
