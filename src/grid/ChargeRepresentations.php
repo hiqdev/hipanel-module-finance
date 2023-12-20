@@ -31,6 +31,7 @@ class ChargeRepresentations extends RepresentationCollection
 //                    'time',
 //                    'is_payed',
 //                    'label',
+                    'id',
                     'bill_id',
                     'client',
                     'seller',
@@ -50,6 +51,7 @@ class ChargeRepresentations extends RepresentationCollection
             'finance' => [
                 'label' => Yii::t('hipanel:finance', 'finance'),
                 'columns' => [
+                    'id',
                     'bill_id',
                     'client',
                     'seller',
