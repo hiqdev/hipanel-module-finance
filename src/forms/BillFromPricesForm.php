@@ -9,8 +9,16 @@ use hipanel\modules\finance\models\Price;
 use hipanel\modules\stock\models\Model;
 use Yii;
 
+/**
+ * @property string|null $charges_description
+ * @property int $type_id
+ * @property string $time
+ */
 class BillFromPricesForm extends Model
 {
+    /**
+     * @var Price[]
+     */
     private array $prices = [];
 
     private array $calculations = [];
@@ -23,6 +31,7 @@ class BillFromPricesForm extends Model
             'object_id',
             'client_id',
             'type_id',
+            'charges_description',
         ];
     }
 
@@ -31,18 +40,25 @@ class BillFromPricesForm extends Model
         return [
             'time' => Yii::t('hipanel', 'Time'),
             'type_id' => Yii::t('hipanel', 'Type'),
+            'charges_description' => Yii::t('hipanel:finance', 'Charges description'),
         ];
     }
 
     public function rules(): array
     {
         return [
-            [['time'], 'string'],
+            [['time', 'charges_description'], 'string'],
             [['type_id', 'time'], 'required'],
         ];
     }
 
-    public function createBillWithCharges(int $buyer_id, int $mainObjectId, string $mainObjectClass = 'device', array $prices = [], array $calculations = []): Bill
+    public function createBillWithCharges(
+        int $buyer_id,
+        int $mainObjectId,
+        string $mainObjectClass = 'device',
+        array $prices = [],
+        array $calculations = []
+    ): Bill
     {
         $this->prices = $prices;
         $this->calculations = $calculations;
@@ -74,9 +90,10 @@ class BillFromPricesForm extends Model
                 'class' => $classMap[$price->type],
                 'object_id' => $price->object_id,
                 'name' => $price->object->label,
-                'type_id' => $this->type_id,
+                'type_id' => $price->type_id,
                 'sum' => $this->calculateSum($price, $bill),
                 'quantity' => 1,
+                'label' => $this->charges_description,
             ]);
         }
 
