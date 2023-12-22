@@ -53,7 +53,8 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface
     public function rules()
     {
         return [
-            [['id', 'type_id', 'object_id', 'bill_id', 'parent_id', 'client_id', 'tariff_id', 'seller_id', 'order_id'], 'integer'],
+            [['id', 'type_id', 'object_id', 'parent_id', 'client_id', 'tariff_id', 'seller_id', 'order_id'], 'integer'],
+            [['bill_id', 'id'], 'trim'],
             [['class', 'name', 'unit', 'tariff', 'order_name', 'client', 'seller', 'client_type', 'root_ftype'], 'string'],
             [['type', 'label', 'ftype', 'time', 'type_label', 'currency', 'exchange_date'], 'safe'],
             [['is_payed'], 'boolean'],

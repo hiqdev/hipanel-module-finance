@@ -8,15 +8,34 @@ use DateTime;
 use hipanel\actions\IndexAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\base\CrudController;
+use hipanel\components\I18N;
 use hipanel\filters\EasyAccessControl;
+use hipanel\helpers\StringHelper;
 use hipanel\modules\finance\models\Pnl;
+use yii\base\Module;
 use Yii;
 use yii\base\Event;
+use yii\caching\CacheInterface;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
+/**
+ *
+ * @property-read array $pnlTypes
+ */
 class PnlController extends CrudController
 {
+    public function __construct(
+        $id,
+        Module $module,
+        readonly private CacheInterface $cache,
+        readonly private I18N $i18N,
+        array $config = []
+    )
+    {
+        parent::__construct($id, $module, $config);
+    }
+
     public function behaviors(): array
     {
         return array_merge(parent::behaviors(), [
@@ -47,14 +66,23 @@ class PnlController extends CrudController
 
     public function actionFetchRows(?string $months = null): Response
     {
-        $rows = [];
-        if ($months) {
-            $result = Pnl::perform('sums', ['months' => $months]);
-            $rows = $this->prepareResult($result);
+        if (empty($months)) {
+            return $this->asJson([
+                'rows' => [],
+                'flatRows' => [],
+            ]);
         }
+        $result = Pnl::perform('sums', ['months' => $months]);
+        $rows = $this->prepareResult($result);
+        $rowsTree = $this->buildRowsTree($rows);
+        usort($rowsTree, static function(array $a, array $b): int {
+            $order = ['revenues', 'expenses', 'tax'];
+
+            return array_search($a['type'], $order, true) - array_search($b['type'], $order, true);
+        });
 
         return $this->asJson([
-            'rows' => $this->buildRowsTree($rows),
+            'rows' => $rowsTree,
             'flatRows' => $rows,
         ]);
     }
@@ -64,8 +92,8 @@ class PnlController extends CrudController
         $this->layout = 'mobile-manager';
         $initialState = [];
         $initialState['monthTreeData'] = $this->prepareMonth(Pnl::batchPerform('search', ['groupby' => 'month']));
-        $pnlTypes = array_filter(Pnl::batchPerform('search', ['groupby' => 'types']));
-        $initialState['filtersTree'] = $this->buildFilersTree($pnlTypes);
+        // $pnlTypes = $this->getPnlTypes();
+        $initialState['filtersTree'] = []; //$this->buildFilersTree($pnlTypes);
 
         return $this->render('report', ['initialState' => $initialState]);
     }
@@ -124,10 +152,10 @@ class PnlController extends CrudController
         $type = $row['type'];
         if (!isset($data[$type])) {
             $data[$type] = [
-                'sort' => $this->toSortString($row['type']),
+                'sort' => $this->toSortString($type),
                 'key' => $type,
                 'type' => $type,
-                'type_label' => Yii::$app->getI18n()->removeLegacyLangTags($row['type_label']),
+                'type_label' => $this->prepareLabel($type),
                 'month' => $row['month'],
             ];
             $this->fillWithMonths($data[$type]);
@@ -146,7 +174,7 @@ class PnlController extends CrudController
                 $this->fillWithMonths($nodeRow);
                 $nodeRow['sort'] = $this->toSortString($nodeType);
                 $nodeRow['type'] = $nodeType;
-                $nodeRow['type_label'] = strtoupper(str_contains($nodeType, ',') ? ltrim(strrchr($nodeType, ','), ',') : (string)$nodeType);
+                $nodeRow['type_label'] = $this->prepareLabel($nodeType);
                 $data[$nodeType] = $nodeRow;
             }
             $month = (new DateTime($leaf['month']))->format('M Y');
@@ -290,5 +318,33 @@ class PnlController extends CrudController
         foreach ($rows as &$row) {
             $row['key'] = $row['month'];
         }
+    }
+
+    private function getPnlTypes(): array
+    {
+        return $this->cache->getOrSet([__CLASS__, __METHOD__], static fn() => Pnl::batchPerform('search', ['groupby' => 'types']));
+    }
+
+    private function prepareLabel(string $type): string
+    {
+//        $types = $this->getPnlTypes();
+//        if (isset($types[$type])) {
+//            return $this->i18N->removeLegacyLangTags($types[$type]);
+//        }
+        $lastSegment = str_contains($type, ',') ? ltrim(strrchr($type, ','), ',') : $type;
+        $label = str_replace("_", " ", $lastSegment);
+        $exclude = ['and', 'for', 'rent', 'food', 'base', 'book', 'taxes'];
+        if (strlen($label) > 4) {
+            $label = StringHelper::mb_ucwords($label);
+
+            return implode(" ",
+                array_map(
+                    static fn($entryLabel) => strlen($entryLabel) <= 3 && !in_array(mb_strtolower($entryLabel), $exclude, true) ? mb_strtoupper($entryLabel) : $entryLabel,
+                    explode(" ", $label)
+                )
+            );
+        }
+
+        return in_array(mb_strtolower($label), $exclude, true) ? StringHelper::mb_ucwords($label) : mb_strtoupper($label);
     }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useReducer, useEffect, useMemo } from "react";
 import {
   DashboardOutlined,
   HomeOutlined,
@@ -10,12 +10,21 @@ import { green, red } from "@ant-design/colors";
 import { Excel } from "antd-table-saveas-excel";
 import Spin from "antd/lib/spin";
 import { map, orderBy } from "lodash/collection";
+import { isEmpty } from "lodash/lang";
 
 import PnlLayout from "./components/PnlLayout";
 import { reducer } from "./reducer";
+import { useTotals } from "./use/totals";
 
-const { Header, Content, Footer } = Layout;
-const { Link, Text } = Typography;
+const {
+  Header,
+  Content,
+  Footer,
+} = Layout;
+const {
+  Link,
+  Text,
+} = Typography;
 const { SHOW_PARENT } = TreeSelect;
 
 const initialState = {
@@ -25,7 +34,7 @@ const initialState = {
   loading: false,
   total_before_taxes: 0,
   profit: 0,
-  gross_prfit_margin: 0,
+  gross_profit_margin: 0,
   ...__initial_state,
 };
 
@@ -75,14 +84,20 @@ const Report = () => {
   const [columns, setColumns] = useState(initialColumns);
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { monthTreeData, rows, flatRows, loading, months } = state;
+  const {
+    monthTreeData,
+    rows,
+    flatRows,
+    loading,
+    months,
+  } = state;
 
   const updateColumns = () => {
     const addColumns = [];
     months.forEach(date => {
       const month = moment(date).format("MMM YYYY");
       addColumns.push({
-        key: month,
+        key: moment(date).format('M'),
         dataIndex: month,
         title: month,
         align: "right",
@@ -98,17 +113,46 @@ const Report = () => {
 
           return (
             <Link href={buildQueryString(row, date)} target={"_blank"} style={{ color }}>
-              {sum.toLocaleString("uk-UA", { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
+              {sum.toLocaleString("uk-UA", {
+                maximumFractionDigits: 2,
+                minimumFractionDigits: 2,
+              })}
             </Link>);
         },
       });
     });
     const orderedColumns = orderBy(addColumns, (col) => moment().month(col.key).unix(), ["asc"]);
+    orderedColumns.push({
+      key: "row_total",
+      dataIndex: "row_total",
+      title: "Total for period",
+      align: "right",
+      render: (value, row, idx) => {
+        const totals = [];
+        months.forEach(date => {
+          const month = moment(date).format("MMM YYYY");
+          totals.push(row[month]);
+        });
+        const sum = totals.length ? totals.reduce((acc, value) => acc + value) / 100 : 0;
+
+        return (
+          <Text type={"secondary"} strong={true}>
+            {sum.toLocaleString("uk-UA", {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            })}
+          </Text>
+        );
+      },
+    });
     setColumns([...initialColumns, ...orderedColumns]);
   };
 
   const onMonthsChange = (newMonths) => {
-    dispatch({ type: "UPDATE_MONTHS", payload: { months: newMonths } });
+    dispatch({
+      type: "UPDATE_MONTHS",
+      payload: { months: newMonths },
+    });
   };
 
   useEffect(() => {
@@ -119,8 +163,11 @@ const Report = () => {
       endpoint.searchParams.set("months", months);
       const response = await fetch(endpoint, { signal: abortController.signal });
       const data = await response.json();
-      dispatch({ type: "UPDATE_ROWS", payload: { ...data } });
-      dispatch({ type: "UPDATE_TOTALS" });
+      dispatch({
+        type: "UPDATE_ROWS",
+        payload: { ...data },
+      });
+      // dispatch({ type: "UPDATE_TOTALS" });
     };
 
     fetchRows();
@@ -140,7 +187,10 @@ const Report = () => {
         placeholder={"Select the months"}
         allowClear={true}
         showSearch={false}
-        style={{ minWidth: "15em", maxWidth: "100em" }}
+        style={{
+          minWidth: "15em",
+          maxWidth: "100em",
+        }}
         treeDefaultExpandAll={true}
       />
       <Button
@@ -179,7 +229,10 @@ const Report = () => {
                 placeholder={"Select the months"}
                 allowClear={true}
                 showSearch={false}
-                style={{ minWidth: "15em", maxWidth: "100em" }}
+                style={{
+                  minWidth: "15em",
+                  maxWidth: "100em",
+                }}
                 treeDefaultExpandAll={true}
               />
               <Button
@@ -206,63 +259,65 @@ const Report = () => {
               bordered
               size={"small"}
               summary={(pageData) => {
-                // const totalByMonth = {};
-                // pageData.forEach((row) => {
-                //   months.forEach(month => {
-                //     const mf = moment(month).format("MMM YYYY");
-                //     if (mf in totalByMonth) {
-                //       totalByMonth[mf] += row[mf];
-                //     } else {
-                //       totalByMonth[mf] = row[mf];
-                //     }
-                //   });
-                // });
-                // let i = 0;
+                if (isEmpty(pageData)) {
+                  return;
+                }
+                const totalsByMonth = {};
+                months.forEach(date => {
+                  const monthAndYear = moment(date).format("MMM YYYY");
+                  totalsByMonth[monthAndYear] = useTotals(flatRows, [date])
+                  totalsByMonth[monthAndYear]['month'] = monthAndYear;
+                });
+                const orderedTotals = orderBy(totalsByMonth, (row) => moment(row.month, 'MMM YYYY').format('M'), ["asc"]);
+                const totalItems = {
+                  total_before_taxes: "Total before taxes",
+                  profit: "Net profit",
+                  // gross_profit_margin: "Gross profit margin",
+                };
+                const summirize = (key) => {
+                  if (key === 'gross_profit_margin') {
+                    return '';
+                  }
+                  let amount = 0;
+                  map(orderedTotals, (totals) => {
+                    amount += totals[key];
+                  });
+
+                  return (amount / 100).toLocaleString("uk-UA", { style: "currency", currency: "EUR" });
+                };
 
                 return (
                   <>
-                    {/*<Table.Summary.Row>*/}
-                    {/*  <Table.Summary.Cell index={0}></Table.Summary.Cell>*/}
-                    {/*  {months.map(month => {*/}
-                    {/*    i++;*/}
-                    {/*    const mf = moment(month).format("MMM YYYY");*/}
+                    {map(totalItems, (label, key) => (
+                      <Table.Summary.Row key={key}>
+                        <Table.Summary.Cell index={0}>
+                          <Text>
+                            {label}
+                          </Text>
+                        </Table.Summary.Cell>
+                        {map(orderBy(months, (date) => moment(date).unix(), ["asc"]), (date) => {
+                          const monthNo = moment(date).format('M');
+                          const totals = useTotals(flatRows, [date]);
+                          let amount = totals[key];
+                          if (key === "gross_profit_margin") {
+                            amount = isNaN(amount) ? 0 : amount.toLocaleString("uk-UA", { style: "percent" });
+                          } else {
+                            amount = (amount / 100).toLocaleString("uk-UA", { style: "currency", currency: "EUR" });
+                          }
 
-                    {/*    return (*/}
-                    {/*      <Table.Summary.Cell key={i} index={i} align={"right"}>*/}
-                    {/*        <Text type={"secondary"} strong={true}>*/}
-                    {/*          {totalByMonth.hasOwnProperty(mf) ? (totalByMonth[mf] / 100).toLocaleString("uk-UA", {*/}
-                    {/*            maximumFractionDigits: 2,*/}
-                    {/*            minimumFractionDigits: 2*/}
-                    {/*          }) : 0}*/}
-                    {/*        </Text>*/}
-                    {/*      </Table.Summary.Cell>*/}
-                    {/*    );*/}
-                    {/*  })}*/}
-                    {/*</Table.Summary.Row>*/}
-                    {map({
-                      total_before_taxes: "Total before taxes",
-                      profit: "Profit",
-                      // gross_prfit_margin: "Gross total margin",
-                    }, (label, key) => {
-                      let amount = 0;
-                      if (key === "gross_prfit_margin") {
-                        amount = (isNaN(state[key]) ? 0 : state[key]).toLocaleString("uk-UA", { style: "percent" });
-                      } else {
-                        amount = (state[key] / 100).toLocaleString("uk-UA", { style: "currency", currency: "EUR" });
-                      }
-                      return (
-                        <Table.Summary.Row key={key}>
-                          <Table.Summary.Cell index={0}>
-                            <Text strong={true}>
-                              {label}
-                            </Text>
-                          </Table.Summary.Cell>
-                          <Table.Summary.Cell index={1} colSpan={months.length}>
-                            <Text strong={true}>{amount}</Text>
-                          </Table.Summary.Cell>
-                        </Table.Summary.Row>
-                      );
-                    })}
+                          return (
+                            <Table.Summary.Cell index={monthNo} align={"right"} key={monthNo}>
+                              <Text>{amount}</Text>
+                            </Table.Summary.Cell>
+                          );
+                        })}
+                        <Table.Summary.Cell index={13} align={"right"}>
+                          <Text type={"secondary"} strong={true}>
+                            {summirize(key)}
+                          </Text>
+                        </Table.Summary.Cell>
+                      </Table.Summary.Row>
+                    ))}
                   </>
                 );
               }}

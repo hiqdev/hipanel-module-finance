@@ -224,7 +224,13 @@ class ChargeGridView extends BoxedGridView
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => ['class' => 'text-right'],
                 'value' => fn($charge): string => Html::a($charge->bill_id, ['@bill/view', 'id' => $charge->bill_id], ['target' => '_blank']),
-            ]
+            ],
+            'id' => [
+                'attribute' => 'id',
+                'enableSorting' => false,
+                'headerOptions' => ['class' => 'text-right'],
+                'contentOptions' => ['class' => 'text-right'],
+            ],
         ]);
     }
 
