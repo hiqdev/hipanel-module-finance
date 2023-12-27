@@ -36,6 +36,15 @@ class ProcessTableGenerator extends Widget
             if (loading.is(":visible")) {
               return;
             }
+            
+            var value = $("#costprice-type").val(); 
+            if (
+                value != 'All'
+                && $('.progress-text:contains(' + value.toLowerCase() + ')').siblings('.progress-description').find('.active:contains("done")').text() != ''
+            ) {
+                hipanel.notify.error('Recalculation of this type has already been sent');
+                return;
+            }
             hipanel.runProcess(
               "$recalculateUrl",
               { type: $("#costprice-type").val(), month: $("#costprice-month").val() },
