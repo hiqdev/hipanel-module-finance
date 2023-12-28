@@ -37,10 +37,11 @@ class ProcessTableGenerator extends Widget
               return;
             }
             
-            var value = $("#costprice-type").val(); 
+            var value = $("#costprice-type").val();
+            value = value.replace('_split', '').toLowerCase();
             if (
-                value != 'All'
-                && $('.progress-text:contains(' + value.toLowerCase() + ')').siblings('.progress-description').find('.active:contains("done")').text() != ''
+                value != 'all'
+                && $('.progress-text:contains(' + value.toLowerCase() + ')').siblings('.progress-description').find('.active:contains("progress")').text() != ''
             ) {
                 hipanel.notify.error('Recalculation of this type has already been sent');
                 return;
