@@ -10,10 +10,8 @@
 
 namespace hipanel\modules\finance\controllers;
 
-use Closure;
 use hipanel\actions\Action;
 use hipanel\actions\IndexAction;
-use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartCreateAction;
 use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartPerformAction;
@@ -24,10 +22,10 @@ use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\ArrayHelper;
+use hipanel\modules\finance\actions\ExportPlanPricesAction;
 use hipanel\modules\finance\collections\PricesCollection;
 use hipanel\modules\finance\grid\PriceGridView;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
-use hipanel\modules\finance\helpers\PriceChargesEstimator;
 use hipanel\modules\finance\helpers\LightPriceChargesEstimator;
 use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
@@ -81,6 +79,7 @@ class PlanController extends CrudController
                     'delete' => 'plan.delete',
                     '*' => 'plan.read',
                     'plan-fork' => 'plan.create',
+                    'export-prices' => 'plan.update',
                 ],
             ],
         ]);
@@ -156,6 +155,9 @@ class PlanController extends CrudController
                 'class' => SmartUpdateAction::class,
                 'view' => 'modals/copy',
                 'queryOptions' => ['batch' => false],
+            ],
+            'export-prices' => [
+                'class' => ExportPlanPricesAction::class,
             ],
         ]);
     }

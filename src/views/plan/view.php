@@ -109,8 +109,16 @@ CSS
                 <?php $page = IndexPage::begin(['model' => $model, 'layout' => $model->type === Plan::TYPE_CALCULATOR ? 'resourceDetail' : 'noSearch']) ?>
                 <?php if ($model->isKnownType()): ?>
                     <?php $page->beginContent('show-actions') ?>
-                    <h4 class="box-title" style="display: inline-block;">
-                        &nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?></h4>
+                        <h4 class="box-title" style="display: inline-block;">
+                            &nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?>
+                            <?php if (Yii::$app->user->can('plan.update')): ?>
+                                &nbsp;<?= Html::a(
+                                    '<i class="fa fa-share-square-o"></i>&nbsp;' . Yii::t('hiqdev.export', 'Export'),
+                                    ['@plan/export-prices', 'id' => $model->id],
+                                    ['class' => 'btn btn-default btn-sm'],
+                                ) ?>
+                            <?php endif ?>
+                        </h4>
                     <?php $page->endContent() ?>
                     <?= $this->render($model->type . '/view', [
                         'model' => $model,
