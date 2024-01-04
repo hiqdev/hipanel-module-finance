@@ -11,9 +11,11 @@ use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
+use hiqdev\yii2\export\exporters\AbstractExporter;
 use hiqdev\yii2\export\models\SaveManager;
 use Yii;
 use yii\base\Action;
+use yii\i18n\Formatter;
 
 /**
  * Class ExportPlanPricesAction exports the prices of a plan to a file.
@@ -38,9 +40,12 @@ final class ExportPlanPricesAction extends Action
     ];
 
     private ?SaveManager $saver;
+    private Formatter $formatter;
 
     public function run(int $id)
     {
+        $this->formatter = AbstractExporter::applyExportFormatting();
+
         $format = Type::CSV; // TODO: Support other formats?
         $this->saver = new SaveManager(md5($this->controller->request->getAbsoluteUrl()));
 
@@ -113,12 +118,16 @@ final class ExportPlanPricesAction extends Action
                     I18N::removeLegacyLangTags($price->object->name),
                     I18N::removeLegacyLangTags($price->object->label),
                     $price->type,
-                    $price->isOveruse() ? $price->quantity : null,
+                    $price->isOveruse()
+                        ? $this->formatter->asDecimal($price->quantity)
+                        : null,
                     $price->unit,
-                    $price->price,
+                    $this->formatter->asDecimal($price->price),
                     $price->currency,
                     str_replace("\n", '; ', $price->formula ?? ''),
-                    $estimate['targets'][$price->object_id][$price->type]['sum'] ?? null,
+                    $this->formatter->asDecimal(
+                        $estimate['targets'][$price->object_id][$price->type]['sum'] ?? null
+                    ),
                 ];
             }
         }
