@@ -10,7 +10,7 @@ import { green, red } from "@ant-design/colors";
 import { Excel } from "antd-table-saveas-excel";
 import Spin from "antd/lib/spin";
 import { map, orderBy } from "lodash/collection";
-import { isEmpty } from "lodash/lang";
+import { isEmpty, toNumber } from "lodash/lang";
 
 import PnlLayout from "./components/PnlLayout";
 import { reducer } from "./reducer";
@@ -131,7 +131,8 @@ const Report = () => {
         const totals = [];
         months.forEach(date => {
           const month = moment(date).format("MMM YYYY");
-          totals.push(row[month]);
+          const total = row[month] ?? 0;
+          totals.push(toNumber(total));
         });
         const sum = totals.length ? totals.reduce((acc, value) => acc + value) / 100 : 0;
 

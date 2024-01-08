@@ -1,5 +1,5 @@
 import { find, map, filter, forEach } from "lodash/collection";
-import { isEmpty } from "lodash/lang";
+import { isEmpty, toNumber } from "lodash/lang";
 
 const summirizeRows = (months, rows) => {
   let sum = 0;
@@ -7,7 +7,8 @@ const summirizeRows = (months, rows) => {
     forEach(months, date => {
       forEach(rows, row => {
         if (!isEmpty(row.month)) {
-          sum += row[moment(date).format("MMM YYYY")];
+          const total = row[moment(date).format("MMM YYYY")] ?? 0;
+          sum += toNumber(total);
         }
       });
     });
