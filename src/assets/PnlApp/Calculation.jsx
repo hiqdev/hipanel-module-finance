@@ -150,7 +150,7 @@ const Calculation = () => {
             </Col>
             <Col span={10}>
               <MonthRangeInput
-                disabledDate={(current) => current < moment("2023-01-01")}
+                disabledDate={(current) => current < moment("2023-01-01") || current > moment().endOf("month")}
                 icon={<ImportOutlined/>}
                 label={"Import OSRC data"}
                 loading={loading}
