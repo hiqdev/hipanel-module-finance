@@ -4,13 +4,17 @@ import {
   HomeOutlined,
   CalculatorOutlined,
   DownloadOutlined,
+  ArrowUpOutlined,
+  ArrowDownOutlined,
 } from "@ant-design/icons";
 import { Button, Switch, Table, Space, Layout, Menu, theme, ConfigProvider, Typography, TreeSelect } from "antd";
 import { green, red } from "@ant-design/colors";
 import { Excel } from "antd-table-saveas-excel";
 import Spin from "antd/lib/spin";
+import styled from "styled-components";
 import { map, orderBy } from "lodash/collection";
 import { isEmpty, toNumber } from "lodash/lang";
+import { hasIn } from "lodash/object";
 
 import PnlLayout from "./components/PnlLayout";
 import { reducer } from "./reducer";
@@ -79,6 +83,35 @@ const buildQueryString = (row, date) => {
   return `index?PnlSearch[month]=${month}&PnlSearch[type]=${row.type}`;
 };
 
+const isPositive = (sum) => sum > 0;
+
+const StyledDiff = styled.div`
+  color: ${({ $diff }) => $diff === 0 ? "#00000040" : "#000000A6" };
+  display: ${({ $show }) => $show ? "block" : "none"};
+  &:before {
+    color: ${({$diff, $type, $isPrevGreater}) => {
+        if ($diff === 0) {
+            return "#00000040";
+        }
+
+        return $isPrevGreater ? red.primary : green.primary;
+    }};
+
+    margin-right: .3em;
+    vertical-align: text-bottom;
+    content: '${({ $diff, $type, $isPrevGreater }) => {
+    if ($diff === 0) {
+        return "";
+    }
+    if ($type.startsWith("revenues")) {
+        return $isPrevGreater ? "\\2193" : "\\2191";
+    }
+
+    return $isPrevGreater ? "\\2191" : "\\2193";
+  }}';
+  }
+`;
+
 const Report = () => {
   const { token: { colorBgContainer } } = theme.useToken();
   const [columns, setColumns] = useState(initialColumns);
@@ -96,32 +129,48 @@ const Report = () => {
     const addColumns = [];
     months.forEach(date => {
       const month = moment(date).format("MMM YYYY");
+      const prevMonth = moment(date).subtract(1, "month").format("MMM YYYY");
       addColumns.push({
-        key: moment(date).format('M'),
+        key: moment(date).format("M"),
         dataIndex: month,
         title: month,
         align: "right",
         render: (value, row, idx) => {
           let sum = 0;
+          let diff = 0;
           if (!value) {
             return (
               <Text type={"secondary"}>{sum.toFixed(2)}</Text>
             );
           }
           sum = value / 100;
-          const color = (sum > 0) ? green.primary : red.primary;
+          if (hasIn(row, prevMonth)) {
+            diff = Math.abs(row[month] - row[prevMonth]) / 100;
+          }
 
           return (
-            <Link href={buildQueryString(row, date)} target={"_blank"} style={{ color }}>
-              {sum.toLocaleString("uk-UA", {
-                maximumFractionDigits: 2,
-                minimumFractionDigits: 2,
-              })}
-            </Link>);
+            <Space.Compact direction={"vertical"} size={"small"} style={{ display: "flex" }}>
+              <Link href={buildQueryString(row, date)} target={"_blank"} style={{ color: isPositive(sum) ? green.primary : red.primary }}>
+                {sum.toLocaleString("uk-UA", {
+                  maximumFractionDigits: 2,
+                  minimumFractionDigits: 2,
+                })}
+              </Link>
+              <span style={{ display: "none" }}>/</span>
+              <StyledDiff $type={row.type} $diff={diff} $isPrevGreater={row[prevMonth] > row[month]} $show={hasIn(row, prevMonth)}>
+                {hasIn(row, prevMonth) ?
+                  diff.toLocaleString("uk-UA", {
+                    maximumFractionDigits: 2,
+                    minimumFractionDigits: 2,
+                  })
+                  : "0"}
+              </StyledDiff>
+            </Space.Compact>
+          );
         },
       });
     });
-    const orderedColumns = orderBy(addColumns, (col) => moment().month(col.key).unix(), ["asc"]);
+    const orderedColumns = orderBy(addColumns, (col) => moment(col.dataIndex, 'MMM YYYY').unix(), ["asc"]);
     orderedColumns.push({
       key: "row_total",
       dataIndex: "row_total",
@@ -243,7 +292,11 @@ const Report = () => {
                 onClick={() => {
                   if (flatRows.length) {
                     const excel = new Excel();
-                    excel.addSheet("report").addColumns(columns).addDataSource(flatRows).saveAs("pnl-report.xlsx");
+                    excel
+                      .addSheet("report")
+                      .addColumns(columns)
+                      .addDataSource(flatRows)
+                      .saveAs("pnl-report.xlsx");
                   }
                 }}
               >
@@ -266,25 +319,28 @@ const Report = () => {
                 const totalsByMonth = {};
                 months.forEach(date => {
                   const monthAndYear = moment(date).format("MMM YYYY");
-                  totalsByMonth[monthAndYear] = useTotals(flatRows, [date])
-                  totalsByMonth[monthAndYear]['month'] = monthAndYear;
+                  totalsByMonth[monthAndYear] = useTotals(flatRows, [date]);
+                  totalsByMonth[monthAndYear]["month"] = monthAndYear;
                 });
-                const orderedTotals = orderBy(totalsByMonth, (row) => moment(row.month, 'MMM YYYY').format('M'), ["asc"]);
+                const orderedTotals = orderBy(totalsByMonth, (row) => moment(row.month, "MMM YYYY").format("M"), ["asc"]);
                 const totalItems = {
                   total_before_taxes: "Total before taxes",
                   profit: "Net profit",
                   // gross_profit_margin: "Gross profit margin",
                 };
                 const summirize = (key) => {
-                  if (key === 'gross_profit_margin') {
-                    return '';
+                  if (key === "gross_profit_margin") {
+                    return "";
                   }
                   let amount = 0;
                   map(orderedTotals, (totals) => {
                     amount += totals[key];
                   });
 
-                  return (amount / 100).toLocaleString("uk-UA", { style: "currency", currency: "EUR" });
+                  return (amount / 100).toLocaleString("uk-UA", {
+                    style: "currency",
+                    currency: "EUR",
+                  });
                 };
 
                 return (
@@ -297,13 +353,16 @@ const Report = () => {
                           </Text>
                         </Table.Summary.Cell>
                         {map(orderBy(months, (date) => moment(date).unix(), ["asc"]), (date) => {
-                          const monthNo = moment(date).format('M');
+                          const monthNo = moment(date).format("M");
                           const totals = useTotals(flatRows, [date]);
                           let amount = totals[key];
                           if (key === "gross_profit_margin") {
                             amount = isNaN(amount) ? 0 : amount.toLocaleString("uk-UA", { style: "percent" });
                           } else {
-                            amount = (amount / 100).toLocaleString("uk-UA", { style: "currency", currency: "EUR" });
+                            amount = (amount / 100).toLocaleString("uk-UA", {
+                              style: "currency",
+                              currency: "EUR",
+                            });
                           }
 
                           return (

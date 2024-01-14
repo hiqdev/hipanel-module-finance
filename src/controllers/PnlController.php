@@ -8,7 +8,6 @@ use DateTime;
 use hipanel\actions\IndexAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\base\CrudController;
-use hipanel\components\I18N;
 use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\StringHelper;
 use hipanel\modules\finance\models\Pnl;
@@ -29,7 +28,6 @@ class PnlController extends CrudController
         $id,
         Module $module,
         readonly private CacheInterface $cache,
-        readonly private I18N $i18N,
         array $config = []
     )
     {
@@ -158,7 +156,6 @@ class PnlController extends CrudController
                 'type_label' => $this->prepareLabel($type),
                 'month' => $row['month'],
             ];
-            $this->fillWithMonths($data[$type]);
         }
         $data[$type][(new DateTime($row['month']))->format('M Y')] = (float)$sum;
     }
@@ -171,7 +168,6 @@ class PnlController extends CrudController
 
             if (!isset($data[$nodeType])) {
                 $nodeRow = [];
-                $this->fillWithMonths($nodeRow);
                 $nodeRow['sort'] = $this->toSortString($nodeType);
                 $nodeRow['type'] = $nodeType;
                 $nodeRow['type_label'] = $this->prepareLabel($nodeType);
@@ -189,16 +185,6 @@ class PnlController extends CrudController
     private function toSortString(string $type): string
     {
         return str_replace(',', '', $type);
-    }
-
-    private function fillWithMonths(array &$row): void
-    {
-        for ($m = 1; $m <= 12; $m++) {
-            $month = date('M Y', mktime(0, 0, 0, $m, 1));
-            if (!isset($row[$month])) {
-                $row[$month] = 0;
-            }
-        }
     }
 
     private function prepareMonth(array $months = []): array
@@ -327,10 +313,6 @@ class PnlController extends CrudController
 
     private function prepareLabel(string $type): string
     {
-//        $types = $this->getPnlTypes();
-//        if (isset($types[$type])) {
-//            return $this->i18N->removeLegacyLangTags($types[$type]);
-//        }
         $lastSegment = str_contains($type, ',') ? ltrim(strrchr($type, ','), ',') : $type;
         $label = str_replace("_", " ", $lastSegment);
         $exclude = ['and', 'for', 'rent', 'food', 'base', 'book', 'taxes'];
