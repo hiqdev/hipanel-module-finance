@@ -125,6 +125,19 @@ const Report = () => {
     months,
   } = state;
 
+  const totalsByMonth = useMemo(() => {
+    const result = {}
+    if (flatRows.length > 0) {
+      months.forEach(date => {
+        const monthWithYear = moment(date).format("MMM YYYY");
+        result[monthWithYear] = useTotals(flatRows, [date]);
+        result[monthWithYear]["month"] = monthWithYear;
+      });
+    }
+
+    return result;
+  }, [months.length, flatRows.length]);
+
   const updateColumns = () => {
     const addColumns = [];
     months.forEach(date => {
@@ -227,6 +240,7 @@ const Report = () => {
       abortController.abort();
     };
   }, [months]);
+
   const ReportHeader = () => (
     <Space>
       <TreeSelect
@@ -316,13 +330,7 @@ const Report = () => {
                 if (isEmpty(pageData)) {
                   return;
                 }
-                const totalsByMonth = {};
-                months.forEach(date => {
-                  const monthAndYear = moment(date).format("MMM YYYY");
-                  totalsByMonth[monthAndYear] = useTotals(flatRows, [date]);
-                  totalsByMonth[monthAndYear]["month"] = monthAndYear;
-                });
-                const orderedTotals = orderBy(totalsByMonth, (row) => moment(row.month, "MMM YYYY").format("M"), ["asc"]);
+                const orderedTotals = orderBy(totalsByMonth, (row) => moment(row.month, "MMM YYYY").unix(), ["asc"]);
                 const totalItems = {
                   total_before_taxes: "Total before taxes",
                   taxes: "Taxes",
@@ -354,9 +362,9 @@ const Report = () => {
                           </Text>
                         </Table.Summary.Cell>
                         {map(orderBy(months, (date) => moment(date).unix(), ["asc"]), (date) => {
-                          const monthNo = moment(date).format("M");
-                          const totals = useTotals(flatRows, [date]);
-                          let amount = totals[key];
+                          const monthNo = moment(date).unix();
+                          const monthWithYear = moment(date).format("MMM YYYY");
+                          let amount = hasIn(totalsByMonth, monthWithYear) ? totalsByMonth[monthWithYear][key] : 0;
                           if (key === "gross_profit_margin") {
                             amount = isNaN(amount) ? 0 : amount.toLocaleString("uk-UA", { style: "percent" });
                           } else {

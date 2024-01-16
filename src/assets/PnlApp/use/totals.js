@@ -1,13 +1,14 @@
 import { find, map, filter, forEach } from "lodash/collection";
 import { isEmpty, toNumber } from "lodash/lang";
 
-const summirizeRows = (months, rows) => {
+const summirizeRows = (rows, dates) => {
   let sum = 0;
   if (rows) {
-    forEach(months, date => {
+    forEach(dates, date => {
       forEach(rows, row => {
-        if (!isEmpty(row.month)) {
-          const total = row[moment(date).format("MMM YYYY")] ?? 0;
+        const monthWithYear = moment(date).format("MMM YYYY");
+        if (row.isLeaf) {
+          const total = row[monthWithYear] ?? 0;
           sum += toNumber(total);
         }
       });
@@ -17,16 +18,17 @@ const summirizeRows = (months, rows) => {
   return sum;
 };
 
-const useTotals = (flatRows, months) => {
-  const revenuesRows = filter(flatRows, (entry) => entry.type.startsWith("revenues,"));
-  const expensesRows = filter(flatRows, (entry) => entry.type.startsWith("expenses,"));
+const useTotals = (flatRows, dates) => {
+  const leafsOnly = filter(flatRows, (entry) => entry.isLeaf === true);
+  const revenuesRows = filter(leafsOnly, (entry) => entry.type.startsWith("revenues,"));
+  const expensesRows = filter(leafsOnly, (entry) => entry.type.startsWith("expenses,"));
   // const directExpensesRows = filter(rows, (entry) => entry.type.includes(",direct_expenses"));
-  const taxWithoutVatRows = filter(flatRows, (entry) => entry.type.startsWith("tax,") && !entry.type.includes("tax,vat"));
+  const taxWithoutVatRows = filter(leafsOnly, (entry) => entry.type.startsWith("tax,") && !entry.type.includes("tax,vat"));
 
-  const revenues = summirizeRows(months, revenuesRows);
-  const expenses = summirizeRows(months, expensesRows);
-  // const directExpenses = summirizeRows(months, directExpensesRows);
-  const taxes = summirizeRows(months, taxWithoutVatRows);
+  const revenues = summirizeRows(revenuesRows, dates);
+  const expenses = summirizeRows(expensesRows, dates);
+  // const directExpenses = summirizeRows(directExpensesRows, dates);
+  const taxes = summirizeRows(taxWithoutVatRows, dates);
 
   const total_before_taxes = revenues - Math.abs(expenses);
   const profit = total_before_taxes - Math.abs(taxes);
@@ -34,7 +36,7 @@ const useTotals = (flatRows, months) => {
 
   return {
     total_before_taxes,
-    taxes,
+    taxes: Math.abs(taxes),
     profit,
     // gross_profit_margin,
   };

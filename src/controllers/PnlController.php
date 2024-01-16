@@ -73,11 +73,25 @@ class PnlController extends CrudController
         $result = Pnl::perform('sums', ['months' => $months]);
         $rows = $this->prepareResult($result);
         $rowsTree = $this->buildRowsTree($rows);
+        $r = array_filter($rows, static fn($r) => str_starts_with($r['type'], 'revenues,') && $r['isLeaf'] === true);
+        $e = array_filter($rows, static fn($r) => str_starts_with($r['type'], 'expenses,') && $r['isLeaf'] === true);
+        $f1 = array_filter($e, fn($i) => $i['type'] === 'expenses,general_and_administrative_expenses,legal');
+        $f2 = array_filter($rows, fn($i) => $i['type'] === 'expenses,general_and_administrative_expenses,legal');
         usort($rowsTree, static function(array $a, array $b): int {
             $order = ['revenues', 'expenses', 'tax'];
 
             return array_search($a['type'], $order, true) - array_search($b['type'], $order, true);
         });
+
+        $rs = 0;
+        foreach ($r as $item) {
+            $rs += $item['Nov 2023'];
+        }
+
+        $es = 0;
+        foreach ($e as $item) {
+            $es += $item['Nov 2023'];
+        }
 
         return $this->asJson([
             'rows' => $rowsTree,
@@ -146,7 +160,6 @@ class PnlController extends CrudController
 
     private function appendLeaf(array &$data, array $row): void
     {
-        $sum = $row['sum'];
         $type = $row['type'];
         if (!isset($data[$type])) {
             $data[$type] = [
@@ -155,12 +168,13 @@ class PnlController extends CrudController
                 'type' => $type,
                 'type_label' => $this->prepareLabel($type),
                 'month' => $row['month'],
+                'isLeaf' => true,
             ];
         }
-        $data[$type][(new DateTime($row['month']))->format('M Y')] = (float)$sum;
+        $data[$type][(new DateTime($row['month']))->format('M Y')] = (float)$row['sum'];
     }
 
-    public function appendNodesFromLeaf(array &$data, $leaf): void
+    private function appendNodesFromLeaf(array &$data, $leaf): void
     {
         $nodeType = $leaf['type'];
         while (str_contains($nodeType, ',')) {
@@ -171,13 +185,15 @@ class PnlController extends CrudController
                 $nodeRow['sort'] = $this->toSortString($nodeType);
                 $nodeRow['type'] = $nodeType;
                 $nodeRow['type_label'] = $this->prepareLabel($nodeType);
+                $nodeRow['isLeaf'] = false;
                 $data[$nodeType] = $nodeRow;
             }
             $month = (new DateTime($leaf['month']))->format('M Y');
             if (isset($data[$nodeType][$month])) {
-                $data[$nodeType][$month] = (float)bcadd((string)$data[$nodeType][$month], (string)$leaf['sum']);
+//                $data[$nodeType][$month] = bcadd((string)$data[$nodeType][$month], (string)$leaf['sum']);
+                $data[$nodeType][$month] = (float)$data[$nodeType][$month] + (float)$leaf['sum'];
             } else {
-                $data[$nodeType][$month] = $leaf['sum'];
+                $data[$nodeType][$month] = (float)$leaf['sum'];
             }
         }
     }
