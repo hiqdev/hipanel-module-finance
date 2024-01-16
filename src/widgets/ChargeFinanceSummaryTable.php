@@ -40,7 +40,7 @@ class ChargeFinanceSummaryTable extends FinanceSummaryTable
 
     protected function calculate(): array
     {
-        $positive = $negative = $discount = $netAmount = $eurAmount = $total = [];
+        $positive = $negative = $eurAmount = $total = [];
         /** @var $charge Charge */
         foreach ($this->displayModels as $charge) {
             $positive[$charge->currency] = $charge->positive;

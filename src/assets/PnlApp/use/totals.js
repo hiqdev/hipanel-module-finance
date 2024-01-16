@@ -34,6 +34,7 @@ const useTotals = (flatRows, months) => {
 
   return {
     total_before_taxes,
+    taxes,
     profit,
     // gross_profit_margin,
   };

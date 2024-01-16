@@ -85,7 +85,7 @@ class ChargeController extends CrudController
 
                       return $defaultSummary . ChargeFinanceSummaryTable::widget([
                           'currencies' => $action->controller->getCurrencyTypes(),
-                          'allModels' => $dataProvider->query->andWhere(['groupby' => 'sum_by_currency'])->all(),
+                          'allModels' => $dataProvider->query->andWhere(['groupby' => 'sum_by_currency', 'hide_child_charges' => true])->all(),
                         ]);
                   },
                 ],
