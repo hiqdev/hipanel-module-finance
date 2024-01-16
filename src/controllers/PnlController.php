@@ -73,25 +73,11 @@ class PnlController extends CrudController
         $result = Pnl::perform('sums', ['months' => $months]);
         $rows = $this->prepareResult($result);
         $rowsTree = $this->buildRowsTree($rows);
-        $r = array_filter($rows, static fn($r) => str_starts_with($r['type'], 'revenues,') && $r['isLeaf'] === true);
-        $e = array_filter($rows, static fn($r) => str_starts_with($r['type'], 'expenses,') && $r['isLeaf'] === true);
-        $f1 = array_filter($e, fn($i) => $i['type'] === 'expenses,general_and_administrative_expenses,legal');
-        $f2 = array_filter($rows, fn($i) => $i['type'] === 'expenses,general_and_administrative_expenses,legal');
         usort($rowsTree, static function(array $a, array $b): int {
             $order = ['revenues', 'expenses', 'tax'];
 
             return array_search($a['type'], $order, true) - array_search($b['type'], $order, true);
         });
-
-        $rs = 0;
-        foreach ($r as $item) {
-            $rs += $item['Nov 2023'];
-        }
-
-        $es = 0;
-        foreach ($e as $item) {
-            $es += $item['Nov 2023'];
-        }
 
         return $this->asJson([
             'rows' => $rowsTree,
