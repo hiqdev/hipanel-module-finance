@@ -23,6 +23,7 @@ class ChangeSearch extends Change
     {
         return ArrayHelper::merge($this->defaultSearchAttributes(), [
             'from_old',
+            'ids',
         ]);
     }
 }
