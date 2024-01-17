@@ -18,6 +18,7 @@ class PnlSearch extends Pnl
     {
         return ArrayHelper::merge($this->defaultSearchAttributes(), [
             'ids',
+            'charge_ids',
             'has_no_type',
             'has_note',
         ]);
