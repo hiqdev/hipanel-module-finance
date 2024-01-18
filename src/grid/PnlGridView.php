@@ -47,9 +47,7 @@ class PnlGridView extends BoxedGridView
                             [
                                 'style' => [
                                     'display' => 'flex',
-                                    'flex-wrap' => 'nowrap',
-                                    'justify-content' => 'space-between',
-                                    'flex-direction' => 'row',
+                                    'flex-direction' => 'column',
                                     'margin-bottom' => '.5em',
                                 ],
                             ]) . $label;
