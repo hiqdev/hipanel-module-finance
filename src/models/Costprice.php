@@ -28,7 +28,7 @@ class Costprice extends Model
             CostpriceType::hw->value => Yii::t('hipanel:finance', 'HW'),
             CostpriceType::nrc->value => Yii::t('hipanel:finance', 'NRC'),
             CostpriceType::salaries->value => Yii::t('hipanel:finance', 'Salaries'),
-            CostpriceType::salaries->value => Yii::t('hipanel:finance', 'Traff'),
+            CostpriceType::traff->value => Yii::t('hipanel:finance', 'Traff'),
         ];
     }
 

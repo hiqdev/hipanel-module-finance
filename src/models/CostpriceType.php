@@ -12,4 +12,5 @@ enum CostpriceType: string
     case hw = 'hw_split';
     case nrc = 'nrc_split';
     case salaries = 'salaries_split';
+    case traff = 'traff_split';
 }
