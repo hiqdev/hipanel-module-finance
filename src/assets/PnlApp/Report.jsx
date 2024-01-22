@@ -103,7 +103,7 @@ const StyledDiff = styled.div`
     if ($diff === 0) {
         return "";
     }
-    if ($type.startsWith("revenues")) {
+    if ($type.startsWith("revenue")) {
         return $isPrevGreater ? "\\2193" : "\\2191";
     }
 

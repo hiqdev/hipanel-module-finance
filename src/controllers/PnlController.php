@@ -74,7 +74,7 @@ class PnlController extends CrudController
         $rows = $this->prepareResult($result);
         $rowsTree = $this->buildRowsTree($rows);
         usort($rowsTree, static function(array $a, array $b): int {
-            $order = ['revenues', 'expenses', 'tax'];
+            $order = ['revenue', 'expenses', 'tax'];
 
             return array_search($a['type'], $order, true) - array_search($b['type'], $order, true);
         });

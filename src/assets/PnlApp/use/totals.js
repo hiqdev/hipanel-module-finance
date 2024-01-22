@@ -20,19 +20,19 @@ const summirizeRows = (rows, dates) => {
 
 const useTotals = (flatRows, dates) => {
   const leafsOnly = filter(flatRows, (entry) => entry.isLeaf === true);
-  const revenuesRows = filter(leafsOnly, (entry) => entry.type.startsWith("revenues,"));
+  const revenueRows = filter(leafsOnly, (entry) => entry.type.startsWith("revenue,"));
   const expensesRows = filter(leafsOnly, (entry) => entry.type.startsWith("expenses,"));
   // const directExpensesRows = filter(rows, (entry) => entry.type.includes(",direct_expenses"));
   const taxWithoutVatRows = filter(leafsOnly, (entry) => entry.type.startsWith("tax,") && !entry.type.includes("tax,vat"));
 
-  const revenues = summirizeRows(revenuesRows, dates);
+  const revenue = summirizeRows(revenueRows, dates);
   const expenses = summirizeRows(expensesRows, dates);
   // const directExpenses = summirizeRows(directExpensesRows, dates);
   const taxes = summirizeRows(taxWithoutVatRows, dates);
 
-  const total_before_taxes = revenues - Math.abs(expenses);
+  const total_before_taxes = revenue - Math.abs(expenses);
   const profit = total_before_taxes - Math.abs(taxes);
-  // const gross_profit_margin = (((revenues - Math.abs(directExpenses)) / revenues) / 100) * 100;
+  // const gross_profit_margin = (((revenue - Math.abs(directExpenses)) / revenue) / 100) * 100;
 
   return {
     total_before_taxes,
