@@ -332,9 +332,9 @@ const Report = () => {
                 }
                 const orderedTotals = orderBy(totalsByMonth, (row) => moment(row.month, "MMM YYYY").unix(), ["asc"]);
                 const totalItems = {
-                  total_before_taxes: "Total before taxes",
-                  taxes: "Taxes",
-                  profit: "Net profit",
+                  ebitda: "EBITDA",
+                  tax: "TAX",
+                  net_profit: "Net profit",
                   // gross_profit_margin: "Gross profit margin",
                 };
                 const summirize = (key) => {

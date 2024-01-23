@@ -22,23 +22,24 @@ const useTotals = (flatRows, dates) => {
   const leafsOnly = filter(flatRows, (entry) => entry.isLeaf === true);
   const revenueRows = filter(leafsOnly, (entry) => entry.type.startsWith("revenue,"));
   const expensesRows = filter(leafsOnly, (entry) => entry.type.startsWith("expenses,"));
+  const depreciationRows = filter(leafsOnly, (entry) => entry.type.startsWith("depreciation"));
   // const directExpensesRows = filter(rows, (entry) => entry.type.includes(",direct_expenses"));
   const taxWithoutVatRows = filter(leafsOnly, (entry) => entry.type.startsWith("tax,") && !entry.type.includes("tax,vat"));
 
   const revenue = summirizeRows(revenueRows, dates);
   const expenses = summirizeRows(expensesRows, dates);
+  const depreciation = summirizeRows(depreciationRows, dates);
   // const directExpenses = summirizeRows(directExpensesRows, dates);
-  const taxes = summirizeRows(taxWithoutVatRows, dates);
+  const tax = summirizeRows(taxWithoutVatRows, dates);
 
-  const total_before_taxes = revenue - Math.abs(expenses);
-  const profit = total_before_taxes - Math.abs(taxes);
+  const ebitda = revenue - Math.abs(expenses);
+  const net_profit = ebitda - depreciation - Math.abs(tax);
   // const gross_profit_margin = (((revenue - Math.abs(directExpenses)) / revenue) / 100) * 100;
 
   return {
-    total_before_taxes,
-    taxes: Math.abs(taxes),
-    profit,
-    // gross_profit_margin,
+    ebitda,
+    tax: Math.abs(tax),
+    net_profit,
   };
 };
 
