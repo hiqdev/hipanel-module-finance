@@ -33,7 +33,7 @@ const useTotals = (flatRows, dates) => {
   const tax = summirizeRows(taxWithoutVatRows, dates);
 
   const ebitda = revenue - Math.abs(expenses);
-  const net_profit = ebitda - depreciation - Math.abs(tax);
+  const net_profit = ebitda - Math.abs(depreciation) - Math.abs(tax);
   // const gross_profit_margin = (((revenue - Math.abs(directExpenses)) / revenue) / 100) * 100;
 
   return {
