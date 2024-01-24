@@ -19,6 +19,7 @@ use yii\web\View;
 
 $this->title = Yii::t('hipanel:finance', 'All P&L records');
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerCss(".table td { white-space: nowrap; }");
 
 ?>
 

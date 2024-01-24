@@ -21,6 +21,8 @@ class PnlSearch extends Pnl
             'charge_ids',
             'has_no_type',
             'has_note',
+            'month_from',
+            'month_till',
         ]);
     }
 
