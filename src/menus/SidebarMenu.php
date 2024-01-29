@@ -69,7 +69,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                                 'visible' => $user->can('costprice.read'),
                             ],
                         ],
-                        'visible' => $user->can('document.generate-all') || $user->can('costprice.read'),
+                        'visible' => $user->can('document.generate-all') || $user->can('costprice.read') || $user->can('pnl.read'),
                     ],
                     'plans' => [
                         'label'   => Yii::t('hipanel:finance', 'Tariff plans'),
