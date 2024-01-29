@@ -66,12 +66,12 @@ class SaleController extends \hipanel\base\CrudController
                         'seller_id' => $sale->seller_id,
                     ];
                     $client = new ClientRelationFreeStub($attributes);
-                    $tariff = Plan::find()->where(['id' => $sale->tariff_id])->one();
+                    $plan = $sale->tariff_id ? Plan::find()->where(['id' => $sale->tariff_id])->one() : null;
 
                     return [
                         'client' => $client,
-                        'tariff' => $tariff,
-                        ];
+                        'plan' => $plan,
+                    ];
                 },
             ],
             'create' => [

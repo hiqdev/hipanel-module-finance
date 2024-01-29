@@ -28,8 +28,12 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
             'tariff' => [
                 'format' => 'raw',
                 'filterAttribute' => 'tariff_like',
-                'value' => function ($model) {
+                'value' => function (Sale $model): string {
+                    if (!$model->tariff) {
+                        return '';
+                    }
                     $label = $model->tariff . ' (' . $model->currency . ')';
+
                     return Html::a(Html::encode($label), ['@plan/view', 'id' => $model->tariff_id]);
                 },
             ],

@@ -3,8 +3,13 @@
 use hipanel\modules\finance\grid\PlanGridView;
 use hipanel\modules\finance\grid\SaleGridView;
 use hipanel\modules\finance\menus\SaleDetailMenu;
+use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\models\Sale;
 use hipanel\widgets\MainDetails;
 use yii\helpers\Html;
+
+/** @var Sale $model */
+/** @var ?Plan $plan */
 
 $this->title = Html::encode($model->object);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance:sale', 'Sales'), 'url' => ['index']];
@@ -48,7 +53,7 @@ $this->registerCss('
             </div>
         <?php endif ?>
     </div>
-    <?php if (Yii::$app->user->can('plan.read')) : ?>
+    <?php if ($plan && Yii::$app->user->can('plan.read')) : ?>
         <div class="col-md-4">
             <div class="box box-solid">
                 <div class="box-header with-border">
@@ -56,7 +61,7 @@ $this->registerCss('
                 </div>
                 <div class="box-body no-padding">
                     <?= PlanGridView::detailView([
-                        'model' => $tariff,
+                        'model' => $plan,
                         'boxed' => false,
                         'columns' => [
                             'simple_name',
