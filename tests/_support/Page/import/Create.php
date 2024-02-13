@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace hipanel\modules\finance\tests\_support\Page\import;
 
 use hipanel\tests\_support\Page\Authenticated;
@@ -11,10 +13,7 @@ class Create extends Authenticated
     {
         $I = $this->tester;
 
-        foreach ($importData as $element) {
-            $importString = implode(';', $importData);
-        }
-
+        $importString = implode(';', $importData);
         (new Input($I, '#billimportform-data'))->setValue($importString);
     }
 
@@ -30,7 +29,7 @@ class Create extends Authenticated
         $this->tester->click("//div[@id = 'w1'] //button[@class = 'close']");
     }
 
-    public function enusreImportTipIsCorrectlyDisplayed(): void
+    public function ensureImportTipIsCorrectlyDisplayed(): void
     {
         $I = $this->tester;
 

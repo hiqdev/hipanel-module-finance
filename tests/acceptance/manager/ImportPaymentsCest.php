@@ -28,7 +28,7 @@ class ImportPaymentsCest
         $I->see('Import payments', 'h1');
         $I->see('Rows for import', 'h3');
 
-        $importCreate->enusreImportTipIsCorrectlyDisplayed();
+        $importCreate->ensureImportTipIsCorrectlyDisplayed();
         $importCreate->fillImportField($importData);
 
         $I->pressButton('Import');
@@ -70,7 +70,7 @@ class ImportPaymentsCest
                 'time' => date('g:i:s'),
                 'amount' => 300,
                 'currency' => 'USD',
-                'type' => 'PayPal',
+                'type' => 'Colocation',
                 'description' => 'description' . uniqid('', true),
             ],
         ];
