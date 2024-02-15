@@ -312,6 +312,11 @@ class BillGridView extends \hipanel\grid\BoxedGridView
 
                     return $tariff . ' ' . $amount . ' ' . implode('<br>', array_filter([$object, $text]));
                 },
+                'exportedColumns' => ['export_requisite'],
+            ],
+            'export_requisite' => [
+                'label' => Yii::t('hipanel:finance', 'Requisite'),
+                'value' => static fn(Bill $bill): string => $bill->requisite ?? '',
             ],
             'tariff_link' => [
                 'attribute' => 'tariff',
