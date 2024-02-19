@@ -110,15 +110,15 @@ CSS
                 <?php if ($model->isKnownType()): ?>
                     <?php $page->beginContent('show-actions') ?>
                         <h4 class="box-title" style="display: inline-block;">
-                            &nbsp;<?= Yii::t('hipanel:finance', 'Prices') ?>
-                            <?php if (Yii::$app->user->can('plan.update')): ?>
-                                &nbsp;<?= Html::a(
-                                    '<i class="fa fa-share-square-o"></i>&nbsp;' . Yii::t('hiqdev.export', 'Export'),
-                                    ['@plan/export-prices', 'id' => $model->id],
-                                    ['class' => 'btn btn-default btn-sm'],
-                                ) ?>
-                            <?php endif ?>
+                            <?= Yii::t('hipanel:finance', 'Prices') ?>
                         </h4>
+                        <?php if (Yii::$app->user->can('plan.update')): ?>
+                            <?= Html::a(
+                                '<i class="fa fa-download fa-fw"></i>&nbsp;' . Yii::t('hiqdev.export', 'Export'),
+                                ['@plan/export-prices', 'id' => $model->id],
+                                ['class' => 'btn btn-info btn-sm pull-right', 'style' => ['margin-left' => '0.1rem']],
+                            ) ?>
+                        <?php endif ?>
                     <?php $page->endContent() ?>
                     <?= $this->render($model->type . '/view', [
                         'model' => $model,
