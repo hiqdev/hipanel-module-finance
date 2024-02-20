@@ -5,7 +5,7 @@ import Alert from "@hipanel-core/ui/Alert";
 
 const bill = {
   client: "hipanel_test_user",
-  type: "PayPal",
+  type: "Monthly fee",
   currency: "$",
   sum: -777,
   quantity: 1,
@@ -17,7 +17,7 @@ const bill = {
     {
       class: "Client",
       object: "hipanel_test_admin",
-      type: "PayPal",
+      type: "Monthly fee",
       sum: 777,
       quantity: 1,
       description: null,

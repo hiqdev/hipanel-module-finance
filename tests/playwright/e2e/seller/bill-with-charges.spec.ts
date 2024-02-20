@@ -59,7 +59,7 @@ const charges = [
   {
     class: "Client",
     object: "hipanel_test_user",
-    type: "Cash",
+    type: "HW purchase",
     sum: 250,
     quantity: 1,
     description: null,
@@ -68,7 +68,7 @@ const charges = [
   {
     class: "Client",
     object: "hipanel_test_user1",
-    type: "Certificate purchase",
+    type: "Premium purchase",
     sum: 350,
     quantity: 1,
     description: null,

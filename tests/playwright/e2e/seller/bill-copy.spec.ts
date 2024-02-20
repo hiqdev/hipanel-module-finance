@@ -8,7 +8,7 @@ import Alert from "@hipanel-core/ui/Alert";
 
 const bill: Bill = {
   client: "hipanel_test_user",
-  type: "Block Storage HDD L2",
+  type: "Monthly fee",
   currency: "$",
   sum: -762.7,
   quantity: 1,
@@ -16,14 +16,14 @@ const bill: Bill = {
     {
       class: "Client",
       object: "hipanel_test_user1",
-      type: "Cash",
+      type: "Monthly fee",
       sum: 712.80,
       quantity: 1,
     },
     {
       class: "Client",
       object: "hipanel_test_user2",
-      type: "PayPal",
+      type: "Monthly fee",
       sum: 49.90,
       quantity: 1,
     }

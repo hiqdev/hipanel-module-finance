@@ -6,7 +6,7 @@ let billId;
 
 const bill = {
   client: "hipanel_test_user",
-  type: "Premium renewal",
+  type: "Premium purchase",
   currency: "$",
   sum: 250,
   quantity: 1,

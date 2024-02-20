@@ -7,7 +7,7 @@ import Select2 from "@hipanel-core/input/Select2";
 
 const bill = {
   client: "hipanel_test_user",
-  type: "PayPal",
+  type: "Monthly fee",
   requisite: "Test Reseller",
   currency: "$",
   sum: 250,
