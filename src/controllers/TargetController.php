@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\ComboSearchAction;
 use hipanel\actions\IndexAction;
 use hipanel\actions\SearchAction;
+use hipanel\actions\SmartPerformAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
@@ -38,6 +41,7 @@ class TargetController extends CrudController
             [
                 'class' => EasyAccessControl::class,
                 'actions' => [
+                    'restore' => ['test.alpha'],
                     '*' => ['plan.read', 'price.read'],
                 ],
             ],
@@ -61,6 +65,9 @@ class TargetController extends CrudController
             ],
             'close-sale' => [
                 'class' => TargetManagementAction::class,
+            ],
+            'restore' => [
+                'class' => SmartPerformAction::class,
             ],
             'view' => [
                 'class' => ViewAction::class,

@@ -31,6 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     <?php $page->endContent() ?>
 
+    <?php $page->beginContent('bulk-actions') ?>
+        <?php if (Yii::$app->user->can('test.alpha')) : ?>
+            <?= $page->renderBulkButton('restore', Yii::t('hipanel', 'Restore')) ?>
+        <?php endif ?>
+    <?php $page->endContent() ?>
+
     <?php $page->beginContent('representation-actions') ?>
         <?= $page->renderRepresentations($representationCollection) ?>
     <?php $page->endContent() ?>

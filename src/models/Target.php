@@ -34,6 +34,7 @@ class Target extends Model implements TaggableInterface
             [['id', 'type_id', 'state_id', 'client_id', 'access_id', 'tariff_id', 'seller_id'], 'integer'],
             [['type', 'state', 'client', 'name', 'tariff', 'seller'], 'string'],
             [['show_deleted'], 'boolean'],
+            [['id'], 'required', 'on' => ['restore']],
         ];
     }
 

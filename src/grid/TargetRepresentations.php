@@ -26,7 +26,8 @@ class TargetRepresentations extends RepresentationCollection
                     'client',
                     'seller',
                     'type',
-                    'tariff'
+                    'state',
+                    'tariff',
                 ]),
             ],
         ]);

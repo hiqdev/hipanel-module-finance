@@ -66,19 +66,21 @@ class View extends Authenticated
     {
         $I = $this->tester;
 
-        $this->priceValues = $I->executeJS("
-        var prices = [];
-        $('.price-item').each(function(){
-            var dollarInput = $(this).find('input[id*={$type}][id$=price]');
-            var euroInput = $(this).find('input[id^=TemplatePrice][id*=subprices][id*=EUR]');
-            var values = {'dollarValue': Math.floor(Math.random() * 2147483647)};
+        $this->priceValues = $I->executeJS(/** @lang JavaScript */ "
+        const prices = [];
+        $('.price-item').each(function() {
+            const random = () => Math.floor(Math.random() * 2147); // 2147483647
+            const dollarInput = $(this).find('input[id*={$type}][id$=price]');
+            const euroInput = $(this).find('input[id^=TemplatePrice][id*=subprices][id*=EUR]');
+            const values = {'dollarValue': random()};
             dollarInput.val(values['dollarValue']);
             if (euroInput[0]) {
-                values['euroValue'] = Math.floor(Math.random() * 2147483647);
+                values['euroValue'] = random();
                 euroInput.val(values['euroValue']);
             }
             prices.push(values);
         });
+
         return prices;
         ");
     }
