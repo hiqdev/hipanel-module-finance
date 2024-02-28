@@ -5,6 +5,7 @@
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\widgets\TariffCombo;
+use hiqdev\combo\StaticCombo;
 use hiqdev\yii2\daterangepicker\DateRangePicker;
 use yii\bootstrap\Html;
 
@@ -19,7 +20,13 @@ use yii\bootstrap\Html;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('object_type')->dropDownList($search->model->types, ['prompt' => '---']) ?>
+    <?= $search->field('object_type')->widget(StaticCombo::class, [
+        'attribute' => 'object_type',
+        'model' => $search->model,
+        'data' => $search->model->getTypes(),
+        'hasId' => true,
+        'multiple' => true,
+    ]) ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
