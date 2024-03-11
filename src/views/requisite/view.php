@@ -92,7 +92,10 @@ FlagIconCssAsset::register($this);
                             'boxed'   => false,
                             'model'   => $model,
                             'columns' => [
-                                'reg_data', 'vat_rate', 'invoice_last_no',
+                                'reg_data', 'vat_rate',
+                                'invoice_last_no', 'proforma_last_no',
+                                'sinvoice_last_no', 'sproforma_last_no',
+                                'pinvoice_last_no', 'pproforma_last_no',
                                 'serie', 'registration_number', 'tic',
                             ],
                         ]) ?>
