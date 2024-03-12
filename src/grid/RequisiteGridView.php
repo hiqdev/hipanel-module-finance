@@ -130,6 +130,22 @@ class RequisiteGridView extends ContactGridView
             'templates' => [
                 'class' => RequisiteTemplateColumn::class,
             ],
+            'last_no' => [
+                'label' => Yii::t('hipanel:finance', 'Last numbers'),
+                'format' => 'raw',
+                'filter' => false,
+                'value' => function (Requisite $model) {
+                    $value = '';
+                    foreach (['invoice_last_no', 'sinvoice_last_no', 'pinvoice_last_no', 'proforma_last_no', 'sproforma_last_no', 'pproforma_last_no'] as $attr) {
+                        if (empty($model->$attr)) {
+                            continue;
+                        }
+                        $value .= Html::tag('p', Html::tag("b", "{$model->getAttributeLabel($attr)}: ") . ($model->$attr ?? ''));
+                    }
+
+                    return $value;
+                }
+            ],
         ], $curColumns ?? [],
             $balanceColumns ?? []
         );

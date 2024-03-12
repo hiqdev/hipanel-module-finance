@@ -23,7 +23,7 @@ class RequisiteRepresentations extends RepresentationCollection
                 'columns' => array_filter([
                     'checkbox',
                     'client_like',
-                    'name', 'actions', 'serie', 'requisites', 'templates'
+                    'name', 'actions', 'serie', 'requisites', 'templates', 'last_no',
                 ]),
             ],
             'balances' => [
