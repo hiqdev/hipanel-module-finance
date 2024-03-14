@@ -46,7 +46,7 @@ class Sale extends \hipanel\base\Model
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['id', 'buyer_id', 'seller_id', 'object_id', 'tariff_id', 'currency_id'], 'integer'],
+            [['id', 'buyer_id', 'seller_id', 'object_id', 'tariff_id', 'currency_id', 'ticket_id'], 'integer'],
             [[
                 'object',
                 'object_like',
@@ -66,7 +66,7 @@ class Sale extends \hipanel\base\Model
                 'from_old',
                 'currency',
                 'tariff_created_at',
-                'tariff_updated_at'
+                'tariff_updated_at',
             ], 'string'],
             [['id'], 'required', 'on' => 'delete'],
             [['id', 'tariff_id', 'time'], 'required', 'on' => 'update'],
