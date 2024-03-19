@@ -47,7 +47,7 @@ class Sale extends \hipanel\base\Model
     const SALE_TYPE_ANYCASTCDN = 'anycastcdn';
     const SALE_TYPE_PRIVATE_CLOUD_BACKUP = 'private_cloud_backup';
     const SALE_TYPE_STORAGE = 'storage';
-    const SALE_TYPE_VPS = ' vps';
+    const SALE_TYPE_VPS = 'vps';
 
     public function rules()
     {
