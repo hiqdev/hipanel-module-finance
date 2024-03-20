@@ -113,7 +113,7 @@ class Sale extends \hipanel\base\Model
             self::SALE_TYPE_PRIVATE_CLOUD_BACKUP => 'Private cloud backup',
             self::SALE_TYPE_SNAPSHOT => 'Snapshot',
             self::SALE_TYPE_STORAGE => 'Storage',
-            self::SALE_TYPE_VPS => ' Vps',
+            self::SALE_TYPE_VPS => 'Vps',
             self::SALE_TYPE_VIDEOCDN => 'Videocdn',
         ]);
     }
