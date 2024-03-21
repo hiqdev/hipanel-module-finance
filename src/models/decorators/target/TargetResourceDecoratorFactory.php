@@ -30,6 +30,9 @@ class TargetResourceDecoratorFactory extends ServerResourceDecoratorFactory
             'cdn_cache95' => CdnCache95ResourceDecorator::class,
             'cdn_traf95' => CdnTraffic95ResourceDecorator::class,
             'cdn_traf95_max' => CdnTraffic95MaxResourceDecorator::class,
+            'vps_traf' => VpsTrafficesourceDecorator::class,
+            'vps_traf_ssl' => VpsTrafficInResourceDecorator::class,
+            'vps_traf_max' => VpsTrafficMaxResourceDecorator::class,
         ]);
     }
 }

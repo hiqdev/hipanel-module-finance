@@ -50,6 +50,9 @@ class ResourceHelper
             'server_traf',
             'server_traf_in',
             'server_traf_max',
+            'vps_traf',
+            'vps_traf_in',
+            'vps_traf_max',
             'storage_du',
             'storage_du95',
         ], $targetTypes);

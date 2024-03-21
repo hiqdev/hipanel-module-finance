@@ -38,6 +38,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
         'devops_support'    => SupportTimeQuantity::class,
         'referral'          => DefaultQuantityFormatter::class,
         'server_traf_max'   => DefaultQuantityFormatter::class,
+        'cdn_traf_max'      => DefaultQuantityFormatter::class,
         'server_traf95_max' => DefaultQuantityFormatter::class,
         'cdn_traf_max'      => DefaultQuantityFormatter::class,
         'cdn_traf95_max'    => DefaultQuantityFormatter::class,
