@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -12,7 +13,7 @@ namespace hipanel\modules\finance\models\decorators\target;
 
 use Yii;
 
-class CdnTrafficMaxResourceDecorator extends VpsTrafficResourceDecorator
+class VpsTrafficMaxResourceDecorator extends VpsTrafficResourceDecorator
 {
     public function displayTitle()
     {
