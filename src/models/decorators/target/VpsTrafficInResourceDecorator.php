@@ -11,10 +11,9 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\models\decorators\target;
 
-use hipanel\modules\finance\models\decorators\server\TrafficResourceDecorator;
 use Yii;
 
-class VpsTrafficInResourceDecorator extends TrafficResourceDecorator
+class VpsTrafficInResourceDecorator extends VpsTrafficResourceDecorator
 {
     public function displayTitle(): string
     {
