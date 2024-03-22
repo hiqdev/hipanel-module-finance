@@ -16,7 +16,7 @@ use Yii;
 
 class VpsTrafficResourceDecorator extends TrafficResourceDecorator
 {
-    public function displayTitle()
+    public function displayTitle(): string
     {
         return Yii::t('hipanel.finance.resource', 'VPS Traffic OUT');
     }
