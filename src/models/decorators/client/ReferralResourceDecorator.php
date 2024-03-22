@@ -6,7 +6,7 @@ use Yii;
 
 class ReferralResourceDecorator extends AbstractClientResourceDecorator
 {
-    public function displayTitle(): string
+    public function displayTitle()
     {
         return Yii::t('hipanel:client', 'Referral');
     }
