@@ -161,11 +161,11 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'enableSorting' => false,
                 'format' => 'datetime',
             ],
-            'ticket' => [
-                'attribute' => 'ticket',
+            'reason' => [
+                'attribute' => 'reason',
                 'format' => 'raw',
-                'value' => fn(Sale $sale): string => $sale->ticket ? Html::a($sale->ticket,
-                    ['@ticket/view', 'id' => $sale->ticket],
+                'value' => fn(Sale $sale): string => $sale->reason ? Html::a($sale->reason,
+                    ['@ticket/view', 'id' => $sale->reason],
                     ['target' => '_blank']) : '',
             ],
         ]);
