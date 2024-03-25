@@ -63,6 +63,7 @@ class Plan extends Model
     public const TYPE_CALCULATOR = 'calculator';
     public const TYPE_VIDECDN = 'videocdn';
     public const TYPE_LOAD_BALANCER = 'load_balancer';
+    public const TYPE_MANAGED_KUBERNETES_CLUSTER = 'managed_kubernetes_cluster';
     public const TYPE_IP = 'ip';
 
     protected $knownTypes = [
@@ -89,6 +90,7 @@ class Plan extends Model
         self::TYPE_CALCULATOR           => self::TYPE_CALCULATOR,
         self::TYPE_VIDECDN              => self::TYPE_VIDECDN,
         self::TYPE_LOAD_BALANCER        => self::TYPE_LOAD_BALANCER,
+        self::TYPE_MANAGED_KUBERNETES_CLUSTER => self::TYPE_MANAGED_KUBERNETES_CLUSTER,
     ];
 
     public $deprecatedTariff = [
