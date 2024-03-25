@@ -86,6 +86,7 @@ class PriceSort
             'backup_du',
             'server_traf_max',
             'cdn_traf_max',
+            'vps_traf_max',
             'server_traf95_max',
             'cdn_traf95_max',
             'server_du',

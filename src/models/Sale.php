@@ -42,15 +42,20 @@ class Sale extends \hipanel\base\Model
     const SALE_TYPE_PART = 'part';
     const SALE_TYPE_HARDWARE = 'model_group';
     const SALE_TYPE_PRIVATE_CLOUD = 'private_cloud';
+    const SALE_TYPE_VIDEOCDN = 'videocdn';
+    const SALE_TYPE_SNAPSHOT = 'snapshot';
+    const SALE_TYPE_ANYCASTCDN = 'anycastcdn';
+    const SALE_TYPE_PRIVATE_CLOUD_BACKUP = 'private_cloud_backup';
+    const SALE_TYPE_STORAGE = 'storage';
+    const SALE_TYPE_VPS = 'vps';
 
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['id', 'buyer_id', 'seller_id', 'object_id', 'tariff_id', 'currency_id', 'ticket_id'], 'integer'],
+            [['id', 'buyer_id', 'seller_id', 'object_id', 'tariff_id', 'currency_id'], 'integer'],
             [[
                 'object',
                 'object_like',
-                'object_type',
                 'object_label',
                 'seller',
                 'login',
@@ -67,7 +72,9 @@ class Sale extends \hipanel\base\Model
                 'currency',
                 'tariff_created_at',
                 'tariff_updated_at',
+                'reason',
             ], 'string'],
+            [['object_type'], 'safe'],
             [['id'], 'required', 'on' => 'delete'],
             [['id', 'tariff_id', 'time'], 'required', 'on' => 'update'],
             [['tariff_id', 'time', 'object_id', 'buyer_id', 'seller_id'], 'required', 'on' => 'create'],
@@ -82,7 +89,7 @@ class Sale extends \hipanel\base\Model
             'unsale_time' => Yii::t('hipanel:finance:sale', 'Close time'),
             'object' => Yii::t('hipanel:finance:sale', 'Object'),
             'object_like' => Yii::t('hipanel:finance:sale', 'Object'),
-            'object_type' => Yii::t('hipanel:finance:sale', 'Object Type'),
+            'object_type' => Yii::t('hipanel:finance:sale', 'Object Types'),
             'object_label' => Yii::t('hipanel:finance:sale', 'Description'),
             'buyer' => Yii::t('hipanel:finance:sale', 'Buyer'),
             'buyer_id' => Yii::t('hipanel:finance:sale', 'Buyer'),
@@ -97,11 +104,18 @@ class Sale extends \hipanel\base\Model
     public function getTypes()
     {
         return array_filter([
-            self::SALE_TYPE_DEVICE => Yii::t('hipanel:finance', 'Servers'),
-            self::SALE_TYPE_IP => 'IP',
             self::SALE_TYPE_ACCOUNT => Yii::t('hipanel', 'Accounts'),
+            self::SALE_TYPE_ANYCASTCDN => 'Anycastcdn',
             self::SALE_TYPE_CLIENT => Yii::t('hipanel', 'Clients'),
+            self::SALE_TYPE_DEVICE => 'Device',
+            self::SALE_TYPE_IP => 'IP',
             self::SALE_TYPE_PART => Yii::getAlias('@part', false) ? Yii::t('hipanel:stock', 'Parts') : null,
+            self::SALE_TYPE_PRIVATE_CLOUD => 'Private cloud',
+            self::SALE_TYPE_PRIVATE_CLOUD_BACKUP => 'Private cloud backup',
+            self::SALE_TYPE_SNAPSHOT => 'Snapshot',
+            self::SALE_TYPE_STORAGE => 'Storage',
+            self::SALE_TYPE_VPS => 'Vps',
+            self::SALE_TYPE_VIDEOCDN => 'Videocdn',
         ]);
     }
 

@@ -316,4 +316,5 @@ return [
     'Calculate costprice' => 'Расчитать costprice',
     'Finance tools' => 'Финансовые инструменты',
     'Process' => 'Процесс',
+    'Last numbers' => 'Последние номера',
 ];

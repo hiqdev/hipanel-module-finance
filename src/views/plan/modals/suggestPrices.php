@@ -56,6 +56,7 @@ use yii\web\View;
     Plan::TYPE_PRIVATE_CLOUD_BACKUP,
     Plan::TYPE_VCDN,
     Plan::TYPE_VIDECDN,
+    Plan::TYPE_MANAGED_KUBERNETES_CLUSTER,
 ], true)) : ?>
     <?php if ($model->isObjectPredefined()) : ?>
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
@@ -103,6 +104,7 @@ use yii\web\View;
             'storage' => Yii::t('hipanel.finance.suggestionTypes', 'storage'),
             'private_cloud_backup' => Yii::t('hipanel.finance.suggestionTypes', 'private_cloud_backup'),
             'private_cloud' => Yii::t('hipanel.finance.suggestionTypes', 'private_cloud'),
+            'managed_kubernetes_cluster' => Yii::t('hipanel.finance.suggestionTypes', 'managed_kubernetes_cluster'),
             'calculator_public_cloud' => Yii::t('hipanel.finance.suggestionTypes', 'calculator_public_cloud'),
             'calculator_private_cloud' => Yii::t('hipanel.finance.suggestionTypes', 'calculator_private_cloud'),
             'calculator_storage' => Yii::t('hipanel.finance.suggestionTypes', 'calculator_storage'),

@@ -14,6 +14,7 @@ return [
     'Sales' => 'Продажи',
     'Time' => 'Время',
     'Object' => 'Объект',
+    'Object types' => 'Типы объектов',
     'Buyer' => 'Покупатель',
     'Seller' => 'Продавец',
     'Sale information' => 'Информция о продаже',

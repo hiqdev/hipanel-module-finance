@@ -100,7 +100,7 @@ $this->registerCss(/** @lang CSS */ "
                             ?>
                         </td>
                         <td>
-                            <?= $form->field($model, "[$idx]ticket_id")
+                            <?= $form->field($model, "[$idx]reason")
                                 ->textInput()
                                 ->label(false)
                             ?>

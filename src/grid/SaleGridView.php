@@ -16,6 +16,7 @@ use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\modules\server\grid\BindingColumn;
+use hiqdev\combo\StaticCombo;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\helpers\Html;
@@ -86,6 +87,15 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => ['class' => 'text-right'],
+                'filter' => $this->filterModel !== null
+                    ? StaticCombo::widget([
+                        'attribute' => 'object_type',
+                        'model' => $this->filterModel,
+                        'data' => $this->filterModel->getTypes(),
+                        'hasId' => true,
+                        'multiple' => true,
+                    ])
+                    : false,
             ],
             'object' => [
                 'format' => 'raw',
@@ -150,6 +160,13 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                 'filter' => false,
                 'enableSorting' => false,
                 'format' => 'datetime',
+            ],
+            'ticket' => [
+                'attribute' => 'ticket',
+                'format' => 'raw',
+                'value' => fn(Sale $sale): string => $sale->ticket ? Html::a($sale->ticket,
+                    ['@ticket/view', 'id' => $sale->ticket],
+                    ['target' => '_blank']) : '',
             ],
         ]);
     }

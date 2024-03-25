@@ -136,6 +136,7 @@ class Price extends Model
             'overuse,volume_du'                 => 'size',
             'overuse,snapshot_du'               => 'size',
             'overuse,private_cloud_backup_du'   => 'size',
+            'overuse,vps_traf_max'              => 'size',
             'overuse,power'                     => 'power',
         ];
 

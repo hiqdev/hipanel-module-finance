@@ -3,6 +3,7 @@
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\ContactCombo;
+use hipanel\modules\document\widgets\combo\FinancialDocumentTypeCombo;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
@@ -27,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'id')->hiddenInput()->label(false); ?>
     <?= $form->field($model, 'client_id')->widget(ClientCombo::class) ?>
     <?= $form->field($model, 'recipient_id')->widget(ContactCombo::class) ?>
+    <?= $form->field($model, 'type')->widget(FinancialDocumentTypeCombo::class) ?>
     <?= Html::submitButton(Yii::t('hipanel', 'Save'), ['class' => 'btn btn-success']) ?>
 
 <?php $form->end() ?>
