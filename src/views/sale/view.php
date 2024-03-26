@@ -42,7 +42,7 @@ $this->registerCss('
                         'seller',
                         'buyer',
                         'tariff',
-                        'ticket'
+                        'reason'
                     ],
                 ]) ?>
             </div>

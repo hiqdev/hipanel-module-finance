@@ -51,6 +51,7 @@ $this->registerCss(/** @lang CSS */ "
                 <th><?= Yii::t('hipanel:finance:sale', 'Time') ?></th>
                 <?php if (Yii::$app->user->can('sale.update')) : ?>
                     <th><?= Yii::t('hipanel:finance:sale', 'Close time') ?></th>
+                    <th><?= Yii::t('hipanel', 'Ticket') ?></th>
                 <?php endif ?>
             </tr>
             </thead>
@@ -95,6 +96,12 @@ $this->registerCss(/** @lang CSS */ "
                         <td>
                             <?= $form->field($sale, "[$idx]unsale_time")
                                 ->textInput(['class' => 'form-control datetime'])
+                                ->label(false)
+                            ?>
+                        </td>
+                        <td>
+                            <?= $form->field($model, "[$idx]reason")
+                                ->textInput()
                                 ->label(false)
                             ?>
                         </td>
