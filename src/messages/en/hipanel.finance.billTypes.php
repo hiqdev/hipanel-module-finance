@@ -11,6 +11,7 @@
 return [
     'Hardware monthly fee' => 'Hardware',
     'Hardware leasing monthly fee' => 'Leasing',
+    'Hardware installment monthly fee' => 'Installment',
     'Number of IP addresses' => 'IP addresses',
     'Server traffic 95% overuse' => '95-th traffic overuse',
     'Rack unit monthly fee' => 'Unit in rack',

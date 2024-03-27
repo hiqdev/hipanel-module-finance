@@ -30,7 +30,7 @@ class BillType extends Type
             'exchange,*',
         ],
         'primary' => [
-            'monthly,leasing',
+            'monthly,installment',
         ],
         'default' => [
             'monthly,hardware',

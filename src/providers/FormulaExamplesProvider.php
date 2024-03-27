@@ -30,8 +30,8 @@ class FormulaExamplesProvider
     {
         $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Fixed discount'), $this->fixedDiscountFormulas());
         $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Growing discount'), $this->growingDiscountFormulas());
-        $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Leasing'), $this->leasingFormulas());
-        $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Monthly Cap'), $this->leasingFormulas());
+        $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Installment'), $this->installmentFormulas());
+        $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Monthly Cap'), $this->installmentFormulas());
 
         return $result;
     }
@@ -58,10 +58,10 @@ class FormulaExamplesProvider
         ];
     }
 
-    private function leasingFormulas()
+    private function installmentFormulas()
     {
         return [
-            sprintf("leasing.since('%s').lasts('3 months').reason('TEST')", date('m.Y')),
+            sprintf("installment.since('%s').lasts('3 months').reason('TEST')", date('m.Y')),
         ];
     }
 

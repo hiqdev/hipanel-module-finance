@@ -119,7 +119,7 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
     private function buildOptionsArray(): array
     {
         $types = ArrayHelper::index($this->billTypes, 'id');
-        // Each type key is a string like "monthly,hardware" or "monthly,leasing,server"
+        // Each type key is a string like "monthly,hardware" or "monthly,installment"
         // We need to split it by comma and build a recursive array of options for vue-treeselect, where ID is a type name
         $options = [];
         foreach ($types as $id => $type) {
