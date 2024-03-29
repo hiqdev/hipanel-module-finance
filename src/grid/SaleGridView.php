@@ -163,6 +163,7 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
             ],
             'reason' => [
                 'attribute' => 'reason',
+                'filter' => false,
                 'format' => 'raw',
                 'value' => fn(Sale $sale): string => $sale->reason ?
                     (is_numeric($sale->reason) ? Html::a($sale->reason,
