@@ -49,6 +49,7 @@ return [
 
     'Discount' => 'Скидка',
     'Leasing discount' => 'Лизинговая скидка',
+    'Installment discount' => 'Скидка при рассрочке',
     'Dividends' => 'Дивиденды',
 
     'Domain services' => 'Доменные услуги',
@@ -227,6 +228,7 @@ return [
     'Hardware monthly fee' => 'Абонплата оборудования',
     'IP addresses monthly fee' => 'Абонплата IP адреса',
     'Hardware leasing monthly fee' => 'Лизинг',
+    'Hardware installment monthly fee' => 'Рассрочка',
     'Load balancer monthly fee' => 'Абонплата за балансировщик нагрузки',
     'Private Cloud monthly fee' => 'Абонплата приватного облака',
     'Rack monthly fee' => 'Стойка',
