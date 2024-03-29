@@ -164,9 +164,11 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
             'reason' => [
                 'attribute' => 'reason',
                 'format' => 'raw',
-                'value' => fn(Sale $sale): string => $sale->reason ? Html::a($sale->reason,
-                    ['@ticket/view', 'id' => $sale->reason],
-                    ['target' => '_blank']) : '',
+                'value' => fn(Sale $sale): string => $sale->reason ?
+                    (is_numeric($sale->reason) ? Html::a($sale->reason,
+                        ['@ticket/view', 'id' => $sale->reason],
+                        ['target' => '_blank']) : (string) $sale->reason
+                    ) : ''
             ],
         ]);
     }
