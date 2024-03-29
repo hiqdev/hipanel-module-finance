@@ -72,7 +72,7 @@ class Sale extends \hipanel\base\Model
                 'currency',
                 'tariff_created_at',
                 'tariff_updated_at',
-                'ticket',
+                'reason',
             ], 'string'],
             [['object_type'], 'safe'],
             [['id'], 'required', 'on' => 'delete'],
