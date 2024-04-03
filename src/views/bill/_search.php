@@ -55,6 +55,9 @@ use yii\web\View;
                 'class' => 'form-control',
                 'placeholder' => Yii::t('hipanel', 'Date'),
             ],
+            'clientOptions' => [
+                'showDropdowns' => true,
+            ],
             'dateFormat' => 'yyyy-MM-dd',
         ]) ?>
     </div>

@@ -15,6 +15,8 @@ use Yii;
 
 class BillTypeFilter extends RefFilter
 {
+    public array $billTypeList = [];
+
     protected function getRefs()
     {
         /** @var BillTypesProvider $provider */
@@ -46,7 +48,7 @@ class BillTypeFilter extends RefFilter
         return BillTypeVueTreeSelect::widget([
             'attribute' => $this->attribute,
             'model' => $this->model,
-            'billTypes' => $this->getRefs(),
+            'billTypes' => !empty($this->billTypeList) ? $this->billTypeList : $this->getRefs(),
             'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
             'behavior' => TreeSelectBehavior::Deprecated,
         ]);

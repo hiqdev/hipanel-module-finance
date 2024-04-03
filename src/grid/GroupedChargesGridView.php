@@ -110,7 +110,7 @@ class GroupedChargesGridView extends ChargeGridView
         // Prevent rendering child prices, unless it is intended
         if ($this->allowedParentId === null
             && $model->parent_id !== null
-            && !\in_array($model->parent_id, $this->chrgeIds(), true)
+            && !\in_array($model->parent_id, $this->chargeIds(), true)
         ) {
             return parent::renderTableRow($model, $key, $index);
         }
@@ -122,7 +122,7 @@ class GroupedChargesGridView extends ChargeGridView
         return parent::renderTableRow($model, $key, $index);
     }
 
-    private function chrgeIds(): array
+    private function chargeIds(): array
     {
         return ArrayHelper::getColumn($this->dataProvider->getModels(), 'id');
     }

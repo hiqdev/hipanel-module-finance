@@ -36,7 +36,7 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
     <?php $page->setSearchFormData([
       'billTypesList' => $billTypesList,
       'clientTypes' => $clientTypes,
-  ]) ?>
+    ]) ?>
 
     <?php $page->beginContent('main-actions') ?>
         <?php if (Yii::$app->user->can('deposit')) : ?>
@@ -80,7 +80,9 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
     <?php $page->beginContent('table') ?>
     <?php $page->beginBulkForm() ?>
         <?= BillGridView::widget([
+            'billTypeList' => $billTypesList,
             'boxed' => false,
+            'resizableColumns' => false,
             'layout' => <<<"HTML"
                 <div class='row'>
                     <div class='col-xs-11'>{sorter}</div>

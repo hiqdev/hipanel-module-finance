@@ -8,7 +8,7 @@ use hipanel\helpers\ArrayHelper;
 class ResourceSearch extends Resource
 {
     use SearchModelTrait {
-        searchAttributes as defaultSearchAttributes;
+        SearchModelTrait::searchAttributes as defaultSearchAttributes;
     }
 
     public function searchAttributes(): array

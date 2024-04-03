@@ -89,7 +89,7 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
             [['client_id', 'receiver_id', 'sum', 'currency', 'time'], 'required', 'on' => [self::SCENARIO_TRANSFER]],
             [['client'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_TRANSFER]],
             [['receiver'], 'safe', 'on' => [self::SCENARIO_TRANSFER]],
-            [['no'], 'safe'],
+            [['no', 'ts'], 'safe'],
         ];
     }
 

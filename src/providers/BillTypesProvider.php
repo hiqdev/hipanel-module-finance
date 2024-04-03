@@ -23,12 +23,12 @@ class BillTypesProvider
     /**
      * @var Application
      */
-    private $app;
+    private Application $app;
 
     /**
      * @var bool
      */
-    private $showUnusedTypes = false;
+    private bool $showUnusedTypes = false;
 
     public function __construct(Application $app)
     {
@@ -41,7 +41,7 @@ class BillTypesProvider
      * `value` - type label (translated).
      * @return array
      */
-    public function getTypesList()
+    public function getTypesList(): array
     {
         return ArrayHelper::map($this->getTypes(), 'name', 'label');
     }
@@ -51,7 +51,7 @@ class BillTypesProvider
      * When user can not support, filters out unused types.
      * @return Ref[]
      */
-    public function getTypes()
+    public function getTypes(): array
     {
         $options = ['select' => 'full', 'orderby' => 'name_asc', 'with_hierarchy' => true];
         $types = Ref::findCached('type,bill', 'hipanel.finance.billTypes', $options);
@@ -67,7 +67,7 @@ class BillTypesProvider
      * @param Ref[] $types
      * @return Ref[]
      */
-    private function removeUnusedTypes($types)
+    private function removeUnusedTypes(array $types): array
     {
         if ($this->showUnusedTypes) {
             return $types;
@@ -81,10 +81,7 @@ class BillTypesProvider
         });
     }
 
-    /**
-     * @return array
-     */
-    public function getGroupedList()
+    public function getGroupedList(): array
     {
         $billTypes = [];
         $billGroupLabels = [];
@@ -101,7 +98,7 @@ class BillTypesProvider
 
             if (isset($name)) {
                 foreach ($types as $k => $t) {
-                    if (strpos($k, $type . ',') === 0) {
+                    if (str_starts_with($k, $type . ',')) {
                         $billTypes[$type][$k] = $t;
                     }
                 }

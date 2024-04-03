@@ -10,13 +10,13 @@ use yii\web\JqueryAsset;
 
 class VueTreeSelectAsset extends AssetBundle
 {
-    public $sourcePath = __DIR__;
+    public $sourcePath = __DIR__ . '/css';
     public $js = [
         'https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@^0.4.0/dist/vue-treeselect.umd.min.js',
     ];
     public $css = [
         'https://cdn.jsdelivr.net/npm/@riophae/vue-treeselect@^0.4.0/dist/vue-treeselect.min.css',
-        'css/vue-treeselect-hipanel.css',
+        'vue-treeselect-hipanel.css',
     ];
 
     public $depends = [

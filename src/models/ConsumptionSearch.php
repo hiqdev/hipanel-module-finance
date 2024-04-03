@@ -12,8 +12,8 @@ use yii\helpers\ArrayHelper;
 class ConsumptionSearch extends Consumption
 {
     use SearchModelTrait {
-        searchAttributes as defaultSearchAttributes;
-        rules as defaultRules;
+        SearchModelTrait::searchAttributes as defaultSearchAttributes;
+        SearchModelTrait::rules as defaultRules;
     }
 
     public function rules()

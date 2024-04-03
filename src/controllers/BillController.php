@@ -36,26 +36,30 @@ use hipanel\modules\finance\models\Resource;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use hipanel\modules\finance\widgets\FinanceSummaryTable;
 use hipanel\widgets\SynchronousCountEnabler;
+use hiqdev\hiart\ActiveDataProvider;
 use hiqdev\hiart\Collection;
 use Tuck\Sort\Sort;
 use Yii;
 use yii\base\Event;
 use yii\base\Module;
+use yii\caching\CacheInterface;
 use yii\grid\GridView;
 use yii\web\Response;
+use yii\web\User;
 
 class BillController extends CrudController
 {
-    /**
-     * @var BillTypesProvider
-     */
-    private $billTypesProvider;
+    private BillTypesProvider $billTypesProvider;
+    private CacheInterface $cache;
+    private User $user;
 
-    public function __construct($id, Module $module, BillTypesProvider $billTypesProvider, array $config = [])
+    public function __construct($id, Module $module, BillTypesProvider $billTypesProvider, CacheInterface $cache, User $user, array $config = [])
     {
         parent::__construct($id, $module, $config);
 
         $this->billTypesProvider = $billTypesProvider;
+        $this->cache = $cache;
+        $this->user = $user;
     }
 
     public function behaviors()
@@ -86,20 +90,28 @@ class BillController extends CrudController
                     $rates = $this->getExchangeRates();
 
                     return [
-                        'rates' => $rates,
-                        'billTypesList' => $billTypesList,
+                        'rates' => $rates ?? [],
+                        'billTypesList' => $billTypesList ?? [],
                         'clientTypes' => $this->getRefs('type,client', 'hipanel:client'),
                     ];
                 },
                 'responseVariants' => [
-                    IndexAction::VARIANT_SUMMARY_RESPONSE => static function (VariantsAction $action): string {
+                    IndexAction::VARIANT_SUMMARY_RESPONSE => function (VariantsAction $action): string {
+                        /** @var ActiveDataProvider $dataProvider */
                         $dataProvider = $action->parent->getDataProvider();
-                        $defaultSummary = (new SynchronousCountEnabler($dataProvider, fn(GridView $grid): string => $grid->renderSummary()))();
+                        $altQuery = clone $dataProvider->query;
+                        $lastModifiedBill = $altQuery->where(['groupby' => 'last_modified'])->one();
+                        $key = serialize(array_merge($action->controller->request->get(null, []), [$this->user->getId(), $lastModifiedBill->ts]));
 
-                        return $defaultSummary . FinanceSummaryTable::widget([
-                            'currencies' => $action->controller->getCurrencyTypes(),
-                            'allModels' => $dataProvider->query->andWhere(['groupby' => 'sum_by_currency'])->all(),
-                        ]);
+                        return $this->cache->getOrSet($key, function () use ($action, $dataProvider): string {
+                            $defaultSummary = (new SynchronousCountEnabler($dataProvider, fn(GridView $grid): string => $grid->renderSummary()))();
+                            $financeSummary = FinanceSummaryTable::widget([
+                                'currencies' => $action->controller->getCurrencyTypes(),
+                                'allModels' => $dataProvider->query->andWhere(['groupby' => 'sum_by_currency'])->all(),
+                            ]);
+
+                            return $defaultSummary . $financeSummary;
+                        }, 3600);
                     },
                 ],
             ],
@@ -275,22 +287,23 @@ class BillController extends CrudController
     private function getExchangeRates(?int $client_id = null): array
     {
         $client_id ??= Yii::$app->user->id;
-        $currencies = Yii::$app->cache->getOrSet(['exchange-rates', $client_id], function () use ($client_id) {
-            return ExchangeRate::find()
+
+        return Yii::$app->cache->getOrSet(['exchange-rates', $client_id], function () use ($client_id) {
+            $currencies = ExchangeRate::find()
                 ->select(['from', 'to', 'rate'])
                 ->where(['client_id' => $client_id])
                 ->all();
+
+            return Sort::by($currencies, static function (ExchangeRate $rate) {
+                if ($rate->from === 'EUR' && $rate->to === 'USD') {
+                    return 1;
+                }
+                if ($rate->from === 'USD' && $rate->to === 'EUR') {
+                    return 2;
+                }
+
+                return INF;
+            });
         }, 3600);
-
-        return Sort::by($currencies, static function (ExchangeRate $rate) {
-            if ($rate->from === 'EUR' && $rate->to === 'USD') {
-                return 1;
-            }
-            if ($rate->from === 'USD' && $rate->to === 'EUR') {
-                return 2;
-            }
-
-            return INF;
-        });
     }
 }

@@ -39,6 +39,7 @@ use yii\helpers\Html;
  */
 class BillGridView extends \hipanel\grid\BoxedGridView
 {
+    public array $billTypeList = [];
     /**
      * @var QuantityFormatterFactoryInterface
      */
@@ -262,13 +263,14 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'filterOptions' => ['class' => 'text-right'],
                 'filter' => function ($column, $filterModel) {
                     return BillTypeFilter::widget([
+                        'billTypeList' => $this->billTypeList,
                         'attribute' => 'type_id',
                         'model' => $filterModel,
                     ]);
                 },
                 'sortAttribute' => 'type_id',
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'text-right', 'style' => 'max-width: 25em'],
+                'headerOptions' => ['class' => 'text-right', 'style' => 'max-width: 25em; width: 20%'],
                 'contentOptions' => function () {
                     return ['class' => 'text-right'];
                 },

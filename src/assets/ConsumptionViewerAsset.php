@@ -16,6 +16,7 @@ class ConsumptionViewerAsset extends AssetBundle
         'https://unpkg.com/lodash@4.17.20/lodash.min.js',
         'ConsumptionViewer.js',
     ];
+    public $publishOptions = ['only' => ['ConsumptionViewer.js']];
 
     public function init()
     {
