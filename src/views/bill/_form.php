@@ -156,7 +156,7 @@ $form = ActiveForm::begin([
                             </div>
                             <div class="col-md-1">
                                 <?= Html::activeHiddenInput($model, "[$i]unit") ?>
-                                <?= $form->field($model, "[$i]quantity")->input('text', ['value' => $model->getQuantity()]) ?>
+                                <?= $form->field($model, "[$i]quantity") ?>
                             </div>
                         </div>
                     </div>
