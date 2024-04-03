@@ -31,6 +31,7 @@ class BillType extends Type
         ],
         'primary' => [
             'monthly,installment',
+            'monthly,leasing',
         ],
         'default' => [
             'monthly,hardware',
