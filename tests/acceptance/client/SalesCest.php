@@ -12,6 +12,7 @@ namespace hipanel\modules\finance\tests\acceptance\client;
 
 use hipanel\helpers\Url;
 use hipanel\tests\_support\Page\IndexPage;
+use hipanel\tests\_support\Page\Widget\Input\Dropdown;
 use hipanel\tests\_support\Page\Widget\Input\Input;
 use hipanel\tests\_support\Step\Acceptance\Client;
 
@@ -57,6 +58,8 @@ class SalesCest
     private function ensureICanSeeBodyBox(Client $I): void
     {
         $I->seeLink('Type');
-        $I->seeElement('input', ['name' => 'SaleSearch[object_type]']);
+        $this->indexPage->containsFilters([
+            Dropdown::asAdvancedSearch($I,'Object Types')
+        ]);
     }
 }

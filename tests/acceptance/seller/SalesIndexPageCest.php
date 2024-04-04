@@ -40,13 +40,7 @@ class SalesIndexPageCest
         $this->index->containsFilters([
             Select2::asAdvancedSearch($I, 'Seller'),
             Select2::asAdvancedSearch($I, 'Buyer'),
-            (Dropdown::asAdvancedSearch($I,'Object Type'))->withItems([
-                'Servers',
-                'IP',
-                'Accounts',
-                'Clients',
-                'Parts',
-            ]),
+            Dropdown::asAdvancedSearch($I,'Object Types'),
             Select2::asAdvancedSearch($I, 'Tariff'),
             Input::asAdvancedSearch($I, 'Object'),
         ]);
