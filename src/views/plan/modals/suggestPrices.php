@@ -57,6 +57,7 @@ use yii\web\View;
     Plan::TYPE_VCDN,
     Plan::TYPE_VIDECDN,
     Plan::TYPE_MANAGED_KUBERNETES_CLUSTER,
+    Plan::TYPE_LOAD_BALANCER,
 ], true)) : ?>
     <?php if ($model->isObjectPredefined()) : ?>
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
