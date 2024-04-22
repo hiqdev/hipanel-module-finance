@@ -9,6 +9,7 @@ use hipanel\modules\finance\widgets\PricePerUnitWidget;
 use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
 use hipanel\modules\finance\widgets\SumSignToggleButton;
 use hipanel\modules\finance\widgets\TreeSelectBehavior;
+use hipanel\modules\finance\widgets\UpdateChargeTimeScript;
 use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\DateTimePicker;
 use hipanel\widgets\DynamicFormWidget;
@@ -34,6 +35,8 @@ $timeResolver = static function ($model): ?string {
 
     return $model->time !== false ? $formatter->asDatetime($model->time, 'php:Y-m-d H:i:s') : null;
 };
+
+UpdateChargeTimeScript::widget(['model' => $model]);
 
 $this->registerCss("
 #bill-dynamic-form .charge-item .col-md-1,
@@ -311,21 +314,6 @@ $form = ActiveForm::begin([
   $("#bill-dynamic-form").on("change", ".bill-charges .charge-item input[data-attribute=sum]", function () {
     $(this).closest(".bill-item").find("input[data-bill-sum]").blur();
   });
-  // auto-update charges time
-  const updateChargesTime = () => {
-    $(".bill-item").each((idx, billItemContainerElement) => {
-      const billTimeInputValue = $(billItemContainerElement).find(".bill-time").val();
-      if (moment(billTimeInputValue).isValid()) {
-        const billTime = moment(billTimeInputValue);
-        let chargeTime = null;
-        $(billItemContainerElement).find(".charge-item :input[id$=time]").each((idx, chargeTimeInput) => {
-          chargeTime = (chargeTime ?? billTime).add(1, "seconds");
-          $(chargeTimeInput).val(chargeTime.format("YYYY-MM-DD HH:mm:ss"));
-        });
-      }
-    });
-  };
-
   const copyObject = function () {
     if (repeatedCharge !== null) {
       return;
@@ -368,7 +356,6 @@ $form = ActiveForm::begin([
       return {"billNumber": splitInput[1], "chargeNumber": splitInput[2]};
     }
   };
-  $(document).on("change", ".bill-time", updateChargesTime);
   // repeat charge
   const repeatCharge = function (e, newCharge) {
     if (repeatedCharge !== null) {
@@ -397,10 +384,9 @@ $form = ActiveForm::begin([
       repeatedCharge = charge.closest('.charge-item').get(0);
     }
   });
-  $(".charges_dynamicform_wrapper").on("afterInsert", updateChargesTime).on("afterInsert", copyObject).on('afterInsert', repeatCharge);
+  $(".charges_dynamicform_wrapper").on("afterInsert", copyObject).on('afterInsert', repeatCharge);
   $(".bills_dynamicform_wrapper").on("afterInsert", (event, el) => {
-    $(el).find(".charges_dynamicform_wrapper").on("afterInsert", updateChargesTime).on("afterInsert", copyObject).on('afterInsert', repeatCharge);
-    updateChargesTime();
+    $(el).find(".charges_dynamicform_wrapper").on("afterInsert", copyObject).on('afterInsert', repeatCharge);
   });
 })();
 JS
