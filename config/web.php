@@ -215,6 +215,13 @@ return [
                         'model' => Target::class,
                         'resourceModel' => TargetResource::class,
                     ],
+                    'load_balancer' => [
+                        'label' => ['hipanel:finance', 'Load balancer'],
+                        'columns' => ['lb_capacity_unit', 'lb_ha_capacity_unit'],
+                        'groups' => [],
+                        'model' => Target::class,
+                        'resourceModel' => TargetResource::class,
+                    ],
                 ]
             ],
             \hipanel\modules\dashboard\menus\DashboardMenu::class => [
