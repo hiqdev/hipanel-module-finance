@@ -103,7 +103,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
     {
         if (empty($type)) {
             $types = ArrayHelper::index($this->billTypesProvider->getTypes(), 'id');
-            $type = $types[$context->id]?->name;
+            $type = isset($types[$context->id]) ? $types[$context->id]->name : null;
         }
         if ($type !== null && !isset($this->types[$type])) {
             if (strpos($type, 'monthly,') === 0) {
