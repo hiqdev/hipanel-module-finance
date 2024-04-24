@@ -43,6 +43,8 @@ class ServerResourceDecoratorFactory extends ResourceDecoratorFactory
             'location' => LocationResourceDecorator::class,
             'power' => PowerResourceDecorator::class,
             'monthly' => MonthlyResourceDecorator::class,
+            'lb_capacity_unit' => LoadBalancerResourceDecorator::class,
+            'lb_ha_capacity_unit' => HALoadBalancerResourceDecorator::class,
         ];
     }
 }
