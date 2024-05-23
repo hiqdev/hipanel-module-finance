@@ -1,6 +1,7 @@
 <?php
 
 use hipanel\models\IndexPageUiOptions;
+use hipanel\modules\finance\grid\ChargeRepresentations;
 use hipanel\modules\finance\grid\ConsumptionGridView;
 use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 use hipanel\modules\finance\models\Consumption;
@@ -15,6 +16,7 @@ use yii\db\ActiveRecordInterface;
 /** @var Consumption $model */
 /** @var ConsumptionSearch $searchModel */
 /** @var ConsumptionConfigurator $configurator */
+/** @var ChargeRepresentations $representationCollection */
 
 $this->title = Yii::t('hipanel:finance', 'Resource consumption');
 $this->params['subtitle'] = $searchModel->getCurrentClassLabel();
@@ -38,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'boxed' => false,
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
+                'columns' => $representationCollection->getByName($uiModel->representation)->getColumns(),
             ]) ?>
         <?php $page->endBulkForm() ?>
     <?php $page->endContent() ?>

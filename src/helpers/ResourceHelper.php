@@ -208,7 +208,7 @@ class ResourceHelper
 
                     return null;
                 },
-                'footer' => 'test_footer',
+                'footer' => '',
                 'footerOptions' => [
                     'class' => [$type, 'text-right'],
                     'data-type' => true,
