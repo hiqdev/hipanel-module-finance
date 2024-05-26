@@ -29,11 +29,11 @@ class Requisite extends Contact
     const TEMPLATE_CONTRACT = 'contract';
     const TEMPLATE_PROBATION = 'probation';
     const TEMPLATE_INTERNAL_INVOICE = 'internal_invoice';
-    const TEMPLATE_PROFORMA = 'proforma';
+    const TEMPLATE_PROFORMA = 'payment_request';
     const TEMPLATE_PURCHASE_INVOICE = 'purchase_invoice';
     const TEMPLATE_SERVICE_INVOICE = 'service_invoice';
     const TEMPLATE_PURCHASE_PROFORMA = 'purchase_invoice';
-    const TEMPLATE_SERVICE_PROFORMA = 'service_proforma';
+    const TEMPLATE_SERVICE_PROFORMA = 'service_payment_request';
 
     public static function tableName()
     {
@@ -58,7 +58,7 @@ class Requisite extends Contact
                     'contract_id',
                     'probation_id',
                     'internal_invoice_id',
-                    'proforma_id',
+                    'payment_request_id',
                     'nda_id',
                 ],
                 'string', // template2pdf ID
@@ -72,9 +72,9 @@ class Requisite extends Contact
                     'internal_invoice_name',
                     'purchase_invoice_name',
                     'service_invoice_name',
-                    'purchase_proforma_name',
-                    'service_proforma_name',
-                    'proforma_name',
+                    'purchase_payment_request_name',
+                    'service_payment_request_name',
+                    'payment_request_name',
                     'nda_name',
                 ],
                 'string',
@@ -123,7 +123,7 @@ class Requisite extends Contact
             'acceptance_name' => Yii::t('hipanel:finance', 'Acceptance template'),
             'contract_name' => Yii::t('hipanel:finance', 'Contract template'),
             'probation_name' => Yii::t('hipanel:finance', 'Probation template'),
-            'proforma_name' => Yii::t('hipanel:finance', 'Proforma template'),
+            'payment_request_name' => Yii::t('hipanel:finance', 'Proforma template'),
             'recipient_id' => Yii::t('hipanel:finance', 'Recipient'),
             'balance' => Yii::t('hipanel:finance', 'Balance'),
         ]);
