@@ -39,7 +39,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
         'referral'          => DefaultQuantityFormatter::class,
         'server_traf_max'   => DefaultQuantityFormatter::class,
         'vps_traf_max'      => DefaultQuantityFormatter::class,
-        'vps_ip_reqular'    => IPNumQuantity::class,
+        'vps_ip_regular'    => IPNumQuantity::class,
         'vps_ip_anycast'    => IPNumQuantity::class,
         'vps_ip_public'     => IPNumQuantity::class,
         'server_traf95_max' => DefaultQuantityFormatter::class,
