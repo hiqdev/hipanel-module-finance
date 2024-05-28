@@ -53,6 +53,9 @@ class ServerResourceDecoratorFactory extends ResourceDecoratorFactory
             'cdn_traf_plain' => CdnTrafficPlainResourceDecorator::class,
             'cdn_traf_ssl' => CdnTrafficSSLResourceDecorator::class,
             'cdn_traf_max' => CdnTrafficMaxResourceDecorator::class,
+            'vps_ip_regular' => VpsIpRegularResourceDecorator::class,
+            'vps_ip_public' => VpsIpPublicResourceDecorator::class,
+            'vps_ip_anycast' => VpsIpAnycastResourceDecorator::class,
         ];
     }
 }
