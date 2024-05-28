@@ -32,7 +32,7 @@ class Requisite extends Contact
     const TEMPLATE_PAYMENT_REQUEST = 'payment_request';
     const TEMPLATE_PURCHASE_INVOICE = 'purchase_invoice';
     const TEMPLATE_SERVICE_INVOICE = 'service_invoice';
-    const TEMPLATE_PURCHASE_PAYMENT_REQUEST = 'purchase_invoice';
+    const TEMPLATE_PURCHASE_PAYMENT_REQUEST = 'purchase_payment_request';
     const TEMPLATE_SERVICE_PAYMENT_REQUEST = 'service_payment_request';
 
     public static function tableName()
