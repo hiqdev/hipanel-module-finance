@@ -123,7 +123,7 @@ class Requisite extends Contact
             'acceptance_name' => Yii::t('hipanel:finance', 'Acceptance template'),
             'contract_name' => Yii::t('hipanel:finance', 'Contract template'),
             'probation_name' => Yii::t('hipanel:finance', 'Probation template'),
-            'payment_request_name' => Yii::t('hipanel:finance', 'Proforma template'),
+            'payment_request_name' => Yii::t('hipanel:finance', 'Payment request template'),
             'recipient_id' => Yii::t('hipanel:finance', 'Recipient'),
             'balance' => Yii::t('hipanel:finance', 'Balance'),
         ]);
