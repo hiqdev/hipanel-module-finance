@@ -14,7 +14,7 @@ namespace hipanel\modules\finance\models\decorators\target;
 use hipanel\modules\finance\models\decorators\server\AbstractServerResourceDecorator;
 use Yii;
 
-class VpsIpRegularResourceDecorator extends AbstractServerResourceDecorator
+class IpRegularResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {

@@ -78,9 +78,9 @@ final class ResourceUnitWidget extends Widget
             'account_traf' => $unitGroup['size'],
             'server_traf95_max' => $unitGroup['speed'],
             'power' => $unitGroup['power'],
-            'vps_ip_regular' => $unitGroup['items'],
-            'vps_ip_anycast' => $unitGroup['items'],
-            'vps_ip_public' => $unitGroup['items'],
+            'cloud_ip_regular' => $unitGroup['items'],
+            'cloud_ip_anycast' => $unitGroup['items'],
+            'cloud_ip_public' => $unitGroup['items'],
         ];
 
         return isset($resource[$this->resource->type]) ? $resource[$this->resource->type] : [];

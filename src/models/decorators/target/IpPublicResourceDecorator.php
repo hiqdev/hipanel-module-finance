@@ -13,10 +13,10 @@ namespace hipanel\modules\finance\models\decorators\target;
 
 use Yii;
 
-class VpsIpAnycastResourceDecorator extends VpsIpRegularResourceDecorator
+class IpPublicResourceDecorator extends IpRegularResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel.finance.resource', 'Anycast IP');
+        return Yii::t('hipanel.finance.resource', 'Public IP');
     }
 }

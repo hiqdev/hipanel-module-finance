@@ -33,9 +33,9 @@ class TargetResourceDecoratorFactory extends ServerResourceDecoratorFactory
             'vps_traf' => VpsTrafficResourceDecorator::class,
             'vps_traf_in' => VpsTrafficInResourceDecorator::class,
             'vps_traf_max' => VpsTrafficMaxResourceDecorator::class,
-            'vps_ip_regular' => VpsIpRegularResourceDecorator::class,
-            'vps_ip_public' => VpsIpPublicResourceDecorator::class,
-            'vps_ip_anycast' => VpsIpAnycastResourceDecorator::class,
+            'cloud_ip_regular' => IpRegularResourceDecorator::class,
+            'cloud_ip_public' => IpPublicResourceDecorator::class,
+            'cloud_ip_anycast' => IpAnycastResourceDecorator::class,
         ]);
     }
 }
