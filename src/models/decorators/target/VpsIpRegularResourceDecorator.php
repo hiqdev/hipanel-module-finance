@@ -21,11 +21,6 @@ class VpsIpRegularResourceDecorator extends AbstractServerResourceDecorator
         return Yii::t('hipanel.finance.resource', 'Regular IP');
     }
 
-    public function getOverusePrice()
-    {
-        return 4; // TODO: move to config
-    }
-
     public function displayUnit()
     {
         return Yii::t('hipanel', 'IP');
