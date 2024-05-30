@@ -38,17 +38,17 @@ class PurseGridView extends BoxedGridView
                 'class' => MonthlyDocumentsColumn::class,
                 'type' => 'purchase_invoice',
             ],
-            'proformaInvoices' => [
+            'payment_requestInvoices' => [
                 'class' => MonthlyDocumentsColumn::class,
-                'type' => 'proforma',
+                'type' => 'payment_request',
             ],
-            'serviceProformas' => [
+            'servicePaymentRequests' => [
                 'class' => MonthlyDocumentsColumn::class,
-                'type' => 'service_proforma',
+                'type' => 'service_payment_request',
             ],
-            'purchaseProformas' => [
+            'purchasePaymentRequests' => [
                 'class' => MonthlyDocumentsColumn::class,
-                'type' => 'purchase_proforma',
+                'type' => 'purchase_payment_request',
             ],
             'acceptances' => [
                 'class' => MonthlyDocumentsColumn::class,

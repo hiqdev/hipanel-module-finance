@@ -136,7 +136,7 @@ class RequisiteGridView extends ContactGridView
                 'filter' => false,
                 'value' => function (Requisite $model) {
                     $value = '';
-                    foreach (['invoice_last_no', 'sinvoice_last_no', 'pinvoice_last_no', 'proforma_last_no', 'sproforma_last_no', 'pproforma_last_no'] as $attr) {
+                    foreach (['invoice_last_no', 'sinvoice_last_no', 'pinvoice_last_no', 'payment_request_last_no', 'spayment_request_last_no', 'ppayment_request_last_no'] as $attr) {
                         if (empty($model->$attr)) {
                             continue;
                         }
