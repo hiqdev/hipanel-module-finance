@@ -11,6 +11,10 @@
 namespace hipanel\modules\finance\models\decorators\server;
 
 use hipanel\modules\finance\models\decorators\ResourceDecoratorFactory;
+use hipanel\modules\finance\models\decorators\target\CdnTrafficResourceDecorator;
+use hipanel\modules\finance\models\decorators\target\CdnTrafficPlainResourceDecorator;
+use hipanel\modules\finance\models\decorators\target\CdnTrafficSSLResourceDecorator;
+use hipanel\modules\finance\models\decorators\target\CdnTrafficMaxResourceDecorator;
 
 class ServerResourceDecoratorFactory extends ResourceDecoratorFactory
 {
@@ -45,6 +49,13 @@ class ServerResourceDecoratorFactory extends ResourceDecoratorFactory
             'monthly' => MonthlyResourceDecorator::class,
             'lb_capacity_unit' => LoadBalancerResourceDecorator::class,
             'lb_ha_capacity_unit' => HALoadBalancerResourceDecorator::class,
+            'cdn_traf' => CdnTrafficResourceDecorator::class,
+            'cdn_traf_plain' => CdnTrafficPlainResourceDecorator::class,
+            'cdn_traf_ssl' => CdnTrafficSSLResourceDecorator::class,
+            'cdn_traf_max' => CdnTrafficMaxResourceDecorator::class,
+            'cloud_ip_regular' => IpRegularResourceDecorator::class,
+            'cloud_ip_public' => IpPublicResourceDecorator::class,
+            'cloud_ip_anycast' => IpAnycastResourceDecorator::class,
         ];
     }
 }

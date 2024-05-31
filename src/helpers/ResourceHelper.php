@@ -29,6 +29,9 @@ class ResourceHelper
             $targetTypes[array_search('ip_num', $targetTypes, true)],
             $targetTypes[array_search('server_files', $targetTypes, true)],
             $targetTypes[array_search('power', $targetTypes, true)],
+            $targetTypes[array_search('cloud_ip_regular', $targetTypes, true)],
+            $targetTypes[array_search('cloud_ip_anycast', $targetTypes, true)],
+            $targetTypes[array_search('cloud_ip_public', $targetTypes, true)],
         );
         $convertibleTypes = array_merge([
             'backup_du',
