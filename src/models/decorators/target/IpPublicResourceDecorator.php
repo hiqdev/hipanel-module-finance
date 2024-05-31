@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
+declare(strict_types=1);
 
 namespace hipanel\modules\finance\models\decorators\target;
 
