@@ -21,8 +21,13 @@ class RackUnitQuantityTest extends TestCase
     /**
      * @dataProvider rackUnitQuantityDataProvider
      */
-    public function testFormat(string $time, float $quantity, ?int $billQuantity, string $expectedFormat, string $expectedClientValue): void
-    {
+    public function testFormat(
+        string $time,
+        float $quantity,
+        ?int $billQuantity,
+        string $expectedFormat,
+        string $expectedClientValue
+    ): void {
         $context = $this->createContext($time, $quantity, $billQuantity);
         $qty = Quantity::create('unit', $quantity);
 

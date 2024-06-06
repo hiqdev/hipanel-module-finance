@@ -31,8 +31,12 @@ class MoneyQuantityTest extends TestCase
     /**
      * @dataProvider moneyQuantityDataProvider
      */
-    public function testGetAmount(float $quantity, string $currency, string $expectedFormat, string $expectedAmount): void
-    {
+    public function testGetAmount(
+        float $quantity,
+        string $currency,
+        string $expectedFormat,
+        string $expectedAmount
+    ): void {
         $qty = Quantity::create($currency, $quantity);
         $moneyQuantity = new MoneyQuantity($qty, $this->intlFormatter);
 
@@ -44,8 +48,13 @@ class MoneyQuantityTest extends TestCase
     /**
      * @dataProvider moneyQuantityDataProvider
      */
-    public function testGetCurrency(float $quantity, string $currency, string $expectedFormat, string $expectedAmount, string $expectedCurrency): void
-    {
+    public function testGetCurrency(
+        float $quantity,
+        string $currency,
+        string $expectedFormat,
+        string $expectedAmount,
+        string $expectedCurrency
+    ): void {
         $qty = Quantity::create($currency, $quantity);
         $moneyQuantity = new MoneyQuantity($qty, $this->intlFormatter);
 
