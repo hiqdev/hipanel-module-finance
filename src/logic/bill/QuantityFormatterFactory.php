@@ -29,7 +29,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
      * @var array maps bill type to a QuantityFormatter
      * // TODO: use DI to configure
      */
-    private $types = [
+    private array $types = [
         'monthly'           => MonthlyQuantity::class,
 
         'monthly,rack_unit' => RackUnitQuantity::class,

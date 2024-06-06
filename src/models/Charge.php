@@ -33,7 +33,7 @@ use Yii;
  * @property TargetObject $latestCommonObject
  * @property Bill $bill
  */
-class Charge extends Resource implements HasSumAndCurrencyAttributesInterface, HasTimeAttributeInterface
+class Charge extends Resource implements HasSumAndCurrencyAttributesInterface, BillableTimeInterface
 {
     use \hipanel\base\ModelTrait;
 
@@ -124,5 +124,10 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface, H
     public function getTime(): ?string
     {
         return $this->time;
+    }
+
+    public function getBillQuantity(): ?int
+    {
+        return $this->bill_quantity;
     }
 }

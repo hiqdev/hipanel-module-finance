@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\tests\unit\logic\bill;
 
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactory;
+use hipanel\modules\finance\models\BillableTimeInterface;
 use hipanel\modules\finance\models\HasTimeAttributeInterface;
 use hipanel\modules\finance\tests\unit\TestCase;
 use hiqdev\php\units\Quantity;
@@ -17,17 +18,23 @@ class QuantityFormatterFactoryTest extends TestCase
      * @dataProvider createByTypeDataProvider
      * @param string $type
      * @param Quantity $qty
-     * @param string $expected
      * @param $context
+     * @param string $expected
+     * @param string $expectedClientValue
      * @return void
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface|InvalidConfigException|NotInstantiableException
      */
-    public function testCreateByType(string $type, Quantity $qty, string $expected, $context): void
-    {
+    public function testCreateByType(
+        string $type,
+        Quantity $qty,
+        $context,
+        string $expected,
+        string $expectedClientValue
+    ): void {
         $factory = $this->di()->get(QuantityFormatterFactory::class);
         $quantityFormatter = $factory->createByType($type, $qty, $context);
         $this->assertEquals($expected, $quantityFormatter->format());
-        $this->assertEquals($expected, $quantityFormatter->getClientValue());
+        $this->assertEquals($expectedClientValue, $quantityFormatter->getClientValue());
     }
 
     public function createByTypeDataProvider(): iterable
@@ -43,52 +50,86 @@ class QuantityFormatterFactoryTest extends TestCase
             }
         };
 
-        yield [
+        $billableTimeContext = new class implements BillableTimeInterface
+        {
+            public function getQuantity()
+            {
+                return 2;
+            }
+
+            public function getBillQuantity(): ?int
+            {
+                return 1;
+            }
+
+            public function getTime(): ?string
+            {
+                return date('Y-m-d H:i:s', strtotime('2024 January'));
+            }
+        };
+
+        yield 'other_deposit type with 1 item' => [
             'other_deposit',
             Quantity::create('items', 1),
-            $expected = '1 item',
             $context,
+            $expected = '1 item',
+            $expectedClientValue = '1',
         ];
-        yield [
+        yield 'other_deposit type with 2 items' => [
             'other_deposit',
             Quantity::create('items', 2),
-            $expected = '2 items',
             $context,
+            $expected = '2 items',
+            $expectedClientValue = '2',
         ];
-        yield [
+        yield 'other_deposit type with 3 unit' => [
             'other_deposit',
             Quantity::create('unit', 3),
-            $expected = '3 unit',
             $context,
+            $expected = '3 unit',
+            $expectedClientValue = '3',
         ];
-        yield [
+        yield 'monthly type with 6 hours' => [
             'monthly',
             Quantity::create('hour', 6),
-            $expected = '6 hours',
             $timeContext,
+            $expected = '6 hours',
+            $expectedClientValue = '186',
         ];
-        yield [
+        yield 'monthly type with 31 days' => [
             'monthly',
             Quantity::create('day', 1),
-            $expected = '31 days',
             $timeContext,
+            $expected = '31 days',
+            $expectedClientValue = '31',
         ];
-//        yield [
-//            'monthly,rack_unit',
-//            Quantity::create('hour', 10),
-//            $expected = '10 hour',
-//        ];
         yield [
+            'monthly,rack_unit',
+            Quantity::create('', 2),
+            $billableTimeContext,
+            $expected = '2 units &times; 31 days',
+            $expectedClientValue = '2',
+        ];
+        yield '10 IP addresses' => [
             'ip_num',
             Quantity::create('172.0.0.1', 10),
+            $context,
             $expected = '10 IP',
-            $context,
+            $expectedClientValue = '10',
         ];
-        yield [
+        yield 'support_time type with 10 quantity' => [
             'support_time',
-            Quantity::create('172.0.0.1', 10),
-            $expected = '10:00',
+            Quantity::create('', 10),
             $context,
+            $expected = '10:00',
+            $expectedClientValue = '10',
+        ];
+        yield 'drenewal type with 10 quantity' => [
+            'drenewal',
+            Quantity::create('', 12),
+            $context,
+            $expected = '12 years',
+            $expectedClientValue = '12',
         ];
     }
 }

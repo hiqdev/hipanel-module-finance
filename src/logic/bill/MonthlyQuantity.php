@@ -59,10 +59,6 @@ class MonthlyQuantity extends DefaultQuantityFormatter implements ContextAwareQu
         return date('t', strtotime($this->model->getTime()));
     }
 
-    /**
-     * @param $context
-     * @return ContextAwareQuantityFormatter
-     */
     public function setContext($context): ContextAwareQuantityFormatter
     {
         if (!$context instanceof HasTimeAttributeInterface) {

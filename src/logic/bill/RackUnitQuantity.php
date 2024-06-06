@@ -10,26 +10,25 @@
 
 namespace hipanel\modules\finance\logic\bill;
 
-use hipanel\modules\finance\models\Charge;
+use hipanel\modules\finance\models\BillableTimeInterface;
 use Yii;
 
 /**
- * Class MonthlyQuantity.
+ * Class RackUnitQuantity.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class RackUnitQuantity extends MonthlyQuantity
+class RackUnitQuantity extends DefaultQuantityFormatter implements ContextAwareQuantityFormatter
 {
-    /** @var Charge */
-    protected $model;
+    protected BillableTimeInterface $model;
 
     /**
      * {@inheritdoc}
      */
     public function format(): string
     {
-        $units = $this->model->quantity / ($this->model->bill_quantity ?: 1);
-        $quantity = round($this->model->bill_quantity * $this->getNumberOfDays());
+        $units = $this->model->getQuantity() / ($this->model->getBillQuantity() ?: 1);
+        $quantity = round($this->model->getBillQuantity() * $this->getNumberOfDays());
 
         return Yii::t('hipanel:finance',
             '{units, plural, one{# unit} other{# units}} &times; {quantity, plural, one{# day} other{# days}}',
@@ -47,5 +46,24 @@ class RackUnitQuantity extends MonthlyQuantity
     public function getClientValue(): string
     {
         return $this->getQuantity()->getQuantity();
+    }
+
+    private function getNumberOfDays(): string
+    {
+        return date('t', strtotime($this->model->getTime()));
+    }
+
+    public function setContext($context): ContextAwareQuantityFormatter
+    {
+        if (!$context instanceof BillableTimeInterface) {
+            throw new \OutOfBoundsException(sprintf(
+                'Context "%s" is not supported by Monthly quantity',
+                get_class($context)
+            ));
+        }
+
+        $this->model = $context;
+
+        return $this;
     }
 }
