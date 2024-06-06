@@ -57,7 +57,7 @@ class RackUnitQuantity extends DefaultQuantityFormatter implements ContextAwareQ
     {
         if (!$context instanceof BillableTimeInterface) {
             throw new \OutOfBoundsException(sprintf(
-                'Context "%s" is not supported by Monthly quantity',
+                'Context "%s" is not supported by RackUnitQuantity',
                 get_class($context)
             ));
         }
