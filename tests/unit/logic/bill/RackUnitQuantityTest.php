@@ -62,13 +62,6 @@ class RackUnitQuantityTest extends TestCase
                 'expectedFormat' => '3 units &times; 29 days',
                 'expectedClientValue' => '3',
             ],
-            /*'invalid context' => [
-                'time' => '2024-02-15',
-                'quantity' => 3.0,
-                'billQuantity' => 1,
-                'expectedFormat' => OutOfBoundsException::class,
-                'expectedClientValue' => OutOfBoundsException::class,
-            ],*/
         ];
     }
 
