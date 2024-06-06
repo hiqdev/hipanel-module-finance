@@ -10,10 +10,7 @@
 
 namespace hipanel\modules\finance\logic\bill;
 
-use hipanel\modules\finance\forms\BillForm;
-use hipanel\modules\finance\models\Bill;
-use hipanel\modules\finance\models\Charge;
-use hipanel\modules\server\models\Consumption;
+use hipanel\modules\finance\models\HasTimeAttributeInterface;
 use Yii;
 
 /**
@@ -23,8 +20,7 @@ use Yii;
  */
 class MonthlyQuantity extends DefaultQuantityFormatter implements ContextAwareQuantityFormatter
 {
-    /** @var Bill|Charge */
-    protected $model;
+    protected HasTimeAttributeInterface $model;
 
     /**
      * {@inheritdoc}
@@ -60,7 +56,7 @@ class MonthlyQuantity extends DefaultQuantityFormatter implements ContextAwareQu
      */
     protected function getNumberOfDays()
     {
-        return date('t', strtotime($this->model->time));
+        return date('t', strtotime($this->model->getTime()));
     }
 
     /**
@@ -69,7 +65,7 @@ class MonthlyQuantity extends DefaultQuantityFormatter implements ContextAwareQu
      */
     public function setContext($context): ContextAwareQuantityFormatter
     {
-        if (!$context instanceof Bill && !$context instanceof Charge && !$context instanceof BillForm && !$context instanceof Consumption) {
+        if (!$context instanceof HasTimeAttributeInterface) {
             throw new \OutOfBoundsException(sprintf(
                 'Context "%s" is not supported by Monthly quantity',
                 get_class($context)
