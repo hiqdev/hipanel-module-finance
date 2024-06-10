@@ -15,13 +15,14 @@ use hipanel\modules\finance\behaviors\BillQuantity;
 use hipanel\modules\finance\logic\bill\QuantityTrait;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
+use hipanel\modules\finance\models\HasTimeAttributeInterface;
 use hipanel\modules\finance\models\Purse;
 use hipanel\modules\finance\validation\BillChargesSumValidator;
 use Yii;
 use yii\base\Model;
 use yii\helpers\HtmlPurifier;
 
-class BillForm extends Model
+class BillForm extends Model implements HasTimeAttributeInterface
 {
     use QuantityTrait;
 
@@ -406,5 +407,10 @@ class BillForm extends Model
     public function afterSave()
     {
         return true;
+    }
+
+    public function getTime(): ?string
+    {
+        return $this->time;
     }
 }
