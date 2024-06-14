@@ -38,6 +38,24 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
+    <div class="form-group">
+        <?= DateRangePicker::widget([
+            'model' => $search->model,
+            'attribute' => 'time_from',
+            'attribute2' => 'time_till',
+            'clientOptions' => [
+                'showDropdowns' => true,
+            ],
+            'options' => [
+                'class' => 'form-control',
+                'placeholder' => Yii::t('hipanel', 'Time'),
+            ],
+            'dateFormat' => 'yyyy-MM-dd',
+        ]) ?>
+    </div>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field('currency_in')->widget(StaticCombo::class, [
         'data' => $currencies,
         'hasId' => true,
@@ -91,21 +109,6 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field('order_id')->widget(OrderCombo::class) ?>
-</div>
-
-<div class="col-md-4 col-sm-6 col-xs-12">
-    <div class="form-group">
-        <?= DateRangePicker::widget([
-            'model' => $search->model,
-            'attribute' => 'time_from',
-            'attribute2' => 'time_till',
-            'options' => [
-                'class' => 'form-control',
-                'placeholder' => Yii::t('hipanel', 'Time'),
-            ],
-            'dateFormat' => 'yyyy-MM-dd',
-        ]) ?>
-    </div>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
