@@ -47,7 +47,7 @@ final class ExportPlanPricesAction extends Action
         $this->formatter = AbstractExporter::applyExportFormatting();
 
         $format = Type::CSV; // TODO: Support other formats?
-        $exportJobKey = md5($this->controller->request->getAbsoluteUrl());
+        $exportJobKey = md5(implode('', [$this->controller->request->getAbsoluteUrl(), Yii::$app->user->id]));
         $this->exportJob = ExportJob::findOrNew($exportJobKey);
 
         $writer = $this->createWriter($format);
