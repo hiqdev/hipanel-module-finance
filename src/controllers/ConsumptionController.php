@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
-use hipanel\actions\RenderAction;
-use hipanel\actions\SearchAction;
 use hipanel\base\Controller;
 use hipanel\base\Module;
 use hipanel\filters\EasyAccessControl;
@@ -34,14 +32,14 @@ class ConsumptionController extends Controller
 
     public function behaviors()
     {
-        return [
+        return array_merge(parent::behaviors(), [
             [
                 'class' => EasyAccessControl::class,
                 'actions' => [
                     '*' => 'consumption.read',
                 ],
             ],
-        ];
+        ]);
     }
 
     public function actions()
@@ -50,15 +48,10 @@ class ConsumptionController extends Controller
             'index' => [
                 'class' => IndexAction::class,
                 'on beforePerform' => function (Event $event) {
-                    /** @var SearchAction $action */
+                    /** @var IndexAction $action */
                     $action = $event->sender;
                     $query = $action->getDataProvider()->query;
                     $query->joinWith('resources')->groupBy('month');
-                },
-                'data' => function (RenderAction $action, array $data): array {
-                    return array_merge($data, [
-                        'searchModel' => $action->parent->getSearchModel(),
-                    ]);
                 },
             ],
         ]);
