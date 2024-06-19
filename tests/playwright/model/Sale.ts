@@ -3,4 +3,5 @@ export default class Sale {
   public tariff: string;
   public column: string;
   public server: string;
+  public type: string;
 }
