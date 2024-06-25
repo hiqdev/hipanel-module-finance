@@ -29,7 +29,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
      * @var array maps bill type to a QuantityFormatter
      * // TODO: use DI to configure
      */
-    private $types = [
+    private array $types = [
         'monthly'           => MonthlyQuantity::class,
 
         'monthly,rack_unit' => RackUnitQuantity::class,
@@ -39,6 +39,9 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
         'referral'          => DefaultQuantityFormatter::class,
         'server_traf_max'   => DefaultQuantityFormatter::class,
         'vps_traf_max'      => DefaultQuantityFormatter::class,
+        'cloud_ip_regular'  => IPNumQuantity::class,
+        'cloud_ip_anycast'  => IPNumQuantity::class,
+        'cloud_ip_public'   => IPNumQuantity::class,
         'server_traf95_max' => DefaultQuantityFormatter::class,
         'cdn_traf_max'      => DefaultQuantityFormatter::class,
         'cdn_traf95_max'    => DefaultQuantityFormatter::class,
@@ -113,19 +116,17 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
             }
         }
 
+        $formatter = new DefaultQuantityFormatter($quantity, $this->intlFormatter);
         if (isset($this->types[$type])) {
             $className = $this->types[$type];
             /** @var QuantityFormatterInterface $formatter */
             $formatter = new $className($quantity, $this->intlFormatter);
-
-            if ($formatter instanceof ContextAwareQuantityFormatter) {
-                $formatter->setContext($context);
-            }
-
-            return $formatter;
         }
 
-        return null;
+        if ($formatter instanceof ContextAwareQuantityFormatter && $context) {
+            $formatter->setContext($context);
+        }
+        return $formatter;
     }
 
     private function fixType(string $type): ?string

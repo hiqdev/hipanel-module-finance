@@ -175,8 +175,8 @@ return [
                     ],
                     'vps' => [
                         'label' => ['hipanel:finance', 'VPS'],
-                        'columns' => ['vps_traf', 'vps_traf_in', 'vps_traf_max'],
-                        'groups' => [['vps_traf', 'vps_traf_in']],
+                        'columns' => ['vps_traf', 'vps_traf_in', 'vps_traf_max', 'cloud_ip_anycast', 'cloud_ip_public'],
+                        'groups' => [['vps_traf', 'vps_traf_in', 'cloud_ip_anycast', 'cloud_ip_public']],
                         'model' => Target::class,
                         'resourceModel' => TargetResource::class,
                     ],

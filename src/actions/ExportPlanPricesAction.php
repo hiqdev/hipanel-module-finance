@@ -12,7 +12,7 @@ use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
 use hiqdev\yii2\export\exporters\AbstractExporter;
-use hiqdev\yii2\export\models\SaveManager;
+use hiqdev\yii2\export\models\ExportJob;
 use Yii;
 use yii\base\Action;
 use yii\i18n\Formatter;
@@ -39,7 +39,7 @@ final class ExportPlanPricesAction extends Action
         'Price with formula',
     ];
 
-    private ?SaveManager $saver;
+    private ?ExportJob $exportJob;
     private Formatter $formatter;
 
     public function run(int $id)
@@ -47,7 +47,8 @@ final class ExportPlanPricesAction extends Action
         $this->formatter = AbstractExporter::applyExportFormatting();
 
         $format = Type::CSV; // TODO: Support other formats?
-        $this->saver = new SaveManager(md5($this->controller->request->getAbsoluteUrl()));
+        $exportJobKey = md5(implode('', [$this->controller->request->getAbsoluteUrl(), Yii::$app->user->id, time()]));
+        $this->exportJob = ExportJob::findOrNew($exportJobKey);
 
         $writer = $this->createWriter($format);
         $this->fillWriter($id, $writer);
@@ -55,18 +56,18 @@ final class ExportPlanPricesAction extends Action
 
         $filename = implode('.', ['report_' . time(), $format]);
 
-        return $this->controller->response->sendFile($this->saver->getFilePath(), $filename);
+        return $this->controller->response->sendFile($this->exportJob->getSaver()->getFilePath(), $filename);
     }
 
     public function __destruct()
     {
-        $this->saver?->delete();
+        $this->exportJob->delete();
     }
 
     private function createWriter(string $format): WriterInterface
     {
         $writer = WriterEntityFactory::createWriter($format);
-        $writer->openToFile($this->saver->getFilePath());
+        $writer->openToFile($this->exportJob->getSaver()->getFilePath());
 
         return $writer;
     }
