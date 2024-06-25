@@ -121,17 +121,17 @@ class Purse extends \hipanel\base\Model
 
     public function getPaymentRequestInvoices()
     {
-        return $this->getDocumentsOfType('proforma');
+        return $this->getDocumentsOfType('payment_request');
     }
 
     public function getPurchasePaymentRequests(): array
     {
-        return $this->getDocumentsOfType('purchase_proforma');
+        return $this->getDocumentsOfType('purchase_payment_request');
     }
 
     public function getServicePaymentRequests(): array
     {
-        return $this->getDocumentsOfType('service_proforma');
+        return $this->getDocumentsOfType('service_payment_request');
     }
 
     public function getDocumentsOfType($type): array
