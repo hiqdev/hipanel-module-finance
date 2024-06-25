@@ -11,6 +11,9 @@
 namespace hipanel\modules\finance\models\decorators\client;
 
 use hipanel\modules\finance\models\decorators\ResourceDecoratorFactory;
+use hipanel\modules\finance\models\decorators\target\IpPublicResourceDecorator;
+use hipanel\modules\finance\models\decorators\target\IpRegularResourceDecorator;
+use hipanel\modules\finance\models\decorators\target\IpAnycastResourceDecorator;
 
 class ClientResourceDecoratorFactory extends ResourceDecoratorFactory
 {
@@ -18,6 +21,12 @@ class ClientResourceDecoratorFactory extends ResourceDecoratorFactory
     {
         return [
             'referral' => ReferralResourceDecorator::class,
+            'cloud_ip_regular' => IpRegularResourceDecorator::class,
+            'cloud_ip_public' => IpPublicResourceDecorator::class,
+            'cloud_ip_anycast' => IpAnycastResourceDecorator::class,
+            'cloud_ip_regular_max' => IpRegularResourceDecorator::class,
+            'cloud_ip_public_max' => IpPublicResourceDecorator::class,
+            'cloud_ip_anycast_max' => IpAnycastResourceDecorator::class,
         ];
     }
 }
