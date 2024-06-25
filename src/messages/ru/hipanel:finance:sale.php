@@ -31,4 +31,6 @@ return [
     'Show all' => 'Показать все',
     'Upcoming close' => 'Скоро закроются',
     'Sale has been successfully created' => 'Продажа была успешно создана',
+    'Reduce charges after unsale' => 'Уменьшить начисления после отмены продажи',
+    'When checked, the previous client charges in the unsale month will be reduced proportionally to the usage time. When not checked, the charges will remain the same.' => 'Если отмечено, предыдущие клиентские начисления в месяце отмены продажи будут уменьшены пропорционально времени использования. Если снята, начисления останутся прежними.',
 ];

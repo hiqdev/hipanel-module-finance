@@ -51,6 +51,7 @@ $this->registerCss(/** @lang CSS */ "
                 <th><?= Yii::t('hipanel:finance:sale', 'Time') ?></th>
                 <?php if (Yii::$app->user->can('sale.update')) : ?>
                     <th><?= Yii::t('hipanel:finance:sale', 'Close time') ?></th>
+                    <th></th>
                     <th><?= Yii::t('hipanel', 'Ticket') ?></th>
                 <?php endif ?>
             </tr>
@@ -97,6 +98,14 @@ $this->registerCss(/** @lang CSS */ "
                             <?= $form->field($sale, "[$idx]unsale_time")
                                 ->textInput(['class' => 'form-control datetime'])
                                 ->label(false)
+                            ?>
+                        </td>
+                        <td>
+                            <?= $form->field($sale, "[$idx]reduce_charges_after_unsale")
+                                ->checkbox()
+                                ->label($sale->getAttributeLabel('reduce_charges_after_unsale'), [
+                                    'title' => Yii::t('hipanel:finance:sale', 'When checked, the previous client charges in the unsale month will be reduced proportionally to the usage time. When not checked, the charges will remain the same.'),
+                                ])
                             ?>
                         </td>
                         <td>

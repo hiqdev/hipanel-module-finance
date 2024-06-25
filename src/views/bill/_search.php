@@ -46,6 +46,15 @@ use yii\web\View;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('type_ids')->widget(BillTypeVueTreeSelect::class, [
+        'billTypes' => $billTypesList,
+        'multiple' => true,
+        'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
+        'behavior' => TreeSelectBehavior::Deprecated,
+    ]) ?>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
     <div class="form-group">
         <?= DateRangePicker::widget([
             'model' => $search->model,
@@ -63,14 +72,6 @@ use yii\web\View;
     </div>
 </div>
 
-<div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('type_ids')->widget(BillTypeVueTreeSelect::class, [
-        'billTypes' => $billTypesList,
-        'multiple' => true,
-        'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
-        'behavior' => TreeSelectBehavior::Deprecated,
-    ]) ?>
-</div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field('servers') ?>

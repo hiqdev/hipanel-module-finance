@@ -32,7 +32,7 @@ use yii\helpers\StringHelper;
  * @property mixed|null $currency
  * @property float|mixed|null $sum
  */
-class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInterface
+class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInterface, HasTimeAttributeInterface
 {
     use \hipanel\base\ModelTrait;
 
@@ -189,5 +189,10 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
     public static function find(): BillQuery
     {
         return new BillQuery(static::class);
+    }
+
+    public function getTime(): ?string
+    {
+        return $this->time;
     }
 }

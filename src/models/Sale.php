@@ -74,6 +74,7 @@ class Sale extends \hipanel\base\Model
                 'tariff_updated_at',
                 'reason',
             ], 'string'],
+            [['reduce_charges_after_unsale'], 'boolean'],
             [['object_type'], 'safe'],
             [['id'], 'required', 'on' => 'delete'],
             [['id', 'tariff_id', 'time'], 'required', 'on' => 'update'],
@@ -98,6 +99,7 @@ class Sale extends \hipanel\base\Model
             'tariff_id' => Yii::t('hipanel:finance', 'Tariff'),
             'tariff_type' => Yii::t('hipanel', 'Type'),
             'currency' => Yii::t('hipanel', 'Currency'),
+            'reduce_charges_after_unsale' => Yii::t('hipanel:finance:sale', 'Reduce charges after unsale'),
         ]);
     }
 

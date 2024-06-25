@@ -29,11 +29,11 @@ class Requisite extends Contact
     const TEMPLATE_CONTRACT = 'contract';
     const TEMPLATE_PROBATION = 'probation';
     const TEMPLATE_INTERNAL_INVOICE = 'internal_invoice';
-    const TEMPLATE_PROFORMA = 'proforma';
+    const TEMPLATE_PAYMENT_REQUEST = 'payment_request';
     const TEMPLATE_PURCHASE_INVOICE = 'purchase_invoice';
     const TEMPLATE_SERVICE_INVOICE = 'service_invoice';
-    const TEMPLATE_PURCHASE_PROFORMA = 'purchase_invoice';
-    const TEMPLATE_SERVICE_PROFORMA = 'service_proforma';
+    const TEMPLATE_PURCHASE_PAYMENT_REQUEST = 'purchase_payment_request';
+    const TEMPLATE_SERVICE_PAYMENT_REQUEST = 'service_payment_request';
 
     public static function tableName()
     {
@@ -123,7 +123,7 @@ class Requisite extends Contact
             'acceptance_name' => Yii::t('hipanel:finance', 'Acceptance template'),
             'contract_name' => Yii::t('hipanel:finance', 'Contract template'),
             'probation_name' => Yii::t('hipanel:finance', 'Probation template'),
-            'proforma_name' => Yii::t('hipanel:finance', 'Proforma template'),
+            'payment_request_name' => Yii::t('hipanel:finance', 'Payment request template'),
             'recipient_id' => Yii::t('hipanel:finance', 'Recipient'),
             'balance' => Yii::t('hipanel:finance', 'Balance'),
         ]);
@@ -137,7 +137,7 @@ class Requisite extends Contact
             self::TEMPLATE_CONTRACT => self::TEMPLATE_CONTRACT,
             self::TEMPLATE_PROBATION => self::TEMPLATE_PROBATION,
             self::TEMPLATE_INTERNAL_INVOICE => self::TEMPLATE_INTERNAL_INVOICE,
-            self::TEMPLATE_PROFORMA => self::TEMPLATE_PROFORMA,
+            self::TEMPLATE_PAYMENT_REQUEST => self::TEMPLATE_PAYMENT_REQUEST,
         ];
     }
 

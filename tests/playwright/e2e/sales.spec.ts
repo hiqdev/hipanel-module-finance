@@ -14,12 +14,14 @@ const sales: Array<Sale> = [
     tariff: "PlanForkerViaLegacyApiTest / Plan to be clonned@hipanel_test_reseller",
     column: "DC",
     server: "TEST-DS-01",
+    type: "Device",
   },
   {
     client: "hipanel_test_user2",
     tariff: "PlanForkerViaLegacyApiTest / Plan to be clonned@hipanel_test_reseller",
     column: "DC",
     server: "TEST-DS-02",
+    type: "Device",
   },
 ];
 
@@ -54,6 +56,7 @@ test(`Ensure I can edit several sales @hipanel-module-finance @seller`, async ({
 
   await saleHelper.gotoIndexSale();
   await saleHelper.filterByBuyer(sales[0].client);
+  await saleHelper.filterByType(sales[0].type);
   await indexPage.hasRowsOnTable(sales.length);
   await saleHelper.checkDataOnTable(sales);
 
@@ -71,6 +74,7 @@ test(`Ensure sale detail view is correct @hipanel-module-finance @seller`, async
 
   await saleHelper.gotoIndexSale();
   await saleHelper.filterByBuyer(sales[0].client);
+  await saleHelper.filterByType(sales[0].type);
   await saleHelper.filterByTariff(sales[0].tariff);
 
   await indexPage.clickColumnOnTable("Time", 1);
@@ -85,6 +89,7 @@ test(`Ensure I can delete several sales @hipanel-module-finance @seller`, async 
 
   await saleHelper.gotoIndexSale();
   await saleHelper.filterByBuyer(sales[0].client);
+  await saleHelper.filterByType(sales[0].type);
 
   await indexPage.chooseRangeOfRowsOnTable(1, 2);
   await saleHelper.deleteSales();

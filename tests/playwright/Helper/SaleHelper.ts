@@ -33,6 +33,12 @@ export default class SaleHelper {
         await this.page.goto(this.page.url() + '&sort=-time');
     }
 
+    async filterByType(type: string) {
+        await Select2.filterBy(this.page, 'Type').setValue(type);
+        await this.page.waitForLoadState('networkidle');
+        await this.page.goto(this.page.url() + '&sort=-time');
+    }
+
     async filterByObject(object: string) {
         await Input.filterBy(this.page, 'Inilike').setValue(object);
         await this.page.goto(this.page.url() + '&sort=-time');
