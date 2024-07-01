@@ -32,6 +32,9 @@ class ResourceHelper
             $targetTypes[array_search('cloud_ip_regular', $targetTypes, true)],
             $targetTypes[array_search('cloud_ip_anycast', $targetTypes, true)],
             $targetTypes[array_search('cloud_ip_public', $targetTypes, true)],
+            $targetTypes[array_search('cloud_ip_regular_max', $targetTypes, true)],
+            $targetTypes[array_search('cloud_ip_anycast_max', $targetTypes, true)],
+            $targetTypes[array_search('cloud_ip_public_max', $targetTypes, true)],
         );
         $convertibleTypes = array_merge([
             'backup_du',
