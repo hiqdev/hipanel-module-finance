@@ -1,9 +1,7 @@
 <?php
 
-use hipanel\modules\finance\grid\TargetGridView;
+use hipanel\modules\finance\grid\HistorySalesGridView;
 use hipanel\widgets\IndexPage;
-use yii\data\ArrayDataProvider;
-
 
 ?>
 
@@ -15,7 +13,7 @@ use yii\data\ArrayDataProvider;
 
 <?php $page->beginContent('table') ?>
     <?php $page->beginBulkForm() ?>
-        <?= TargetGridView::detailView([
+        <?= HistorySalesGridView::detailView([
             'boxed' => false,
             'model' => $target,
             'columns' => [
