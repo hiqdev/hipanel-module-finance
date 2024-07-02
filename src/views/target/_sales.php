@@ -1,9 +1,7 @@
 <?php
 
-use hipanel\modules\finance\grid\SaleGridView;
+use hipanel\modules\finance\grid\HistorySalesGridView;
 use hipanel\widgets\IndexPage;
-use yii\data\ArrayDataProvider;
-
 
 ?>
 
@@ -15,19 +13,13 @@ use yii\data\ArrayDataProvider;
 
 <?php $page->beginContent('table') ?>
     <?php $page->beginBulkForm() ?>
-        <?= SaleGridView::widget([
+        <?= HistorySalesGridView::detailView([
             'boxed' => false,
-            'dataProvider' => new ArrayDataProvider([
-                'allModels' => $target->sales,
-                'pagination' => [
-                    'pageSize' => 25,
-                ],
-            ]),
-            'tableOptions' => [
-                'class' => 'table table-striped table-bordered',
-            ],
+            'model' => $target,
             'columns' => [
-                'time', 'unsale_time', 'tariff'
+                'finished_sales',
+                'active_sales',
+                'future_sales',
             ],
         ]) ?>
     <?php $page->endBulkForm() ?>
