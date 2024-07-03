@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\grid\BoxedGridView;
 use hipanel\grid\RefColumn;
 use hipanel\modules\finance\grid\presenters\price\PricePresenter;
 use hipanel\modules\finance\grid\presenters\price\PricePresenterFactory;
@@ -20,16 +21,17 @@ use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\bootstrap\Html;
+use function get_class;
 
 /**
  * Class PriceGridView.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class PriceGridView extends \hipanel\grid\BoxedGridView
+class PriceGridView extends BoxedGridView
 {
     /**
-     * @var \hipanel\modules\finance\grid\presenters\price\PricePresenterFactory
+     * @var PricePresenterFactory
      */
     private $presenterFactory;
 
@@ -53,19 +55,18 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
             'price' => [
                 'label' => Yii::t('hipanel.finance.price', 'Price'),
                 'format' => 'raw',
-                'value' => function (Price $model) {
-                    return $this->presenterFactory->build(\get_class($model))->renderPrice($model);
-                },
+                'value' => fn(Price $model) => $this->presenterFactory->build($model::class)->renderPrice($model),
             ],
             'old_price' => [
                 'label' => Yii::t('hipanel.finance.price', 'Old price'),
                 'format' => 'raw',
                 'value' => function (Price $model): string {
                     /** @var PricePresenter $presenter */
-                    $presenter = $this->presenterFactory->build(\get_class($model));
+                    $presenter = $this->presenterFactory->build(get_class($model));
+
                     return $presenter
-                            ->setPriceAttribute('old_price')
-                            ->renderPrice($model);
+                        ->setPriceAttribute('old_price')
+                        ->renderPrice($model);
                 },
             ],
             'object->name_clear' => [
@@ -147,14 +148,14 @@ class PriceGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'raw',
                 'label' => Yii::t('hipanel', 'Details'),
                 'value' => function (Price $model) {
-                    return $this->presenterFactory->build(\get_class($model))->renderInfo($model);
+                    return $this->presenterFactory->build(get_class($model))->renderInfo($model);
                 },
             ],
             'old_quantity' => [
                 'format' => 'raw',
                 'label' => Yii::t('hipanel.finance.price', 'Old quantity'),
                 'value' => function (Price $model) {
-                    return $this->presenterFactory->build(\get_class($model))->renderInfo($model, 'old_quantity');
+                    return $this->presenterFactory->build(get_class($model))->renderInfo($model, 'old_quantity');
                 },
             ],
             'value' => [

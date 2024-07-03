@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -64,11 +64,16 @@ class Price extends Model
 
             [['plan_id', 'type', 'price', 'currency'], 'required', 'on' => ['create', 'update']],
             [['id'], 'required', 'on' => ['update', 'set-note', 'delete']],
-            [['class'], 'default', 'value' => function ($model) {
-                return (new \ReflectionClass($this))->getShortName();
-            }],
+            [
+                ['class'],
+                'default',
+                'value' => function () {
+                    return (new \ReflectionClass($this))->getShortName();
+                },
+            ],
             [['class'], 'string'],
             [['formula'], 'string', 'on' => ['create', 'update']], // TODO syn check
+            [['thresholds'], 'safe'],
         ]);
     }
 
@@ -104,40 +109,40 @@ class Price extends Model
     public function getUnitOptions()
     {
         $unitGroup = [
-            'hour'  => ['hour'],
+            'hour' => ['hour'],
             'items' => ['items'],
             'speed' => ['bps', 'kbps', 'mbps', 'gbps', 'tbps'],
-            'size'  => ['mb', 'mb10', 'mb100', 'gb', 'tb'],
+            'size' => ['mb', 'mb10', 'mb100', 'gb', 'tb'],
             'power' => ['w', 'kw'],
         ];
 
         $type2group = [
-            'overuse,ip_num'                    => 'items',
-            'overuse,support_time'              => 'hour',
-            'overuse,backup_du'                 => 'size',
-            'overuse,server_traf_max'           => 'size',
-            'overuse,server_traf95_max'         => 'speed',
-            'overuse,cdn_traf_max'              => 'size',
-            'overuse,cdn_traf95_max'            => 'speed',
-            'overuse,cdn_cache95'               => 'size',
-            'overuse,server_du'                 => 'size',
-            'overuse,server_ssd'                => 'size',
-            'overuse,server_sata'               => 'size',
-            'overuse,backup_traf'               => 'size',
-            'overuse,domain_traf'               => 'size',
-            'overuse,domain_num'                => 'items',
-            'overuse,ip_traf_max'               => 'size',
-            'overuse,account_traf'              => 'size',
-            'overuse,account_du'                => 'size',
-            'overuse,mail_num'                  => 'items',
-            'overuse,mail_du'                   => 'size',
-            'overuse,db_num'                    => 'items',
-            'overuse,storage_du95'              => 'size',
-            'overuse,volume_du'                 => 'size',
-            'overuse,snapshot_du'               => 'size',
-            'overuse,private_cloud_backup_du'   => 'size',
-            'overuse,vps_traf_max'              => 'size',
-            'overuse,power'                     => 'power',
+            'overuse,ip_num' => 'items',
+            'overuse,support_time' => 'hour',
+            'overuse,backup_du' => 'size',
+            'overuse,server_traf_max' => 'size',
+            'overuse,server_traf95_max' => 'speed',
+            'overuse,cdn_traf_max' => 'size',
+            'overuse,cdn_traf95_max' => 'speed',
+            'overuse,cdn_cache95' => 'size',
+            'overuse,server_du' => 'size',
+            'overuse,server_ssd' => 'size',
+            'overuse,server_sata' => 'size',
+            'overuse,backup_traf' => 'size',
+            'overuse,domain_traf' => 'size',
+            'overuse,domain_num' => 'items',
+            'overuse,ip_traf_max' => 'size',
+            'overuse,account_traf' => 'size',
+            'overuse,account_du' => 'size',
+            'overuse,mail_num' => 'items',
+            'overuse,mail_du' => 'size',
+            'overuse,db_num' => 'items',
+            'overuse,storage_du95' => 'size',
+            'overuse,volume_du' => 'size',
+            'overuse,snapshot_du' => 'size',
+            'overuse,private_cloud_backup_du' => 'size',
+            'overuse,vps_traf_max' => 'size',
+            'overuse,power' => 'power',
         ];
 
         foreach ($type2group as $type => $group) {
@@ -150,7 +155,7 @@ class Price extends Model
             'mapOptions' => ['from' => 'oname'],
         ]);
 
-        $possibleTypes = $availableUnitsByPriceType[$this->type] ?? [];
+        $possibleTypes = $availableUnitsByPriceType[$this->type] ?? [$this->unit] ?? [];
 
         return array_intersect_key($units, array_combine($possibleTypes, $possibleTypes));
     }
@@ -179,9 +184,11 @@ class Price extends Model
         return $this->object_id === null;
     }
 
-    public function getUnitLabel()
+    public function getUnitLabel(): ?string
     {
-        return $this->getUnitOptions()[$this->unit] ?? null;
+        $unitOptions = $this->getUnitOptions();
+
+        return $unitOptions[$this->unit] ?? null;
     }
 
     public function getCurrencyOptions()
@@ -258,5 +265,39 @@ class Price extends Model
         return new PriceQuery(get_called_class(), [
             'options' => $options,
         ]);
+    }
+
+    public function isRate(): bool
+    {
+        return static::class === RatePrice::class || str_starts_with($this->type, Plan::TYPE_REFERRAL);
+    }
+
+    public function isProgressive(): bool
+    {
+        return str_contains($this->type, 'overuse,');
+    }
+
+    public function getThresholds(): array
+    {
+        $thresholds = [];
+        if (!empty($this->thresholds)) {
+            foreach ($this->thresholds as $row) {
+                $threshold = new Threshold($row);
+                $threshold->setParent($this);
+                $thresholds[] = $threshold;
+            }
+        }
+
+        return empty($thresholds) ? [new Threshold()] : $thresholds;
+    }
+
+    public function loadProgressiveData(array $data): void
+    {
+        $this->setAttribute('class', 'ProgressivePrice');
+        foreach ($data as $key => $value) {
+            $data[$key]['unit'] = $this->unit;
+            $data[$key]['currency'] = $this->currency;
+        }
+        $this->thresholds = $data;
     }
 }

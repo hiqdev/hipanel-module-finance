@@ -48,6 +48,7 @@ class PlanDetailMenu extends \hipanel\menus\AbstractDetailMenu
                         'confirm' => Yii::t('hipanel', 'Are you sure you want to delete this item?'),
                         'method' => 'POST',
                         'pjax' => '0',
+                        'testid' => 'delete',
                     ],
                 ],
                 'visible' => \count($this->model->sales) === 0 && !$this->model->isDeleted() && Yii::$app->user->can('plan.delete'),

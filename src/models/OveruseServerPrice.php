@@ -1,22 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace hipanel\modules\finance\models;
 
 use hipanel\base\ModelTrait;
 use Yii;
 
-class OveruseServerPrice extends Price
+class OveruseServerPrice extends ProgressivePrice
 {
     use ModelTrait;
 
-    public static function tableName()
-    {
-        return 'price';
-    }
-
-    /**
-     * @return array
-     */
     public function rules(): array
     {
         $rules = parent::rules();
@@ -25,9 +17,6 @@ class OveruseServerPrice extends Price
         return $rules;
     }
 
-    /**
-     * @return array
-     */
     public function attributeLabels(): array
     {
         return array_merge(parent::attributeLabels(), [
@@ -35,10 +24,9 @@ class OveruseServerPrice extends Price
         ]);
     }
 
-    /** {@inheritdoc} */
-    public function isServer95Traf()
+    public function isServer95Traf(): bool
     {
-        return strpos($this->type, 'overuse,server_traf95_max') === 0;
+        return str_starts_with($this->type, 'overuse,server_traf95_max');
     }
 
 }
