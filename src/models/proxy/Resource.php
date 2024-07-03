@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace hipanel\modules\finance\models\proxy;
 
@@ -115,7 +115,7 @@ class Resource extends Model implements DecoratedInterface
 
     private function getLastTypes(): array
     {
-        return ['server_traf95_in', 'server_traf95_max', 'server_traf95', 'ip_num', 'server_files'];
+        return ['server_traf95_in', 'server_traf95_max', 'server_traf95', 'ip_num', 'server_files', 'volume_du'];
     }
 
     public function decorator(): ResourceDecoratorInterface
