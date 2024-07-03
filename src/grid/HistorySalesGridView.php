@@ -8,6 +8,7 @@ use hipanel\components\User;
 use hipanel\grid\BoxedGridView;
 use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\models\Target;
+use hipanel\modules\server\models\Server;
 use Yii;
 use yii\helpers\Html;
 
@@ -74,7 +75,7 @@ class HistorySalesGridView extends BoxedGridView
         ]);
     }
 
-    protected function getActiveSales(Target $model)
+    protected function getActiveSales(Server|Target $model)
     {
         $sales = $this->getAndFilterServerSalesByVisibility($model);
 
@@ -91,7 +92,7 @@ class HistorySalesGridView extends BoxedGridView
         return $data ?? [];
     }
 
-    protected function getHistoricalSales(Target $model)
+    protected function getHistoricalSales(Server|Target $model)
     {
         $sales = $this->getAndFilterServerSalesByVisibility($model);
 
@@ -108,7 +109,7 @@ class HistorySalesGridView extends BoxedGridView
         return $data ?? [];
     }
 
-    protected function getFutureSales(Target $model)
+    protected function getFutureSales(Server|Target $model)
     {
         $sales = $this->getAndFilterServerSalesByVisibility($model);
 
@@ -125,7 +126,7 @@ class HistorySalesGridView extends BoxedGridView
         return $data ?? [];
     }
 
-    protected function getAndFilterServerSalesByVisibility(Target $model): array
+    protected function getAndFilterServerSalesByVisibility(Server|Target $model): array
     {
         $models = $this->getModelWithUserPermission($model);
 
@@ -199,7 +200,7 @@ class HistorySalesGridView extends BoxedGridView
         return $result;
     }
 
-    protected function getModelWithUserPermission(Target $model)
+    protected function getModelWithUserPermission(Server|Target $model)
     {
         $models = [];
         if ($this->user->can('sale.read') && !empty($model->sales)) {
