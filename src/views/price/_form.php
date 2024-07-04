@@ -10,11 +10,16 @@ use hipanel\widgets\DynamicFormWidget;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
-/** @var yii\web\View $this */
-/** @var Price[] $models */
-/** @var Price $model */
-/** @var Plan|null $plan */
-/** @var string $type */
+/**
+ * @var yii\web\View $this
+ * @var Price[] $models
+ * @var Price $model
+ * @var Plan|null $plan
+ * @var string $type
+ * @var array $currencyTypes
+ */
+
+$currencyTypes = $this->context->getCurrencyTypes();
 
 ?>
 
@@ -54,9 +59,9 @@ use yii\helpers\Html;
                 <?= Html::activeHiddenInput($model, "[$i]plan_id", ['ref' => 'plan_id']) ?>
                 <div class="row input-row">
                     <?php if ($model instanceof TemplatePrice): ?>
-                        <?= $this->render('formRow/template', compact('plan', 'model', 'form', 'i')) ?>
+                        <?= $this->render('formRow/template', compact('plan', 'model', 'form', 'i', 'currencyTypes')) ?>
                     <?php else: ?>
-                        <?= $this->render('formRow/simple', compact('plan', 'model', 'form', 'i')) ?>
+                        <?= $this->render('formRow/simple', compact('plan', 'model', 'form', 'i', 'currencyTypes')) ?>
                     <?php endif ?>
                 </div>
             </div>

@@ -1,6 +1,9 @@
 <?php
 
-/** @var Plan|null $plan */
+/**
+ * @var Plan|null $plan
+ * @var array $currencyTypes
+ */
 
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\widgets\ChangeFormulaButton;
@@ -22,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
     <div class="box-body">
-        <?= $this->render('_form', ['models' => $models ?? [], 'model' => $model ?? null, 'plan' => $plan ?? null]) ?>
+        <?= $this->render('_form',
+            ['models' => $models ?? [], 'model' => $model ?? null, 'plan' => $plan ?? null]) ?>
     </div>
 </div>
