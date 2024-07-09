@@ -1,11 +1,8 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace hipanel\modules\finance\actions;
 
 use Exception;
-use hipanel\hiart\hiapi\Connection;
 use hipanel\hiart\hiapi\HiapiConnectionInterface;
 use hipanel\modules\finance\forms\TargetManagementForm;
 use hipanel\modules\finance\models\Target;
@@ -13,23 +10,23 @@ use RuntimeException;
 use Yii;
 use yii\base\Action;
 use yii\web\Controller;
-use yii\web\Request;
+use yii\base\Request;
 use yii\web\Session;
 
 final class TargetManagementAction extends Action
 {
-    private Session $session;
-
     private Request $request;
 
-    private Connection $api;
-
-    public function __construct($id, Controller $controller, Session $session, HiapiConnectionInterface $api, array $config = [])
+    public function __construct(
+        $id,
+        Controller $controller,
+        private Session $session,
+        private HiapiConnectionInterface $api,
+        array $config = []
+    )
     {
         parent::__construct($id, $controller, $config);
-        $this->session = $session;
         $this->request = $this->controller->request;
-        $this->api = $api;
     }
 
     public function run()

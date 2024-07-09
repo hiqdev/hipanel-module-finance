@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace hipanel\modules\finance\forms;
 
@@ -22,10 +21,10 @@ final class TargetManagementForm extends Target
         return 'target';
     }
 
-    public function fillFromTarget(Target $target): void
+    public function fillFromTarget(?Target $target): void
     {
         if ($target === null) {
-            return ;
+            return;
         }
         $this->setAttribute('remoteid', $target->id);
         $this->setAttribute('target_id', $target->id);
