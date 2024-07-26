@@ -397,27 +397,6 @@ class PlanController extends CrudController
         }
     }
 
-//    public function actionLinkParent(int $id): Response | string
-//    {
-//        $request = Yii::$app->request;
-//        $session = Yii::$app->session;
-//        $fork = Plan::perform('fork', ['id' => $id]);
-//        $plan = new Plan(['id' => $id, 'scenario' => 'link-parent-plan']);
-//        if ($request->isAjax) {
-//            return $this->renderAjax('modals/link-parent-plan');
-//        }
-//        if ($plan->load($request->post()) && $plan->validate()) {
-//            try {
-//                Plan::batchPerform('set-tariffs', [$id => $plan->attributes]);
-//                $session->addFlash('success', Yii::t('hipanel:finance', 'Parent plan have been successfully changed'));
-//            } catch (RuntimeException $e) {
-//                $session->addFlash('error', $e->getMessage());
-//            }
-//        }
-//
-//        return $this->redirect(['@plan/view', 'id' => $id]);
-//    }
-
     /**
      * @param int|null $plan_id
      * @return Price[]|null Array of parent plan prices or `null`, when parent plan was not found

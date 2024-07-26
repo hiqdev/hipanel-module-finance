@@ -20,11 +20,10 @@ class LinkParentPlanAction extends Action
         $parentId = $this->controller->request->post('Plan')['id'] ?? NULL;
         if (!is_null($parentId)) {
             try {
-                $result = Plan::perform('link-parent', [
+                Plan::perform('link-parent', [
                     'id' => $id,
                     'parent_id' => $parentId,
                 ]);
-                $result = $result;
             } catch (Exception $e) {
                 throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
             }
