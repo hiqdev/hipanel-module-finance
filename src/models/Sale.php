@@ -73,6 +73,7 @@ class Sale extends \hipanel\base\Model
                 'tariff_created_at',
                 'tariff_updated_at',
                 'reason',
+                'fee',
             ], 'string'],
             [['reduce_charges_after_unsale'], 'boolean'],
             [['object_type'], 'safe'],
