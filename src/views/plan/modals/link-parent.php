@@ -1,8 +1,13 @@
 <?php
 
-use hipanel\modules\finance\widgets\combo\PlanCombo;
+use hipanel\modules\finance\models\Plan;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+
+/**
+ * @var Plan $model
+ * @var array $parentData
+ */
 
 ?>
 
