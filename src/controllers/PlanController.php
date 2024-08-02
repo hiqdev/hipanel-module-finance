@@ -37,7 +37,6 @@ use hipanel\modules\finance\models\query\PlanQuery;
 use hipanel\modules\finance\models\SaleSearch;
 use hipanel\modules\finance\models\TargetObject;
 use hiqdev\hiart\ResponseErrorException;
-use RuntimeException;
 use Yii;
 use yii\base\Event;
 use yii\base\Module;

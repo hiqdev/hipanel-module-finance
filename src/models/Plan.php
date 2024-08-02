@@ -237,8 +237,7 @@ class Plan extends Model
 
     public function getParent()
     {
-        return $this->hasOne(self::class, ['id' => 'parent_id'])
-                    ->from(self::tableName() . ' AS parent');
+        return $this->hasOne(self::class, ['id' => 'parent_id']);
     }
 
     public function hasParent(): bool

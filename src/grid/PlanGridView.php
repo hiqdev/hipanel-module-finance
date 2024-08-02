@@ -114,7 +114,7 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                 'format' => 'raw',
                 'value' => function (Plan $model): string {
                     if ($model->hasParent()) {
-                        return str_replace('&nbsp;', '', strip_tags($model->parent->name));
+                        return Html::encode($model->parent->name);
                     }
                     return '';
                 },
