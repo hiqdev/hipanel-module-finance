@@ -109,6 +109,22 @@ class PurseController extends \hipanel\base\CrudController
                     Costprice::perform('recalculate', $params);
                 },
             ],
+            'generate-excel' => [
+                'class' => RunProcessAction::class,
+                'onRunProcess' => function (RunProcessAction $action) {
+                    $request = $action->controller->request;
+                    $params = $request->post();
+                    if (!empty($params['type'])) {
+                        $params['month'] = (!empty($params['month'])) ? $params['month'] : date('Y-m-01');
+                        $result = Costprice::perform('generate', $params);
+                        return $this->response->sendContentAsFile(
+                            $result,
+                            $params['type'] . $params['month'],
+                            ['inline' => true, 'mimeType' => 'application/vnd.ms-excel']
+                        );
+                    }
+                },
+            ],
             'generation-perform' => [
                 'class' => RunProcessAction::class,
                 'onRunProcess' => function (RunProcessAction $action) {
@@ -155,6 +171,15 @@ class PurseController extends \hipanel\base\CrudController
         return $this->render('calculate-costprice', [
             'model' => $model,
             'statistic' => $statistic,
+        ]);
+    }
+
+    public function actionCostpriceExcelReport(): string
+    {
+        $model = new Costprice();
+
+        return $this->render('costprice-excel-reports', [
+            'model' => $model,
         ]);
     }
 
