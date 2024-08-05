@@ -31,7 +31,7 @@ class LinkParentPlanAction extends Action
         $client = Client::findOne(['id' => $client_id]);
         $model = Plan::findOne($id);
         $parentPlans = Plan::find()
-            ->where(['client_id' => $client->getSellerId(), 'type' => $type])
+            ->where(['client_id' => $client->account_owner_id, 'type' => $type])
             ->limit(-1)
             ->all();
         $parentPlansData = [];

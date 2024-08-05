@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\forms;
 
 use hipanel\base\ModelTrait;
 use hipanel\hiart\hiapi\Connection;
+use hipanel\modules\finance\enums\TargetScenario;
 use hipanel\modules\finance\models\Target;
 use hiqdev\hiart\ResponseInterface;
 use Yii;
@@ -11,10 +12,6 @@ use Yii;
 final class TargetManagementForm extends Target
 {
     use ModelTrait;
-
-    public const SCENARIO_CHANGE_PLAN = 'change-plan';
-    public const SCENARIO_CLOSE_SALE = 'close-sale';
-    public const SCENARIO_SALE = 'sale';
 
     public static function tableName()
     {
@@ -37,9 +34,12 @@ final class TargetManagementForm extends Target
     public function rules()
     {
         return [
-            [['remoteid', 'type', 'name', 'plan_id', 'time', 'customer_id'], 'required', 'on' => 'change-plan'],
-            [['target_id', 'plan_id', 'time', 'customer_id'], 'required', 'on' => 'close-sale'],
-            [['remoteid', 'type', 'name', 'plan_id', 'time', 'customer_id'], 'required', 'on' => 'sale'],
+            [['remoteid', 'type', 'name', 'plan_id', 'time', 'customer_id'], 'required', 'on' => TargetScenario::CHANGE_PLAN->value],
+            [['target_id', 'plan_id', 'time', 'customer_id'], 'required', 'on' => TargetScenario::CLOSE_SALE->value],
+            [['remoteid', 'type', 'name', 'plan_id', 'time', 'customer_id'], 'required', 'on' => TargetScenario::SALE->value],
+            [['remoteid', 'target_id', 'plan_id', 'customer_id'], 'integer'],
+            [['name', 'type'], 'string'],
+            [['remoteid', 'target_id'], 'safe'],
             [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
         ];
     }
@@ -55,12 +55,13 @@ final class TargetManagementForm extends Target
 
     public function submit(Connection $api): ResponseInterface
     {
-        $actionsMap = [
-            self::SCENARIO_CHANGE_PLAN => 'api/v1/target/sale',
-            self::SCENARIO_CLOSE_SALE => 'api/v1/sale/close',
-            self::SCENARIO_SALE => 'api/v1/target',
-        ];
+        $endpoint = match (TargetScenario::from($this->scenario)) {
+            TargetScenario::CHANGE_PLAN => 'api/v1/target/sale',
+            TargetScenario::CLOSE_SALE => 'api/v1/sale/close',
+            TargetScenario::SALE => 'api/v1/target',
+            default => throw new \InvalidArgumentException("Invalid scenario: $this->scenario"),
+        };
 
-        return $api->post($actionsMap[$this->scenario], [], $this->attributes);
+        return $api->post($endpoint, [], $this->attributes);
     }
 }
