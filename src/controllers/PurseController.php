@@ -121,7 +121,7 @@ class PurseController extends \hipanel\base\CrudController
                         'type' => $type,
                         'client_types' => $type === 'acceptance' ? 'employee' : null,
                     ]);
-                },
+                }
             ],
             'generation-progress' => [
                 'class' => ProgressAction::class,

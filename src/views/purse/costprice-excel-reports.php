@@ -10,7 +10,7 @@ use hipanel\widgets\DateTimePicker;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
-$this->title = Yii::t('hipanel:finance', 'Calculate costprice');
+$this->title = Yii::t('hipanel:finance', 'Costprice excel reports');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
