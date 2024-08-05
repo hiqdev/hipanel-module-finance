@@ -23,6 +23,7 @@ use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\actions\ExportPlanPricesAction;
+use hipanel\modules\finance\actions\LinkParentPlanAction;
 use hipanel\modules\finance\collections\PricesCollection;
 use hipanel\modules\finance\grid\PriceGridView;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
@@ -80,6 +81,7 @@ class PlanController extends CrudController
                     '*' => 'plan.read',
                     'plan-fork' => 'plan.create',
                     'export-prices' => 'plan.update',
+                    'link-parent' => 'plan.update',
                 ],
             ],
         ]);
@@ -159,6 +161,11 @@ class PlanController extends CrudController
             'export-prices' => [
                 'class' => ExportPlanPricesAction::class,
             ],
+            'link-parent' => [
+                'class' => LinkParentPlanAction::class,
+                'view' => 'modals/link-parent',
+                'success' => Yii::t('hipanel.finance.plan', 'Parent plan was successfully linked'),
+            ]
         ]);
     }
 

@@ -110,6 +110,15 @@ class PlanGridView extends \hipanel\grid\BoxedGridView
                     ],  
                 ]),
             ],
+            'parent_plan' => [
+                'format' => 'raw',
+                'value' => function (Plan $model): string {
+                    if ($model->hasParent()) {
+                        return Html::encode($model->parent->name);
+                    }
+                    return '';
+                },
+            ],
         ]);
     }
 
