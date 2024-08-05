@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\controllers;
 
 use advancedhosters\hipanel\modules\costprice\models\Costprice;
+use Exception;
 use hipanel\actions\IndexAction;
 use hipanel\actions\ProgressAction;
 use hipanel\actions\RedirectAction;
@@ -28,6 +29,7 @@ use hipanel\modules\finance\models\Purse;
 use hipanel\modules\finance\widgets\ProcessTableGenerator;
 use hipanel\modules\finance\widgets\StatisticTableGenerator;
 use hiqdev\hiart\ResponseErrorException;
+use RuntimeException;
 use Yii;
 use yii\base\Event;
 use yii\helpers\Html;
@@ -161,11 +163,16 @@ class PurseController extends \hipanel\base\CrudController
     public function actionCostpriceExcelReport(): string
     {
         $model = new Costprice();
-        $params = $this->request->post();
-        if (!empty($params['Costprice'])) {
-            $params = $params['Costprice'];
+        $params = $this->request->post('Costprice', []);
+        if (!empty($params)) {
             $params['month'] = (!empty($params['month'])) ? $params['month'] : date('Y-m-01');
-            $content =  Costprice::perform('generate', $params);
+            $session = Yii::$app->session;
+            try {
+                $content = Costprice::perform('generate', $params);
+            } catch (Exception $e) {
+                $session->addFlash('error', Yii::t('hipanel:finance', 'Failed to generate the report'));
+                throw new RuntimeException(Yii::t('hipanel:finance', 'Failed to generate the report:' . $e->getMessage()));
+            }
             $this->response->sendContentAsFile(
                 $content,
                 $params['type'] . $params['month'] . '.xlsx',

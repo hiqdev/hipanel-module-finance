@@ -319,4 +319,5 @@ return [
     'Finance tools' => 'Финансовые инструменты',
     'Process' => 'Процесс',
     'Last numbers' => 'Последние номера',
+    'Failed to generate the report' => 'Ошибка генерации отчета'
 ];
