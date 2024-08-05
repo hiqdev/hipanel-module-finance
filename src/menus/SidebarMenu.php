@@ -68,6 +68,11 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                                 'url' => ['/finance/purse/calculate-costprice'],
                                 'visible' => $user->can('costprice.read'),
                             ],
+                            'costprice-excel-report' => [
+                                'label' => Yii::t('hipanel:finance', 'Costprice excel reports'),
+                                'url' => ['/finance/purse/costprice-excel-report'],
+                                'visible' => $user->can('costprice.read'),
+                            ],
                         ],
                         'visible' => $user->can('document.generate-all') || $user->can('costprice.read') || $user->can('pnl.read'),
                     ],

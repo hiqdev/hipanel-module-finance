@@ -314,7 +314,10 @@ return [
     'HW' => 'Оборудование',
     'Salaries' => 'Зарплата',
     'Calculate costprice' => 'Расчитать costprice',
+    'Costprice excel reports' => 'Costprice excel отчеты',
+    'Load report' => 'Загрузить отчет',
     'Finance tools' => 'Финансовые инструменты',
     'Process' => 'Процесс',
     'Last numbers' => 'Последние номера',
+    'Failed to generate the report' => 'Ошибка генерации отчета'
 ];
