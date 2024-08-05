@@ -8,47 +8,10 @@
 use hipanel\modules\finance\models\Costprice;
 use hipanel\widgets\DateTimePicker;
 use yii\bootstrap\ActiveForm;
-use yii\helpers\Url;
-use yii\web\View;
+use yii\helpers\Html;
 
 $this->title = Yii::t('hipanel:finance', 'Calculate costprice');
 $this->params['breadcrumbs'][] = $this->title;
-$generateUrl = Url::to(['@purse/generate-excel']);
-$this->registerJs(/* @lang JavaScript */ <<<JS
-        (() => {
-          const loading = $(".costprice-box .loading");
-          const runProgress = () => {
-            hipanel.progress("$generateUrl").onMessage((event) => {
-              $(".costprice-box .box-body").html(event.data);
-            });
-          }
-          function sendGenerate(e) {
-            e.preventDefault();
-            if (loading.is(":visible")) {
-              return;
-            }
-            
-            let value = $("#costprice-type").val();
-            value = value.replace('_excel', '').toLowerCase();
-            hipanel.runProcess(
-              "$generateUrl",
-              { type: $("#costprice-type").val(), month: $("#costprice-month").val() },
-              () => {
-                loading.css("display", "inline-block");
-              },
-              () => {
-                loading.hide();
-                runProgress();
-                hipanel.notify.success(`Generate request has been sent`);
-              }
-            );
-          }
-          $(".costprice-box form").on("submit", sendGenerate);
-        })();
-JS
-    ,
-    View::POS_END);
-
 ?>
 
 <div class="row">
@@ -74,9 +37,7 @@ JS
                             <div class="loading btn-box-tool" style="display: none;">
                                 <i class="fa fa-refresh fa-spin"></i> <?= Yii::t('hipanel', 'loading...') ?>
                             </div>
-                            <button type="submit" class="btn btn-success btn-sm">
-                                <?= Yii::t('hipanel:finance', 'Load report') ?>
-                            </button>
+                            <?= Html::submitButton(Yii::t('hipanel:finance', 'Load report'), ['class' => 'btn btn-primary']) ?>
                         </div>
                     </div>
                 </div>

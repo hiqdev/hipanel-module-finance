@@ -109,22 +109,6 @@ class PurseController extends \hipanel\base\CrudController
                     Costprice::perform('recalculate', $params);
                 },
             ],
-            'generate-excel' => [
-                'class' => RunProcessAction::class,
-                'onRunProcess' => function (RunProcessAction $action) {
-                    $request = $action->controller->request;
-                    $params = $request->post();
-                    if (!empty($params['type'])) {
-                        $params['month'] = (!empty($params['month'])) ? $params['month'] : date('Y-m-01');
-                        $result = Costprice::perform('generate', $params);
-                        return $this->response->sendContentAsFile(
-                            $result,
-                            $params['type'] . $params['month'],
-                            ['inline' => true, 'mimeType' => 'application/vnd.ms-excel']
-                        );
-                    }
-                },
-            ],
             'generation-perform' => [
                 'class' => RunProcessAction::class,
                 'onRunProcess' => function (RunProcessAction $action) {
@@ -137,7 +121,7 @@ class PurseController extends \hipanel\base\CrudController
                         'type' => $type,
                         'client_types' => $type === 'acceptance' ? 'employee' : null,
                     ]);
-                }
+                },
             ],
             'generation-progress' => [
                 'class' => ProgressAction::class,
@@ -177,6 +161,17 @@ class PurseController extends \hipanel\base\CrudController
     public function actionCostpriceExcelReport(): string
     {
         $model = new Costprice();
+        $params = $this->request->post();
+        if (!empty($params['Costprice'])) {
+            $params = $params['Costprice'];
+            $params['month'] = (!empty($params['month'])) ? $params['month'] : date('Y-m-01');
+            $content =  Costprice::perform('generate', $params);
+            $this->response->sendContentAsFile(
+                $content,
+                $params['type'] . $params['month'] . '.xlsx',
+                ['inline' => true, 'mimeType' => 'application/vnd.ms-excel']
+            )->send();
+        }
 
         return $this->render('costprice-excel-reports', [
             'model' => $model,
