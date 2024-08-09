@@ -48,6 +48,7 @@ class Sale extends \hipanel\base\Model
     const SALE_TYPE_PRIVATE_CLOUD_BACKUP = 'private_cloud_backup';
     const SALE_TYPE_STORAGE = 'storage';
     const SALE_TYPE_VPS = 'vps';
+    const SALE_TYPE_K8S = 'managed_kubernetes_cluster';
 
     public function rules()
     {
@@ -118,6 +119,7 @@ class Sale extends \hipanel\base\Model
             self::SALE_TYPE_STORAGE => 'Storage',
             self::SALE_TYPE_VPS => 'Vps',
             self::SALE_TYPE_VIDEOCDN => 'Videocdn',
+            self::SALE_TYPE_K8S => 'K8s',
         ]);
     }
 

@@ -68,6 +68,7 @@ class LinkToObjectResolver extends Widget
         'config' => '@config/view',
         'anycastcdn' => '@target/view',
         'videocdn' => '@target/view',
+        'managed_kubernetes_cluster' => '@target/view',
     ];
 
     public function init()
