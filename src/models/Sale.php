@@ -49,6 +49,7 @@ class Sale extends \hipanel\base\Model
     const SALE_TYPE_STORAGE = 'storage';
     const SALE_TYPE_VPS = 'vps';
     const SALE_TYPE_K8S = 'managed_kubernetes_cluster';
+    const SALE_TYPE_LOAD_BALANCER = 'load_balancer';
 
     public function rules()
     {
@@ -120,6 +121,7 @@ class Sale extends \hipanel\base\Model
             self::SALE_TYPE_VPS => 'Vps',
             self::SALE_TYPE_VIDEOCDN => 'Videocdn',
             self::SALE_TYPE_K8S => 'K8s',
+            self::SALE_TYPE_LOAD_BALANCER = 'Load Balancer';
         ]);
     }
 
