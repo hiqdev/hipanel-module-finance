@@ -63,8 +63,6 @@ class Sale extends \hipanel\base\Model
                 'login',
                 'buyer',
                 'tariff',
-//                'time',
-//                'unsale_time',
                 'expires',
                 'renewed_num',
                 'sub_factor',
@@ -78,7 +76,6 @@ class Sale extends \hipanel\base\Model
                 'fee',
             ], 'string'],
             [['time', 'unsale_time'], 'datetime', 'format' => 'php:Y-m-d H:i:s',],
-//            ['unsale_time', 'datetime', 'format' => 'php:Y-m-d H:i:s', 'timestampAttribute' => 'time'],
             [
                 'unsale_time',
                 'compare',
