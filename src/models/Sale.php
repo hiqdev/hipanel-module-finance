@@ -122,7 +122,7 @@ class Sale extends \hipanel\base\Model
             self::SALE_TYPE_VPS => 'Vps',
             self::SALE_TYPE_VIDEOCDN => 'Videocdn',
             self::SALE_TYPE_K8S => 'K8s',
-            self::SALE_TYPE_LOAD_BALANCER = 'Load Balancer';
+            self::SALE_TYPE_LOAD_BALANCER => 'Load Balancer',
         ]);
     }
 
