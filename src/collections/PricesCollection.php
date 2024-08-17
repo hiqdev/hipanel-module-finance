@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -13,8 +13,9 @@ namespace hipanel\modules\finance\collections;
 use Closure;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\Threshold;
 use hiqdev\hiart\Collection;
-use Yii;
+use yii\web\Request;
 
 /**
  * Class PricesCollection overrides loading behavior of parent class in order to:
@@ -24,38 +25,31 @@ use Yii;
  */
 class PricesCollection extends Collection
 {
-    /**
-     * @var \hipanel\modules\finance\models\factories\PriceModelFactory
-     */
-    private $priceModelFactory;
-
-    public function __construct(PriceModelFactory $priceModelFactory, array $config = [])
+    public function __construct(
+        readonly private PriceModelFactory $priceModelFactory,
+        readonly private Request $request,
+        array $config = []
+    )
     {
         parent::__construct($config);
-        $this->priceModelFactory = $priceModelFactory;
         // Prevent default behavior in Collection::collectData() in order to allow all attributes for different models
         $this->dataCollector = fn(Price $model) => [$model->getPrimaryKey(), $model->toArray()];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function load($data = null)
+    public function load($data = null): PricesCollection|Collection
     {
         if ($data === null && $this->dataToBeLoadedExistsInPostRequest()) {
-            $data = $this->loadDifferentModelsFromPostRequest();
+            $models = $this->createPriceModelsFromRequest();
+            $this->ensureProgressive($models);
             $this->checkConsistency = false;
 
-            return $this->set($data);
+            return $this->set($models);
         }
 
         return parent::load($data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function collectData($attributes = null)
+    public function collectData($attributes = null): array
     {
         $data = [];
         foreach ($this->models as $model) {
@@ -76,9 +70,9 @@ class PricesCollection extends Collection
         return $data;
     }
 
-    private function dataToBeLoadedExistsInPostRequest()
+    private function dataToBeLoadedExistsInPostRequest(): bool
     {
-        $request = Yii::$app->request->post();
+        $request = $this->request->post();
 
         $map = $this->priceModelFactory->getMap();
         foreach ($map as $formName => $className) {
@@ -97,11 +91,11 @@ class PricesCollection extends Collection
         return false;
     }
 
-    private function loadDifferentModelsFromPostRequest()
+    private function createPriceModelsFromRequest(): array
     {
         /** @var Price[] $result */
         $result = [];
-        $request = Yii::$app->request->post();
+        $request = $this->request->post();
         $usedClasses = [];
 
         $iter = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($this->priceModelFactory->getMap()));
@@ -117,7 +111,6 @@ class PricesCollection extends Collection
             $usedClasses[$className] = true;
             /** @var Price[] $models */
             $models = [];
-            /** @var array $modelsData */
             $modelsData = [];
             /** @var Price $modelPrototype */
             $modelPrototype = $this->priceModelFactory->instantiate($className);
@@ -134,9 +127,24 @@ class PricesCollection extends Collection
             }
 
             $modelPrototype->loadMultiple($models, $modelsData);
-            $result = array_merge($result, $models);
+            $result += $models;
         }
 
         return $result;
+    }
+
+    private function ensureProgressive(array $models): void
+    {
+        $data = $this->request->post((new Threshold())->formName());
+        foreach ($models as $priceRowIdx => $model) {
+            if (!$model->isProgressive()) {
+                continue;
+            }
+            if (isset($data[$priceRowIdx])) {
+                $model->loadProgressiveData($data[$priceRowIdx]);
+            } else {
+                $model->class = 'SinglePrice';
+            }
+        }
     }
 }

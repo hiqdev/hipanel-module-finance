@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -16,6 +16,7 @@ use hipanel\modules\finance\models\DomainServicePrice;
 use hipanel\modules\finance\models\DomainZonePrice;
 use hipanel\modules\finance\models\OveruseServerPrice;
 use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\ProgressivePrice;
 use hipanel\modules\finance\models\RatePrice;
 use hipanel\modules\finance\models\TemplatePrice;
 use yii\base\InvalidConfigException;
@@ -29,10 +30,7 @@ use yii\base\Model;
  */
 class PriceModelFactory
 {
-    /**
-     * @var array
-     */
-    protected $map = [
+    protected array $map = [
         'Price' => Price::class,
         'RatePrice' => RatePrice::class,
         'TemplatePrice' => TemplatePrice::class,
@@ -48,15 +46,16 @@ class PriceModelFactory
         'EnumPrice' => CertificatePrice::class,
         'DomainZonePrice' => DomainZonePrice::class,
         'DomainServicePrice' => DomainServicePrice::class,
+        'ProgressivePrice' => ProgressivePrice::class,
     ];
 
     /**
      * @param string $className
      * @param string|null $priceType
-     * @throws InvalidConfigException
      * @return Price
+     * @throws InvalidConfigException
      */
-    public function build(string $className, ?string $priceType = null)
+    public function build(string $className, ?string $priceType = null): Price
     {
         if (!isset($this->map[$className])) {
             throw new InvalidConfigException('Can not create model for class ' . $className);
@@ -64,7 +63,7 @@ class PriceModelFactory
 
         if (is_array($this->map[$className])) {
             foreach ($this->map[$className] as $type => $class) {
-                if (StringHelper::matchWildcard($type, (string) $priceType)) {
+                if (StringHelper::matchWildcard($type, (string)$priceType)) {
                     return new $class();
                 }
             }
@@ -73,9 +72,6 @@ class PriceModelFactory
         return new $this->map[$className]();
     }
 
-    /**
-     * @return array
-     */
     public function getMap(): array
     {
         return $this->map;

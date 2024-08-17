@@ -12,6 +12,7 @@ namespace hipanel\modules\finance\grid\presenters\price;
 
 use hipanel\modules\finance\models\CertificatePrice;
 use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\ProgressivePrice;
 use hipanel\modules\finance\models\TemplatePrice;
 use Psr\Container\ContainerInterface;
 use yii\base\InvalidConfigException;
@@ -30,6 +31,7 @@ class PricePresenterFactory
         Price::class => PricePresenter::class,
         TemplatePrice::class => TemplatePricePresenter::class,
         CertificatePrice::class => CertificatePricePresenter::class,
+        ProgressivePrice::class => ProgressivePricePresenter::class,
         '*' => PricePresenter::class,
     ];
 
@@ -49,8 +51,8 @@ class PricePresenterFactory
 
     /**
      * @param string $name
-     * @throws InvalidConfigException
      * @return PricePresenter
+     * @throws InvalidConfigException
      */
     public function build($name)
     {

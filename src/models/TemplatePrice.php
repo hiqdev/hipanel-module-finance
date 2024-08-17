@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -23,7 +23,7 @@ class TemplatePrice extends Price
 {
     use ModelTrait;
 
-    public function rules()
+    public function rules(): array
     {
         return array_merge(parent::rules(), [
             [['subprices'], 'each', 'rule' => ['number']],

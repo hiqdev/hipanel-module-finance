@@ -59,6 +59,10 @@ class Requisite extends Contact
                     'probation_id',
                     'internal_invoice_id',
                     'payment_request_id',
+                    'service_invoice_id',
+                    'purchase_invoice_id',
+                    'service_payment_request_id',
+                    'purchase_payment_request_id',
                     'nda_id',
                 ],
                 'string', // template2pdf ID
@@ -115,6 +119,11 @@ class Requisite extends Contact
         return array_merge(parent::attributeLabels(), [
             'serie' => Yii::t('hipanel:finance', 'Serie'),
             'invoice_id' => Yii::t('hipanel:finance', 'Invoice template'),
+            'service_invoice_id' => Yii::t('hipanel:finance', 'Service invoice template'),
+            'purchase_invoice_id' => Yii::t('hipanel:finance', 'Purchase invoice template'),
+            'payment_request_id' => Yii::t('hipanel:finance', 'Payment request template'),
+            'service_payment_request_id' => Yii::t('hipanel:finance', 'Service payment request template'),
+            'purchase_payment_request_id' => Yii::t('hipanel:finance', 'Purchase payment request template'),
             'acceptance_id' => Yii::t('hipanel:finance', 'Acceptance template'),
             'contract_id' => Yii::t('hipanel:finance', 'Contract template'),
             'probation_id' => Yii::t('hipanel:finance', 'Probation template'),
@@ -133,11 +142,16 @@ class Requisite extends Contact
     {
         return [
             self::TEMPLATE_INVOICE => self::TEMPLATE_INVOICE,
+            self::TEMPLATE_PURCHASE_INVOICE => self::TEMPLATE_PURCHASE_INVOICE,
+            self::TEMPLATE_SERVICE_INVOICE => self::TEMPLATE_SERVICE_INVOICE,
             self::TEMPLATE_ACCEPTANCE => self::TEMPLATE_ACCEPTANCE,
             self::TEMPLATE_CONTRACT => self::TEMPLATE_CONTRACT,
             self::TEMPLATE_PROBATION => self::TEMPLATE_PROBATION,
             self::TEMPLATE_INTERNAL_INVOICE => self::TEMPLATE_INTERNAL_INVOICE,
             self::TEMPLATE_PAYMENT_REQUEST => self::TEMPLATE_PAYMENT_REQUEST,
+            self::TEMPLATE_PURCHASE_PAYMENT_REQUEST => self::TEMPLATE_PURCHASE_PAYMENT_REQUEST,
+            self::TEMPLATE_SERVICE_PAYMENT_REQUEST => self::TEMPLATE_SERVICE_PAYMENT_REQUEST,
+
         ];
     }
 

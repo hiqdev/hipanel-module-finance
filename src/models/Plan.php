@@ -116,7 +116,7 @@ class Plan extends Model
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['id', 'type_id', 'state_id', 'client_id', 'currency_id'], 'integer'],
+            [['id', 'type_id', 'state_id', 'client_id', 'currency_id', 'parent_id'], 'integer'],
             [['type', 'state', 'client', 'name', 'plan', 'note', 'currency', 'is_grouping'], 'string'],
 
             [['type', 'name', 'currency'], 'required', 'on' => ['create', 'update']],
@@ -147,7 +147,7 @@ class Plan extends Model
             'currency' => Yii::t('hipanel:finance', 'Currency'),
             'is_sold' => Yii::t('hipanel:finance', 'Is sold?'),
             'fee' => Yii::t('hipanel:finance', 'Subscription fee'),
-            'fork' => Yii::t('hipanel:finance', 'Fork tariff plan')
+            'fork' => Yii::t('hipanel:finance', 'Fork tariff plan'),
         ]);
     }
 
@@ -233,5 +233,15 @@ class Plan extends Model
     public function isKnownType(string $type = null): bool
     {
         return isset($this->knownTypes[$type ?: $this->type]);
+    }
+
+    public function getParent()
+    {
+        return $this->hasOne(self::class, ['id' => 'parent_id']);
+    }
+
+    public function hasParent(): bool
+    {
+        return !empty($this->parent_id);
     }
 }

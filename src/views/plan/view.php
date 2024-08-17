@@ -90,6 +90,7 @@ CSS
                         'type',
                         'state',
                         'note',
+                        'parent_plan',
                     ]),
                 ]) ?>
             </div>

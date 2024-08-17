@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
@@ -6,6 +6,7 @@ use hipanel\modules\finance\models\RatePrice;
 use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\FormulaInput;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
+use hipanel\modules\finance\widgets\PriceFields;
 use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\XEditable;
 use yii\bootstrap\Html;
@@ -17,26 +18,28 @@ use yii\widgets\ActiveForm;
  * @var Price $model
  * @var ActiveForm $form
  * @var int $i
+ * @var array $currencyTypes
  */
 ?>
 
+<?= Html::activeHiddenInput($model, "[$i]object_id", ['ref' => 'object_id']) ?>
+<?= Html::activeHiddenInput($model, "[$i]plan_id") ?>
+<?= Html::activeHiddenInput($model, "[$i]type") ?>
+<?= Html::activeHiddenInput($model, "[$i]class") ?>
+<?= Html::activeHiddenInput($model, "[$i]object", ['value' => $model->object->name ?? '']) ?>
+<?= Html::activeHiddenInput($model, "[$i]note", [
+    'data' => [
+        'attribute' => 'note',
+        'pk' => $model->object_id,
+    ],
+]) ?>
+
+<?= Html::activeHiddenInput($model, "[$i]quantity") ?>
+<?= Html::activeHiddenInput($model, "[$i]unit") ?>
+
 <div class="form-instance">
     <div class="col-md-2" style="white-space: normal">
-        <?= Html::activeHiddenInput($model, "[$i]object_id", ['ref' => 'object_id']) ?>
-        <?= Html::activeHiddenInput($model, "[$i]plan_id") ?>
-        <?= Html::activeHiddenInput($model, "[$i]type") ?>
-        <?= Html::activeHiddenInput($model, "[$i]class") ?>
-        <?= Html::activeHiddenInput($model, "[$i]object", ['value' => $model->object->name ?? '']) ?>
-        <?= Html::activeHiddenInput($model, "[$i]quantity") ?>
-        <?= Html::activeHiddenInput($model, "[$i]unit") ?>
-        <?= Html::activeHiddenInput($model, "[$i]note", [
-            'data' => [
-                'attribute' => 'note',
-                'pk' => $model->object_id,
-            ],
-        ]) ?>
-
-        <div class="form-group">
+        <divCalculate class="form-group">
             <?php if ($model->object->name === null): ?>
                 <i><?= Yii::t('hipanel.finance.price', 'Any object') ?></i>
             <?php else: ?>
@@ -75,43 +78,15 @@ JS
                 ],
                 ]) ?>
             <?php endif ?>
-        </div>
+        </divCalculate>
     </div>
-    <div class="col-md-1">
-        <?php if ($model->isOveruse()): ?>
-            <?= $form->field($model, "[$i]quantity")->textInput() ?>
-        <?php endif ?>
-    </div>
-    <div class="col-md-1">
-        <?php if ($model->unitOptions !== []): ?>
-            <?= $form->field($model, "[$i]unit")->dropDownList($model->unitOptions) ?>
-        <?php endif ?>
-    </div>
-    <div class="col-md-2">
-        <?php if ($model instanceof RatePrice) : ?>
-            <?= $form->field($model, "[$i]rate")->input('number') ?>
-            <?= Html::activeHiddenInput($model, "[$i]price", ['value' => 0]) ?>
-            <?= Html::activeHiddenInput($model, "[$i]currency", ['value' => $model->plan->currency]) ?>
-            <?= Html::activeHiddenInput($model, "[$i]unit", ['value' => $model->plan->currency]) ?>
-        <?php else : ?>
-            <div class="<?= AmountWithCurrency::$widgetClass ?>">
-                <?= $form->field($model, "[$i]price")->widget(AmountWithCurrency::class, [
-                    'currencyAttributeName' => 'currency',
-                    'currencyAttributeOptions' => [
-                        'items' => $this->context->getCurrencyTypes(),
-                    ],
-                ]) ?>
-                <?= $form->field($model, "[$i]currency", ['template' => '{input}{error}'])->hiddenInput([
-                    'ref' => 'currency',
-                ]) ?>
-            </div>
-            <div class="price-estimates"></div>
-        <?php endif; ?>
+    <div class="col-md-4">
+        <?= PriceFields::widget(['model' => $model, 'form' => $form, 'index' => $i, 'currencyTypes' => $this->context->getCurrencyTypes()]) ?>
     </div>
     <div class="col-md-5">
         <?php if (!($model instanceof RatePrice)) : ?>
             <?= $form->field($model, "[$i]formula")->widget(FormulaInput::class) ?>
-        <?php endif; ?>
+        <?php endif ?>
     </div>
     <div class="col-md-1" style="padding-top: 25px;">
         <label>&nbsp;</label>
