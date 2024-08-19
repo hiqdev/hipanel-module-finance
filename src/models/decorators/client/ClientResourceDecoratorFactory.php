@@ -14,6 +14,7 @@ use hipanel\modules\finance\models\decorators\ResourceDecoratorFactory;
 use hipanel\modules\finance\models\decorators\target\IpPublicResourceDecorator;
 use hipanel\modules\finance\models\decorators\target\IpRegularResourceDecorator;
 use hipanel\modules\finance\models\decorators\target\IpAnycastResourceDecorator;
+use hipanel\modules\finance\models\decorators\server\SupportResourceDecorator;
 
 class ClientResourceDecoratorFactory extends ResourceDecoratorFactory
 {
@@ -21,6 +22,7 @@ class ClientResourceDecoratorFactory extends ResourceDecoratorFactory
     {
         return [
             'referral' => ReferralResourceDecorator::class,
+            'support_time' => SupportResourceDecorator::class,
             'cloud_ip_regular' => IpRegularResourceDecorator::class,
             'cloud_ip_public' => IpPublicResourceDecorator::class,
             'cloud_ip_anycast' => IpAnycastResourceDecorator::class,
