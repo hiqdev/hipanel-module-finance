@@ -31,5 +31,4 @@ return [
     'calculator_public_cloud' => 'Calculator Public cloud',
     'calculator_private_cloud' => 'Calculator Private cloud',
     'calculator_storage' => 'Calculator Storage',
-    'managed_kubernetes_cluster' => 'Managed Kubernetes Cluster',
 ];
