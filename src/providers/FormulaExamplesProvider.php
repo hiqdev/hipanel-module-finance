@@ -31,7 +31,7 @@ class FormulaExamplesProvider
         $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Fixed discount'), $this->fixedDiscountFormulas());
         $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Growing discount'), $this->growingDiscountFormulas());
         $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Installment'), $this->installmentFormulas());
-        $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Monthly Cap'), $this->installmentFormulas());
+        $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Monthly Cap'), $this->monthlyCapFomulas());
 
         return $result;
     }
@@ -65,7 +65,7 @@ class FormulaExamplesProvider
         ];
     }
 
-    private function mpnthlyCapFomulas()
+    private function monthlyCapFomulas()
     {
         return [
             "cap.monthly('28 days')" => Yii::t('hipanel.finance.price',
