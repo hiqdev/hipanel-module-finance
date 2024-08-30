@@ -10,7 +10,7 @@ class HALoadBalancerResourceDecorator extends AbstractServerResourceDecorator
 {
     public function displayTitle()
     {
-        return Yii::t('hipanel.finance.resource', 'Load Balancer Hight-Available capacity unit');
+        return Yii::t('hipanel.finance.resource', 'Load Balancer HA capacity unit');
     }
 
     public function displayUnit()
