@@ -18,7 +18,7 @@ BootstrapDatetimepickerAsset::register($this);
 $this->registerJs(/** @lang ECMAScript 6 */ "
 $('.datetime').datetimepicker({
     locale: hipanel.locale.get(),
-    format: 'YYYY-MM-DD HH:mm:SS',
+    format: 'YYYY-MM-DD HH:mm:ss',
     showClose: true,
     showTodayButton: true
 });");
