@@ -126,6 +126,8 @@ class Plan extends Model
             [['your_tariff', 'is_sold'], 'boolean'],
             [['fee'], 'number'],
             [['custom_attributes', 'data'], 'safe', 'on' => ['create', 'update']],
+            //link-parent-plan
+            [['id'], 'required', 'on' => ['link-parent-plan']],
         ]);
     }
 
