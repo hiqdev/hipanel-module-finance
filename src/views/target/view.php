@@ -74,6 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $this->render('_sales', ['target' => $originalModel]) ?>
         <?php if ($model->showConsumption()) : ?>
             <?= ConsumptionViewer::widget([
+                'configurator' => $configurator,
                 'consumption' => $consumption,
                 'mainObject' => $originalModel,
             ]) ?>
