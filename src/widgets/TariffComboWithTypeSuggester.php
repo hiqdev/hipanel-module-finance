@@ -42,6 +42,8 @@ class TariffComboWithTypeSuggester extends Widget
         'vps' => ['vps'],
         // by server types
         'cdn' => ['vcdn', 'server'],
+        'load_balancer' => ['load_balancer'],
+        'managed_kubernetes_cluster' => ['managed_kubernetes_cluster'],
     ];
 
     public function init()

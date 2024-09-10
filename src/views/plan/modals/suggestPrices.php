@@ -106,6 +106,7 @@ use yii\web\View;
             'private_cloud_backup' => Yii::t('hipanel.finance.suggestionTypes', 'private_cloud_backup'),
             'private_cloud' => Yii::t('hipanel.finance.suggestionTypes', 'private_cloud'),
             'managed_kubernetes_cluster' => Yii::t('hipanel.finance.suggestionTypes', 'managed_kubernetes_cluster'),
+            'load_balancer' => Yii::t('hipanel.finance.suggestionTypes', 'load_balancer'),
             'calculator_public_cloud' => Yii::t('hipanel.finance.suggestionTypes', 'calculator_public_cloud'),
             'calculator_private_cloud' => Yii::t('hipanel.finance.suggestionTypes', 'calculator_private_cloud'),
             'calculator_storage' => Yii::t('hipanel.finance.suggestionTypes', 'calculator_storage'),
