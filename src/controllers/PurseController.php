@@ -168,7 +168,7 @@ class PurseController extends \hipanel\base\CrudController
             $params['month'] = (!empty($params['month'])) ? $params['month'] : date('Y-m-01');
             $session = Yii::$app->session;
             try {
-                $content = Costprice::perform('generate', $params);
+                $content = Costprice::perform('reportGenerate', $params);
             } catch (Exception $e) {
                 $session->addFlash('error', Yii::t('hipanel:finance', 'Failed to generate the report'));
                 throw new RuntimeException(Yii::t('hipanel:finance', 'Failed to generate the report:' . $e->getMessage()));
