@@ -32,4 +32,11 @@ class Costprice extends Model
         ];
     }
 
+    public static function getAvailableReports(): array
+    {
+        return [
+            CostpriceReport::traff->value => Yii::t('hipanel:finance', 'Traff'),
+        ];
+    }
+
 }
