@@ -18,6 +18,7 @@ use hipanel\modules\finance\forms\TargetManagementForm;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\query\TargetQuery;
 use hipanel\modules\finance\models\Target;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 use hipanel\modules\finance\providers\ConsumptionsProvider;
 use hipanel\base\Module;
 use hiqdev\hiart\Collection;
@@ -28,6 +29,7 @@ class TargetController extends CrudController
     public function __construct(
         string $id,
         Module $module,
+        readonly private ConsumptionConfigurator $consumptionConfigurator,
         readonly private ConsumptionsProvider $consumptionsProvider,
         array $config = []
     )
@@ -104,6 +106,7 @@ class TargetController extends CrudController
         $tariff = (!empty($target->tariff_id)) ? Plan::find()->where(['id' => $target->tariff_id])->one() : null;
 
         return array_merge($data, [
+            'configurator' => $this->consumptionConfigurator,
             'originalModel' => $target,
             'client' => $client,
             'tariff' => $tariff,

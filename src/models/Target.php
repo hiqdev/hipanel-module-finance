@@ -90,6 +90,6 @@ class Target extends Model implements TaggableInterface
 
     public function showConsumption(): bool
     {
-        return $this->type !== 'vps';
+        return true;
     }
 }
