@@ -44,7 +44,9 @@ if ($user->can('document.read') && $user->can('bill.read')) {
                 $user->can('document.read') && $isEmployee ? 'ndas' : null,
                 $user->can('document.read') && $isEmployee ? 'internalinvoices' : null,
                 $user->can('owner-staff') && $user->can('document.read') && !$isEmployee ? 'invoices' : null,
+                $user->can('owner-staff') && $user->can('document.read') && !$isEmployee ? 'detailed_invoices' : null,
                 $user->can('owner-staff') && $user->can('document.read') && !$isEmployee ? 'payment_requestInvoices' : null,
+                $user->can('owner-staff') && $user->can('document.read') && !$isEmployee ? 'detailed_payment_request' : null,
             ], $documents)),
         ]) ?>
     <?php $box->endBody() ?>
