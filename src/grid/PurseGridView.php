@@ -30,6 +30,10 @@ class PurseGridView extends BoxedGridView
                 'class' => MonthlyDocumentsColumn::class,
                 'type' => 'invoice',
             ],
+            'detailed_service_invoices' => [
+                'class' => MonthlyDocumentsColumn::class,
+                'type' => 'detailed_service_invoice',
+            ],
             'serviceInvoices' => [
                 'class' => MonthlyDocumentsColumn::class,
                 'type' => 'service_invoice',
@@ -41,6 +45,10 @@ class PurseGridView extends BoxedGridView
             'payment_requestInvoices' => [
                 'class' => MonthlyDocumentsColumn::class,
                 'type' => 'payment_request',
+            ],
+            'detailed_service_payment_requests' => [
+                'class' => MonthlyDocumentsColumn::class,
+                'type' => 'detailed_service_payment_request',
             ],
             'servicePaymentRequests' => [
                 'class' => MonthlyDocumentsColumn::class,
