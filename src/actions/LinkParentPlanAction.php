@@ -17,8 +17,8 @@ class LinkParentPlanAction extends Action
 
     public function run(int $id, int $client_id, string $type)
     {
-        $parentId = $this->controller->request->post('Plan')['id'] ?? NULL;
-        if (!is_null($parentId)) {
+        if (!empty($this->controller->request->post('Plan'))) {
+            $parentId = $this->controller->request->post('Plan')['id'] ?? NULL;
             try {
                 Plan::perform('link-parent', [
                     'id' => $id,

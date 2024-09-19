@@ -120,8 +120,7 @@ class Plan extends Model
             [['type', 'state', 'client', 'name', 'plan', 'note', 'currency', 'is_grouping'], 'string'],
 
             [['type', 'name', 'currency'], 'required', 'on' => ['create', 'update']],
-            [['id'], 'required', 'on' => ['update', 'delete', 'set-note']],
-            [['id'], 'required', 'on' => ['delete', 'restore']],
+            [['id'], 'required', 'on' => ['update', 'delete', 'set-note', 'restore', 'link-parent-plan']],
             [['id', 'server_ids'], 'safe', 'on' => ['copy']],
             [['your_tariff', 'is_sold'], 'boolean'],
             [['fee'], 'number'],
