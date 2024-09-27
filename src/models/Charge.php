@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -10,7 +10,9 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\models\query\ChargeQuery;
+use hiqdev\hiart\ActiveQuery;
 use Yii;
 
 /**
@@ -105,9 +107,14 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface, B
         return $this->hasOne(Bill::class, ['id' => 'id'])->inverseOf('charges');
     }
 
+    public function getCustomer(): ActiveQuery
+    {
+        return $this->hasOne(Client::class, ['client_id' => 'id']);
+    }
+
     public function isMonthly(): bool
     {
-        return strpos($this->ftype, 'monthly,') === 0;
+        return str_starts_with($this->ftype, 'monthly,');
     }
 
     /**

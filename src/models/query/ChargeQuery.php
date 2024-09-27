@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace hipanel\modules\finance\models\query;
 
@@ -12,6 +11,11 @@ use hiqdev\hiart\ActiveQuery;
  */
 class ChargeQuery extends ActiveQuery
 {
+    public function init()
+    {
+        $this->joinWith('customer');
+    }
+
     public function behaviors(): array
     {
         return [
