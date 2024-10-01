@@ -101,6 +101,7 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
 
     public function registerJs(string $widgetId, $value): void
     {
+        $isAdjustment = $this->isAdjustment($value) ? 'true' : 'false';
         $this->view->registerJs(
             sprintf(/** @lang JavaScript */ "
                 ;(() => {
@@ -151,8 +152,8 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
                 })();
                 ",
                 $widgetId,
-                $this->isAdjustment($value) ? 'true' : 'false',
-                $this->isAdjustment($value) ? 'true' : 'false',
+                $isAdjustment,
+                $isAdjustment,
             )
         );
     }
