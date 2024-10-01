@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -47,6 +47,11 @@ use yii\grid\GridView;
 use yii\web\Response;
 use yii\web\User;
 
+/**
+ *
+ * @property-read array $typesAndGroups
+ * @property-read array $paymentTypes
+ */
 class BillController extends CrudController
 {
     private BillTypesProvider $billTypesProvider;
@@ -72,7 +77,6 @@ class BillController extends CrudController
                     'create-transfer'                                    => 'bill.create',
                     'import'                                             => 'bill.import',
                     'import-from-file'                                   => 'bill.import',
-                    'update,charge-delete'                               => 'bill.update',
                     'delete'                                             => 'bill.delete',
                     '*'                                                  => 'bill.read',
                 ],
