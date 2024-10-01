@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace hipanel\modules\finance\widgets;
 
@@ -27,20 +25,21 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
     public function run(): string
     {
         $id = $this->getId();
-        $options = $this->buildOptionsArray();
         $value = Html::getAttributeValue($this->model, $this->replaceAttribute ?? $this->attribute);
+        [$options, $adjustmentOptions] = $this->prepareOptions();
         if ($this->multiple) {
             $value = empty($value) ? [] : explode(',', $value);
         } else {
             $value = empty($value) ? null : $value;
         }
-        $this->registerJs($id);
+        $this->registerJs($id, $value);
         $activeInput = Html::activeHiddenInput($this->model, $this->attribute, [
             'v-model' => 'value',
-            'value'   => null,
-            'data'    => [
-                'value'   => $value,
+            'value' => null,
+            'data' => [
+                'value' => $value,
                 'options' => Json::encode($options),
+                'adjustment-options' => Json::encode($adjustmentOptions),
             ],
         ]);
 
@@ -69,6 +68,24 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
                         <span v-if="shouldShowCount" :class="countClassName">({{ count }})</span>
                     </label>
                     <div slot="value-label" slot-scope="{ node }" v-html="node.raw.treeLabel ?? node.raw.label"></div>
+                    <div slot="after-list">
+                        <div class="checkbox" style="%s">
+                            <button 
+                              type="button"
+                              :class="{ \'btn btn-default btn-sm btn-block\': true, \'active\': adjustmentOnly }"
+                              @click="toggleAdjustemnt"
+                            >
+                                <span v-if="adjustmentOnly">
+                                    <i class="glyphicon glyphicon-eye-close"></i>
+                                    Hide adjustment
+                                </span>
+                                <span v-else>
+                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                    Show adjustment
+                                </span>
+                            </button>
+                        </div>
+                    </div>
                 </treeselect>
                 %s
             </div>
@@ -77,11 +94,12 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
             $this->multiple ? 'false' : 'true', // disable/enable branch nodes
             var_export($this->multiple, true), // multiple
             $this->model->getAttributeLabel($this->getAttribute()), // set placeholder
+            $this->splitTypesByAdjustment() ? 'display: block; padding: 0 1em' : 'display: none;',
             $activeInput
         );
     }
 
-    public function registerJs(string $widgetId): void
+    public function registerJs(string $widgetId, $value): void
     {
         $this->view->registerJs(
             sprintf(/** @lang JavaScript */ "
@@ -94,15 +112,36 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
                         },
                         data: {
                             value: container.find('input[type=hidden]').data('value'),
-                            options: container.find('input[type=hidden]').data('options')
+                            adjustmentOnly: %s,
+                            options: [],
+                        },
+                        watch: {
+                          adjustmentOnly(value) {
+                            this.toggleOptions(value);
+                          }
+                        },
+                        mounted() {
+                          this.toggleOptions(%s);
                         },
                         methods: {
+                          toggleAdjustemnt: function () {
+                            this.value = null;
+                            this.adjustmentOnly = !this.adjustmentOnly;
+                          },
                           typeChange: function (node) {
                             this.value = typeof node === 'undefined' ? null : node.id;
                             this.\$nextTick(function () {
                               const el = this.\$el.querySelector('input:not(.vue-treeselect__input)');
                               $(el).trigger('change');
                             });
+                          },
+                          toggleOptions: function (showAdjustments) {
+                            const input = container.find('input[type=hidden]');
+                            if (showAdjustments === true) {
+                              this.options = input.data('adjustment-options');
+                            } else  {
+                              this.options = input.data('options');
+                            }
                           },
                           s(text) {
                               return '<s>' + text + '</s>';
@@ -111,14 +150,16 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
                     });
                 })();
                 ",
-                $widgetId
+                $widgetId,
+                $this->isAdjustment($value) ? 'true' : 'false',
+                $this->isAdjustment($value) ? 'true' : 'false',
             )
         );
     }
 
-    private function buildOptionsArray(): array
+    private function buildOptionsArray(array $types): array
     {
-        $types = ArrayHelper::index($this->billTypes, 'id');
+        $types = ArrayHelper::index($types, 'id');
         // Each type key is a string like "monthly,hardware" or "monthly,installment"
         // We need to split it by comma and build a recursive array of options for vue-treeselect, where ID is a type name
         $options = [];
@@ -136,18 +177,18 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
                 }
                 if (!isset($currentLevel['children'][$typePart])) {
                     $currentLevel['children'][$typePart] = [
-                        'id'       => $typePart,
-                        'label'    => $typePart,
+                        'id' => $typePart,
+                        'label' => $typePart,
                         'children' => [],
                     ];
                 }
                 $currentLevel = &$currentLevel['children'][$typePart];
             }
             $currentLevel = [
-                'id'         => (string)$id,
-                'label'      => $type->label,
-                'type'       => $type->name,
-                'treeLabel'  => str_contains($type->name, ',') ? $this->findTreeLabel($type) : null,
+                'id' => (string)$id,
+                'label' => $type->label,
+                'type' => $type->name,
+                'treeLabel' => str_contains($type->name, ',') ? $this->findTreeLabel($type) : null,
                 'isDisabled' => str_contains($type->name, 'delimiter'),
             ];
             if ($this->behavior === TreeSelectBehavior::Deprecated && $this->isDeprecatedType($type->name)) {
@@ -204,7 +245,8 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
 
     private function isDisabled(string $typeName): bool
     {
-        if (str_contains($typeName, 'delimiter') || ($this->behavior === TreeSelectBehavior::Disabled && $this->isDeprecatedType($typeName))) {
+        if (str_contains($typeName,
+                'delimiter') || ($this->behavior === TreeSelectBehavior::Disabled && $this->isDeprecatedType($typeName))) {
             return true;
         }
 
@@ -227,5 +269,40 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
         }
 
         return $remained;
+    }
+
+    private function isAdjustment($typeId): bool
+    {
+        if (!is_int($typeId)) {
+            return false;
+        }
+        $types = ArrayHelper::index($this->billTypes, 'id');
+        $type = $types[$typeId];
+        if ($type === null) {
+            return false;
+        }
+
+        return str_starts_with($type->name, 'adjustment');
+    }
+
+    private function prepareOptions(): array
+    {
+        $types = ArrayHelper::index($this->billTypes, 'id');
+        if (!$this->splitTypesByAdjustment()) {
+            $options = $this->buildOptionsArray($types);
+
+            return [$options, []];
+        }
+        $adjustmentTypes = array_filter($types, fn(Ref $ref) => $this->isAdjustment($ref->id));
+        $typesWithoutAdjustments = array_diff_key($types, $adjustmentTypes);
+        $options = $this->buildOptionsArray($typesWithoutAdjustments);
+        $adjustmentOptions = $this->buildOptionsArray($adjustmentTypes);
+
+        return [$options, $adjustmentOptions];
+    }
+
+    private function splitTypesByAdjustment(): bool
+    {
+        return Yii::$app->user->can('owner-staff') && $this->behavior !== TreeSelectBehavior::Deprecated;
     }
 }

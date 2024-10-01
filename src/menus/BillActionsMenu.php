@@ -11,11 +11,12 @@
 namespace hipanel\modules\finance\menus;
 
 use hipanel\helpers\Url;
+use hipanel\modules\finance\models\Bill;
 use Yii;
 
 class BillActionsMenu extends \hiqdev\yii2\menus\Menu
 {
-    public $model;
+    public Bill $model;
 
     public function items()
     {
