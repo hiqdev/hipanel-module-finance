@@ -15,6 +15,7 @@ use hipanel\base\ModelTrait;
 use hipanel\models\Ref;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\query\PriceQuery;
+use hiqdev\hiart\ActiveQuery;
 use Money\Money;
 use Money\MoneyParser;
 use Money\Currency;
@@ -27,9 +28,11 @@ use yii\helpers\StringHelper;
  *
  * @property int $id
  * @property int $plan_id
+ * @property string|null $plan_type
  * @property string|int $object_id
  * @property string|float $price
  * @property string $currency
+ * @property string $class
  * @property string|int $main_object_id
  * @property string $main_object_name
  * @property string $unit
@@ -42,6 +45,7 @@ use yii\helpers\StringHelper;
  * @property TargetObject $object
  * @property Plan $plan
  * @property array|null $formula_lines
+ * @property array|null $thresholds
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -53,11 +57,17 @@ class Price extends Model
     const SCENARIO_UPDATE = 'update';
     const SCENARIO_DELETE = 'delete';
 
+    private const PROGRESSIVE_PRICE_CLASS = 'ProgressivePrice';
+
+    public const TEMPLATE_PRICE_CLASS = 'TemplatePrice';
+
+    public const SINGLE_PRICE_CLASS = 'SinglePrice';
+
     public function rules()
     {
         return array_merge(parent::rules(), [
             [['id', 'parent_id', 'plan_id', 'object_id', 'type_id', 'unit_id', 'currency_id', 'main_object_id'], 'integer'],
-            [['type', 'type_label', 'plan_name', 'unit', 'currency', 'note', 'data', 'main_object_name'], 'string'],
+            [['type', 'type_label', 'plan_type', 'plan_name', 'unit', 'currency', 'note', 'data', 'main_object_name'], 'string'],
             [['quantity', 'price'], 'number'],
             [['formula_lines'], 'safe'],
             [['class'], 'string'], // todo: probably, refactor is needed
@@ -73,7 +83,7 @@ class Price extends Model
             ],
             [['class'], 'string'],
             [['formula'], 'string', 'on' => ['create', 'update']], // TODO syn check
-            [['thresholds'], 'safe'],
+            [['thresholds', 'plan_type'], 'safe'],
         ]);
     }
 
@@ -201,7 +211,7 @@ class Price extends Model
         return $this->hasOne(TargetObject::class, ['id' => 'id']);
     }
 
-    public function getPlan()
+    public function getPlan(): ActiveQuery
     {
         return $this->hasOne(Plan::class, ['id' => 'plan_id']);
     }
@@ -291,13 +301,29 @@ class Price extends Model
         return empty($thresholds) ? [new Threshold()] : $thresholds;
     }
 
-    public function loadProgressiveData(array $data): void
+    public function setProgressivePricingThresholds(array $data): void
     {
-        $this->setAttribute('class', 'ProgressivePrice');
+        $this->setClass(self::PROGRESSIVE_PRICE_CLASS);
+        $this->thresholds = $this->prepareThresholds($data);
+    }
+
+    private function prepareThresholds(array $data): array
+    {
         foreach ($data as $key => $value) {
             $data[$key]['unit'] = $this->unit;
             $data[$key]['currency'] = $this->currency;
         }
-        $this->thresholds = $data;
+
+        return $data;
+    }
+
+    public function hasProgressiveClass(): bool
+    {
+        return $this->class === self::PROGRESSIVE_PRICE_CLASS;
+    }
+
+    public function setClass(string $class): void
+    {
+        $this->setAttribute('class', $class);
     }
 }
