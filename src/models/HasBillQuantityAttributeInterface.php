@@ -4,11 +4,11 @@ namespace hipanel\modules\finance\models;
 
 /**
  * @property string|null $quantity
- * @property int|null $bill_quantity
+ * @property int|string|float|null $bill_quantity
  */
 interface HasBillQuantityAttributeInterface
 {
     public function getQuantity();
 
-    public function getBillQuantity(): ?int;
+    public function getBillQuantity();
 }

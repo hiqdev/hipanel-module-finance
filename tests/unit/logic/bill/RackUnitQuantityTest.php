@@ -24,7 +24,7 @@ class RackUnitQuantityTest extends TestCase
     public function testFormat(
         string $time,
         float $quantity,
-        ?int $billQuantity,
+        $billQuantity,
         string $expectedFormat,
         string $expectedClientValue
     ): void {
@@ -48,6 +48,13 @@ class RackUnitQuantityTest extends TestCase
                 'expectedFormat' => '2 units &times; 31 days',
                 'expectedClientValue' => '2',
             ],
+            'basic scenario float quantity' => [
+                'time' => '2024-01-15',
+                'quantity' => 0.41306867283951,
+                'billQuantity' => 0.43333333333333,
+                'expectedFormat' => '0.953 units &times; 13 days',
+                'expectedClientValue' => '0.41306867283951',
+            ],
             'zero billing quantity' => [
                 'time' => '2024-02-15',
                 'quantity' => 2.0,
@@ -65,7 +72,7 @@ class RackUnitQuantityTest extends TestCase
         ];
     }
 
-    private function createContext(string $time, float $quantity, ?int $billQuantity): BillableTimeInterface
+    private function createContext(string $time, float $quantity, $billQuantity): BillableTimeInterface
     {
         return new class($time, $quantity, $billQuantity) implements BillableTimeInterface
         {
@@ -73,7 +80,7 @@ class RackUnitQuantityTest extends TestCase
             private $quantity;
             private $billQuantity;
 
-            public function __construct(string $time, float $quantity, ?int $billQuantity)
+            public function __construct(string $time, float $quantity, $billQuantity)
             {
                 $this->time = $time;
                 $this->quantity = $quantity;
@@ -85,7 +92,7 @@ class RackUnitQuantityTest extends TestCase
                 return $this->quantity;
             }
 
-            public function getBillQuantity(): ?int
+            public function getBillQuantity()
             {
                 return $this->billQuantity;
             }

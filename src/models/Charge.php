@@ -126,7 +126,7 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface, B
         return $this->time;
     }
 
-    public function getBillQuantity(): ?int
+    public function getBillQuantity()
     {
         return $this->bill_quantity;
     }

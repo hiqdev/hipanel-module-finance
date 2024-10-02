@@ -50,23 +50,7 @@ class QuantityFormatterFactoryTest extends TestCase
             }
         };
 
-        $billableTimeContext = new class implements BillableTimeInterface
-        {
-            public function getQuantity()
-            {
-                return 2;
-            }
-
-            public function getBillQuantity(): ?int
-            {
-                return 1;
-            }
-
-            public function getTime(): ?string
-            {
-                return date('Y-m-d H:i:s', strtotime('2024 January'));
-            }
-        };
+        $billableTimeContext = $this->createBillableTimeContext(2, 1);
 
         yield 'other_deposit type with 1 item' => [
             'other_deposit',
@@ -131,5 +115,37 @@ class QuantityFormatterFactoryTest extends TestCase
             $expected = '12 years',
             $expectedClientValue = '12',
         ];
+        yield '0.953 units × 13 days' => [
+            'monthly,rack_unit',
+            Quantity::create('items', "0.41306867283951"),
+            $this->createBillableTimeContext("0.41306867283951", "0.43333333333333"),
+            $expected = '0.953 units &times; 13 days',
+            $expectedClientValue = '0.41306867283951',
+        ];
+    }
+
+    private function createBillableTimeContext($quantity, $billQuantity): BillableTimeInterface
+    {
+        return new class($quantity, $billQuantity) implements BillableTimeInterface
+        {
+            public function __construct(private $quantity, private $billQuantity)
+            {
+            }
+
+            public function getQuantity()
+            {
+                return $this->quantity;
+            }
+
+            public function getBillQuantity()
+            {
+                return $this->billQuantity;
+            }
+
+            public function getTime(): ?string
+            {
+                return date('Y-m-d H:i:s', strtotime('2024 January'));
+            }
+        };
     }
 }
