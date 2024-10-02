@@ -40,7 +40,7 @@ class PricesCollection extends Collection
     {
         if ($data === null && $this->dataToBeLoadedExistsInPostRequest()) {
             $models = $this->createPriceModelsFromRequest();
-            $this->ensureProgressive($models);
+            $this->handleProgressivePricing($models);
             $this->checkConsistency = false;
 
             return $this->set($models);
@@ -133,18 +133,44 @@ class PricesCollection extends Collection
         return $result;
     }
 
-    private function ensureProgressive(array $models): void
+    /**
+     * @param Price[] $models
+     * @return void
+     */
+    private function handleProgressivePricing(array $models): void
     {
-        $data = $this->request->post((new Threshold())->formName());
+        $progressiveData = $this->getProgressiveData();
+
         foreach ($models as $priceRowIdx => $model) {
-            if (!$model->isProgressive()) {
-                continue;
-            }
-            if (isset($data[$priceRowIdx])) {
-                $model->loadProgressiveData($data[$priceRowIdx]);
-            } else {
-                $model->class = 'SinglePrice';
+            if ($model->isProgressive()) {
+                if ($this->hasProgressiveDataForModel($progressiveData, $priceRowIdx)) {
+                    $model->setProgressivePricingThresholds($progressiveData[$priceRowIdx]);
+                } else if (!$model->isNewRecord) {
+                    $this->rollbackProgressivePriceClassToPreviousClass($model);
+                }
             }
         }
+    }
+
+    private function getProgressiveData(): array
+    {
+        return $this->request->post((new Threshold())->formName(), []);
+    }
+
+    private function hasProgressiveDataForModel(array $progressiveData, int $index): bool
+    {
+        return isset($progressiveData[$index]);
+    }
+
+    private function rollbackProgressivePriceClassToPreviousClass(Price $model): void
+    {
+        if ($model->hasProgressiveClass()) {
+            $model->setClass($this->determinePreviousClass());
+        }
+    }
+
+    private function determinePreviousClass(): string
+    {
+        return $this->plan_type === 'template' ? Price::TEMPLATE_PRICE_CLASS : Price::SINGLE_PRICE_CLASS;
     }
 }

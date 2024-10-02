@@ -13,7 +13,7 @@ use hipanel\modules\finance\tests\_support\Page\price\Create as PriceCreate;
 
 class TariffPlansCest
 {
-    private string $templateName;
+    private string $templateName = '';
 
     public function _before(Seller $I): void
     {
