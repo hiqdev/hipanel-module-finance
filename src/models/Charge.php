@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -10,7 +10,9 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\models\query\ChargeQuery;
+use hiqdev\hiart\ActiveQuery;
 use Yii;
 
 /**
@@ -56,7 +58,7 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface, B
             [['id', 'type_id', 'object_id', 'parent_id', 'client_id', 'tariff_id', 'seller_id', 'order_id'], 'integer'],
             [['bill_id', 'id'], 'trim'],
             [['class', 'name', 'unit', 'tariff', 'order_name', 'client', 'seller', 'client_type', 'root_ftype'], 'string'],
-            [['type', 'label', 'ftype', 'time', 'type_label', 'currency', 'exchange_date'], 'safe'],
+            [['type', 'label', 'ftype', 'time', 'type_label', 'currency', 'exchange_date', 'client_tags'], 'safe'],
             [['is_payed'], 'boolean'],
             [['sum', 'quantity', 'bill_quantity', 'positive', 'negative', 'discount_sum', 'net_amount', 'rate', 'eur_amount'], 'number'],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
@@ -105,9 +107,19 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface, B
         return $this->hasOne(Bill::class, ['id' => 'id'])->inverseOf('charges');
     }
 
+    public function getCustomer(): Client
+    {
+        return new Client([
+            'id' => $this->client_id,
+            'login' => $this->client,
+            'type' => $this->client_type,
+            'tags' => $this->client_tags,
+        ]);
+    }
+
     public function isMonthly(): bool
     {
-        return strpos($this->ftype, 'monthly,') === 0;
+        return str_starts_with($this->ftype, 'monthly,');
     }
 
     /**

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -12,7 +12,9 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\BoxedGridView;
 use hipanel\grid\CurrencyColumn;
+use hipanel\helpers\ArrayHelper;
 use hipanel\helpers\Url;
+use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\models\ChargeSearch;
@@ -20,8 +22,10 @@ use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\BillTypeFilter;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\widgets\IconStateLabel;
+use hipanel\widgets\TagsManager;
 use hiqdev\combo\StaticCombo;
 use hiqdev\higrid\DataColumn;
+use ReflectionClass;
 use Yii;
 use yii\helpers\Html;
 
@@ -51,7 +55,23 @@ class ChargeGridView extends BoxedGridView
 
     public function columns()
     {
-        return array_merge(parent::columns(), [
+        return ArrayHelper::merge(parent::columns(), [
+            'client' => [
+                'format' => 'raw',
+                'exportedColumns' => ['client', 'client_tags'],
+                'value' => function (Charge $charge) {
+                    $clientColumn = (new ReflectionClass(ClientColumn::class))->newInstanceWithoutConstructor();
+
+                    return implode("\n", [
+                        $clientColumn->getValue($charge, Yii::$app->user),
+                        TagsManager::widget(['model' => $charge->customer, 'forceReadOnly' => true]),
+                    ]);
+                },
+            ],
+            'client_tags' => [
+                'label' => Yii::t('hipanel:finance', 'Client tags'),
+                'value' => fn(Charge $charge) => $charge->customer?->tags ? implode(', ', $charge->customer->tags) : '',
+            ],
             'label' => [
                 'attribute' => 'label_ilike',
                 'sortAttribute' => 'label_ilike',
@@ -117,25 +137,25 @@ class ChargeGridView extends BoxedGridView
                 'format' => 'raw',
                 'value' => function (Charge $model) {
                     $result = LinkToObjectResolver::widget([
-                        'model' => $model,
-                        'idAttribute' => 'object_id',
-                        'typeAttribute' => 'class',
-                        'labelAttribute' => 'name',
-                    ]) . ($model->label ? " &ndash; $model->label" : '');
+                            'model' => $model,
+                            'idAttribute' => 'object_id',
+                            'typeAttribute' => 'class',
+                            'labelAttribute' => 'name',
+                        ]) . ($model->label ? " &ndash; $model->label" : '');
 
                     if ($model->commonObject->id !== null && $model->commonObject->id !== $model->latestCommonObject->id) {
                         $result .= ' ' . Html::tag(
-                            'span',
-                            Yii::t('hipanel:finance', 'Now it is in {objectLink}', [
-                                'objectLink' => LinkToObjectResolver::widget([
-                                    'model'          => $model->latestCommonObject,
-                                    'idAttribute'    => 'id',
-                                    'labelAttribute' => 'name',
-                                    'typeAttribute'  => 'type',
+                                'span',
+                                Yii::t('hipanel:finance', 'Now it is in {objectLink}', [
+                                    'objectLink' => LinkToObjectResolver::widget([
+                                        'model' => $model->latestCommonObject,
+                                        'idAttribute' => 'id',
+                                        'labelAttribute' => 'name',
+                                        'typeAttribute' => 'type',
+                                    ]),
                                 ]),
-                            ]),
-                            ['class' => 'badge', 'style' => 'background-color: #f89406;']
-                        );
+                                ['class' => 'badge', 'style' => 'background-color: #f89406;']
+                            );
                     }
 
                     return $result;
@@ -153,7 +173,7 @@ class ChargeGridView extends BoxedGridView
                 'filter' => false,
                 'contentOptions' => ['class' => 'text-nowrap'],
                 'value' => function ($model) {
-                    list($date, $time) = explode(' ', $model->time, 2);
+                    [$date, $time] = explode(' ', $model->time, 2);
 
                     return $model->isMonthly() && $time === '00:00:00'
                         ? Yii::$app->formatter->asDate($date, 'LLLL y')
@@ -166,15 +186,15 @@ class ChargeGridView extends BoxedGridView
                 'enableSorting' => false,
                 'filter' => $this->filterModel !== null
                     ? StaticCombo::widget([
-                          'attribute' => 'is_payed',
-                          'model' => $this->filterModel,
-                          'data' => [
-                              0 => Yii::t('hipanel:finance', 'Charge not paid'),
-                              1 => Yii::t('hipanel:finance', 'Charge paid'),
-                          ],
-                          'hasId' => true,
-                          'inputOptions' => ['id' => 'is_payed'],
-                      ])
+                        'attribute' => 'is_payed',
+                        'model' => $this->filterModel,
+                        'data' => [
+                            0 => Yii::t('hipanel:finance', 'Charge not paid'),
+                            1 => Yii::t('hipanel:finance', 'Charge paid'),
+                        ],
+                        'hasId' => true,
+                        'inputOptions' => ['id' => 'is_payed'],
+                    ])
                     : false,
                 'contentOptions' => ['class' => 'text-center'],
                 'headerOptions' => ['class' => 'text-center'],
@@ -189,19 +209,21 @@ class ChargeGridView extends BoxedGridView
                             Yii::t('hipanel:finance', 'Charge not paid'),
                         ],
                     ]);
-                }
+                },
             ],
             'discount_sum' => [
                 'attribute' => 'discount_sum',
                 'headerOptions' => ['class' => 'text-right'],
-                'value' => fn($charge): string => $charge->discount_sum ? $this->formatter->asCurrency($charge->discount_sum, $charge->currency) : '',
+                'value' => fn($charge): string => $charge->discount_sum ? $this->formatter->asCurrency($charge->discount_sum,
+                    $charge->currency) : '',
                 'enableSorting' => true,
                 'filter' => false,
             ],
             'net_amount' => [
                 'attribute' => 'net_amount',
                 'headerOptions' => ['class' => 'text-right'],
-                'value' => fn($charge): string => $charge->net_amount ? $this->formatter->asCurrency($charge->net_amount, $charge->currency) : '',
+                'value' => fn($charge): string => $charge->net_amount ? $this->formatter->asCurrency($charge->net_amount,
+                    $charge->currency) : '',
                 'enableSorting' => false,
                 'filter' => false,
             ],
@@ -223,7 +245,9 @@ class ChargeGridView extends BoxedGridView
                 'enableSorting' => false,
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => ['class' => 'text-right'],
-                'value' => fn($charge): string => Html::a($charge->bill_id, ['@bill/view', 'id' => $charge->bill_id], ['target' => '_blank']),
+                'value' => fn($charge): string => Html::a($charge->bill_id,
+                    ['@bill/view', 'id' => $charge->bill_id],
+                    ['target' => '_blank']),
             ],
             'id' => [
                 'attribute' => 'id',
