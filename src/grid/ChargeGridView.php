@@ -69,6 +69,7 @@ class ChargeGridView extends BoxedGridView
                 },
             ],
             'client_tags' => [
+                'label' => Yii::t('hipanel:finance', 'Client tags'),
                 'value' => fn(Charge $charge) => $charge->customer?->tags ? implode(', ', $charge->customer->tags) : '',
             ],
             'label' => [

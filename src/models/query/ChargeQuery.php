@@ -11,11 +11,6 @@ use hiqdev\hiart\ActiveQuery;
  */
 class ChargeQuery extends ActiveQuery
 {
-    public function init()
-    {
-        $this->joinWith('customer');
-    }
-
     public function behaviors(): array
     {
         return [
