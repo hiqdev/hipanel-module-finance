@@ -149,7 +149,7 @@ class ResourceHelper
             static fn($resource) => in_array($resource->type, $configurator->getAllPossibleColumns(), true));
     }
 
-    public static function buildGridColumns(array $columnsWithLabels, ?string $dateFilter = null): array
+    public static function buildGridColumns(array $columnsWithLabels): array
     {
         $columns = [];
         $user = yii::getApp()->user;
@@ -184,7 +184,7 @@ class ResourceHelper
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => ['class' => ['text-right', 'consumption-cell'], 'data-type' => $type, 'style' => 'white-space:nowrap;'],
-                'value' => static function (ActiveRecord $model) use ($type, $dateFilter): ?string {
+                'value' => static function (ActiveRecord $model) use ($type): ?string {
                     $map = [
                         Hub::class => 'switch',
                         Server::class => 'server'
@@ -198,9 +198,6 @@ class ResourceHelper
                     foreach (ArrayHelper::index($resources, 'date') as $date => $resource) {
                         $unit = $resource->buildResourceModel()->decorator()->displayUnit();
                         $resourceData[$date] = ['amount' => self::normalizeAmount($resource), 'unit' => $unit];
-                    }
-                    if ($dateFilter) {
-                        $resources = array_filter($resources, static fn($resource) => $resource->date === $dateFilter);
                     }
                     if (!empty($resources)) {
                         $unit = reset($resources)->buildResourceModel()->decorator()->displayUnit();
