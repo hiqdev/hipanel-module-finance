@@ -25,7 +25,7 @@ class PriceUpdateAction extends SmartUpdateAction
 
             $plans = array_unique(ArrayHelper::getColumn($models, 'plan_id'));
             if (count($plans) === 1) {
-                return ['@plan/view', 'id' => $plans[0]];
+                return ['@plan/view', 'id' => current($plans)];
             }
 
             return $action->collection->count() > 1
