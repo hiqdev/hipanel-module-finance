@@ -7,7 +7,6 @@ use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\FormulaInput;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\modules\finance\widgets\PriceFields;
-use hipanel\widgets\AmountWithCurrency;
 use hipanel\widgets\XEditable;
 use yii\bootstrap\Html;
 use yii\web\JsExpression;
@@ -31,7 +30,7 @@ use yii\widgets\ActiveForm;
 <?= Html::activeHiddenInput($model, "[$i]note", [
     'data' => [
         'attribute' => 'note',
-        'pk' => $model->object_id,
+        'pk' => $model->id,
     ],
 ]) ?>
 
@@ -65,13 +64,14 @@ use yii\widgets\ActiveForm;
             <br/>
             <?php if ($model->object_id) : ?>
                 <?= XEditable::widget([
-                    'model' => $model->object,
+                    'model' => $model,
                     'attribute' => 'note',
                     'pluginOptions' => [
-                        'selector' => ".editable[data-pk={$model->object_id}][data-name=note]",
+                        'selector' => ".editable[data-pk={$model->id}][data-name=note]",
                         'url' => new JsExpression(<<<"JS"
                         function(params) {
-                            $(this).closest('.form-instance').find('input[data-attribute=note]').val(params.value);
+                            $(this).closest('.form-instance').parent().find('input[data-attribute=note]').val(params.value);
+                            
                             return $.Deferred().resolve();
                         }
 JS
