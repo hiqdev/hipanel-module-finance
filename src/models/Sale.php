@@ -140,6 +140,21 @@ class Sale extends \hipanel\base\Model
         ]);
     }
 
+    public function isMine()
+    {
+        return (string) $this->buyer_id === (string) Yii::$app->user->identity->id;
+    }
+
+    public function isMineSeller()
+    {
+        return (string) $this->buyer_id === (string) Yii::$app->user->identity->seller_id;
+    }
+
+    public function isOperateable()
+    {
+        return !$this->isMine() && !$this->isMineSeller();
+    }
+
     public function getServer(): ActiveQuery
     {
         return $this->hasOne(Server::class, ['id' => 'object_id'])
