@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -12,7 +12,9 @@ namespace hipanel\modules\finance\grid\presenters\price;
 
 use hipanel\modules\finance\models\Price;
 use hipanel\widgets\ArraySpoiler;
+use NumberFormatter;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\bootstrap\Html;
 use yii\i18n\Formatter;
 use yii\web\User;
@@ -50,7 +52,7 @@ class PricePresenter
 
     /**
      * @param Price $price
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      * @return string
      */
     public function renderPrice(Price $price): string
@@ -79,8 +81,9 @@ class PricePresenter
                 ],
             ]);
         }
+        $sum = $this->formatter->asCurrency($price->{$this->priceAttribute}, $price->currency, [NumberFormatter::MAX_FRACTION_DIGITS => 20]);
 
-        return Html::tag('strong', $this->formatter->asCurrency($price->{$this->priceAttribute}, $price->currency)) . $unit . $formula;
+        return Html::tag('strong', $sum) . $unit . $formula;
     }
 
     /**
