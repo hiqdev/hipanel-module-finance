@@ -391,7 +391,7 @@
             let result;
             rows.forEach(elem => {
                 const row_object_id = elem.querySelector("[name*=object_id]").value;
-                const row_type = elem.querySelector("[name*=\"type\"]").value;
+                const row_type = elem.querySelector("[name*=\"[type]\"]").value;
 
                 if (object_id === row_object_id && type === row_type) {
                     result = elem;
