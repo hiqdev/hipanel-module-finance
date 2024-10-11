@@ -19,6 +19,12 @@ use yii\widgets\ActiveForm;
  * @var int $i
  * @var array $currencyTypes
  */
+
+// Generates a unique identifier for the note.
+// $model->id is null during creation (before the model is saved).
+// $model->object_id is consistent across the page.
+// $i is a unique index for distinguishing notes on the same page in case if $model->id is null.
+$notePk = $model->id . $model->object_id . $i;
 ?>
 
 <?= Html::activeHiddenInput($model, "[$i]object_id", ['ref' => 'object_id']) ?>
@@ -30,7 +36,7 @@ use yii\widgets\ActiveForm;
 <?= Html::activeHiddenInput($model, "[$i]note", [
     'data' => [
         'attribute' => 'note',
-        'pk' => $model->id,
+        'pk' => $notePk,
     ],
 ]) ?>
 
@@ -67,7 +73,8 @@ use yii\widgets\ActiveForm;
                     'model' => $model,
                     'attribute' => 'note',
                     'pluginOptions' => [
-                        'selector' => ".editable[data-pk={$model->id}][data-name=note]",
+                        'selector' => ".editable[data-pk={$notePk}][data-name=note]",
+                        //'data-pk' => $notePk,
                         'url' => new JsExpression(<<<"JS"
                         function(params) {
                             $(this).closest('.form-instance').parent().find('input[data-attribute=note]').val(params.value);
