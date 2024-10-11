@@ -5,7 +5,7 @@ test("Test the Progressive Price feature works @hipanel-module-finance @manager"
 
   const planName = "TEST-PROGRESSIVE-PRICE-TEMPLATE" + Math.random().toString(36).substring(7);
 
-  await page.goto("http://local.hipanel.advancedhosting.com/finance/plan/index");
+  await page.goto("/finance/plan/index");
   await page.getByRole("link", { name: "Create" }).click();
   await page.getByLabel("Name").fill(planName);
   await page.getByLabel("Type").selectOption("template");
