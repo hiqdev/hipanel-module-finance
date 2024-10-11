@@ -38,6 +38,7 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
             'value' => null,
             'v-bind:data-adjustment' => 'adjustmentOnly ? "yes" : "no"',
             'data' => [
+                'value' => $value,
                 'options' => Json::encode($options),
                 'adjustment-options' => Json::encode($adjustmentOptions),
             ],
@@ -131,7 +132,7 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
             },
             data: function () {
               return {
-                value: container.find('input[type=hidden]').val(),
+                value: container.find('input[type=hidden]').data('value'),
                 options: [],
                 adjustmentOnly: %s,
               };
