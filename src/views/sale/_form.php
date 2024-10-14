@@ -96,7 +96,10 @@ $this->registerCss(/** @lang CSS */ "
                     <?php if (Yii::$app->user->can('sale.update')) : ?>
                         <td>
                             <?= $form->field($sale, "[$idx]unsale_time")
-                                ->textInput(['class' => 'form-control datetime'])
+                                ->textInput([
+                                    'class' => 'form-control datetime',
+                                    'readonly' => !$sale->isOperateable()
+                                ])
                                 ->label(false)
                             ?>
                         </td>
@@ -110,7 +113,7 @@ $this->registerCss(/** @lang CSS */ "
                         </td>
                         <td>
                             <?= $form->field($model, "[$idx]reason")
-                                ->textInput()
+                                ->textInput(['readonly' => !$sale->isOperateable()])
                                 ->label(false)
                             ?>
                         </td>
