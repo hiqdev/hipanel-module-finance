@@ -74,7 +74,7 @@ $notePk = $model->id . $model->object_id . $i;
                     'attribute' => 'note',
                     'pluginOptions' => [
                         'selector' => ".editable[data-pk={$notePk}][data-name=note]",
-                        //'data-pk' => $notePk,
+                        'data-pk' => $notePk,
                         'url' => new JsExpression(<<<"JS"
                         function(params) {
                             $(this).closest('.form-instance').parent().find('input[data-attribute=note]').val(params.value);
