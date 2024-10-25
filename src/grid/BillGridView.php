@@ -271,8 +271,9 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'sortAttribute' => 'type_id',
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'text-right', 'style' => 'max-width: 25em; width: 20%'],
+                'filterInputOptions' => ['style' => 'min-width: 10%;'],
                 'contentOptions' => function () {
-                    return ['class' => 'text-right'];
+                    return ['class' => 'text-right', 'style' => 'white-space: nowrap;'];
                 },
                 'value' => function (Bill $model) {
                     return BillType::widget([

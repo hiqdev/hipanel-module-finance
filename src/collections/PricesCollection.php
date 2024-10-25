@@ -165,12 +165,12 @@ class PricesCollection extends Collection
     private function rollbackProgressivePriceClassToPreviousClass(Price $model): void
     {
         if ($model->hasProgressiveClass()) {
-            $model->setClass($this->determinePreviousClass());
+            $model->setClass($this->determinePreviousClass($model));
         }
     }
 
-    private function determinePreviousClass(): string
+    private function determinePreviousClass(Price $model): string
     {
-        return $this->plan_type === 'template' ? Price::TEMPLATE_PRICE_CLASS : Price::SINGLE_PRICE_CLASS;
+        return $model->plan_type === 'template' ? Price::TEMPLATE_PRICE_CLASS : Price::SINGLE_PRICE_CLASS;
     }
 }

@@ -35,8 +35,8 @@ class ValueColumn extends Column
 
     protected function renderDataCellContent($model, $key, $index)
     {
-        $fields = Html::hiddenInput("[{$model->id}]object_id", $model->object_id);
-        $fields .= Html::hiddenInput("[{$model->id}]type", $model->type);
+        $fields = Html::hiddenInput("[{$model->id}]object_id", $model->object_id, ['ref' => 'object_id']);
+        $fields .= Html::hiddenInput("[{$model->id}]type", $model->type, ['ref' => 'type']);
 
         return Html::tag('span', Html::tag('span', Html::tag('i', $fields, [
             'class' => 'fa fa-refresh fa-spin fa-fw',

@@ -91,7 +91,8 @@ class ChargeGridView extends BoxedGridView
             ],
             'type_label' => [
                 'label' => Yii::t('hipanel', 'Type'),
-                'headerOptions' => ['class' => 'text-right', 'style' => 'max-width: 25em'],
+                'headerOptions' => ['class' => 'text-right', 'style' => 'max-width: 25em;'],
+                'contentOptions' => ['style' => 'white-space: nowrap;'],
                 'format' => 'raw',
                 'value' => function (Charge $model) {
                     return BillType::widget([
@@ -101,6 +102,7 @@ class ChargeGridView extends BoxedGridView
                     ]);
                 },
                 'filterAttribute' => 'type',
+                'filterInputOptions' => ['style' => 'min-width: 10%;'],
                 'filter' => function (DataColumn $column, ChargeSearch $filterModel): string {
                     return BillTypeFilter::widget([
                         'attribute' => 'type_id',

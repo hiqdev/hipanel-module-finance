@@ -36,6 +36,7 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
         $activeInput = Html::activeHiddenInput($this->model, $this->attribute, [
             'v-model' => 'value',
             'value' => null,
+            'v-bind:data-adjustment' => 'adjustmentOnly ? "yes" : "no"',
             'data' => [
                 'value' => $value,
                 'options' => Json::encode($options),
@@ -69,11 +70,13 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
                     </label>
                     <div slot="value-label" slot-scope="{ node }" v-html="node.raw.treeLabel ?? node.raw.label"></div>
                     <div slot="after-list">
-                        <div class="checkbox" style="%s">
-                            <button 
+                        <div style="%s">
+                            <button
                               type="button"
+                              class="adjustmentButton"
                               :class="{ \'btn btn-default btn-sm btn-block\': true, \'active\': adjustmentOnly }"
-                              @click="toggleAdjustemnt"
+                              v-on:click="toggleAdjustment"
+                              ref="adjustmentButton"
                             >
                                 <span v-if="adjustmentOnly">
                                     <i class="glyphicon glyphicon-eye-close"></i>
@@ -94,68 +97,81 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
             $this->multiple ? 'false' : 'true', // disable/enable branch nodes
             var_export($this->multiple, true), // multiple
             $this->model->getAttributeLabel($this->getAttribute()), // set placeholder
-            $this->splitTypesByAdjustment() ? 'display: block; padding: 0 1em' : 'display: none;',
+            $this->splitTypesByAdjustment() ? 'display: block; padding: 1em 1em 0' : 'display: none;',
             $activeInput
         );
     }
 
     public function registerJs(string $widgetId, $value): void
     {
-        $isAdjustment = $this->isAdjustment($value) ? 'true' : 'false';
+        $mixin = self::mixin($this->isAdjustment($value));
         $this->view->registerJs(
             sprintf(/** @lang JavaScript */ "
                 ;(() => {
                     const container = $('#%s');
+                    const mixin = $mixin;
                     new Vue({
                         el: container.get(0),
-                        components: {
-                          'treeselect': VueTreeselect.Treeselect,
-                        },
-                        data: {
-                            value: container.find('input[type=hidden]').data('value'),
-                            adjustmentOnly: %s,
-                            options: [],
-                        },
-                        watch: {
-                          adjustmentOnly(value) {
-                            this.toggleOptions(value);
-                          }
-                        },
-                        mounted() {
-                          this.toggleOptions(%s);
-                        },
-                        methods: {
-                          toggleAdjustemnt: function () {
-                            this.value = null;
-                            this.adjustmentOnly = !this.adjustmentOnly;
-                          },
-                          typeChange: function (node) {
-                            this.value = typeof node === 'undefined' ? null : node.id;
-                            this.\$nextTick(function () {
-                              const el = this.\$el.querySelector('input:not(.vue-treeselect__input)');
-                              $(el).trigger('change');
-                            });
-                          },
-                          toggleOptions: function (showAdjustments) {
-                            const input = container.find('input[type=hidden]');
-                            if (showAdjustments === true) {
-                              this.options = input.data('adjustment-options');
-                            } else  {
-                              this.options = input.data('options');
-                            }
-                          },
-                          s(text) {
-                              return '<s>' + text + '</s>';
-                          }
-                        }
+                        mixins: [mixin],
                     });
                 })();
                 ",
                 $widgetId,
-                $isAdjustment,
-                $isAdjustment,
             )
         );
+    }
+
+    public static function mixin(bool $isAdjustment = false): string
+    {
+        $isAdjustment = $isAdjustment ? 'true' : 'false';
+
+        return sprintf(/** @lang JavaScript */ <<<"JS"
+          {
+            components: {
+              'treeselect': VueTreeselect.Treeselect
+            },
+            data: function () {
+              return {
+                value: container.find('input[type=hidden]').data('value'),
+                options: [],
+                adjustmentOnly: %s,
+              };
+            },
+            watch: {
+              adjustmentOnly(value) {
+                this.toggleOptions(value);
+              }
+            },
+            mounted() {
+              this.toggleOptions(%s);
+            },
+            methods: {
+              toggleAdjustment: function () {
+                this.value = null;
+                this.adjustmentOnly = !this.adjustmentOnly;
+              },
+              toggleOptions: function (showAdjustment) {
+                const input = container.find('input[type=hidden]');
+                if (showAdjustment === true) {
+                  this.options = input.data('adjustment-options');
+                } else  {
+                  this.options = input.data('options');
+                }
+              },
+              typeChange: function (node) {
+                this.value = typeof node === 'undefined' ? null : node.id;
+                this.\$nextTick(function () {
+                  const el = this.\$el.querySelector('input:not(.vue-treeselect__input)');
+                  $(el).trigger('change');
+                });
+              },
+              s(text) {
+                  return '<s>' + text + '</s>';
+              }
+            }
+          }
+JS,
+            $isAdjustment, $isAdjustment);
     }
 
     private function buildOptionsArray(array $types): array
