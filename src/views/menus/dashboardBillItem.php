@@ -24,7 +24,7 @@ use yii\helpers\Html;
     <?php if ($model->credit > 0) : ?>
         <span><?= Yii::t('hipanel', 'Credit') . ' ' . Yii::$app->formatter->asCurrency($model->credit, $model->currency) ?></span>
     <?php endif ?>
-    <?php if (Yii::$app->user->can('manage')) : ?>
+    <?php if (Yii::$app->user->can('bill.read')) : ?>
         <br>
         <?= SearchForm::widget([
             'formOptions' => [

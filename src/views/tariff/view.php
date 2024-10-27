@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="profile-usermenu">
             <?php if ($model->tariff->note) : ?>
                 <p style="padding: 10px 15px; border-bottom: 1px solid #f0f4f7;">
-                    <?php if (Yii::$app->user->can('manage')) : ?>
+                    <?php if (Yii::$app->user->can('plan.set-note')) : ?>
                         <?= Yii::t('hipanel:finance:tariff', '{0}:', [Html::tag('b', $model->tariff->getAttributeLabel('note'))]) ?>
                         <?= \hipanel\widgets\XEditable::widget([
                             'model' => $model->tariff,
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php endif; ?>
                 </p>
             <?php endif; ?>
-            <?php if (Yii::$app->user->can('manage')) : ?>
+            <?php if (Yii::$app->user->can('plan.update')) : ?>
                 <?= TariffDetailMenu::widget(['model' => $model]) ?>
             <?php endif ?>
         </div>

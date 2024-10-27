@@ -20,7 +20,7 @@ class CreditColumn
 {
     public static function resolveConfig()
     {
-        return Yii::$app->user->can('manage') ? [
+        return Yii::$app->user->can('purse.set-credit') ? [
             'class'          => XEditableColumn::class,
             'filter'         => false,
             'contentOptions' => ['class' => 'text-right'],
