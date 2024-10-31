@@ -13,18 +13,19 @@ $provides = [
     'interkassa' => ['visa', 'maestro2'],
 ];
 
-if (Yii::$app->getModule('merchant')->cashewOnly) {
+$hideBlock = false;
 
-    foreach ($merchants as $merchant) {
-        $methods[] = $name = $merchant->system;
-        if (isset($provides[$name])) {
-            $methods = array_merge($provides[$name], $methods);
-        }
+foreach ($merchants as $merchant) {
+    if (Yii::$app->getModule('merchant')->cashewOnly && $merchant->system === 'cashew') {
+        $hideBlock = true;
+        break;
     }
-} else {
-    $hideBlock = true;
+    $methods[] = $name = $merchant->system;
+    if (isset($provides[$name])) {
+        $methods = array_merge($provides[$name], $methods);
+    }
 }
-$methods = array_unique($methods);
+
 ?>
 
 <?php if ($hideBlock !== true) : ?>
