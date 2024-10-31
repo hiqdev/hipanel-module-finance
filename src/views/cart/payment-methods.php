@@ -13,7 +13,13 @@ $provides = [
     'interkassa' => ['visa', 'maestro2'],
 ];
 
+$cashew = false;
+
 foreach ($merchants as $merchant) {
+    if ($merchant->system === 'cashew') {
+        $cashew = $merchant;
+        break;
+    }
     $methods[] = $name = $merchant->system;
     if (isset($provides[$name])) {
         $methods = array_merge($provides[$name], $methods);
@@ -23,12 +29,15 @@ foreach ($merchants as $merchant) {
 $methods = array_unique($methods);
 
 ?>
+
+<?php if ($cashew === false) : ?>
     <p class="lead"><?= Yii::t('cart', 'Payment methods') ?>:</p>
 
-<?php if (empty($methods)) :
-    echo Yii::t('cart', 'No available payment methods');
-else :
-    foreach ($methods as $name) : ?>
-        <i class="pi pi-<?= strtolower($name) ?>"></i>
-    <?php endforeach;
-endif; ?>
+    <?php if (empty($methods)) : ?>
+        <?= Yii::t('cart', 'No available payment methods') ?>
+    <?php else : ?>
+        <?php foreach ($methods as $name) : ?>
+            <i class="pi pi-<?= strtolower($name) ?>"></i>
+        <?php endforeach ?>
+    <?php endif ?>
+<?php endif ?>
