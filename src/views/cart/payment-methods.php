@@ -25,9 +25,7 @@ foreach ($merchants as $merchant) {
         $methods = array_merge($provides[$name], $methods);
     }
 }
-
 $methods = array_unique($methods);
-
 ?>
 
 <?php if ($hideBlock !== true) : ?>
