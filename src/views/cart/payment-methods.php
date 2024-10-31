@@ -14,9 +14,10 @@ $provides = [
 ];
 
 $hideBlock = false;
+$cashewOnly = Yii::$app->getModule('merchant')->cashewOnly ?? false;
 
 foreach ($merchants as $merchant) {
-    if (Yii::$app->getModule('merchant')->cashewOnly && $merchant->system === 'cashew') {
+    if ($cashewOnly && $merchant->system === 'cashew') {
         $hideBlock = true;
         break;
     }
