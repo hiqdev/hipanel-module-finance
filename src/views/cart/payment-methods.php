@@ -26,6 +26,8 @@ foreach ($merchants as $merchant) {
     }
 }
 
+$methods = array_unique($methods);
+
 ?>
 
 <?php if ($hideBlock !== true) : ?>
