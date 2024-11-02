@@ -29,18 +29,22 @@ class FractionQuantityFormatter extends DefaultQuantityFormatter implements Cont
         if ($this->model->unit === 'hour') {
             $hours = $this->model->getQuantity();
 
-            return Yii::t('hipanel:finance', '{d}', ['d' => $formatter->asDuration($hours * 3600)]);
+            return Yii::t('hipanel:finance', '{d}', ['d' => $this->formatDurationWithoutSecondsAndMinutes($hours * 3600)]);
         }
         $hoursInCurrentMonth = (new DateTimeImmutable($this->model->getTime()))->format('t') * 24;
         $units = $this->model->getQuantity() / $this->model->getFractionOfMonth();
         $hours = $this->model->getFractionOfMonth() * $hoursInCurrentMonth;
 
         $formattedUnites = match ($this->fractionUnit) {
-            FractionUnit::SIZE => $formatter->asShortSize(Quantity::create($this->model->unit, $units)->convert(Unit::create('byte'))->getQuantity()),
+            FractionUnit::SIZE => $formatter->asShortSize(Quantity::create($this->model->unit,
+                $units)->convert(Unit::create('byte'))->getQuantity()),
             default => $units . ' ' . $this->fractionUnit,
         };
 
-        return Yii::t('hipanel:finance', '{u} {d}', ['u' => $formattedUnites . ' &times; ', 'd' => $formatter->asDuration($hours * 3600)]);
+        return Yii::t('hipanel:finance', '{u} {d}', [
+            'u' => $formattedUnites . ' &times; ',
+            'd' => $this->formatDurationWithoutSecondsAndMinutes($hours * 3600),
+        ]);
     }
 
     public function setContext(mixed $context): ContextAwareQuantityFormatter
@@ -51,5 +55,27 @@ class FractionQuantityFormatter extends DefaultQuantityFormatter implements Cont
         $this->model = $context;
 
         return $this;
+    }
+
+    public function formatDurationWithoutSecondsAndMinutes(int|float $seconds): string
+    {
+        $seconds = (int)$seconds;
+        $days = intdiv($seconds, 86400);
+        $months = intdiv($days, 30);
+        $remainingDays = $days % 30;
+        $hours = ($seconds % 86400) / 3600;
+
+        $parts = [];
+        if ($months > 0) {
+            $parts[] = $months . ' ' . Yii::t('app', '{n, plural, =1{month} other{months}}', ['n' => $months]);
+        }
+        if ($remainingDays > 0) {
+            $parts[] = $remainingDays . ' ' . Yii::t('app', '{n, plural, =1{day} other{days}}', ['n' => $remainingDays]);
+        }
+        if ($hours > 0) {
+            $parts[] = $hours . ' ' . Yii::t('app', '{n, plural, =1{hour} other{hours}}', ['n' => $hours]);
+        }
+
+        return empty($parts) ? ' -- ' : implode(", ", $parts);
     }
 }
