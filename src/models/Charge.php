@@ -12,7 +12,6 @@ namespace hipanel\modules\finance\models;
 
 use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\models\query\ChargeQuery;
-use hiqdev\hiart\ActiveQuery;
 use Yii;
 
 /**
@@ -35,7 +34,7 @@ use Yii;
  * @property TargetObject $latestCommonObject
  * @property Bill $bill
  */
-class Charge extends Resource implements HasSumAndCurrencyAttributesInterface, BillableTimeInterface
+class Charge extends Resource implements HasSumAndCurrencyAttributesInterface, BillableTimeInterface, FractionAwareInterface
 {
     use \hipanel\base\ModelTrait;
 
@@ -60,6 +59,7 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface, B
             [['class', 'name', 'unit', 'tariff', 'order_name', 'client', 'seller', 'client_type', 'root_ftype'], 'string'],
             [['type', 'label', 'ftype', 'time', 'type_label', 'currency', 'exchange_date', 'client_tags'], 'safe'],
             [['is_payed'], 'boolean'],
+            [['fraction_of_month'], 'number'],
             [['sum', 'quantity', 'bill_quantity', 'positive', 'negative', 'discount_sum', 'net_amount', 'rate', 'eur_amount'], 'number'],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['object_id', 'sum', 'type_id', 'quantity', 'unit'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
@@ -141,5 +141,10 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface, B
     public function getBillQuantity()
     {
         return $this->bill_quantity;
+    }
+
+    public function getFractionOfMonth(): float
+    {
+        return (float)$this->fraction_of_month;
     }
 }
