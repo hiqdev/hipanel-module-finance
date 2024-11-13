@@ -73,14 +73,19 @@
 
             return result;
         },
-        rememberEstimates(period, objects) {
+        rememberEstimates(period, targets, context = {}) {
             let estimatesPerRow = {};
 
-            if (!objects) {
+            if (!targets || Object.keys(targets).length === 0) {
+                this.estimatesPerPeriod[period] = {};
+                this.addToTotalSum(period, {
+                    sum: 0,
+                    currency: context.currency,
+                });
                 return;
             }
-            Object.keys(objects).forEach(object_id => {
-                let objectActions = objects[object_id];
+            Object.keys(targets).forEach(object_id => {
+                let objectActions = targets[object_id];
                 Object.keys(objectActions).forEach(type => {
                     let row = this.matchPriceRow(object_id, type);
                     if (row) {
@@ -145,10 +150,11 @@
 
                 totalSpan.classList.add('total-per-currency');
                 for (let values of objectCurrency) {
-                    let period = values[0],
-                        sumFormatted = values[1].sumFormatted;
+                    let period = values[0];
+                    let sumFormatted = values[1].sumFormatted;
+                    let sum = values[1].sum;
 
-                    this.drawEstimatedValue(totalSpan, period, sumFormatted || '&mdash;');
+                    this.drawEstimatedValue(totalSpan, period, sum === 0 ? '&mdash;' : sumFormatted);
                 }
                 totalCell.appendChild(totalSpan);
             });
@@ -189,12 +195,14 @@
             let rows = this.getPriceRows();
 
             rows.forEach(row => {
-                let saleObjectId = this.getRelatedSaleObjectId(row);
+                const saleObjectId = this.getRelatedSaleObjectId(row);
                 Object.keys(this.estimatesPerPeriod).forEach(period => {
-                    let estimatesPerRow = this.estimatesPerPeriod[period],
-                        estimate = estimatesPerRow[row.dataset.id];
+                    const estimatesPerRow = this.estimatesPerPeriod[period];
+                    const estimate = estimatesPerRow[row.dataset.id];
                     if (estimate) {
                         this.updateSaleObjectSum(saleObjectId, period, estimate.currency, estimate.sum);
+                    } else {
+                        this.updateSaleObjectSum(saleObjectId, period, row.dataset.currency, 0);
                     }
                 });
             });
@@ -255,7 +263,7 @@
                     Object.keys(objectCurrency).forEach(period => {
                         this.saleObjects[saleObjectId][currency][period] = {
                             'sum': objectCurrency[period],
-                            'sumFormatted': formatter.format(objectCurrency[period]),
+                            'sumFormatted': objectCurrency[period] > 0 ? formatter.format(objectCurrency[period]) : null,
                         };
                     });
                 });
@@ -283,7 +291,7 @@
                 data: {prices, actions},
                 success: json => {
                     Object.keys(json).forEach(period => {
-                        this.rememberEstimates(period, json[period].targets);
+                        this.rememberEstimates(period, json[period].targets, json[period]);
                     });
                     this.drawEstimates();
                     this.drawPlanTotal();
@@ -311,7 +319,7 @@
                 success: json => {
                     this.drawDynamicQuantity(json);
                     Object.keys(json).forEach(period => {
-                        this.rememberEstimates(period, json[period].targets);
+                        this.rememberEstimates(period, json[period].targets, json[period]);
                     });
                     this.drawEstimates();
                     this.drawTotalPerSaleObject();

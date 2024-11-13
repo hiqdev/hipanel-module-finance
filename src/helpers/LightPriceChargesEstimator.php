@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -11,11 +11,8 @@
 namespace hipanel\modules\finance\helpers;
 
 use hipanel\modules\finance\widgets\PriceChargesEstimationTable;
-use Money\Currencies\ISOCurrencies;
 use Money\Currency;
-use Money\Formatter\DecimalMoneyFormatter;
 use Money\Money;
-use Yii;
 
 /**
  * Class LightPriceChargesEstimator.
@@ -24,15 +21,7 @@ use Yii;
  */
 class LightPriceChargesEstimator extends PriceChargesEstimator
 {
-    /**
-     * @var string[] array of strings compatible with `strtotime()`, e.g. `first day of next month`
-     */
-    private $periods = [];
-
-    /**
-     * @var string[] array of strings compatible with `strtotime()`, e.g. `first day of next month`
-     * @return array
-     */
+    /** @inerhitDoc */
     public function calculateForPeriods($periods): array
     {
         $this->periods = $periods;
@@ -40,12 +29,23 @@ class LightPriceChargesEstimator extends PriceChargesEstimator
         return $this->groupCalculationsByTarget();
     }
 
-    private function groupCalculationsByTarget()
+    private function groupCalculationsByTarget(): array
     {
         $result = [];
 
         foreach ($this->calculations as $period => &$chargesByTargetAndAction) {
-            foreach ($chargesByTargetAndAction['targets'] as $target => &$actions) {
+            $resultKey = $this->yiiFormatter->asDate(strtotime($period), 'php:M Y');
+            if (empty($chargesByTargetAndAction['targets'])) {
+                $tryToGetCurrency = array_unique(array_column($this->calculations, 'currency'));
+                $result[$resultKey] = [
+                    'targets' => [],
+                    'currency' => reset($tryToGetCurrency),
+                    'sum' => 0,
+                    'sumFormatted' => null,
+                ];
+                continue;
+            }
+            foreach ($chargesByTargetAndAction['targets'] as &$actions) {
                 foreach ($actions as &$action) {
                     foreach ($action['charges'] as &$charge) {
                         $money = new Money($charge['sum'], new Currency($charge['currency']));
@@ -53,20 +53,23 @@ class LightPriceChargesEstimator extends PriceChargesEstimator
                         $charge['formattedPrice'] = $this->yiiFormatter->asCurrency($charge['price'], $charge['currency']);
                         $chargesByTargetAndAction['sum'] ??= 0;
 
-                        $chargesByTargetAndAction['sum'] += (int) $charge['price'];
+                        $chargesByTargetAndAction['sum'] += (int)$charge['price'];
                     }
                     $this->decorateAction($action);
                 }
             }
 
-            $chargesByTargetAndAction['sumFormatted'] = $this->yiiFormatter->asCurrency($chargesByTargetAndAction['sum'], $chargesByTargetAndAction['currency']);
-            $result[$this->yiiFormatter->asDate(strtotime($period), 'php:M Y')] = $chargesByTargetAndAction;
+            $chargesByTargetAndAction['sumFormatted'] = $this->yiiFormatter->asCurrency(
+                $chargesByTargetAndAction['sum'],
+                $chargesByTargetAndAction['currency']
+            );
+            $result[$resultKey] = $chargesByTargetAndAction;
         }
 
         return $result;
     }
 
-    private function decorateAction(&$action)
+    private function decorateAction(&$action): void
     {
         $action['sum'] = array_sum(array_column($action['charges'], 'price'));
         $action['sumFormatted'] = $this->yiiFormatter->asCurrency($action['sum'], $action['currency']);

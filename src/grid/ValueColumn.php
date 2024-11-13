@@ -41,7 +41,10 @@ class ValueColumn extends Column
         return Html::tag('span', Html::tag('span', Html::tag('i', $fields, [
             'class' => 'fa fa-refresh fa-spin fa-fw',
             'data' => ['id' => $model->id],
-        ]), ['class' => 'price-estimates']), ['class' => 'price-item', 'data' => ['id' => $model->id]]);
+        ]), ['class' => 'price-estimates']), ['class' => 'price-item', 'data' => [
+            'id' => $model->id,
+            'currency' => mb_strtoupper($model->currency),
+        ]]);
     }
 
     private function registerClientScript()
@@ -53,7 +56,7 @@ class ValueColumn extends Column
             "
         ;(function ($, window, document, undefined) {
             let Estimator = $('#bulk-plan').priceEstimator({
-                url: '${calculateValueUrl}',
+                url: '$calculateValueUrl',
                 estimatePlan: true,
                 rowSelector: '.price-item',
                 totalCellSelector: '#plan-monthly-value',
