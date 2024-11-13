@@ -62,7 +62,7 @@ $detalizationAllowed = Yii::$app->params['module.finance.bill.detalization.allow
         ]) ?>
     </div>
 
-    <?php if ($detalizationAllowed || Yii::$app->user->can('charge.read')): ?>
+    <?php if ($detalizationAllowed || Yii::$app->user->can('bill.charges.read')): ?>
         <div class="col-md-9">
             <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
                 <?php $page->beginContent('show-actions') ?>
