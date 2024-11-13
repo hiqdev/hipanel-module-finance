@@ -32,6 +32,7 @@ class FormulaExamplesProvider
         $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Growing discount'), $this->growingDiscountFormulas());
         $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Installment'), $this->installmentFormulas());
         $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Monthly Cap'), $this->monthlyCapFomulas());
+        $result[] = $this->groupOf(Yii::t('hipanel.finance.price', 'Once'), $this->onceFormulas());
 
         return $result;
     }
@@ -71,6 +72,14 @@ class FormulaExamplesProvider
             "cap.monthly('28 days')" => Yii::t('hipanel.finance.price',
                 'The given formula is useful only for monthly prices. When the monthly invoice consumption exceeds the given cap, two charges will be produced: first at the price amount for 28 days, and second for 0 cents for the rest days of month.'
             ),
+        ];
+    }
+
+    private function onceFormulas()
+    {
+        return [
+           "once.per('1 year')" => Yii::t('hipanel.finance.price', 'Bill every year in month that matches the month of sale of the object.'),
+           "once.per('3 months')" => Yii::t('hipanel.finance.price', 'Bill every third month, starting from the month of sale of the object.'),
         ];
     }
 

@@ -13,16 +13,18 @@ $provides = [
     'interkassa' => ['visa', 'maestro2'],
 ];
 
-if (Yii::$app->getModule('merchant')->cashewOnly) {
+$hideBlock = false;
+$cashewOnly = Yii::$app->getModule('merchant')->cashewOnly ?? false;
 
-    foreach ($merchants as $merchant) {
-        $methods[] = $name = $merchant->system;
-        if (isset($provides[$name])) {
-            $methods = array_merge($provides[$name], $methods);
-        }
+foreach ($merchants as $merchant) {
+    if ($cashewOnly && $merchant->system === 'cashew') {
+        $hideBlock = true;
+        break;
     }
-} else {
-    $hideBlock = true;
+    $methods[] = $name = $merchant->system;
+    if (isset($provides[$name])) {
+        $methods = array_merge($provides[$name], $methods);
+    }
 }
 $methods = array_unique($methods);
 ?>

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -30,32 +30,38 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
      * // TODO: use DI to configure
      */
     private array $types = [
-        'monthly'           => MonthlyQuantity::class,
+        'monthly' => MonthlyQuantity::class,
 
-        'monthly,rack_unit' => RackUnitQuantity::class,
-        'ip_num'            => IPNumQuantity::class,
-        'support_time'      => SupportTimeQuantity::class,
-        'devops_support'    => SupportTimeQuantity::class,
-        'referral'          => DefaultQuantityFormatter::class,
-        'server_traf_max'   => DefaultQuantityFormatter::class,
-        'vps_traf_max'      => DefaultQuantityFormatter::class,
-        'cloud_ip_regular'  => IPNumQuantity::class,
-        'cloud_ip_anycast'  => IPNumQuantity::class,
-        'cloud_ip_public'   => IPNumQuantity::class,
+        'ip_num' => IPNumQuantity::class,
+        'support_time' => SupportTimeQuantity::class,
+        'devops_support' => SupportTimeQuantity::class,
+        'referral' => DefaultQuantityFormatter::class,
+        'server_traf_max' => DefaultQuantityFormatter::class,
+        'vps_traf_max' => DefaultQuantityFormatter::class,
+        'cloud_ip_regular' => IPNumQuantity::class,
+        'cloud_ip_anycast' => IPNumQuantity::class,
+        'cloud_ip_public' => IPNumQuantity::class,
         'server_traf95_max' => DefaultQuantityFormatter::class,
-        'cdn_traf_max'      => DefaultQuantityFormatter::class,
-        'cdn_traf95_max'    => DefaultQuantityFormatter::class,
-        'cdn_cache95'       => DefaultQuantityFormatter::class,
-        'backup_du'         => DefaultQuantityFormatter::class,
-        'server_du'         => DefaultQuantityFormatter::class,
-        'storage_du'        => DefaultQuantityFormatter::class,
-        'storage_du95'      => DefaultQuantityFormatter::class,
-        'win_license'       => DefaultQuantityFormatter::class,
-        'hw_purchase'       => DefaultQuantityFormatter::class,
-        'server_ssd'        => DefaultQuantityFormatter::class,
-        'server_sata'       => DefaultQuantityFormatter::class,
-        'power'             => DefaultQuantityFormatter::class,
-        'drenewal'          => DomainRenewalQuantity::class,
+        'cdn_traf_max' => DefaultQuantityFormatter::class,
+        'cdn_traf95_max' => DefaultQuantityFormatter::class,
+        'cdn_cache95' => DefaultQuantityFormatter::class,
+        'backup_du' => DefaultQuantityFormatter::class,
+        'server_du' => DefaultQuantityFormatter::class,
+        'storage_du' => DefaultQuantityFormatter::class,
+        'storage_du95' => DefaultQuantityFormatter::class,
+        'win_license' => DefaultQuantityFormatter::class,
+        'hw_purchase' => DefaultQuantityFormatter::class,
+        'server_ssd' => DefaultQuantityFormatter::class,
+        'server_sata' => DefaultQuantityFormatter::class,
+        'power' => DefaultQuantityFormatter::class,
+        'drenewal' => DomainRenewalQuantity::class,
+
+        'monthly,rack_unit' => [FractionQuantityFormatter::class, 'units'],
+        'overuse,lb_capacity_unit' => [FractionQuantityFormatter::class, 'CU'],
+        'overuse,lb_ha_capacity_unit' => [FractionQuantityFormatter::class, 'HA CU'],
+        'overuse,private_cloud_backup_du' => [FractionQuantityFormatter::class, FractionUnit::SIZE],
+        'overuse,volume_du' => [FractionQuantityFormatter::class, FractionUnit::SIZE],
+        'overuse,snapshot_du' => [FractionQuantityFormatter::class, FractionUnit::SIZE],
     ];
 
     public function __construct(private readonly IntlFormatter $intlFormatter, private readonly BillTypesProvider $billTypesProvider)
@@ -109,7 +115,7 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
             $type = isset($types[$context->id]) ? $types[$context->id]->name : null;
         }
         if ($type !== null && !isset($this->types[$type])) {
-            if (strpos($type, 'monthly,') === 0) {
+            if (str_starts_with($type, 'monthly,')) {
                 $type = 'monthly';
             } else {
                 $type = $this->fixType($type);
@@ -118,14 +124,16 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
 
         $formatter = new DefaultQuantityFormatter($quantity, $this->intlFormatter);
         if (isset($this->types[$type])) {
-            $className = $this->types[$type];
+            $typeSettings = $this->types[$type];
+            $className = is_array($typeSettings) ? ArrayHelper::remove($typeSettings, 0) : $typeSettings;
             /** @var QuantityFormatterInterface $formatter */
-            $formatter = new $className($quantity, $this->intlFormatter);
+            $formatter = is_array($typeSettings) ? new $className($quantity, $this->intlFormatter, ...$typeSettings) : new $className($quantity, $this->intlFormatter);
         }
 
         if ($formatter instanceof ContextAwareQuantityFormatter && $context) {
             $formatter->setContext($context);
         }
+
         return $formatter;
     }
 
