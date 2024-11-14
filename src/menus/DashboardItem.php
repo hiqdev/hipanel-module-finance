@@ -34,7 +34,7 @@ class DashboardItem extends Menu
                 'encode' => false,
             ];
         }
-        if (Yii::$app->user->can('manage')) {
+        if (Yii::$app->user->can('plan.update')) {
             $items['tariff'] = [
                 'label' => $this->render('dashboardTariffItem', array_merge($this->clientWithCounters->getWidgetData('tariff'), [
                     'route' => Url::toRoute('@plan/index'),

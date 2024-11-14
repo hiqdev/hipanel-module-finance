@@ -17,7 +17,7 @@ use hipanel\widgets\Box;
             <thead>
             <tr>
                 <td><?= Yii::t('hipanel:finance:tariff', 'Price') ?></td>
-                <?php if (Yii::$app->user->can('manage')) : ?>
+                <?php if (Yii::$app->user->can('price.update')) : ?>
                     <td><?= Yii::t('hipanel:finance:tariff', 'Parent tariff price') ?></td>
                     <td><?= Yii::t('hipanel:finance:tariff', 'Profit') ?></td>
                 <?php endif; ?>
@@ -28,7 +28,7 @@ use hipanel\widgets\Box;
                 <?php $price = $model->calculation()->price; ?>
                 <?php $basePrice = $model->parentCalculation()->price; ?>
                 <td><?= Yii::$app->formatter->asCurrency($price, $model->calculation()->currency) ?></td>
-                <?php if (Yii::$app->user->can('manage')) : ?>
+                <?php if (Yii::$app->user->can('price.update')) : ?>
                     <td><?= Yii::$app->formatter->asCurrency($basePrice, $model->parentCalculation()->currency) ?></td>
                     <td>
                         <?= PriceDifferenceWidget::widget([
@@ -63,7 +63,7 @@ use hipanel\widgets\Box;
                             'price' => $resource->fee,
                             'currency' => $resource->currency,
                         ]) ?>
-                        <?php if (Yii::$app->user->can('manage')) : ?>
+                        <?php if (Yii::$app->user->can('price.update')) : ?>
                             <?= PriceDifferenceWidget::widget([
                                 'new' => $resource->fee,
                                 'old' => $baseResource->fee,
@@ -99,7 +99,7 @@ use hipanel\widgets\Box;
                             'price' => $resource->fee,
                             'currency' => $resource->currency,
                         ]) ?>
-                        <?php if (Yii::$app->user->can('manage')) : ?>
+                        <?php if (Yii::$app->user->can('price.update')) : ?>
                             <?= PriceDifferenceWidget::widget([
                                 'new' => $resource->fee,
                                 'old' => $baseResource->fee,
@@ -114,7 +114,7 @@ use hipanel\widgets\Box;
                             'price' => $resource->price,
                             'currency' => $resource->currency,
                         ]) ?>
-                        <?php if (Yii::$app->user->can('manage')) : ?>
+                        <?php if (Yii::$app->user->can('price.update')) : ?>
                             <?= PriceDifferenceWidget::widget([
                                 'new' => $resource->price,
                                 'old' => $baseResource->price,

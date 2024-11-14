@@ -11,7 +11,6 @@ use yii\widgets\ActiveForm;
 
 /**
  * @var View $this
- * @var bool $canSupport
  * @var CurrencyExchangeForm $model
  * @var ExchangeRate[] $rates
  */
@@ -33,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row">
             <div class="col-lg-6 col-md-8">
                 <?php Box::begin() ?>
-                <?= $canSupport
+                <?= Yii::$app->user->can('access-subclients')
                     ? $form->field($model, 'client_id')
                         ->widget(ClientCombo::class)
                     : Html::activeHiddenInput($model, 'client_id') ?>

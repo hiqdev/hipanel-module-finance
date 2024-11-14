@@ -245,8 +245,7 @@ class BillController extends CrudController
     public function actionCreateExchange()
     {
         $model = new CurrencyExchangeForm();
-        $canSupport = Yii::$app->user->can('support');
-        if (!$canSupport) {
+        if (!Yii::$app->user->can('access-subclients')) {
             $model->client_id = Yii::$app->user->identity->getId();
         }
 
@@ -260,7 +259,6 @@ class BillController extends CrudController
 
         return $this->render('create-exchange', [
             'model' => $model,
-            'canSupport' => $canSupport,
             'rates' => $this->getExchangeRates(),
         ]);
     }
