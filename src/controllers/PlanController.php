@@ -448,7 +448,7 @@ class PlanController extends CrudController
 
     private function calculateDataForPeriods(string $action, array $data = []): array
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
+        $this->response->format = Response::FORMAT_JSON;
         $times = ['now', 'first day of +1 month', 'first day of +1 year'];
 
         try {
