@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -12,6 +12,7 @@ namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
 use hipanel\actions\SmartPerformAction;
+use hipanel\actions\VariantsAction;
 use hipanel\actions\ViewAction;
 use hipanel\actions\ComboSearchAction;
 use hipanel\actions\SmartUpdateAction;
@@ -21,11 +22,14 @@ use hipanel\actions\ProxyAction;
 use hipanel\filters\EasyAccessControl;
 use hipanel\actions\ValidateFormAction;
 use hipanel\base\CrudController;
+use hipanel\modules\finance\widgets\RequisiteSummaryTable;
+use yii\grid\GridView;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\client\actions\ContactCreateAction;
 use hipanel\modules\client\models\query\ContactQuery;
 use hipanel\modules\finance\actions\CdbExportAction;
 use hipanel\modules\finance\models\Requisite;
+use hipanel\widgets\SynchronousCountEnabler;
 use yii\base\Event;
 use Yii;
 
@@ -57,6 +61,7 @@ class RequisiteController extends CrudController
     public function actions()
     {
         $canSeeDocuments = Yii::getAlias('@document', false) && Yii::$app->user->can('document.read');
+
         return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
@@ -67,10 +72,25 @@ class RequisiteController extends CrudController
                     if (in_array($representation, ['balance', 'balances'], true)) {
                         $query->addSelect('balances');
                     }
-                    if ($canSeeDocuments) {
+                    if ($canSeeDocuments && $representation === 'common') {
                         $query->withDocuments();
                     }
                 },
+                'responseVariants' => [
+                    IndexAction::VARIANT_SUMMARY_RESPONSE => static function (VariantsAction $action): string {
+                        $dataProvider = $action->parent->getDataProvider();
+                        $defaultSummary = (new SynchronousCountEnabler($dataProvider, fn(GridView $grid): string => $grid->renderSummary()))();
+                        $representation = $action->controller->indexPageUiOptionsModel->representation;
+                        if (in_array($representation, ['balance', 'balances'], true)) {
+                            return $defaultSummary . RequisiteSummaryTable::widget([
+                                'currencies' => $action->controller->getCurrencyTypes(),
+                                'allModels' => $dataProvider->query->limit(-1)->all(),
+                            ]);
+                        }
+
+                        return $defaultSummary;
+                    },
+                ],
             ],
             'search' => [
                 'class' => ComboSearchAction::class,
@@ -218,7 +238,7 @@ class RequisiteController extends CrudController
             ],
             'cdb-export' => [
                 'class' => CdbExportAction::class,
-            ]
+            ],
         ]);
     }
 }

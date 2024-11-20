@@ -10,15 +10,14 @@ use hipanel\models\Ref;
 /**
  * @var \hipanel\widgets\AdvancedSearch
  */
-?>
 
-<?php
 $currencies = Ref::getList('type,currency');
 $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
+
 ?>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('name_ilike') ?>
+    $search->field('name_ilike') ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
@@ -40,6 +39,7 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
                 'id' => 'balance_time-picker',
                 'model' => $search->model,
                 'attribute' => 'balance_time',
+                'containerOptions' => ['class' => 'form-group'],
                 'clientOptions' => [
                     'autoclose' => true,
                     'minView' => 2,

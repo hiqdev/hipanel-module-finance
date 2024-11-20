@@ -145,6 +145,6 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface, B
 
     public function getFractionOfMonth(): float
     {
-        return (float)$this->fraction_of_month;
+        return $this->fraction_of_month == 0 ? 1.0 : (float)$this->fraction_of_month;
     }
 }
