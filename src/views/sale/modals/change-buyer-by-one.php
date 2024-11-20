@@ -49,7 +49,10 @@ use yii\widgets\ActiveForm;
                     <div class="col-md-8">
                         <?= $form->field($model, "[$tariffType][$idx]buyer_id")->widget(ClientCombo::class, [
                             'hasId' => true,
-                            'inputOptions' => ['id' => "sale-$tariffType-$idx-buyer_id"],
+                            'inputOptions' => [
+                                'id' => "sale-$tariffType-$idx-buyer_id",
+                                'readonly' => !$model->isOperateable(),
+                            ],
                         ]) ?>
                     </div>
                     <div class="col-md-4">
@@ -59,6 +62,7 @@ use yii\widgets\ActiveForm;
                             'options' => [
                                 'value' => Yii::$app->formatter->asDatetime(new DateTime(), 'php:Y-m-d H:i:s'),
                                 'id' => "sale-$tariffType-$idx-time",
+                                'readonly' => !$model->isOperateable(),
                             ],
                         ]) ?>
                     </div>

@@ -28,7 +28,7 @@ class SaleActionsMenu extends Menu
                 'linkOptions' => [
                     'data-pjax' => 0,
                 ],
-                'visible' => Yii::$app->user->can('sale.update'),
+                'visible' => Yii::$app->user->can('sale.update') && $this->model->isOperateable(),
             ],
         ];
     }

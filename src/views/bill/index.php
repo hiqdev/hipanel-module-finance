@@ -59,7 +59,7 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
                 'type', 'descr',
                 'time', 'no',
                  Yii::$app->user->can('resell') ? 'client' : null,
-                 Yii::$app->user->can('support') ? 'seller' : null
+                 Yii::$app->user->can('access-subclients') ? 'seller' : null
             ]),
         ]) ?>
     <?php $page->endContent() ?>
