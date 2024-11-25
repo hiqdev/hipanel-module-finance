@@ -42,6 +42,7 @@ class RequisiteRepresentations extends RepresentationCollection
                     'btc',
                     'sgd',
                     'gbp',
+                    'eur_balance'
                 ]),
             ],
             'balance' => [

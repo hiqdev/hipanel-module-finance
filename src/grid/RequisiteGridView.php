@@ -47,6 +47,7 @@ class RequisiteGridView extends ContactGridView
                 'attribute' => 'balances',
                 'filter' => false,
                 'label' => Yii::t('hipanel:finance', strtoupper($currency)),
+                'enableSorting' => false,
                 'contentOptions' => [
                     'class' => 'no-padding',
                     'style' => 'width: 1%; white-space: nowrap;',
@@ -70,6 +71,22 @@ class RequisiteGridView extends ContactGridView
                 },
             ];
         }
+        $curColumns['eur_balance'] = [
+            'format' => 'raw',
+            'attribute' => 'eur_balance',
+            'filter' => false,
+            'enableSorting' => false,
+            'label' => Yii::t('hipanel:finance', 'Converted to EUR balance'),
+            'headerOptions' => [
+                'style' => 'width: 1%; white-space: nowrap;',
+            ],
+            'contentOptions' => [
+                'style' => 'text-align: center; vertical-align: middle;',
+            ],
+            'value' => function (Requisite $model) use ($formatter): string {
+                return Html::tag('span', $formatter->asCurrency($model->balance['eur_balance'], 'eur'));
+            },
+        ];
 
         foreach ($cellLabels as $attribute => $label) {
             $balanceColumns[$attribute] = [
