@@ -33,7 +33,7 @@ class FractionQuantityFormatter extends DefaultQuantityFormatter implements Cont
         }
         $hoursInCurrentMonth = (new DateTimeImmutable($this->model->getTime()))->format('t') * 24;
         $fractionOfMonth = $this->model->getFractionOfMonth();
-        $units = $this->model->getQuantity() / ($fractionOfMonth != 0 ? $fractionOfMonth : 1);
+        $units = $this->model->getQuantity() / ((float) $fractionOfMonth !== (float) 0 ? $fractionOfMonth : 1);
         $hours = $fractionOfMonth * $hoursInCurrentMonth;
 
         $formattedUnites = match ($this->fractionUnit) {
