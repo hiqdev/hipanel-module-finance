@@ -32,8 +32,9 @@ class FractionQuantityFormatter extends DefaultQuantityFormatter implements Cont
             return Yii::t('hipanel:finance', '{d}', ['d' => $this->formatDurationWithoutSecondsAndMinutes($hours * 3600)]);
         }
         $hoursInCurrentMonth = (new DateTimeImmutable($this->model->getTime()))->format('t') * 24;
-        $units = $this->model->getQuantity() / $this->model->getFractionOfMonth();
-        $hours = $this->model->getFractionOfMonth() * $hoursInCurrentMonth;
+        $fractionOfMonth = $this->model->getFractionOfMonth();
+        $units = $this->model->getQuantity() / ($fractionOfMonth != 0 ? $fractionOfMonth : 1);
+        $hours = $fractionOfMonth * $hoursInCurrentMonth;
 
         $formattedUnites = match ($this->fractionUnit) {
             FractionUnit::SIZE => $formatter->asShortSize(Quantity::create($this->model->unit,
