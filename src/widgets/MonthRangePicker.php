@@ -40,7 +40,7 @@ final class MonthRangePicker extends Widget
               const date = evt.viewDate;
               const form = $(evt.target).closest('form');
               form.find('input[name*=$this->timeFromAttribute]').val(date.startOf('month').format('YYYY-MM-DD'));
-              form.find('input[name*=$this->timeTillAttribute]').val(date.add(1, 'month').startOf('month').format('YYYY-MM-DD'));
+              form.find('input[name*=$this->timeTillAttribute]').val(date.endOf('month').format('YYYY-MM-DD'));
             });
 JS
         );
