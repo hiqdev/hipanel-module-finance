@@ -69,7 +69,14 @@ class RequisiteGridView extends ContactGridView
 
                     return Html::tag('span', implode('', $tags), ['class' => 'balance-cell']);
                 },
+                'exportedColumns' => ["export_${currency}_credit", "export_${currency}_debit", "export_${currency}_balance"],
             ];
+            foreach ($cellLabels as $attribute => $label) {
+                $curColumns["export_${currency}_$attribute"] = [
+                    'label' => "$currency $attribute",
+                    'value' => fn($model) => $this->plainSum($model->balances[$currency][$attribute] ?? null),
+                ];
+            }
         }
         $curColumns['eur_balance'] = [
             'format' => 'raw',
@@ -86,6 +93,7 @@ class RequisiteGridView extends ContactGridView
             'value' => function (Requisite $model) use ($formatter): string {
                 return Html::tag('span', $formatter->asCurrency($model->balance['eur_balance'], 'eur'));
             },
+            'exportedValue' => fn($model) => $this->plainSum($model->balance['eur_balance'] ?? null),
         ];
 
         foreach ($cellLabels as $attribute => $label) {
@@ -107,6 +115,9 @@ class RequisiteGridView extends ContactGridView
 
                     return '';
                 },
+                'exportedValue' => function (Requisite $model) use ($attribute) {
+                    return $this->plainSum($model->balance[$attribute]);
+                }
             ];
         }
 
@@ -119,8 +130,16 @@ class RequisiteGridView extends ContactGridView
                     return Html::a(Html::encode($model->name), ['view', 'id' => $model->id])
                         . "<br>"
                         . Html::encode($model->organization);
-                }
-                //'extraAttribute' => 'organization',
+                },
+                'exportedColumns' => ['export_name', 'export_organization'],
+            ],
+            'export_name' => [
+                'label' => Yii::t('hipanel', 'Name'),
+                'value' => fn($model) => $model->name,
+            ],
+            'export_organization' => [
+                'label' => Yii::t('hipanel', 'Organization'),
+                'value' => fn($model) => $model->organization,
             ],
             'serie' => [
                 'class' => XEditableColumn::class,
@@ -166,6 +185,12 @@ class RequisiteGridView extends ContactGridView
         ], $curColumns ?? [],
             $balanceColumns ?? []
         );
+    }
+
+    public function plainSum($sum) {
+        if (!is_string($sum)) return '';
+        if (empty($sum)) return 0.0;
+        return (float)$sum;
     }
 
     public static function getRequisiteColumns(Requisite $requisite): array
