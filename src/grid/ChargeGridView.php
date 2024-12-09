@@ -171,6 +171,19 @@ class ChargeGridView extends BoxedGridView
 
                     return $result;
                 },
+                'exportedColumns' => ['export_object_class', 'export_object_name', 'export_label'],
+            ],
+            'export_object_class' => [
+                'label' => Yii::t('hipanel', 'Class'),
+                'value' => fn($charge) => $charge->class,
+            ],
+            'export_object_name' => [
+                'label' => Yii::t('hipanel', 'Object'),
+                'value' => fn($charge) => $charge->name,
+            ],
+            'export_label' => [
+                'label' => Yii::t('hipanel', 'Label'),
+                'value' => fn($charge) => $charge->label,
             ],
             'quantity' => [
                 'attribute' => 'quantity',
