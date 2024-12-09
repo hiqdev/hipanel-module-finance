@@ -132,9 +132,15 @@ class ChargeGridView extends BoxedGridView
                 'urlCallback' => function ($model) {
                     return $this->sumLink($model);
                 },
-                'exportedValue' => function (Charge $model): string {
-                    return $model->sum;
-                },
+                'exportedColumns' => ['export_currency', 'export_sum'],
+            ],
+            'export_currency' => [
+                'label' => Yii::t('hipanel', 'Currency'),
+                'value' => fn($charge) => $charge->currency,
+            ],
+            'export_sum' => [
+                'label' => Yii::t('hipanel', 'Sum'),
+                'value' => fn($charge) => $charge->sum,
             ],
             'name' => [
                 'attribute' => 'name_ilike',
@@ -223,6 +229,7 @@ class ChargeGridView extends BoxedGridView
                     $charge->currency) : '',
                 'enableSorting' => true,
                 'filter' => false,
+                'exportedValue' => fn($charge) => $charge->discount_sum,
             ],
             'net_amount' => [
                 'attribute' => 'net_amount',
@@ -231,6 +238,7 @@ class ChargeGridView extends BoxedGridView
                     $charge->currency) : '',
                 'enableSorting' => false,
                 'filter' => false,
+                'exportedValue' => fn($charge) => $charge->net_amount,
             ],
             'eur_amount' => [
                 'attribute' => 'eur_amount',
@@ -238,6 +246,7 @@ class ChargeGridView extends BoxedGridView
                 'value' => fn($charge): string => $charge->eur_amount ? $this->formatter->asCurrency($charge->eur_amount, 'eur') : '',
                 'enableSorting' => false,
                 'filter' => false,
+                'exportedValue' => fn($charge) => $charge->eur_amount,
             ],
             'rate' => [
                 'attribute' => 'rate',
