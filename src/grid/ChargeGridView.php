@@ -132,6 +132,9 @@ class ChargeGridView extends BoxedGridView
                 'urlCallback' => function ($model) {
                     return $this->sumLink($model);
                 },
+                'exportedValue' => function (Charge $model): string {
+                    return $model->sum;
+                },
             ],
             'name' => [
                 'attribute' => 'name_ilike',
