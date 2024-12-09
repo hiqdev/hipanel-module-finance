@@ -190,6 +190,7 @@ class ChargeGridView extends BoxedGridView
                         ? Yii::$app->formatter->asDate($date, 'LLLL y')
                         : Yii::$app->formatter->asDateTime($model->time);
                 },
+                'exportedValue' => fn($charge) => $charge->time,
             ],
             'is_payed' => [
                 'attribute' => 'is_payed',
