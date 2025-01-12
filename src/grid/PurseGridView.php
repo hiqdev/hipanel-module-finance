@@ -63,7 +63,7 @@ class PurseGridView extends BoxedGridView
                 'type' => 'acceptance',
             ],
             'internalinvoices' => [
-                'class' => MonthlyDocumentsColumn::class,
+                'class' => ActsDocumentsColumn::class,
                 'type' => 'internal_invoice',
                 'label' => Yii::t('hipanel:finance', 'Internal invoice'),
             ],

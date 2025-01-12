@@ -56,10 +56,10 @@ class Purse extends \hipanel\base\Model
             [['id', 'contact_id'], 'required', 'on' => ['update-contact']],
             [['id', 'requisite_id'], 'required', 'on' => ['update-requisite']],
 
-            [['month'], 'date', 'format' => 'php:Y-m', 'on' => ['generate-and-save-monthly-document']],
-            [['month'], 'required', 'on' => ['generate-and-save-monthly-document']],
-            [['type'], 'string', 'on' => ['generate-and-save-monthly-document', 'generate-and-save-document']],
-            [['client_bank_account_no', 'seller_bank_account_no'], 'number', 'on' => ['generate-and-save-monthly-document', 'generate-and-save-document']],
+            [['month'], 'date', 'format' => 'php:Y-m', 'on' => ['generate-and-save-monthly-document', 'generate-acts']],
+            [['month'], 'required', 'on' => ['generate-and-save-monthly-document', 'generate-acts']],
+            [['type'], 'string', 'on' => ['generate-and-save-monthly-document', 'generate-and-save-document', 'generate-acts']],
+            [['client_bank_account_no', 'seller_bank_account_no'], 'number', 'on' => ['generate-and-save-monthly-document', 'generate-and-save-document', 'generate-acts']],
             [['client_id', 'currency'], 'required', 'on' => ['create']],
             [['id'], 'required', 'on' => 'update'],
         ];
