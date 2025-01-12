@@ -24,6 +24,8 @@ class DocumentsColumn extends DataColumn
 
     public $type;
 
+    public $hideNewButton = false;
+
     public function init()
     {
         if ($this->type === null) {
@@ -77,6 +79,9 @@ class DocumentsColumn extends DataColumn
 
     public function renderSeeNewButton($model)
     {
+        if ($this->hideNewButton === true) {
+            return '';
+        }
         return DocumentByMonthButton::widget([
             'modalHeader' => Yii::t('hipanel:finance', 'See new'),
             'buttonLabel' => Yii::t('hipanel:finance', 'See new'),

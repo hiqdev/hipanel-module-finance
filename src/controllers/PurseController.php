@@ -90,6 +90,10 @@ class PurseController extends \hipanel\base\CrudController
                 'class' => SmartPerformAction::class,
                 'success' => Yii::t('hipanel:finance', 'Document updated'),
             ],
+            'generate-acts' => [
+                'class' => SmartPerformAction::class,
+                'success' => Yii::t('hipanel:finance', 'Document updated'),
+            ],
             'generate-and-save-document' => [
                 'class' => SmartPerformAction::class,
                 'success' => Yii::t('hipanel:finance', 'Document updated'),
