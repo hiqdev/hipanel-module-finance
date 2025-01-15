@@ -34,6 +34,8 @@ class Requisite extends Contact
     const TEMPLATE_SERVICE_INVOICE = 'service_invoice';
     const TEMPLATE_PURCHASE_PAYMENT_REQUEST = 'purchase_payment_request';
     const TEMPLATE_SERVICE_PAYMENT_REQUEST = 'service_payment_request';
+    const TEMPLATE_DETAILED_SERVICE_INVOICE = 'detailed_service_invoice';
+    const TEMPLATE_DETAILED_PAYMENT_REQUEST = 'detailed_service_payment_request';
 
     public static function tableName()
     {
@@ -155,7 +157,8 @@ class Requisite extends Contact
             self::TEMPLATE_PAYMENT_REQUEST => self::TEMPLATE_PAYMENT_REQUEST,
             self::TEMPLATE_PURCHASE_PAYMENT_REQUEST => self::TEMPLATE_PURCHASE_PAYMENT_REQUEST,
             self::TEMPLATE_SERVICE_PAYMENT_REQUEST => self::TEMPLATE_SERVICE_PAYMENT_REQUEST,
-
+            self::TEMPLATE_DETAILED_SERVICE_INVOICE => self::TEMPLATE_DETAILED_SERVICE_INVOICE,
+            self::TEMPLATE_DETAILED_PAYMENT_REQUEST => self::TEMPLATE_DETAILED_PAYMENT_REQUEST,
         ];
     }
 
