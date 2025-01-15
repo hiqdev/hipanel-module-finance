@@ -1,5 +1,6 @@
 <?php
 
+use hipanel\modules\client\models\Client;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\forms\CurrencyExchangeForm;
 use hipanel\modules\finance\models\ExchangeRate;
@@ -32,10 +33,15 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row">
             <div class="col-lg-6 col-md-8">
                 <?php Box::begin() ?>
-                <?= Yii::$app->user->can('access-subclients')
-                    ? $form->field($model, 'client_id')
-                        ->widget(ClientCombo::class)
-                    : Html::activeHiddenInput($model, 'client_id') ?>
+                <?php if (
+                        Yii::$app->user->can('access-subclients')
+                    &&  Yii::$app->user->identity->type !== Client::TYPE_CLIENT
+                ) : ?>
+                    <?= $form->field($model, 'client_id')
+                        ->widget(ClientCombo::class) ?>
+                <?php else : ?>
+                    <?= Html::activeHiddenInput($model, 'client_id') ?>
+                <?php endif ?>
                 <div class="row">
                     <div class="col-md-2">
                         <?= $form->field($model, 'sum')->textInput([
