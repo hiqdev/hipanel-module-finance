@@ -132,9 +132,15 @@ class ChargeGridView extends BoxedGridView
                 'urlCallback' => function ($model) {
                     return $this->sumLink($model);
                 },
-                'exportedValue' => function (Charge $model): string {
-                    return $model->sum;
-                },
+                'exportedColumns' => ['export_currency', 'export_sum'],
+            ],
+            'export_currency' => [
+                'label' => Yii::t('hipanel', 'Currency'),
+                'value' => fn($charge) => $charge->currency,
+            ],
+            'export_sum' => [
+                'label' => Yii::t('hipanel', 'Sum'),
+                'value' => fn($charge) => $this->plainSum($charge->sum),
             ],
             'name' => [
                 'attribute' => 'name_ilike',
@@ -165,6 +171,19 @@ class ChargeGridView extends BoxedGridView
 
                     return $result;
                 },
+                'exportedColumns' => ['export_object_class', 'export_object_name', 'export_label'],
+            ],
+            'export_object_class' => [
+                'label' => Yii::t('hipanel', 'Class'),
+                'value' => fn($charge) => $charge->class,
+            ],
+            'export_object_name' => [
+                'label' => Yii::t('hipanel', 'Object'),
+                'value' => fn($charge) => $charge->name,
+            ],
+            'export_label' => [
+                'label' => Yii::t('hipanel', 'Label'),
+                'value' => fn($charge) => $charge->label,
             ],
             'quantity' => [
                 'attribute' => 'quantity',
@@ -184,6 +203,7 @@ class ChargeGridView extends BoxedGridView
                         ? Yii::$app->formatter->asDate($date, 'LLLL y')
                         : Yii::$app->formatter->asDateTime($model->time);
                 },
+                'exportedValue' => fn($charge) => $charge->time,
             ],
             'is_payed' => [
                 'attribute' => 'is_payed',
@@ -223,6 +243,7 @@ class ChargeGridView extends BoxedGridView
                     $charge->currency) : '',
                 'enableSorting' => true,
                 'filter' => false,
+                'exportedValue' => fn($charge) => $this->plainSum($charge->discount_sum),
             ],
             'net_amount' => [
                 'attribute' => 'net_amount',
@@ -231,6 +252,7 @@ class ChargeGridView extends BoxedGridView
                     $charge->currency) : '',
                 'enableSorting' => false,
                 'filter' => false,
+                'exportedValue' => fn($charge) => $this->plainSum($charge->net_amount),
             ],
             'eur_amount' => [
                 'attribute' => 'eur_amount',
@@ -238,6 +260,7 @@ class ChargeGridView extends BoxedGridView
                 'value' => fn($charge): string => $charge->eur_amount ? $this->formatter->asCurrency($charge->eur_amount, 'eur') : '',
                 'enableSorting' => false,
                 'filter' => false,
+                'exportedValue' => fn($charge) => $this->plainSum($charge->eur_amount),
             ],
             'rate' => [
                 'attribute' => 'rate',
@@ -261,6 +284,12 @@ class ChargeGridView extends BoxedGridView
                 'contentOptions' => ['class' => 'text-right'],
             ],
         ]);
+    }
+
+    public function plainSum($sum) {
+        if (!is_string($sum)) return '';
+        if (empty($sum)) return 0.0;
+        return (float)$sum;
     }
 
     /**
