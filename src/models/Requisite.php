@@ -64,6 +64,7 @@ class Requisite extends Contact
                     'service_payment_request_id',
                     'purchase_payment_request_id',
                     'detailed_service_payment_request_id',
+                    'detailed_service_invoice_id',
                     'nda_id',
                 ],
                 'string', // template2pdf ID
@@ -81,6 +82,7 @@ class Requisite extends Contact
                     'service_payment_request_name',
                     'payment_request_name',
                     'detailed_service_payment_request_name',
+                    'detailed_service_invoice_name',
                     'nda_name',
                 ],
                 'string',
