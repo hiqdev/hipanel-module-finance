@@ -46,7 +46,7 @@ test("Test the Progressive Price feature works @hipanel-module-finance @manager"
 
   await page.getByRole("button", { name: "Save" }).click();
 
-  await expect(page.getByRole("cell", { name: "$30.00 per Pcs over 0 Pcs $0.0085 per Pcs over 1 Pcs $0.008 per Pcs over 2 Pcs $0.0075 per Pcs over 3 Pcs" })).toBeVisible();
+  await expect(page.getByRole("cell", { name: "$30.00 per items over 0 items $0.0085 per items over 1 items $0.008 per items over 2 items $0.0075 per items over 3 items" })).toBeVisible();
 
   await expect(page.getByText("Number of IPs")).toBeVisible();
   await page.locator("input[name=\"selection_all\"]").check();
@@ -54,7 +54,7 @@ test("Test the Progressive Price feature works @hipanel-module-finance @manager"
   await page.getByRole("button", { name: "" }).nth(2).click();
   await page.locator("#threshold-0-2-price").fill("0.0075");
   await page.getByRole("button", { name: "Save" }).click();
-  await expect(page.getByRole("grid")).toContainText("$30.00 per Pcs over 0 Pcs $0.0085 per Pcs over 1 Pcs $0.0075 per Pcs over 2 Pcs");
+  await expect(page.getByRole("grid")).toContainText("$30.00 per items over 0 Pcs $0.0085 per items over 1 items $0.0075 per items over 2 items");
 
   page.on("dialog", async dialog => {
     await dialog.accept();

@@ -16,23 +16,32 @@ class ProgressivePricePresenter extends PricePresenter
             return parent::renderPrice($price);
         }
         $result = [];
-        $toLine = fn($price, $currency, $unit, $quantity): string => Yii::t('hipanel:finance',
-            "{sum} per {unit} over {quantity} {unit}",
-            [
-                'sum' => Html::tag('b', $this->formatter->asCurrency($price, $currency, [
-                    NumberFormatter::MIN_FRACTION_DIGITS => 2,
-                    NumberFormatter::MAX_FRACTION_DIGITS => 6,
-                ])),
-                'currency' => $currency,
-                'quantity' => $quantity,
-                'unit' => $unit,
-            ]
-        );
-        $result[] = $toLine($price->price, $price->currency, $price->getUnitLabel(), $price->quantity);
+        $result[] = $this->toLine($price->price, $price->currency, $price->getUnitLabel(), $price->quantity);
         foreach ($thresholds as $threshold) {
-            $result[] = $toLine($threshold->price, $threshold->currency, $threshold->getUnitLabel(), $threshold->quantity);
+            $result[] = $this->toLine($threshold->price, $threshold->currency, $threshold->getUnitLabel(), $threshold->quantity);
         }
 
         return nl2br(implode("\n", $result));
+    }
+
+    private function toLine(?string $price, string $currency, ?string $unit, string $quantity): string
+    {
+        return Yii::t('hipanel:finance',
+            "{sum} per {unit} over {quantity} {unit}",
+            [
+                'sum' => Html::tag('b', $this->formatSumAsCurrency($price, $currency)),
+                'unit' => $unit,
+                'currency' => $currency,
+                'quantity' => $quantity,
+            ]
+        );
+    }
+
+    private function formatSumAsCurrency(?string $price, string $currency): string
+    {
+        return $this->formatter->asCurrency($price, $currency, [
+            NumberFormatter::MIN_FRACTION_DIGITS => 2,
+            NumberFormatter::MAX_FRACTION_DIGITS => 6,
+        ]);
     }
 }
