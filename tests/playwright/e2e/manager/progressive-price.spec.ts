@@ -54,7 +54,7 @@ test("Test the Progressive Price feature works @hipanel-module-finance @manager"
   await page.getByRole("button", { name: "" }).nth(2).click();
   await page.locator("#threshold-0-2-price").fill("0.0075");
   await page.getByRole("button", { name: "Save" }).click();
-  await expect(page.getByRole("grid")).toContainText("$30.00 per Item over 0 Pcs $0.0085 per Item over 1 Item $0.0075 per Item over 2 Item");
+  await expect(page.getByRole("grid")).toContainText("$30.00 per Item over 0 Item $0.0085 per Item over 1 Item $0.0075 per Item over 2 Item");
 
   page.on("dialog", async dialog => {
     await dialog.accept();
