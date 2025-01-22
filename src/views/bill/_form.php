@@ -219,7 +219,7 @@ $form = ActiveForm::begin([
                                         <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<?= Yii::t('hipanel:finance', 'Detalization') ?>
                                     </button>
                                 </div>
-                                <?php foreach ($charges as $j => $charge) : ?>
+                                <?php foreach ($charges as $j => $charge) : $j++; ?>
                                     <div class="charge-item col-md-12">
                                         <?php if (!$charge->isNewRecord && !$model->isNewRecord): ?>
                                             <?= Html::activeHiddenInput($charge, "[$i][$j]id") ?>
