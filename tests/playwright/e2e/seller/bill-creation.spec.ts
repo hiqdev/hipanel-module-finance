@@ -82,7 +82,7 @@ test.describe("Bill creation", () => {
 
     const billForm = new BillForm(page);
     await page.locator("#billform-0-label").fill(billDescr);
-    await page.locator("#charge-0-0-label").fill(chargeDescr);
+    await page.locator("#charge-0-1-label").fill(chargeDescr);
     await billForm.submit();
     await Alert.on(page).hasText("Bill was updated successfully");
 
