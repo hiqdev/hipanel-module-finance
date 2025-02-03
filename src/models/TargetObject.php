@@ -31,7 +31,7 @@ class TargetObject extends Model
     {
         return [
             [['id', 'no'], 'integer'],
-            [['name', 'label', 'type'], 'safe'],
+            [['name', 'label', 'type', 'model_type'], 'safe'],
         ];
     }
 }
