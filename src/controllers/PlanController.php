@@ -357,7 +357,7 @@ class PlanController extends CrudController
         $request = Yii::$app->request;
         if ($request->isPost) {
             try {
-                $collection = new PricesCollection($this->priceModelFactory, ['scenario' => $scenario]);
+                $collection = new PricesCollection($this->priceModelFactory, $request, ['scenario' => $scenario]);
                 $collection->load();
                 if ($collection->save() === false) {
                     if ($scenario === 'create') {
