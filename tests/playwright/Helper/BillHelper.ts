@@ -24,7 +24,9 @@ export default class BillHelper {
 
     async copyBill() {
         await this.page.locator("button:has-text(\"Copy\")").click();
-        await this.page.locator("text=Save").click();
+        const saveButton = this.page.locator("text=Save");
+        await saveButton.waitFor({ state: "visible" });
+        await saveButton.click();
     }
 
     async ensureBillDidntChange(billData: Bill, billId: string) {
