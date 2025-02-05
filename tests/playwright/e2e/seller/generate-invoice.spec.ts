@@ -33,15 +33,18 @@ async function deleteBill(page, billId) {
 
 test("Test 'Generate invoice' button is work and the form opens @hipanel-module-finance @seller", async ({ page }) => {
   const billId = await createBill(page);
-  await page.goto("/finance/bill/index");
+  const action = '/finance/bill/index';
+
+  await page.goto(action);
   const index = new Index(page);
   await Select2.fieldByName(page, `BillSearch[requisite_id]`).setValue(bill.requisite);
   await index.advancedSearch.submitButton.click();
-  await page.waitForLoadState("networkidle");
+
   const rowNumber = await index.getRowNumberInColumnByValue("Description", bill.requisite);
   await index.chooseNumberRowOnTable(rowNumber);
   await index.clickBulkButton("Generate invoice");
   await expect(page).toHaveTitle("Generate invoice");
+
   if (billId) {
     await deleteBill(page, billId);
   }
