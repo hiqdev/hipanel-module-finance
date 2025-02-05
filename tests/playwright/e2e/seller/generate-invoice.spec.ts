@@ -28,6 +28,12 @@ async function deleteBill(page, billId) {
   await page.goto("/finance/bill/view?id=" + billId);
   const viewPage = await new BillView(page);
   await viewPage.detailMenuItem("Delete", true).click();
+
+  // Handle the confirmation alert
+  await page.once("dialog", async (dialog) => {
+    await dialog.accept();
+  });
+
   await Alert.on(page).hasText("Payment was deleted successfully");
 }
 
@@ -39,6 +45,7 @@ test("Test 'Generate invoice' button is work and the form opens @hipanel-module-
   const index = new Index(page);
   await Select2.fieldByName(page, `BillSearch[requisite_id]`).setValue(bill.requisite);
   await index.advancedSearch.submitButton.click();
+  await page.waitForFunction(() => window.location.search.includes("BillSearch"));
 
   const rowNumber = await index.getRowNumberInColumnByValue("Description", bill.requisite);
   await index.chooseNumberRowOnTable(rowNumber);
