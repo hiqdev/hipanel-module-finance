@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace hipanel\modules\finance\actions;
 
@@ -69,10 +67,11 @@ final class ChangeBuyerAction extends Action
                 throw new RuntimeException('No sales selected');
             }
             $sales = $this->getSales($selection);
+            $salesByTariffType = ArrayHelper::index($sales, null, static fn($item): string => $item->tariff_type ?? 'unknown');
 
             return $this->controller->renderAjax($this->view, [
                 'model' => $model,
-                'salesByTariffType' => ArrayHelper::index($sales, null, 'tariff_type'),
+                'salesByTariffType' => $salesByTariffType,
 
             ]);
         } catch (Exception $e) {
@@ -97,22 +96,21 @@ final class ChangeBuyerAction extends Action
     private function getSales(array $data): array
     {
         $ids = [];
-        if (ArrayHelper::isIndexed($data)) {
-            $ids = array_values($data);
-        } else if (1) {
-            foreach ($data as $datum) {
-                if (isset($datum['id']) && !empty($datum['id'])) {
-                    $ids = array_merge($ids, $datum['id']);
-                } else {
-                    foreach ($datum as $model) {
-                        if (isset($model['id']) && !empty($model['id'])) {
-                            $ids[] = $model['id'];
-                        }
+        foreach ($data as $datum) {
+            if (!empty($datum['id'])) {
+                $ids = array_merge($ids, $datum['id']);
+            } elseif (is_array($datum)) {
+                foreach ($datum as $model) {
+                    if (!empty($model['id'])) {
+                        $ids[] = $model['id'];
                     }
                 }
             }
         }
+        if (empty($ids)) {
+            $ids = array_values($data);
+        }
 
-        return Sale::find()->where(['id_in' => array_unique($ids)])->limit(-1)->all();
+        return !empty($ids) ? Sale::find()->where(['id_in' => array_unique($ids)])->limit(-1)->all() : [];
     }
 }
