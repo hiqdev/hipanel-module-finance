@@ -3,7 +3,6 @@
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\models\Sale;
-use hipanel\modules\finance\widgets\combo\PlanCombo;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\widgets\DateTimePicker;
 use yii\helpers\Html;

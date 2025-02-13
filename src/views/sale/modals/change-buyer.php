@@ -58,7 +58,7 @@ use yii\widgets\ActiveForm;
                 <div class="col-md-4">
                     <?= $form->field($model, "[$tariffType]tariff_id")->widget(PlanCombo::class, [
                         'hasId' => true,
-                        'tariffType' => $tariffType,
+                        'tariffType' => $tariffType === 'unknown' ? null : $tariffType,
                         'inputOptions' => ['id' => "sale-$tariffType-tariff_id"],
                     ]) ?>
                 </div>
