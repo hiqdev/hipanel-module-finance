@@ -294,10 +294,11 @@ JS,
             return false;
         }
         $types = ArrayHelper::index($this->billTypes, 'id');
-        $type = $types[$typeId];
-        if ($type === null) {
+        if (!isset($types[$typeId])) {
             return false;
         }
+
+        $type = $types[$typeId];
 
         return str_starts_with($type->name, 'adjustment');
     }
