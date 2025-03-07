@@ -44,8 +44,7 @@ test("Test 'Generate invoice' button is work and the form opens @hipanel-module-
   await page.goto(action);
   const index = new Index(page);
   await Select2.fieldByName(page, `BillSearch[requisite_id]`).setValue(bill.requisite);
-  await index.advancedSearch.submitButton.click();
-  await page.waitForFunction(() => window.location.search.includes("BillSearch"));
+  await index.advancedSearch.submitButton();
 
   const rowNumber = await index.getRowNumberInColumnByValue("Description", bill.requisite);
   await index.chooseNumberRowOnTable(rowNumber);
