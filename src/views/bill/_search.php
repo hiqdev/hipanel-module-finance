@@ -74,7 +74,7 @@ use yii\web\View;
 
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('servers') ?>
+    <?= $search->field('server_ilike') ?>
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
