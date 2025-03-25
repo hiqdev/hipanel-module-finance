@@ -2,7 +2,6 @@
 
 use hipanel\helpers\Url;
 use hipanel\modules\finance\forms\TargetManagementForm;
-use hipanel\modules\finance\widgets\combo\PlanCombo;
 use hipanel\widgets\DateTimePicker;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
@@ -27,10 +26,6 @@ use yii\helpers\Html;
 
 <?= $form->field($model, 'time')->widget(DateTimePicker::class, [
     'model' => $model,
-    'clientOptions' => [
-        'autoclose' => true,
-        'format' => 'yyyy-mm-dd hh:ii:ss',
-    ],
     'options' => [
         'value' => Yii::$app->formatter->asDatetime(new DateTime(), 'php:Y-m-d H:i:s'),
     ],

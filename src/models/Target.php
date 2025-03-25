@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace hipanel\modules\finance\models;
 
-use hipanel\base\Model;
-use hipanel\base\ModelTrait;
-use hipanel\behaviors\TaggableBehavior;
-use hipanel\models\TaggableInterface;
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
-use hipanel\modules\finance\models\query\TargetQuery;
 use Yii;
+use hipanel\base\Model;
+use hipanel\models\Ref;
+use hipanel\base\ModelTrait;
+use hipanel\models\TaggableInterface;
+use hipanel\behaviors\TaggableBehavior;
+use hipanel\modules\finance\models\query\TargetQuery;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 
 /**
  * @property Sale[] $sales
@@ -32,9 +35,10 @@ class Target extends Model implements TaggableInterface
     {
         return [
             [['id', 'type_id', 'state_id', 'client_id', 'access_id', 'tariff_id', 'seller_id'], 'integer'],
-            [['type', 'state', 'client', 'name', 'tariff', 'seller'], 'string'],
+            [['type', 'state', 'client', 'name', 'tariff', 'seller', 'remoteid'], 'string'],
             [['show_deleted'], 'boolean'],
             [['id'], 'required', 'on' => ['restore']],
+            [['name', 'type', 'state', 'client'], 'required', 'on' => ['create', 'update']],
         ];
     }
 
@@ -53,11 +57,18 @@ class Target extends Model implements TaggableInterface
         return $types;
     }
 
+    public function getStateOptions(): array
+    {
+        return Ref::getList('state,target', 'hipanel:finance');
+    }
+
     public function attributeLabels(): array
     {
         return array_merge(parent::attributeLabels(), [
             'show_deleted' => Yii::t('hipanel:finance', 'Show deleted'),
             'tariff_id' => Yii::t('hipanel:finance', 'Tariff'),
+            'state_id' => Yii::t('hipanel:finance', 'State'),
+            'type_id' => Yii::t('hipanel:finance', 'Type'),
         ]);
     }
 

@@ -175,11 +175,6 @@ $form = ActiveForm::begin([
                         <div class="col-md-3">
                             <?= $form->field($model, "[$i]time")->widget(DateTimePicker::class, [
                                 'model' => $model,
-                                'clientOptions' => [
-                                    'autoclose' => true,
-                                    'format' => 'yyyy-mm-dd hh:ii:ss',
-                                    'todayBtn' => true,
-                                ],
                                 'options' => [
                                     'value' => $timeResolver($model),
                                     'class' => 'bill-time',
@@ -278,13 +273,6 @@ $form = ActiveForm::begin([
                                                         </div>
                                                         <div class="col-md-3">
                                                             <?= $form->field($charge, "[$i][$j]time")->widget(DateTimePicker::class, [
-                                                                'clientOptions' => [
-                                                                    'format' => 'yyyy-mm-dd hh:ii:ss',
-                                                                    'autoclose' => true,
-                                                                    'clearBtn' => true,
-                                                                    'todayBtn' => true,
-                                                                    'minView' => 2,
-                                                                ],
                                                                 'options' => [
                                                                     'placeholder' => Yii::t('hipanel', 'Select date'),
                                                                     'value' => $timeResolver($charge),

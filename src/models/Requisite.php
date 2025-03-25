@@ -165,6 +165,9 @@ class Requisite extends Contact
     public function getDocumentsByTypes(): array
     {
         $documents = [];
+        if (empty($this->documents_by_types)) {
+            return $documents;
+        }
         foreach ($this->documents_by_types as $type => $rawData) {
             $document = new Document();
             $document->setAttributes($rawData, false);
