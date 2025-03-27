@@ -17,11 +17,19 @@ class TargetGridView extends ContactGridView
             'name' => [
                 'class' => MainColumn::class,
                 'exportedColumns' => ['tags', 'name'],
+                'filterAttribute' => 'name_like',
+            ],
+            'state' => [
+                'filter' => $this->filterModel?->states,
+                'filterInputOptions' => ['prompt' => '--', 'class' => 'form-control'],
             ],
             'type' => [
                 'filter' => $this->filterModel?->types,
-                'filterInputOptions' => ['class' => 'form-control'],
+                'filterInputOptions' => ['prompt' => '--', 'class' => 'form-control'],
                 'value' => static fn(Target $target): string => Yii::t('hipanel:finance', $target->type),
+            ],
+            'remoteid' => [
+                'filterAttribute' => 'remoteid_like',
             ],
             'actions' => [
                 'class' => MenuColumn::class,

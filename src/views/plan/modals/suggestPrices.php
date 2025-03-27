@@ -3,6 +3,7 @@
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\PriceSuggestionRequestForm;
+use hipanel\modules\finance\widgets\combo\target\SwitchLicenceCombo;
 use hipanel\modules\finance\widgets\combo\TargetCombo;
 use hipanel\modules\finance\widgets\combo\TemplatePlanCombo;
 use hipanel\modules\server\widgets\combo\HubCombo;
@@ -16,10 +17,13 @@ use yii\web\View;
  * @var View $this
  * @var Plan $plan
  * @var PriceSuggestionRequestForm $model
+ * @var bool $withSwitchLicense
  */
 ?>
 
 <?php $form = ActiveForm::begin(['id' => 'create-prices', 'action' => ['@price/suggest'], 'method' => 'GET']) ?>
+
+<fieldset>
 
 <?= $form->field($model, 'plan_id')->hiddenInput()->label(false) ?>
 
@@ -29,14 +33,14 @@ use yii\web\View;
 ?>
 
 <?php if (in_array($plan->type, [
-        Plan::TYPE_SERVER,
-        Plan::TYPE_PRIVATE_CLOUD
-    ], true)): ?>
+    Plan::TYPE_SERVER,
+    Plan::TYPE_PRIVATE_CLOUD,
+], true)): ?>
     <?php if ($model->isObjectPredefined()) : ?>
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
     <?php else : ?>
         <?= $form->field($model, 'object_id')->widget(ServerCombo::class, ['primaryFilter' => 'name_like']) ?>
-    <?php endif; ?>
+    <?php endif ?>
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
         'plan_id' => $plan->id,
         'object_input_type' => $model->isObjectPredefined() ? null : 'server/server',
@@ -63,7 +67,7 @@ use yii\web\View;
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
     <?php else : ?>
         <?= $form->field($model, 'object_id')->widget(TargetCombo::class) ?>
-    <?php endif; ?>
+    <?php endif ?>
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
         'plan_id' => $plan->id,
         'object_input_type' => $model->isObjectPredefined() ? null : 'target/name',
@@ -75,12 +79,50 @@ use yii\web\View;
     <?php if ($model->isObjectPredefined()) : ?>
         <?= $form->field($model, 'object_id')->hiddenInput()->label(false) ?>
     <?php else : ?>
-        <?= $form->field($model, 'object_id')->widget(HubCombo::class) ?>
-    <?php endif; ?>
-    <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
-        'plan_id' => $plan->id,
-        'object_input_type' => $model->isObjectPredefined() ? null : 'server/hub',
-    ]) ?>
+        <?php $this->registerJs(/** @lang JavaScript */ ';(() => {
+          $("#switch-object a").one("click", function (evt) {
+            const url = ["suggest-prices-modal?id=" + ' . $plan->id . '];
+            if (evt.currentTarget.getAttribute("href") === "#switch_license") {
+              url.push("switch_license");
+            }
+            $("#create-prices").css({ opacity: "0.5" });
+            $("#create-prices fieldset").prop("disabled", true);
+            $.get(url.join("&"), function( data ) {
+              $( "#create-prices-modal .modal-body" ).html( data );
+            });
+          });
+        })();') ?>
+        <div id="switch-object">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="<?= !$withSwitchLicense ? 'active' : '' ?>">
+                <a href="#switch" role="tab" data-toggle="tab"><?= Yii::t('hipanel:finance', 'Switch') ?></a>
+            </li>
+            <li class="<?= $withSwitchLicense ? 'active' : '' ?>">
+                <a href="#switch_license" role="tab" data-toggle="tab"><?= Yii::t('hipanel:finance', 'Switch Licence') ?></a>
+            </li>
+          </ul>
+          <div class="tab-content" style="margin-top: 2rem;">
+              <?php if ($withSwitchLicense) : ?>
+                  <div role="tabpanel" class="tab-pane active" id="switch_license">
+                      <?= $form->field($model, 'object_id')->widget(SwitchLicenceCombo::class)->label(Yii::t('hipanel:finance',
+                          'Switch Licence Target')) ?>
+                      <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
+                          'plan_id' => $plan->id,
+                          'object_input_type' => $model->isObjectPredefined() ? null : 'target/name',
+                      ]) ?>
+                  </div>
+              <?php else : ?>
+                  <div role="tabpanel" class="tab-pane active" id="switch">
+                      <?= $form->field($model, 'object_id')->widget(HubCombo::class)->label(Yii::t('hipanel:finance', 'Switch object')) ?>
+                      <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
+                          'plan_id' => $plan->id,
+                          'object_input_type' => $model->isObjectPredefined() ? null : 'server/hub',
+                      ]) ?>
+                  </div>
+              <?php endif ?>
+          </div>
+        </div>
+    <?php endif ?>
     <?= $form->field($model, 'type')->widget(StaticCombo::class, [
         'data' => [
             'default' => Yii::t('hipanel.finance.suggestionTypes', 'default'),
@@ -121,7 +163,7 @@ use yii\web\View;
             /// XXX Looks like managers need CDN tariffs to be applicable to any servers
             /// 'filter' => ['type' => ['format' => $plan->type === Plan::TYPE_PCDN ? 'cdnpix' : 'cdn']],
         ]) ?>
-    <?php endif; ?>
+    <?php endif ?>
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
         'plan_id' => $plan->id,
         'object_input_type' => $model->isObjectPredefined() ? null : 'server/server',
@@ -135,7 +177,7 @@ use yii\web\View;
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, [
         'plan_id' => $plan->id,
     ]) ?>
-    <?php $form->action = ['@plan/create-prices', 'id' => $plan->id]; ?>
+    <?php $form->action = ['@plan/create-prices', 'id' => $plan->id] ?>
 <?php elseif ($plan->type === Plan::TYPE_HARDWARE): ?>
     <?= $form->field($model, 'object_id')->widget(ClientCombo::class) ?>
     <?= $form->field($model, 'template_plan_id')->widget(TemplatePlanCombo::class, ['plan_id' => $plan->id]) ?>
@@ -153,5 +195,6 @@ use yii\web\View;
 <?= Html::submitButton(Yii::t('hipanel.finance.price', 'Proceed to creation'), [
     'class' => 'btn btn-block btn-success',
 ]) ?>
+</fieldset>
 
-<?php ActiveForm::end(); ?>
+<?php ActiveForm::end() ?>

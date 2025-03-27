@@ -66,7 +66,7 @@ class CreatePricesButton extends Widget
         return Html::tag('div', Html::a(Yii::t('hipanel.finance.price', 'Create prices') .
                 '&nbsp;&nbsp;' .
                 Html::tag('span', null, ['class' => 'caret']), '#', [
-                'data-toggle' => 'dropdown', 'class' => 'dropdown-toggle btn btn-success btn-sm',
+                'data-toggle' => 'dropdown', 'class' => 'dropdown-toggle btn btn-success btn-sm', 'style' => ['margin-right' => '0.3rem'],
             ]) . Dropdown::widget([
                 'options' => ['class' => 'pull-right'],
                 'items' => array_filter([

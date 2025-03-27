@@ -233,8 +233,13 @@ class PlanController extends CrudController
             'plan_id' => $plan->id,
             'plan_type' => $plan->type,
         ]);
+        $queryParams = $this->request->get();
 
-        return $this->renderAjax('modals/suggestPrices', compact('plan', 'model'));
+        return $this->renderAjax('modals/suggestPrices', [
+            'plan' => $plan,
+            'model' => $model,
+            'withSwitchLicense' => isset($queryParams['switch_license']),
+        ]);
     }
 
     public function actionSuggestCalculatorPricesModal($id, $type)

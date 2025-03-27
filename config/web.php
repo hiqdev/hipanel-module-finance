@@ -187,6 +187,13 @@ return [
                         'model' => Target::class,
                         'resourceModel' => TargetResource::class,
                     ],
+                    'switch_license' => [
+                        'label' => ['hipanel:finance', 'Switch License'],
+                        'columns' => [],
+                        'groups' => [],
+                        'model' => Target::class,
+                        'resourceModel' => TargetResource::class,
+                    ],
                     'volume' => [
                         'label' => ['hipanel:finance', 'Volume'],
                         'columns' => ['volume_du'],
