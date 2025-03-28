@@ -57,7 +57,6 @@ use yii\widgets\ActiveForm;
                     <div class="col-md-4">
                         <?= $form->field($model, "[$tariffType][$idx]time")->widget(DateTimePicker::class, [
                             'model' => $model,
-                            'clientOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd hh:ii:00', 'todayBtn' => true],
                             'options' => [
                                 'value' => Yii::$app->formatter->asDatetime(new DateTime(), 'php:Y-m-d H:i:s'),
                                 'id' => "sale-$tariffType-$idx-time",

@@ -3,7 +3,7 @@
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\helpers\CurrencyFilter;
-use hipanel\widgets\DateTimePicker;
+use hipanel\widgets\DatePicker;
 use hiqdev\combo\StaticCombo;
 use hipanel\models\Ref;
 
@@ -35,15 +35,12 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 
     <?php if (in_array($uiModel->representation, ['balance', 'balances'], true)) : ?>
         <div class="col-md-4 col-sm-6 col-xs-12">
-            <?= DateTimePicker::widget([
+            <?= DatePicker::widget([
                 'id' => 'balance_time-picker',
                 'model' => $search->model,
                 'attribute' => 'balance_time',
-                'containerOptions' => ['class' => 'form-group'],
-                'clientOptions' => [
-                    'autoclose' => true,
-                    'minView' => 2,
-                    'format' => 'yyyy-mm-dd',
+                'options' => [
+                    'placeholder' => $search->model->getAttributeLabel('balance_time'),
                 ],
             ]) ?>
         </div>

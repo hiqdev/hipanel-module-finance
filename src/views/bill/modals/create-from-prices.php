@@ -17,7 +17,6 @@ use yii\helpers\Url;
  * @var array $billTypes
  */
 
-
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -41,10 +40,6 @@ use yii\helpers\Url;
     <div class="col-md-6">
         <?= $form->field($model, 'time')->widget(DateTimePicker::class, [
             'model' => $model,
-            'clientOptions' => [
-                'autoclose' => true,
-                'format' => 'yyyy-mm-dd hh:ii:ss',
-            ],
             'options' => [
                 'value' => Yii::$app->formatter->asDatetime(($model->isNewRecord && empty($model->time) ? new DateTime() : $model->time),
                     'php:Y-m-d H:i:s'),

@@ -1,32 +1,23 @@
 <?php
 
-use hipanel\assets\BootstrapDatetimepickerAsset;
 use hipanel\helpers\Url;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
 use hipanel\widgets\combo\ObjectCombo;
+use hipanel\widgets\DateTimePicker;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
 /** @var Sale $model */
 /** @var Sale[] $models */
 
-BootstrapDatetimepickerAsset::register($this);
-
-$this->registerJs(/** @lang ECMAScript 6 */ "
-$('.datetime').datetimepicker({
-    locale: hipanel.locale.get(),
-    format: 'YYYY-MM-DD HH:mm:ss',
-    showClose: true,
-    showTodayButton: true
-});");
-
 $this->registerCss(/** @lang CSS */ "
-.sales tbody tr td { align-items: center; vertical-align: middle; }
-.sales tbody tr td .form-group { position: relative; padding-top: 1.5rem; }
-.sales tbody tr td .form-group .help-block-error { position: absolute; top: 4.5rem; }
+  .sales tbody tr td { align-items: center; vertical-align: middle; }
+  .sales tbody tr td .form-group { position: relative; }
+  .sales tbody tr td .form-group .help-block-error { position: absolute; top: 2.5rem; }
+  .sales tbody tr td .form-group .checkbox { margin-top: 0; }
 ");
 
 ?>
@@ -50,29 +41,29 @@ $this->registerCss(/** @lang CSS */ "
                 <th><?= Yii::t('hipanel:finance:sale', 'Tariff') ?></th>
                 <th><?= Yii::t('hipanel:finance:sale', 'Time') ?></th>
                 <?php if (Yii::$app->user->can('sale.update')) : ?>
-                    <th><?= Yii::t('hipanel:finance:sale', 'Close time') ?></th>
-                    <th></th>
-                    <th><?= Yii::t('hipanel', 'Ticket') ?></th>
+                  <th><?= Yii::t('hipanel:finance:sale', 'Close time') ?></th>
+                  <th></th>
+                  <th><?= Yii::t('hipanel', 'Ticket') ?></th>
                 <?php endif ?>
             </tr>
             </thead>
             <tbody>
             <?php foreach ($models as $idx => $sale) : ?>
-                <tr>
+              <tr>
                     <?php if ($model->isNewRecord) : ?>
-                        <td>
+                      <td>
                             <?= $form->field($model, "[$idx]object_id")->widget(ObjectCombo::class, [
                                 'class_attribute' => "object_type",
                                 'class_attribute_name' => "[$idx]object_type",
                             ])->label(false) ?>
                         </td>
-                        <td>
+                      <td>
                             <?= $form->field($sale, "[$idx]seller_id")->widget(SellerCombo::class, [
                                 'hasId' => true,
                                 'formElementSelector' => 'td',
                             ])->label(false) ?>
                         </td>
-                        <td>
+                      <td>
                             <?= $form->field($sale, "[$idx]buyer_id")->widget(ClientCombo::class, [
                                 'hasId' => true,
                                 'formElementSelector' => 'td',
@@ -80,44 +71,44 @@ $this->registerCss(/** @lang CSS */ "
                         </td>
                     <?php else : ?>
                         <?= Html::activeHiddenInput($sale, "[$idx]id") ?>
-                        <td><?= $sale->object ?></td>
-                        <td><?= $sale->seller ?></td>
-                        <td><?= $sale->buyer ?></td>
+                      <td><?= $sale->object ?></td>
+                      <td><?= $sale->seller ?></td>
+                      <td><?= $sale->buyer ?></td>
                     <?php endif ?>
-                    <td>
+                <td>
                         <?= $form->field($sale, "[$idx]tariff_id")->widget(PlanCombo::class, [
                             'hasId' => true,
                             'tariffType' => $sale->tariff_type,
                         ])->label(false) ?>
                     </td>
                     <td>
-                        <?= $form->field($sale, "[$idx]time")->textInput(['class' => 'form-control datetime'])->label(false) ?>
+                        <?= $form->field($sale, "[$idx]time")->widget(DateTimePicker::class)->label(false) ?>
                     </td>
-                    <?php if (Yii::$app->user->can('sale.update')) : ?>
-                        <td>
-                            <?= $form->field($sale, "[$idx]unsale_time")
-                                ->textInput([
-                                    'class' => 'form-control datetime',
-                                    'readonly' => !$sale->isOperateable()
-                                ])
-                                ->label(false)
-                            ?>
-                        </td>
-                        <td>
+                  <?php if (Yii::$app->user->can('sale.update')) : ?>
+                    <td>
+                        <?= $form->field($sale, "[$idx]unsale_time")->widget(DateTimePicker::class, [
+                            'options' => [
+                                'readonly' => !$sale->isOperateable(),
+                            ],
+                        ])->label(false)
+                        ?>
+                    </td>
+                    <td>
                             <?= $form->field($sale, "[$idx]reduce_charges_after_unsale")
                                 ->checkbox()
                                 ->label($sale->getAttributeLabel('reduce_charges_after_unsale'), [
-                                    'title' => Yii::t('hipanel:finance:sale', 'When checked, the previous client charges in the unsale month will be reduced proportionally to the usage time. When not checked, the charges will remain the same.'),
+                                    'title' => Yii::t('hipanel:finance:sale',
+                                        'When checked, the previous client charges in the unsale month will be reduced proportionally to the usage time. When not checked, the charges will remain the same.'),
                                 ])
                             ?>
                         </td>
-                        <td>
+                    <td>
                             <?= $form->field($model, "[$idx]reason")
                                 ->textInput(['readonly' => !$sale->isOperateable()])
                                 ->label(false)
                             ?>
                         </td>
-                    <?php endif ?>
+                  <?php endif ?>
                 </tr>
             <?php endforeach ?>
             </tbody>

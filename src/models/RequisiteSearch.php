@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\models;
 
 use hipanel\base\SearchModelTrait;
+use Yii;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -39,6 +40,13 @@ class RequisiteSearch extends Requisite
             'balance_time',
             'currency',
             'name_insubstri',
+        ]);
+    }
+
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(), [
+            'balance_time' => Yii::t('hipanel:finance', 'Balance time'),
         ]);
     }
 }
