@@ -22,11 +22,13 @@ class TargetRepresentations extends RepresentationCollection
                 'label' => Yii::t('hipanel', 'Common'),
                 'columns' => array_filter([
                     'checkbox',
+                    'actions',
                     'name',
                     'client',
                     'seller',
                     'type',
                     'state',
+                    'remoteid',
                     'tariff',
                 ]),
             ],

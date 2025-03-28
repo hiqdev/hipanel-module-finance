@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace hipanel\modules\finance\models;
 
 use Yii;
+use yii\db\Query;
 use hipanel\base\Model;
 use hipanel\models\Ref;
 use hipanel\base\ModelTrait;
@@ -39,6 +40,27 @@ class Target extends Model implements TaggableInterface
             [['show_deleted'], 'boolean'],
             [['id'], 'required', 'on' => ['restore']],
             [['name', 'type', 'state', 'client'], 'required', 'on' => ['create', 'update']],
+            [
+                ['name'],
+                'unique',
+                'targetAttribute' => ['name', 'type'],
+                'filter' => function (Query $query): void {
+                    $query->andWhere(['ne', 'id', $this->id]);
+                },
+                'message' => Yii::t('hipanel:finance', 'The combination Name and Type has already been taken.'),
+                'on' => ['create', 'update'],
+            ],
+            [
+                ['remoteid'],
+                'unique',
+                'targetAttribute' => ['remoteid', 'type', 'access_id'],
+                'filter' => function (Query $query): void {
+                    $query->andWhere(['ne', 'id', $this->id]);
+                },
+                'message' => Yii::t('hipanel:finance', 'The combination Remote ID, Access ID and Type has already been taken.'),
+                'on' => ['create', 'update'],
+            ],
+            [['id'], 'required', 'on' => 'delete'],
         ];
     }
 
@@ -57,7 +79,7 @@ class Target extends Model implements TaggableInterface
         return $types;
     }
 
-    public function getStateOptions(): array
+    public function getStates(): array
     {
         return Ref::getList('state,target', 'hipanel:finance');
     }

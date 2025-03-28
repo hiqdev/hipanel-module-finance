@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace hipanel\modules\finance\menus;
 
 use hipanel\helpers\Url;
@@ -21,8 +23,9 @@ class TargetDetailMenu extends AbstractDetailMenu
         ])->items();
         $hasSales = count($this->model->sales) > 0;
         $hasActiveSale = $this->model->getActiveSale() !== null;
+        $user = Yii::$app->user;
 
-        $items = array_merge($items, [
+        $items = array_merge([
             [
                 'label' => AjaxModalWithTemplatedButton::widget([
                     'ajaxModalOptions' => [
@@ -36,7 +39,7 @@ class TargetDetailMenu extends AbstractDetailMenu
                         'header' => Html::tag('h4', Yii::t('hipanel:finance', 'Change plan'), ['class' => 'modal-title']),
                         'toggleButton' => [
                             'tag' => 'a',
-                            'label' => Yii::t('hipanel:finance', 'Change plan') . '<span class="pull-right"><i class="fa fa-fw fa-pencil"></i></span>',
+                            'label' => Yii::t('hipanel:finance', 'Change plan') . '<span class="pull-right"><i class="fa fa-fw fa-files-o"></i></span>',
                             'class' => 'clickable',
                         ],
                     ],
@@ -89,7 +92,7 @@ class TargetDetailMenu extends AbstractDetailMenu
                 'visible' => $hasActiveSale && !$this->model->isDeleted(),
                 'encode' => false,
             ],
-        ]);
+        ], $items);
 
         unset($items['view']);
 

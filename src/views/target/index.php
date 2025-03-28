@@ -1,11 +1,12 @@
 <?php
 
-use hipanel\models\IndexPageUiOptions;
-use hipanel\modules\finance\grid\TargetGridView;
-use hipanel\modules\finance\models\Target;
+use yii\helpers\Html;
 use hipanel\widgets\IndexPage;
-use hiqdev\higrid\representations\RepresentationCollection;
 use yii\data\DataProviderInterface;
+use hipanel\models\IndexPageUiOptions;
+use hipanel\modules\finance\models\Target;
+use hipanel\modules\finance\grid\TargetGridView;
+use hiqdev\higrid\representations\RepresentationCollection;
 
 /** @var Target $model */
 /** @var DataProviderInterface $dataProvider */
@@ -22,6 +23,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
 
     <?php $page->setSearchFormData() ?>
+
+    <?php $page->beginContent('main-actions') ?>
+        <?php if (Yii::$app->user->can('plan.create')) : ?>
+            <?= Html::a(Yii::t('hipanel:finance', 'Create'), ['@target/create'], ['class' => 'btn btn-sm btn-success']) ?>
+        <?php endif ?>
+    <?php $page->endContent() ?>
 
     <?php $page->beginContent('sorter-actions') ?>
         <?= $page->renderSorter([

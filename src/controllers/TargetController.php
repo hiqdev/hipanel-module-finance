@@ -7,21 +7,25 @@ namespace hipanel\modules\finance\controllers;
 use hipanel\actions\ComboSearchAction;
 use hipanel\actions\IndexAction;
 use hipanel\actions\SearchAction;
+use hipanel\actions\SmartCreateAction;
+use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartPerformAction;
+use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
+use hipanel\base\Module;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\models\stub\ClientRelationFreeStub;
 use hipanel\modules\finance\actions\TargetManagementAction;
 use hipanel\modules\finance\forms\TargetManagementForm;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\query\TargetQuery;
 use hipanel\modules\finance\models\Target;
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 use hipanel\modules\finance\providers\ConsumptionsProvider;
-use hipanel\base\Module;
 use hiqdev\hiart\Collection;
+use Yii;
 use yii\base\Event;
 
 class TargetController extends CrudController
@@ -45,6 +49,9 @@ class TargetController extends CrudController
                 'actions' => [
                     'restore' => ['test.alpha'],
                     '*' => ['plan.read', 'price.read'],
+                    'create' => 'target.create',
+                    'update' => 'target.update',
+                    'delete' => 'target.delete',
                 ],
             ],
         ]);
@@ -58,6 +65,21 @@ class TargetController extends CrudController
             ],
             'index' => [
                 'class' => IndexAction::class,
+            ],
+            'create' => [
+                'class' => SmartCreateAction::class,
+                'success' => Yii::t('hipanel:finance', 'Target was successfully created'),
+            ],
+            'update' => [
+                'class' => SmartUpdateAction::class,
+                'success' => Yii::t('hipanel:finance', 'Target was successfully updated'),
+                'on beforeFetch' => function (Event $event) {
+                    $event->sender->getDataProvider()->query->andWhere(['show_deleted' => 1]);
+                },
+            ],
+            'delete' => [
+                'class' => SmartDeleteAction::class,
+                'success' => Yii::t('hipanel:finance:sale', 'Target was successfully deleted.'),
             ],
             'change-plan' => [
                 'class' => TargetManagementAction::class,
