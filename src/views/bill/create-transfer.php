@@ -101,10 +101,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <div class="col-md-2">
                                         <?= $form->field($model, "[$i]time")->widget(DateTimePicker::class, [
                                             'model' => $model,
-                                            'clientOptions' => [
-                                                'autoclose' => true,
-                                                'format' => 'yyyy-mm-dd hh:ii:ss',
-                                            ],
                                             'options' => [
                                                 'value' => Yii::$app->formatter->asDatetime(new DateTime(), 'php:Y-m-d H:i:s'),
                                             ],

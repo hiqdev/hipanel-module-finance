@@ -90,10 +90,10 @@ class RequisiteGridView extends ContactGridView
             'contentOptions' => [
                 'style' => 'text-align: center; vertical-align: middle;',
             ],
-            'value' => function (Requisite $model) use ($formatter): string {
-                return Html::tag('span', $formatter->asCurrency($model->balance['eur_balance'], 'eur'));
+            'value' => function (Requisite $model) use ($formatter): ?string {
+                return !empty($model->balance['eur_balance']) ? Html::tag('span', $formatter->asCurrency($model->balance['eur_balance'], 'eur')) : null;
             },
-            'exportedValue' => fn($model) => $this->plainSum($model->balance['eur_balance'] ?? null),
+            'exportedValue' => fn($model): ?string => $this->plainSum($model->balance['eur_balance'] ?? null),
         ];
 
         foreach ($cellLabels as $attribute => $label) {

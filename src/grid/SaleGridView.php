@@ -15,7 +15,6 @@ use hipanel\modules\finance\models\FakeGroupingSale;
 use hipanel\modules\finance\models\FakeSale;
 use hipanel\modules\finance\models\Sale;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
-use hipanel\modules\server\grid\BindingColumn;
 use hiqdev\combo\StaticCombo;
 use Yii;
 use yii\base\InvalidArgumentException;
@@ -169,7 +168,7 @@ class SaleGridView extends \hipanel\grid\BoxedGridView
                      if (!is_numeric($sale->reason)) {
                         return Html::encode($sale->reason);
                      }
-                     
+
                      return Html::a($sale->reason,
                         ['@ticket/view', 'id' => $sale->reason],
                         ['target' => '_blank']

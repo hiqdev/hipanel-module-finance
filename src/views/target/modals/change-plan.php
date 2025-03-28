@@ -36,10 +36,6 @@ $map = [
 <?= $form->field($model, 'customer_id')->widget(ClientCombo::class) ?>
 <?= $form->field($model, 'time')->widget(DateTimePicker::class, [
     'model' => $model,
-    'clientOptions' => [
-        'autoclose' => true,
-        'format' => 'yyyy-mm-dd hh:ii:ss',
-    ],
     'options' => [
         'value' => Yii::$app->formatter->asDatetime(new DateTime(), 'php:Y-m-d H:i:s'),
     ],

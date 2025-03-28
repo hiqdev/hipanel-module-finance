@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\models;
 
-use hipanel\base\Model;
-use hipanel\base\ModelTrait;
-use hipanel\behaviors\TaggableBehavior;
-use hipanel\models\Ref;
-use hipanel\models\TaggableInterface;
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
-use hipanel\modules\finance\models\query\TargetQuery;
 use Yii;
 use yii\db\Query;
+use hipanel\base\Model;
+use hipanel\models\Ref;
+use hipanel\base\ModelTrait;
+use hipanel\models\TaggableInterface;
+use hipanel\behaviors\TaggableBehavior;
+use hipanel\modules\finance\models\query\TargetQuery;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 
 /**
  * @property Sale[] $sales
