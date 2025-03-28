@@ -1,7 +1,7 @@
 <?php
 
-use yii\helpers\Html;
 use hipanel\modules\finance\models\Target;
+use yii\helpers\Html;
 
 /** @var Target $model */
 /** @var Target[] $models */
