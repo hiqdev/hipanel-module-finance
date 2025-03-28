@@ -4,29 +4,29 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\controllers;
 
-use Yii;
-use yii\base\Event;
-use hipanel\base\Module;
-use hiqdev\hiart\Collection;
-use hipanel\actions\ViewAction;
-use hipanel\actions\IndexAction;
-use hipanel\base\CrudController;
-use hipanel\actions\SearchAction;
 use hipanel\actions\ComboSearchAction;
+use hipanel\actions\IndexAction;
+use hipanel\actions\SearchAction;
 use hipanel\actions\SmartCreateAction;
 use hipanel\actions\SmartDeleteAction;
-use hipanel\actions\SmartUpdateAction;
-use hipanel\filters\EasyAccessControl;
 use hipanel\actions\SmartPerformAction;
+use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
-use hipanel\modules\finance\models\Plan;
-use hipanel\modules\finance\models\Target;
-use hipanel\modules\finance\models\query\TargetQuery;
-use hipanel\modules\finance\forms\TargetManagementForm;
-use hipanel\modules\finance\actions\TargetManagementAction;
-use hipanel\modules\finance\providers\ConsumptionsProvider;
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
+use hipanel\actions\ViewAction;
+use hipanel\base\CrudController;
+use hipanel\base\Module;
+use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\models\stub\ClientRelationFreeStub;
+use hipanel\modules\finance\actions\TargetManagementAction;
+use hipanel\modules\finance\forms\TargetManagementForm;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator;
+use hipanel\modules\finance\models\Plan;
+use hipanel\modules\finance\models\query\TargetQuery;
+use hipanel\modules\finance\models\Target;
+use hipanel\modules\finance\providers\ConsumptionsProvider;
+use hiqdev\hiart\Collection;
+use Yii;
+use yii\base\Event;
 
 class TargetController extends CrudController
 {
@@ -36,7 +36,8 @@ class TargetController extends CrudController
         readonly private ConsumptionConfigurator $consumptionConfigurator,
         readonly private ConsumptionsProvider $consumptionsProvider,
         array $config = []
-    ) {
+    )
+    {
         parent::__construct($id, $module, $config);
     }
 
@@ -48,9 +49,9 @@ class TargetController extends CrudController
                 'actions' => [
                     'restore' => ['test.alpha'],
                     '*' => ['plan.read', 'price.read'],
-                    // 'create' => 'target.create',
-                    // 'update' => 'target.update',
-                    // 'delete' => 'target.delete',
+                    'create' => 'target.create',
+                    'update' => 'target.update',
+                    'delete' => 'target.delete',
                 ],
             ],
         ]);
