@@ -54,8 +54,6 @@ class ConsumptionConfiguratorTest extends TestCase
                     $mockTariffType->label(),
                     ['col1', 'col2', 'col3'],
                     [['col1', 'col2']],
-                    Target::class,
-                    MockResource::class,
                 ))
             ->end();
     }
