@@ -99,8 +99,8 @@ final class ConsumptionConfigurator
             'Tariff resources',
             [
                 PriceType::server_traf95_max->name(),
-                'server_traf95',
-                'server_traf95_in',
+                PriceType::server_traf95->name(),
+                PriceType::server_traf95_in->name(),
             ],
             [],
             $this->createObject($defaultModel),
