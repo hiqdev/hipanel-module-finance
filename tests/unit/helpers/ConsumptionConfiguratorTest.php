@@ -65,11 +65,11 @@ class ConsumptionConfiguratorTest extends TestCase
         $groups = $this->configurator->getGroupsWithLabels('test_tariff_type');
         $expected = [
             [
-                'col1' => 'Mock',
-                'col2' => 'Mock',
+                'col1' => 'Mock Label',
+                'col2' => 'Mock Label',
             ],
             [
-                'col3' => 'Mock',
+                'col3' => 'Mock Label',
             ],
         ];
 
@@ -98,9 +98,9 @@ class ConsumptionConfiguratorTest extends TestCase
     {
         $columns = $this->configurator->getColumnsWithLabels('test_tariff_type');
         $expected = [
-            'col1' => 'Mock',
-            'col2' => 'Mock',
-            'col3' => 'Mock',
+            'col1' => 'Mock Label',
+            'col2' => 'Mock Label',
+            'col3' => 'Mock Label',
         ];
 
         $this->assertSame($expected, $columns);

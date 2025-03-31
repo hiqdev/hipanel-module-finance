@@ -2,8 +2,6 @@
 
 namespace hipanel\modules\finance\tests\unit\helpers;
 
-//use hipanel\modules\finance\models\decorators\ResourceDecoratorInterface;
-
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorData;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
 
@@ -21,7 +19,7 @@ class MockResourceDecorator implements ResourceDecoratorInterface
 
     public function displayTitle(): string
     {
-        return 'Mock';
+        return 'Mock Label';
     }
 
     public function displayUnit(): ?string
