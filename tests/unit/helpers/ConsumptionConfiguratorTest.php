@@ -63,8 +63,17 @@ class ConsumptionConfiguratorTest extends TestCase
     public function testGetGroupsWithLabels()
     {
         $groups = $this->configurator->getGroupsWithLabels('test_tariff_type');
+        $expected = [
+            [
+                'col1' => 'Mock',
+                'col2' => 'Mock',
+            ],
+            [
+                'col3' => 'Mock',
+            ],
+        ];
 
-        $this->assertSame([['col1', 'col2'], ['col3']], $groups);
+        $this->assertSame($expected, $groups);
     }
 
     public function testGetFirstAvailableClass(): void
@@ -87,9 +96,14 @@ class ConsumptionConfiguratorTest extends TestCase
 
     public function testGetColumnsWithLabels(): void
     {
-        $columns = $this->configurator->getColumnsWithLabels('server');
+        $columns = $this->configurator->getColumnsWithLabels('test_tariff_type');
+        $expected = [
+            'col1' => 'Mock',
+            'col2' => 'Mock',
+            'col3' => 'Mock',
+        ];
 
-        $this->assertSame(['col1', 'col2', 'col3'], $columns);
+        $this->assertSame($expected, $columns);
     }
 
 //    public function testGetDecorator(): void

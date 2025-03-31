@@ -21,7 +21,7 @@ class MockResourceDecorator implements ResourceDecoratorInterface
 
     public function displayTitle(): string
     {
-        // TODO: Implement displayTitle() method.
+        return 'Mock';
     }
 
     public function displayUnit(): ?string
