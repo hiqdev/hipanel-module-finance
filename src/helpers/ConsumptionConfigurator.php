@@ -8,9 +8,11 @@ use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\models\TargetResource;
 use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehaviour;
+use hiqdev\billing\registry\Domain\Model\TariffType;
 use hiqdev\billing\registry\product\PriceType;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
 use hiqdev\php\billing\product\BillingRegistryInterface;
+use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use yii\db\ActiveRecordInterface;
 use Yii;
 
@@ -70,12 +72,14 @@ final class ConsumptionConfigurator
         foreach ($this->billingRegistry->getBehaviors(ConsumptionConfigurationBehaviour::class) as $behavior) {
             $tariffType = $behavior->getTariffType();
 
+            list ($model, $resourceModel) = $this->getModels($tariffType);
+
             $configurations[$tariffType->name()] = new ConsumptionConfiguratorData(
                 $behavior->getLabel(),
                 $behavior->columns,
                 $behavior->groups,
-                $this->createObject($behavior->getModel() ?? Target::class),
-                $this->createObject($behavior->getResourceModel() ?? TargetResource::class),
+                $this->createObject($model),
+                $this->createObject($resourceModel),
             );
         }
 
@@ -93,6 +97,33 @@ final class ConsumptionConfigurator
         );
 
         return $configurations;
+    }
+
+    private function getModels(TariffTypeInterface $tariffType): array
+    {
+        $data = [
+            Target::class,
+            TargetResource::class
+        ];
+
+        if ($tariffType instanceof TariffType::client) {
+            $data = [
+                \hipanel\modules\client\models\Client::class,
+                \hipanel\modules\finance\models\ClientResource::class,
+            ];
+        } else if ($tariffType instanceof TariffType::server) {
+            $data = [
+                \hipanel\modules\server\models\Server::class,
+                \hipanel\modules\finance\models\ServerResource::class,
+            ];
+        } else if ($tariffType instanceof TariffType::switch) {
+            $data = [
+                \hipanel\modules\server\models\Hub::class,
+                \hipanel\modules\finance\models\ServerResource::class,
+            ];
+        }
+
+        return $data;
     }
 
     public function getGroupsWithLabels(string $class): array
