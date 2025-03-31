@@ -23,8 +23,7 @@ class ResourceDecoratorFactory
     public static function createFromResource(Resource|AbstractResourceStub $resource): ResourceDecoratorInterface
     {
         $type = $resource->model_type ?? $resource->type;
-
-        $registry = Yii::createObject(BillingRegistryInterface::class);
+        $registry = self::createBillingRegistry();
 
         try {
             /** @var ResourceDecoratorBehavior $behavior */
@@ -37,6 +36,11 @@ class ResourceDecoratorFactory
         } catch (BehaviorNotFoundException) {
             throw new InvalidConfigException('No representative decoration class found for type "' . $type . '"');
         }
+    }
+
+    private static function createBillingRegistry(): BillingRegistryInterface
+    {
+        return Yii::createObject(BillingRegistryInterface::class);
     }
 
     private static function createResourceDecoratorData(Resource|AbstractResourceStub $resource): ResourceDecoratorData
