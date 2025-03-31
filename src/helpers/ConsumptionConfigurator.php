@@ -37,15 +37,25 @@ final class ConsumptionConfigurator
      */
     public function getConfigurationByClass(string $class): ConsumptionConfiguratorData
     {
+        list ($defaultModel, $defaultResourceModel) = $this->getDefaultModels();
+
         $fallback = new ConsumptionConfiguratorData(
             $class,
             [],
             [],
-            $this->createObject(Target::class),
-            $this->createObject(TargetResource::class),
+            $this->createObject($defaultModel),
+            $this->createObject($defaultResourceModel),
         );
 
         return $this->getConfigurations()[$class] ?? $fallback;
+    }
+
+    private function getDefaultModels(): array
+    {
+        return [
+            Target::class,
+            TargetResource::class
+        ];
     }
 
     private function createObject(string $className, array $params = []): Model
@@ -84,6 +94,7 @@ final class ConsumptionConfigurator
         }
 
         // Can't be added to Billing Registry, so left as it is
+        list ($defaultModel, $defaultResourceModel) = $this->getDefaultModels();
         $configurations['tariff'] = new ConsumptionConfiguratorData(
             'Tariff resources',
             [
@@ -92,8 +103,8 @@ final class ConsumptionConfigurator
                 'server_traf95_in',
             ],
             [],
-            $this->createObject(Target::class),
-            $this->createObject(TargetResource::class),
+            $this->createObject($defaultModel),
+            $this->createObject($defaultResourceModel),
         );
 
         return $configurations;
@@ -101,10 +112,7 @@ final class ConsumptionConfigurator
 
     private function getModels(TariffTypeInterface $tariffType): array
     {
-        $data = [
-            Target::class,
-            TargetResource::class
-        ];
+        $data = $this->getDefaultModels();
 
         if ($tariffType instanceof TariffType::client) {
             $data = [
