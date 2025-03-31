@@ -23,24 +23,16 @@ class ResourceDecoratorFactory
     public static function createFromResource(Resource|AbstractResourceStub $resource): ResourceDecoratorInterface
     {
         $type = $resource->model_type ?? $resource->type;
-        $registry = self::createBillingRegistry();
+        $resourceDecoratorData = self::createResourceDecoratorData($resource);
+        $registry = Yii::createObject(BillingRegistryInterface::class);
 
         try {
-            /** @var ResourceDecoratorBehavior $behavior */
-            $behavior = $registry->getBehavior(
-                ResourceHelper::addOveruseToTypeIfNeeded($type),
-                ResourceDecoratorBehavior::class,
-            );
+            $behavior = self::getBehaviorByTypeFromBillingRegistry($registry, $type);
 
-            return $behavior->createDecorator(self::createResourceDecoratorData($resource));
+            return $behavior->createDecorator($resourceDecoratorData);
         } catch (BehaviorNotFoundException) {
             throw new InvalidConfigException('No representative decoration class found for type "' . $type . '"');
         }
-    }
-
-    private static function createBillingRegistry(): BillingRegistryInterface
-    {
-        return Yii::createObject(BillingRegistryInterface::class);
     }
 
     private static function createResourceDecoratorData(Resource|AbstractResourceStub $resource): ResourceDecoratorData
@@ -53,5 +45,17 @@ class ResourceDecoratorFactory
             $resource->type,
             $resource->part->partno,
         );
+    }
+
+    private static function getBehaviorByTypeFromBillingRegistry(
+        BillingRegistryInterface $registry,
+        string $type
+    ): ResourceDecoratorBehavior {
+        $behavior = $registry->getBehavior(
+            ResourceHelper::addOveruseToTypeIfNeeded($type),
+            ResourceDecoratorBehavior::class,
+        );
+
+        return $behavior;
     }
 }
