@@ -49,10 +49,10 @@ class ResourceDecoratorFactory
 
     private static function getBehaviorByTypeFromBillingRegistry(
         BillingRegistryInterface $registry,
-        string $type
+        string $priceType
     ): ResourceDecoratorBehavior {
         $behavior = $registry->getBehavior(
-            ResourceHelper::addOveruseToTypeIfNeeded($type),
+            ResourceHelper::addOveruseToTypeIfNeeded($priceType),
             ResourceDecoratorBehavior::class,
         );
 
