@@ -6,6 +6,8 @@ use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\tests\unit\TestCase;
 use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehaviour;
+use hiqdev\billing\registry\behavior\ResourceDecoratorBehavior;
+use hiqdev\billing\registry\product\PriceType;
 use hiqdev\billing\registry\TariffDefinitions\TariffTypeDefinitionFacade;
 use hiqdev\php\billing\product\BillingRegistry;
 use hiqdev\php\billing\product\BillingRegistryInterface;
@@ -15,12 +17,15 @@ class ConsumptionConfiguratorTest extends TestCase
 {
     private ConsumptionConfigurator $configurator;
 
+    private MockTariffType $mockTariffType;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->di()->set(BillingRegistryInterface::class, self::createBillingRegistry());
         $this->configurator = $this->di()->get(ConsumptionConfigurator::class);
+        $this->mockTariffType = new MockTariffType();
     }
 
     private static function createBillingRegistry(): BillingRegistryInterface
@@ -34,10 +39,19 @@ class ConsumptionConfiguratorTest extends TestCase
 
     private static function createTariffTypeDefinition(): TariffTypeDefinitionInterface
     {
-        return (new TariffTypeDefinitionFacade(new MockTariffType()))
+        $mockTariffType = new MockTariffType();
+
+        return (new TariffTypeDefinitionFacade($mockTariffType))
+            ->withPrices()
+                ->overuse(PriceType::lb_ha_capacity_unit)
+                    ->withBehaviors()
+                        ->attach(new ResourceDecoratorBehavior(MockResourceDecorator::class))
+                    ->end()
+                ->end()
+            ->end()
             ->withBehaviors()
                 ->attach(new ConsumptionConfigurationBehaviour(
-                    'Test Tariff Type',
+                    $mockTariffType->label(),
                     ['col1', 'col2', 'col3'],
                     [['col1', 'col2']],
                     Target::class,
@@ -48,7 +62,7 @@ class ConsumptionConfiguratorTest extends TestCase
 
     public function testGetColumns(): void
     {
-        $columns = $this->configurator->getColumns('test_tariff_type');
+        $columns = $this->configurator->getColumns($this->mockTariffType->name());
 
         $this->assertSame(['col1', 'col2', 'col3'], $columns);
     }
@@ -62,7 +76,7 @@ class ConsumptionConfiguratorTest extends TestCase
 
     public function testGetGroupsWithLabels()
     {
-        $groups = $this->configurator->getGroupsWithLabels('test_tariff_type');
+        $groups = $this->configurator->getGroupsWithLabels($this->mockTariffType->name());
         $expected = [
             [
                 'col1' => 'Mock Label',
@@ -78,13 +92,13 @@ class ConsumptionConfiguratorTest extends TestCase
 
     public function testGetFirstAvailableClass(): void
     {
-        $this->assertSame('test_tariff_type', $this->configurator->getFirstAvailableClass());
+        $this->assertSame($this->mockTariffType->name(), $this->configurator->getFirstAvailableClass());
     }
 
     public function testGetClassesDropDownOptions(): void
     {
         $options = $this->configurator->getClassesDropDownOptions();
-        $this->assertSame(['test_tariff_type' => 'Test Tariff Type'], $options);
+        $this->assertSame(['mock_tariff_type' => 'Mock Tariff Type'], $options);
     }
 
     public function testGetAllPossibleColumns(): void
@@ -96,7 +110,7 @@ class ConsumptionConfiguratorTest extends TestCase
 
     public function testGetColumnsWithLabels(): void
     {
-        $columns = $this->configurator->getColumnsWithLabels('test_tariff_type');
+        $columns = $this->configurator->getColumnsWithLabels($this->mockTariffType->name());
         $expected = [
             'col1' => 'Mock Label',
             'col2' => 'Mock Label',

@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\tests\unit\helpers;
 
+use hipanel\modules\finance\models\decorators\ResourceDecoratorFactory;
 use hipanel\modules\finance\models\Resource;
 use hiqdev\billing\registry\ResourceDecorator\DecoratedInterface;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
@@ -13,7 +14,7 @@ class MockResource extends Resource implements DecoratedInterface
     public function decorator(): ResourceDecoratorInterface
     {
         if ($this->decorator === null) {
-            $this->decorator = MockResourceDecoratorFactory::createFromResource($this);
+            $this->decorator = ResourceDecoratorFactory::createFromResource($this);
         }
 
         return $this->decorator;
