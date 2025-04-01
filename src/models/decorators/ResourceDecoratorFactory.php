@@ -2,13 +2,14 @@
 
 namespace hipanel\modules\finance\models\decorators;
 
+use hipanel\modules\finance\helpers\TariffResourceHelper;
 use hipanel\modules\finance\models\Resource;
 use hipanel\modules\finance\models\stubs\AbstractResourceStub;
 use hiqdev\billing\registry\behavior\ResourceDecoratorBehavior;
+use hiqdev\billing\registry\behavior\ResourceDecoratorBehaviorNotFoundException;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorBehaviorSearch;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorData;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
-use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
 use hiqdev\php\billing\product\BillingRegistryInterface;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -25,12 +26,18 @@ class ResourceDecoratorFactory
         $type = $resource->model_type ?? $resource->type;
         $resourceDecoratorData = self::createResourceDecoratorData($resource);
         $registry = Yii::createObject(BillingRegistryInterface::class);
+        $tariffResourceHelper = new TariffResourceHelper();
+
+        $resourceDecorator = $tariffResourceHelper->getResourceDecorator($resourceDecoratorData, $type);
+        if ($resourceDecorator) {
+            return $resourceDecorator;
+        }
 
         try {
             $behavior = self::findResourceDecoratorBehavior($registry, $type);
 
             return $behavior->createDecorator($resourceDecoratorData);
-        } catch (BehaviorNotFoundException) {
+        } catch (ResourceDecoratorBehaviorNotFoundException) {
             throw new InvalidConfigException('No representative decoration class found for type "' . $type . '"');
         }
     }
@@ -43,7 +50,9 @@ class ResourceDecoratorFactory
             $resource->unit,
             $resource->currency,
             $resource->type,
-            $resource->part->partno,
+            // TODO: looks like the bug is here: partsSearch doesn't pass id
+            '',
+//            $resource->part->partno,
         );
     }
 

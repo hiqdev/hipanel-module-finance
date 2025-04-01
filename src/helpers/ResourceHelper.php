@@ -82,9 +82,12 @@ class ResourceHelper
         return $totals;
     }
 
+    /**
+     * @deprecated - I can't add overuse to all types
+     * Need to think how to deal with it
+     */
     public static function addOveruseToTypeIfNeeded(string $type): string
     {
-        // TODO: I can't add overuse to all types. For example:
         if (str_starts_with($type, GType::overuse->name()) === false) {
             return GType::overuse->name() . ',' . $type;
         }

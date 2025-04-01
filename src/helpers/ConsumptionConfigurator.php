@@ -9,7 +9,6 @@ use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\models\TargetResource;
 use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehaviour;
 use hiqdev\billing\registry\Domain\Model\TariffType;
-use hiqdev\billing\registry\product\PriceType;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
 use hiqdev\php\billing\product\BillingRegistryInterface;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
@@ -54,13 +53,13 @@ final class ConsumptionConfigurator
     {
         return [
             Target::class,
-            TargetResource::class
+            TargetResource::class,
         ];
     }
 
     private function createObject(string $className, array $params = []): Model
     {
-        return Yii::createObject(array_merge(['class' => $className], $params));
+        return YiiObjectHelper::createObject($className, $params);
     }
 
     public function getConfigurations(): array
@@ -93,21 +92,8 @@ final class ConsumptionConfigurator
             );
         }
 
-        // Can't be added to Billing Registry, so left as it is
-        list ($defaultModel, $defaultResourceModel) = $this->getDefaultModels();
-        $configurations['tariff'] = new ConsumptionConfiguratorData(
-            'Tariff resources',
-            [
-                PriceType::server_traf95_max->name(),
-                PriceType::server_traf95->name(),
-                PriceType::server_traf95_in->name(),
-            ],
-            [],
-            $this->createObject($defaultModel),
-            $this->createObject($defaultResourceModel),
-        );
-
-        return $configurations;
+        // Tariff can't be added to Billing Registry
+        return (new TariffResourceHelper())->addTariffToConfiguration($configurations);
     }
 
     private function getModels(TariffTypeInterface $tariffType): array
