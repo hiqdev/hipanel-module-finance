@@ -8,7 +8,7 @@ use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehaviour;
 use hiqdev\billing\registry\behavior\ResourceDecoratorBehavior;
 use hiqdev\billing\registry\product\PriceType;
 use hiqdev\billing\registry\TariffDefinitions\TariffTypeDefinitionFacade;
-use hiqdev\billing\tests\unit\ResourceDecorator\MockResourceDecorator;
+use hiqdev\billing\registry\tests\unit\ResourceDecorator\MockResourceDecorator;
 use hiqdev\php\billing\product\BillingRegistry;
 use hiqdev\php\billing\product\BillingRegistryInterface;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
