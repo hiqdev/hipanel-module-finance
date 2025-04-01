@@ -2,10 +2,10 @@
 
 namespace hipanel\modules\finance\models\decorators;
 
-use hipanel\modules\finance\helpers\ResourceHelper;
 use hipanel\modules\finance\models\Resource;
 use hipanel\modules\finance\models\stubs\AbstractResourceStub;
 use hiqdev\billing\registry\behavior\ResourceDecoratorBehavior;
+use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorBehaviorSearch;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorData;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
 use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
@@ -27,7 +27,7 @@ class ResourceDecoratorFactory
         $registry = Yii::createObject(BillingRegistryInterface::class);
 
         try {
-            $behavior = self::getBehaviorByTypeFromBillingRegistry($registry, $type);
+            $behavior = self::findResourceDecoratorBehavior($registry, $type);
 
             return $behavior->createDecorator($resourceDecoratorData);
         } catch (BehaviorNotFoundException) {
@@ -47,20 +47,10 @@ class ResourceDecoratorFactory
         );
     }
 
-    private static function getBehaviorByTypeFromBillingRegistry(
+    private static function findResourceDecoratorBehavior(
         BillingRegistryInterface $registry,
-        string $priceType
+        string $type
     ): ResourceDecoratorBehavior {
-        // 1. find TariffType by ConsumptionConfigurationBehaviour
-        // 2. find ResourceDecoratorBehavior in TariffType by PriceType
-        $registry->getBehavior();
-
-
-        $behavior = $registry->getBehavior(
-            ResourceHelper::addOveruseToTypeIfNeeded($priceType),
-            ResourceDecoratorBehavior::class,
-        );
-
-        return $behavior;
+        return (new ResourceDecoratorBehaviorSearch())->find($registry, $type);
     }
 }
