@@ -114,17 +114,17 @@ final class ConsumptionConfigurator
     {
         $data = $this->getDefaultModels();
 
-        if ($tariffType instanceof TariffType::client) {
+        if ($tariffType->name() === TariffType::client->name()) {
             $data = [
                 \hipanel\modules\client\models\Client::class,
                 \hipanel\modules\finance\models\ClientResource::class,
             ];
-        } else if ($tariffType instanceof TariffType::server) {
+        } else if ($tariffType->name() === TariffType::server->name()) {
             $data = [
                 \hipanel\modules\server\models\Server::class,
                 \hipanel\modules\finance\models\ServerResource::class,
             ];
-        } else if ($tariffType instanceof TariffType::switch) {
+        } else if ($tariffType->name() === TariffType::switch->name()) {
             $data = [
                 \hipanel\modules\server\models\Hub::class,
                 \hipanel\modules\finance\models\ServerResource::class,
