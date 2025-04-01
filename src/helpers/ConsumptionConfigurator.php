@@ -86,8 +86,8 @@ final class ConsumptionConfigurator
 
             $configurations[$tariffType->name()] = new ConsumptionConfiguratorData(
                 $behavior->getLabel(),
-                $behavior->columns,
-                $behavior->groups,
+                $behavior->getColumns(),
+                $behavior->getGroups(),
                 $this->createObject($model),
                 $this->createObject($resourceModel),
             );
