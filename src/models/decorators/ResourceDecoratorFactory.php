@@ -51,6 +51,11 @@ class ResourceDecoratorFactory
         BillingRegistryInterface $registry,
         string $priceType
     ): ResourceDecoratorBehavior {
+        // 1. find TariffType by ConsumptionConfigurationBehaviour
+        // 2. find ResourceDecoratorBehavior in TariffType by PriceType
+        $registry->getBehavior();
+
+
         $behavior = $registry->getBehavior(
             ResourceHelper::addOveruseToTypeIfNeeded($priceType),
             ResourceDecoratorBehavior::class,
