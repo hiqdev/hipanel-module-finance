@@ -44,15 +44,15 @@ class ResourceDecoratorFactory
 
     private static function createResourceDecoratorData(Resource|AbstractResourceStub $resource): ResourceDecoratorData
     {
+        $part = $resource->part;
+
         return new ResourceDecoratorData(
             $resource->quantity,
             $resource->price,
             $resource->unit,
             $resource->currency,
             $resource->type,
-            // TODO: looks like the bug is here: partsSearch doesn't pass id
-            '',
-//            $resource->part->partno,
+            $part ? $part->partno : '',
         );
     }
 

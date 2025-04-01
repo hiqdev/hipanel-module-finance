@@ -20,6 +20,7 @@ use Yii;
 use yii\base\InvalidConfigException;
 
 /**
+ * @property ?Part $part
  * @property Tariff $tariff
  */
 class Resource extends Model
@@ -56,6 +57,11 @@ class Resource extends Model
     {
         if (!Yii::getAlias('@part', false)) {
             throw new InvalidConfigException('Stock module is a must to retrieve resource parts');
+        }
+
+        if (empty($this->id)) {
+            // To avoid sending a request to HiApi, which is eventually stuck (there is a bug on the API side)
+            return null;
         }
 
         return $this->hasOne(Part::class, ['object_id' => 'id']);
