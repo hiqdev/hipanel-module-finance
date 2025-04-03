@@ -3,7 +3,7 @@
 use hipanel\modules\finance\models\Purse;
 use hipanel\modules\finance\widgets\BankAccountField;
 use hipanel\widgets\ModalButton;
-use hipanel\widgets\DateTimePicker;
+use hipanel\widgets\MonthPicker;
 use yii\helpers\Html;
 use yii\web\View;
 
@@ -46,16 +46,13 @@ use yii\web\View;
 
 <?= $prepend ?>
 
-<?= $modalButton->form->field($model, 'month')->widget(DateTimePicker::class, [
+<?= $modalButton->form->field($model, 'month')->widget(MonthPicker::class, [
     'options' => [
         'id' => 'purse-month-' . $this->context->id,
     ],
     'clientOptions' => [
-        'format' => 'yyyy-mm',
-        'minView' => 3,
-        'startView' => 'year',
-        'autoclose' => true,
-        'endDate' => $dt->modify('next month')->format('Y-m'),
+        'dateFormat' => 'Y-m',
+        'maxDate' => $dt->modify('next month')->format('Y-m'),
     ],
 ]) ?>
 
