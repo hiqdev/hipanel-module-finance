@@ -4,7 +4,7 @@ namespace hipanel\modules\finance\tests\unit\helpers;
 
 use hipanel\modules\finance\helpers\ConsumptionConfigurator;
 use hipanel\modules\finance\tests\unit\TestCase;
-use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehaviour;
+use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehavior;
 use hiqdev\billing\registry\behavior\ResourceDecoratorBehavior;
 use hiqdev\billing\registry\product\PriceType;
 use hiqdev\billing\registry\TariffDefinitions\TariffTypeDefinitionFacade;
@@ -51,7 +51,7 @@ class ConsumptionConfiguratorTest extends TestCase
                 ->end()
             ->end()
             ->withBehaviors()
-                ->attach(new ConsumptionConfigurationBehaviour(
+                ->attach(new ConsumptionConfigurationBehavior(
                     $mockTariffType->label(),
                     ['col1', 'col2', 'col3'],
                     [['col1', 'col2']],

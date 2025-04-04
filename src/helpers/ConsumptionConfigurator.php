@@ -7,13 +7,12 @@ use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\models\TargetResource;
-use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehaviour;
+use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehavior;
 use hiqdev\billing\registry\Domain\Model\TariffType;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
 use hiqdev\php\billing\product\BillingRegistryInterface;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use yii\db\ActiveRecordInterface;
-use Yii;
 
 final class ConsumptionConfigurator
 {
@@ -77,8 +76,8 @@ final class ConsumptionConfigurator
     private function buildConfigurations(): array
     {
         $configurations = [];
-        /** @var ConsumptionConfigurationBehaviour $behavior */
-        foreach ($this->billingRegistry->getBehaviors(ConsumptionConfigurationBehaviour::class) as $behavior) {
+        /** @var ConsumptionConfigurationBehavior $behavior */
+        foreach ($this->billingRegistry->getBehaviors(ConsumptionConfigurationBehavior::class) as $behavior) {
             $tariffType = $behavior->getTariffType();
 
             list ($model, $resourceModel) = $this->getModels($tariffType);
