@@ -42,6 +42,7 @@ class BillSearch extends Bill
             'time_till',
             'servers',
             'server_ids',
+            'server_ilike',
             'ftype',
             'object_name_ilike',
             'object_types',
