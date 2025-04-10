@@ -19,7 +19,7 @@ test("Test bills index page works @hipanel-module-finance @seller", async ({ sel
     "BillSearch[client_id]",
     "BillSearch[requisite_id]",
     "BillSearch[currency_in][]",
-    "BillSearch[servers]",
+    "BillSearch[server_ilike]",
     "BillSearch[descr]",
     "BillSearch[tariff_id]",
     "BillSearch[seller_id]",
