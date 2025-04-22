@@ -16,6 +16,7 @@ use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use hipanel\modules\server\models\Consumption;
+use hiqdev\php\billing\product\BillingRegistryInterface;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\yii2\formatters\IntlFormatter;
 use InvalidArgumentException;
@@ -64,7 +65,11 @@ final class QuantityFormatterFactory implements QuantityFormatterFactoryInterfac
         'overuse,snapshot_du' => [FractionQuantityFormatter::class, FractionUnit::SIZE],
     ];
 
-    public function __construct(private readonly IntlFormatter $intlFormatter, private readonly BillTypesProvider $billTypesProvider)
+    public function __construct(
+        private readonly IntlFormatter $intlFormatter,
+        private readonly BillTypesProvider $billTypesProvider,
+        private readonly BillingRegistryInterface $BillingRegistry,
+    )
     {
     }
 
