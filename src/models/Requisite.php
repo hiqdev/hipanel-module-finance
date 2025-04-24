@@ -16,6 +16,13 @@ use Yii;
 
 /**
  * Class Requisite.
+ *
+ * @psalm-property array<string, array{
+ *       debit: float|int,
+ *       credit: float|int,
+ *       balance: float|int,
+ *       eur_sum?: float|int|null
+ *   }> $balances
  */
 class Requisite extends Contact
 {
