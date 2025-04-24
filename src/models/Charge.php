@@ -29,7 +29,15 @@ use Yii;
  * @property string $currency
  * @property float $sum
  * @property float $is_payed
- * @property int object_id
+ * @property int $object_id
+ * @property float $positive
+ * @property float $negative
+ * @property float $eur_amount
+ * @property int $client_id
+ * @property string $client
+ * @property string $client_type
+ * @property array $client_tags
+ * @property float $fraction_of_month
  * @property TargetObject $commonObject
  * @property TargetObject $latestCommonObject
  * @property Bill $bill
