@@ -194,11 +194,13 @@ class ResourceHelper
         $consumption = new Consumption();
         $consumption->class = $class;
         $consumption->setAttributes($model->toArray());
+        $uses = [];
         if ($model->isRelationPopulated('resources')) {
             $uses = $model->resources;
         } elseif ($model->isRelationPopulated('uses')) {
             $uses = $model->uses;
         }
+        $resources = [];
         foreach ($uses as $use) {
             $resource = new Resource();
             $resource->class = $class;
