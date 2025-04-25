@@ -31,6 +31,7 @@ use yii\helpers\StringHelper;
  * @property mixed|null $type_id
  * @property mixed|null $currency
  * @property float|mixed|null $sum
+ * @property string $ts
  */
 class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInterface, HasTimeAttributeInterface
 {
