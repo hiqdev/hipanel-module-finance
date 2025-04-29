@@ -68,18 +68,18 @@ test(`Ensure I can edit several sales @hipanel-module-finance @seller`, async ({
 });
 
 test(`Ensure sale detail view is correct @hipanel-module-finance @seller`, async ({ page }) => {
-
   const saleHelper = new SaleHelper(page);
   const indexPage = new Index(page);
+  const sale = sales[0];
 
   await saleHelper.gotoIndexSale();
-  await saleHelper.filterByBuyer(sales[0].client);
-  await saleHelper.filterByType(sales[0].type);
-  await saleHelper.filterByTariff(sales[0].tariff);
+  await saleHelper.filterByBuyer(sale.client);
+  await saleHelper.filterByType(sale.type);
+  await saleHelper.filterByTariff(sale.tariff);
 
   await indexPage.clickColumnOnTable("Time", 1);
   await page.locator("text=Tariff information").waitFor();
-  await saleHelper.checkDetailViewData(sales[0]);
+  await saleHelper.assertSaleDetails(sale);
 });
 
 test(`Ensure I can delete several sales @hipanel-module-finance @seller`, async ({ page }) => {

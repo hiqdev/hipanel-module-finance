@@ -44,10 +44,17 @@ export default class SaleHelper {
         await this.page.goto(this.page.url() + '&sort=-time');
     }
 
-    async checkDetailViewData(sale: Sale) {
-        await expect(this.page.locator('//div[@class="box box-widget"]')).toContainText(sale.server);
-        await expect(this.page.locator('//div[@class="box box-widget"]')).toContainText(sale.client);
-        await expect(this.page.locator('//div[@class="box box-widget"]')).toContainText(sale.tariff);
+    async assertSaleDetails(sale: Sale) {
+        const box = this.page.locator('.box.box-widget');
+
+        await this.assertCellContains(box, 'Servers', sale.server);
+        await this.assertCellContains(box, 'Buyer', sale.client);
+        await this.assertCellContains(box, 'Tariff', sale.tariff);
+    }
+
+    private async assertCellContains(box: Locator, header: string, substring: string) {
+        const cell = box.locator(`xpath=//tr[th[normalize-space()="${header}"]]/td`);
+        await expect(cell, `Expected '${header}' to contain '${substring}'`).toContainText(substring);
     }
 
     async deleteSales() {
