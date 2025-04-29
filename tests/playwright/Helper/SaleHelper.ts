@@ -45,7 +45,7 @@ export default class SaleHelper {
     }
 
     async assertSaleDetails(sale: Sale) {
-        const box = this.page.locator('.box.box-widget');
+        const box = this.page.locator('div.box.box-widget');
 
         await this.assertCellContains(box, 'Servers', sale.server);
         await this.assertCellContains(box, 'Buyer', sale.client);
