@@ -4,14 +4,17 @@ import Sale from "@hipanel-module-finance/model/Sale";
 import Index from "@hipanel-core/page/Index";
 import Input from "@hipanel-core/input/Input";
 import DateHelper from "@hipanel-core/helper/DateHelper";
+import ViewTableHelper from "@hipanel-module-finance/Helper/ViewTableHelper";
 
 export default class SaleHelper {
     private page: Page;
     private indexPage: Index
+    private viewTable: ViewTableHelper
 
     public constructor(page: Page) {
         this.page = page;
         this.indexPage = new Index(page);
+        this.viewTable = new ViewTableHelper(page);
     }
 
     async gotoIndexSale() {
@@ -45,16 +48,9 @@ export default class SaleHelper {
     }
 
     async assertSaleDetails(sale: Sale) {
-        const box = this.page.locator('div.box.box-widget');
-
-        await this.assertCellContains(box, 'Servers', sale.server);
-        await this.assertCellContains(box, 'Buyer', sale.client);
-        await this.assertCellContains(box, 'Tariff', sale.tariff);
-    }
-
-    private async assertCellContains(box: Locator, header: string, substring: string) {
-        const cell = box.locator(`xpath=//tr[th[normalize-space()="${header}"]]/td`);
-        await expect(cell, `Expected '${header}' to contain '${substring}'`).toContainText(substring);
+        await this.viewTable.assertCellEquals('Servers', sale.server);
+        await this.viewTable.assertCellEquals('Buyer', sale.client);
+        await this.viewTable.assertCellEquals('Tariff', sale.tariff);
     }
 
     async deleteSales() {
