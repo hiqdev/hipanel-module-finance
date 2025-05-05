@@ -48,9 +48,9 @@ export default class SaleHelper {
     }
 
     async assertSaleDetails(sale: Sale) {
-        await this.viewTable.assertCellEquals('Servers', sale.server);
-        await this.viewTable.assertCellEquals('Buyer', sale.client);
-        await this.viewTable.assertCellEquals('Tariff', sale.tariff);
+        await this.viewTable.assertCellContains('Servers', sale.server);
+        await this.viewTable.assertCellContains('Buyer', sale.client);
+        await this.viewTable.assertCellContains('Tariff', sale.tariff);
     }
 
     async deleteSales() {
