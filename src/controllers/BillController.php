@@ -30,6 +30,7 @@ use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\forms\CurrencyExchangeForm;
 use hipanel\modules\finance\helpers\ChargesGrouper;
+use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\models\query\ChargeQuery;
 use hipanel\modules\finance\models\Resource;
@@ -104,8 +105,13 @@ class BillController extends CrudController
                         /** @var ActiveDataProvider $dataProvider */
                         $dataProvider = $action->parent->getDataProvider();
                         $altQuery = clone $dataProvider->query;
+                        /** @var ?Bill $lastModifiedBill */
                         $lastModifiedBill = $altQuery->where(['groupby' => 'last_modified'])->one();
-                        $key = serialize(array_merge($action->controller->request->get(null, []), [$this->user->getId(), $lastModifiedBill->ts]));
+
+                        $key = serialize(array_merge(
+                            $action->controller->request->get(null, []),
+                            [$this->user->getId(), $lastModifiedBill->ts ?? null],
+                        ));
 
                         return $this->cache->getOrSet($key, function () use ($action, $dataProvider): string {
                             $defaultSummary = (new SynchronousCountEnabler($dataProvider, fn(GridView $grid): string => $grid->renderSummary()))();
