@@ -15,7 +15,7 @@ class RequisiteSummaryTable extends ChargeFinanceSummaryTable
                 $positive[$currency] = $balance['debit'];
                 $negative[$currency] = $balance['credit'];
                 $total[$currency] = $balance['balance'];
-                $eurAmount['eur'] += $balance['eur_sum'];
+                $eurAmount['eur'] += $balance['eur_sum'] ?? 0;
             }
         }
 
