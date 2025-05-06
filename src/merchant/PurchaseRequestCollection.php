@@ -35,7 +35,6 @@ class PurchaseRequestCollection extends Collection
         'freekassa' => 1,
         'bitpay' => 1,
         'epayservice' => 1,
-        'twoco' => 1,
         'epayments' => 1,
         'ikajo' => 1,
         'coingate' => 1,
