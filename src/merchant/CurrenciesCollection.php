@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -14,6 +14,7 @@ use hipanel\modules\finance\models\Merchant;
 use hiqdev\hiart\ResponseErrorException;
 use hiqdev\yii2\merchant\Currencies;
 use hiqdev\yii2\merchant\models\Currency;
+use hiqdev\yii2\merchant\Module;
 use Yii;
 
 /**
@@ -24,7 +25,9 @@ use Yii;
 class CurrenciesCollection extends Currencies
 {
     /** @var Currency[] */
-    private $currencies = [];
+    private array $currencies;
+
+    public Module $module;
 
     public function __construct()
     {
