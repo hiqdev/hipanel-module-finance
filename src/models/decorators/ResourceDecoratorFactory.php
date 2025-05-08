@@ -10,7 +10,7 @@ use hiqdev\billing\registry\behavior\ResourceDecoratorBehaviorNotFoundException;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorBehaviorSearch;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorData;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
-use hiqdev\php\billing\product\BillingRegistryInterface;
+use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
 use Yii;
 use yii\base\InvalidConfigException;
 
@@ -25,7 +25,7 @@ class ResourceDecoratorFactory
     {
         $type = $resource->model_type ?? $resource->type;
         $resourceDecoratorData = self::createResourceDecoratorData($resource);
-        $registry = Yii::createObject(BillingRegistryInterface::class);
+        $registry = Yii::createObject(BillingRegistryServiceInterface::class);
         $tariffResourceHelper = new TariffResourceHelper();
 
         $resourceDecorator = $tariffResourceHelper->getResourceDecorator($resourceDecoratorData, $type);
@@ -57,7 +57,7 @@ class ResourceDecoratorFactory
     }
 
     private static function findResourceDecoratorBehavior(
-        BillingRegistryInterface $registry,
+        BillingRegistryServiceInterface $registry,
         string $type
     ): ResourceDecoratorBehavior {
         return (new ResourceDecoratorBehaviorSearch())->find($registry, $type);
