@@ -51,7 +51,8 @@
         "tuck/sort": "^0.1.0",
         "moneyphp/money": "*",
         "hiqdev/php-units": "*",
-        "advancedhosters/billing-registry": "dev-master"
+        "advancedhosters/billing-registry": "dev-master",
+        "opis/closure": "3.x-dev as 3.6.x-dev"
     },
     "require-dev": {
         "hiqdev/hidev-php": "dev-master",
@@ -76,6 +77,10 @@
         {
             "type": "composer",
             "url": "https://asset-packagist.org"
+        },
+        {
+            "type": "composer",
+            "url": "https://packagist.hiqdev.com"
         }
     ]
 }

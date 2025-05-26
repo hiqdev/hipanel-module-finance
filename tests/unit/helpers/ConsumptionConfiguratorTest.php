@@ -9,8 +9,9 @@ use hiqdev\billing\registry\behavior\ResourceDecoratorBehavior;
 use hiqdev\billing\registry\product\PriceType;
 use hiqdev\billing\registry\TariffDefinitions\TariffTypeDefinitionFacade;
 use hiqdev\billing\registry\tests\unit\ResourceDecorator\MockResourceDecorator;
+use hiqdev\php\billing\product\Application\BillingRegistryService;
+use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
 use hiqdev\php\billing\product\BillingRegistry;
-use hiqdev\php\billing\product\BillingRegistryInterface;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\tests\unit\product\Domain\Model\MockTariffType;
 
@@ -24,18 +25,19 @@ class ConsumptionConfiguratorTest extends TestCase
     {
         parent::setUp();
 
-        $this->di()->set(BillingRegistryInterface::class, self::createBillingRegistry());
+        $this->di()->set(BillingRegistryServiceInterface::class, self::createBillingRegistryService());
         $this->configurator = $this->di()->get(ConsumptionConfigurator::class);
         $this->mockTariffType = new MockTariffType();
     }
 
-    private static function createBillingRegistry(): BillingRegistryInterface
+    private static function createBillingRegistryService(): BillingRegistryServiceInterface
     {
         $billingRegistry = new BillingRegistry();
+        $billingRegistryService = new BillingRegistryService($billingRegistry);
 
         $billingRegistry->addTariffType(self::createTariffTypeDefinition());
 
-        return $billingRegistry;
+        return $billingRegistryService;
     }
 
     private static function createTariffTypeDefinition(): TariffTypeDefinitionInterface
