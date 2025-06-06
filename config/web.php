@@ -29,6 +29,7 @@ return [
         '@target-resource' => '/finance/targetresource',
         '@consumption' => '/finance/consumption',
         '@pay/check-return' => '/finance/pay/check-return',
+        '@billing-registry' => '/finance/billing-registry',
     ],
     'modules' => [
         'finance' => [
