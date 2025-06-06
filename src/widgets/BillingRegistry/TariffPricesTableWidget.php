@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\widgets\BillingRegistry;
 
+use hipanel\modules\finance\models\Price;
+use hiqdev\billing\registry\product\Aggregate;
+use hiqdev\billing\registry\product\PriceType;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
 use hiqdev\php\billing\product\invoice\RepresentationInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
@@ -75,7 +78,7 @@ CSS
 
     protected function renderTable()
     {
-        $headers = ['Price Type', 'Unit', 'Quantity Formatter', 'Invoice Representation'];
+        $headers = ['Price Type', 'Unit, Agg.', 'Quantity Formatter', 'Invoice Representation'];
         $headerRow = Html::tag('tr', implode('', array_map(fn($h) => Html::tag('th', $h), $headers)));
         $thead = Html::tag('thead', $headerRow);
 
@@ -93,7 +96,7 @@ CSS
     {
         $cells = [
             $this->renderPriceTypeCell($priceType),
-            $this->renderUnitCell($priceType),
+            $this->renderUnitAndAggregationCell($priceType),
             $this->renderQuantityFormatterCell($priceType),
             $this->renderRepresentationsCell($priceType),
         ];
@@ -115,9 +118,24 @@ CSS
         return Html::tag('td', $content);
     }
 
-    protected function renderUnitCell($priceType)
+    protected function renderUnitAndAggregationCell(PriceTypeDefinitionInterface $priceType)
     {
-        return Html::tag('td', Html::encode($priceType->getUnit()->name()));
+        $unit = Html::encode($priceType->getUnit()->name());
+        try {
+            $aggregation = $priceType->getAggregate();
+        } catch (\Exception $e) {
+            $aggregation = Html::tag('em', '‼️ EXCEPTION: no aggregation');
+        }
+
+        $agg = match ($aggregation) {
+            Aggregate::sum => '∑',
+            Aggregate::last => 'Last',
+            Aggregate::max => 'Max',
+            Aggregate::count => '⠿',
+            Aggregate::one => '1',
+        };
+
+        return Html::tag('td', "$agg ($unit)");
     }
 
     protected function renderQuantityFormatterCell(PriceTypeDefinitionInterface $priceType)
