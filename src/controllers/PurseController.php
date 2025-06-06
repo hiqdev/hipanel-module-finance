@@ -217,10 +217,17 @@ class PurseController extends \hipanel\base\CrudController
         try {
             $content = Purse::perform($action, $params);
         } catch (ResponseErrorException $e) {
-            $contactUrl = Html::a(Url::toRoute(['@requisite/view', 'id' => $e->getResponse()->getData()['_error_ops']['requisite_id']], true),
-                ['@requisite/view', 'id' => $e->getResponse()->getData()['_error_ops']['requisite_id']]);
-            $type = $e->getResponse()->getData()['_error_ops']['type'];
+            $responseData = $e->getResponse()->getData();
+            if (!isset($responseData['_error_ops']['requisite_id']) || !isset($responseData['_error_ops']['type'])) {
+                Yii::$app->getSession()->setFlash('error', Yii::t('hipanel:finance', 'Failed to generate document'));
+                return $this->redirect(['@client/view', 'id' => $params['client_id']]);
+            }
 
+            $contactUrl = Html::a(
+                Url::toRoute(['@requisite/view', 'id' => $responseData['_error_ops']['requisite_id']], true),
+                ['@requisite/view', 'id' => $responseData['_error_ops']['requisite_id']]
+            );
+            $type = $responseData['_error_ops']['type'];
             if (Yii::$app->user->can('requisites.update')) {
                 Yii::$app->getSession()->setFlash('error',
                     Yii::t('hipanel:finance',
