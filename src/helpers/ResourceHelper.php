@@ -10,8 +10,8 @@ use hipanel\modules\server\models\Server;
 use hiqdev\billing\registry\product\Aggregate;
 use hiqdev\billing\registry\product\GType;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
-use hiqdev\billing\registry\TariffConfiguration;
 use hiqdev\hiart\ActiveRecord;
+use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
 use hiqdev\yii\compat\yii;
 use Yii as BaseYii;
 use yii\db\ActiveRecordInterface;
@@ -22,7 +22,7 @@ class ResourceHelper
 {
     private static function convertAmount(ResourceDecoratorInterface $decorator)
     {
-        return \hiqdev\billing\registry\helper\ResourceHelper::convertAmount($decorator);
+        return (string)\hiqdev\billing\registry\helper\ResourceHelper::convertAmount($decorator);
     }
 
     public static function prepareDetailView(array $resources): array
@@ -63,17 +63,17 @@ class ResourceHelper
 
     public static function calculateTotal(array $resources): array
     {
-        $billingRegistry = TariffConfiguration::buildRegistry();
+        $service = BaseYii::$container->get(BillingRegistryServiceInterface::class);
 
         $totals = [];
         foreach (self::filterByAvailableTypes($resources) as $resource) {
             $decorator = $resource->buildResourceModel()->decorator();
             $type = $resource->type;
-            $aggregate = $billingRegistry->getAggregate(self::addOveruseToTypeIfNeeded($type));
+            $aggregate = $service->getAggregate(self::addOveruseToTypeIfNeeded($type));
 
             $totals[$type]['amount'] = self::calculateAmount(
                 $aggregate,
-                $totals[$type]['amount'] ?? 0,
+                (string)($totals[$type]['amount'] ?? 0),
                 $decorator,
             );
             $totals[$resource->type]['unit'] = $decorator->displayUnit();
@@ -95,7 +95,7 @@ class ResourceHelper
         return $type;
     }
 
-    private static function calculateAmount(Aggregate $aggregate, $amount, ResourceDecoratorInterface $decorator)
+    private static function calculateAmount(Aggregate $aggregate, string $amount, ResourceDecoratorInterface $decorator)
     {
         if ($aggregate->isMax()) {
             return max($amount, self::convertAmount($decorator));
