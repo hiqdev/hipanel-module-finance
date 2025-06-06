@@ -243,7 +243,6 @@ final class ConsumptionConfigurator
             'unit' => $resource->unit,
             'quantity' => $resource->getAmount(),
         ]);
-        $config->resourceModel->refreshDecorator();
 
         return $config->resourceModel;
     }
