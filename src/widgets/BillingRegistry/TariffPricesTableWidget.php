@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\widgets\BillingRegistry;
 
-use hipanel\modules\finance\models\Price;
+use hiqdev\billing\registry\behavior\ResourceDecoratorBehaviorNotDeclaredException;
+use hiqdev\billing\registry\behavior\ResourceDecoratorBehaviorNotFoundException;
 use hiqdev\billing\registry\product\Aggregate;
 use hiqdev\billing\registry\product\PriceType;
+use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorBehaviorSearch;
+use hiqdev\billing\registry\Type\TypeSemantics;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
 use hiqdev\php\billing\product\invoice\RepresentationInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
@@ -13,6 +16,7 @@ use hiqdev\php\billing\product\quantity\FractionQuantityData;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\Unit;
+use ReflectionClass;
 use yii\base\Widget;
 use yii\helpers\Html;
 
@@ -30,8 +34,12 @@ class TariffPricesTableWidget extends Widget
      */
     private array $representationsByClassAndPriceType = [];
 
-    public function __construct(BillingRegistryServiceInterface $registryService, $config = [])
-    {
+    public function __construct(
+        BillingRegistryServiceInterface $registryService,
+        private ResourceDecoratorBehaviorSearch $resourceDecoratorBehaviorSearch,
+        private TypeSemantics $typeSemantics,
+        $config = []
+    ) {
         parent::__construct($config);
 
         $this->registryService = $registryService;
@@ -61,7 +69,7 @@ CSS
         $result = [];
 
         foreach ($this->registryService->getRepresentationsByType(RepresentationInterface::class) as $representation) {
-            $className = (new \ReflectionClass($representation))->getShortName();
+            $className = (new ReflectionClass($representation))->getShortName();
             $result[$className][$representation->getType()->getName()] = $representation;
         }
 
@@ -108,12 +116,27 @@ CSS
     {
         $content = '';
 
-        $shortClass = (new \ReflectionClass($priceType))->getShortName();
+        $shortClass = (new ReflectionClass($priceType))->getShortName();
         $content .= Html::tag('span', $shortClass, ['class' => 'text-muted']);
         $content .= Html::tag('br');
         $content .= Html::tag('strong', Html::encode($priceType->type()->getName()));
         $content .= Html::tag('br');
         $content .= Html::encode($priceType->getDescription());
+        $content .= Html::tag('br');
+
+        // Rendering the decorator class
+        try {
+            $decorator = $this->resourceDecoratorBehaviorSearch->find(
+                $this->registryService,
+                $this->typeSemantics->localName($priceType->type())
+            );
+            $shortClass = (new ReflectionClass($decorator->class))->getShortName();
+        } catch (ResourceDecoratorBehaviorNotFoundException $e) {
+            $shortClass = "‼️No decorator, exception was thrown";
+        } catch (ResourceDecoratorBehaviorNotDeclaredException $e) {
+            $shortClass = "🔸Not used in UI";
+        }
+        $content .= Html::tag('span', "👒 " . $shortClass);
 
         return Html::tag('td', $content);
     }
@@ -162,7 +185,7 @@ CSS
 
     protected function formatClassBasedQuantityFormatter(PriceTypeDefinitionInterface $priceType, $quantityFormatter)
     {
-        $reflection = new \ReflectionClass($quantityFormatter->formatterClass());
+        $reflection = new ReflectionClass($quantityFormatter->formatterClass());
         $formatterName = $reflection->getShortName();
 
         $quantity = $this->generateRandomQuantity($priceType);
@@ -180,7 +203,7 @@ CSS
         foreach ($this->representationsByClassAndPriceType as $className => $representations) {
             if (isset($representations[$priceType->type()->getName()])) {
                 $representation = $representations[$priceType->type()->getName()];
-                $reflection = new \ReflectionClass($representation);
+                $reflection = new ReflectionClass($representation);
                 $content .= $this->renderRepresentationDetails($reflection->getShortName(), $representation->getSql());
             }
         }
