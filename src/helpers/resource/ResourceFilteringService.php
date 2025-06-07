@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\helpers\resource;
 
 use hipanel\modules\finance\helpers\ConsumptionConfigurator;
+use hipanel\modules\finance\models\proxy\Resource;
 use hiqdev\yii\compat\yii;
 
 class ResourceFilteringService
@@ -14,6 +15,10 @@ class ResourceFilteringService
         $this->configurator = $configurator ?? yii::getContainer()->get(ConsumptionConfigurator::class);
     }
 
+    /**
+     * @param Resource[] $resources
+     * @return Resource[]
+     */
     public function filterByAvailableTypes(array $resources): array
     {
         static $allPossibleColumns;

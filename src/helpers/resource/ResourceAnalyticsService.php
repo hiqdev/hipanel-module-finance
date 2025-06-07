@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\helpers\resource;
 
+use hipanel\modules\finance\models\proxy\Resource;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
 use hiqdev\php\billing\product\AggregateInterface;
 
@@ -15,7 +16,7 @@ class ResourceAnalyticsService
     }
 
     /**
-     * @param array $resources
+     * @param Resource[] $resources
      * @return array
      */
     public function prepareDetailView(array $resources): array
