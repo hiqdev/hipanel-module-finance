@@ -15,6 +15,9 @@ use yii\db\ActiveRecordInterface;
 use yii\helpers\Html;
 use yii\web\JsExpression;
 
+/**
+ * @deprecated - The class is not using anywhere and outdated
+ */
 class ResourceGridView extends BoxedGridView
 {
     public ResourceConfigurator $configurator;
