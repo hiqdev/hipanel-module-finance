@@ -16,16 +16,15 @@ class ResourceFilteringService
 
     public function filterByAvailableTypes(array $resources): array
     {
-        static $types;
-        if ($types === null) {
+        static $allPossibleColumns;
+        if ($allPossibleColumns === null) {
             $allPossibleColumns = array_flip($this->configurator->getAllPossibleColumns());
-            $types = array_filter(
-                $resources,
-                static fn($resource) => array_key_exists($resource->type, $allPossibleColumns),
-            );
         }
 
-        return $types;
+        return array_filter(
+            $resources,
+            static fn($resource) => array_key_exists($resource->type, $allPossibleColumns),
+        );
     }
 
     public function getConfigurator(): ConsumptionConfigurator
