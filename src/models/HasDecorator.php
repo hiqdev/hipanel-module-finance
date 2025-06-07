@@ -11,15 +11,6 @@ trait HasDecorator
 
     public function decorator(): ResourceDecoratorInterface
     {
-        if (empty($this->decorator)) {
-            $this->refreshDecorator();
-        }
-
-        return $this->decorator;
-    }
-
-    public function refreshDecorator(): void
-    {
-        $this->decorator = ResourceDecoratorFactory::createFromResource($this);
+        return ResourceDecoratorFactory::createFromResource($this);
     }
 }

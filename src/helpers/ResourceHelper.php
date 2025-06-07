@@ -7,10 +7,10 @@ use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\proxy\Resource;
 use hipanel\modules\server\models\Hub;
 use hipanel\modules\server\models\Server;
-use hiqdev\billing\registry\product\Aggregate;
 use hiqdev\billing\registry\product\GType;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
 use hiqdev\hiart\ActiveRecord;
+use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
 use hiqdev\yii\compat\yii;
 use Yii as BaseYii;
@@ -70,13 +70,16 @@ class ResourceHelper
             $decorator = $resource->buildResourceModel()->decorator();
             $type = $resource->type;
             $aggregate = $service->getAggregate(self::addOveruseToTypeIfNeeded($type));
-
-            $totals[$type]['amount'] = self::calculateAmount(
+            $amount = self::calculateAmount(
                 $aggregate,
                 (string)($totals[$type]['amount'] ?? 0),
                 $decorator,
             );
-            $totals[$resource->type]['unit'] = $decorator->displayUnit();
+
+            $totals[$type] = [
+                'amount' => $amount,
+                'unit' => $decorator->displayUnit(),
+            ];
         }
 
         return $totals;
@@ -95,7 +98,7 @@ class ResourceHelper
         return $type;
     }
 
-    private static function calculateAmount(Aggregate $aggregate, string $amount, ResourceDecoratorInterface $decorator)
+    private static function calculateAmount(AggregateInterface $aggregate, string $amount, ResourceDecoratorInterface $decorator)
     {
         if ($aggregate->isMax()) {
             return max($amount, self::convertAmount($decorator));
