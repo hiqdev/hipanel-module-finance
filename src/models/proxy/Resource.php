@@ -32,8 +32,6 @@ class Resource extends Model implements DecoratedInterface
 {
     use ModelTrait;
 
-    private DecoratedInterface $resourceModel;
-
     /**
      * @var ConsumptionConfigurator|object
      */
