@@ -10,6 +10,7 @@ use hipanel\modules\finance\models\TargetResource;
 use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehavior;
 use hiqdev\billing\registry\Domain\Model\TariffType;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
+use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use yii\db\ActiveRecordInterface;
@@ -261,5 +262,10 @@ final class ConsumptionConfigurator
         $configurations = $this->getConfigurations();
 
         return array_key_first($configurations);
+    }
+
+    public function getAggregate(string $type): AggregateInterface
+    {
+        return $this->billingRegistry->getAggregate($type);
     }
 }

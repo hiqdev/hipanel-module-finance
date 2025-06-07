@@ -3,15 +3,12 @@
 namespace hipanel\modules\finance\helpers;
 
 use hipanel\helpers\ArrayHelper;
+use hipanel\modules\finance\helpers\resource\ResourceAnalyticsService;
 use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\proxy\Resource;
 use hipanel\modules\server\models\Hub;
 use hipanel\modules\server\models\Server;
-use hiqdev\billing\registry\product\GType;
-use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
 use hiqdev\hiart\ActiveRecord;
-use hiqdev\php\billing\product\AggregateInterface;
-use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
 use hiqdev\yii\compat\yii;
 use Yii as BaseYii;
 use yii\db\ActiveRecordInterface;
@@ -20,99 +17,29 @@ use yii\helpers\Json;
 
 class ResourceHelper
 {
-    private static function convertAmount(ResourceDecoratorInterface $decorator)
-    {
-        return (string)\hiqdev\billing\registry\helper\ResourceHelper::convertAmount($decorator);
-    }
-
     public static function prepareDetailView(array $resources): array
     {
-        $result = [];
-        foreach (self::filterByAvailableTypes($resources) as $resource) {
-            $decorator = $resource->buildResourceModel()->decorator();
-            $result[] = [
-                'object_id' => $resource->object_id,
-                'date' => $resource->date,
-                'type' => $resource->type,
-                'type_label' => $decorator->displayTitle(),
-                'amount' => self::convertAmount($decorator),
-                'unit' => $decorator->displayUnit(),
-            ];
+        return self::getResourceAnalyticsService()->prepareDetailView($resources);
+    }
+
+    private static function getResourceAnalyticsService(): ResourceAnalyticsService
+    {
+        static $service;
+        if ($service === null) {
+            $service = (new ResourceAnalyticsService());
         }
 
-        return $result;
+        return $service;
     }
 
     public static function summarize(array $resources): string
     {
-        $qty = '0';
-        foreach (self::filterByAvailableTypes($resources) as $resource) {
-            $amount = self::normalizeAmount($resource);
-            $qty = bcadd($qty, $amount, 3);
-        }
-
-        return str_replace(".000", "", $qty);
-    }
-
-    public static function normalizeAmount(Resource $resource): string
-    {
-        $decorator = $resource->buildResourceModel()->decorator();
-
-        return self::convertAmount($decorator);
+        return self::getResourceAnalyticsService()->summarize($resources);
     }
 
     public static function calculateTotal(array $resources): array
     {
-        $service = BaseYii::$container->get(BillingRegistryServiceInterface::class);
-
-        $totals = [];
-        foreach (self::filterByAvailableTypes($resources) as $resource) {
-            $decorator = $resource->buildResourceModel()->decorator();
-            $type = $resource->type;
-            $aggregate = $service->getAggregate(self::addOveruseToTypeIfNeeded($type));
-            $amount = self::calculateAmount(
-                $aggregate,
-                (string)($totals[$type]['amount'] ?? 0),
-                $decorator,
-            );
-
-            $totals[$type] = [
-                'amount' => $amount,
-                'unit' => $decorator->displayUnit(),
-            ];
-        }
-
-        return $totals;
-    }
-
-    /**
-     * @deprecated - I can't add overuse to all types
-     * Need to think how to deal with it
-     */
-    public static function addOveruseToTypeIfNeeded(string $type): string
-    {
-        if (str_starts_with($type, GType::overuse->name()) === false) {
-            return GType::overuse->name() . ',' . $type;
-        }
-
-        return $type;
-    }
-
-    private static function calculateAmount(AggregateInterface $aggregate, string $amount, ResourceDecoratorInterface $decorator)
-    {
-        if ($aggregate->isMax()) {
-            return max($amount, self::convertAmount($decorator));
-        } else {
-            return bcadd($amount, self::convertAmount($decorator), 3);
-        }
-    }
-
-    public static function filterByAvailableTypes(array $resources): array
-    {
-        $configurator = yii::getContainer()->get(ConsumptionConfigurator::class);
-
-        return array_filter($resources,
-            static fn($resource) => in_array($resource->type, $configurator->getAllPossibleColumns(), true));
+        return self::getResourceAnalyticsService()->calculateTotal($resources);
     }
 
     public static function buildGridColumns(array $columnsWithLabels): array
@@ -162,8 +89,11 @@ class ResourceHelper
                     $resources = array_filter($model->resources, static fn($resource) => $resource->type === $type);
                     $resourceData = [];
                     foreach (ArrayHelper::index($resources, 'date') as $date => $resource) {
-                        $unit = $resource->buildResourceModel()->decorator()->displayUnit();
-                        $resourceData[$date] = ['amount' => self::normalizeAmount($resource), 'unit' => $unit];
+                        $decorator = $resource->buildResourceModel()->decorator();
+                        $resourceData[$date] = [
+                            'amount' => \hiqdev\billing\registry\helper\ResourceHelper::convertAmount($decorator),
+                            'unit' => $decorator->displayUnit(),
+                        ];
                     }
                     if (!empty($resources)) {
                         $unit = reset($resources)->buildResourceModel()->decorator()->displayUnit();
@@ -189,7 +119,7 @@ class ResourceHelper
         return $columns;
     }
 
-    public static function transformToConsumptionModel(ActiveRecord $model, string $class): Consumption
+    private static function transformToConsumptionModel(ActiveRecord $model, string $class): Consumption
     {
         if ($model instanceof Consumption) {
             return $model;
