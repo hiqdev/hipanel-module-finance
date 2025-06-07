@@ -96,7 +96,7 @@ class ResourceHelper
                         ];
                     }
                     if (!empty($resources)) {
-                        $unit = reset($resources)->decorator()->displayUnit();
+                        $unit = self::getFirstResource($resources)->decorator()->displayUnit();
 
                         return Html::tag(
                             'span',
@@ -117,6 +117,15 @@ class ResourceHelper
         }
 
         return $columns;
+    }
+
+    /**
+     * @param Resource[] $resources
+     * @return Resource
+     */
+    private static function getFirstResource(array $resources): Resource
+    {
+        return reset($resources);
     }
 
     private static function transformToConsumptionModel(ActiveRecord $model, string $class): Consumption
