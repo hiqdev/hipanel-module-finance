@@ -49,11 +49,7 @@ class Resource extends Model implements DecoratedInterface
 
     public function buildResourceModel(): DecoratedInterface
     {
-        if (!isset($this->resourceModel)) {
-            $this->resourceModel = $this->consumptionConfigurator->buildResourceModel($this);
-        }
-
-        return $this;
+        return $this->consumptionConfigurator->buildResourceModel($this);
     }
 
     /**

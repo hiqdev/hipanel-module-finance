@@ -34,7 +34,6 @@ class ConsumptionViewer extends Widget
         ConsumptionViewerAsset::register($this->view);
 
         $resources = $this->consumption->resources;
-
         $resourcesPrepared = ResourceHelper::prepareDetailView($resources);
         $total = ResourceHelper::calculateTotal($resources);
 
