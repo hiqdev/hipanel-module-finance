@@ -9,6 +9,7 @@ use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\models\TargetResource;
 use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehavior;
 use hiqdev\billing\registry\Domain\Model\TariffType;
+use hiqdev\billing\registry\ResourceDecorator\DecoratedInterface;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
 use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
@@ -235,7 +236,7 @@ final class ConsumptionConfigurator
         return $decorator;
     }
 
-    public function buildResourceModel(ActiveRecordInterface $resource): object
+    public function buildResourceModel(ActiveRecordInterface $resource): DecoratedInterface
     {
         $config = $this->getConfigurationByClass($resource->class);
 

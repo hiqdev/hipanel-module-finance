@@ -23,7 +23,7 @@ class ResourceAnalyticsService
     {
         $result = [];
         foreach ($this->filteringService->filterByAvailableTypes($resources) as $resource) {
-            $decorator = $resource->buildResourceModel()->decorator();
+            $decorator = $resource->decorator();
             $result[] = [
                 'object_id' => $resource->object_id,
                 'date' => $resource->date,
@@ -46,7 +46,7 @@ class ResourceAnalyticsService
     {
         $qty = '0';
         foreach ($this->filteringService->filterByAvailableTypes($resources) as $resource) {
-            $amount = $this->convertAmount($resource->buildResourceModel()->decorator());
+            $amount = $this->convertAmount($resource->decorator());
             $qty = bcadd($qty, $amount, 3);
         }
 
@@ -59,7 +59,7 @@ class ResourceAnalyticsService
 
         $totals = [];
         foreach ($this->filteringService->filterByAvailableTypes($resources) as $resource) {
-            $decorator = $resource->buildResourceModel()->decorator();
+            $decorator = $resource->decorator();
             $type = $resource->type;
             $aggregate = $configurator->getAggregate($this->addOveruseToTypeIfNeeded($type));
             $amount = $this->calculateAmount(

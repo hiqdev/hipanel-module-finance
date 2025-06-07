@@ -89,14 +89,14 @@ class ResourceHelper
                     $resources = array_filter($model->resources, static fn($resource) => $resource->type === $type);
                     $resourceData = [];
                     foreach (ArrayHelper::index($resources, 'date') as $date => $resource) {
-                        $decorator = $resource->buildResourceModel()->decorator();
+                        $decorator = $resource->decorator();
                         $resourceData[$date] = [
                             'amount' => \hiqdev\billing\registry\helper\ResourceHelper::convertAmount($decorator),
                             'unit' => $decorator->displayUnit(),
                         ];
                     }
                     if (!empty($resources)) {
-                        $unit = reset($resources)->buildResourceModel()->decorator()->displayUnit();
+                        $unit = reset($resources)->decorator()->displayUnit();
 
                         return Html::tag(
                             'span',

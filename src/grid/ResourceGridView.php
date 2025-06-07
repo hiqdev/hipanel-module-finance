@@ -79,7 +79,7 @@ class ResourceGridView extends BoxedGridView
             'footerOptions' => ['class' => 'text-right text-bold'],
             'value' => function (Resource $resource): ?string {
                 if (in_array($resource->type, $this->configurator->getRawColumns(), true)) {
-                    return $resource->buildResourceModel($this->configurator)->decorator()->displayAmountWithUnit();
+                    return $resource->decorator()->displayAmountWithUnit();
                 }
 
                 return '';

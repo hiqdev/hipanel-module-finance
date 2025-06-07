@@ -63,11 +63,6 @@ class Resource extends Model implements DecoratedInterface
         ];
     }
 
-    public function buildResourceModel(): DecoratedInterface
-    {
-        return $this->consumptionConfigurator->buildResourceModel($this);
-    }
-
     /**
      * {@inheritdoc}
      * @return QueryInterface
@@ -132,7 +127,7 @@ class Resource extends Model implements DecoratedInterface
 
     public function decorator(): ResourceDecoratorInterface
     {
-        return $this->resourceModel->decorator();
+        return $this->consumptionConfigurator->buildResourceModel($this)->decorator();
     }
 
     private function isLast(string $type): bool
