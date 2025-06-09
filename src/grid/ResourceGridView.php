@@ -15,6 +15,9 @@ use yii\db\ActiveRecordInterface;
 use yii\helpers\Html;
 use yii\web\JsExpression;
 
+/**
+ * @deprecated - The class is not using anywhere and has outdated code
+ */
 class ResourceGridView extends BoxedGridView
 {
     public ResourceConfigurator $configurator;
@@ -79,7 +82,7 @@ class ResourceGridView extends BoxedGridView
             'footerOptions' => ['class' => 'text-right text-bold'],
             'value' => function (Resource $resource): ?string {
                 if (in_array($resource->type, $this->configurator->getRawColumns(), true)) {
-                    return $resource->buildResourceModel($this->configurator)->decorator()->displayAmountWithUnit();
+                    return $resource->decorator()->displayAmountWithUnit();
                 }
 
                 return '';

@@ -12,11 +12,25 @@ use hiqdev\php\units\Unit;
 use yii\db\QueryInterface;
 use Yii;
 
+/**
+ * @property int $id
+ * @property int $object_id
+ * @property int $type_id
+ * @property float $last
+ * @property float $total
+ * @property string $type
+ * @property string $aggregation
+ * @property string $unit
+ * @property string $class
+ * @property string $time_from
+ * @property string $time_till
+ * @property string $date
+ * @property DecoratedInterface $resourceModel
+ * @property ConsumptionConfigurator $consumptionConfigurator
+ */
 class Resource extends Model implements DecoratedInterface
 {
     use ModelTrait;
-
-    private DecoratedInterface $resourceModel;
 
     /**
      * @var ConsumptionConfigurator|object
@@ -45,15 +59,6 @@ class Resource extends Model implements DecoratedInterface
             [['type', 'aggregation', 'unit', 'class'], 'string'],
             [['time_from', 'time_till', 'date'], 'datetime', 'format' => 'php:Y-m-d'],
         ];
-    }
-
-    public function buildResourceModel(): DecoratedInterface
-    {
-        if (!isset($this->resourceModel)) {
-            $this->resourceModel = $this->consumptionConfigurator->buildResourceModel($this);
-        }
-
-        return $this;
     }
 
     /**
@@ -120,7 +125,7 @@ class Resource extends Model implements DecoratedInterface
 
     public function decorator(): ResourceDecoratorInterface
     {
-        return $this->resourceModel->decorator();
+        return $this->consumptionConfigurator->buildResourceModel($this)->decorator();
     }
 
     private function isLast(string $type): bool

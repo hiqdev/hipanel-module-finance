@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace hipanel\modules\finance\widgets;
 
@@ -34,12 +33,16 @@ class ConsumptionViewer extends Widget
         }
         ConsumptionViewerAsset::register($this->view);
 
+        $resources = $this->consumption->resources;
+        $resourcesPrepared = ResourceHelper::prepareDetailView($resources);
+        $total = ResourceHelper::calculateTotal($resources);
+
         return $this->render('ConsumptionViewer', [
             'initialData' => [
                 'columns' => $columns,
                 'boxTitle' => Yii::t('hipanel:finance', 'Resource consumption'),
-                'resources' => ResourceHelper::prepareDetailView($this->consumption->resources),
-                'totals' => ResourceHelper::calculateTotal($this->consumption->resources),
+                'resources' => $resourcesPrepared,
+                'totals' => $total,
                 'groups' => $this->consumption->getGroupsWithLabels(),
                 'object_id' => $this->mainObject->id,
                 'class' => $this->consumption->class,
