@@ -54,6 +54,7 @@ class LinkToObjectResolver extends Widget
     private $links = [
         'ip' => '@ip/view',
         'client' => '@client/view',
+        'partner' => '@client/view',
         'account' => '@account/view',
         'server' => '@server/view',
         'private_cloud' => '@server/view',
@@ -63,6 +64,9 @@ class LinkToObjectResolver extends Widget
         'part' => '@part/view',
         'tariff' => '@plan/view',
         'switch' => '@hub/view',
+        'location' => '@hub/view',
+        'region' => '@hub/view',
+        'rack' => '@hub/view',
         'model_group' => '@model-group/view',
         'model' => '@model/view',
         'config' => '@config/view',
