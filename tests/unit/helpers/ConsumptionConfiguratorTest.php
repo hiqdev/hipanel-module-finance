@@ -25,28 +25,38 @@ class ConsumptionConfiguratorTest extends TestCase
     {
         parent::setUp();
 
-        $this->di()->set(BillingRegistryServiceInterface::class, self::createBillingRegistryService());
+        $this->di()->set(BillingRegistryServiceInterface::class, $this->createBillingRegistryService());
         $this->configurator = $this->di()->get(ConsumptionConfigurator::class);
         $this->mockTariffType = new MockTariffType();
     }
 
-    private static function createBillingRegistryService(): BillingRegistryServiceInterface
+    private function createBillingRegistryService(): BillingRegistryServiceInterface
     {
         $billingRegistry = new BillingRegistry();
         $billingRegistryService = new BillingRegistryService($billingRegistry);
 
-        $billingRegistry->addTariffType(self::createTariffTypeDefinition());
+        $billingRegistry->addTariffType($this->createTariffTypeDefinition());
 
         return $billingRegistryService;
     }
 
-    private static function createTariffTypeDefinition(): TariffTypeDefinitionInterface
+    private function createTariffTypeDefinition(): TariffTypeDefinitionInterface
     {
         $mockTariffType = new MockTariffType();
 
         return (new TariffTypeDefinitionFacade($mockTariffType))
             ->withPrices()
-                ->overuse(PriceType::lb_ha_capacity_unit)
+                ->overuse(PriceType::ip_num)
+                    ->withBehaviors()
+                        ->attach(new ResourceDecoratorBehavior(MockResourceDecorator::class))
+                    ->end()
+                ->end()
+                ->overuse(PriceType::power)
+                    ->withBehaviors()
+                        ->attach(new ResourceDecoratorBehavior(MockResourceDecorator::class))
+                    ->end()
+                ->end()
+                ->overuse(PriceType::vps)
                     ->withBehaviors()
                         ->attach(new ResourceDecoratorBehavior(MockResourceDecorator::class))
                     ->end()
@@ -55,8 +65,8 @@ class ConsumptionConfiguratorTest extends TestCase
             ->withBehaviors()
                 ->attach(new ConsumptionConfigurationBehavior(
                     $mockTariffType->label(),
-                    ['col1', 'col2', 'col3'],
-                    [['col1', 'col2']],
+                    ['ip_num', 'power', 'vps'],
+                    [['ip_num', 'power']],
                 ))
             ->end();
     }
@@ -65,7 +75,7 @@ class ConsumptionConfiguratorTest extends TestCase
     {
         $columns = $this->configurator->getColumns($this->mockTariffType->name());
 
-        $this->assertSame(['col1', 'col2', 'col3'], $columns);
+        $this->assertSame(['ip_num', 'power', 'vps'], $columns);
     }
 
 //    public function testGetGroups(): void
@@ -80,11 +90,11 @@ class ConsumptionConfiguratorTest extends TestCase
         $groups = $this->configurator->getGroupsWithLabels($this->mockTariffType->name());
         $expected = [
             [
-                'col1' => 'Mock Label',
-                'col2' => 'Mock Label',
+                'ip_num' => 'Ip Num Label',
+                'power' => 'Power Label',
             ],
             [
-                'col3' => 'Mock Label',
+                'vps' => 'VPS Label',
             ],
         ];
 
@@ -99,23 +109,23 @@ class ConsumptionConfiguratorTest extends TestCase
     public function testGetClassesDropDownOptions(): void
     {
         $options = $this->configurator->getClassesDropDownOptions();
-        $this->assertSame(['mock_tariff_type' => 'Mock Tariff Type'], $options);
+        $this->assertSame(['ip_num' => 'Ip Num Label'], $options);
     }
 
     public function testGetAllPossibleColumns(): void
     {
         $columns = $this->configurator->getAllPossibleColumns();
 
-        $this->assertSame(['col1', 'col2', 'col3'], $columns);
+        $this->assertSame(['ip_num', 'power', 'vps'], $columns);
     }
 
     public function testGetColumnsWithLabels(): void
     {
         $columns = $this->configurator->getColumnsWithLabels($this->mockTariffType->name());
         $expected = [
-            'col1' => 'Mock Label',
-            'col2' => 'Mock Label',
-            'col3' => 'Mock Label',
+            'ip_num' => 'Ip Num Label',
+            'power' => 'Power Label',
+            'vps' => 'VPS Label',
         ];
 
         $this->assertSame($expected, $columns);
