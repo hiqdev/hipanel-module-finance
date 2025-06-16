@@ -7,7 +7,6 @@ use hipanel\modules\finance\models\BillableTimeInterface;
 use hipanel\modules\finance\tests\unit\TestCase;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\yii2\formatters\IntlFormatter;
-use OutOfBoundsException;
 
 class RackUnitQuantityTest extends TestCase
 {
@@ -38,7 +37,7 @@ class RackUnitQuantityTest extends TestCase
         $this->assertEquals($expectedClientValue, $formatter->getClientValue());
     }
 
-    public function rackUnitQuantityDataProvider(): array
+    public static function rackUnitQuantityDataProvider(): array
     {
         return [
             'basic scenario' => [
