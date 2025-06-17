@@ -46,17 +46,17 @@ class ConsumptionConfiguratorTest extends TestCase
 
         return (new TariffTypeDefinitionFacade($mockTariffType))
             ->withPrices()
-                ->overuse(PriceType::ip_num)
+                ->overuse(PriceType::switch_license)
                     ->withBehaviors()
                         ->attach(new ResourceDecoratorBehavior(MockResourceDecorator::class))
                     ->end()
                 ->end()
-                ->overuse(PriceType::power)
+                ->overuse(PriceType::dregistration)
                     ->withBehaviors()
                         ->attach(new ResourceDecoratorBehavior(MockResourceDecorator::class))
                     ->end()
                 ->end()
-                ->overuse(PriceType::vps)
+                ->overuse(PriceType::dtransfer)
                     ->withBehaviors()
                         ->attach(new ResourceDecoratorBehavior(MockResourceDecorator::class))
                     ->end()
@@ -65,8 +65,8 @@ class ConsumptionConfiguratorTest extends TestCase
             ->withBehaviors()
                 ->attach(new ConsumptionConfigurationBehavior(
                     $mockTariffType->label(),
-                    ['ip_num', 'power', 'vps'],
-                    [['ip_num', 'power']],
+                    ['switch_license', 'dregistration', 'dtransfer'],
+                    [['switch_license', 'dregistration']],
                 ))
             ->end();
     }
@@ -75,7 +75,7 @@ class ConsumptionConfiguratorTest extends TestCase
     {
         $columns = $this->configurator->getColumns($this->mockTariffType->name());
 
-        $this->assertSame(['ip_num', 'power', 'vps'], $columns);
+        $this->assertSame(['switch_license', 'dregistration', 'dtransfer'], $columns);
     }
 
 //    public function testGetGroups(): void
@@ -90,11 +90,11 @@ class ConsumptionConfiguratorTest extends TestCase
         $groups = $this->configurator->getGroupsWithLabels($this->mockTariffType->name());
         $expected = [
             [
-                'ip_num' => 'Ip Num Label',
-                'power' => 'Power Label',
+                'switch_license' => 'Mock Label',
+                'dregistration' => 'Mock Label',
             ],
             [
-                'vps' => 'VPS Label',
+                'dtransfer' => 'Mock Label',
             ],
         ];
 
@@ -109,23 +109,23 @@ class ConsumptionConfiguratorTest extends TestCase
     public function testGetClassesDropDownOptions(): void
     {
         $options = $this->configurator->getClassesDropDownOptions();
-        $this->assertSame(['ip_num' => 'Ip Num Label'], $options);
+        $this->assertSame(['switch_license' => 'Mock Label'], $options);
     }
 
     public function testGetAllPossibleColumns(): void
     {
         $columns = $this->configurator->getAllPossibleColumns();
 
-        $this->assertSame(['ip_num', 'power', 'vps'], $columns);
+        $this->assertSame(['switch_license', 'dregistration', 'dtransfer'], $columns);
     }
 
     public function testGetColumnsWithLabels(): void
     {
         $columns = $this->configurator->getColumnsWithLabels($this->mockTariffType->name());
         $expected = [
-            'ip_num' => 'Ip Num Label',
-            'power' => 'Power Label',
-            'vps' => 'VPS Label',
+            'switch_license' => 'Mock Label',
+            'dregistration' => 'Mock Label',
+            'dtransfer' => 'Mock Label',
         ];
 
         $this->assertSame($expected, $columns);
