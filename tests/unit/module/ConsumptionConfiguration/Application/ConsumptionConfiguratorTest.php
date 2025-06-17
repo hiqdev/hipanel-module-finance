@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace hipanel\modules\finance\tests\unit\helpers;
+namespace hipanel\modules\finance\tests\unit\module\ConsumptionConfiguration\Application;
 
 use hipanel\modules\finance\module\ConsumptionConfiguration\Application\ConsumptionConfigurator;
 use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Collection\ConsumptionConfiguratorDataCollection;
