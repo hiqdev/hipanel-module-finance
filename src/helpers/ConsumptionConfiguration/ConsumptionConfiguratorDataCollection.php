@@ -1,7 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace hipanel\modules\finance\helpers\ConsumptionConfigurator;
+namespace hipanel\modules\finance\helpers\ConsumptionConfiguration;
 
+use hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfiguratorData;
+use hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfiguratorDataCollectionInterface;
+use hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfiguratorDataFactory;
+use hipanel\modules\finance\helpers\ConsumptionConfiguration\TariffResourceHelper;
 use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehavior;
 use hiqdev\billing\registry\Domain\Model\TariffType;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;

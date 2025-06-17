@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace hipanel\modules\finance\helpers\ConsumptionConfigurator;
+namespace hipanel\modules\finance\helpers\ConsumptionConfiguration;
 
 use hipanel\base\Model;
+use hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfiguratorData;
 use hipanel\modules\finance\helpers\YiiObjectHelper;
 
 class ConsumptionConfiguratorDataFactory

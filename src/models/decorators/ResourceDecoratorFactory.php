@@ -2,7 +2,7 @@
 
 namespace hipanel\modules\finance\models\decorators;
 
-use hipanel\modules\finance\helpers\ConsumptionConfigurator\TariffResourceHelper;
+use hipanel\modules\finance\helpers\ConsumptionConfiguration\TariffResourceHelper;
 use hipanel\modules\finance\models\Resource;
 use hipanel\modules\finance\models\stubs\AbstractResourceStub;
 use hiqdev\billing\registry\behavior\ResourceDecoratorBehavior;

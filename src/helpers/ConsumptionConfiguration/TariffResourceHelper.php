@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace hipanel\modules\finance\helpers\ConsumptionConfigurator;
+namespace hipanel\modules\finance\helpers\ConsumptionConfiguration;
 
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\models\TargetResource;
