@@ -2,7 +2,9 @@
 
 namespace hipanel\modules\finance\tests\unit\helpers;
 
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator\ConsumptionConfigurator;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator\ConsumptionConfiguratorDataCollection;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator\ConsumptionConfiguratorDataCollectionInterface;
 use hipanel\modules\finance\tests\unit\TestCase;
 use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehavior;
 use hiqdev\billing\registry\behavior\ResourceDecoratorBehavior;
@@ -25,7 +27,12 @@ class ConsumptionConfiguratorTest extends TestCase
     {
         parent::setUp();
 
-        $this->di()->set(BillingRegistryServiceInterface::class, $this->createBillingRegistryService());
+        $billingRegistry = $this->createBillingRegistryService();
+        $this->di()->set(BillingRegistryServiceInterface::class, $billingRegistry);
+        $this->di()->set(
+            ConsumptionConfiguratorDataCollectionInterface::class,
+            $this->createConsumptionConfiguratorDataCollection($billingRegistry),
+        );
         $this->configurator = $this->di()->get(ConsumptionConfigurator::class);
         $this->mockTariffType = new MockTariffType();
     }
@@ -71,6 +78,12 @@ class ConsumptionConfiguratorTest extends TestCase
             ->end();
     }
 
+    private function createConsumptionConfiguratorDataCollection(
+        BillingRegistryServiceInterface $billingRegistry
+    ): ConsumptionConfiguratorDataCollectionInterface {
+        return new ConsumptionConfiguratorDataCollection($billingRegistry);
+    }
+
     public function testGetColumns(): void
     {
         $columns = $this->configurator->getColumns($this->mockTariffType->name());
@@ -109,7 +122,7 @@ class ConsumptionConfiguratorTest extends TestCase
     public function testGetClassesDropDownOptions(): void
     {
         $options = $this->configurator->getClassesDropDownOptions();
-        $this->assertSame(['switch_license' => 'Mock Label'], $options);
+        $this->assertSame(['mock_tariff_type' => 'Mock Tariff Type'], $options);
     }
 
     public function testGetAllPossibleColumns(): void

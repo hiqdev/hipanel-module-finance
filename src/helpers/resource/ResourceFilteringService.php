@@ -2,7 +2,7 @@
 
 namespace hipanel\modules\finance\helpers\resource;
 
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator\ConsumptionConfigurator;
 use hipanel\modules\finance\models\proxy\Resource;
 use hiqdev\yii\compat\yii;
 

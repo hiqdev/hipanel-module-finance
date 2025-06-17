@@ -8,7 +8,7 @@ use hipanel\actions\IndexAction;
 use hipanel\base\Controller;
 use hipanel\base\Module;
 use hipanel\filters\EasyAccessControl;
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator\ConsumptionConfigurator;
 use hipanel\modules\finance\helpers\ResourceHelper;
 use hipanel\modules\finance\models\ConsumptionSearch;
 use hipanel\modules\finance\providers\ConsumptionsProvider;

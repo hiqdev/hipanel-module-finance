@@ -4,7 +4,7 @@ namespace hipanel\modules\finance\widgets;
 
 use hipanel\helpers\Url;
 use hipanel\modules\finance\assets\ConsumptionViewerAsset;
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator\ConsumptionConfigurator;
 use hipanel\modules\finance\helpers\ResourceHelper;
 use hipanel\modules\finance\models\Consumption;
 use Yii;

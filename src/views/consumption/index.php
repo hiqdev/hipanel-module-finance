@@ -3,7 +3,7 @@
 use hipanel\models\IndexPageUiOptions;
 use hipanel\modules\finance\grid\ChargeRepresentations;
 use hipanel\modules\finance\grid\ConsumptionGridView;
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator\ConsumptionConfigurator;
 use hipanel\modules\finance\models\ConsumptionSearch;
 use hipanel\widgets\IndexPage;
 use hiqdev\hiart\ActiveDataProvider;

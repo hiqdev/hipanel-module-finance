@@ -11,8 +11,8 @@ use hipanel\models\Ref;
 use hipanel\base\ModelTrait;
 use hipanel\models\TaggableInterface;
 use hipanel\behaviors\TaggableBehavior;
-use hipanel\modules\finance\helpers\ConsumptionConfiguratorData;
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator\ConsumptionConfiguratorData;
+use hipanel\modules\finance\helpers\ConsumptionConfigurator\ConsumptionConfigurator;
 use hipanel\modules\finance\models\query\TargetQuery;
 
 /**
