@@ -3,7 +3,6 @@
 namespace hipanel\modules\finance\helpers\ConsumptionConfiguration;
 
 use hipanel\base\Model;
-use hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfiguratorData;
 use hipanel\modules\finance\helpers\YiiObjectHelper;
 
 class ConsumptionConfiguratorDataFactory

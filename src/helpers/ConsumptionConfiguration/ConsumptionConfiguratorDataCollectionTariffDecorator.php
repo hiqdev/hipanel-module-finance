@@ -2,9 +2,6 @@
 
 namespace hipanel\modules\finance\helpers\ConsumptionConfiguration;
 
-use hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfiguratorDataCollectionInterface;
-use hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfiguratorDataFactory;
-use hipanel\modules\finance\helpers\ConsumptionConfiguration\TariffResourceHelper;
 use Traversable;
 
 /**

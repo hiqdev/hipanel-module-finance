@@ -3,9 +3,6 @@
 namespace hipanel\modules\finance\helpers\ConsumptionConfiguration;
 
 use hipanel\helpers\ArrayHelper;
-use hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfiguratorData;
-use hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfiguratorDataCollectionInterface;
-use hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfiguratorDataFactory;
 use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\models\TargetResource;
