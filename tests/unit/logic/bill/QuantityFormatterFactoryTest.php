@@ -93,8 +93,8 @@ class QuantityFormatterFactoryTest extends TestCase
         yield [
             'monthly,rack_unit',
             Quantity::create('', 2),
-            self::createFractionAwareInterface(2, 1),
-            $expected = '0.5 units &times;  2 months, 2 days',
+            self::createFractionAwareInterface(2, 2),
+            $expected = '1 units &times;  2 months, 2 days',
             $expectedClientValue = '2',
         ];
         yield '10 IP addresses' => [
