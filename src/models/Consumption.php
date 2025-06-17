@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\models;
 
-use hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfigurator;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Application\ConsumptionConfigurator;
 use hipanel\modules\finance\models\proxy\Resource;
 use hipanel\base\Model;
 use hipanel\base\ModelTrait;

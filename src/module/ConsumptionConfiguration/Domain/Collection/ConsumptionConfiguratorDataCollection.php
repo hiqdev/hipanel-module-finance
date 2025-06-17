@@ -1,7 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace hipanel\modules\finance\helpers\ConsumptionConfiguration;
+namespace hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Collection;
 
+use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\ModelRegistry;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Factory\ConsumptionConfiguratorDataFactory;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Data\ConsumptionConfiguratorData;
 use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehavior;
 use hiqdev\billing\registry\Domain\Model\TariffType;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
@@ -13,12 +16,12 @@ class ConsumptionConfiguratorDataCollection implements ConsumptionConfiguratorDa
     /** @var ConsumptionConfiguratorData[]|null */
     private ?array $configurations = null;
 
-    private TariffResourceHelper $helper;
+    private ModelRegistry $modelRegistry;
 
     public function __construct(
         readonly private BillingRegistryServiceInterface $billingRegistry
     ) {
-        $this->helper = new TariffResourceHelper();
+        $this->modelRegistry = new ModelRegistry();
     }
 
     public function getIterator(): Traversable
@@ -61,7 +64,7 @@ class ConsumptionConfiguratorDataCollection implements ConsumptionConfiguratorDa
 
     private function getModels(TariffTypeInterface $tariffType): array
     {
-        $data = $this->helper->getDefaultModels();
+        $data = $this->modelRegistry->getDefaultModels();
 
         if ($tariffType->name() === TariffType::client->name()) {
             $data = [

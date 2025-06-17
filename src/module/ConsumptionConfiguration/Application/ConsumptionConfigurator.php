@@ -1,8 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace hipanel\modules\finance\helpers\ConsumptionConfiguration;
+namespace hipanel\modules\finance\module\ConsumptionConfiguration\Application;
 
 use hipanel\helpers\ArrayHelper;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Data\ConsumptionConfiguratorData;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Collection\ConsumptionConfiguratorDataCollectionInterface;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Factory\ConsumptionConfiguratorDataFactory;
 use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\models\TargetResource;

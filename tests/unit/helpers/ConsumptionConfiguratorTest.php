@@ -2,9 +2,9 @@
 
 namespace hipanel\modules\finance\tests\unit\helpers;
 
-use hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfigurator;
-use hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfiguratorDataCollection;
-use hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfiguratorDataCollectionInterface;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Application\ConsumptionConfigurator;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Collection\ConsumptionConfiguratorDataCollection;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Collection\ConsumptionConfiguratorDataCollectionInterface;
 use hipanel\modules\finance\tests\unit\TestCase;
 use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehavior;
 use hiqdev\billing\registry\behavior\ResourceDecoratorBehavior;

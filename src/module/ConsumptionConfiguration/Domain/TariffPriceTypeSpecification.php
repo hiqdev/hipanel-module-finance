@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace hipanel\modules\finance\helpers\ConsumptionConfiguration;
+namespace hipanel\modules\finance\module\ConsumptionConfiguration\Domain;
 
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\models\TargetResource;
@@ -13,7 +13,7 @@ use hiqdev\billing\registry\ResourceDecorator\server\Traffic95ResourceDecorator;
  * Tariff can't be added to Billing Registry, but it is creating a bunch of problems.
  * So, I created this class to fix them.
  */
-class TariffResourceHelper
+class TariffPriceTypeSpecification
 {
     public function getResourceDecorator(
         ResourceDecoratorData $resourceData,
@@ -32,14 +32,6 @@ class TariffResourceHelper
             PriceType::server_traf95_max->name(),
             PriceType::server_traf95->name(),
             PriceType::server_traf95_in->name(),
-        ];
-    }
-
-    public function getDefaultModels(): array
-    {
-        return [
-            Target::class,
-            TargetResource::class,
         ];
     }
 }

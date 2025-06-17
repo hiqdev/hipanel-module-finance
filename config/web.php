@@ -197,11 +197,11 @@ return [
                 );
             },
             \Money\MoneyParser::class => \Money\Parser\DecimalMoneyParser::class,
-            \hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfigurator::class => \hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfigurator::class,
-            \hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfiguratorDataCollectionInterface::class => function (yii\di\Container $container) {
+            \hipanel\modules\finance\module\ConsumptionConfiguration\Application\ConsumptionConfigurator::class => \hipanel\modules\finance\module\ConsumptionConfiguration\Application\ConsumptionConfigurator::class,
+            \hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Collection\ConsumptionConfiguratorDataCollectionInterface::class => function (yii\di\Container $container) {
                 // Tariff can't be added to Billing Registry directly
-                return new \hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfiguratorDataCollectionTariffDecorator(
-                    new \hipanel\modules\finance\helpers\ConsumptionConfiguration\ConsumptionConfiguratorDataCollection(
+                return new \hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Collection\ConsumptionConfiguratorDataCollectionTariffDecorator(
+                    new \hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Collection\ConsumptionConfiguratorDataCollection(
                         $container->get(\hiqdev\php\billing\product\Application\BillingRegistryServiceInterface::class)
                     )
                 );
