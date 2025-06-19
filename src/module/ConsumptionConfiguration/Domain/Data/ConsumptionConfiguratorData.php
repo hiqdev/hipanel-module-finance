@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace hipanel\modules\finance\helpers;
+namespace hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Data;
 
 use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\models\proxy\Resource as ResourceProxy;

@@ -2,11 +2,9 @@
 
 namespace hipanel\modules\finance\models;
 
-interface FractionAwareInterface
+interface FractionAwareInterface extends HasTimeAttributeInterface
 {
     public function getFractionOfMonth();
-
-    public function getTime();
 
     public function getQuantity();
 }

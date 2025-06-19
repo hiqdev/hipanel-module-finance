@@ -4,7 +4,7 @@ namespace hipanel\modules\finance\models\proxy;
 
 use hipanel\base\Model;
 use hipanel\base\ModelTrait;
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Application\ConsumptionConfigurator;
 use hiqdev\billing\registry\ResourceDecorator\DecoratedInterface;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
 use hiqdev\php\units\Quantity;

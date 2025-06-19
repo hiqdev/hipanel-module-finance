@@ -1,8 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace hipanel\modules\finance\tests\unit\helpers;
+namespace hipanel\modules\finance\tests\unit\module\ConsumptionConfiguration\Application;
 
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Application\ConsumptionConfigurator;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Collection\ConsumptionConfiguratorDataCollection;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Collection\ConsumptionConfiguratorDataCollectionInterface;
 use hipanel\modules\finance\tests\unit\TestCase;
 use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehavior;
 use hiqdev\billing\registry\behavior\ResourceDecoratorBehavior;
@@ -25,28 +27,43 @@ class ConsumptionConfiguratorTest extends TestCase
     {
         parent::setUp();
 
-        $this->di()->set(BillingRegistryServiceInterface::class, self::createBillingRegistryService());
+        $billingRegistry = $this->createBillingRegistryService();
+        $this->di()->set(BillingRegistryServiceInterface::class, $billingRegistry);
+        $this->di()->set(
+            ConsumptionConfiguratorDataCollectionInterface::class,
+            $this->createConsumptionConfiguratorDataCollection($billingRegistry),
+        );
         $this->configurator = $this->di()->get(ConsumptionConfigurator::class);
         $this->mockTariffType = new MockTariffType();
     }
 
-    private static function createBillingRegistryService(): BillingRegistryServiceInterface
+    private function createBillingRegistryService(): BillingRegistryServiceInterface
     {
         $billingRegistry = new BillingRegistry();
         $billingRegistryService = new BillingRegistryService($billingRegistry);
 
-        $billingRegistry->addTariffType(self::createTariffTypeDefinition());
+        $billingRegistry->addTariffType($this->createTariffTypeDefinition());
 
         return $billingRegistryService;
     }
 
-    private static function createTariffTypeDefinition(): TariffTypeDefinitionInterface
+    private function createTariffTypeDefinition(): TariffTypeDefinitionInterface
     {
         $mockTariffType = new MockTariffType();
 
         return (new TariffTypeDefinitionFacade($mockTariffType))
             ->withPrices()
-                ->overuse(PriceType::lb_ha_capacity_unit)
+                ->overuse(PriceType::switch_license)
+                    ->withBehaviors()
+                        ->attach(new ResourceDecoratorBehavior(MockResourceDecorator::class))
+                    ->end()
+                ->end()
+                ->overuse(PriceType::dregistration)
+                    ->withBehaviors()
+                        ->attach(new ResourceDecoratorBehavior(MockResourceDecorator::class))
+                    ->end()
+                ->end()
+                ->overuse(PriceType::dtransfer)
                     ->withBehaviors()
                         ->attach(new ResourceDecoratorBehavior(MockResourceDecorator::class))
                     ->end()
@@ -55,17 +72,23 @@ class ConsumptionConfiguratorTest extends TestCase
             ->withBehaviors()
                 ->attach(new ConsumptionConfigurationBehavior(
                     $mockTariffType->label(),
-                    ['col1', 'col2', 'col3'],
-                    [['col1', 'col2']],
+                    ['switch_license', 'dregistration', 'dtransfer'],
+                    [['switch_license', 'dregistration']],
                 ))
             ->end();
+    }
+
+    private function createConsumptionConfiguratorDataCollection(
+        BillingRegistryServiceInterface $billingRegistry
+    ): ConsumptionConfiguratorDataCollectionInterface {
+        return new ConsumptionConfiguratorDataCollection($billingRegistry);
     }
 
     public function testGetColumns(): void
     {
         $columns = $this->configurator->getColumns($this->mockTariffType->name());
 
-        $this->assertSame(['col1', 'col2', 'col3'], $columns);
+        $this->assertSame(['switch_license', 'dregistration', 'dtransfer'], $columns);
     }
 
 //    public function testGetGroups(): void
@@ -80,11 +103,11 @@ class ConsumptionConfiguratorTest extends TestCase
         $groups = $this->configurator->getGroupsWithLabels($this->mockTariffType->name());
         $expected = [
             [
-                'col1' => 'Mock Label',
-                'col2' => 'Mock Label',
+                'switch_license' => 'Mock Label',
+                'dregistration' => 'Mock Label',
             ],
             [
-                'col3' => 'Mock Label',
+                'dtransfer' => 'Mock Label',
             ],
         ];
 
@@ -106,16 +129,16 @@ class ConsumptionConfiguratorTest extends TestCase
     {
         $columns = $this->configurator->getAllPossibleColumns();
 
-        $this->assertSame(['col1', 'col2', 'col3'], $columns);
+        $this->assertSame(['switch_license', 'dregistration', 'dtransfer'], $columns);
     }
 
     public function testGetColumnsWithLabels(): void
     {
         $columns = $this->configurator->getColumnsWithLabels($this->mockTariffType->name());
         $expected = [
-            'col1' => 'Mock Label',
-            'col2' => 'Mock Label',
-            'col3' => 'Mock Label',
+            'switch_license' => 'Mock Label',
+            'dregistration' => 'Mock Label',
+            'dtransfer' => 'Mock Label',
         ];
 
         $this->assertSame($expected, $columns);

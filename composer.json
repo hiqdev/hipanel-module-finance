@@ -58,7 +58,7 @@
         "hiqdev/hidev-php": "dev-master",
         "hiqdev/hidev-hiqdev": "dev-master",
         "codeception/codeception": "*",
-        "phpunit/phpunit": "^9.0"
+        "phpunit/phpunit": "^10.0 || ^11.0 || ^12.0"
     },
     "autoload": {
         "psr-4": {

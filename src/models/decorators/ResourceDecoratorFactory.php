@@ -2,7 +2,7 @@
 
 namespace hipanel\modules\finance\models\decorators;
 
-use hipanel\modules\finance\helpers\TariffResourceHelper;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\TariffPriceTypeSpecification;
 use hipanel\modules\finance\models\Resource;
 use hipanel\modules\finance\models\stubs\AbstractResourceStub;
 use hiqdev\billing\registry\behavior\ResourceDecoratorBehavior;
@@ -26,7 +26,7 @@ class ResourceDecoratorFactory
         $type = $resource->model_type ?? $resource->type;
         $resourceDecoratorData = self::createResourceDecoratorData($resource);
         $registry = Yii::createObject(BillingRegistryServiceInterface::class);
-        $tariffResourceHelper = new TariffResourceHelper();
+        $tariffResourceHelper = new TariffPriceTypeSpecification();
 
         $resourceDecorator = $tariffResourceHelper->getResourceDecorator($resourceDecoratorData, $type);
         if ($resourceDecorator) {

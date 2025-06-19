@@ -19,7 +19,7 @@ use hipanel\filters\EasyAccessControl;
 use hipanel\modules\client\models\stub\ClientRelationFreeStub;
 use hipanel\modules\finance\actions\TargetManagementAction;
 use hipanel\modules\finance\forms\TargetManagementForm;
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Application\ConsumptionConfigurator;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\query\TargetQuery;
 use hipanel\modules\finance\models\Target;

@@ -1,29 +1,28 @@
 <?php declare(strict_types=1);
 
-namespace hipanel\modules\finance\helpers;
+namespace hipanel\modules\finance\module\ConsumptionConfiguration\Application;
 
-use hipanel\base\Model;
 use hipanel\helpers\ArrayHelper;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Data\ConsumptionConfiguratorData;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Collection\ConsumptionConfiguratorDataCollectionInterface;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Factory\ConsumptionConfiguratorDataFactory;
 use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\models\TargetResource;
-use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehavior;
-use hiqdev\billing\registry\Domain\Model\TariffType;
 use hiqdev\billing\registry\ResourceDecorator\DecoratedInterface;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
 use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
-use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use yii\db\ActiveRecordInterface;
 
 final class ConsumptionConfigurator
 {
-    /** @var ConsumptionConfiguratorData[]|null */
-    private ?array $configurations = null;
-
     private ?array $columnsWithLabelsGroupedByClass = null;
 
-    public function __construct(private readonly BillingRegistryServiceInterface $billingRegistry)
+    public function __construct(
+        private readonly BillingRegistryServiceInterface $billingRegistry,
+        private readonly ConsumptionConfiguratorDataCollectionInterface $configuratorDataCollection
+    )
     {
     }
 
@@ -39,12 +38,12 @@ final class ConsumptionConfigurator
     {
         list ($defaultModel, $defaultResourceModel) = $this->getDefaultModels();
 
-        $fallback = new ConsumptionConfiguratorData(
+        $fallback = ConsumptionConfiguratorDataFactory::create(
             $class,
             [],
             [],
-            $this->createObject($defaultModel),
-            $this->createObject($defaultResourceModel),
+            $defaultModel,
+            $defaultResourceModel,
         );
 
         return $this->getConfigurations()[$class] ?? $fallback;
@@ -58,67 +57,9 @@ final class ConsumptionConfigurator
         ];
     }
 
-    private function createObject(string $className, array $params = []): Model
-    {
-        return YiiObjectHelper::createObject($className, $params);
-    }
-
     public function getConfigurations(): array
     {
-        if ($this->configurations === null) {
-            $this->configurations = $this->buildConfigurations();
-        }
-
-        return $this->configurations;
-    }
-
-    /**
-     * @return ConsumptionConfiguratorData[]
-     */
-    private function buildConfigurations(): array
-    {
-        $configurations = [];
-        /** @var ConsumptionConfigurationBehavior $behavior */
-        foreach ($this->billingRegistry->getBehaviors(ConsumptionConfigurationBehavior::class) as $behavior) {
-            $tariffType = $behavior->getTariffType();
-
-            list ($model, $resourceModel) = $this->getModels($tariffType);
-
-            $configurations[$tariffType->name()] = new ConsumptionConfiguratorData(
-                $behavior->getLabel(),
-                $behavior->getColumns(),
-                $behavior->getGroups(),
-                $this->createObject($model),
-                $this->createObject($resourceModel),
-            );
-        }
-
-        // Tariff can't be added to Billing Registry
-        return (new TariffResourceHelper())->addTariffToConfiguration($configurations);
-    }
-
-    private function getModels(TariffTypeInterface $tariffType): array
-    {
-        $data = $this->getDefaultModels();
-
-        if ($tariffType->name() === TariffType::client->name()) {
-            $data = [
-                \hipanel\modules\client\models\Client::class,
-                \hipanel\modules\finance\models\ClientResource::class,
-            ];
-        } else if ($tariffType->name() === TariffType::server->name()) {
-            $data = [
-                \hipanel\modules\server\models\Server::class,
-                \hipanel\modules\finance\models\ServerResource::class,
-            ];
-        } else if ($tariffType->name() === TariffType::switch->name()) {
-            $data = [
-                \hipanel\modules\server\models\Hub::class,
-                \hipanel\modules\finance\models\ServerResource::class,
-            ];
-        }
-
-        return $data;
+        return iterator_to_array($this->configuratorDataCollection->getIterator());
     }
 
     public function getGroupsWithLabels(string $class): array

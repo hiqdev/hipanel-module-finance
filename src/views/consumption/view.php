@@ -1,6 +1,6 @@
 <?php
 
-use hipanel\modules\finance\helpers\ConsumptionConfigurator;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Application\ConsumptionConfigurator;
 use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\widgets\ConsumptionViewer;
 use yii\base\ViewNotFoundException;

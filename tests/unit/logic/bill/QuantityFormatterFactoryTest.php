@@ -3,7 +3,7 @@
 namespace hipanel\modules\finance\tests\unit\logic\bill;
 
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactory;
-use hipanel\modules\finance\models\BillableTimeInterface;
+use hipanel\modules\finance\models\FractionAwareInterface;
 use hipanel\modules\finance\models\HasTimeAttributeInterface;
 use hipanel\modules\finance\tests\unit\TestCase;
 use hiqdev\php\units\Quantity;
@@ -37,10 +37,15 @@ class QuantityFormatterFactoryTest extends TestCase
         $this->assertEquals($expectedClientValue, $quantityFormatter->getClientValue());
     }
 
-    public function createByTypeDataProvider(): iterable
+    public static function createByTypeDataProvider(): iterable
     {
-        $context = new \stdClass();
-        $context->id = 123;
+        $context = new class implements HasTimeAttributeInterface
+        {
+            public function getTime(): ?string
+            {
+                return null;
+            }
+        };
 
         $timeContext = new class implements HasTimeAttributeInterface
         {
@@ -49,8 +54,6 @@ class QuantityFormatterFactoryTest extends TestCase
                 return date('Y-m-d H:i:s', strtotime('2024 January'));
             }
         };
-
-        $billableTimeContext = $this->createBillableTimeContext(2, 1);
 
         yield 'other_deposit type with 1 item' => [
             'other_deposit',
@@ -76,7 +79,7 @@ class QuantityFormatterFactoryTest extends TestCase
         yield 'monthly type with 6 hours' => [
             'monthly',
             Quantity::create('hour', 6),
-            $timeContext,
+            $context,
             $expected = '6 hours',
             $expectedClientValue = '186',
         ];
@@ -90,8 +93,8 @@ class QuantityFormatterFactoryTest extends TestCase
         yield [
             'monthly,rack_unit',
             Quantity::create('', 2),
-            $billableTimeContext,
-            $expected = '2 units &times; 31 days',
+            self::createFractionAwareInterface(2, 2),
+            $expected = '1 units &times;  2 months, 2 days',
             $expectedClientValue = '2',
         ];
         yield '10 IP addresses' => [
@@ -115,36 +118,29 @@ class QuantityFormatterFactoryTest extends TestCase
             $expected = '12 years',
             $expectedClientValue = '12',
         ];
-        yield '0.953 units × 13 days' => [
-            'monthly,rack_unit',
-            Quantity::create('items', "0.41306867283951"),
-            $this->createBillableTimeContext("0.41306867283951", "0.43333333333333"),
-            $expected = '0.953 units &times; 13 days',
-            $expectedClientValue = '0.41306867283951',
-        ];
     }
 
-    private function createBillableTimeContext($quantity, $billQuantity): BillableTimeInterface
+    private static function createFractionAwareInterface($fractionOfMonth, $quantity): FractionAwareInterface
     {
-        return new class($quantity, $billQuantity) implements BillableTimeInterface
+        return new class($fractionOfMonth, $quantity) implements FractionAwareInterface
         {
-            public function __construct(private $quantity, private $billQuantity)
+            public function __construct(private $fractionOfMonth, private $quantity)
             {
-            }
-
-            public function getQuantity()
-            {
-                return $this->quantity;
-            }
-
-            public function getBillQuantity()
-            {
-                return $this->billQuantity;
             }
 
             public function getTime(): ?string
             {
                 return date('Y-m-d H:i:s', strtotime('2024 January'));
+            }
+
+            public function getFractionOfMonth()
+            {
+                return $this->fractionOfMonth;
+            }
+
+            public function getQuantity()
+            {
+                return $this->quantity;
             }
         };
     }
