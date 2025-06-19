@@ -6,7 +6,6 @@ namespace hipanel\modules\finance\widgets\BillingRegistry;
 use hiqdev\billing\registry\behavior\ResourceDecoratorBehaviorNotDeclaredException;
 use hiqdev\billing\registry\behavior\ResourceDecoratorBehaviorNotFoundException;
 use hiqdev\billing\registry\product\Aggregate;
-use hiqdev\billing\registry\product\PriceType;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorBehaviorSearch;
 use hiqdev\billing\registry\Type\TypeSemantics;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
@@ -22,17 +21,12 @@ use yii\helpers\Html;
 
 class TariffPricesTableWidget extends Widget
 {
-    /**
-     * @var string https://git.hiqdev.com/hiqdev/hiapi-legacy/blob/master/src/lib/billing/documents/Invoice/MonthlyInvoiceBuilder.php#L77-77
-     */
     private const DEFAULT_REPRESENTATION = 'Hosting services fee from || date';
 
     public TariffTypeDefinitionInterface $tariff;
     private BillingRegistryServiceInterface $registryService;
-    /**
-     * @var array<class-string<RepresentationInterface>, array<string, RepresentationInterface>>
-     */
     private array $representationsByClassAndPriceType = [];
+    public string $tariffTypeNameSlug = '';
 
     public function __construct(
         BillingRegistryServiceInterface $registryService,
@@ -41,7 +35,6 @@ class TariffPricesTableWidget extends Widget
         $config = []
     ) {
         parent::__construct($config);
-
         $this->registryService = $registryService;
         $this->representationsByClassAndPriceType = $this->buildRepresentationsArray();
     }
@@ -50,26 +43,122 @@ class TariffPricesTableWidget extends Widget
     {
         parent::init();
         if ($this->tariff === null) {
-            throw new \InvalidArgumentException('Definition must be provided');
+            throw new \InvalidArgumentException('Tariff definition must be provided');
         }
 
         $this->view->registerCss(<<<CSS
-.representation-details {
-    width: 50%;
+.tariff-prices-info {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #333;
 }
+
+.price-type-card {
+    background-color: #fff;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    margin-bottom: 25px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.price-type-card-header {
+    background-color: #f8f9fa;
+    padding: 12px 18px;
+    border-bottom: 1px solid #e3e3e3;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.price-type-card-header h4 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #212529;
+}
+
+.price-type-card-header .price-type-class {
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-weight: normal;
+    margin-left: 8px;
+}
+
+.price-type-card .table {
+    margin-bottom: 0;
+}
+
+.price-type-card .table td {
+    padding: 10px 15px;
+    vertical-align: top;
+}
+
+.price-type-card .property-name {
+    font-weight: 500;
+    width: 25%;
+    color: #495057;
+}
+
+.representation-details {
+    margin-bottom: 8px;
+}
+.representation-details:last-child {
+    margin-bottom: 0;
+}
+
+.representation-details summary {
+    cursor: pointer;
+    padding: 5px 8px;
+    background-color: #f1f3f5;
+    border-radius: 3px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    outline: none;
+    display: list-item;
+}
+.representation-details summary:hover {
+    background-color: #e9ecef;
+}
+
+.representation-details pre {
+    background-color: #fdfdfe;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 0.875em;
+    color: #212529;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+.small {
+    font-size: 85%;
+}
+
+.decorator-status-error, .formatter-status-error, .representation-status-none {
+    color: #dc3545;
+    font-style: italic;
+}
+.decorator-status-not-used {
+    color: #ffc107;
+    font-style: italic;
+}
+.representation-status-default {
+}
+
 CSS
         );
     }
 
-    /**
-     * @return array<class-string<RepresentationInterface>, array<string, RepresentationInterface[]>>
-     */
     private function buildRepresentationsArray(): array
     {
         $result = [];
-
         foreach ($this->registryService->getRepresentationsByType(RepresentationInterface::class) as $representation) {
             $className = (new ReflectionClass($representation))->getShortName();
+
+            // Ensure unique key for representations of the same class for different price types
             $result[$className][$representation->getType()->getName()] = $representation;
         }
 
@@ -78,94 +167,113 @@ CSS
 
     public function run()
     {
-        $content = Html::tag('h3', 'Brief information');
-        $content .= $this->renderTable();
+        $content = Html::tag('h3', 'Price Configuration Details', ['style' => 'margin-bottom: 20px;']);
+
+        foreach ($this->tariff->withPrices()->getIterator() as $priceType) {
+            $content .= $this->renderPriceTypeCard($priceType);
+        }
 
         return Html::tag('div', $content, ['class' => 'tariff-prices-info']);
     }
 
-    protected function renderTable()
+    protected function renderPriceTypeCard(PriceTypeDefinitionInterface $priceType)
     {
-        $headers = ['Price Type', 'Unit, Agg.', 'Quantity Formatter', 'Invoice Representation'];
-        $headerRow = Html::tag('tr', implode('', array_map(fn($h) => Html::tag('th', $h), $headers)));
-        $thead = Html::tag('thead', $headerRow);
+        $priceTypeNameSlug = $this->slugify($priceType->type()->getName());
+        $cardId = 'price-type--' . $this->tariffTypeNameSlug . '--' . $priceTypeNameSlug;
 
-        $rows = '';
+        $headerContent = $this->renderPriceTypeCardHeader($priceType);
+        $header = Html::tag('div', $headerContent, ['class' => 'price-type-card-header']);
 
-        foreach ($this->tariff->withPrices()->getIterator() as $priceType) {
-            $rows .= $this->renderTableRow($priceType);
-        }
-        $tbody = Html::tag('tbody', $rows);
-
-        return Html::tag('table', $thead . $tbody, ['class' => 'table table-striped table-bordered']);
-    }
-
-    protected function renderTableRow(PriceTypeDefinitionInterface $priceType)
-    {
-        $cells = [
-            $this->renderPriceTypeCell($priceType),
-            $this->renderUnitAndAggregationCell($priceType),
-            $this->renderQuantityFormatterCell($priceType),
-            $this->renderRepresentationsCell($priceType),
+        $tableRows = [
+            $this->renderPropertyRow('Description', $this->renderPriceTypeDescription($priceType)),
+            // Changed "Type" to "Description" for clarity
+            $this->renderPropertyRow('Decorator', $this->renderDecoratorInfo($priceType)),
+            $this->renderPropertyRow('Unit & Agg.', $this->renderUnitAndAggregationInfo($priceType)),
+            $this->renderPropertyRow('Quantity Formatter', $this->renderQuantityFormatterInfo($priceType)),
+            $this->renderPropertyRow('Invoice Representation', $this->renderRepresentationsInfo($priceType)),
         ];
 
-        return Html::tag('tr', implode('', $cells));
+        $tbody = Html::tag('tbody', implode('', $tableRows));
+        $table = Html::tag('table', $tbody, ['class' => 'table table-hover']); // table-hover for subtle row hover
+
+        return Html::tag('div', $header . $table, [
+            'class' => 'price-type-card',
+            'id' => $cardId
+        ]);
     }
 
-    protected function renderPriceTypeCell(PriceTypeDefinitionInterface $priceType)
+    protected function renderPriceTypeCardHeader(PriceTypeDefinitionInterface $priceType)
+    {
+        $priceTypeName = Html::encode($priceType->type()->getName());
+        $priceTypeClass = Html::tag(
+            'span',
+            '(' . (new ReflectionClass($priceType))->getShortName() . ')',
+            ['class' => 'price-type-class']
+        );
+
+        return Html::tag('h4', $priceTypeName . ' ' . $priceTypeClass);
+    }
+
+    protected function renderPropertyRow(string $propertyName, string $propertyValue)
+    {
+        $nameCell = Html::tag('td', Html::encode($propertyName), ['class' => 'property-name']);
+        $valueCell = Html::tag('td', $propertyValue);
+
+        return Html::tag('tr', $nameCell . $valueCell);
+    }
+
+    protected function renderPriceTypeDescription(PriceTypeDefinitionInterface $priceType)
+    {
+        $description = $priceType->getDescription();
+
+        return Html::encode(empty($description) ? 'N/A' : $description);
+    }
+
+    protected function renderDecoratorInfo(PriceTypeDefinitionInterface $priceType)
     {
         $content = '';
-
-        $shortClass = (new ReflectionClass($priceType))->getShortName();
-        $content .= Html::tag('span', $shortClass, ['class' => 'text-muted']);
-        $content .= Html::tag('br');
-        $content .= Html::tag('strong', Html::encode($priceType->type()->getName()));
-        $content .= Html::tag('br');
-        $content .= Html::encode($priceType->getDescription());
-        $content .= Html::tag('br');
-
-        // Rendering the decorator class
         try {
             $decorator = $this->resourceDecoratorBehaviorSearch->find(
                 $this->registryService,
                 $this->typeSemantics->localName($priceType->type())
             );
             $shortClass = (new ReflectionClass($decorator->class))->getShortName();
+            $content = "👒 " . Html::encode($shortClass);
         } catch (ResourceDecoratorBehaviorNotFoundException $e) {
-            $shortClass = "‼️No decorator, exception was thrown";
+            $content = Html::tag('span', "‼️ No decorator, exception was thrown",
+                ['class' => 'decorator-status-error']);
         } catch (ResourceDecoratorBehaviorNotDeclaredException $e) {
-            $shortClass = "🔸Not used in UI";
+            $content = Html::tag('span', "🔸 Not used in UI (or no specific decorator needed)",
+                ['class' => 'decorator-status-not-used']);
         }
-        $content .= Html::tag('span', "👒 " . $shortClass);
 
-        return Html::tag('td', $content);
+        return $content;
     }
 
-    protected function renderUnitAndAggregationCell(PriceTypeDefinitionInterface $priceType)
+    protected function renderUnitAndAggregationInfo(PriceTypeDefinitionInterface $priceType)
     {
         $unit = Html::encode($priceType->getUnit()->name());
         try {
             $aggregation = $priceType->getAggregate();
+            $aggSymbol = match ($aggregation) {
+                Aggregate::sum => '∑',
+                Aggregate::last => 'Last',
+                Aggregate::max => 'Max',
+                Aggregate::count => '⠿ Count',
+                Aggregate::one => '1 One',
+                default => 'Unknown'
+            };
+
+            return Html::encode("{$aggSymbol} ({$unit})");
         } catch (\Exception $e) {
-            $aggregation = Html::tag('em', '‼️ EXCEPTION: no aggregation');
+            return Html::tag('span', '‼️ EXCEPTION: no aggregation',
+                    ['class' => 'decorator-status-error']) . " ({$unit})";
         }
-
-        $agg = match ($aggregation) {
-            Aggregate::sum => '∑',
-            Aggregate::last => 'Last',
-            Aggregate::max => 'Max',
-            Aggregate::count => '⠿',
-            Aggregate::one => '1',
-        };
-
-        return Html::tag('td', "$agg ($unit)");
     }
 
-    protected function renderQuantityFormatterCell(PriceTypeDefinitionInterface $priceType)
+    protected function renderQuantityFormatterInfo(PriceTypeDefinitionInterface $priceType)
     {
-        $content = $this->formatQuantityFormatter($priceType);
-
-        return Html::tag('td', $content);
+        return $this->formatQuantityFormatter($priceType);
     }
 
     protected function formatQuantityFormatter(PriceTypeDefinitionInterface $priceType)
@@ -173,14 +281,14 @@ CSS
         $quantityFormatter = $priceType->getQuantityFormatterDefinition();
 
         if ($quantityFormatter === null) {
-            return Html::tag('em', '‼️ No quantity formatter');
+            return Html::tag('em', '‼️ No quantity formatter defined', ['class' => 'formatter-status-error']);
         }
 
         if ($quantityFormatter->formatterClass() !== null) {
             return $this->formatClassBasedQuantityFormatter($priceType, $quantityFormatter);
         }
 
-        return Html::encode($quantityFormatter->getFractionUnit()->label);
+        return Html::tag('span', Html::encode($quantityFormatter->getFractionUnit()->label));
     }
 
     protected function formatClassBasedQuantityFormatter(PriceTypeDefinitionInterface $priceType, $quantityFormatter)
@@ -193,36 +301,47 @@ CSS
             new FractionQuantityData($quantity, date('c'), 1)
         );
 
-        return Html::tag('i', '[' . Html::encode($formatterName) . ']: ') . $example->format();
+        return Html::tag('code', '[' . Html::encode($formatterName) . ']') . ': ' . $example->format();
     }
 
-    protected function renderRepresentationsCell($priceType)
+    protected function renderRepresentationsInfo(PriceTypeDefinitionInterface $priceType)
     {
         $content = '';
+        $foundCustom = false;
 
         foreach ($this->representationsByClassAndPriceType as $className => $representations) {
             if (isset($representations[$priceType->type()->getName()])) {
                 $representation = $representations[$priceType->type()->getName()];
-                $reflection = new ReflectionClass($representation);
-                $content .= $this->renderRepresentationDetails($reflection->getShortName(), $representation->getSql());
+                $content .= $this->renderRepresentationDetails($className, $representation->getSql());
+                $foundCustom = true;
             }
         }
 
-        if ($content === '') {
-            $content = Html::tag('em', '♦️ No custom representation');
-            $content .= Html::tag('br');
-            $content .= $this->renderRepresentationDetails('Default', self::DEFAULT_REPRESENTATION);
+        if (!$foundCustom) {
+            $noCustomMsg = Html::tag('span', '♦️ No custom representation. Using default.',
+                ['class' => 'representation-status-none']);
+            $defaultRep = $this->renderRepresentationDetails('Default Representation', self::DEFAULT_REPRESENTATION,
+                true);
+            $content = $noCustomMsg . Html::tag('br') . $defaultRep;
         }
 
-        return Html::tag('td', $content);
+        return $content;
     }
 
-    protected function renderRepresentationDetails(string $className, string $representation)
-    {
-        $summary = Html::tag('summary', "↓&nbsp;" . Html::encode($className));
-        $pre = Html::tag('pre', Html::encode($representation));
+    protected function renderRepresentationDetails(
+        string $summaryTitle,
+        string $representationSql,
+        bool $isOpen = false
+    ) {
+        $summary = Html::tag('summary', "↓&nbsp;" . Html::encode($summaryTitle));
+        $pre = Html::tag('pre', Html::encode($representationSql));
 
-        return Html::tag('details', $summary . $pre, ['class' => 'representation-details']);
+        $options = ['class' => 'representation-details'];
+        if ($isOpen) {
+            $options['open'] = true;
+        }
+
+        return Html::tag('details', $summary . $pre, $options);
     }
 
     private function generateRandomQuantity(PriceTypeDefinitionInterface $priceType): Quantity
@@ -247,4 +366,14 @@ CSS
 
         return $quantity;
     }
+
+    protected function slugify(string $string): string
+    {
+        $string = preg_replace('/[^a-zA-Z0-9\s-]/u', '', mb_strtolower((string)$string));
+        $string = preg_replace('/[\s-]+/', '-', $string);
+
+        return trim($string, '-');
+    }
+
 }
+
