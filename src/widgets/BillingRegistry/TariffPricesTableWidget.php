@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\widgets\BillingRegistry;
 
+use hiqdev\billing\registry\behavior\ResourceDecoratorBehavior;
 use hiqdev\billing\registry\behavior\ResourceDecoratorBehaviorNotDeclaredException;
 use hiqdev\billing\registry\behavior\ResourceDecoratorBehaviorNotFoundException;
 use hiqdev\billing\registry\product\Aggregate;
@@ -188,6 +189,8 @@ CSS
             $this->renderPropertyRow('Description', $this->renderPriceTypeDescription($priceType)),
             // Changed "Type" to "Description" for clarity
             $this->renderPropertyRow('Decorator', $this->renderDecoratorInfo($priceType)),
+            $this->renderPropertyRow('MeasuredWith Class', $this->renderMeasuredWithInfo($priceType)),
+            $this->renderPropertyRow('Behaviors', $this->renderBehaviorsInfo($priceType)),
             $this->renderPropertyRow('Unit & Agg.', $this->renderUnitAndAggregationInfo($priceType)),
             $this->renderPropertyRow('Quantity Formatter', $this->renderQuantityFormatterInfo($priceType)),
             $this->renderPropertyRow('Invoice Representation', $this->renderRepresentationsInfo($priceType)),
@@ -248,6 +251,46 @@ CSS
         }
 
         return $content;
+    }
+
+    protected function renderMeasuredWithInfo(PriceTypeDefinitionInterface $priceType): string
+    {
+        return Html::tag('span', 'Not implemented yet.', [
+            'class' => 'text-muted',
+        ]);
+    }
+
+    private array $doNotRenderBehaviors = [
+        ResourceDecoratorBehavior::class, // We render this one separately
+    ];
+
+    protected function renderBehaviorsInfo(PriceTypeDefinitionInterface $priceType)
+    {
+        $behaviors = [];
+        $behaviorCollection = $priceType->withBehaviors();
+        
+        foreach ($behaviorCollection as $behavior) {
+            if (in_array(get_class($behavior), $this->doNotRenderBehaviors, true)) {
+                continue;
+            }
+
+            $behaviorClass = (new ReflectionClass($behavior))->getShortName();
+            $behaviorDescription = $behavior->description();
+            
+            $behaviorHtml = Html::tag('div', 
+                Html::tag('strong', Html::encode($behaviorClass)) . ': ' . $behaviorDescription,
+                ['style' => 'margin-bottom: 5px;']
+            );
+            $behaviors[] = $behaviorHtml;
+        }
+
+        if (empty($behaviors)) {
+            return Html::tag('span', '–', ['class' => 'text-muted']);
+        }
+
+        $behaviorsList = implode('', $behaviors);
+
+        return Html::tag('div', $behaviorsList, ['style' => 'margin-top: 5px;']);
     }
 
     protected function renderUnitAndAggregationInfo(PriceTypeDefinitionInterface $priceType)

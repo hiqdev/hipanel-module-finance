@@ -57,6 +57,7 @@ class TariffTypesWidget extends Widget
                 ];
             }
             $navigationItems[] = $navTariffItem;
+
             $mainContent .= $this->renderDefinitionSection($definition, $tariffTypeId, $tariffTypeSlug);
         }
 
@@ -82,18 +83,67 @@ class TariffTypesWidget extends Widget
             ['encode' => false]
         );
 
+        $behaviors = $this->renderBehaviors($definition);
+
         $table = TariffPricesTableWidget::widget([
             'tariff' => $definition,
             'tariffTypeNameSlug' => $tariffTypeSlug,
         ]);
 
-        return Html::tag('div', $title . $table, [
+        return Html::tag('div', $title . $behaviors . $table, [
             'class' => 'tariff-type-section',
             'id' => $tariffTypeId,
         ]);
     }
 
-    protected function registerCss()
+    protected function renderBehaviors(TariffTypeDefinitionInterface $definition): string
+    {
+        $behaviors = [];
+        
+        try {
+            foreach ($definition->withBehaviors() as $behavior) {
+                $behaviorClass = get_class($behavior);
+                $behaviorName = basename(str_replace('\\', '/', $behaviorClass));
+                
+                $description = '';
+                if (method_exists($behavior, 'description')) {
+                    $description = $behavior->description();
+                }
+                
+                $behaviors[] = [
+                    'name' => $behaviorName,
+                    'class' => $behaviorClass,
+                    'description' => $description,
+                ];
+            }
+        } catch (\Exception) {
+            // Skip behaviors rendering if there's an error accessing them
+            return '';
+        }
+
+        if (empty($behaviors)) {
+            return '';
+        }
+
+        $behaviorItems = [];
+        foreach ($behaviors as $behavior) {
+            $item = Html::tag('div', 
+                Html::tag('strong', Html::encode($behavior['name']), ['class' => 'behavior-name']) .
+                Html::tag('small', Html::encode($behavior['class']), ['class' => 'behavior-class']) .
+                ($behavior['description'] ? Html::tag('p', $behavior['description'], ['class' => 'behavior-description']) : ''),
+                ['class' => 'behavior-item']
+            );
+            $behaviorItems[] = $item;
+        }
+
+        return Html::tag('div',
+            Html::tag('h3', 'Behaviors', ['class' => 'behaviors-title']) .
+            Html::tag('div', implode('', $behaviorItems), ['class' => 'behaviors-list']),
+            ['class' => 'tariff-behaviors-section']
+        );
+    }
+
+    protected function registerCss(): void
     {
         $this->view->registerCss(<<<CSS
 .billing-registry-container {
@@ -114,17 +164,73 @@ class TariffTypesWidget extends Widget
     height: calc(100vh - 60px - 20px);
 }
 
+.tariff-type-section {
+    border-top: 1px dashed #565574;
+    padding-top: 2em;
+}
 .tariff-type-section h2 {
     scroll-margin-top: 20px;
 }
 .price-type-card {
     scroll-margin-top: 20px;
 }
+
+/* Behavior Styles */
+.tariff-behaviors-section {
+    margin: 1.5em 0;
+    padding: 1em;
+    background-color: #f8f9fa;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+}
+
+.behaviors-title {
+    margin: 0 0 1em 0;
+    font-size: 1.1em;
+    color: #495057;
+    font-weight: 600;
+}
+
+.behaviors-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+}
+
+.behavior-item {
+    padding: 0.75em;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.behavior-name {
+    display: block;
+    color: #007bff;
+    font-size: 0.95em;
+    margin-bottom: 0.25em;
+}
+
+.behavior-class {
+    display: block;
+    color: #6c757d;
+    font-size: 0.8em;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    margin-bottom: 0.5em;
+}
+
+.behavior-description {
+    margin: 0.5em 0 0 0;
+    color: #495057;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
 CSS
         );
     }
 
-    protected function registerJs()
+    protected function registerJs(): void
     {
         $this->view->registerJs(<<<JS
 document.addEventListener('DOMContentLoaded', function () {
