@@ -10,8 +10,10 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\grid\DataColumn;
 use hipanel\modules\finance\helpers\ChargeSort;
 use hipanel\modules\finance\models\Charge;
+use hipanel\widgets\AuditButton;
 use Yii;
 use yii\data\ArrayDataProvider;
 
@@ -80,6 +82,13 @@ class GroupedByServerChargesGridView extends BillGridView
                     Yii::$app->user->can('bill.update') ? 'checkbox' : null,
                     'type_label', 'name',
                     'quantity', 'sum', 'sum_with_children', 'time', 'is_payed',
+                    [
+                        'class' => DataColumn::class,
+                        'format' => 'raw',
+                        'value' => fn(Charge $model): string => AuditButton::widget(
+                            ['model' => $model, 'linkOptions' => ['class' => 'btn btn-xs btn-default']]
+                        ),
+                    ],
                 ]),
             ]);
         };
