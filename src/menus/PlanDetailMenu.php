@@ -14,6 +14,7 @@ use hipanel\helpers\Url;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\widgets\LinkParentButton;
 use hipanel\widgets\AjaxModalWithTemplatedButton;
+use hipanel\widgets\AuditButton;
 use hipanel\widgets\SettingsModal;
 use Yii;
 use yii\bootstrap\Modal;
@@ -105,6 +106,10 @@ class PlanDetailMenu extends \hipanel\menus\AbstractDetailMenu
                 ]),
                 'encode' => false,
                 'visible' => Yii::$app->user->can('plan.update'),
+            ],
+            [
+                'label' => AuditButton::widget(['model' => $this->model]),
+                'encode' => false,
             ]
         ]);
         unset($items['view']);

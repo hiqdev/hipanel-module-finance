@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\menus;
 
+use hipanel\widgets\AuditButton;
 use Yii;
 
 class SaleDetailMenu extends \hipanel\menus\AbstractDetailMenu
@@ -33,6 +34,10 @@ class SaleDetailMenu extends \hipanel\menus\AbstractDetailMenu
                     ],
                 ],
             ],
+            [
+                'label' => AuditButton::widget(['model' => $this->model, 'rightIcon' => true]),
+                'encode' => false,
+            ]
         ]);
 
         return $items;
