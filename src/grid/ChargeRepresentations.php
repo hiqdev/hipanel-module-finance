@@ -53,6 +53,7 @@ class ChargeRepresentations extends RepresentationCollection
                 'columns' => [
                     'id',
                     'bill_id',
+                    'object_id',
                     'client',
                     'seller',
                     'tariff',
