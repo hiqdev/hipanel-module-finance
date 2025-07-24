@@ -58,7 +58,7 @@ class ChargesGrouper
     private function sortByServerName(): SortChain
     {
         return Sort::chain()->compare(function (Charge $a, Charge $b) {
-            return strnatcasecmp($a->commonObject->name, $b->commonObject->name);
+            return strnatcasecmp($a->commonObject->name ?? '', $b->commonObject->name ?? '');
         });
     }
 }
