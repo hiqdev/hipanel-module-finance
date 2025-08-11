@@ -23,7 +23,7 @@ export default class SaleHelper {
     }
 
     async filterByTariff(tariff: string) {
-        await Select2.field(this.page, '[name="SaleSearch\[tariff_id\]"]').setValue(tariff);
+        await Select2.field(this.page, '[name="SaleSearch[tariff_id]"]').setValue(tariff);
         await this.page.waitForLoadState('networkidle');
 
         await this.page.locator('button:has-text("Search")').click();
