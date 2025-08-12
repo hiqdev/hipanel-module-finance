@@ -24,13 +24,11 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\base\CrudController;
 use hipanel\modules\finance\widgets\RequisiteSummaryTable;
 use hipanel\widgets\DataProviderGridRenderer;
-use yii\grid\GridView;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\client\actions\ContactCreateAction;
 use hipanel\modules\client\models\query\ContactQuery;
 use hipanel\modules\finance\actions\CdbExportAction;
 use hipanel\modules\finance\models\Requisite;
-use hipanel\widgets\SynchronousCountEnabler;
 use yii\base\Event;
 use Yii;
 
