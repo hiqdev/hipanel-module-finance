@@ -23,6 +23,7 @@ use hipanel\filters\EasyAccessControl;
 use hipanel\actions\ValidateFormAction;
 use hipanel\base\CrudController;
 use hipanel\modules\finance\widgets\RequisiteSummaryTable;
+use hipanel\widgets\DataProviderGridRenderer;
 use yii\grid\GridView;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\client\actions\ContactCreateAction;
@@ -79,7 +80,7 @@ class RequisiteController extends CrudController
                 'responseVariants' => [
                     IndexAction::VARIANT_SUMMARY_RESPONSE => static function (VariantsAction $action): string {
                         $dataProvider = $action->parent->getDataProvider();
-                        $defaultSummary = (new SynchronousCountEnabler($dataProvider, fn(GridView $grid): string => $grid->renderSummary()))();
+                        $defaultSummary = (new DataProviderGridRenderer($dataProvider))->renderSummary();
                         $representation = $action->controller->indexPageUiOptionsModel->representation;
                         if (in_array($representation, ['balance', 'balances'], true)) {
                             return $defaultSummary . RequisiteSummaryTable::widget([
