@@ -23,9 +23,9 @@ export default class SaleHelper {
     }
 
     async filterByTariff(tariff: string) {
-        await this.page.locator('span[role="textbox"]:has-text("Tariff")').click();
-        await this.page.locator('.select2-container--open input.select2-search__field').fill(tariff);
-        await this.page.locator(`li[role="option"]:has-text("${tariff}")`).click();
+        await Select2.field(this.page, '[name="SaleSearch[tariff_id]"]').setValue(tariff);
+        await this.page.waitForLoadState('networkidle');
+
         await this.page.locator('button:has-text("Search")').click();
         await this.page.waitForLoadState('networkidle');
     }

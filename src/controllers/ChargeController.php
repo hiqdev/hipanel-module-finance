@@ -21,9 +21,8 @@ use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\models\query\ChargeQuery;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use hipanel\modules\finance\widgets\ChargeFinanceSummaryTable;
-use hipanel\widgets\SynchronousCountEnabler;
+use hipanel\widgets\DataProviderGridRenderer;
 use yii\base\Event;
-use yii\grid\GridView;
 
 /**
  * Class ChargeController
@@ -81,7 +80,7 @@ class ChargeController extends CrudController
                 'responseVariants' => [
                   IndexAction::VARIANT_SUMMARY_RESPONSE => static function (VariantsAction $action): string {
                       $dataProvider = $action->parent->getDataProvider();
-                      $defaultSummary = (new SynchronousCountEnabler($dataProvider, fn(GridView $grid): string => $grid->renderSummary()))();
+                      $defaultSummary = (new DataProviderGridRenderer($dataProvider))->renderSummary();
 
                       return $defaultSummary . ChargeFinanceSummaryTable::widget([
                           'currencies' => $action->controller->getCurrencyTypes(),

@@ -36,7 +36,7 @@ use hipanel\modules\finance\models\query\ChargeQuery;
 use hipanel\modules\finance\models\Resource;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use hipanel\modules\finance\widgets\FinanceSummaryTable;
-use hipanel\widgets\SynchronousCountEnabler;
+use hipanel\widgets\DataProviderGridRenderer;
 use hiqdev\hiart\ActiveDataProvider;
 use hiqdev\hiart\Collection;
 use Tuck\Sort\Sort;
@@ -44,7 +44,6 @@ use Yii;
 use yii\base\Event;
 use yii\base\Module;
 use yii\caching\CacheInterface;
-use yii\grid\GridView;
 use yii\web\Response;
 use yii\web\User;
 
@@ -114,7 +113,7 @@ class BillController extends CrudController
                         ));
 
                         return $this->cache->getOrSet($key, function () use ($action, $dataProvider): string {
-                            $defaultSummary = (new SynchronousCountEnabler($dataProvider, fn(GridView $grid): string => $grid->renderSummary()))();
+                            $defaultSummary = (new DataProviderGridRenderer($dataProvider))->renderSummary();
                             $financeSummary = FinanceSummaryTable::widget([
                                 'currencies' => $action->controller->getCurrencyTypes(),
                                 'allModels' => $dataProvider->query->andWhere(['groupby' => 'sum_by_currency'])->all(),
