@@ -66,6 +66,7 @@ class LinkToObjectResolver extends Widget
         'model_group' => '@model-group/view',
         'model' => '@model/view',
         'config' => '@config/view',
+        'target' => '@target/view',
         'anycastcdn' => '@target/view',
         'videocdn' => '@target/view',
         'managed_kubernetes_cluster' => '@target/view',
