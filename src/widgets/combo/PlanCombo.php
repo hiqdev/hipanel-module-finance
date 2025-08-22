@@ -38,11 +38,21 @@ class PlanCombo extends Combo
      */
     public $tariffType;
 
+    /**
+     * @var array|string[] map target type to the tariff type used in the API
+     * // TODO: Replace with Billing Registry and some kind of Behavior.
+     */
+    private array $tariffTypeAlias = [
+        'switch_license' => 'switch',
+    ];
+
     /** {@inheritdoc} */
     public function getFilter()
     {
         return ArrayHelper::merge(parent::getFilter(), [
-            'type_in' => ['format' => $this->tariffType],
+            'type_in' => [
+                'format' => $this->tariffTypeAlias[$this->tariffType] ?? $this->tariffType
+            ],
         ]);
     }
 }
