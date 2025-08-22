@@ -80,6 +80,7 @@ class ConsumptionConfiguratorDataCollection implements ConsumptionConfiguratorDa
             $data = [
                 \hipanel\modules\server\models\Hub::class,
                 \hipanel\modules\finance\models\ServerResource::class,
+                \hipanel\modules\finance\models\Target::class,
             ];
         }
 
