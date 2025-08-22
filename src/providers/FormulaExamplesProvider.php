@@ -79,6 +79,8 @@ class FormulaExamplesProvider
     {
         return [
            "once.per('1 year')" => Yii::t('hipanel.finance.price', 'Bill every year in month that matches the month of sale of the object.'),
+           sprintf("once.per('1 year').since('%s')", date('m.Y')) =>
+               Yii::t('hipanel.finance.price', 'Bill every year in {month} starting from {month.year}.', ['month' => date('F'), 'month.year' => date('m.Y')]),
            "once.per('3 months')" => Yii::t('hipanel.finance.price', 'Bill every third month, starting from the month of sale of the object.'),
         ];
     }
