@@ -33,7 +33,7 @@ class PlanCombo extends Combo
     public $_primaryFilter = 'plan_ilike';
 
     /**
-     * @var string|string[] the type of tariff
+     * @var null|string|string[] the type of tariff
      * @see getFilter()
      */
     public $tariffType;
@@ -59,8 +59,8 @@ class PlanCombo extends Combo
     /**
      * Normalizes tariff type(s) by resolving possible aliases.
      *
-     * @param string|string[] $tariffTypes
-     * @return string|string[]
+     * @param null|string|string[] $tariffTypes
+     * @return null|string|string[]
      */
     private function normalizeTariffTypes($tariffTypes)
     {
