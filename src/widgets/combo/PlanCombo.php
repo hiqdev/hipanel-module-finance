@@ -33,7 +33,7 @@ class PlanCombo extends Combo
     public $_primaryFilter = 'plan_ilike';
 
     /**
-     * @var string the type of tariff
+     * @var string|array|string[] the type of tariff
      * @see getFilter()
      */
     public $tariffType;
@@ -51,8 +51,25 @@ class PlanCombo extends Combo
     {
         return ArrayHelper::merge(parent::getFilter(), [
             'type_in' => [
-                'format' => $this->tariffTypeAlias[$this->tariffType] ?? $this->tariffType
+                'format' => $this->resolveTariffType(),
             ],
         ]);
+    }
+
+    /**
+     * @return string|string[]
+     */
+    private function resolveTariffType()
+    {
+        if (is_string($this->tariffType) && $this->isAlias($this->tariffType)) {
+            return $this->tariffTypeAlias[$this->tariffType];
+        }
+
+        return $this->tariffType;
+    }
+
+    private function isAlias(string $type): bool
+    {
+        return isset($this->tariffTypeAliases[$type]);
     }
 }
