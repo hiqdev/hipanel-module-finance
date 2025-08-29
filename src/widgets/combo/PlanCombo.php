@@ -64,11 +64,15 @@ class PlanCombo extends Combo
      */
     private function normalizeTariffTypes($tariffTypes)
     {
-        if (is_array($tariffTypes)) {
-            return array_map(fn(string $type) => $this->resolveAlias($type), $tariffTypes);
+        if ($tariffTypes) {
+            if (is_array($tariffTypes)) {
+                return array_map(fn(string $type) => $this->resolveAlias($type), $tariffTypes);
+            }
+
+            return $this->resolveAlias($tariffTypes);
         }
 
-        return $this->resolveAlias($tariffTypes);
+        return $tariffTypes;
     }
 
     private function resolveAlias(string $type): string
