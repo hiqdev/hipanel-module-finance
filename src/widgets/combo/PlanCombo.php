@@ -33,7 +33,7 @@ class PlanCombo extends Combo
     public $_primaryFilter = 'plan_ilike';
 
     /**
-     * @var string the type of tariff
+     * @var null|string|string[] the type of tariff
      * @see getFilter()
      */
     public $tariffType;
@@ -42,7 +42,7 @@ class PlanCombo extends Combo
      * @var array|string[] map target type to the tariff type used in the API
      * // TODO: Replace with Billing Registry and some kind of Behavior.
      */
-    private array $tariffTypeAlias = [
+    private array $tariffTypeAliases = [
         'switch_license' => 'switch',
     ];
 
@@ -51,8 +51,32 @@ class PlanCombo extends Combo
     {
         return ArrayHelper::merge(parent::getFilter(), [
             'type_in' => [
-                'format' => $this->tariffTypeAlias[$this->tariffType] ?? $this->tariffType
+                'format' => $this->normalizeTariffTypes($this->tariffType),
             ],
         ]);
+    }
+
+    /**
+     * Normalizes tariff type(s) by resolving possible aliases.
+     *
+     * @param null|string|string[] $tariffTypes
+     * @return null|string|string[]
+     */
+    private function normalizeTariffTypes($tariffTypes)
+    {
+        if ($tariffTypes) {
+            if (is_array($tariffTypes)) {
+                return array_map(fn(string $type) => $this->resolveAlias($type), $tariffTypes);
+            }
+
+            return $this->resolveAlias($tariffTypes);
+        }
+
+        return $tariffTypes;
+    }
+
+    private function resolveAlias(string $type): string
+    {
+        return $this->tariffTypeAliases[$type] ?? $type;
     }
 }
