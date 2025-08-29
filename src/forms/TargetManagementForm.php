@@ -23,7 +23,7 @@ final class TargetManagementForm extends Target
         if ($target === null) {
             return;
         }
-        $this->setAttribute('remoteid', $target->id);
+        $this->setAttribute('remoteid', $target->remoteid);
         $this->setAttribute('target_id', $target->id);
         $this->setAttribute('plan_id', $target->tariff_id);
         $this->setAttribute('type', $target->type);
@@ -37,7 +37,7 @@ final class TargetManagementForm extends Target
             [['remoteid', 'type', 'name', 'plan_id', 'time', 'customer_id'], 'required', 'on' => TargetScenario::CHANGE_PLAN->value],
             [['target_id', 'plan_id', 'time', 'customer_id'], 'required', 'on' => TargetScenario::CLOSE_SALE->value],
             [['remoteid', 'type', 'name', 'plan_id', 'time', 'customer_id'], 'required', 'on' => TargetScenario::SALE->value],
-            [['remoteid', 'target_id', 'plan_id', 'customer_id'], 'integer'],
+            [['target_id', 'plan_id', 'customer_id'], 'integer'],
             [['name', 'type'], 'string'],
             [['remoteid', 'target_id'], 'safe'],
             [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
