@@ -62,7 +62,6 @@ final class PriceUnitAvailabilityService
         string $defaultUnitCode,
     ): UnitCollectionInterface {
         $defaultCollection = new UnitCollection();
-
         foreach ($unitCollection as $unit) {
             if ($unit->code === $defaultUnitCode) {
                 $defaultCollection->add($unit);
