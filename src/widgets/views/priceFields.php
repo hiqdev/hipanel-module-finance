@@ -14,14 +14,15 @@ use hipanel\widgets\AmountWithCurrency;
  * @var array $currencyTypes
  */
 
+$unitCollection = $model->getUnitCollection();
 ?>
 
 <div class="row  <?= $model->isProgressive() ? 'well well-sm' : '' ?>">
     <div class="col-md-3">
-        <?php if ($model->unitOptions !== []): ?>
-            <?= $form->field($model, "[$index]unit")->dropDownList($model->unitOptions) ?>
-        <?php else : ?>
+        <?php if ($unitCollection->isEmpty()): ?>
             <?= Html::activeHiddenInput($model, "[$index]unit") ?>
+        <?php else : ?>
+            <?= $form->field($model, "[$index]unit")->dropDownList($unitCollection->toArray()) ?>
         <?php endif ?>
     </div>
     <div class="col-md-3">
