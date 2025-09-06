@@ -8,6 +8,9 @@ use hipanel\modules\finance\module\Price\Domain\Model\Unit;
 use IteratorAggregate;
 use Traversable;
 
+/**
+ * @extends IteratorAggregate<int, Unit>
+ */
 interface UnitCollectionInterface extends IteratorAggregate
 {
     /**

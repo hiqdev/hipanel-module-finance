@@ -28,7 +28,7 @@ final class UnitCollection implements UnitCollectionInterface
     {
         $items = [];
         foreach ($this->units as $unit) {
-            $items[$unit->code()] = $unit->label();
+            $items[$unit->code] = $unit->label;
         }
 
         return $items;
