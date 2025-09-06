@@ -47,7 +47,7 @@ final class PriceUnitAvailabilityService
 
         $filteredUnitCollection = new UnitCollection();
         foreach ($unitCollection as $unit) {
-            if (array_key_exists($unit->code, $allowedCodes,)) {
+            if (array_key_exists($unit->code, $allowedCodes)) {
                 $filteredUnitCollection->add($unit);
             }
         }
