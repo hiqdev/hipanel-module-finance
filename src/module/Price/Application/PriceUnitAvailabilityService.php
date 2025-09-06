@@ -11,6 +11,7 @@ use hiqdev\billing\registry\Application\UnitService;
 use hiqdev\billing\registry\Domain\Model\Unit\FractionUnit;
 use hiqdev\billing\registry\Domain\Model\Unit\Unit as RegistryUnit;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
+use hiqdev\php\billing\product\Exception\PriceTypeDefinitionNotFoundException;
 
 final class PriceUnitAvailabilityService
 {
@@ -30,7 +31,7 @@ final class PriceUnitAvailabilityService
             $fraction = $priceTypeDefinition->getUnit()->fractionUnit();
 
             return $this->filterUnitsByFraction($allUnits, $fraction);
-        } catch (\Exception) {
+        } catch (PriceTypeDefinitionNotFoundException) {
             return $this->getDefaultUnits($allUnits, $defaultUnitCode);
         }
     }
