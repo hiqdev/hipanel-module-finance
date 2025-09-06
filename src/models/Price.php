@@ -160,9 +160,11 @@ class Price extends Model
      */
     public function getUnitCollection(): UnitCollectionInterface
     {
+        $typeName = $this->type ?? '';
+        $defaultUnit = $this->unit ?? '';
         $service = \Yii::$container->get(PriceUnitAvailabilityService::class);
 
-        return $service->getAvailableUnitsForPrice($this->type, $this->unit);
+        return $service->getAvailableUnitsForPrice($typeName, $defaultUnit);
     }
 
     public function getCurrencyOptions()
