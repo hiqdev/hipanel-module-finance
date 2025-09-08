@@ -20,15 +20,6 @@ use hiqdev\php\billing\product\BillingRegistry;
 
 class PriceUnitAvailabilityServiceTest extends TestCase
 {
-    private RefUnitRepository $unitRepository;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->unitRepository = $this->createMock(RefUnitRepository::class);
-    }
-
     /**
      * @dataProvider priceTypeProvider
      */
@@ -38,21 +29,28 @@ class PriceUnitAvailabilityServiceTest extends TestCase
         string $defaultUnitCode,
         array $expected,
     ): void {
-        $this->unitRepository->method('findAll')->willReturn($collection);
-
-        $service = $this->createService();
+        $service = $this->createService($collection);
         $result = $service->getAvailableUnitsForPrice($priceType, $defaultUnitCode);
 
         $this->assertEquals($expected, $result->toArray());
     }
 
-    private function createService(): PriceUnitAvailabilityService
+    private function createService(UnitCollection $collection): PriceUnitAvailabilityService
     {
         return new PriceUnitAvailabilityService(
             $this->createBillingRegistryService(),
-            $this->unitRepository,
+            $this->createUnitRepositoryMock($collection),
             $this->di()->get(UnitService::class),
         );
+    }
+
+    private function createUnitRepositoryMock(UnitCollection $collection): RefUnitRepository
+    {
+        $unitRepository = $this->createMock(RefUnitRepository::class);
+
+        $unitRepository->method('findAll')->willReturn($collection);
+
+        return $unitRepository;
     }
 
     private function createBillingRegistryService(): BillingRegistryServiceInterface
