@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\module\Price\Application;
 
-use hipanel\modules\finance\module\Price\Domain\Collection\UnitCollection;
 use hipanel\modules\finance\module\Price\Domain\Collection\UnitCollectionInterface;
 use hipanel\modules\finance\module\Price\Infrastructure\Persistence\RefUnitRepository;
 use hiqdev\billing\registry\Application\UnitService;
-use hiqdev\billing\registry\Domain\Model\Unit\FractionUnit;
-use hiqdev\billing\registry\Domain\Model\Unit\Unit as RegistryUnit;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
+use hiqdev\php\billing\product\Domain\Model\Unit\UnitInterface;
 use hiqdev\php\billing\product\Exception\PriceTypeDefinitionNotFoundException;
 
 final class PriceUnitAvailabilityService
@@ -18,57 +16,27 @@ final class PriceUnitAvailabilityService
     public function __construct(
         private readonly BillingRegistryServiceInterface $billingRegistryService,
         private readonly RefUnitRepository $unitRepository,
-        private readonly UnitService $unitCatalog,
+        private readonly UnitService $unitService,
     ) {
     }
 
     public function getAvailableUnitsForPrice(string $priceTypeName, string $defaultUnitCode): UnitCollectionInterface
     {
-        $allUnits = $this->unitRepository->findAll();
+        $unitCollection = $this->unitRepository->findAll();
 
         try {
-            $priceTypeDefinition = $this->billingRegistryService->getPriceTypeDefinitionByPriceTypeName($priceTypeName);
-            $fraction = $priceTypeDefinition->getUnit()->fractionUnit();
+            $fraction = $this->getPriceTypeDefinitionUnit($priceTypeName)->fractionUnit();
 
-            return $this->filterUnitsByFraction($allUnits, $fraction);
+            return $unitCollection->filterByFraction($fraction, $this->unitService);
         } catch (PriceTypeDefinitionNotFoundException) {
-            return $this->getDefaultUnits($allUnits, $defaultUnitCode);
+            return $unitCollection->getDefaultUnits($defaultUnitCode);
         }
     }
 
-    private function filterUnitsByFraction(
-        UnitCollectionInterface $unitCollection,
-        FractionUnit $fraction,
-    ): UnitCollectionInterface {
-        $fractionUnits = $this->unitCatalog->getUnitsByFraction($fraction);
-
-        // Create a lookup set of allowed unit codes
-        $allowedCodes = array_flip(array_map(fn (RegistryUnit $u) => $u->name(), $fractionUnits));
-
-        $filteredUnitCollection = new UnitCollection();
-        foreach ($unitCollection as $unit) {
-            if (array_key_exists($unit->code, $allowedCodes)) {
-                $filteredUnitCollection->add($unit);
-            }
-        }
-
-        return $filteredUnitCollection;
-    }
-
-    /**
-     * Returns fallback default units if PriceType is unknown.
-     */
-    private function getDefaultUnits(
-        UnitCollectionInterface $unitCollection,
-        string $defaultUnitCode,
-    ): UnitCollectionInterface {
-        $defaultCollection = new UnitCollection();
-        foreach ($unitCollection as $unit) {
-            if ($unit->code === $defaultUnitCode) {
-                $defaultCollection->add($unit);
-            }
-        }
-
-        return $defaultCollection;
+    private function getPriceTypeDefinitionUnit(string $priceTypeName): UnitInterface
+    {
+        return $this->billingRegistryService
+            ->getPriceTypeDefinitionByPriceTypeName($priceTypeName)
+            ->getUnit();
     }
 }
