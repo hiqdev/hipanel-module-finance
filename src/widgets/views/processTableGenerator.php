@@ -16,7 +16,10 @@ $normalizeDate = static function (?array $date): ?string {
 
 <?php foreach ($statistic as $name => $data) : ?>
     <div class="progress-group">
-        <span class="progress-text" style="text-transform: uppercase;"><?= $name ?></span>
+        <span class="progress-text">
+            <span style="text-transform: uppercase;"><?= $name ?></span>
+            <span style="text-align: center; font-weight: normal; font-style: italic"><?= $data['activity'] ?? '' ?></span>
+        </span>
         <span class="progress-number"><b><?= $data['count'] ?></b>/<?= $data['total'] ?></span>
         <div class="progress-description text-muted">
             <ol class="breadcrumb" style="margin: 0; padding: 0; background-color: transparent;">
