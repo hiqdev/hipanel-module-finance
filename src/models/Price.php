@@ -15,11 +15,15 @@ use hipanel\base\ModelTrait;
 use hipanel\models\Ref;
 use hipanel\modules\finance\models\factories\PriceModelFactory;
 use hipanel\modules\finance\models\query\PriceQuery;
+use hipanel\modules\finance\module\Price\Application\PriceUnitAvailabilityService;
+use hipanel\modules\finance\module\Price\Domain\Collection\UnitCollectionInterface;
 use hiqdev\hiart\ActiveQuery;
 use Money\Money;
 use Money\MoneyParser;
 use Money\Currency;
 use Yii;
+use yii\base\InvalidConfigException;
+use yii\di\NotInstantiableException;
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
 
@@ -111,68 +115,6 @@ class Price extends Model
     }
 
     /**
-     * Returns array of unit option, that are available for this price
-     * depending on price type.
-     *
-     * @return array
-     */
-    public function getUnitOptions()
-    {
-        $unitGroup = [
-            'hour' => ['hour'],
-            'items' => ['items'],
-            'speed' => ['bps', 'kbps', 'mbps', 'gbps', 'tbps'],
-            'size' => ['mb', 'mb10', 'mb100', 'gb', 'tb'],
-            'power' => ['w', 'kw'],
-        ];
-
-        $type2group = [
-            'overuse,ip_num' => 'items',
-            'overuse,support_time' => 'hour',
-            'overuse,backup_du' => 'size',
-            'overuse,server_traf_max' => 'size',
-            'overuse,server_traf95_max' => 'speed',
-            'overuse,cdn_traf_max' => 'size',
-            'overuse,cdn_traf95_max' => 'speed',
-            'overuse,cdn_cache95' => 'size',
-            'overuse,server_du' => 'size',
-            'overuse,server_ssd' => 'size',
-            'overuse,server_sata' => 'size',
-            'overuse,backup_traf' => 'size',
-            'overuse,domain_traf' => 'size',
-            'overuse,domain_num' => 'items',
-            'overuse,ip_traf_max' => 'size',
-            'overuse,account_traf' => 'size',
-            'overuse,account_du' => 'size',
-            'overuse,mail_num' => 'items',
-            'overuse,mail_du' => 'size',
-            'overuse,db_num' => 'items',
-            'overuse,storage_du95' => 'size',
-            'overuse,volume_du' => 'size',
-            'overuse,snapshot_du' => 'size',
-            'overuse,private_cloud_backup_du' => 'size',
-            'overuse,vps_traf_max' => 'size',
-            'overuse,power' => 'power',
-            'overuse,powerpeak' => 'power',
-            'overuse,powerpeak_max' => 'power',
-        ];
-
-        foreach ($type2group as $type => $group) {
-            $availableUnitsByPriceType[$type] = $unitGroup[$group];
-        }
-
-        $units = Ref::getList('type,unit', 'hipanel.finance.units', [
-            'with_recursive' => 1,
-            'select' => 'oname_label',
-            'mapOptions' => ['from' => 'oname'],
-        ]);
-
-        $possibleTypes = $availableUnitsByPriceType[$this->type] ?? [$this->unit] ?? [];
-
-        return array_intersect_key($units, array_combine($possibleTypes, $possibleTypes));
-    }
-
-    /**
      * Method checks, whether current price quantity is predefined and is not a result
      * of sophisticated calculation on server side.
      * @return bool
@@ -196,11 +138,33 @@ class Price extends Model
         return $this->object_id === null;
     }
 
+    /**
+     * @return string|null
+     * @throws InvalidConfigException
+     * @throws NotInstantiableException
+     */
     public function getUnitLabel(): ?string
     {
-        $unitOptions = $this->getUnitOptions();
+        $unitOptions = $this->getUnitCollection()->toArray();
 
         return $unitOptions[$this->unit] ?? null;
+    }
+
+    /**
+     * Returns array of unit option, that are available for this price
+     * depending on price type.
+     *
+     * @return UnitCollectionInterface
+     * @throws InvalidConfigException
+     * @throws NotInstantiableException
+     */
+    public function getUnitCollection(): UnitCollectionInterface
+    {
+        $typeName = $this->type ?? '';
+        $defaultUnit = $this->unit ?? '';
+        $service = \Yii::$container->get(PriceUnitAvailabilityService::class);
+
+        return $service->getAvailableUnitsForPrice($typeName, $defaultUnit);
     }
 
     public function getCurrencyOptions()
