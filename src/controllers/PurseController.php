@@ -10,7 +10,6 @@
 
 namespace hipanel\modules\finance\controllers;
 
-use advancedhosters\hipanel\modules\costprice\models\Costprice;
 use Exception;
 use hipanel\actions\IndexAction;
 use hipanel\actions\ProgressAction;
@@ -25,6 +24,7 @@ use hipanel\components\Response;
 use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\Url;
 use hipanel\modules\document\models\Statistic as DocumentStatisticModel;
+use hipanel\modules\finance\models\Costprice;
 use hipanel\modules\finance\models\Purse;
 use hipanel\modules\finance\widgets\ProcessTableGenerator;
 use hipanel\modules\finance\widgets\StatisticTableGenerator;

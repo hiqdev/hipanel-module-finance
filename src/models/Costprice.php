@@ -5,16 +5,25 @@ declare(strict_types=1);
 namespace hipanel\modules\finance\models;
 
 use Yii;
-use yii\base\Model;
+use hipanel\base\Model;
+use hipanel\base\ModelTrait;
 
 class Costprice extends Model
 {
-    use \hipanel\base\ModelTrait;
+    public const DEFAULT_PERIOD = 12;
+
+    use ModelTrait;
 
     public function rules()
     {
         return [
-            [['mask', 'month','type'], 'safe'],
+            [['mask', 'month', 'type'], 'safe'],
+
+            [['id', 'bill_id', 'charge_id', 'type_id'], 'integer'],
+            [['amount', 'sum'], 'number'],
+            [['description', 'note', 'unit', 'type', 'currency', 'object'], 'string'],
+            [['month', 'update_time'], 'datetime'],
+            [['rawCharge'], 'safe'],
         ];
     }
 
@@ -22,12 +31,7 @@ class Costprice extends Model
     {
         return [
             'all' => Yii::t('hipanel:finance', 'All'),
-            CostpriceType::admin->value => Yii::t('hipanel:finance', 'Admin'),
-            CostpriceType::colocation->value => Yii::t('hipanel:finance', 'Colocation'),
-            CostpriceType::ip->value => Yii::t('hipanel:finance', 'IP'),
             CostpriceType::hw->value => Yii::t('hipanel:finance', 'HW'),
-            CostpriceType::nrc->value => Yii::t('hipanel:finance', 'NRC'),
-            CostpriceType::salaries->value => Yii::t('hipanel:finance', 'Salaries'),
             CostpriceType::traff->value => Yii::t('hipanel:finance', 'Traff'),
         ];
     }
@@ -38,5 +42,4 @@ class Costprice extends Model
             CostpriceReport::traff->value => Yii::t('hipanel:finance', 'Traff'),
         ];
     }
-
 }
