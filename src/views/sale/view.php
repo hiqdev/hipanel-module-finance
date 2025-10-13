@@ -31,20 +31,22 @@ $this->registerCss('
         ]) ?>
         <div class="box box-widget">
             <div class="box-body no-padding">
-                <?= SaleGridView::detailView([
-                    'model' => $model,
-                    'boxed' => false,
-                    'columns' => [
-                        'object_v',
-                        'object_label',
-                        'time',
-                        'unsale_time',
-                        'seller',
-                        'buyer',
-                        'tariff',
-                        'reason'
-                    ],
-                ]) ?>
+                <div class="table-responsive">
+                    <?= SaleGridView::detailView([
+                        'model' => $model,
+                        'boxed' => false,
+                        'columns' => [
+                            'object_v',
+                            'object_label',
+                            'time',
+                            'unsale_time',
+                            'seller',
+                            'buyer',
+                            'tariff',
+                            'reason'
+                        ],
+                    ]) ?>
+                </div>
             </div>
         </div>
 
