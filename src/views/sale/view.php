@@ -23,7 +23,7 @@ $this->registerCss('
 
 ?>
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-6 col-lg-3">
         <?= MainDetails::widget([
             'title' => $this->title ?? Yii::t('hipanel', 'No title'),
             'icon' => 'fa-briefcase',
@@ -49,33 +49,38 @@ $this->registerCss('
                 </div>
             </div>
         </div>
-
-        <?php if (Yii::$app->user->can('client.read') && Yii::$app->user->can('access-subclients')) : ?>
-            <div class="row">
-                <?= $this->render('@vendor/hiqdev/hipanel-module-ticket/src/views/ticket/_clientInfo', compact('client')) ?>
-            </div>
-        <?php endif ?>
     </div>
-    <?php if ($plan && Yii::$app->user->can('plan.read')) : ?>
-        <div class="col-md-4">
-            <div class="box box-solid">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><?= Yii::t('hipanel:finance:sale', 'Tariff information') ?></h3>
+    <div class="col-md-6 col-lg-9">
+        <div class="row">
+            <?php if (Yii::$app->user->can('client.read') && Yii::$app->user->can('access-subclients')) : ?>
+                <div class="col-lg-6 col-md-12">
+                    <div class="row">
+                        <?= $this->render('@vendor/hiqdev/hipanel-module-ticket/src/views/ticket/_clientInfo', compact('client')) ?>
+                    </div>
                 </div>
-                <div class="box-body no-padding">
-                    <?= PlanGridView::detailView([
-                        'model' => $plan,
-                        'boxed' => false,
-                        'columns' => [
-                            'simple_name',
-                            'client',
-                            'type',
-                            'state',
-                            'note',
-                        ],
-                    ]) ?>
+            <?php endif ?>
+            <?php if ($plan && Yii::$app->user->can('plan.read')) : ?>
+                <div class="col-lg-6 col-md-12">
+                    <div class="box box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><?= Yii::t('hipanel:finance:sale', 'Tariff information') ?></h3>
+                        </div>
+                        <div class="box-body no-padding">
+                            <?= PlanGridView::detailView([
+                                'model' => $plan,
+                                'boxed' => false,
+                                'columns' => [
+                                    'simple_name',
+                                    'client',
+                                    'type',
+                                    'state',
+                                    'note',
+                                ],
+                            ]) ?>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            <?php endif ?>
         </div>
-    <?php endif ?>
+    </div>
 </div>
