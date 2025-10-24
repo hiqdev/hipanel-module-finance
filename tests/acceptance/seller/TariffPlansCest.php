@@ -22,6 +22,7 @@ class TariffPlansCest
 
     /**
      * @dataProvider provideTariffData
+     * @group rcp-tariff
      */
     public function createTemplateTariffAndItsPrices(Seller $I, Example $example): void
     {
@@ -36,6 +37,7 @@ class TariffPlansCest
 
     /**
      * @dataProvider provideTariffData
+     * @group rcp-tariff
      */
     public function ensureICanCreateNewPlanAndCheckIt(Seller $I, Example $example): void
     {

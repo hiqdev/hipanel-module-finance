@@ -183,7 +183,7 @@ class BillCreationCest
         $chargeSelector = 'div.bill-charges:first-child';
         $I->see('hipanel_test_user2', $chargeSelector);
         $I->see('Server', $chargeSelector);
-        $I->see('Monthly fee', $chargeSelector);
+        $I->see('Positive balance correction', $chargeSelector);
     }
 
     /**
@@ -232,7 +232,7 @@ class BillCreationCest
         return [
             'class' => 'Client',
             'objectId' => $objectId,
-            'type' => 'Monthly fee',
+            'type' => 'Positive balance correction',
             'sum' => '-250',
             'quantity' => '1',
         ];

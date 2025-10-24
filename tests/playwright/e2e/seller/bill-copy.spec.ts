@@ -8,7 +8,7 @@ import Alert from "@hipanel-core/ui/Alert";
 
 const bill: Bill = {
   client: "hipanel_test_user",
-  type: "Monthly fee",
+  type: "Negative balance correction",
   currency: "$",
   sum: -762.7,
   quantity: 1,
@@ -16,14 +16,14 @@ const bill: Bill = {
     {
       class: "Client",
       object: "hipanel_test_user1",
-      type: "Monthly fee",
+      type: "Negative balance correction",
       sum: 712.80,
       quantity: 1,
     },
     {
       class: "Client",
       object: "hipanel_test_user2",
-      type: "Monthly fee",
+      type: "Positive balance correction",
       sum: 49.90,
       quantity: 1,
     }

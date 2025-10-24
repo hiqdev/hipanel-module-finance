@@ -43,7 +43,7 @@ test("Test we add the charges to created bill @hipanel-module-finance @seller", 
 
 const bill = {
   client: "hipanel_test_user",
-  type: "Monthly fee",
+  type: "Negative balance correction",
   currency: "$",
   sum: -1050,
   quantity: 1,
@@ -59,7 +59,7 @@ const charges = [
   {
     class: "Client",
     object: "hipanel_test_user",
-    type: "Monthly fee",
+    type: "Negative balance correction",
     sum: 250,
     quantity: 1,
     description: null,

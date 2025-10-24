@@ -33,7 +33,9 @@ const changeBuyerData = {
 };
 
 sales.forEach((sale) => {
-  test(`Ensure I can create several sales ${sale.server} @hipanel-module-finance @manager`, async ({ page }) => {
+  test(`Ensure I can create several sales ${sale.server} @hipanel-module-finance @manager`, {
+    tag: '@server-sale',
+  }, async ({ page }) => {
 
     const serverHelper = new ServerHelper(page);
     const serverView = new ServerView(page);
@@ -48,7 +50,9 @@ sales.forEach((sale) => {
   });
 });
 
-test(`Ensure I can edit several sales @hipanel-module-finance @seller`, async ({ page }) => {
+test(`Ensure I can edit several sales @hipanel-module-finance @seller`, {
+  tag: '@multi-sales',
+},async ({ page }) => {
 
   const saleHelper = new SaleHelper(page);
   const indexPage = new Index(page);
@@ -82,7 +86,9 @@ test(`Ensure sale detail view is correct @hipanel-module-finance @seller`, async
   await saleHelper.assertSaleDetails(sale);
 });
 
-test(`Ensure I can delete several sales @hipanel-module-finance @seller`, async ({ page }) => {
+test(`Ensure I can delete several sales @hipanel-module-finance @seller`, {
+  tag: '@multi-sales',
+},async ({ page }) => {
 
   const saleHelper = new SaleHelper(page);
   const indexPage = new Index(page);

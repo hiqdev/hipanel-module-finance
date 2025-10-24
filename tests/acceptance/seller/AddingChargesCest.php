@@ -53,7 +53,7 @@ class AddingChargesCest
         return [
             'client' => [
                 'login' => 'hipanel_test_user',
-                'type' => 'Monthly fee',
+                'type' => 'Positive balance correction',
                 'currency' => '$',
                 'sum' => 250,
                 'quantity' => 1,

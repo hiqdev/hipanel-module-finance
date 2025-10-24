@@ -14,7 +14,7 @@ const transfer: Transfer = {
 };
 const bill: Bill = {
   client: 'hipanel_test_user2',
-  type: 'Monthly fee',
+  type: 'Positive balance correction',
   currency: '$',
   sum: 100,
   quantity: 1,

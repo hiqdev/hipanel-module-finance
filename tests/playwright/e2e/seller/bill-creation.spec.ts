@@ -20,7 +20,7 @@ const bill = {
 const charge = {
   class: "Client",
   object: "hipanel_test_user",
-  type: "Monthly fee",
+  type: "Positive balance correction",
   sum: -250,
   quantity: 1,
   description: null,

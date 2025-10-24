@@ -114,7 +114,7 @@ class InternalTransferCest
                 ],
                 'bill' => [
                     'login' => 'hipanel_test_user1',
-                    'type' => 'Monthly fee',
+                    'type' => 'Positive balance correction',
                     'currency' => '$',
                     'sum' => 1000,
                     'quantity' => 1,
