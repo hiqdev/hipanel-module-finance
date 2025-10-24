@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = ['label' => $plan->name, 'url' => ['view', 'id'
 $this->params['breadcrumbs'][] = $this->title;
 
 $prices = $grouper->group();
+$plan_id ??= null;
 
 ?>
 

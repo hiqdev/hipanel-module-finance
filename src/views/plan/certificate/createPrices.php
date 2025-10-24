@@ -12,7 +12,8 @@ $this->params['breadcrumbs'][] = ['label' => $plan->name, 'url' => ['view', 'id'
 $this->params['breadcrumbs'][] = $this->title;
 
 $prices = $grouper->group();
+$plan_id ??= null;
 
 ?>
 
-<?= $this->render('_form', compact('plan', 'prices', 'plan_id', 'action', 'parentPrices')) ?>
+<?= $this->render('_form', compact('plan', 'prices', 'plan_id', 'action', 'parentPrices', 'scenario')) ?>

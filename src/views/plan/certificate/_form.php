@@ -79,12 +79,15 @@ CSS
                         <tr>
                             <td><?= current($group)->object->label ?></td>
                             <?php foreach (CertificatePrice::getTypes() as $type => $name) : ?>
-                                <?php $price = $group[$type]; ?>
+                                <?php $price = $group[$type] ?? null; ?>
                                 <?php if ($price === null): ?>
                                     <?= str_repeat('<td></td>', count(CertificatePrice::getPeriods())) ?>
                                 <?php continue; endif ?>
                                 <?php $price->plan_id = $plan_id ?? $price->plan_id; ?>
-                                <?= Html::activeHiddenInput($price, "[$i]id") ?>
+                                <?php $price->isNewRecord = $price->isNewRecord ?? ($scenario === 'create' ? true : false) ?>
+                                <?php if ($price->isNewRecord || $scenario === 'create' ): ?>
+                                    <?= Html::activeHiddenInput($price, "[$i]id") ?>
+                                <?php endif ?>
                                 <?= Html::activeHiddenInput($price, "[$i]plan_id") ?>
                                 <?= Html::activeHiddenInput($price, "[$i]object_id") ?>
                                 <?= Html::activeHiddenInput($price, "[$i]currency") ?>

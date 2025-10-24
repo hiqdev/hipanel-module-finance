@@ -188,9 +188,10 @@ class PlanController extends CrudController
         $grouper = new PlanInternalsGrouper($plan);
         [$plan->name, $plan->id] = [$targetPlan->name, $targetPlan->id];
         $action = ['@plan/update-prices', 'id' => $plan->id, 'scenario' => 'create'];
+        $scenario = 'create';
 
         return $this->render($plan->type . '/' . 'createPrices',
-            compact('plan', 'grouper', 'parentPrices', 'action', 'plan_id'));
+            compact('plan', 'grouper', 'parentPrices', 'action', 'plan_id', 'scenario'));
     }
 
     public function actionGetPlanHistory(int $plan_id, string $date)
@@ -386,9 +387,10 @@ class PlanController extends CrudController
 
         $grouper = new PlanInternalsGrouper($plan);
         $parentPrices = $this->getParentPrices($id);
+        $action = ['@plan/update-prices', 'id' => $plan->id, 'scenario' => $scenario];
 
         return $this->render($plan->type . '/' . 'updatePrices',
-            compact('plan', 'grouper', 'parentPrices'));
+            compact('plan', 'grouper', 'parentPrices', 'scenario', 'action'));
     }
 
     public function actionFork(int $id): Response

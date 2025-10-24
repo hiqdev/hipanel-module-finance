@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 [$zonePrices, $servicePrices] = $grouper->group();
 [$parentZonePrices, $parentServicePrices] = $parentPrices;
+$plan_id ??= null;
 
 ?>
 

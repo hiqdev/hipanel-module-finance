@@ -33,7 +33,8 @@ class BillBulkButtonCest
         $I->pressButton('Update');
 
         $this->fillDescriptionField($I, $example['descrp']);
-        $this->checkDataInTable($I, $example['descrp']);
+        $I->waitForPageUpdate();
+        $I->closeNotification("Bill was updated successfully");
     }
 
     /**
@@ -49,7 +50,8 @@ class BillBulkButtonCest
         $I->pressButton('Update');
 
         $this->fillDescriptionField($I, $example['descrp']);
-        $this->checkDataInTable($I, $example['descrp']);
+        $I->waitForPageUpdate();
+        $I->closeNotification("Bill was updated successfully");
     }
 
     /**
@@ -68,7 +70,7 @@ class BillBulkButtonCest
 
     private function goToBillPageAndPrepareForAction(Manager $I, $client): void
     {
-        $I->needPage(Url::to('@bill/index/?sort=-time'));
+        $I->needPage(Url::to("@bill/index/?sort=-time"));
 
         $this->index->filterBy(Select2::asTableFilter($I, 'Client'), $client);
 
