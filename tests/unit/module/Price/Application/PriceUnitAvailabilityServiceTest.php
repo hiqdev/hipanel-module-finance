@@ -12,7 +12,7 @@ use hipanel\modules\finance\module\Price\Domain\Model\Unit;
 use hiqdev\billing\registry\Application\UnitService;
 use hiqdev\billing\registry\Domain\Model\TariffType;
 use hiqdev\billing\registry\Domain\Model\Unit\Unit as BillingUnit;
-use hiqdev\billing\registry\product\PriceType;
+use hiqdev\billing\registry\Domain\Finance\Enum\PriceType;
 use hiqdev\billing\registry\TariffDefinitions\TariffTypeDefinitionFacade;
 use hiqdev\php\billing\product\Application\BillingRegistryService;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;

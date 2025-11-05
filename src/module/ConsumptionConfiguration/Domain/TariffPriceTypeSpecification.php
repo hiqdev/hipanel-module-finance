@@ -2,9 +2,7 @@
 
 namespace hipanel\modules\finance\module\ConsumptionConfiguration\Domain;
 
-use hipanel\modules\finance\models\Target;
-use hipanel\modules\finance\models\TargetResource;
-use hiqdev\billing\registry\product\PriceType;
+use hiqdev\billing\registry\Domain\Finance\Enum\PriceType;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorData;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
 use hiqdev\billing\registry\ResourceDecorator\server\Traffic95ResourceDecorator;
