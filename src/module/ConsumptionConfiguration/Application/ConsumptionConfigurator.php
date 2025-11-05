@@ -9,10 +9,11 @@ use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Factory\Consu
 use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\models\TargetResource;
+use hiqdev\billing\registry\behavior\ConsumptionAggregateBehavior;
 use hiqdev\billing\registry\ResourceDecorator\DecoratedInterface;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
-use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
+use hiqdev\php\billing\product\behavior\BehaviorInterface;
 use yii\db\ActiveRecordInterface;
 
 final class ConsumptionConfigurator
@@ -206,8 +207,11 @@ final class ConsumptionConfigurator
         return array_key_first($configurations);
     }
 
-    public function getAggregate(string $type): AggregateInterface
+    /**
+     * @return ConsumptionAggregateBehavior|BehaviorInterface
+     */
+    public function getConsumptionAggregateBehavior(string $type)
     {
-        return $this->billingRegistry->getAggregate($type);
+        return $this->billingRegistry->getBehavior($type, ConsumptionAggregateBehavior::class);
     }
 }

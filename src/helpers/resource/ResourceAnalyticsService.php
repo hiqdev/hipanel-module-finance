@@ -3,8 +3,11 @@
 namespace hipanel\modules\finance\helpers\resource;
 
 use hipanel\modules\finance\models\proxy\Resource;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Application\ConsumptionConfigurator;
+use hiqdev\billing\registry\behavior\Consumption\MaxConsumptionAggregateStrategy;
+use hiqdev\billing\registry\behavior\Consumption\SumConsumptionAggregateStrategy;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
-use hiqdev\php\billing\product\AggregateInterface;
+use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
 
 class ResourceAnalyticsService
 {
@@ -47,7 +50,7 @@ class ResourceAnalyticsService
         $qty = '0';
         foreach ($this->filteringService->filterByAvailableTypes($resources) as $resource) {
             $amount = $this->convertAmount($resource->decorator());
-            $qty = bcadd($qty, $amount, 3);
+            $qty = (new SumConsumptionAggregateStrategy())->aggregate($qty, $amount);
         }
 
         return str_replace(".000", "", $qty);
@@ -61,11 +64,12 @@ class ResourceAnalyticsService
         foreach ($this->filteringService->filterByAvailableTypes($resources) as $resource) {
             $decorator = $resource->decorator();
             $type = $resource->type;
-            $aggregate = $configurator->getAggregate($this->addOveruseToTypeIfNeeded($type));
+
             $amount = $this->calculateAmount(
-                $aggregate,
+                $configurator,
+                $type,
                 (string)($totals[$type]['amount'] ?? 0),
-                $decorator,
+                $this->convertAmount($decorator),
             );
 
             $totals[$type] = [
@@ -78,15 +82,18 @@ class ResourceAnalyticsService
     }
 
     private function calculateAmount(
-        AggregateInterface $aggregate,
-        string $amount,
-        ResourceDecoratorInterface $decorator
+        ConsumptionConfigurator $configurator,
+        string $type,
+        string $amount1,
+        string $amount2,
     ): string {
-        $converted = $this->convertAmount($decorator);
+        try {
+            $aggregateBehavior = $configurator->getConsumptionAggregateBehavior($this->addOveruseToTypeIfNeeded($type));
+        } catch (BehaviorNotFoundException) {
+            return (new MaxConsumptionAggregateStrategy())->aggregate($amount1, $amount2);
+        }
 
-        return $aggregate->isMax()
-            ? max($amount, $converted)
-            : bcadd($amount, $converted, 3);
+        return $aggregateBehavior->aggregate($amount1, $amount2);
     }
 
     private function addOveruseToTypeIfNeeded(string $type): string
