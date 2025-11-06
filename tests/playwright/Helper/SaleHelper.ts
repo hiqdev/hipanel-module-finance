@@ -28,6 +28,13 @@ export default class SaleHelper {
 
         await this.page.locator('button:has-text("Search")').click();
         await this.page.waitForLoadState('networkidle');
+
+        // Wait until `tariff_id` parameter appears in the URL
+        await this.page.waitForFunction(
+            () => new URL(window.location.href).searchParams.has('SaleSearch[tariff_id]'),
+            null,
+            { timeout: 5000 }
+        );
     }
 
     async filterByBuyer(buyer: string) {
