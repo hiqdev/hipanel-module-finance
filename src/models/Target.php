@@ -69,14 +69,11 @@ class Target extends Model implements TaggableInterface
     {
         $configurator = Yii::$container->get(ConsumptionConfigurator::class);
 
-        $configurations = array_filter(
-            $configurator->getConfigurations(),
-            static fn(ConsumptionConfiguratorData $configuration): bool => $configuration->model instanceof self
-        );
-
         $types = [];
-        foreach ($configurations as $type => $configuration) {
-            $types[$type] = $configuration->getLabel();
+        foreach ($configurator->getConfiguratorDataCollection() as $tariffTypeName => $configuration) {
+            if ($configuration->model instanceof self) {
+                $types[$tariffTypeName] = $configuration->getLabel();
+            }
         }
 
         return $types;

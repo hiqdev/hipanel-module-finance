@@ -14,6 +14,7 @@ use hiqdev\billing\registry\tests\unit\ResourceDecorator\MockResourceDecorator;
 use hiqdev\php\billing\product\Application\BillingRegistryService;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
 use hiqdev\php\billing\product\BillingRegistry;
+use hiqdev\php\billing\product\Domain\Model\Price\PriceTypeCollection;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\tests\unit\product\Domain\Model\MockTariffType;
 
@@ -72,8 +73,14 @@ class ConsumptionConfiguratorTest extends TestCase
             ->withBehaviors()
                 ->attach(new ConsumptionConfigurationBehavior(
                     $mockTariffType->label(),
-                    [PriceType::switch_license, PriceType::dregistration, PriceType::dtransfer],
-                    [[PriceType::switch_license, PriceType::dregistration]],
+                    new PriceTypeCollection([
+                        PriceType::switch_license,
+                        PriceType::dregistration,
+                        PriceType::dtransfer,
+                    ]),
+                    [
+                        new PriceTypeCollection([PriceType::switch_license, PriceType::dregistration]),
+                    ],
                 ))
             ->end();
     }
@@ -86,7 +93,7 @@ class ConsumptionConfiguratorTest extends TestCase
 
     public function testGetColumns(): void
     {
-        $columns = $this->configurator->getColumns($this->mockTariffType->name());
+        $columns = $this->configurator->getColumns($this->mockTariffType->name())->names();
 
         $this->assertSame(['switch_license', 'dregistration', 'dtransfer'], $columns);
     }
