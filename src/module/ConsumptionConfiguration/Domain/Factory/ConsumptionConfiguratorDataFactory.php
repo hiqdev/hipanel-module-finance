@@ -5,9 +5,14 @@ namespace hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Factory
 use hipanel\base\Model;
 use hipanel\modules\finance\helpers\YiiObjectHelper;
 use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Data\ConsumptionConfiguratorData;
+use hiqdev\php\billing\product\price\PriceTypeInterface;
 
 class ConsumptionConfiguratorDataFactory
 {
+    /**
+     * @psalm-param list<PriceTypeInterface> $columns
+     * @psalm-param list<list<PriceTypeInterface>> $groups
+     */
     public static function create(
         string $label,
         array $columns,

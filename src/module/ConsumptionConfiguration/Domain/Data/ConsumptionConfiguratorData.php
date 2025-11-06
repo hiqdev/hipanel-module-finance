@@ -8,21 +8,30 @@ use hipanel\modules\finance\models\Resource;
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\server\models\Hub;
 use hipanel\modules\server\models\Server;
+use hiqdev\php\billing\product\price\PriceTypeInterface;
 
 class ConsumptionConfiguratorData
 {
+    /**
+     * @psalm-param list<PriceTypeInterface> $columns
+     * @psalm-param list<list<PriceTypeInterface>> $groups
+     */
     public function __construct(
         private readonly string $label,
         public readonly array $columns,
         public readonly array $groups,
         public readonly Target|Server|Hub|Client $model,
-        public readonly Resource|ResourceProxy $resourceModel
-    )
-    {
+        public readonly Resource|ResourceProxy $resourceModel,
+    ) {
     }
 
     public function getLabel(): string
     {
         return \Yii::t('hipanel:finance', $this->label);
+    }
+
+    public function hasColumns(): bool
+    {
+        return count($this->columns) > 0;
     }
 }

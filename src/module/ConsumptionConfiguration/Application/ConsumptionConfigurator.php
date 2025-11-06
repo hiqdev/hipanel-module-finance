@@ -14,6 +14,7 @@ use hiqdev\billing\registry\ResourceDecorator\DecoratedInterface;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
 use hiqdev\php\billing\product\behavior\BehaviorInterface;
+use hiqdev\php\billing\product\price\PriceTypeInterface;
 use yii\db\ActiveRecordInterface;
 
 final class ConsumptionConfigurator
@@ -27,9 +28,15 @@ final class ConsumptionConfigurator
     {
     }
 
+    /**
+     * @param string $class
+     * @return string[]
+     */
     public function getColumns(string $class): array
     {
-        return $this->getConfigurationByClass($class)->columns;
+        $columns = $this->getConfigurationByClass($class)->columns;
+
+        return array_map(fn(PriceTypeInterface $t) => $t->name(), $columns);
     }
 
     /**
@@ -135,7 +142,7 @@ final class ConsumptionConfigurator
         return array_filter(ArrayHelper::getColumn(
             $this->getConfigurations(),
             static function (ConsumptionConfiguratorData $config): ?string {
-                if (!empty($config->columns)) {
+                if ($config->hasColumns()) {
                     return $config->getLabel();
                 }
 
