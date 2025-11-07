@@ -87,11 +87,7 @@ class ResourceAnalyticsService
         string $amount1,
         string $amount2,
     ): string {
-        try {
-            $aggregateBehavior = $configurator->getConsumptionAggregateBehavior($this->addOveruseToTypeIfNeeded($type));
-        } catch (BehaviorNotFoundException) {
-            return (new MaxConsumptionAggregateStrategy())->aggregate($amount1, $amount2);
-        }
+        $aggregateBehavior = $configurator->getConsumptionAggregateBehavior($this->addOveruseToTypeIfNeeded($type));
 
         return $aggregateBehavior->aggregate($amount1, $amount2);
     }
