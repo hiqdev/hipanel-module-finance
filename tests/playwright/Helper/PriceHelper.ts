@@ -18,7 +18,7 @@ export default class PriceHelper {
         await this.page.locator("#select2-plan-client-container").click();
         await this.page.getByRole("option", { name: "hipanel_test_reseller" }).click();
         await this.page.locator("#select2-plan-currency-container").click();
-        await this.page.getByRole("option", { name: "USD" }).click();
+        await this.page.getByRole("option", { name: "USD", value: "usd" }).click();
         await this.page.getByRole("button", { name: "Save" }).click();
     }
 
