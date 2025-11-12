@@ -37,7 +37,9 @@ async function deleteBill(page, billId) {
   await Alert.on(page).hasText("Payment was deleted successfully");
 }
 
-test("Test 'Generate invoice' button is work and the form opens @hipanel-module-finance @seller", async ({ page }) => {
+test("Test 'Generate invoice' button is work and the form opens @hipanel-module-finance @seller", {
+  tag: '@missing-requisites',
+}, async ({ page }) => {
   const billId = await createBill(page);
   const action = '/finance/bill/index';
 
