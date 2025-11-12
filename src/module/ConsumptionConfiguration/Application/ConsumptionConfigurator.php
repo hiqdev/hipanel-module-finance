@@ -9,10 +9,12 @@ use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Factory\Consu
 use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\Target;
 use hipanel\modules\finance\models\TargetResource;
+use hiqdev\billing\registry\behavior\ConsumptionAggregateBehavior;
 use hiqdev\billing\registry\ResourceDecorator\DecoratedInterface;
 use hiqdev\billing\registry\ResourceDecorator\ResourceDecoratorInterface;
-use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
+use hiqdev\php\billing\product\behavior\BehaviorInterface;
+use hiqdev\php\billing\product\Domain\Model\Price\PriceTypeCollection;
 use yii\db\ActiveRecordInterface;
 
 final class ConsumptionConfigurator
@@ -26,7 +28,7 @@ final class ConsumptionConfigurator
     {
     }
 
-    public function getColumns(string $class): array
+    public function getColumns(string $class): PriceTypeCollection
     {
         return $this->getConfigurationByClass($class)->columns;
     }
@@ -40,13 +42,13 @@ final class ConsumptionConfigurator
 
         $fallback = ConsumptionConfiguratorDataFactory::create(
             $class,
-            [],
+            new PriceTypeCollection(),
             [],
             $defaultModel,
             $defaultResourceModel,
         );
 
-        return $this->getConfigurations()[$class] ?? $fallback;
+        return $this->getConfiguratorDataCollection()->findByTariffName($class) ?? $fallback;
     }
 
     private function getDefaultModels(): array
@@ -57,39 +59,44 @@ final class ConsumptionConfigurator
         ];
     }
 
-    public function getConfigurations(): array
+    public function getConfiguratorDataCollection(): ConsumptionConfiguratorDataCollectionInterface
     {
-        return iterator_to_array($this->configuratorDataCollection->getIterator());
+        return $this->configuratorDataCollection;
     }
 
     public function getGroupsWithLabels(string $class): array
     {
         $groups = [];
         $columnsWithLabels = $this->getColumnsWithLabels($class);
-        foreach ($this->getGroups($class) as $i => $group) {
-            foreach ($group as $j => $type) {
-                $groups[$i][$type] = $columnsWithLabels[$type];
+        foreach ($this->getGroups($class) as $i => $priceTypeNames) {
+            foreach ($priceTypeNames as $priceTypeName) {
+                $groups[$i][$priceTypeName] = $columnsWithLabels[$priceTypeName];
             }
         }
 
         return $groups;
     }
 
+    /**
+     * @param string $class
+     *
+     * @return string[][]
+     */
     private function getGroups(string $class): array
     {
-        $groups = [];
-        $columns = $this->getColumns($class);
-        foreach ($this->getConfigurationByClass($class)->groups as $group) {
-            $groups[] = $group;
-            foreach ($group as $item) {
-                $columns = array_diff($columns, [$item]);
+        $priceTypeGroups = [];
+        $columns = $this->getColumns($class)->names();
+        foreach ($this->getConfigurationByClass($class)->groups as $priceTypeCollection) {
+            $priceTypeGroups[] = $priceTypeCollection->names();
+            foreach ($priceTypeCollection as $priceType) {
+                $columns = array_diff($columns, [$priceType->name()]);
             }
         }
         foreach ($columns as $column) {
-            $groups[] = [$column];
+            $priceTypeGroups[] = [$column];
         }
 
-        return $groups;
+        return $priceTypeGroups;
     }
 
     public function getColumnsWithLabels(string $searchClass): array
@@ -114,14 +121,14 @@ final class ConsumptionConfigurator
     private function getCachedColumnsWithLabelsGroupedByClass(): array
     {
         if ($this->columnsWithLabelsGroupedByClass === null) {
-            foreach ($this->getConfigurations() as $class => $configuration) {
+            foreach ($this->getConfiguratorDataCollection() as $class => $configuration) {
                 $columns = $configuration->columns;
 
                 $this->columnsWithLabelsGroupedByClass[$class] = [];
                 foreach ($columns as $column) {
-                    $decorator = $this->getDecorator($class, $column);
+                    $decorator = $this->getDecorator($class, $column->name());
 
-                    $this->columnsWithLabelsGroupedByClass[$class][$column] = $decorator->displayTitle();
+                    $this->columnsWithLabelsGroupedByClass[$class][$column->name()] = $decorator->displayTitle();
                 }
             }
         }
@@ -131,10 +138,12 @@ final class ConsumptionConfigurator
 
     public function getClassesDropDownOptions(): array
     {
+        $configurations = iterator_to_array($this->getConfiguratorDataCollection());
+
         return array_filter(ArrayHelper::getColumn(
-            $this->getConfigurations(),
+            $configurations,
             static function (ConsumptionConfiguratorData $config): ?string {
-                if (!empty($config->columns)) {
+                if ($config->hasColumns()) {
                     return $config->getLabel();
                 }
 
@@ -146,8 +155,8 @@ final class ConsumptionConfigurator
     public function getAllPossibleColumns(): array
     {
         $columns = [];
-        foreach ($this->getConfigurations() as $configuration) {
-            $columns = array_merge($configuration->columns, $columns);
+        foreach ($this->getConfiguratorDataCollection() as $configuration) {
+            $columns = array_merge($configuration->columns->names(), $columns);
         }
 
         return array_unique($columns);
@@ -156,7 +165,7 @@ final class ConsumptionConfigurator
     public function getAllPossibleColumnsWithLabels(): array
     {
         $allPossibleColumnsWithLabels = [];
-        foreach ($this->getCachedColumnsWithLabelsGroupedByClass() as $class => $columns) {
+        foreach ($this->getCachedColumnsWithLabelsGroupedByClass() as $columns) {
             foreach ($columns as $column => $label) {
                 $allPossibleColumnsWithLabels[$column] = $label;
             }
@@ -201,13 +210,18 @@ final class ConsumptionConfigurator
 
     public function getFirstAvailableClass(): string
     {
-        $configurations = $this->getConfigurations();
+        foreach ($this->getConfiguratorDataCollection() as $key => $configuration) {
+            return $key;
+        }
 
-        return array_key_first($configurations);
+        return '';
     }
 
-    public function getAggregate(string $type): AggregateInterface
+    /**
+     * @return ConsumptionAggregateBehavior|BehaviorInterface
+     */
+    public function getConsumptionAggregateBehavior(string $type)
     {
-        return $this->billingRegistry->getAggregate($type);
+        return $this->billingRegistry->getBehavior($type, ConsumptionAggregateBehavior::class);
     }
 }

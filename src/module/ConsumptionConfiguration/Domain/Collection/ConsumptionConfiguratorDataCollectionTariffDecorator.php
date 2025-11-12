@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Collection;
 
+use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Data\ConsumptionConfiguratorData;
 use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\ModelRegistry;
 use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Factory\ConsumptionConfiguratorDataFactory;
 use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\TariffPriceTypeSpecification;
@@ -35,12 +36,23 @@ class ConsumptionConfiguratorDataCollectionTariffDecorator implements Consumptio
 
         $configurations['tariff'] = ConsumptionConfiguratorDataFactory::create(
             'Tariff resources',
-            $this->specification->getTariffColumns(),
+            $this->specification->getPriceTypeCollection(),
             [],
             $defaultModel,
             $defaultResourceModel,
         );
 
         return $configurations;
+    }
+
+    public function findByTariffName(string $tariffName): ?ConsumptionConfiguratorData
+    {
+        foreach ($this->getIterator() as $key => $configuratorData) {
+            if ($key === $tariffName) {
+                return $configuratorData;
+            }
+        }
+
+        return null;
     }
 }
