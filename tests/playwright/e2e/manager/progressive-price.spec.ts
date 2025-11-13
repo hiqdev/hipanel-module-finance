@@ -3,7 +3,9 @@ import { expect } from "@playwright/test";
 import PriceHelper from "@hipanel-module-finance/Helper/PriceHelper";
 import ViewTableHelper from "@hipanel-module-finance/Helper/ViewTableHelper";
 
-test("Test the Progressive Price feature works @hipanel-module-finance @manager", async ({ page }) => {
+test("Test the Progressive Price feature works @hipanel-module-finance @manager", {
+    tag: '@dedicated-server',
+}, async ({ page }) => {
   const planName = "TEST-PROGRESSIVE-PRICE-TEMPLATE" + Math.random().toString(36).substring(7);
   const priceHelper = new PriceHelper(page);
   const viewTable = new ViewTableHelper(page);

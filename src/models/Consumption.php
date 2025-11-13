@@ -48,12 +48,12 @@ class Consumption extends Model
 
     public function getSortColumns(): array
     {
-        return $this->consumptionConfigurator->getColumns($this->class);
+        return $this->consumptionConfigurator->getColumns($this->class)->names();
     }
 
     public function getColumns(): array
     {
-        return $this->consumptionConfigurator->getColumns($this->class);
+        return $this->consumptionConfigurator->getColumns($this->class)->names();
     }
 
     public function getColumnsWithLabels(): array

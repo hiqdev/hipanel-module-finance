@@ -52,7 +52,7 @@ sales.forEach((sale) => {
 
 test(`Ensure I can edit several sales @hipanel-module-finance @seller`, {
   tag: '@multi-sales',
-},async ({ page }) => {
+}, async ({ page }) => {
 
   const saleHelper = new SaleHelper(page);
   const indexPage = new Index(page);
@@ -71,7 +71,9 @@ test(`Ensure I can edit several sales @hipanel-module-finance @seller`, {
   await Alert.on(page).hasText("Sale has been successfully changed");
 });
 
-test(`Ensure sale detail view is correct @hipanel-module-finance @seller`, async ({ page }) => {
+test(`Ensure sale detail view is correct @hipanel-module-finance @seller`, {
+  tag: '@multi-sales',
+}, async ({ page }) => {
   const saleHelper = new SaleHelper(page);
   const indexPage = new Index(page);
   const sale = sales[0];
@@ -109,7 +111,9 @@ test(`Ensure I can delete several sales @hipanel-module-finance @seller`, {
   expect(closeTime2).toContain(year);
 });
 
-test('Ensure I can change buyer @hipanel-module-finance @seller', async ({ page }) => {
+test('Ensure I can change buyer @hipanel-module-finance @seller', {
+  tag: '@multi-sales',
+}, async ({ page }) => {
 
   test.fixme(true, 'The problem is with time compare (Expected: "Nov 30, 2022, 8:48:00 PM Received: "Nov 30, 2022, 6:48:00 PM")');
   const saleHelper = new SaleHelper(page);

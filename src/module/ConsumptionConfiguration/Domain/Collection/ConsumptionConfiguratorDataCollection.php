@@ -86,4 +86,9 @@ class ConsumptionConfiguratorDataCollection implements ConsumptionConfiguratorDa
 
         return $data;
     }
+
+    public function findByTariffName(string $tariffName): ?ConsumptionConfiguratorData
+    {
+        return $this->getConfigurations()[$tariffName] ?? null;
+    }
 }

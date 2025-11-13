@@ -8,12 +8,13 @@ use hipanel\modules\finance\module\ConsumptionConfiguration\Domain\Collection\Co
 use hipanel\modules\finance\tests\unit\TestCase;
 use hiqdev\billing\registry\behavior\ConsumptionConfigurationBehavior;
 use hiqdev\billing\registry\behavior\ResourceDecoratorBehavior;
-use hiqdev\billing\registry\product\PriceType;
+use hiqdev\billing\registry\Domain\Finance\Enum\PriceType;
 use hiqdev\billing\registry\TariffDefinitions\TariffTypeDefinitionFacade;
 use hiqdev\billing\registry\tests\unit\ResourceDecorator\MockResourceDecorator;
 use hiqdev\php\billing\product\Application\BillingRegistryService;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
 use hiqdev\php\billing\product\BillingRegistry;
+use hiqdev\php\billing\product\Domain\Model\Price\PriceTypeCollection;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\tests\unit\product\Domain\Model\MockTariffType;
 
@@ -72,8 +73,14 @@ class ConsumptionConfiguratorTest extends TestCase
             ->withBehaviors()
                 ->attach(new ConsumptionConfigurationBehavior(
                     $mockTariffType->label(),
-                    ['switch_license', 'dregistration', 'dtransfer'],
-                    [['switch_license', 'dregistration']],
+                    new PriceTypeCollection([
+                        PriceType::switch_license,
+                        PriceType::dregistration,
+                        PriceType::dtransfer,
+                    ]),
+                    [
+                        new PriceTypeCollection([PriceType::switch_license, PriceType::dregistration]),
+                    ],
                 ))
             ->end();
     }
@@ -86,7 +93,7 @@ class ConsumptionConfiguratorTest extends TestCase
 
     public function testGetColumns(): void
     {
-        $columns = $this->configurator->getColumns($this->mockTariffType->name());
+        $columns = $this->configurator->getColumns($this->mockTariffType->name())->names();
 
         $this->assertSame(['switch_license', 'dregistration', 'dtransfer'], $columns);
     }
