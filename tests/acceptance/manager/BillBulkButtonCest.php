@@ -34,6 +34,7 @@ class BillBulkButtonCest
 
         $this->fillDescriptionField($I, $example['descrp']);
         $I->waitForPageUpdate();
+        $I->wait(3);
         $I->closeNotification("Bill was updated successfully");
     }
 
