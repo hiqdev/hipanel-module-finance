@@ -28,5 +28,6 @@ $plan_id ??= null;
     'zonePrices',
     'servicePrices',
     'parentZonePrices',
-    'parentServicePrices'
+    'parentServicePrices',
+    'scenario'
 )) ?>

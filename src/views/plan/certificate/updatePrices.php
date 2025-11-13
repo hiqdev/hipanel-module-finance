@@ -16,4 +16,4 @@ $plan_id ??= null;
 
 ?>
 
-<?= $this->render('_form', compact('plan', 'prices', 'plan_id', 'action', 'parentPrices')) ?>
+<?= $this->render('_form', compact('plan', 'prices', 'plan_id', 'action', 'parentPrices', 'scenario')) ?>
