@@ -72,7 +72,7 @@ CSS
                         <?= Html::tag('th', ''); ?>
                         <?php foreach (DomainZonePrice::getTypes() as $name) : ?>
                             <?= Html::tag('th', $name); ?>
-                        <?php endforeach; ?>
+                        <?php endforeach ?>
                     </tr>
                     </thead>
                     <tbody>
@@ -86,11 +86,13 @@ CSS
 
                                 <?php if ($price === null): ?>
                                     <td></td>
-                                    <?php continue; ?>
-                                <?php endif; ?>
+                                    <?php continue ?>
+                                <?php endif ?>
 
                                 <?php $price->plan_id = $plan_id ?? $price->plan_id; ?>
-                                <?= Html::activeHiddenInput($price, "[$i]id") ?>
+                                <?php if (!$price->isNewRecord && $scenario !== 'create'): ?>
+                                    <?= Html::activeHiddenInput($price, "[$i]id") ?>
+                                <?php endif ?>
                                 <?= Html::activeHiddenInput($price, "[$i]plan_id") ?>
                                 <?= Html::activeHiddenInput($price, "[$i]object_id") ?>
                                 <?= Html::activeHiddenInput($price, "[$i]currency") ?>
@@ -103,9 +105,9 @@ CSS
                                         'activeField' => $form->field($price, "[$i]price")]) ?>
                                 </td>
                                 <?php ++$i; ?>
-                            <?php endforeach; ?>
+                            <?php endforeach ?>
                         </tr>
-                        <?php endforeach; ?>
+                        <?php endforeach ?>
                     </tbody>
                 </table>
                 <?php foreach ($servicePrices as $groupLabel => $servicePriceGroup) : ?>
@@ -125,12 +127,13 @@ CSS
                         </tr>
                         </thead>
                         <tbody>
-                        <?php $i = 0; ?>
                         <tr>
                             <?php foreach ($servicePriceGroup as $type => $price) : ?>
                                 <?php $originalPrice = $parentServicePrices[$type] ?? null; ?>
                                 <?php $price->plan_id = $plan_id ?? $price->plan_id; ?>
-                                <?= Html::activeHiddenInput($price, "[$i]id") ?>
+                                <?php if (!$price->isNewRecord && $scenario !== 'create'): ?>
+                                    <?= Html::activeHiddenInput($price, "[$i]id") ?>
+                                <?php endif ?>
                                 <?= Html::activeHiddenInput($price, "[$i]plan_id") ?>
                                 <?= Html::activeHiddenInput($price, "[$i]currency") ?>
                                 <?= Html::activeHiddenInput($price, "[$i]type") ?>

@@ -85,13 +85,16 @@ CSS
                                 <?php continue; endif ?>
                                 <?php $price->plan_id = $plan_id ?? $price->plan_id; ?>
                                 <?php $price->isNewRecord = $price->isNewRecord ?? ($scenario === 'create' ? true : false) ?>
-                                <?php if ($price->isNewRecord || $scenario === 'create' ): ?>
+                                <?php if (!$price->isNewRecord && $scenario !== 'create' ): ?>
                                     <?= Html::activeHiddenInput($price, "[$i]id") ?>
                                 <?php endif ?>
                                 <?= Html::activeHiddenInput($price, "[$i]plan_id") ?>
                                 <?= Html::activeHiddenInput($price, "[$i]object_id") ?>
                                 <?= Html::activeHiddenInput($price, "[$i]currency") ?>
-                                <?= Html::activeHiddenInput($price, "[$i]price") ?>
+                                <?= $form->field($price, "[$i]price")
+                                        ->hiddenInput(['value' => '1.00'])
+                                        ->label(false)
+                                ?>
                                 <?= Html::activeHiddenInput($price, "[$i]type") ?>
                                 <?= Html::activeHiddenInput($price, "[$i]unit") ?>
                                 <?php $originalPrice = $parentPrices[$object_id][$type] ?? null; ?>
@@ -102,9 +105,9 @@ CSS
                                             'originalPrice' => ($originalPrice ?? $price)->getMoneyForPeriod($period),
                                             'activeField' => $form->field($price, "[$i]sums[$period]")]) ?>
                                     </td>
-                                <?php endforeach; ?>
-                                <?php ++$i; ?>
-                            <?php endforeach; ?>
+                                <?php endforeach ?>
+                                <?php ++$i ?>
+                            <?php endforeach ?>
                         </tr>
                         <?php
                     } ?>
