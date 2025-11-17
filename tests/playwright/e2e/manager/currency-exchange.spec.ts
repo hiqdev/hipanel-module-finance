@@ -4,7 +4,7 @@ import Select2 from "@hipanel-core/input/Select2";
 import Alert from "@hipanel-core/ui/Alert";
 import AdvancedSearch from "@hipanel-core/helper/AdvancedSearch";
 
-test("the currency exchange operation are works and creates a bill @hipanel-module-finance @manager", async ({ page }) => {
+test("the currency exchange operation works and creates a bill @hipanel-module-finance @manager", async ({ page }) => {
   const advancedSearch = new AdvancedSearch(page);
 
   await page.goto("/finance/bill/index");
