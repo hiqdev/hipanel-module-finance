@@ -14,7 +14,6 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use hipanel\helpers\Url;
 use hipanel\modules\finance\widgets\PriceInput;
-use Money\Formatter\DecimalMoneyFormatter;
 
 $this->registerJs("
 $('#tariff-create-form').on('afterValidate', function (event, messages) {
