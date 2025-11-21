@@ -1,6 +1,6 @@
 import { test, expect } from "@hipanel-core/fixtures";
 import BillForm from "@hipanel-module-finance/page/bill/BillForm";
-import Alert from "@hipanel-core/ui/Alert";
+import { Alert } from "@hipanel-core/shared/ui/components";
 import BillView from "@hipanel-module-finance/page/bill/BillView";
 
 test("Test we add the charges to created bill @hipanel-module-finance @seller", async ({ page }) => {
