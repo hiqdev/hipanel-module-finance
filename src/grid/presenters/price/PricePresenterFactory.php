@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -14,8 +14,8 @@ use hipanel\modules\finance\models\CertificatePrice;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\ProgressivePrice;
 use hipanel\modules\finance\models\TemplatePrice;
-use Psr\Container\ContainerInterface;
-use yii\base\InvalidConfigException;
+use yii\i18n\Formatter;
+use yii\web\User;
 
 /**
  * Class PricePresenterFactory.
@@ -27,47 +27,37 @@ class PricePresenterFactory
     /**
      * @var array map of model class to its presenter
      */
-    protected $map = [
+    protected array $map = [
         Price::class => PricePresenter::class,
         TemplatePrice::class => TemplatePricePresenter::class,
         CertificatePrice::class => CertificatePricePresenter::class,
         ProgressivePrice::class => ProgressivePricePresenter::class,
         '*' => PricePresenter::class,
     ];
+    protected array $cache = [];
 
-    /**
-     * @var array
-     */
-    protected $cache = [];
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    public function __construct(ContainerInterface $container)
+    public function __construct(
+        private readonly Formatter $formatter,
+        private readonly User $user
+    )
     {
-        $this->container = $container;
     }
 
     /**
      * @param string $name
      * @return PricePresenter
-     * @throws InvalidConfigException
      */
-    public function build($name)
+    public function build(string $name): PricePresenter
     {
         $className = $this->map[$name] ?? $this->map['*'];
 
         if (!isset($this->cache[$name])) {
-            $this->cache[$name] = $this->container->get($className);
+            $this->cache[$name] = new $className($this->formatter, $this->user->can('part.read'));
         }
 
         return $this->cache[$name];
     }
 
-    /**
-     * @return array
-     */
     public function getMap(): array
     {
         return $this->map;
