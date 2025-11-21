@@ -53,7 +53,7 @@ use yii\helpers\StringHelper;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class Price extends Model
+class Price extends Model implements RepresentablePrice
 {
     use ModelTrait;
 
