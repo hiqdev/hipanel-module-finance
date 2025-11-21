@@ -4,7 +4,7 @@ import BillHelper from "@hipanel-module-finance/Helper/BillHelper";
 import Bill from "@hipanel-module-finance/model/Bill";
 import TransferForm from "@hipanel-module-finance/page/bill/TransferForm";
 import Transfer from "@hipanel-module-finance/model/Transfer";
-import Alert from "@hipanel-core/ui/Alert";
+import { Alert } from "@hipanel-core/shared/ui/components";
 
 const transfer: Transfer = {
   sum: 100,
@@ -52,4 +52,3 @@ test("Ensure transfer is working correctly @hipanel-module-finance @seller", asy
   await transferForm.submit();
   await Alert.on(sellerPage).hasText('Transfer was completed');
 });
-

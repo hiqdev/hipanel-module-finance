@@ -4,7 +4,7 @@ import TreeSelect from "@hipanel-core/input/TreeSelect";
 import SumWithCurrency from "@hipanel-core/input/SumWithCurrency";
 import Bill from "@hipanel-module-finance/model/Bill";
 import Charge from "@hipanel-module-finance/model/Charge";
-import Alert from "@hipanel-core/ui/Alert";
+import { Alert } from "@hipanel-core/shared/ui/components";
 
 export default class BillForm {
   private page: Page;
@@ -30,7 +30,7 @@ export default class BillForm {
     await SumWithCurrency.field(this.page, "billform", k).setSumAndCurrency(bill.sum, bill.currency);
     await this.page.locator(`#billform-${k}-quantity`).fill(bill.quantity.toString());
     if (bill.requisite) {
-      await Select2.field(this.page, `#billform-${k}-requisite_id`).setValue(bill.requisite)
+      await Select2.field(this.page, `#billform-${k}-requisite_id`).setValue(bill.requisite);
     }
 
     if (bill.charges) {

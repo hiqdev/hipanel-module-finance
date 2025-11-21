@@ -5,7 +5,7 @@ import ServerView from "@hipanel-module-finance/page/bill/ServerView";
 import SaleHelper from "@hipanel-module-finance/Helper/SaleHelper";
 import Index from "@hipanel-core/page/Index";
 import SaleUpdate from "@hipanel-module-finance/page/bill/SaleUpdate";
-import Alert from "@hipanel-core/ui/Alert";
+import { Alert } from "@hipanel-core/shared/ui/components";
 import DateHelper from "@hipanel-core/helper/DateHelper";
 
 const sales: Array<Sale> = [
