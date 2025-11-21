@@ -1,4 +1,4 @@
-import {expect, Locator, Page} from "@playwright/test";
+import { expect, Locator, Page } from "@playwright/test";
 import Select2 from "@hipanel-core/input/Select2";
 import Transfer from "@hipanel-module-finance/model/Transfer";
 import SumWithCurrency from "@hipanel-core/input/SumWithCurrency";
@@ -8,10 +8,10 @@ export default class TransferForm {
   private submitBtn: Locator;
 
   private notBeBlankFields: Array<string> = [
-    'Sum',
-    'Client',
-    'Receiver ID',
-    'Currency',
+    "Sum",
+    "Client",
+    "Receiver ID",
+    "Currency",
   ];
 
   public constructor(page: Page) {
@@ -27,7 +27,7 @@ export default class TransferForm {
   async ensureICantCreateTransferWithoutRequiredData() {
     await this.gotoCreateTransfer();
     await this.submit();
-    this.notBeBlankFields.forEach(field => this.hasValidationError(field + ' cannot be blank.'));
+    this.notBeBlankFields.forEach(field => this.hasValidationError(field + " cannot be blank."));
   }
 
   async hasValidationError(msg: string) {
@@ -36,8 +36,8 @@ export default class TransferForm {
 
   async fillTransfer(transferData: Transfer) {
     await SumWithCurrency.field(this.page, "bill", 0).setSumAndCurrency(transferData.sum, transferData.currency);
-    await Select2.field(this.page, '#bill-0-client_id').setValue(transferData.client);
-    await Select2.field(this.page, '#bill-0-receiver_id').setValue(transferData.receiverId);
+    await Select2.field(this.page, "#bill-0-client_id").setValue(transferData.client);
+    await Select2.field(this.page, "#bill-0-receiver_id").setValue(transferData.receiverId);
   }
 
   async submit() {

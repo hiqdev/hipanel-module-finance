@@ -1,9 +1,9 @@
-export default class Charge {
-  public class: string;
-  public object: string;
-  public type: string;
-  public quantity: number;
-  public sum: number;
-  public description?: string | null;
-  public time?: string | null;
+export default interface Charge {
+  class: string;
+  object: string;
+  type: string;
+  quantity: number;
+  sum: number;
+  description?: string | null;
+  time?: string | null;
 }

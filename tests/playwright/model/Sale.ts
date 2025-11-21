@@ -1,7 +1,7 @@
-export default class Sale {
-  public client: string;
-  public tariff: string;
-  public column: string;
-  public server: string;
-  public type: string;
+export default interface Sale {
+  client: string;
+  tariff: string;
+  column: string;
+  server: string;
+  type: string;
 }

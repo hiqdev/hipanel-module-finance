@@ -1,11 +1,13 @@
-import { test, expect } from "@hipanel-core/fixtures";
+import { expect, test } from "@hipanel-core/fixtures";
+import { Page } from "@playwright/test";
 import BillForm from "@hipanel-module-finance/page/bill/BillForm";
 import BillView from "@hipanel-module-finance/page/bill/BillView";
-import Alert from "@hipanel-core/ui/Alert";
+import { Alert } from "@hipanel-core/shared/ui/components";
 import Index from "@hipanel-core/page/Index";
 import Select2 from "@hipanel-core/input/Select2";
+import Bill from "@hipanel-module-finance/model/Bill";
 
-const bill = {
+const bill: Bill = {
   client: "hipanel_test_user",
   type: "Positive balance correction",
   requisite: "Test Reseller",
@@ -14,7 +16,7 @@ const bill = {
   quantity: 1,
 };
 
-async function createBill(page) {
+async function createBill(page: Page) {
   await page.goto("/finance/bill/create");
   const form = new BillForm(page);
   await form.fill([bill]);
@@ -24,13 +26,13 @@ async function createBill(page) {
   return await form.getSavedBillId();
 }
 
-async function deleteBill(page, billId) {
+async function deleteBill(page: Page, billId) {
   await page.goto("/finance/bill/view?id=" + billId);
-  const viewPage = await new BillView(page);
+  const viewPage = new BillView(page);
   await viewPage.detailMenuItem("Delete", true).click();
 
   // Handle the confirmation alert
-  await page.once("dialog", async (dialog) => {
+  page.once("dialog", async (dialog) => {
     await dialog.accept();
   });
 
@@ -38,10 +40,10 @@ async function deleteBill(page, billId) {
 }
 
 test("Test 'Generate invoice' button is work and the form opens @hipanel-module-finance @seller", {
-  tag: '@missing-requisites',
+  tag: "@missing-requisites",
 }, async ({ page }) => {
   const billId = await createBill(page);
-  const action = '/finance/bill/index';
+  const action = "/finance/bill/index";
 
   await page.goto(action);
   const index = new Index(page);

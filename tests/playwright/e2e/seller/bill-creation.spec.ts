@@ -1,6 +1,6 @@
 import { test, expect } from "@hipanel-core/fixtures";
 import BillForm from "@hipanel-module-finance/page/bill/BillForm";
-import Alert from "@hipanel-core/ui/Alert";
+import { Alert } from "@hipanel-core/shared/ui/components";
 
 let billId;
 
@@ -92,4 +92,3 @@ test.describe("Bill creation", () => {
     await expect(page.locator(`table >> text=${chargeDescr}`)).toBeVisible();
   });
 });
-
