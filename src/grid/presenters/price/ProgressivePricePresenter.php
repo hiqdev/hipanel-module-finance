@@ -70,10 +70,11 @@ class ProgressivePricePresenter extends PricePresenter
         $lastThreshold = (int)$thresholds[count($thresholds) - 1]->quantity;
         $result[] = Yii::t(
             'hipanel:finance',
-            "Over {quantity} {unit}",
+            "Over {quantity} {unit} {custom_sum}",
             [
                 'quantity' => $lastThreshold,
                 'unit' => $unit,
+                'custom_sum' => Html::tag('b', Yii::t('hipanel:finance', 'Custom')),
             ]
         );
 

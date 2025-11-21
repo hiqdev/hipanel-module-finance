@@ -49,6 +49,7 @@ class ProgressivePricePresenterTest extends TestCase
         $this->assertStringContainsString('Next 5000 GB', $result);
         $this->assertStringContainsString('$2.00', $result);
         $this->assertStringContainsString('Over 6000 GB', $result);
+        $this->assertStringContainsString('Custom', $result);
     }
 
     public function testRenderPriceCalculatesRangesCorrectly(): void
@@ -79,6 +80,7 @@ class ProgressivePricePresenterTest extends TestCase
 
         // Last tier
         $this->assertStringContainsString('Over 500 GB', $result);
+        $this->assertStringContainsString('Custom', $result);
     }
 
     public function testRenderPriceWithSingleThreshold(): void
@@ -95,6 +97,7 @@ class ProgressivePricePresenterTest extends TestCase
         $this->assertStringContainsString('First 100 GB', $result);
         $this->assertStringContainsString('$10.00', $result);
         $this->assertStringContainsString('Over 100 GB', $result);
+        $this->assertStringContainsString('Custom', $result);
     }
 
     public function testRenderPriceFallsBackToParentForStandardPrice(): void
@@ -110,14 +113,11 @@ class ProgressivePricePresenterTest extends TestCase
         // Act
         $result = $this->presenter->renderPrice($price);
 
-        // Assert - should use parent's renderPrice method
+        // Assert - should use a parent's renderPrice method
         $this->assertStringContainsString('$5.00', $result);
         $this->assertStringContainsString('per GB', $result);
     }
 
-    /**
-     * Helper method to create threshold mock
-     */
     private function createThreshold(string $price, string $quantity, string $unit, string $currency): Threshold
     {
         $threshold = $this->createMock(Threshold::class);
