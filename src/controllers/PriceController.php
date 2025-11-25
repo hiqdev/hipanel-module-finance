@@ -270,9 +270,9 @@ class PriceController extends CrudController
     {
         $presenter = Yii::$container->get(ProgressivePricePresenter::class);;
         $dataPrice = $this->request->post('ProgressivePrice') ?? $this->request->post('Price');
-        $dataThreshold = $this->request->post('Threshold');
+        $dataThreshold = $this->request->post('Threshold', []);
 
-        if (!$dataPrice || !$dataThreshold) {
+        if (!$dataPrice) {
             return '';
         }
 

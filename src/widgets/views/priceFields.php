@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\ProgressivePrice;
@@ -56,8 +56,8 @@ $unitCollection = $model->getUnitCollection();
     </div>
     <?php if ($model->isProgressive()) : ?>
         <?php $thresholds = $model->getThresholds() ?>
-        <?php $dynamicFormWdget = DynamicFormWidget::begin([
-            'widgetContainer' => 'thresholds_dynamic_form_wrapper',
+        <?php $dynamicFormWidget = DynamicFormWidget::begin([
+            'widgetContainer' => 'thresholds_dynamic_form_wrapper_' . $index,
             'widgetBody' => '.price-thresholds',
             'widgetItem' => '.threshold-item',
             'limit' => 21,
@@ -78,11 +78,7 @@ $unitCollection = $model->getUnitCollection();
                     <i class="fa fa-plus fa-fw"></i>
                     <?= Yii::t('hipanel:finance', 'Add progression') ?>
                 </button>
-                <?= ProgressivePresenter::widget([
-                    'price' => $model,
-                    'index' => $index,
-                    'dynamicFormWidgetContainerClass' => $dynamicFormWdget->widgetContainer,
-                ]) ?>
+                <?= ProgressivePresenter::widget(['price' => $model, 'index' => $index, 'dynamicFormWidget' => $dynamicFormWidget]) ?>
             </div>
             <?php foreach ($thresholds as $j => $threshold) : ?>
                 <div class="threshold-item col-md-12">
