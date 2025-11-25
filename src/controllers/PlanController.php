@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Finance module for HiPanel
  *
@@ -398,16 +398,6 @@ class PlanController extends CrudController
         } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
         }
-    }
-
-    public function actionShowProgressive(): Response
-    {
-        return $this->asJson([
-            'success' => true,
-            'data' => [
-                'price' => 'stirng',
-            ],
-        ]);
     }
 
     /**

@@ -29,8 +29,6 @@ use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\query\PriceQuery;
 use hipanel\modules\finance\models\TargetObject;
 use hipanel\modules\finance\models\Threshold;
-use hipanel\modules\finance\widgets\ProgressivePresenter;
-use hipanel\modules\stock\grid\WarrantyColumn;
 use Yii;
 use yii\base\DynamicModel;
 use yii\base\Event;
@@ -229,7 +227,10 @@ class PriceController extends CrudController
             }
             $prices = $this->getSuggested($plan_id, $plan_id, null, $type);
             $existingObjects = array_keys(ArrayHelper::map($prices, 'object_id', 'id'));
-            $uniqSuggestions = array_filter($suggestions, static fn($suggestion) => !in_array($suggestion->object_id, $existingObjects, true));
+            $uniqSuggestions = array_filter(
+                $suggestions,
+                static fn($suggestion) => !in_array($suggestion->object_id, $existingObjects, true)
+            );
             $prices = array_merge($prices, $uniqSuggestions);
             $prices = PriceSort::anyPrices()->values($prices, true);
 
@@ -268,15 +269,15 @@ class PriceController extends CrudController
 
     public function actionGetProgressiveInfo(): string
     {
-        $presenter = Yii::$container->get(ProgressivePricePresenter::class);;
-        $dataPrice = $this->request->post('ProgressivePrice') ?? $this->request->post('Price');
+        $presenter = Yii::$container->get(ProgressivePricePresenter::class);
+        $dataPrice = array_filter($this->request->post(), fn($key) => str_ends_with($key, 'Price'), ARRAY_FILTER_USE_KEY);
         $dataThreshold = $this->request->post('Threshold', []);
 
         if (!$dataPrice) {
             return '';
         }
 
-        $prices = array_map(static fn(array $price): Price => new Price($price), $dataPrice);
+        $prices = array_map(static fn(array $price): Price => new Price($price), reset($dataPrice));
         foreach ($dataThreshold as $j => $thresholds) {
             $thresholdRows = [];
             $price = $prices[$j];
