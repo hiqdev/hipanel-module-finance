@@ -7,6 +7,7 @@ use hipanel\modules\finance\models\RepresentablePrice;
 use hipanel\modules\finance\models\Threshold;
 use hipanel\modules\finance\tests\unit\TestCase;
 use yii\i18n\Formatter;
+use yii\web\User;
 
 class ProgressivePricePresenterTest extends TestCase
 {
@@ -18,8 +19,10 @@ class ProgressivePricePresenterTest extends TestCase
 
         $formatter = $this->createMock(Formatter::class);
         $formatter->method('asCurrency')->willReturnCallback(fn($value, $currency) => '$' . number_format((float)$value, 2));
+        $user = $this->createMock(User::class);
+        $user->method('can')->willReturn(true);
 
-        $this->presenter = new ProgressivePricePresenter($formatter, false);
+        $this->presenter = new ProgressivePricePresenter($formatter, $user);
     }
 
     public function testRenderPriceWithProgressiveTiers(): void
@@ -49,7 +52,7 @@ class ProgressivePricePresenterTest extends TestCase
         $this->assertStringContainsString('Next 5000 GB', $result);
         $this->assertStringContainsString('$2.00', $result);
         $this->assertStringContainsString('Over 6000 GB', $result);
-        $this->assertStringContainsString('Custom', $result);
+        $this->assertStringContainsString('$2.00', $result);
     }
 
     public function testRenderPriceCalculatesRangesCorrectly(): void
@@ -80,7 +83,7 @@ class ProgressivePricePresenterTest extends TestCase
 
         // Last tier
         $this->assertStringContainsString('Over 500 GB', $result);
-        $this->assertStringContainsString('Custom', $result);
+        $this->assertStringContainsString('$3.00', $result);
     }
 
     public function testRenderPriceWithSingleThreshold(): void
@@ -97,7 +100,7 @@ class ProgressivePricePresenterTest extends TestCase
         $this->assertStringContainsString('First 100 GB', $result);
         $this->assertStringContainsString('$10.00', $result);
         $this->assertStringContainsString('Over 100 GB', $result);
-        $this->assertStringContainsString('Custom', $result);
+        $this->assertStringContainsString('$10.00', $result);
     }
 
     public function testRenderPriceFallsBackToParentForStandardPrice(): void
@@ -156,6 +159,21 @@ class ProgressivePricePresenterTest extends TestCase
             public function getThresholds(): array
             {
                 return $this->thresholds;
+            }
+
+            public function getSubtype(): string
+            {
+                // TODO: Implement getSubtype() method.
+            }
+
+            public function isOveruse(): bool
+            {
+                // TODO: Implement isOveruse() method.
+            }
+
+            public function isQuantityPredefined(): bool
+            {
+                // TODO: Implement isQuantityPredefined() method.
             }
         };
     }

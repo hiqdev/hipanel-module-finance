@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
@@ -45,7 +45,7 @@ $notePk = $model->id . $model->object_id . $i;
 
 <div class="form-instance">
     <div class="col-md-2" style="white-space: normal">
-        <divCalculate class="form-group">
+        <div class="form-group">
             <?php if ($model->object->name === null): ?>
                 <i><?= Yii::t('hipanel.finance.price', 'Any object') ?></i>
             <?php else: ?>
@@ -77,7 +77,7 @@ $notePk = $model->id . $model->object_id . $i;
                         'data-pk' => $notePk,
                         'url' => new JsExpression(<<<"JS"
                         function(params) {
-                            $(this).closest('.form-instance').parent().find('input[data-attribute=note]').val(params.value);
+                            $(this).closest(".form-instance").parent().find("input[data-attribute=note]").val(params.value);
                             
                             return $.Deferred().resolve();
                         }
@@ -86,7 +86,7 @@ JS
                 ],
                 ]) ?>
             <?php endif ?>
-        </divCalculate>
+        </div>
     </div>
     <div class="col-md-4">
         <?= PriceFields::widget(['model' => $model, 'form' => $form, 'index' => $i, 'currencyTypes' => $this->context->getCurrencyTypes()]) ?>

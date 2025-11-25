@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -47,10 +47,7 @@ use yii\web\UnprocessableEntityHttpException;
 
 class PlanController extends CrudController
 {
-    /**
-     * @var PriceModelFactory
-     */
-    public $priceModelFactory;
+    private PriceModelFactory $priceModelFactory;
 
     /**
      * PlanController constructor.
@@ -403,6 +400,16 @@ class PlanController extends CrudController
         }
     }
 
+    public function actionShowProgressive(): Response
+    {
+        return $this->asJson([
+            'success' => true,
+            'data' => [
+                'price' => 'stirng',
+            ],
+        ]);
+    }
+
     /**
      * @param int|null $plan_id
      * @return Price[]|null Array of parent plan prices or `null`, when parent plan was not found
@@ -440,7 +447,6 @@ class PlanController extends CrudController
                 $priceData['class'] = 'CertificatePrice';
             }
 
-            /** @var Price $price */
             $price = Price::instantiate($priceData);
             $price->setScenario('create');
             $price->setAttributes($priceData);

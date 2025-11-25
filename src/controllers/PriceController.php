@@ -22,11 +22,15 @@ use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\actions\PriceUpdateAction;
 use hipanel\modules\finance\collections\PricesCollection;
+use hipanel\modules\finance\grid\presenters\price\ProgressivePricePresenter;
 use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\query\PriceQuery;
 use hipanel\modules\finance\models\TargetObject;
+use hipanel\modules\finance\models\Threshold;
+use hipanel\modules\finance\widgets\ProgressivePresenter;
+use hipanel\modules\stock\grid\WarrantyColumn;
 use Yii;
 use yii\base\DynamicModel;
 use yii\base\Event;
@@ -260,6 +264,30 @@ class PriceController extends CrudController
             'models' => $models,
             'plan' => $plan,
         ]);
+    }
+
+    public function actionGetProgressiveInfo(): string
+    {
+        $presenter = Yii::$container->get(ProgressivePricePresenter::class);;
+        $dataPrice = $this->request->post('ProgressivePrice') ?? $this->request->post('Price');
+        $dataThreshold = $this->request->post('Threshold');
+
+        if (!$dataPrice || !$dataThreshold) {
+            return '';
+        }
+
+        $prices = array_map(static fn(array $price): Price => new Price($price), $dataPrice);
+        foreach ($dataThreshold as $j => $thresholds) {
+            $thresholdRows = [];
+            $price = $prices[$j];
+            foreach ($thresholds as $threshold) {
+                $threshold['parent'] = $price;
+                $thresholdRows[] = new Threshold($threshold);
+            }
+            $price->setProgressivePricingThresholds($thresholdRows);
+        }
+
+        return $presenter->renderPrice(reset($prices));
     }
 
     private function getSuggested($plan_id, $object_id = null, $template_plan_id = null, string $type = 'default'): array

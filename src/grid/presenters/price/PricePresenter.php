@@ -19,6 +19,7 @@ use yii\base\InvalidConfigException;
 use yii\bootstrap\Html;
 use yii\di\NotInstantiableException;
 use yii\i18n\Formatter;
+use yii\web\User;
 
 /**
  * Class PricePresenter contains methods that present price properties.
@@ -32,7 +33,7 @@ class PricePresenter
 
     public function __construct(
         readonly protected Formatter $formatter,
-        readonly protected bool $canReadPrices,
+        readonly protected User $user,
     )
     {
     }
@@ -112,7 +113,7 @@ class PricePresenter
             ]);
         }
 
-        if ($price->getSubtype() === 'hardware' && $this->canReadPrices) {
+        if ($price->getSubtype() === 'hardware' && $this->user->can('part.read')) {
             return $price->object->label ?? $price->object->name;
         }
 

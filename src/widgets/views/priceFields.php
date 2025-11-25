@@ -2,6 +2,7 @@
 
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\ProgressivePrice;
+use hipanel\modules\finance\widgets\ProgressivePresenter;
 use hipanel\widgets\DynamicFormWidget;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
@@ -55,7 +56,7 @@ $unitCollection = $model->getUnitCollection();
     </div>
     <?php if ($model->isProgressive()) : ?>
         <?php $thresholds = $model->getThresholds() ?>
-        <?php DynamicFormWidget::begin([
+        <?php $dynamicFormWdget = DynamicFormWidget::begin([
             'widgetContainer' => 'thresholds_dynamic_form_wrapper',
             'widgetBody' => '.price-thresholds',
             'widgetItem' => '.threshold-item',
@@ -71,12 +72,17 @@ $unitCollection = $model->getUnitCollection();
             ],
         ]) ?>
         <div class="price-thresholds">
-            <div class="col-md-4 col-md-offset-6 text-right">
+            <div class="col-md-10 text-right" style="position: relative;">
                 <button type="button" class="btn btn-success btn-xs add-threshold"
                         title="<?= Yii::t('hipanel:finance', 'Make progressive') ?>" data-testid="add progression">
                     <i class="fa fa-plus fa-fw"></i>
                     <?= Yii::t('hipanel:finance', 'Add progression') ?>
                 </button>
+                <?= ProgressivePresenter::widget([
+                    'price' => $model,
+                    'index' => $index,
+                    'dynamicFormWidgetContainerClass' => $dynamicFormWdget->widgetContainer,
+                ]) ?>
             </div>
             <?php foreach ($thresholds as $j => $threshold) : ?>
                 <div class="threshold-item col-md-12">

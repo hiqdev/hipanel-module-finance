@@ -14,7 +14,9 @@ use hipanel\modules\finance\models\CertificatePrice;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\ProgressivePrice;
 use hipanel\modules\finance\models\TemplatePrice;
-use yii\i18n\Formatter;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use yii\web\User;
 
 /**
@@ -37,8 +39,7 @@ class PricePresenterFactory
     protected array $cache = [];
 
     public function __construct(
-        private readonly Formatter $formatter,
-        private readonly User $user
+        private readonly ContainerInterface $container,
     )
     {
     }
@@ -46,13 +47,15 @@ class PricePresenterFactory
     /**
      * @param string $name
      * @return PricePresenter
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function build(string $name): PricePresenter
     {
         $className = $this->map[$name] ?? $this->map['*'];
 
         if (!isset($this->cache[$name])) {
-            $this->cache[$name] = new $className($this->formatter, $this->user->can('part.read'));
+            $this->cache[$name] = $this->container->get($className);
         }
 
         return $this->cache[$name];

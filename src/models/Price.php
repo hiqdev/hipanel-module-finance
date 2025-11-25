@@ -193,9 +193,9 @@ class Price extends Model implements RepresentablePrice
         return Inflector::camel2id(StringHelper::basename(__CLASS__), '-');
     }
 
-    public function isOveruse()
+    public function isOveruse(): bool
     {
-        return strpos($this->type, 'overuse,') === 0;
+        return str_starts_with($this->type, 'overuse,');
     }
 
     public function isServer95Traf()
@@ -213,7 +213,7 @@ class Price extends Model implements RepresentablePrice
         return in_array($type, $this->getCertificateTypes(), true);
     }
 
-    public function getSubtype()
+    public function getSubtype(): string
     {
         [, $subtype] = explode(',', $this->type);
 
