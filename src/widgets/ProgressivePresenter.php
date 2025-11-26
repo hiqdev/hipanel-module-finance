@@ -37,7 +37,7 @@ class ProgressivePresenter extends Widget
             .progressive-info {
                 padding: 3px 15px;
                 margin-top: 1rem;
-                font-size: small;
+                font-size: smaller;
             }
             @media (width >= 2300px) {
                 .progressive-info {

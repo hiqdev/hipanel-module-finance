@@ -43,6 +43,8 @@ class ProgressivePricePresenterTest extends TestCase
         // Assert
         $this->assertStringContainsString('First 100 GB', $result);
         $this->assertStringContainsString('$3.80', $result);
+
+        // Check prices are present
         $this->assertStringContainsString('Next 100 GB', $result);
         $this->assertStringContainsString('$3.40', $result);
         $this->assertStringContainsString('Next 200 GB', $result);
@@ -52,7 +54,10 @@ class ProgressivePricePresenterTest extends TestCase
         $this->assertStringContainsString('Next 5000 GB', $result);
         $this->assertStringContainsString('$2.00', $result);
         $this->assertStringContainsString('Over 6000 GB', $result);
-        $this->assertStringContainsString('$2.00', $result);
+
+        // Check discounts are present (but not on the first line)
+        $this->assertStringNotContainsString('First 100 GB $3.80 (-', $result); // No discount on first
+        $this->assertStringContainsString('(-', $result); // Has discounts in output
     }
 
     public function testRenderPriceCalculatesRangesCorrectly(): void
@@ -187,6 +192,73 @@ class ProgressivePricePresenterTest extends TestCase
         $this->assertStringContainsString('Next 100 GB', $result); // 200 - 100
         $this->assertStringContainsString('$3.00', $result);
         $this->assertStringContainsString('Over 500 GB', $result);
+    }
+
+    public function testRenderPriceWithDiscounts(): void
+    {
+        // Arrange
+        $thresholds = [
+            $this->createThreshold('3.40', '100', 'GB', 'usd'), // -11% from 3.80
+            $this->createThreshold('3.00', '200', 'GB', 'usd'), // -12% from 3.40
+            $this->createThreshold('2.50', '400', 'GB', 'usd'), // -17% from 3.00
+            $this->createThreshold('2.00', '1000', 'GB', 'usd'), // -20% from 2.50
+        ];
+        $price = $this->createPrice(price: '3.80', thresholds: $thresholds);
+
+        // Act
+        $result = $this->presenter->renderPrice($price);
+
+        // Assert - First line has no discount
+        $lines = explode("\n", strip_tags($result));
+        $this->assertStringNotContainsString('(-', $lines[0] ?? '');
+
+        // Assert - Check that discounts are present in subsequent lines
+        $this->assertStringContainsString('(-11%)', $result); // 3.80 -> 3.40
+        $this->assertStringContainsString('(-12%)', $result); // 3.40 -> 3.00
+        $this->assertStringContainsString('(-17%)', $result); // 3.00 -> 2.50
+        $this->assertStringContainsString('(-20%)', $result); // 2.50 -> 2.00
+    }
+
+    public function testRenderPriceWithPrepaidHasNoDiscountOnFirstLine(): void
+    {
+        // Arrange
+        $thresholds = [
+            $this->createThreshold('3.40', '100', 'GB', 'usd'),
+            $this->createThreshold('3.00', '200', 'GB', 'usd'),
+            $this->createThreshold('2.00', '500', 'GB', 'usd'),
+        ];
+        $price = $this->createPrice(price: '3.80', thresholds: $thresholds, quantity: '10');
+
+        // Act
+        $result = $this->presenter->renderPrice($price);
+
+        // Assert - Prepaid line should not have a discount
+        $this->assertStringContainsString('First 10 GB Included', strip_tags($result));
+        $this->assertStringNotContainsString('First 10 GB Included (-', strip_tags($result));
+
+        // Assert - First paid line (Next 90 GB) should not have discount
+        // because it's the first line with price after prepaid
+        $lines = explode('<br />', $result);
+        $secondLine = $lines[1] ?? '';
+        $this->assertStringContainsString('Next 90 GB', $secondLine);
+        $this->assertStringNotContainsString('(-', strip_tags($secondLine));
+    }
+
+    public function testDiscountCalculationRounding(): void
+    {
+        // Arrange
+        $thresholds = [
+            $this->createThreshold('2.75', '100', 'GB', 'usd'), // Should be -8% from 3.00 (8.33% rounds to 8)
+            $this->createThreshold('2.50', '200', 'GB', 'usd'), // Should be -9% from 2.75 (9.09% rounds to 9)
+        ];
+        $price = $this->createPrice(price: '3.00', thresholds: $thresholds);
+
+        // Act
+        $result = $this->presenter->renderPrice($price);
+
+        // Assert
+        $this->assertStringContainsString('(-8%)', $result); // 3.00 -> 2.75 = 8.33% rounds to 8
+        $this->assertStringContainsString('(-9%)', $result); // 2.75 -> 2.50 = 9.09% rounds to 9
     }
 
     private function createThreshold(string $price, string $quantity, string $unit, string $currency): Threshold
