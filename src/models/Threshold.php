@@ -10,7 +10,7 @@ use yii\di\NotInstantiableException;
 /**
  *
  * @property-read string $unitLabel
- * @property-read mixed $currencyLabel
+ * @property-read string $currencyLabel
  * @property-read bool $isNewRecord
  */
 class Threshold extends Model
@@ -39,12 +39,12 @@ class Threshold extends Model
      */
     public function getUnitLabel(): ?string
     {
-        return $this->parent->getUnitLabel();
+        return $this->parent?->getUnitLabel();
     }
 
     public function getCurrencyLabel(): string
     {
-        return mb_strtoupper($this->currency);
+        return $this->currency !== null ? mb_strtoupper($this->currency) : '';
     }
 
     public function setParent(?Price $parent): void

@@ -26,7 +26,7 @@ class ProgressivePricePresenterTest extends TestCase
     }
 
     /**
-     * Helper method to parse result into clean lines and assert they contain expected strings in order
+     * Helper method to parse a result into clean lines and assert they contain expected strings in order
      *
      * @param string $result HTML result from renderPrice()
      * @param array $expectedStrings Array of strings that should appear in order in the lines
@@ -61,7 +61,7 @@ class ProgressivePricePresenterTest extends TestCase
     }
 
     /**
-     * Helper method to get clean lines from result
+     * Helper method to get clean lines from the result
      *
      * @param string $result HTML result from renderPrice()
      * @return array Array of clean text lines
