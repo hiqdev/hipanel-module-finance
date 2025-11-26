@@ -27,7 +27,8 @@ class ProgressivePricePresenter extends PricePresenter
 
     /**
      * Build progressive price lines in format:
-     * First X TB $Y.YY
+     * First X TB Included (if prepaid > 0)
+     * First X TB $Y.YY (if prepaid = 0)
      * Next X TB $Y.YY
      * Over X TB
      */
@@ -36,47 +37,89 @@ class ProgressivePricePresenter extends PricePresenter
         $result = [];
         $unit = $price->getUnitLabel();
         $currency = $price->currency;
+        $prepaidQuantity = (int)$price->quantity;
 
-        // First line: from 0 to the first threshold
-        $firstThreshold = (int)$thresholds[0]->quantity;
-        $result[] = Yii::t(
-            'hipanel:finance',
-            "First {quantity} {unit} {sum}",
-            [
-                'quantity' => $firstThreshold,
-                'unit' => $unit,
-                'sum' => Html::tag('b', $this->formatSumAsCurrency($price->price, $currency)),
-            ]
-        );
-
-        // Middle lines: from threshold[i] to threshold[i+1]
-        for ($i = 0; $i < count($thresholds) - 1; $i++) {
-            $currentQuantity = (int)$thresholds[$i]->quantity;
-            $nextQuantity = (int)$thresholds[$i + 1]->quantity;
-            $range = $nextQuantity - $currentQuantity;
-
+        // First line: prepaid quantity (if > 0) or first tier
+        if ($prepaidQuantity > 0) {
+            // Prepaid line: "First X TB Included"
             $result[] = Yii::t(
                 'hipanel:finance',
-                "Next {quantity} {unit} {sum}",
+                "First {quantity} {unit} {included}",
                 [
-                    'quantity' => $range,
+                    'quantity' => $prepaidQuantity,
                     'unit' => $unit,
-                    'sum' => Html::tag('b', $this->formatSumAsCurrency($thresholds[$i]->price, $currency)),
+                    'included' => Html::tag('b', Yii::t('hipanel:finance', 'Included')),
                 ]
             );
         }
 
-        // Last line: "Over X TB"
-        $lastThreshold = $thresholds[count($thresholds) - 1];
-        $result[] = Yii::t(
-            'hipanel:finance',
-            "Over {quantity} {unit} {sum}",
-            [
-                'quantity' => $lastThreshold->quantity,
-                'unit' => $unit,
-                'sum' => Html::tag('b', $this->formatSumAsCurrency($lastThreshold->price, $currency)),
-            ]
-        );
+        $previousQuantity = $prepaidQuantity;
+        $previousThresholdIndex = null; // Track the last processed threshold index
+        $isFirstLine = ($prepaidQuantity === 0); // Track if we need to render "First" line
+
+        // Process all thresholds
+        for ($i = 0; $i < count($thresholds); $i++) {
+            $currentThreshold = (int)$thresholds[$i]->quantity;
+
+            // Skip thresholds that are within the prepaid range
+            if ($currentThreshold <= $prepaidQuantity) {
+                $previousThresholdIndex = $i; // Track skipped thresholds
+                continue;
+            }
+
+            $range = $currentThreshold - $previousQuantity;
+            $isLast = ($i === count($thresholds) - 1);
+
+            if ($isFirstLine) {
+                // First line without prepaid: "First X TB $Y.YY"
+                $result[] = Yii::t(
+                    'hipanel:finance',
+                    "First {quantity} {unit} {sum}",
+                    [
+                        'quantity' => $range,
+                        'unit' => $unit,
+                        'sum' => Html::tag('b', $this->formatSumAsCurrency($price->price, $currency)),
+                    ]
+                );
+                $isFirstLine = false;
+            } else {
+                // Middle lines: "Next X TB $Y.YY"
+                // Determine which price to use based on the previous threshold
+                if ($previousThresholdIndex !== null) {
+                    // Use the price from the previous threshold
+                    $priceToUse = $thresholds[$previousThresholdIndex]->price;
+                } else {
+                    // No previous threshold processed, use base price
+                    $priceToUse = $price->price;
+                }
+
+                $result[] = Yii::t(
+                    'hipanel:finance',
+                    "Next {quantity} {unit} {sum}",
+                    [
+                        'quantity' => $range,
+                        'unit' => $unit,
+                        'sum' => Html::tag('b', $this->formatSumAsCurrency($priceToUse, $currency)),
+                    ]
+                );
+            }
+
+            if ($isLast) {
+                // Last line: "Over X TB $Y.YY"
+                $result[] = Yii::t(
+                    'hipanel:finance',
+                    "Over {quantity} {unit} {sum}",
+                    [
+                        'quantity' => $currentThreshold,
+                        'unit' => $unit,
+                        'sum' => Html::tag('b', $this->formatSumAsCurrency($thresholds[$i]->price, $currency)),
+                    ]
+                );
+            }
+
+            $previousQuantity = $currentThreshold;
+            $previousThresholdIndex = $i;
+        }
 
         return $result;
     }
