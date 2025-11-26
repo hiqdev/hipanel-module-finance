@@ -1,21 +1,24 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 
 namespace hipanel\modules\finance\actions;
 
-use Box\Spout\Common\Type;
-use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
-use Box\Spout\Writer\WriterInterface;
+use Generator;
 use hipanel\components\I18N;
 use hipanel\modules\finance\helpers\LightPriceChargesEstimator;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
-use hiqdev\yii2\export\exporters\AbstractExporter;
+use hiqdev\yii2\export\exporters\ExporterFactoryInterface;
+use hiqdev\yii2\export\exporters\ExportType;
 use hiqdev\yii2\export\models\ExportJob;
 use Yii;
 use yii\base\Action;
 use yii\i18n\Formatter;
+use yii\web\Response;
 
 /**
  * Class ExportPlanPricesAction exports the prices of a plan to a file.
@@ -24,7 +27,7 @@ use yii\i18n\Formatter;
  */
 final class ExportPlanPricesAction extends Action
 {
-    private const COLUMNS = [
+    private const array COLUMNS = [
         'Object name',
         'Sale time',
         'Buyer',
@@ -39,37 +42,34 @@ final class ExportPlanPricesAction extends Action
         'Price with formula',
     ];
 
-    private ?ExportJob $exportJob;
-    private Formatter $formatter;
+    private ?ExportJob $exportJob = null;
+    private ?Formatter $formatter = null;
 
-    public function run(int $id)
+    public function __construct($id, $controller, readonly private ExporterFactoryInterface $exporterFactory, array $config = [])
     {
-        $this->formatter = AbstractExporter::applyExportFormatting();
+        parent::__construct($id, $controller, $config);
+    }
 
-        $format = Type::CSV; // TODO: Support other formats?
+    public function run(int $id): Response
+    {
+        $exporter = $this->exporterFactory->build(ExportType::CSV);
+        $this->formatter = $exporter::applyExportFormatting();
+
         $exportJobKey = md5(implode('', [$this->controller->request->getAbsoluteUrl(), Yii::$app->user->id, time()]));
-        $this->exportJob = ExportJob::findOrNew($exportJobKey);
+        $this->exportJob = ExportJob::findOrCreate($exportJobKey);
+        $exporter->setExportJob($this->exportJob);
 
-        $writer = $this->createWriter($format);
-        $this->fillWriter($id, $writer);
-        $writer->close();
+        $saver = $this->exportJob->getSaver();
+        $exporter->exportToFile($saver->getFilePath(), [
+            'data' => fn() => $this->generateRows($id),
+        ]);
 
-        $filename = implode('.', ['report_' . time(), $format]);
-
-        return $this->controller->response->sendFile($this->exportJob->getSaver()->getFilePath(), $filename);
+        return $this->controller->response->sendFile($saver->getFilePath(), $saver->getFilename());
     }
 
     public function __destruct()
     {
         $this->exportJob->delete();
-    }
-
-    private function createWriter(string $format): WriterInterface
-    {
-        $writer = WriterEntityFactory::createWriter($format);
-        $writer->openToFile($this->exportJob->getSaver()->getFilePath());
-
-        return $writer;
     }
 
     /**
@@ -83,11 +83,11 @@ final class ExportPlanPricesAction extends Action
     private function getPricesAndEstimates(int $id): array
     {
         $plan = Plan::find()
-            ->withPrices()
-            ->withSales()
-            ->byId($id)
-            ->andWhere(['show_deleted' => 1])
-            ->one();
+                    ->withPrices()
+                    ->withSales()
+                    ->byId($id)
+                    ->andWhere(['show_deleted' => 1])
+                    ->one();
         $grouper = new PlanInternalsGrouper($plan);
         [$salesByObject, $pricesByMainObject] = $grouper->group();
 
@@ -103,16 +103,16 @@ final class ExportPlanPricesAction extends Action
         return [$salesByObject, $pricesByMainObject, $estimate];
     }
 
-    private function fillWriter(int $id, WriterInterface $writer): void
+    private function generateRows(int $id): Generator
     {
-        $rows = [self::COLUMNS];
+        yield self::COLUMNS;
 
         [$salesByObject, $pricesByMainObject, $estimate] = $this->getPricesAndEstimates($id);
 
         foreach ($pricesByMainObject as $mainObject => $prices) {
             $sale = $salesByObject[$mainObject] ?? null;
             foreach ($prices as $price) {
-                $rows[] = [
+                yield [
                     $sale?->object,
                     $sale?->time,
                     $sale?->buyer,
@@ -132,8 +132,5 @@ final class ExportPlanPricesAction extends Action
                 ];
             }
         }
-
-        $rows = array_map(fn($row) => WriterEntityFactory::createRowFromArray($row), $rows);
-        $writer->addRows($rows);
     }
 }
