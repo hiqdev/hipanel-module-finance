@@ -14,12 +14,12 @@ class ProgressivePresenter extends Widget
     public RepresentablePrice $price;
     public DynamicFormWidget $dynamicFormWidget;
     public int $index;
-    readonly private ProgressivePricePresenter $presenter;
+    private readonly ProgressivePricePresenter $presenter;
 
     public function init(): void
     {
         parent::init();
-        $this->presenter = Yii::$container->get(ProgressivePricePresenter::class, ['canReadParts' => Yii::$app->user->can('parts.read')]);
+        $this->presenter = Yii::$container->get(ProgressivePricePresenter::class);
     }
 
     public function run(): string

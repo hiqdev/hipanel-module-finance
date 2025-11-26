@@ -13,4 +13,6 @@ interface RepresentablePrice
     public function isOveruse(): bool;
 
     public function isQuantityPredefined(): bool;
+
+    public function getThresholds(): array;
 }

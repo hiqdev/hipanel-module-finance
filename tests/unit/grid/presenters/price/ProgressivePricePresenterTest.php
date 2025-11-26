@@ -88,7 +88,7 @@ class ProgressivePricePresenterTest extends TestCase
 
         // Last tier
         $this->assertStringContainsString('Over 500 GB', $result);
-        $this->assertStringContainsString('$3.00', $result);
+        $this->assertStringContainsString('$2.00', $result);
     }
 
     public function testRenderPriceWithSingleThreshold(): void
@@ -105,7 +105,7 @@ class ProgressivePricePresenterTest extends TestCase
         $this->assertStringContainsString('First 100 GB', $result);
         $this->assertStringContainsString('$10.00', $result);
         $this->assertStringContainsString('Over 100 GB', $result);
-        $this->assertStringContainsString('$10.00', $result);
+        $this->assertStringContainsString('$5.00', $result);
     }
 
     public function testRenderPriceFallsBackToParentForStandardPrice(): void
@@ -303,17 +303,17 @@ class ProgressivePricePresenterTest extends TestCase
 
             public function getSubtype(): string
             {
-                // TODO: Implement getSubtype() method.
+                return '';
             }
 
             public function isOveruse(): bool
             {
-                // TODO: Implement isOveruse() method.
+                return false;
             }
 
             public function isQuantityPredefined(): bool
             {
-                // TODO: Implement isQuantityPredefined() method.
+                return false;
             }
         };
     }

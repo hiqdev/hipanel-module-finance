@@ -279,6 +279,9 @@ class PriceController extends CrudController
 
         $prices = array_map(static fn(array $price): Price => new Price($price), reset($dataPrice));
         foreach ($dataThreshold as $j => $thresholds) {
+            if (!isset($prices[$j])) {
+                continue;
+            }
             $thresholdRows = [];
             $price = $prices[$j];
             foreach ($thresholds as $threshold) {
