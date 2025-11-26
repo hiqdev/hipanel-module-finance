@@ -201,8 +201,8 @@ class ProgressivePricePresenterTest extends TestCase
         $this->assertLinesContain($result, [
             'First 100 GB Included',         // Prepaid
             'Next 100 GB $3.40',             // 100 to 200 GB - no discount (first after prepaid)
-            'Next 200 GB $3.00 (-12%)',      // 200 to 400 GB
-            'Next 5600 GB $2.50 (-17%)',      // 200 to 400 GB
+            'Next 200 GB $3.00 (-12%)',      // 200 to 5600 GB
+            'Next 5600 GB $2.50 (-17%)',     // from 5600 GB
             'Over 6000 GB $2.00 (-20%)',     // Last tier
         ]);
 

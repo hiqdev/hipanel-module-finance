@@ -191,7 +191,8 @@ class PriceController extends CrudController
                 if ($type === 'calculator_public_cloud') {
                     $trafficExist = array_filter(
                         $selection,
-                        static fn($entry) => (string)$entry['object_id'] === (string)$object['object_id'] && $entry['price_type'] === 'overuse,server_traf_max'
+                        static fn($entry
+                        ) => (string)$entry['object_id'] === (string)$object['object_id'] && $entry['price_type'] === 'overuse,server_traf_max'
                     );
                     if (!empty($trafficExist)) {
                         $object = reset($trafficExist);
@@ -277,7 +278,12 @@ class PriceController extends CrudController
             return '';
         }
 
-        $prices = array_map(static fn(array $price): Price => new Price($price), reset($dataPrice));
+        $prices = array_map(function (array $priceRow): Price {
+            $price = new Price($priceRow);
+            if ($price->validate()) {
+                return $price;
+            }
+        }, reset($dataPrice));
         foreach ($dataThreshold as $j => $thresholds) {
             if (!isset($prices[$j])) {
                 continue;
@@ -286,7 +292,10 @@ class PriceController extends CrudController
             $price = $prices[$j];
             foreach ($thresholds as $threshold) {
                 $threshold['parent'] = $price;
-                $thresholdRows[] = new Threshold($threshold);
+                $thresholdObj = new Threshold($threshold);
+                if ($thresholdObj->validate()) { // todo: validation needed?
+                    $thresholdRows[] = $thresholdObj;
+                }
             }
             $price->setProgressivePricingThresholds($thresholdRows);
         }
