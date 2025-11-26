@@ -25,6 +25,55 @@ class ProgressivePricePresenterTest extends TestCase
         $this->presenter = new ProgressivePricePresenter($formatter, $user);
     }
 
+    /**
+     * Helper method to parse result into clean lines and assert they contain expected strings in order
+     *
+     * @param string $result HTML result from renderPrice()
+     * @param array $expectedStrings Array of strings that should appear in order in the lines
+     * @param string $message Optional assertion message
+     */
+    private function assertLinesContain(string $result, array $expectedStrings, string $message = ''): void
+    {
+        // Strip HTML tags and split by line breaks
+        $lines = $this->getCleanLines($result);
+
+        // Check that we have enough lines
+        $this->assertGreaterThanOrEqual(
+            count($expectedStrings),
+            count($lines),
+            'Result does not have enough lines for all expected strings. ' . $message
+        );
+
+        // Assert each expected string appears in the corresponding line
+        foreach ($expectedStrings as $index => $expectedString) {
+            $this->assertStringContainsString(
+                $expectedString,
+                $lines[$index],
+                sprintf(
+                    'Line %d does not contain expected string "%s". Line content: "%s". %s',
+                    $index,
+                    $expectedString,
+                    $lines[$index] ?? '(line not found)',
+                    $message
+                )
+            );
+        }
+    }
+
+    /**
+     * Helper method to get clean lines from result
+     *
+     * @param string $result HTML result from renderPrice()
+     * @return array Array of clean text lines
+     */
+    private function getCleanLines(string $result): array
+    {
+        $cleanResult = strip_tags($result);
+        $lines = array_filter(explode("\n", $cleanResult), fn($line) => trim($line) !== '');
+
+        return array_values($lines); // Re-index array
+    }
+
     public function testRenderPriceWithProgressiveTiers(): void
     {
         // Arrange
@@ -40,24 +89,15 @@ class ProgressivePricePresenterTest extends TestCase
         // Act
         $result = $this->presenter->renderPrice($price);
 
-        // Assert
-        $this->assertStringContainsString('First 100 GB', $result);
-        $this->assertStringContainsString('$3.80', $result);
-
-        // Check prices are present
-        $this->assertStringContainsString('Next 100 GB', $result);
-        $this->assertStringContainsString('$3.40', $result);
-        $this->assertStringContainsString('Next 200 GB', $result);
-        $this->assertStringContainsString('$3.00', $result);
-        $this->assertStringContainsString('Next 600 GB', $result);
-        $this->assertStringContainsString('$2.50', $result);
-        $this->assertStringContainsString('Next 5000 GB', $result);
-        $this->assertStringContainsString('$2.00', $result);
-        $this->assertStringContainsString('Over 6000 GB', $result);
-
-        // Check discounts are present (but not on the first line)
-        $this->assertStringNotContainsString('First 100 GB $3.80 (-', $result); // No discount on first
-        $this->assertStringContainsString('(-', $result); // Has discounts in output
+        // Assert - Check lines in order with prices and discounts
+        $this->assertLinesContain($result, [
+            'First 100 GB $3.80',           // Line 0: no discount
+            'Next 100 GB $3.40 (-11%)',     // Line 1: 3.80 -> 3.40 = 10.5% ≈ 11%
+            'Next 200 GB $3.00 (-12%)',     // Line 2: 3.40 -> 3.00 = 11.8% ≈ 12%
+            'Next 600 GB $2.50 (-17%)',     // Line 3: 3.00 -> 2.50 = 16.7% ≈ 17%
+            'Next 5000 GB $2.00 (-20%)',    // Line 4: 2.50 -> 2.00 = 20%
+            'Over 6000 GB $2.00',           // Line 5: last threshold, no discount (same price)
+        ]);
     }
 
     public function testRenderPriceCalculatesRangesCorrectly(): void
@@ -73,22 +113,13 @@ class ProgressivePricePresenterTest extends TestCase
         // Act
         $result = $this->presenter->renderPrice($price);
 
-        // Assert
-        // First tier: 0 to 50 GB
-        $this->assertStringContainsString('First 50 GB', $result);
-        $this->assertStringContainsString('$5.00', $result);
-
-        // Second tier: 50 to 150 GB (100 GB range)
-        $this->assertStringContainsString('Next 100 GB', $result);
-        $this->assertStringContainsString('$4.00', $result);
-
-        // Third tier: 150 to 500 GB (350 GB range)
-        $this->assertStringContainsString('Next 350 GB', $result);
-        $this->assertStringContainsString('$3.00', $result);
-
-        // Last tier
-        $this->assertStringContainsString('Over 500 GB', $result);
-        $this->assertStringContainsString('$2.00', $result);
+        // Assert - Check lines in order
+        $this->assertLinesContain($result, [
+            'First 50 GB $5.00',         // 0 to 50 GB
+            'Next 100 GB $4.00 (-20%)',  // 50 to 150 GB (100 GB range), 5.00 -> 4.00 = 20%
+            'Next 350 GB $3.00 (-25%)',  // 150 to 500 GB (350 GB range), 4.00 -> 3.00 = 25%
+            'Over 500 GB $2.00 (-33%)',  // Last tier, 3.00 -> 2.00 = 33.3% ≈ 33%
+        ]);
     }
 
     public function testRenderPriceWithSingleThreshold(): void
@@ -101,11 +132,11 @@ class ProgressivePricePresenterTest extends TestCase
         // Act
         $result = $this->presenter->renderPrice($price);
 
-        // Assert
-        $this->assertStringContainsString('First 100 GB', $result);
-        $this->assertStringContainsString('$10.00', $result);
-        $this->assertStringContainsString('Over 100 GB', $result);
-        $this->assertStringContainsString('$5.00', $result);
+        // Assert - Check lines in order
+        $this->assertLinesContain($result, [
+            'First 100 GB $10.00',       // 0 to 100 GB
+            'Over 100 GB $5.00 (-50%)',  // Last tier, 10.00 -> 5.00 = 50%
+        ]);
     }
 
     public function testRenderPriceFallsBackToParentForStandardPrice(): void
@@ -140,11 +171,15 @@ class ProgressivePricePresenterTest extends TestCase
         // Act
         $result = $this->presenter->renderPrice($price);
 
-        // Assert
-        $this->assertStringContainsString('First 10 GB Included', strip_tags($result));
-        $this->assertStringNotContainsString('First 10 GB $', $result); // Should not have a price for prepaid
-        $this->assertStringContainsString('Next 90 GB', $result); // 100 - 10 = 90
-        $this->assertStringContainsString('$3.40', $result);
+        // assert - check lines in order (no discount after prepaid line)
+        $this->assertLinesContain($result, [
+            'First 10 GB Included',
+            'Next 90 GB $3.80',
+            'Next 100 GB $3.40 (-11%)',
+            'Next 200 GB $3.00 (-12%)',
+            'Next 5600 GB $2.50 (-17%)',
+            'Over 6000 GB $2.00 (-20%)',
+        ]);
     }
 
     public function testRenderPriceWithPrepaidQuantityCoveringFirstThreshold(): void
@@ -162,14 +197,20 @@ class ProgressivePricePresenterTest extends TestCase
         // Act
         $result = $this->presenter->renderPrice($price);
 
-        // Assert
-        $this->assertStringContainsString('First 100 GB Included', strip_tags($result));
-        $this->assertStringContainsString('Next 100 GB', $result); // 200 - 100 = 100
-        $this->assertStringContainsString('$3.00', $result);
-        $this->assertStringContainsString('Next 200 GB', $result); // 400 - 200 = 200
-        $this->assertStringContainsString('$2.50', $result);
-        // Should NOT contain the first threshold (50 GB) since it's covered by prepaid
-        $this->assertStringNotContainsString('Next 50 GB', $result);
+        // Assert - First threshold (50) is skipped because prepaid covers it
+        $this->assertLinesContain($result, [
+            'First 100 GB Included',         // Prepaid
+            'Next 100 GB $3.40',             // 100 to 200 GB - no discount (first after prepaid)
+            'Next 200 GB $3.00 (-12%)',      // 200 to 400 GB
+            'Next 5600 GB $2.50 (-17%)',      // 200 to 400 GB
+            'Over 6000 GB $2.00 (-20%)',     // Last tier
+        ]);
+
+        // Verify that a skipped threshold doesn't appear
+        $lines = $this->getCleanLines($result);
+        foreach ($lines as $line) {
+            $this->assertStringNotContainsString('Next 50 GB', $line);
+        }
     }
 
     public function testRenderPriceWithPrepaidQuantityEqualToFirstThreshold(): void
@@ -186,12 +227,13 @@ class ProgressivePricePresenterTest extends TestCase
         // Act
         $result = $this->presenter->renderPrice($price);
 
-        // Assert
-        $this->assertStringContainsString('First 100 GB Included', strip_tags($result));
-        // The next tier should start from 100 to 200
-        $this->assertStringContainsString('Next 100 GB', $result); // 200 - 100
-        $this->assertStringContainsString('$3.00', $result);
-        $this->assertStringContainsString('Over 500 GB', $result);
+        // Assert - Check lines in order
+        $this->assertLinesContain($result, [
+            'First 100 GB Included',
+            'Next 100 GB $3.40',
+            'Next 300 GB $3.00 (-12%)',
+            'Over 500 GB $2.00 (-33%)',
+        ]);
     }
 
     public function testRenderPriceWithDiscounts(): void
@@ -208,15 +250,14 @@ class ProgressivePricePresenterTest extends TestCase
         // Act
         $result = $this->presenter->renderPrice($price);
 
-        // Assert - First line has no discount
-        $lines = explode("\n", strip_tags($result));
-        $this->assertStringNotContainsString('(-', $lines[0] ?? '');
-
-        // Assert - Check that discounts are present in subsequent lines
-        $this->assertStringContainsString('(-11%)', $result); // 3.80 -> 3.40
-        $this->assertStringContainsString('(-12%)', $result); // 3.40 -> 3.00
-        $this->assertStringContainsString('(-17%)', $result); // 3.00 -> 2.50
-        $this->assertStringContainsString('(-20%)', $result); // 2.50 -> 2.00
+        // Assert - Check lines in order with correct discounts
+        $this->assertLinesContain($result, [
+            'First 100 GB $3.80',           // No discount
+            'Next 100 GB $3.40 (-11%)',     // 3.80 -> 3.40 = 10.5% ≈ 11%
+            'Next 200 GB $3.00 (-12%)',     // 3.40 -> 3.00 = 11.8% ≈ 12%
+            'Next 600 GB $2.50 (-17%)',     // 3.00 -> 2.50 = 16.7% ≈ 17%
+            'Over 1000 GB $2.00 (-20%)',    // 2.50 -> 2.00 = 20%
+        ]);
     }
 
     public function testRenderPriceWithPrepaidHasNoDiscountOnFirstLine(): void
@@ -232,16 +273,14 @@ class ProgressivePricePresenterTest extends TestCase
         // Act
         $result = $this->presenter->renderPrice($price);
 
-        // Assert - Prepaid line should not have a discount
-        $this->assertStringContainsString('First 10 GB Included', strip_tags($result));
-        $this->assertStringNotContainsString('First 10 GB Included (-', strip_tags($result));
-
-        // Assert - First paid line (Next 90 GB) should not have discount
-        // because it's the first line with price after prepaid
-        $lines = explode('<br />', $result);
-        $secondLine = $lines[1] ?? '';
-        $this->assertStringContainsString('Next 90 GB', $secondLine);
-        $this->assertStringNotContainsString('(-', strip_tags($secondLine));
+        // Assert - Check lines in order, prepaid and first paid line have no discount
+        $this->assertLinesContain($result, [
+            'First 10 GB Included',         // Prepaid - no discount
+            'Next 90 GB $3.80',             // First paid line - no discount
+            'Next 100 GB $3.40 (-11%)',     // Has discount
+            'Next 300 GB $3.00 (-12%)',     // Has discount
+            'Over 500 GB $2.00 (-33%)',     // Has discount
+        ]);
     }
 
     public function testDiscountCalculationRounding(): void
@@ -256,9 +295,12 @@ class ProgressivePricePresenterTest extends TestCase
         // Act
         $result = $this->presenter->renderPrice($price);
 
-        // Assert
-        $this->assertStringContainsString('(-8%)', $result); // 3.00 -> 2.75 = 8.33% rounds to 8
-        $this->assertStringContainsString('(-9%)', $result); // 2.75 -> 2.50 = 9.09% rounds to 9
+        // Assert - Check rounding is correct
+        $this->assertLinesContain($result, [
+            'First 100 GB $3.00',           // No discount
+            'Next 100 GB $2.75 (-8%)',      // 3.00 -> 2.75 = 8.33% rounds to 8
+            'Over 200 GB $2.50 (-9%)',      // 2.75 -> 2.50 = 9.09% rounds to 9
+        ]);
     }
 
     private function createThreshold(string $price, string $quantity, string $unit, string $currency): Threshold
