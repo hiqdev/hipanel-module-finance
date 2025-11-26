@@ -191,8 +191,7 @@ class PriceController extends CrudController
                 if ($type === 'calculator_public_cloud') {
                     $trafficExist = array_filter(
                         $selection,
-                        static fn($entry
-                        ) => (string)$entry['object_id'] === (string)$object['object_id'] && $entry['price_type'] === 'overuse,server_traf_max'
+                        static fn($entry) => (string)$entry['object_id'] === (string)$object['object_id'] && $entry['price_type'] === 'overuse,server_traf_max'
                     );
                     if (!empty($trafficExist)) {
                         $object = reset($trafficExist);
@@ -278,12 +277,17 @@ class PriceController extends CrudController
             return '';
         }
 
-        $prices = array_map(function (array $priceRow): Price {
+        $prices = array_filter(array_map(function (array $priceRow): ?Price {
             $price = new Price($priceRow);
             if ($price->validate()) {
                 return $price;
             }
-        }, reset($dataPrice));
+
+            return null;
+        }, reset($dataPrice)));
+        if (empty($prices)) {
+            return '';
+        }
         foreach ($dataThreshold as $j => $thresholds) {
             if (!isset($prices[$j])) {
                 continue;
