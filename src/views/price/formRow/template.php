@@ -5,10 +5,6 @@ use hipanel\modules\finance\models\TemplatePrice;
 use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\modules\finance\widgets\PriceFields;
-use hipanel\widgets\AmountWithCurrency;
-use Money\Currency;
-use Money\Formatter\DecimalMoneyFormatter;
-use Money\Money;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 

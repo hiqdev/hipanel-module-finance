@@ -47,10 +47,7 @@ use yii\web\UnprocessableEntityHttpException;
 
 class PlanController extends CrudController
 {
-    /**
-     * @var PriceModelFactory
-     */
-    public $priceModelFactory;
+    private PriceModelFactory $priceModelFactory;
 
     /**
      * PlanController constructor.
@@ -440,7 +437,6 @@ class PlanController extends CrudController
                 $priceData['class'] = 'CertificatePrice';
             }
 
-            /** @var Price $price */
             $price = Price::instantiate($priceData);
             $price->setScenario('create');
             $price->setAttributes($priceData);

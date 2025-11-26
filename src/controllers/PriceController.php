@@ -22,11 +22,13 @@ use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\actions\PriceUpdateAction;
 use hipanel\modules\finance\collections\PricesCollection;
+use hipanel\modules\finance\grid\presenters\price\ProgressivePricePresenter;
 use hipanel\modules\finance\helpers\PriceSort;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\query\PriceQuery;
 use hipanel\modules\finance\models\TargetObject;
+use hipanel\modules\finance\models\Threshold;
 use Yii;
 use yii\base\DynamicModel;
 use yii\base\Event;
@@ -225,7 +227,10 @@ class PriceController extends CrudController
             }
             $prices = $this->getSuggested($plan_id, $plan_id, null, $type);
             $existingObjects = array_keys(ArrayHelper::map($prices, 'object_id', 'id'));
-            $uniqSuggestions = array_filter($suggestions, static fn($suggestion) => !in_array($suggestion->object_id, $existingObjects, true));
+            $uniqSuggestions = array_filter(
+                $suggestions,
+                static fn($suggestion) => !in_array($suggestion->object_id, $existingObjects, true)
+            );
             $prices = array_merge($prices, $uniqSuggestions);
             $prices = PriceSort::anyPrices()->values($prices, true);
 
@@ -260,6 +265,46 @@ class PriceController extends CrudController
             'models' => $models,
             'plan' => $plan,
         ]);
+    }
+
+    public function actionGetProgressiveInfo(): string
+    {
+        $presenter = Yii::$container->get(ProgressivePricePresenter::class);
+        $dataPrice = array_filter($this->request->post(), fn($key) => str_ends_with($key, 'Price'), ARRAY_FILTER_USE_KEY);
+        $dataThreshold = $this->request->post('Threshold', []);
+
+        if (!$dataPrice) {
+            return '';
+        }
+
+        $prices = array_filter(array_map(function (array $priceRow): ?Price {
+            $price = new Price($priceRow);
+            if ($price->validate()) {
+                return $price;
+            }
+
+            return null;
+        }, reset($dataPrice)));
+        if (empty($prices)) {
+            return '';
+        }
+        foreach ($dataThreshold as $j => $thresholds) {
+            if (!isset($prices[$j])) {
+                continue;
+            }
+            $thresholdRows = [];
+            $price = $prices[$j];
+            foreach ($thresholds as $threshold) {
+                $threshold['parent'] = $price;
+                $thresholdObj = new Threshold($threshold);
+                if ($thresholdObj->validate()) { // todo: validation needed?
+                    $thresholdRows[] = $thresholdObj;
+                }
+            }
+            $price->setProgressivePricingThresholds($thresholdRows);
+        }
+
+        return $presenter->renderPrice(reset($prices));
     }
 
     private function getSuggested($plan_id, $object_id = null, $template_plan_id = null, string $type = 'default'): array

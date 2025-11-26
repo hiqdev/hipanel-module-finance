@@ -10,12 +10,14 @@
 
 namespace hipanel\modules\finance\grid\presenters\price;
 
-use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\RepresentablePrice;
 use hipanel\widgets\ArraySpoiler;
 use NumberFormatter;
+use Throwable;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\bootstrap\Html;
+use yii\di\NotInstantiableException;
 use yii\i18n\Formatter;
 use yii\web\User;
 
@@ -27,16 +29,13 @@ use yii\web\User;
  */
 class PricePresenter
 {
-    protected Formatter $formatter;
-
-    protected User $user;
-
     protected string $priceAttribute = 'price';
 
-    public function __construct(Formatter $formatter, User $user)
+    public function __construct(
+        readonly protected Formatter $formatter,
+        readonly protected User $user,
+    )
     {
-        $this->formatter = $formatter;
-        $this->user = $user;
     }
 
     /**
@@ -51,25 +50,25 @@ class PricePresenter
     }
 
     /**
-     * @param Price $price
-     * @throws InvalidConfigException
+     * @param RepresentablePrice $price
      * @return string
+     * @throws InvalidConfigException
+     * @throws Throwable
+     * @throws NotInstantiableException
      */
-    public function renderPrice(Price $price): string
+    public function renderPrice(RepresentablePrice $price): string
     {
         $unit = $formula = '';
         if ($price->getUnitLabel()) {
             $unit = ' ' . Yii::t('hipanel:finance', 'per {unit}', ['unit' => Html::encode($price->getUnitLabel())]);
         }
 
-        $activeFormulas = array_filter($price->getFormulaLines(), fn ($el) => $el['is_actual']);
+        $activeFormulas = array_filter($price->getFormulaLines(), fn($el) => $el['is_actual']);
         if (!empty($activeFormulas)) {
             $formula = ArraySpoiler::widget([
-                'id' => mt_rand(),
+                'id' => uniqid('f_'),
                 'data' => $activeFormulas,
-                'formatter' => function ($v) {
-                    return Html::tag('kbd', Html::encode($v['formula']), ['class' => 'javascript']);
-                },
+                'formatter' => fn($v) => Html::tag('kbd', Html::encode($v['formula']), ['class' => 'javascript']),
                 'visibleCount' => 0,
                 'delimiter' => '<br />',
                 'button' => [
@@ -81,17 +80,21 @@ class PricePresenter
                 ],
             ]);
         }
-        $sum = $this->formatter->asCurrency($price->{$this->priceAttribute}, $price->currency, [NumberFormatter::MAX_FRACTION_DIGITS => 20]);
+        $sum = $this->formatter->asCurrency(
+            $price->{$this->priceAttribute},
+            $price->currency,
+            [NumberFormatter::MAX_FRACTION_DIGITS => 20]
+        );
 
         return Html::tag('strong', $sum) . $unit . $formula;
     }
 
     /**
-     * @param Price $price
+     * @param RepresentablePrice $price
      * @param string $attribute
      * @return string
      */
-    public function renderInfo(Price $price, string $attribute = 'quantity'): string
+    public function renderInfo(RepresentablePrice $price, string $attribute = 'quantity'): string
     {
         if (!$price->isQuantityPredefined()) {
             return Yii::t('hipanel:finance', '{icon} Quantity: {quantity}', [

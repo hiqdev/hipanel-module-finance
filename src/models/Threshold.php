@@ -3,11 +3,14 @@
 namespace hipanel\modules\finance\models;
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\base\Model;
+use yii\di\NotInstantiableException;
 
 /**
  *
  * @property-read string $unitLabel
+ * @property-read string $currencyLabel
  * @property-read bool $isNewRecord
  */
 class Threshold extends Model
@@ -30,14 +33,18 @@ class Threshold extends Model
         return empty($this->price);
     }
 
+    /**
+     * @throws NotInstantiableException
+     * @throws InvalidConfigException
+     */
     public function getUnitLabel(): ?string
     {
-        return $this->parent->getUnitLabel();
+        return $this->parent?->getUnitLabel();
     }
 
-    public function getCurrencyLabel()
+    public function getCurrencyLabel(): string
     {
-        return mb_strtoupper($this->currency);
+        return $this->currency !== null ? mb_strtoupper($this->currency) : '';
     }
 
     public function setParent(?Price $parent): void

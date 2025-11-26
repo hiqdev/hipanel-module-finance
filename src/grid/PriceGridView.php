@@ -29,15 +29,12 @@ use yii\bootstrap\Html;
  */
 class PriceGridView extends BoxedGridView
 {
-    /**
-     * @var PricePresenterFactory
-     */
-    private $presenterFactory;
-
-    public function __construct(PricePresenterFactory $presenterFactory, array $config = [])
+    public function __construct(
+        readonly private PricePresenterFactory $presenterFactory,
+        array $config = []
+    )
     {
         parent::__construct($config);
-        $this->presenterFactory = $presenterFactory;
     }
 
     public function columns()
@@ -60,7 +57,6 @@ class PriceGridView extends BoxedGridView
                 'label' => Yii::t('hipanel.finance.price', 'Old price'),
                 'format' => 'raw',
                 'value' => function (Price $model): string {
-                    /** @var PricePresenter $presenter */
                     $presenter = $this->presenterFactory->build($model::class);
 
                     return $presenter
