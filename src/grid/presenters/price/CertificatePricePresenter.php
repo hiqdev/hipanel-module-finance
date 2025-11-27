@@ -10,7 +10,8 @@
 
 namespace hipanel\modules\finance\grid\presenters\price;
 
-use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\CertificatePrice;
+use hipanel\modules\finance\models\RepresentablePrice;
 use Money\MoneyFormatter;
 use yii\i18n\Formatter;
 use yii\web\User;
@@ -32,13 +33,13 @@ class CertificatePricePresenter extends PricePresenter
     }
 
     /**
-     * @param \hipanel\modules\finance\models\CertificatePrice $price
+     * @param CertificatePrice $price
      * @return string
      */
-    public function renderPrice(Price $price): string
+    public function renderPrice(RepresentablePrice $price): string
     {
         $result = [];
-        foreach ($price->sums as $period => $amount) {
+        foreach ($price->sums as $amount) {
             $result[] = $this->moneyFormatter->format($amount);
         }
 
