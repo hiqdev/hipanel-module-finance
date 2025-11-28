@@ -1,7 +1,7 @@
 import { test } from "@hipanel-core/fixtures";
 import { expect } from "@playwright/test";
 import Select2 from "@hipanel-core/input/Select2";
-import Alert from "@hipanel-core/ui/Alert";
+import { Alert } from "@hipanel-core/shared/ui/components";
 import AdvancedSearch from "@hipanel-core/helper/AdvancedSearch";
 
 test("the currency exchange operation works and creates a bill @hipanel-module-finance @manager", async ({ page }) => {
@@ -28,7 +28,7 @@ test("the currency exchange operation works and creates a bill @hipanel-module-f
 
   await advancedSearch.setFilter("client_id", "hipanel_test_user");
   await advancedSearch.setFilter("descr", "Exchanging 200.00 USD");
-  await advancedSearch.submitButton();
+  await advancedSearch.search();
 
   await page.locator("div[role=grid] a:has-text(\"-$200.00\")").first().click();
 

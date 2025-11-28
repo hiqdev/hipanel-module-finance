@@ -2,11 +2,12 @@ import { test } from "@hipanel-core/fixtures";
 import { expect } from "@playwright/test";
 import PriceHelper from "@hipanel-module-finance/Helper/PriceHelper";
 import ViewTableHelper from "@hipanel-module-finance/Helper/ViewTableHelper";
+import { faker } from "@faker-js/faker";
 
-test("Test the Progressive Price feature works @hipanel-module-finance @manager", {
-    tag: '@dedicated-server',
+test("the Progressive Price feature works @hipanel-module-finance @manager", {
+  tag: "@dedicated-server",
 }, async ({ page }) => {
-  const planName = "TEST-PROGRESSIVE-PRICE-TEMPLATE" + Math.random().toString(36).substring(7);
+  const planName = "TEST-PROGRESSIVE-PRICE-TEMPLATE-" + faker.string.nanoid(10).toUpperCase();
   const priceHelper = new PriceHelper(page);
   const viewTable = new ViewTableHelper(page);
 
@@ -14,15 +15,20 @@ test("Test the Progressive Price feature works @hipanel-module-finance @manager"
 
   await expect(page.locator("h1")).toContainText(planName);
 
-  await viewTable.assertCellEquals('Name', planName);
-  await viewTable.assertCellEquals('Type', 'template');
-  await viewTable.assertCellEquals('Status', 'ok');
+  await viewTable.assertCellEquals("Name", planName);
+  await viewTable.assertCellEquals("Type", "template");
+  await viewTable.assertCellEquals("Status", "ok");
 
   await priceHelper.createProgressivePrice(planName);
 
-  await expect(page.getByRole("cell", { name: "$30.00 per Item over 0 Item $0.0085 per Item over 1 Item $0.008 per Item over 2 Item $0.0075 per Item over 3 Item" })).toBeVisible();
-
   await expect(page.getByText("Number of IPs")).toBeVisible();
+  await expect(page.getByRole("cell", {
+    name: "First 1 Item $30.00 "
+      + "Next 1 Item $0.0085 (-100%) "
+      + "Next 1 Item $0.008 (-6%) "
+      + "Over 3 Item $0.0075 (-6%) ",
+  })).toBeVisible();
+
 
   page.on("dialog", async dialog => {
     await dialog.accept();
@@ -30,10 +36,6 @@ test("Test the Progressive Price feature works @hipanel-module-finance @manager"
 
   await priceHelper.deleteProgressivePriceItems();
 
-  await page.locator('input[name="selection_all"]').check();
-  await page.getByRole("button", { name: "Update" }).click();
-  await expect( page.locator('input#templateprice-0-class')).toBeHidden();
-  await page.getByRole("button", { name: "Cancel" }).click();
-
-  await page.getByTestId("delete").click();
+  await expect(page.getByText("Number of IPs")).toBeVisible();
+  await expect(page.getByText("$30.00 per Item")).toBeVisible();
 });

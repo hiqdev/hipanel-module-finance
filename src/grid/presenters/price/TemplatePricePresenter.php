@@ -11,9 +11,11 @@
 namespace hipanel\modules\finance\grid\presenters\price;
 
 use hipanel\helpers\StringHelper;
-use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\RepresentablePrice;
+use hipanel\modules\finance\models\TemplatePrice;
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\di\NotInstantiableException;
 use yii\helpers\Html;
 
 /**
@@ -24,10 +26,12 @@ use yii\helpers\Html;
 class TemplatePricePresenter extends PricePresenter
 {
     /**
-     * @param \hipanel\modules\finance\models\TemplatePrice $price
+     * @param TemplatePrice $price
      * @return string
+     * @throws InvalidConfigException
+     * @throws NotInstantiableException
      */
-    public function renderPrice(Price $price): string
+    public function renderPrice(RepresentablePrice $price): string
     {
         $formatter = Yii::$app->formatter;
 

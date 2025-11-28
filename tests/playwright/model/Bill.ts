@@ -1,15 +1,15 @@
-import Charge from "@hipanel-module-finance/model/Charge";
+import Charge from "./Charge";
 
-export default class Bill {
-  public client: string;
-  public type: string;
-  public currency: string;
-  public sum: number;
-  public quantity: number;
-  public requisite?: string;
-  public time?: string | null;
-  public description?: string | null;
-  public class?: string | null;
-  public object?: string | null;
-  public charges?: Array<Charge> | null;
+export default interface Bill {
+  client: string;
+  type: string;
+  currency: string;
+  sum: number;
+  quantity: number;
+  requisite?: string;
+  time?: string | null;
+  description?: string | null;
+  class?: string | null;
+  object?: string | null;
+  charges?: Array<Charge> | null;
 }

@@ -4,7 +4,7 @@ import BillForm from "@hipanel-module-finance/page/bill/BillForm";
 import BillHelper from "@hipanel-module-finance/Helper/BillHelper";
 import Bill from "@hipanel-module-finance/model/Bill";
 import Index from "@hipanel-core/page/Index";
-import Alert from "@hipanel-core/ui/Alert";
+import { Alert } from "@hipanel-core/shared/ui/components";
 
 const bill: Bill = {
   client: "hipanel_test_user",
@@ -48,4 +48,3 @@ test("Create and copy bill with charges @hipanel-module-finance @seller", async 
   await billHelper.ensureBillDidntChange(bill, billId);
 
 });
-
