@@ -67,9 +67,10 @@ class RequisiteController extends CrudController
                 'on beforePerform' => function (Event $event) use ($canSeeDocuments) {
                     $action = $event->sender;
                     $representation = $action->controller->indexPageUiOptionsModel->representation;
+                    /** @var ContactQuery $query */
                     $query = $action->getDataProvider()->query;
                     if (in_array($representation, ['balance', 'balances'], true)) {
-                        $query->addSelect('balances');
+                        $query->withBalances();
                     }
                     if ($canSeeDocuments && $representation === 'common') {
                         $query->withDocuments();
