@@ -37,7 +37,7 @@ use Yii;
  */
 class Requisite extends Contact
 {
-    /*
+    /**
      * @return array the list of attributes for this record
      */
     use ModelTrait;

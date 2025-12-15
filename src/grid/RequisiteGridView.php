@@ -145,7 +145,7 @@ class RequisiteGridView extends ContactGridView
                     return !empty($balance) ? Html::tag('span', $formatter->asCurrency($balance, $currency)) : '';
                 },
                 'exportedValue' => function (Requisite $model) use ($attribute) {
-                    return $this->plainSum($model->balance[$attribute]);
+                    return $this->plainSum($model->balance[$attribute] ?? null);
                 },
             ];
         }
@@ -228,8 +228,12 @@ class RequisiteGridView extends ContactGridView
 
     public function plainSum($sum): float|string
     {
-        if (!is_string($sum)) return '';
-        if (empty($sum)) return 0.0;
+        if (!is_string($sum)) {
+            return '';
+        }
+        if (empty($sum)) {
+            return 0.0;
+        }
 
         return (float)$sum;
     }
@@ -255,8 +259,7 @@ class RequisiteGridView extends ContactGridView
                                     "{$form->formName()}[id]" => $document->id,
                                 ],
                             ],
-                        ]
-
+                        ],
                     );
                 },
             ];

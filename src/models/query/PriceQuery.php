@@ -20,7 +20,6 @@ class PriceQuery extends ActiveQuery
 
     public function withPlan(): self
     {
-        return $this->addSelect('plan')
-                    ->joinWith('plan');
+        return $this->addSelect('plan')->joinWith('plan');
     }
 }
