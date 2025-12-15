@@ -27,7 +27,8 @@ $this->registerCss("
 ");
 
 $this->title = Yii::t('hipanel:finance', 'Requisites');
-$this->params['subtitle'] = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii::t('hipanel', 'filtered list') : Yii::t('hipanel', 'full list');
+$rep = $representationCollection->getByName($uiModel->representation)->getLabel();
+$this->params['subtitle'] = Yii::t('hipanel:finance', '{representation} view', ['representation' => $rep ?: Yii::t('hipanel', 'Common')]);
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

@@ -64,10 +64,9 @@ class PriceController extends CrudController
                 'on beforePerform' => function (Event $event) {
                     /** @var PriceQuery $query */
                     $query = $event->sender->getDataProvider()->query;
-                    $query
-                        ->withMainObject()
-                        ->withPlan()
-                        ->withFormulaLines();
+                    $query->withMainObject()
+                          ->withPlan()
+                          ->withFormulaLines();
                 },
             ],
             'view' => [

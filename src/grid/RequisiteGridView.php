@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Finance module for HiPanel
  *
@@ -12,24 +12,28 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\MainColumn;
 use hipanel\grid\RefColumn;
+use hipanel\grid\XEditableColumn;
 use hipanel\helpers\Url;
+use hipanel\models\Ref;
+use hipanel\modules\client\grid\ContactGridView;
 use hipanel\modules\finance\forms\GenerateInvoiceForm;
 use hipanel\modules\finance\menus\RequisiteActionsMenu;
 use hipanel\modules\finance\models\Requisite;
 use hiqdev\yii2\menus\grid\MenuColumn;
-use hipanel\modules\client\grid\ContactGridView;
-use hipanel\grid\XEditableColumn;
-use hipanel\models\Ref;
-use yii\helpers\Html;
 use Yii;
+use yii\helpers\Html;
 
+/**
+ *
+ * @property-read array $staticColumns
+ */
 class RequisiteGridView extends ContactGridView
 {
     public $resizableColumns = false;
 
     public function columns()
     {
-        $currencies = Ref::getList('type,currency');
+        $currencies = array_keys(Ref::getList('type,currency'));
         $formatter = Yii::$app->formatter;
         $cellLabels = [
             'balance' => Yii::t('hipanel:finance', "Balance"),
@@ -41,8 +45,21 @@ class RequisiteGridView extends ContactGridView
             'credit' => '#FEF2F2',
             'balance' => 'inherit',
         ];
-        foreach (array_keys($currencies) as $currency) {
-            $curColumns[$currency] = [
+
+        return array_merge(
+            parent::columns(),
+            $this->getStaticColumns(),
+            $this->getCurrencyColumns($currencies, $cellLabels, $labelColors, $formatter),
+            ['eur_balance' => $this->getEurBalanceColumn($formatter)],
+            $this->getBalanceColumns($cellLabels, $labelColors, $formatter)
+        );
+    }
+
+    private function getCurrencyColumns(array $currencies, array $cellLabels, array $labelColors, $formatter): array
+    {
+        $columns = [];
+        foreach ($currencies as $currency) {
+            $columns[$currency] = [
                 'format' => 'html',
                 'attribute' => 'balances',
                 'filter' => false,
@@ -57,28 +74,35 @@ class RequisiteGridView extends ContactGridView
                     foreach ($cellLabels as $attribute => $label) {
                         $balance = $model->balances[$currency][$attribute] ?? null;
                         $color = $labelColors[$attribute] ?? null;
-                        $tags[] = Html::tag('span', $formatter->asCurrency($balance, $currency), array_filter([
-                            'title' => $label,
-                            'style' => $color ? "background-color: $color;" : null,
-                            'class' => 'text-right ' . ($attribute === 'balance' ? 'text-bold' : ''),
-                        ]));
-                    }
-                    if (empty($tags)) {
-                        return '';
+                        $tags[] = Html::tag(
+                            'span',
+                            $formatter->asCurrency($balance, $currency),
+                            array_filter([
+                                'title' => $label,
+                                'style' => $color ? "background-color: $color;" : null,
+                                'class' => 'text-right ' . ($attribute === 'balance' ? 'text-bold' : ''),
+                            ])
+                        );
                     }
 
-                    return Html::tag('span', implode('', $tags), ['class' => 'balance-cell']);
+                    return empty($tags) ? '' : Html::tag('span', implode('', $tags), ['class' => 'balance-cell']);
                 },
-                'exportedColumns' => ["export_${currency}_credit", "export_${currency}_debit", "export_${currency}_balance"],
+                'exportedColumns' => ["export_{$currency}_credit", "export_{$currency}_debit", "export_{$currency}_balance"],
             ];
             foreach ($cellLabels as $attribute => $label) {
-                $curColumns["export_${currency}_$attribute"] = [
+                $columns["export_{$currency}_$attribute"] = [
                     'label' => "$currency $attribute",
                     'value' => fn($model) => $this->plainSum($model->balances[$currency][$attribute] ?? null),
                 ];
             }
         }
-        $curColumns['eur_balance'] = [
+
+        return $columns;
+    }
+
+    private function getEurBalanceColumn($formatter): array
+    {
+        return [
             'format' => 'raw',
             'attribute' => 'eur_balance',
             'filter' => false,
@@ -90,14 +114,19 @@ class RequisiteGridView extends ContactGridView
             'contentOptions' => [
                 'style' => 'text-align: center; vertical-align: middle;',
             ],
-            'value' => function (Requisite $model) use ($formatter): ?string {
-                return !empty($model->balance['eur_balance']) ? Html::tag('span', $formatter->asCurrency($model->balance['eur_balance'], 'eur')) : null;
-            },
+            'value' => fn(Requisite $model): ?string => !empty($model->balance['eur_balance']) ? Html::tag(
+                'span',
+                $formatter->asCurrency($model->balance['eur_balance'], 'eur')
+            ) : null,
             'exportedValue' => fn($model): ?string => $this->plainSum($model->balance['eur_balance'] ?? null),
         ];
+    }
 
+    private function getBalanceColumns(array $cellLabels, array $labelColors, $formatter): array
+    {
+        $columns = [];
         foreach ($cellLabels as $attribute => $label) {
-            $balanceColumns[$attribute] = [
+            $columns[$attribute] = [
                 'format' => 'raw',
                 'attribute' => 'balance',
                 'filter' => false,
@@ -107,26 +136,31 @@ class RequisiteGridView extends ContactGridView
                     'class' => 'text-right ' . ($attribute === 'balance' ? 'text-bold' : ''),
                 ],
                 'value' => function (Requisite $model) use ($attribute, $formatter): string {
+                    if (!isset($model->balance[$attribute])) {
+                        return '';
+                    }
                     $balance = $model->balance[$attribute];
                     $currency = $model->balance->currency ?? $model->balance['currency'] ?? 'usd';
-                    if (!empty($balance)) {
-                        return Html::tag('span', $formatter->asCurrency($balance, $currency));
-                    }
 
-                    return '';
+                    return !empty($balance) ? Html::tag('span', $formatter->asCurrency($balance, $currency)) : '';
                 },
                 'exportedValue' => function (Requisite $model) use ($attribute) {
-                    return $this->plainSum($model->balance[$attribute]);
-                }
+                    return $this->plainSum($model->balance[$attribute] ?? null);
+                },
             ];
         }
 
-        return array_merge(parent::columns(), [
+        return $columns;
+    }
+
+    private function getStaticColumns(): array
+    {
+        return [
             'name' => [
                 'class' => MainColumn::class,
                 'filterAttribute' => 'name_ilike',
                 'format' => 'raw',
-                'value' => function($model) {
+                'value' => function ($model) {
                     return Html::a(Html::encode($model->name), ['view', 'id' => $model->id])
                         . "<br>"
                         . Html::encode($model->organization);
@@ -172,7 +206,14 @@ class RequisiteGridView extends ContactGridView
                 'filter' => false,
                 'value' => function (Requisite $model) {
                     $value = '';
-                    foreach (['invoice_last_no', 'sinvoice_last_no', 'pinvoice_last_no', 'payment_request_last_no', 'spayment_request_last_no', 'ppayment_request_last_no'] as $attr) {
+                    foreach ([
+                                 'invoice_last_no',
+                                 'sinvoice_last_no',
+                                 'pinvoice_last_no',
+                                 'payment_request_last_no',
+                                 'spayment_request_last_no',
+                                 'ppayment_request_last_no',
+                             ] as $attr) {
                         if (empty($model->$attr)) {
                             continue;
                         }
@@ -180,16 +221,20 @@ class RequisiteGridView extends ContactGridView
                     }
 
                     return $value;
-                }
+                },
             ],
-        ], $curColumns ?? [],
-            $balanceColumns ?? []
-        );
+        ];
     }
 
-    public function plainSum($sum) {
-        if (!is_string($sum)) return '';
-        if (empty($sum)) return 0.0;
+    public function plainSum($sum): float|string
+    {
+        if (!is_string($sum)) {
+            return '';
+        }
+        if (empty($sum)) {
+            return 0.0;
+        }
+
         return (float)$sum;
     }
 
@@ -214,10 +259,9 @@ class RequisiteGridView extends ContactGridView
                                     "{$form->formName()}[id]" => $document->id,
                                 ],
                             ],
-                        ]
-
+                        ],
                     );
-                }
+                },
             ];
         }
 

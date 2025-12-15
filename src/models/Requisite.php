@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\base\ModelTrait;
 use hipanel\modules\client\models\Contact;
 use hipanel\modules\document\models\Document;
 use Yii;
@@ -23,26 +24,36 @@ use Yii;
  *       balance: float|int,
  *       eur_sum?: float|int|null
  *   }> $balances
+ * @psalm-property array{
+ *      requisite_id: int,
+ *      currency: string,
+ *      eur_balance: string,
+ *      balance: string,
+ *      debit: string,
+ *      credit: string,
+ * } $balance
+ *
+ * @property-read array $documentsByTypes
  */
 class Requisite extends Contact
 {
-    /*
+    /**
      * @return array the list of attributes for this record
      */
-    use \hipanel\base\ModelTrait;
+    use ModelTrait;
 
-    const TEMPLATE_INVOICE = 'invoice';
-    const TEMPLATE_ACCEPTANCE = 'acceptance';
-    const TEMPLATE_CONTRACT = 'contract';
-    const TEMPLATE_PROBATION = 'probation';
-    const TEMPLATE_INTERNAL_INVOICE = 'internal_invoice';
-    const TEMPLATE_PAYMENT_REQUEST = 'payment_request';
-    const TEMPLATE_PURCHASE_INVOICE = 'purchase_invoice';
-    const TEMPLATE_SERVICE_INVOICE = 'service_invoice';
-    const TEMPLATE_PURCHASE_PAYMENT_REQUEST = 'purchase_payment_request';
-    const TEMPLATE_SERVICE_PAYMENT_REQUEST = 'service_payment_request';
-    const TEMPLATE_DETAILED_SERVICE_INVOICE = 'detailed_service_invoice';
-    const TEMPLATE_DETAILED_PAYMENT_REQUEST = 'detailed_service_payment_request';
+    const string TEMPLATE_INVOICE = 'invoice';
+    const string TEMPLATE_ACCEPTANCE = 'acceptance';
+    const string TEMPLATE_CONTRACT = 'contract';
+    const string TEMPLATE_PROBATION = 'probation';
+    const string TEMPLATE_INTERNAL_INVOICE = 'internal_invoice';
+    const string TEMPLATE_PAYMENT_REQUEST = 'payment_request';
+    const string TEMPLATE_PURCHASE_INVOICE = 'purchase_invoice';
+    const string TEMPLATE_SERVICE_INVOICE = 'service_invoice';
+    const string TEMPLATE_PURCHASE_PAYMENT_REQUEST = 'purchase_payment_request';
+    const string TEMPLATE_SERVICE_PAYMENT_REQUEST = 'service_payment_request';
+    const string TEMPLATE_DETAILED_SERVICE_INVOICE = 'detailed_service_invoice';
+    const string TEMPLATE_DETAILED_PAYMENT_REQUEST = 'detailed_service_payment_request';
 
     public static function tableName()
     {
