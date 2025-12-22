@@ -1,7 +1,10 @@
 <?php
 
 use hipanel\modules\finance\grid\HistorySalesGridView;
+use hipanel\modules\finance\models\Target;
 use hipanel\widgets\IndexPage;
+
+/** @var Target $target */
 
 ?>
 
