@@ -120,7 +120,7 @@ class BillController extends CrudController
                             ]);
 
                             return $defaultSummary . $financeSummary;
-                        }, 3600);
+                        }, 1);
                     },
                 ],
             ],

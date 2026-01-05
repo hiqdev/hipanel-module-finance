@@ -1,16 +1,20 @@
 <?php
 
+use hipanel\modules\client\models\ClientSearch;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
 use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\widgets\BillTypeVueTreeSelect;
+use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
 use hipanel\modules\finance\widgets\combo\PlanCombo;
 use hipanel\modules\finance\widgets\TreeSelectBehavior;
 use hipanel\modules\stock\widgets\combo\OrderCombo;
 use hipanel\widgets\AdvancedSearch;
+use hipanel\widgets\TagsInput;
 use hiqdev\combo\StaticCombo;
 use hiqdev\yii2\daterangepicker\DateRangePicker;
 use yii\base\View;
+use yii\bootstrap\Html;
 
 /**
  * @var View $this
@@ -27,6 +31,18 @@ $currencies = CurrencyFilter::addSymbolAndFilter($currencies);
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field( "ids") ?>
 </div>
+
+<?php if (Yii::$app->user->can('requisites.read')) : ?>
+    <?= Html::tag('div', $search->field('requisite_id')->widget(BillRequisitesCombo::class), ['class' => 'col-md-4 col-sm-6 col-xs-12']) ?>
+<?php endif ?>
+
+<?php if (Yii::$app->user->can('owner-staff')) : ?>
+    <div class="col-md-4 col-sm-6 col-xs-12">
+      <?= $search->field('client_tags')->widget(TagsInput::class, [
+          'searchModel' => new ClientSearch(),
+      ]) ?>
+  </div>
+<?php endif ?>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field( "type_ids")->widget(BillTypeVueTreeSelect::class, [

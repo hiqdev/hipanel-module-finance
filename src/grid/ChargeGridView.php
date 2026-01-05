@@ -36,6 +36,8 @@ use yii\helpers\Html;
  */
 class ChargeGridView extends BoxedGridView
 {
+    use AmountColumns;
+
     /**
      * @var QuantityFormatterFactoryInterface
      */
@@ -56,18 +58,6 @@ class ChargeGridView extends BoxedGridView
     public function columns()
     {
         return ArrayHelper::merge(parent::columns(), [
-            'client' => [
-                'format' => 'raw',
-                'exportedColumns' => ['client', 'client_tags'],
-                'value' => function (Charge $charge) {
-                    $clientColumn = (new ReflectionClass(ClientColumn::class))->newInstanceWithoutConstructor();
-
-                    return implode("\n", [
-                        $clientColumn->getValue($charge, Yii::$app->user),
-                        TagsManager::widget(['model' => $charge->customer, 'forceReadOnly' => true]),
-                    ]);
-                },
-            ],
             'client_tags' => [
                 'label' => Yii::t('hipanel:finance', 'Client tags'),
                 'value' => fn(Charge $charge) => $charge->customer?->tags ? implode(', ', $charge->customer->tags) : '',
@@ -76,39 +66,31 @@ class ChargeGridView extends BoxedGridView
                 'attribute' => 'label_ilike',
                 'sortAttribute' => 'label_ilike',
                 'label' => Yii::t('hipanel', 'Description'),
-                'value' => function (Charge $model): string {
-                    return $model->label ?? '';
-                },
+                'value' => fn(Charge $model): string => $model->label ?? '',
             ],
             'tariff' => [
                 'attribute' => 'tariff_id',
                 'label' => Yii::t('hipanel', 'Plan'),
                 'filter' => false,
                 'format' => 'raw',
-                'value' => function (Charge $model): string {
-                    return $this->tariffLink($model);
-                },
+                'value' => fn(Charge $model): string => $this->tariffLink($model),
             ],
             'type_label' => [
                 'label' => Yii::t('hipanel', 'Type'),
                 'headerOptions' => ['class' => 'text-right', 'style' => 'max-width: 25em;'],
                 'contentOptions' => ['style' => 'white-space: nowrap;'],
                 'format' => 'raw',
-                'value' => function (Charge $model) {
-                    return BillType::widget([
-                        'model' => $model,
-                        'field' => 'ftype',
-                        'labelField' => 'type_label',
-                    ]);
-                },
+                'value' => fn(Charge $model) => BillType::widget([
+                    'model' => $model,
+                    'field' => 'ftype',
+                    'labelField' => 'type_label',
+                ]),
                 'filterAttribute' => 'type',
                 'filterInputOptions' => ['style' => 'min-width: 10%;'],
-                'filter' => function (DataColumn $column, ChargeSearch $filterModel): string {
-                    return BillTypeFilter::widget([
-                        'attribute' => 'type_id',
-                        'model' => $filterModel,
-                    ]);
-                },
+                'filter' => fn(DataColumn $column, ChargeSearch $filterModel): string => BillTypeFilter::widget([
+                    'attribute' => 'type_id',
+                    'model' => $filterModel,
+                ]),
                 'exportedColumns' => ['export_type', 'export_top_type'],
             ],
             'export_type' => [
@@ -126,12 +108,8 @@ class ChargeGridView extends BoxedGridView
                 'colors' => ['danger' => 'warning'],
                 'headerOptions' => ['class' => 'text-right'],
                 'filter' => false,
-                'contentOptions' => function ($model) {
-                    return ['class' => 'text-right' . ($model->sum > 0 ? ' text-bold' : '')];
-                },
-                'urlCallback' => function ($model) {
-                    return $this->sumLink($model);
-                },
+                'contentOptions' => fn($model) => ['class' => 'text-right' . ($model->sum > 0 ? ' text-bold' : '')],
+                'urlCallback' => fn($model) => $this->sumLink($model),
                 'exportedColumns' => ['export_currency', 'export_sum'],
             ],
             'export_currency' => [
@@ -189,9 +167,7 @@ class ChargeGridView extends BoxedGridView
                 'attribute' => 'quantity',
                 'format' => 'raw',
                 'filter' => false,
-                'value' => function (Charge $model) {
-                    return $this->renderQuantity($model);
-                },
+                'value' => fn(Charge $model) => $this->renderQuantity($model),
             ],
             'time' => [
                 'filter' => false,
@@ -223,49 +199,26 @@ class ChargeGridView extends BoxedGridView
                     : false,
                 'contentOptions' => ['class' => 'text-center'],
                 'headerOptions' => ['class' => 'text-center'],
-                'value' => static function (Charge $model) {
-                    return IconStateLabel::widget([
-                        'model' => $model,
-                        'attribute' => 'is_payed',
-                        'icons' => ['fa-check', 'fa-times'],
-                        'colors' => ['#00a65a', '#dd4b39'],
-                        'messages' => [
-                            Yii::t('hipanel:finance', 'Charge paid'),
-                            Yii::t('hipanel:finance', 'Charge not paid'),
-                        ],
-                    ]);
-                },
+                'value' => static fn(Charge $model) => IconStateLabel::widget([
+                    'model' => $model,
+                    'attribute' => 'is_payed',
+                    'icons' => ['fa-check', 'fa-times'],
+                    'colors' => ['#00a65a', '#dd4b39'],
+                    'messages' => [
+                        Yii::t('hipanel:finance', 'Charge paid'),
+                        Yii::t('hipanel:finance', 'Charge not paid'),
+                    ],
+                ]),
             ],
             'discount_sum' => [
                 'attribute' => 'discount_sum',
                 'headerOptions' => ['class' => 'text-right'],
-                'value' => fn($charge): string => $charge->discount_sum ? $this->formatter->asCurrency($charge->discount_sum,
-                    $charge->currency) : '',
+                'value' => fn($charge): string => $charge->discount_sum
+                    ? $this->formatter->asCurrency($charge->discount_sum, $charge->currency)
+                    : '',
                 'enableSorting' => true,
                 'filter' => false,
                 'exportedValue' => fn($charge) => $this->plainSum($charge->discount_sum),
-            ],
-            'net_amount' => [
-                'attribute' => 'net_amount',
-                'headerOptions' => ['class' => 'text-right'],
-                'value' => fn($charge): string => $charge->net_amount ? $this->formatter->asCurrency($charge->net_amount,
-                    $charge->currency) : '',
-                'enableSorting' => false,
-                'filter' => false,
-                'exportedValue' => fn($charge) => $this->plainSum($charge->net_amount),
-            ],
-            'eur_amount' => [
-                'attribute' => 'eur_amount',
-                'headerOptions' => ['class' => 'text-right'],
-                'value' => fn($charge): string => $charge->eur_amount ? $this->formatter->asCurrency($charge->eur_amount, 'eur') : '',
-                'enableSorting' => false,
-                'filter' => false,
-                'exportedValue' => fn($charge) => $this->plainSum($charge->eur_amount),
-            ],
-            'rate' => [
-                'attribute' => 'rate',
-                'enableSorting' => false,
-                'filter' => false,
             ],
             'bill_id' => [
                 'attribute' => 'bill_id',
@@ -283,13 +236,7 @@ class ChargeGridView extends BoxedGridView
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => ['class' => 'text-right'],
             ],
-        ]);
-    }
-
-    public function plainSum($sum) {
-        if (!is_string($sum)) return '';
-        if (empty($sum)) return 0.0;
-        return (float)$sum;
+        ], $this->amountColumns());
     }
 
     /**
@@ -305,6 +252,7 @@ class ChargeGridView extends BoxedGridView
     }
 
     /**
+     * @param Charge $charge
      * @return string
      */
     private function renderQuantity(Charge $charge): string
