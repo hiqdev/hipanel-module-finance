@@ -10,9 +10,9 @@
 
 namespace hipanel\modules\finance\grid;
 
+use hipanel\grid\BoxedGridView;
 use hipanel\grid\CurrencyColumn;
 use hipanel\grid\MainColumn;
-use hipanel\grid\RefColumn;
 use hipanel\helpers\Url;
 use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\finance\helpers\CurrencyFilter;
@@ -26,7 +26,6 @@ use hipanel\modules\finance\widgets\BillTypeFilter;
 use hipanel\modules\finance\widgets\ColoredBalance;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hipanel\widgets\ArraySpoiler;
-use hipanel\widgets\ClientSellerLink;
 use hipanel\widgets\IconStateLabel;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
@@ -37,13 +36,12 @@ use yii\helpers\Html;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class BillGridView extends \hipanel\grid\BoxedGridView
+class BillGridView extends BoxedGridView
 {
+    use AmountColumns;
+
     public array $billTypeList = [];
-    /**
-     * @var QuantityFormatterFactoryInterface
-     */
-    private $quantityFactory;
+    private QuantityFormatterFactoryInterface $quantityFactory;
 
     public function __construct(QuantityFormatterFactoryInterface $quantityFactory, array $config = [])
     {
@@ -114,7 +112,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'sortAttribute' => 'time',
                 'contentOptions' => ['class' => 'text-nowrap'],
                 'value' => function (Bill $model) {
-                    list($date, $time) = explode(' ', $model->time, 2);
+                    [$date, $time] = explode(' ', $model->time, 2);
 
                     return in_array($model->gtype, [
                         'discount',
@@ -158,7 +156,9 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'filterOptions' => ['class' => 'narrow-filter text-right'],
                 'filter' => function ($column, $filterModel) {
                     $currencies = CurrencyFilter::addSymbolAndFilter($this->currencies);
-                    return Html::activeDropDownList($filterModel, 'currency_in', $currencies, ['class' => 'form-control', 'prompt' => '--']);
+
+                    return Html::activeDropDownList($filterModel, 'currency_in', $currencies, ['class' => 'form-control', 'prompt' => '--']
+                    );
                 },
                 'exportedColumns' => ['export_sum', 'export_currency'],
             ],
@@ -220,11 +220,13 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                     ]);
                     $balance = ColoredBalance::widget(compact('model'));
 
-                    return Html::tag('span', implode('', [$isPayed, $balance]), ['style' => [
-                        'display' => 'flex',
-                        'justify-content' => 'space-between',
-                        'align-items' => 'center',
-                    ]]);
+                    return Html::tag('span', implode('', [$isPayed, $balance]), [
+                        'style' => [
+                            'display' => 'flex',
+                            'justify-content' => 'space-between',
+                            'align-items' => 'center',
+                        ],
+                    ]);
                 },
                 'filterOptions' => ['class' => 'narrow-filter text-right'],
                 'filter' => fn($column, $filterModel): string => BillIsPayedDropdown::widget(['model' => $filterModel]),
@@ -242,17 +244,19 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'balance',
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'text-right'],
-                'contentOptions' => function ($model, $key, $index) {
-                    return ['class' => 'text-right' . ($index ? '' : ' text-bold')];
-                },
-                'value' => function (Bill $model) {
-                    return ColoredBalance::widget(compact('model'));
-                },
+                'contentOptions' => fn($model, $key, $index) => ['class' => 'text-right' . ($index ? '' : ' text-bold')],
+                'value' => fn(Bill $model): string => ColoredBalance::widget(compact('model')),
                 'filterAttribute' => 'currency_in',
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'filter' => function ($column, $filterModel) {
                     $currencies = CurrencyFilter::addSymbolAndFilter($this->currencies);
-                    return Html::activeDropDownList($filterModel, 'currency_in', $currencies, ['class' => 'form-control', 'prompt' => '--']);
+
+                    return Html::activeDropDownList(
+                        $filterModel,
+                        'currency_in',
+                        $currencies,
+                        ['class' => 'form-control', 'prompt' => '--']
+                    );
                 },
             ],
             'gtype' => [
@@ -261,27 +265,21 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             'type_label' => [
                 'label' => Yii::t('hipanel:finance', 'Type'),
                 'filterOptions' => ['class' => 'text-right'],
-                'filter' => function ($column, $filterModel) {
-                    return BillTypeFilter::widget([
-                        'billTypeList' => $this->billTypeList,
-                        'attribute' => 'type_id',
-                        'model' => $filterModel,
-                    ]);
-                },
+                'filter' => fn($column, $filterModel) => BillTypeFilter::widget([
+                    'billTypeList' => $this->billTypeList,
+                    'attribute' => 'type_id',
+                    'model' => $filterModel,
+                ]),
                 'sortAttribute' => 'type_id',
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'text-right', 'style' => 'max-width: 25em; width: 20%'],
                 'filterInputOptions' => ['style' => 'min-width: 10%;'],
-                'contentOptions' => function () {
-                    return ['class' => 'text-right', 'style' => 'white-space: nowrap;'];
-                },
-                'value' => function (Bill $model) {
-                    return BillType::widget([
-                        'model' => $model,
-                        'field' => 'ftype',
-                        'labelField' => 'type_label',
-                    ]);
-                },
+                'contentOptions' => fn() => ['class' => 'text-right', 'style' => 'white-space: nowrap;'],
+                'value' => fn(Bill $model) => BillType::widget([
+                    'model' => $model,
+                    'field' => 'ftype',
+                    'labelField' => 'type_label',
+                ]),
                 'exportedColumns' => ['export_type_type', 'export_payment_type'],
             ],
             'export_type_type' => [
@@ -296,11 +294,15 @@ class BillGridView extends \hipanel\grid\BoxedGridView
                 'attribute' => 'descr',
                 'format' => 'raw',
                 'value' => function (Bill $model) {
-                    $requisite = $model->requisite ? Html::tag('small', Html::encode($model->requisite), ['class' => 'label bg-purple']) : null;
-                    $descr = Html::encode(Yii::t('hipanel',$model->descr ?? $model->label ?? ''));
+                    $requisite = $model->requisite ? Html::tag('small', Html::encode($model->requisite), ['class' => 'label bg-purple']
+                    ) : null;
+                    $descr = Html::encode(Yii::t('hipanel', $model->descr ?? $model->label ?? ''));
                     $text = mb_strlen($descr) > 70 ? ArraySpoiler::widget(['data' => $descr]) : $descr;
-                    $tariff = $model->tariff ? Html::tag('span',
-                        Yii::t('hipanel', 'Tariff') . ': ' . $this->tariffLink($model), ['class' => 'pull-right']) : '';
+                    $tariff = $model->tariff ? Html::tag(
+                        'span',
+                        Yii::t('hipanel', 'Tariff') . ': ' . $this->tariffLink($model),
+                        ['class' => 'pull-right']
+                    ) : '';
                     $amount = $this->formatQuantity($model);
                     $object = $this->objectTag($model);
 
@@ -341,21 +343,17 @@ class BillGridView extends \hipanel\grid\BoxedGridView
             ],
             'common_object_link' => [
                 'format' => 'raw',
-                'value' => function (Charge $model) {
-                    $link = LinkToObjectResolver::widget([
-                        'model'          => $model->commonObject,
-                        'labelAttribute' => 'name',
-                        'idAttribute'    => 'id',
-                        'typeAttribute'  => 'type',
-                        'customLinks' => [
-                            'part' => '@server/view',
-                        ],
-                    ]);
-
-                    return $link;
-                },
+                'value' => fn(Charge $model) => LinkToObjectResolver::widget([
+                    'model' => $model->commonObject,
+                    'labelAttribute' => 'name',
+                    'idAttribute' => 'id',
+                    'typeAttribute' => 'type',
+                    'customLinks' => [
+                        'part' => '@server/view',
+                    ],
+                ]),
             ],
-        ]);
+        ], $this->amountColumns());
     }
 
     public function tariffLink(Bill $model): ?string
@@ -372,7 +370,7 @@ class BillGridView extends \hipanel\grid\BoxedGridView
     }
 
     /**
-     * Creates link to object details page.
+     * Creates a link to the object details page.
      *
      * @param Bill $model
      * @return string
