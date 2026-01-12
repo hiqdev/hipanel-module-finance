@@ -7,6 +7,7 @@ use hipanel\modules\finance\menus\TargetDetailMenu;
 use hipanel\modules\finance\models\Consumption;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Target;
+use hipanel\modules\finance\module\ConsumptionConfiguration\Application\ConsumptionConfigurator;
 use hipanel\modules\finance\widgets\ConsumptionViewer;
 use hipanel\widgets\MainDetails;
 use yii\data\DataProviderInterface;
@@ -19,6 +20,7 @@ use yii\helpers\Html;
 /** @var DataProviderInterface $dataProvider */
 /** @var IndexPageUiOptions $uiModel */
 /** @var Consumption $consumption */
+/** @var ConsumptionConfigurator $configurator */
 
 $this->title = Html::encode($originalModel->name);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel:finance', 'Targets'), 'url' => ['index']];
@@ -29,12 +31,14 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row">
     <div class="col-md-3">
         <?php if ($model->isDeleted()) : ?>
-            <?= Html::tag('div', Yii::t('hipanel:finance:tariff', 'This target is deleted'), ['class' => 'alert alert-danger text-center']) ?>
+            <?= Html::tag('div', Yii::t('hipanel:finance:tariff', 'This target is deleted'), ['class' => 'alert alert-danger text-center']
+            ) ?>
         <?php endif ?>
         <?= MainDetails::widget([
             'title' => $this->title,
             'icon' => 'fa-bullseye',
-            'menu' => TargetDetailMenu::widget(['model' => $model], ['linkTemplate' => '<a href="{url}" {linkOptions}><span class="pull-right">{icon}</span>&nbsp;{label}</a>']),
+            'menu' => TargetDetailMenu::widget(['model' => $model],
+                ['linkTemplate' => '<a href="{url}" {linkOptions}><span class="pull-right">{icon}</span>&nbsp;{label}</a>']),
         ]) ?>
 
         <?php if (Yii::$app->user->can('client.read') && Yii::$app->user->can('access-subclients')) : ?>
@@ -62,7 +66,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]) ?>
                 </div>
                 <?= Html::a(
-                    '<i class="fa fa-info-circle" style="font-size: 120%"></i> &nbsp;&nbsp;' . Yii::t('hipanel:finance:tariff', 'Tariff details'),
+                    '<i class="fa fa-info-circle" style="font-size: 120%"></i> &nbsp;&nbsp;' . Yii::t(
+                        'hipanel:finance:tariff',
+                        'Tariff details'
+                    ),
                     ['@plan/view', 'id' => $tariff->id],
                     ['class' => 'btn bg-olive btn-sm btn-block btn-flat']
                 ) ?>

@@ -49,9 +49,9 @@ class RequisiteRepresentations extends RepresentationCollection
                 'label' => Yii::t('hipanel', 'Balance'),
                 'columns' => array_filter([
                     'checkbox',
+                    'actions',
                     'client_like',
                     'name',
-                    'actions',
                     'serie',
                     'balance',
                     'debit',

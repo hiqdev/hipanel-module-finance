@@ -10,6 +10,7 @@
 
 namespace hipanel\modules\finance\models;
 
+use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\behaviors\BillNegation;
 use hipanel\modules\finance\models\query\BillQuery;
 use Yii;
@@ -76,15 +77,24 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
             [['type_label', 'gtype_label'], 'safe'],
             [['time'], 'date', 'format' => 'php:Y-m-d H:i:s'],
             [['txn'], 'string'],
+            [['net_amount', 'rate', 'eur_amount'], 'number'],
+            [['client_tags'], 'safe'],
 
             [['id'], 'required', 'on' => [self::SCENARIO_UPDATE, self::SCENARIO_DELETE]],
             [['client_id'], 'integer', 'on' => [self::SCENARIO_CREATE]],
             [['currency', 'sum', 'type', 'label'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
-            ['sum', function ($attribute, $params, $validator) {
-                if ($this->{$attribute} < 0 && in_array($this->type, static::negativeTypes(), true)) {
-                    $this->addError($attribute, Yii::t('hipanel:finance', 'The entered value for the selected payment type can not be negative.'));
-                }
-            }, 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [
+                'sum',
+                function ($attribute, $params, $validator) {
+                    if ($this->{$attribute} < 0 && in_array($this->type, static::negativeTypes(), true)) {
+                        $this->addError(
+                            $attribute,
+                            Yii::t('hipanel:finance', 'The entered value for the selected payment type can not be negative.')
+                        );
+                    }
+                },
+                'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE],
+            ],
             [['client_id', 'sum', 'time'], 'required', 'on' => [self::SCENARIO_CREATE]],
             [['client_id', 'receiver_id', 'currency_id'], 'integer', 'on' => [self::SCENARIO_TRANSFER]],
             [['client_id', 'receiver_id', 'sum', 'currency', 'time'], 'required', 'on' => [self::SCENARIO_TRANSFER]],
@@ -164,6 +174,7 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
     protected function checkClientIsOwner(): bool
     {
         $user = Yii::$app->user->identity;
+
         return in_array($this->client, [$user->username, $user->seller], true);
     }
 
@@ -174,12 +185,16 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
 
     public function getPageTitle(): string
     {
-        $title = StringHelper::truncateWords(sprintf('%s: %s %s %s',
-            $this->client,
-            $this->sum,
-            $this->currency,
-            $this->label),
-            7);
+        $title = StringHelper::truncateWords(
+            sprintf(
+                '%s: %s %s %s',
+                $this->client,
+                $this->sum,
+                $this->currency,
+                $this->label
+            ),
+            7
+        );
         if (empty($title)) {
             return '&nbsp;';
         }
@@ -195,5 +210,14 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
     public function getTime(): ?string
     {
         return $this->time;
+    }
+
+    public function getCustomer(): Client
+    {
+        return new Client([
+            'id' => $this->client_id,
+            'login' => $this->client,
+            'tags' => $this->client_tags,
+        ]);
     }
 }

@@ -36,6 +36,7 @@ class FinanceSummaryTable extends Widget
             'openingBalance' => Yii::t('hipanel:finance', 'Opening balance'),
             'total' => Yii::t('hipanel:finance', 'Total'),
             'closingBalance' => Yii::t('hipanel:finance', 'Closing balance'),
+            'eurAmount' => Yii::t('hipanel:finance', 'EUR Amount'),
         ];
         $this->displayModels = empty($this->onPageModels) ? $this->allModels : $this->onPageModels;
     }
@@ -74,10 +75,12 @@ class FinanceSummaryTable extends Widget
     protected function calculate(): array
     {
         $positive = $negative = $total = $openingBalance = $closingBalance = [];
+        $eurAmount['eur'] = 0;
         foreach ($this->displayModels as $bill) {
             $positive[$bill->currency] ??= 0;
             $negative[$bill->currency] ??= 0;
             $total[$bill->currency] ??= 0;
+            $eurAmount['eur'] += $bill->eur_amount;
 
             if ($bill instanceof Bill && $this->isGrouped($bill)) {
                 $positive[$bill->currency] = $bill->positive;
@@ -100,6 +103,7 @@ class FinanceSummaryTable extends Widget
             'total' => $total,
             'openingBalance' => $openingBalance,
             'closingBalance' => $closingBalance,
+            'eurAmount' => $eurAmount,
         ];
     }
 

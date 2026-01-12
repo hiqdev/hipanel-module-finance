@@ -46,6 +46,8 @@ class ChargeSearch extends Charge
             'hide_internal_clients',
             'sellers',
             'hide_child_charges',
+            'requisite_id',
+            'client_tags',
         ]);
     }
 
@@ -64,6 +66,8 @@ class ChargeSearch extends Charge
             'hide_internal_clients' => Yii::t('hipanel:finance', 'Hide internal client'),
             'sellers' => Yii::t('hipanel:finance', 'Resellers'),
             'hide_child_charges' => Yii::t('hipanel:finance', 'Hide child charges'),
+            'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
+            'client_tags' => Yii::t('hipanel:finance', 'Client tags'),
         ]);
     }
 }
