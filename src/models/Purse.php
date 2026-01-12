@@ -94,6 +94,11 @@ class Purse extends \hipanel\base\Model
         return $this->getDocumentsOfType('purchase_invoice');
     }
 
+    public function getInstallmentInvoices()
+    {
+        return $this->getDocumentsOfType('installment_invoice');
+    }
+
     public function getContracts()
     {
         return $this->getDocumentsOfType('contract');
@@ -129,9 +134,19 @@ class Purse extends \hipanel\base\Model
         return $this->getDocumentsOfType('purchase_payment_request');
     }
 
+    public function getInstallmentPaymentRequests(): array
+    {
+        return $this->getDocumentsOfType('installment_payment_request');
+    }
+
     public function getServicePaymentRequests(): array
     {
         return $this->getDocumentsOfType('service_payment_request');
+    }
+
+    public function getPaymentPlanPaymentRequests(): array
+    {
+        return $this->getDocumentsOfType('payment_plan_payment_request');
     }
 
     public function getDocumentsOfType($type): array
@@ -176,8 +191,10 @@ class Purse extends \hipanel\base\Model
             'invoices' => Yii::t('hipanel:finance', 'Invoices'),
             'serviceInvoices' => Yii::t('hipanel:finance', 'Service Invoices'),
             'purchaseInvoices' => Yii::t('hipanel:finance', 'Purchase Invoices'),
+            'installmentInvoices' => Yii::t('hipanel:finance', 'Installment Invoices'),
             'payment_requestInvoices' => Yii::t('hipanel:finance', 'Payment Request'),
             'purchasePaymentRequests' => Yii::t('hipanel:finance', 'Purchase Payment Request'),
+            'installmentPaymentRequests' => Yii::t('hipanel:finance', 'Installment Payment Request'),
             'servicePaymentRequests' => Yii::t('hipanel:finance', 'Service Payment Request'),
             'acceptances' => Yii::t('hipanel:finance', 'Acceptance reports'),
             'contracts' => Yii::t('hipanel:finance', 'Contracts'),

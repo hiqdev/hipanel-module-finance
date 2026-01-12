@@ -16,7 +16,11 @@ $documentType = $isEmployee ? 'acceptance' : 'invoice';
 
 $documents = [];
 if ($user->can('document.read') && $user->can('bill.read')) {
-    $documents = ($isEmployee ? ['acceptances'] : ['serviceInvoices', 'purchaseInvoices', 'servicePaymentRequests', 'purchasePaymentRequests']);
+    $documents = ($isEmployee ? ['acceptances'] : [
+        'serviceInvoices', 'purchaseInvoices', 'installmentInvoices',
+        'servicePaymentRequests', 'purchasePaymentRequests', 'installmentPaymentRequests',
+        'paymentplanPaymentRequests',
+    ]);
 }
 
 ?>
