@@ -23,7 +23,7 @@ class BillRepresentations extends RepresentationCollection
                 'columns' => [
                     'checkbox',
                     'actions',
-                    'client',
+                    'client_id',
                     'time',
                     'sum_editable',
                     'index_page_balance',
