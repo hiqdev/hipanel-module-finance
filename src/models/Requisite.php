@@ -49,11 +49,16 @@ class Requisite extends Contact
     const string TEMPLATE_INTERNAL_INVOICE = 'internal_invoice';
     const string TEMPLATE_PAYMENT_REQUEST = 'payment_request';
     const string TEMPLATE_PURCHASE_INVOICE = 'purchase_invoice';
+    const string TEMPLATE_INSTALLMENT_INVOICE = 'installment_invoice';
+    const string TEMPLATE_OLD_INSTALLMENT_INVOICE = 'old_installment_invoice';
     const string TEMPLATE_SERVICE_INVOICE = 'service_invoice';
     const string TEMPLATE_PURCHASE_PAYMENT_REQUEST = 'purchase_payment_request';
+    const string TEMPLATE_INSTALLMENT_PAYMENT_REQUEST = 'installment_payment_request';
     const string TEMPLATE_SERVICE_PAYMENT_REQUEST = 'service_payment_request';
     const string TEMPLATE_DETAILED_SERVICE_INVOICE = 'detailed_service_invoice';
     const string TEMPLATE_DETAILED_PAYMENT_REQUEST = 'detailed_service_payment_request';
+    const string TEMPLATE_PAYMENT_PLAN_PAYMENT_REQUEST = 'payment_plan_payment_request';
+    const string TEMPLATE_OLD_PAYMENT_PLAN_PAYMENT_REQUEST = 'old_payment_plan_payment_request';
 
     public static function tableName()
     {
@@ -81,10 +86,15 @@ class Requisite extends Contact
                     'payment_request_id',
                     'service_invoice_id',
                     'purchase_invoice_id',
+                    'installment_invoice_id',
+                    'old_installment_invoice_id',
                     'service_payment_request_id',
                     'purchase_payment_request_id',
+                    'installment_payment_request_id',
                     'detailed_service_payment_request_id',
                     'detailed_service_invoice_id',
+                    'payment_plan_payment_request_id',
+                    'old_payment_plan_payment_request_id',
                     'nda_id',
                 ],
                 'string', // template2pdf ID
@@ -97,10 +107,15 @@ class Requisite extends Contact
                     'probation_name',
                     'internal_invoice_name',
                     'purchase_invoice_name',
+                    'installment_invoice_name',
+                    'old_installment_invoice_name',
                     'service_invoice_name',
                     'purchase_payment_request_name',
+                    'installment_payment_request_name',
                     'service_payment_request_name',
                     'payment_request_name',
+                    'payment_plan_payment_request_name',
+                    'old_payment_plan_payment_request_name',
                     'detailed_service_payment_request_name',
                     'detailed_service_invoice_name',
                     'nda_name',
@@ -145,9 +160,13 @@ class Requisite extends Contact
             'invoice_id' => Yii::t('hipanel:finance', 'Invoice template'),
             'service_invoice_id' => Yii::t('hipanel:finance', 'Service invoice template'),
             'purchase_invoice_id' => Yii::t('hipanel:finance', 'Purchase invoice template'),
+            'installment_invoice_id' => Yii::t('hipanel:finance', 'Installment invoice template'),
             'payment_request_id' => Yii::t('hipanel:finance', 'Payment request template'),
             'service_payment_request_id' => Yii::t('hipanel:finance', 'Service payment request template'),
             'purchase_payment_request_id' => Yii::t('hipanel:finance', 'Purchase payment request template'),
+            'installment_payment_request_id' => Yii::t('hipanel:finance', 'Installment payment request template'),
+            'payment_plan_payment_request_id' => Yii::t('hipanel:finance', 'Payment plan template'),
+            'old_payment_plan_payment_request_id' => Yii::t('hipanel:finance', 'Old Payment plan template'),
             'acceptance_id' => Yii::t('hipanel:finance', 'Acceptance template'),
             'contract_id' => Yii::t('hipanel:finance', 'Contract template'),
             'probation_id' => Yii::t('hipanel:finance', 'Probation template'),
@@ -167,16 +186,20 @@ class Requisite extends Contact
         return [
             self::TEMPLATE_INVOICE => self::TEMPLATE_INVOICE,
             self::TEMPLATE_PURCHASE_INVOICE => self::TEMPLATE_PURCHASE_INVOICE,
+            self::TEMPLATE_INSTALLMENT_INVOICE => self::TEMPLATE_INSTALLMENT_INVOICE,
+            self::TEMPLATE_OLD_INSTALLMENT_INVOICE => self::TEMPLATE_OLD_INSTALLMENT_INVOICE,
             self::TEMPLATE_SERVICE_INVOICE => self::TEMPLATE_SERVICE_INVOICE,
             self::TEMPLATE_ACCEPTANCE => self::TEMPLATE_ACCEPTANCE,
             self::TEMPLATE_CONTRACT => self::TEMPLATE_CONTRACT,
             self::TEMPLATE_PROBATION => self::TEMPLATE_PROBATION,
             self::TEMPLATE_INTERNAL_INVOICE => self::TEMPLATE_INTERNAL_INVOICE,
             self::TEMPLATE_PAYMENT_REQUEST => self::TEMPLATE_PAYMENT_REQUEST,
+            self::TEMPLATE_INSTALLMENT_PAYMENT_REQUEST => self::TEMPLATE_INSTALLMENT_PAYMENT_REQUEST,
             self::TEMPLATE_PURCHASE_PAYMENT_REQUEST => self::TEMPLATE_PURCHASE_PAYMENT_REQUEST,
             self::TEMPLATE_SERVICE_PAYMENT_REQUEST => self::TEMPLATE_SERVICE_PAYMENT_REQUEST,
             self::TEMPLATE_DETAILED_SERVICE_INVOICE => self::TEMPLATE_DETAILED_SERVICE_INVOICE,
             self::TEMPLATE_DETAILED_PAYMENT_REQUEST => self::TEMPLATE_DETAILED_PAYMENT_REQUEST,
+            self::TEMPLATE_PAYMENT_PLAN_PAYMENT_REQUEST => self::TEMPLATE_PAYMENT_PLAN_PAYMENT_REQUEST,
         ];
     }
 
