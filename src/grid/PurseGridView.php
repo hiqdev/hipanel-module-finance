@@ -46,6 +46,10 @@ class PurseGridView extends BoxedGridView
                 'class' => MonthlyDocumentsColumn::class,
                 'type' => 'installment_invoice',
             ],
+            'oldInstallmentInvoices' => [
+                'class' => MonthlyDocumentsColumn::class,
+                'type' => 'old_installment_invoice',
+            ],
             'payment_requestInvoices' => [
                 'class' => MonthlyDocumentsColumn::class,
                 'type' => 'payment_request',
@@ -69,6 +73,10 @@ class PurseGridView extends BoxedGridView
             'paymentplanPaymentRequests' => [
                 'class' => MonthlyDocumentsColumn::class,
                 'type' => 'payment_plan_payment_request',
+            ],
+            'oldPaymentplanPaymentRequests' => [
+                'class' => MonthlyDocumentsColumn::class,
+                'type' => 'old_payment_plan_payment_request',
             ],
             'acceptances' => [
                 'class' => MonthlyDocumentsColumn::class,

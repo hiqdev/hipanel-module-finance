@@ -99,6 +99,11 @@ class Purse extends \hipanel\base\Model
         return $this->getDocumentsOfType('installment_invoice');
     }
 
+    public function getOldInternalInvoices()
+    {
+        return $this->getDocumentsOfType('old_installment_invoice');
+    }
+
     public function getContracts()
     {
         return $this->getDocumentsOfType('contract');
@@ -149,6 +154,11 @@ class Purse extends \hipanel\base\Model
         return $this->getDocumentsOfType('payment_plan_payment_request');
     }
 
+    public function getOldPaymentPlanPaymentRequests(): array
+    {
+        return $this->getDocumentsOfType('old_payment_plan_payment_request');
+    }
+
     public function getDocumentsOfType($type): array
     {
         if (Yii::$app->user->can('document.read') === false) {
@@ -192,6 +202,7 @@ class Purse extends \hipanel\base\Model
             'serviceInvoices' => Yii::t('hipanel:finance', 'Service Invoices'),
             'purchaseInvoices' => Yii::t('hipanel:finance', 'Purchase Invoices'),
             'installmentInvoices' => Yii::t('hipanel:finance', 'Installment Invoices'),
+            'oldInstallmentInvoices' => Yii::t('hipanel:finance', 'Old Installment Invoices'),
             'payment_requestInvoices' => Yii::t('hipanel:finance', 'Payment Request'),
             'purchasePaymentRequests' => Yii::t('hipanel:finance', 'Purchase Payment Request'),
             'installmentPaymentRequests' => Yii::t('hipanel:finance', 'Installment Payment Request'),
