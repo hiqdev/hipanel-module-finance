@@ -149,7 +149,7 @@ class Create extends View
 
         $I->needPage(Url::to('@plan/update?id=' . $planId));
         (new Select2($I, '#plan-currency'))
-            ->setValueLike($currency);
+            ->setValue($currency);
         $I->click('Save');
     }
 }

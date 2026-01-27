@@ -80,7 +80,7 @@ class Create extends Plan
     private function chooseCurrency(): void
     {
         (new Select2($this->tester, '#plan-currency'))
-            ->setValueLike($this->currency);
+            ->setValue($this->currency);
     }
 
     private function fillNote(): void
