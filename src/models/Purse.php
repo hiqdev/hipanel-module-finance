@@ -81,37 +81,37 @@ class Purse extends \hipanel\base\Model
 
     public function getInvoices()
     {
-        return $this->getDocumentsOfType('invoice');
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_INVOICE);
     }
 
     public function getServiceInvoices()
     {
-        return $this->getDocumentsOfType('service_invoice');
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_SERVICE_INVOICE);
     }
 
     public function getPurchaseInvoices()
     {
-        return $this->getDocumentsOfType('purchase_invoice');
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_PURCHASE_INVOICE);
     }
 
     public function getInstallmentInvoices()
     {
-        return $this->getDocumentsOfType('installment_invoice');
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_INSTALLMENT_INVOICE);
     }
 
-    public function getOldInternalInvoices()
+    public function getOldInstallmentInvoices()
     {
-        return $this->getDocumentsOfType('old_installment_invoice');
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_OLD_INSTALLMENT_INVOICE);
     }
 
     public function getContracts()
     {
-        return $this->getDocumentsOfType('contract');
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_CONTRACT);
     }
 
     public function getProbations()
     {
-        return $this->getDocumentsOfType('probation');
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_PROBATION);
     }
 
     public function getNdas()
@@ -121,42 +121,42 @@ class Purse extends \hipanel\base\Model
 
     public function getAcceptances()
     {
-        return $this->getDocumentsOfType('acceptance');
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_ACCEPTANCE);
     }
 
     public function getInternalInvoices()
     {
-        return $this->getDocumentsOfType('internal_invoice');
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_INTERNAL_INVOICE);
     }
 
     public function getPaymentRequestInvoices()
     {
-        return $this->getDocumentsOfType('payment_request');
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_PAYMENT_REQUEST);
     }
 
     public function getPurchasePaymentRequests(): array
     {
-        return $this->getDocumentsOfType('purchase_payment_request');
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_PURCHASE_PAYMENT_REQUEST);
     }
 
     public function getInstallmentPaymentRequests(): array
     {
-        return $this->getDocumentsOfType('installment_payment_request');
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_INSTALLMENT_PAYMENT_REQUEST);
     }
 
     public function getServicePaymentRequests(): array
     {
-        return $this->getDocumentsOfType('service_payment_request');
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_SERVICE_PAYMENT_REQUEST);
     }
 
     public function getPaymentPlanPaymentRequests(): array
     {
-        return $this->getDocumentsOfType('payment_plan_payment_request');
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_PAYMENT_PLAN_PAYMENT_REQUEST);
     }
 
     public function getOldPaymentPlanPaymentRequests(): array
     {
-        return $this->getDocumentsOfType('old_payment_plan_payment_request');
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_OLD_PAYMENT_PLAN_PAYMENT_REQUEST);
     }
 
     public function getDocumentsOfType($type): array
