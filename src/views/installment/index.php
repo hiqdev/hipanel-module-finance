@@ -42,11 +42,6 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
                 'dataProvider' => $dataProvider,
                 'filterModel' => $model,
                 'columns' => $representationCollection->getByName($uiModel->representation)->getColumns(),
-                /***
-                'rowOptions' => static function ($model): array {
-                    return GridLegend::create(new SaleGridLegend($model))->gridRowOptions();
-                },
-                ***/
             ]) ?>
         <?php $page->endBulkForm() ?>
     <?php $page->endContent() ?>
