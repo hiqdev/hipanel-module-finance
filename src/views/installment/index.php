@@ -1,11 +1,9 @@
 <?php
 
 use hipanel\models\IndexPageUiOptions;
-use hipanel\modules\finance\grid\SaleGridLegend;
-use hipanel\modules\finance\grid\SaleGridView;
-use hipanel\modules\finance\grid\SaleRepresentations;
-use hipanel\modules\finance\models\SaleSearch;
-use hipanel\modules\finance\widgets\ChangeBuyerButton;
+use hipanel\modules\finance\grid\InstallmentGridView;
+use hipanel\modules\finance\grid\InstallmentRepresentations;
+use hipanel\modules\finance\models\SInstallmentSearch;
 use hipanel\widgets\gridLegend\GridLegend;
 use hipanel\widgets\IndexPage;
 use yii\bootstrap\Dropdown;
@@ -31,7 +29,7 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
 <?php $page = IndexPage::begin(['model' => $model, 'dataProvider' => $dataProvider]) ?>
 
     <?php $page->beginContent('sorter-actions') ?>
-        <?= $page->renderSorter(['attributes' => ['id', 'time', 'unsale_time']]) ?>
+        <?= $page->renderSorter(['attributes' => ['id', 'start', 'finish']]) ?>
     <?php $page->endContent() ?>
 
     <?php $page->beginContent('representation-actions') ?>

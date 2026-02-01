@@ -22,6 +22,8 @@ use Yii;
  */
 class Installment extends \hipanel\base\Model
 {
+    use \hipanel\base\ModelTrait;
+
     public function rules()
     {
         return array_merge(parent::rules(), [

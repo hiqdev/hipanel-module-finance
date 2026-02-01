@@ -16,19 +16,21 @@ use Yii;
 
 class InstallmentSearch extends Installment
 {
+
     use SearchModelTrait {
         searchAttributes as defaultSearchAttributes;
-        rules as defaultRules;
     }
 
-    public function rules(): array
+    public function searchAttributes()
     {
-        return ArrayHelper::merge($this->defaultRules(), [
+        return ArrayHelper::merge($this->defaultSearchAttributes(), [
+            'month',
         ]);
     }
 
-    public static function tableName(): string
+    public function attributeLabels()
     {
-        return Installment::tableName();
+        return array_merge(parent::attributeLabels(), [
+        ]);
     }
 }
