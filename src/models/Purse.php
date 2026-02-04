@@ -129,9 +129,14 @@ class Purse extends \hipanel\base\Model
         return $this->getDocumentsOfType(Requisite::TEMPLATE_INTERNAL_INVOICE);
     }
 
-    public function getPaymentRequestInvoices()
+    public function getPaymentRequestInvoices(): array
     {
         return $this->getDocumentsOfType(Requisite::TEMPLATE_PAYMENT_REQUEST);
+    }
+
+    public function getPaymentRequests(): array
+    {
+        return $this->getPaymentRequestInvoices();
     }
 
     public function getPurchasePaymentRequests(): array
