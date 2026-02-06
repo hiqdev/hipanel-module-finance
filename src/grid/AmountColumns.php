@@ -13,6 +13,8 @@ trait AmountColumns
 {
     protected function amountColumns(): array
     {
+        $isOwnerStaff = Yii::$app->user->can('owner-staff');
+
         return [
             'client' => [
                 'format' => 'raw',
@@ -36,6 +38,7 @@ trait AmountColumns
                 'enableSorting' => false,
                 'filter' => false,
                 'exportedValue' => fn($charge) => $this->plainSum($charge->net_amount),
+                'visible' => $isOwnerStaff,
             ],
             'eur_amount' => [
                 'attribute' => 'eur_amount',
@@ -44,11 +47,13 @@ trait AmountColumns
                 'enableSorting' => false,
                 'filter' => false,
                 'exportedValue' => fn($charge) => $this->plainSum($charge->eur_amount),
+                'visible' => $isOwnerStaff,
             ],
             'rate' => [
                 'attribute' => 'rate',
                 'enableSorting' => false,
                 'filter' => false,
+                'visible' => $isOwnerStaff,
             ],
         ];
     }
