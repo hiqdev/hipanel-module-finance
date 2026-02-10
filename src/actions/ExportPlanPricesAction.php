@@ -1,86 +1,57 @@
-<?php
-
-declare(strict_types=1);
-
+<?php declare(strict_types=1);
 
 namespace hipanel\modules\finance\actions;
 
 use Generator;
+use hipanel\actions\DataExportAction;
 use hipanel\components\I18N;
 use hipanel\modules\finance\helpers\LightPriceChargesEstimator;
 use hipanel\modules\finance\helpers\PlanInternalsGrouper;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
-use hiqdev\yii2\export\exporters\ExporterFactoryInterface;
-use hiqdev\yii2\export\exporters\ExportType;
-use hiqdev\yii2\export\models\ExportJob;
 use Yii;
-use yii\base\Action;
-use yii\i18n\Formatter;
-use yii\web\Response;
+use yii\base\InvalidConfigException;
+use yii\di\NotInstantiableException;
 
 /**
  * Class ExportPlanPricesAction exports the prices of a plan to a file.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ *
+ * @property-read string[] $columns
  */
-final class ExportPlanPricesAction extends Action
+final class ExportPlanPricesAction extends DataExportAction
 {
-    private const array COLUMNS = [
-        'Object name',
-        'Sale time',
-        'Buyer',
-        'Object name',
-        'Label',
-        'Price type',
-        'Included amount',
-        'Unit',
-        'Price',
-        'Currency',
-        'Formula',
-        'Price with formula',
-    ];
-
-    private ?ExportJob $exportJob = null;
-    private ?Formatter $formatter = null;
-
-    public function __construct($id, $controller, readonly private ExporterFactoryInterface $exporterFactory, array $config = [])
+    protected function getColumns(): array
     {
-        parent::__construct($id, $controller, $config);
-    }
-
-    public function run(int $id): Response
-    {
-        $exporter = $this->exporterFactory->build(ExportType::CSV);
-        $this->formatter = $exporter::applyExportFormatting();
-
-        $exportJobKey = md5(implode('', [$this->controller->request->getAbsoluteUrl(), Yii::$app->user->id, time()]));
-        $this->exportJob = ExportJob::findOrCreate($exportJobKey);
-        $exporter->setExportJob($this->exportJob);
-
-        $saver = $this->exportJob->getSaver();
-        $exporter->exportToFile($saver->getFilePath(), [
-            'data' => fn() => $this->generateRows($id),
-        ]);
-
-        return $this->controller->response->sendFile($saver->getFilePath(), $saver->getFilename());
-    }
-
-    public function __destruct()
-    {
-        $this->exportJob->delete();
+        return [
+            'Object name',
+            'Sale time',
+            'Buyer',
+            'Object name',
+            'Label',
+            'Price type',
+            'Included amount',
+            'Unit',
+            'Price',
+            'Currency',
+            'Formula',
+            'Price with formula',
+        ];
     }
 
     /**
-     * @param int $id
+     * @param string $id
      * @return array{
      *     0: Sale[],
      *     1: Price[][],
      *     2: array
      * }
+     * @throws InvalidConfigException
+     * @throws NotInstantiableException
      */
-    private function getPricesAndEstimates(int $id): array
+    private function getPricesAndEstimates(string $id): array
     {
         $plan = Plan::find()
                     ->withPrices()
@@ -103,9 +74,15 @@ final class ExportPlanPricesAction extends Action
         return [$salesByObject, $pricesByMainObject, $estimate];
     }
 
-    private function generateRows(int $id): Generator
+    /**
+     * @throws NotInstantiableException
+     * @throws InvalidConfigException
+     */
+    protected function generateRows(array $params): Generator
     {
-        yield self::COLUMNS;
+        $id = $params['id'] ?? throw new \InvalidArgumentException('Parameter "id" is required');
+
+        yield $this->getColumns();
 
         [$salesByObject, $pricesByMainObject, $estimate] = $this->getPricesAndEstimates($id);
 
