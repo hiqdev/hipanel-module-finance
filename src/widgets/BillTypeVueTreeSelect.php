@@ -8,7 +8,6 @@ use hipanel\models\Ref;
 use hipanel\widgets\VueTreeSelectInput;
 use Yii;
 use yii\helpers\Html;
-use yii\helpers\Json;
 
 class BillTypeVueTreeSelect extends VueTreeSelectInput
 {
@@ -32,19 +31,23 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
         } else {
             $value = empty($value) ? null : $value;
         }
+
         $this->registerJs($id, $value);
+        $attribute = $this->replaceAttribute ?? $this->attribute;
+        $this->view->registerJsVar(implode('_', [$attribute, 'options']), $options);
+        $this->view->registerJsVar(implode('_', [$attribute, 'adjustment', 'options']), $adjustmentOptions);
+
         $activeInput = Html::activeHiddenInput($this->model, $this->attribute, [
             'v-model' => 'value',
             'value' => null,
             'v-bind:data-adjustment' => 'adjustmentOnly ? "yes" : "no"',
             'data' => [
                 'value' => $value,
-                'options' => Json::encode($options),
-                'adjustment-options' => Json::encode($adjustmentOptions),
             ],
         ]);
 
-        return sprintf(/** @lang HTML */ '
+        return sprintf(
+        /** @lang HTML */ '
             <div id="%s">
                 <treeselect
                   :options="options"
@@ -106,7 +109,8 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
     {
         $mixin = self::mixin($this->isAdjustment($value));
         $this->view->registerJs(
-            sprintf(/** @lang JavaScript */ "
+            sprintf(
+            /** @lang JavaScript */ "
                 ;(() => {
                     const container = $('#%s');
                     const mixin = $mixin;
@@ -125,7 +129,8 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
     {
         $isAdjustment = $isAdjustment ? 'true' : 'false';
 
-        return sprintf(/** @lang JavaScript */ <<<"JS"
+        return sprintf(
+        /** @lang JavaScript */ <<<"JS"
           {
             components: {
               'treeselect': VueTreeselect.Treeselect
@@ -152,10 +157,13 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
               },
               toggleOptions: function (showAdjustment) {
                 const input = container.find('input[type=hidden]');
+                const attributeName = input.attr('id').split('-').pop();
+                const options = window[attributeName + '_options'];
+                const adjustmentOptions = window[attributeName + '_adjustment' + '_options'];
                 if (showAdjustment === true) {
-                  this.options = input.data('adjustment-options');
+                  this.options = adjustmentOptions;
                 } else  {
-                  this.options = input.data('options');
+                  this.options = options;
                 }
               },
               typeChange: function (node) {
@@ -171,7 +179,9 @@ class BillTypeVueTreeSelect extends VueTreeSelectInput
             }
           }
 JS,
-            $isAdjustment, $isAdjustment);
+            $isAdjustment,
+            $isAdjustment,
+        );
     }
 
     private function buildOptionsArray(array $types): array
@@ -260,16 +270,6 @@ JS,
         return ($this->deprecatedTypes && in_array($typeName, $this->deprecatedTypes, true));
     }
 
-    private function isDisabled(string $typeName): bool
-    {
-        if (str_contains($typeName,
-                'delimiter') || ($this->behavior === TreeSelectBehavior::Disabled && $this->isDeprecatedType($typeName))) {
-            return true;
-        }
-
-        return false;
-    }
-
     private function filter(array $children, array $remained = []): array
     {
         if (empty($children) || empty($this->allowedTypes)) {
@@ -305,18 +305,32 @@ JS,
 
     private function prepareOptions(): array
     {
+        static $cache = [];
+
+        $cacheKey = md5(serialize([
+            $this->replaceAttribute,
+            count($this->billTypes),
+            count($this->allowedTypes),
+            count($this->deprecatedTypes),
+            Yii::$app->user->id,
+        ]));
+
+        if (isset($cache[$cacheKey])) {
+            return $cache[$cacheKey];
+        }
+
         $types = ArrayHelper::index($this->billTypes, 'id');
         if (!$this->splitTypesByAdjustment()) {
             $options = $this->buildOptionsArray($types);
 
-            return [$options, []];
+            return $cache[$cacheKey] = [$options, []];
         }
         $adjustmentTypes = array_filter($types, fn(Ref $ref) => $this->isAdjustment($ref->id));
         $typesWithoutAdjustments = array_diff_key($types, $adjustmentTypes);
         $options = $this->buildOptionsArray($typesWithoutAdjustments);
         $adjustmentOptions = $this->buildOptionsArray($adjustmentTypes);
 
-        return [$options, $adjustmentOptions];
+        return $cache[$cacheKey] = [$options, $adjustmentOptions];
     }
 
     private function splitTypesByAdjustment(): bool
