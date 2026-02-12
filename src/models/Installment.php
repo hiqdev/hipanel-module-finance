@@ -31,6 +31,7 @@ class Installment extends \hipanel\base\Model
             [['client', 'seller', 'serial', 'model', 'model_type', 'model_type_label', 'model_brand', 'model_brand_label', 'device'], 'string'],
             [['start', 'finish'], 'datetime', 'format' => 'php:Y-m-d'],
             [['period'], 'integer'],
+            [['paid_sum', 'monthly_sum', 'total_sum', 'left_sum'], 'number'],
         ]);
     }
 

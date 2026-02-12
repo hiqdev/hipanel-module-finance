@@ -24,7 +24,7 @@ class InstallmentSearch extends Installment
     public function searchAttributes()
     {
         return ArrayHelper::merge($this->defaultSearchAttributes(), [
-            'month',
+            'month', 'time_from', 'time_till',
         ]);
     }
 

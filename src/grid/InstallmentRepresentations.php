@@ -25,6 +25,7 @@ class InstallmentRepresentations extends RepresentationCollection
                     'client', 'seller',
                     'serial', 'model', 'device',
                     'start', 'finish', 'period',
+                    'monthly_sum', 'paid_sum', 'left_sum', 'total_sum',
                 ],
             ],
         ]);
