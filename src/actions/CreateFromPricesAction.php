@@ -40,7 +40,13 @@ class CreateFromPricesAction extends BillManagementAction
                 throw new BadRequestHttpException('No prices selected');
             }
             $billTypes = $this->billTypesProvider->getTypes();
-            $prices = Price::find()->select(['*', 'main_object_id'])->joinWith(['object'])->withFormulaLines()->where(['id_in' => $priceIds])->limit(-1)->all();
+            $prices = Price::find()
+                ->select(['*', 'main_object_id', 'object'])
+                ->joinWith(['object'])
+                ->withFormulaLines()
+                ->where(['id_in' => $priceIds])
+                ->limit(-1)
+                ->all();
             $pricesByObjectId = ArrayHelper::index($prices, null, 'main_object_id');
             if ($this->controller->request->isAjax) {
                 return $this->controller->renderAjax('modals/create-from-prices', [
