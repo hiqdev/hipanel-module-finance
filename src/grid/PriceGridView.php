@@ -12,7 +12,6 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\BoxedGridView;
 use hipanel\grid\RefColumn;
-use hipanel\modules\finance\grid\presenters\price\PricePresenter;
 use hipanel\modules\finance\grid\presenters\price\PricePresenterFactory;
 use hipanel\modules\finance\menus\PriceActionsMenu;
 use hipanel\modules\finance\models\Price;
@@ -44,9 +43,7 @@ class PriceGridView extends BoxedGridView
                 'format' => 'raw',
                 'filterAttribute' => 'plan_name_ilike',
                 'filterOptions' => ['class' => 'narrow-filter'],
-                'value' => function (Price $model) {
-                    return Html::a(Html::encode($model->plan->name), ['@plan/view', 'id' => $model->plan->id]);
-                },
+                'value' => fn(Price $model) => Html::a(Html::encode($model->plan->name), ['@plan/view', 'id' => $model->plan->id]),
             ],
             'price' => [
                 'label' => Yii::t('hipanel.finance.price', 'Price'),
@@ -66,14 +63,16 @@ class PriceGridView extends BoxedGridView
             ],
             'object->name_clear' => [
                 'label' => Yii::t('hipanel', 'Object'),
-                'value' => function (Price $model) {
-                    return $model->object->name ?: Yii::t('hipanel.finance.price', 'Any');
-                },
+                'value' => fn(Price $model) => $model->object->name ?: Yii::t('hipanel.finance.price', 'Any'),
             ],
             'object->name' => [
                 'label' => Yii::t('hipanel', 'Object'),
                 'format' => 'raw',
                 'value' => function (Price $model) {
+                    if (!$model->isRelationPopulated('object')) {
+                        return Yii::t('hipanel.finance.price', 'Any');
+                    }
+
                     $link = LinkToObjectResolver::widget([
                         'model' => $model->object,
                         'labelAttribute' => 'name',
@@ -84,18 +83,14 @@ class PriceGridView extends BoxedGridView
             ],
             'object->name-any' => [
                 'label' => Yii::t('hipanel', 'Object'),
-                'value' => function (Price $model) {
-                    return Yii::t('hipanel.finance.price', 'Any');
-                },
+                'value' => fn(Price $model) => Yii::t('hipanel.finance.price', 'Any'),
             ],
             'object->label' => [
                 'class' => RefColumn::class,
                 'attribute' => 'object_name_ilike',
                 'label' => Yii::t('hipanel', 'Details'),
                 'i18nDictionary' => 'hipanel.finance.plan',
-                'value' => function (Price $model) {
-                    return $model->object->label;
-                },
+                'value' => fn(Price $model) => $model->isRelationPopulated('object') ? $model->object->label : $model->main_object_name,
             ],
             'type' => [
                 'class' => RefColumn::class,
@@ -124,9 +119,7 @@ class PriceGridView extends BoxedGridView
                     'select' => 'name_label',
                     'mapOptions' => ['from' => 'name'],
                 ],
-                'value' => function (Price $model) {
-                    return $model->getUnitLabel();
-                },
+                'value' => fn(Price $model): ?string => $model->getUnitLabel(),
             ],
             'currency' => [
                 'class' => RefColumn::class,
@@ -142,16 +135,12 @@ class PriceGridView extends BoxedGridView
             'info' => [
                 'format' => 'raw',
                 'label' => Yii::t('hipanel', 'Details'),
-                'value' => function (Price $model) {
-                    return $this->presenterFactory->build($model::class)->renderInfo($model);
-                },
+                'value' => fn(Price $model) => $this->presenterFactory->build($model::class)->renderInfo($model),
             ],
             'old_quantity' => [
                 'format' => 'raw',
                 'label' => Yii::t('hipanel.finance.price', 'Old quantity'),
-                'value' => function (Price $model) {
-                    return $this->presenterFactory->build($model::class)->renderInfo($model, 'old_quantity');
-                },
+                'value' => fn(Price $model) => $this->presenterFactory->build($model::class)->renderInfo($model, 'old_quantity'),
             ],
             'value' => [
                 'class' => ValueColumn::class,
