@@ -47,7 +47,7 @@ class ResourceDecoratorFactory
         $part = $resource->part;
 
         return new ResourceDecoratorData(
-            $resource->quantity,
+            (string)$resource->quantity,
             $resource->price,
             $resource->unit,
             $resource->currency,

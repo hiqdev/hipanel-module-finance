@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace hipanel\modules\finance\widgets;
 
@@ -18,7 +16,8 @@ final class PricePerUnitWidget extends Widget
     {
         $name = 'price_per_unit_' . $this->getId();
         $view = $this->view;
-        $view->registerCss(<<<CSS
+        $view->registerCss(
+            <<<CSS
             .ppu-input:after, .ppu-input:before {
                 position: absolute;
                 top: 25px;
@@ -33,9 +32,12 @@ final class PricePerUnitWidget extends Widget
                 content: "=";
                 right: -4px;
             }
-        CSS, [__CLASS__, __METHOD__]);
+        CSS,
+            [__CLASS__, __METHOD__]
+        );
 
-        $view->registerJs(<<<"JS"
+        $view->registerJs(
+            <<<"JS"
           (function () {
             $(document).on('keyup mouseup', ':input[name=$name], .form-instance :input[id$="-quantity"]', function () {
               const billForm = $(this).parents('.form-instance');
@@ -44,16 +46,21 @@ final class PricePerUnitWidget extends Widget
               const qtyInput = isPPU ? billForm.find(':input[id$="-quantity"]').get(0) : this;
               const PPUInput = isPPU ? this : billForm.find(':input[name="$name"]').get(0);
               const qty = qtyInput.value.trim();
+              if (!PPUInput) {
+                return;
+              }
               const amount = parseFloat(PPUInput.value.trim()) * qty;
               if (amount) {
                   sumInput.value = amount.toFixed(2);
+                  $(sumInput).trigger('change, keyup');
               }
             });
           })();
 JS
         );
 
-        return sprintf('%s%s',
+        return sprintf(
+            '%s%s',
             Html::label(Yii::t('hipanel:finance', 'per unit'), $name, ['class' => 'control-label ppu-input']),
             Html::textInput($name, !empty($this->quantity) ? $this->sum / $this->quantity : null, ['class' => 'form-control'])
         );

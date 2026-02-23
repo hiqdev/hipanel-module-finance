@@ -1,11 +1,11 @@
 <?php
 
+use hipanel\modules\finance\forms\BillForm;
 use yii\web\View;
-use hipanel\modules\ticket\models\Thread;
 
 /**
  * @var View $this
- * @var Thread $models
+ * @var BillForm $models
  * @var array $billTypesList
  * @var array $allowedTypes
  */
@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="bill-update">
     <?= $this->render('_form', [
+        'model' => reset($models),
         'models' => $models,
         'billTypesList' => $billTypesList,
         'allowedTypes' => $allowedTypes,

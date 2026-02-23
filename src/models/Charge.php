@@ -71,7 +71,7 @@ class Charge extends Resource implements HasSumAndCurrencyAttributesInterface, B
             [['sum', 'quantity', 'bill_quantity', 'positive', 'negative', 'discount_sum', 'net_amount', 'rate', 'eur_amount'], 'number'],
             [['unit'], 'default', 'value' => 'items', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['object_id', 'sum', 'type_id', 'quantity', 'unit'], 'required', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
-            [['id'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['id', 'currency', 'client_id', 'action_id', 'parent_id'], 'safe', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
         ];
     }
 

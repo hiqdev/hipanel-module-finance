@@ -5,13 +5,12 @@ use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\widgets\BillTypeVueTreeSelect;
-use hipanel\modules\finance\widgets\PricePerUnitWidget;
+use hipanel\modules\finance\widgets\DateTimePickerWithFormatter;
 use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
 use hipanel\modules\finance\widgets\SumSignToggleButton;
 use hipanel\modules\finance\widgets\TreeSelectBehavior;
 use hipanel\modules\finance\widgets\UpdateChargeTimeScript;
 use hipanel\widgets\AmountWithCurrency;
-use hipanel\widgets\DateTimePicker;
 use hipanel\widgets\DynamicFormWidget;
 use hipanel\widgets\combo\ObjectCombo;
 use yii\bootstrap\ActiveForm;
@@ -20,21 +19,12 @@ use yii\web\View;
 
 /**
  * @var View $this
+ * @var BillForm $model
  * @var BillForm[] $models
  * @var array $billTypesList
  * @var array $allowedTypes
  */
 
-
-$model = reset($models);
-$timeResolver = static function ($model): ?string {
-    $formatter = Yii::$app->formatter;
-    if (!isset($model->time)) {
-        return $formatter->asDatetime(new DateTime(), 'php:Y-m-d H:i:s');
-    }
-
-    return $model->time !== false ? $formatter->asDatetime($model->time, 'php:Y-m-d H:i:s') : null;
-};
 
 UpdateChargeTimeScript::widget(['model' => $model]);
 
@@ -173,13 +163,7 @@ $form = ActiveForm::begin([
                             <?= $form->field($model, "[$i]label") ?>
                         </div>
                         <div class="col-md-3">
-                            <?= $form->field($model, "[$i]time")->widget(DateTimePicker::class, [
-                                'model' => $model,
-                                'options' => [
-                                    'value' => $timeResolver($model),
-                                    'class' => 'bill-time',
-                                ],
-                            ]) ?>
+                            <?= $form->field($model, "[$i]time")->widget(DateTimePickerWithFormatter::class) ?>
                         </div>
                     </div>
 
@@ -187,106 +171,14 @@ $form = ActiveForm::begin([
                     <?php $charge = reset($charges); ?>
                     <?php if ($charge) : ?>
                         <div class="row input-row">
-                            <?php DynamicFormWidget::begin([
-                                'widgetContainer' => 'charges_dynamicform_wrapper',
-                                'widgetBody' => '.bill-charges', // required: css class selector
-                                'widgetItem' => '.charge-item', // required: css class
-                                'limit' => 99, // the maximum times, an element can be cloned (default 999)
-                                'min' => 0,
-                                'insertButton' => '.add-charge',
-                                'deleteButton' => '.remove-charge',
-                                'model' => $charge,
-                                'formId' => 'bill-dynamic-form',
-                                'formFields' => [
-                                    'id',
-                                    'class',
-                                    'object_id',
-                                    'type',
-                                    'sum',
-                                    'unit',
-                                    'quantity',
-                                    'label',
-                                ],
+                            <?= $this->render('../charge/_form', [
+                                'form' => $form,
+                                'model' => $model,
+                                'charges' => $charges,
+                                'billTypesList' => $billTypesList,
+                                'allowedTypes' => $allowedTypes,
+                                'i' => $i,
                             ]) ?>
-                            <div class="bill-charges">
-                                <div class="col-md-12 margin-bottom">
-                                    <button type="button" class="add-charge btn btn-sm bg-olive btn-flat">
-                                        <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<?= Yii::t('hipanel:finance', 'Detalization') ?>
-                                    </button>
-                                </div>
-                                <?php foreach ($charges as $j => $charge) : $j++; ?>
-                                    <div class="charge-item col-md-12">
-                                        <?php if (!$charge->isNewRecord && !$model->isNewRecord): ?>
-                                            <?= Html::activeHiddenInput($charge, "[$i][$j]id") ?>
-                                        <?php endif ?>
-                                        <div class="row input-row margin-bottom">
-                                            <div class="form-instance">
-                                                <div class="col-md-3">
-                                                    <?= $form->field($charge, "[$i][$j]object_id")->widget(ObjectCombo::class, [
-                                                        'class_attribute_name' => "[$i][$j]class",
-                                                        'selectedAttributeName' => 'name',
-                                                    ]) ?>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <?= $form->field($charge, "[$i][$j]type_id")->widget(BillTypeVueTreeSelect::class, [
-                                                        'billTypes' => $billTypesList,
-                                                        'replaceAttribute' => 'type_id',
-                                                        'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
-                                                        'behavior' => $model->isNewRecord ? TreeSelectBehavior::Hidden : TreeSelectBehavior::Disabled,
-                                                        'allowedTypes' => $allowedTypes,
-                                                    ]) ?>
-                                                </div>
-                                                <div class="col-md-5">
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <?= Html::activeHiddenInput($charge, "[$i][$j]unit") ?>
-                                                            <?= $form->field($charge, "[$i][$j]quantity")->input('text', ['value' => $charge->getQuantity()]) ?>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <?= PricePerUnitWidget::widget([
-                                                                'sum' => $charge->sum ?? null,
-                                                                'quantity' => $charge->quantity ?? null,
-                                                            ]) ?>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <?= $form->field($charge, "[$i][$j]sum")->input('text', [
-                                                                'data-attribute' => 'sum',
-                                                            ]) ?>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-1" style="padding-top: 25px;">
-                                                    <label>&nbsp;</label>
-                                                    <button type="button" title="<?= Yii::t('hipanel:finance', 'Delete charge') ?>"
-                                                            class="remove-charge btn bg-maroon btn-sm btn-flat">
-                                                        <i class="glyphicon glyphicon-minus"></i>
-                                                    </button>
-                                                    <button type="button" title="<?= Yii::t('hipanel:finance', 'Repeat charge') ?>"
-                                                            class="add-charge repeat-charge btn btn-warning btn-sm btn-flat">
-                                                        <i class="fa fa-repeat fa-fw"></i>
-                                                    </button>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="row">
-                                                        <div class="col-md-8">
-                                                            <?= $form->field($charge, "[$i][$j]label") ?>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <?= $form->field($charge, "[$i][$j]time")->widget(DateTimePicker::class, [
-                                                                'options' => [
-                                                                    'placeholder' => Yii::t('hipanel', 'Select date'),
-                                                                    'value' => $timeResolver($charge),
-                                                                ],
-                                                            ]) ?>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php endforeach ?>
-                            </div>
-                            <?php DynamicFormWidget::end() ?>
                         </div>
                     <?php endif ?>
                 </div>
