@@ -52,7 +52,7 @@ final class PricePerUnitWidget extends Widget
               const amount = parseFloat(PPUInput.value.trim()) * qty;
               if (amount) {
                   sumInput.value = amount.toFixed(2);
-                  $(sumInput).trigger('change, keyup');
+                  $(sumInput).trigger('change').trigger('keyup');
               }
             });
           })();
