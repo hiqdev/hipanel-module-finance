@@ -60,10 +60,12 @@ use yii\widgets\ActiveForm;
 <?php foreach ($charges as $j => $charge) : $j++; ?>
 
     <div class="charge-item col-md-12">
+        <?= Html::activeHiddenInput($charge, "[$i][$j]bill_id", ['value' => $model->id]) ?>
         <?= Html::activeHiddenInput($charge, "[$i][$j]currency", ['value' => $model->currency]) ?>
         <?= Html::activeHiddenInput($charge, "[$i][$j]client_id", ['value' => $model->client_id]) ?>
         <?= Html::activeHiddenInput($charge, "[$i][$j]action_id", ['value' => $charge->action_id]) ?>
         <?= Html::activeHiddenInput($charge, "[$i][$j]parent_id", ['value' => $charge->parent_id]) ?>
+        <?= Html::activeHiddenInput($charge, "[$i][$j]unit", ['value' => $charge->unit]) ?>
         <?php if (!$charge->isNewRecord && !$model->isNewRecord): ?>
             <?= Html::activeHiddenInput($charge, "[$i][$j]id") ?>
         <?php endif ?>
