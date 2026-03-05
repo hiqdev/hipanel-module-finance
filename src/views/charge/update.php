@@ -2,7 +2,7 @@
 
 /**
  * @var Bill $bill
- * @var Charge[] $model
+ * @var Charge $model
  * @var Charge[] $models
  * @var array $billTypesList
  * @var array $allowedTypes
@@ -11,7 +11,6 @@
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
 use yii\bootstrap\Html;
-use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 $this->title = Yii::t('hipanel:finance', 'Update charges');

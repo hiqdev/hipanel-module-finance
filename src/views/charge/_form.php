@@ -53,7 +53,7 @@ use yii\widgets\ActiveForm;
 
     <div class="col-md-12 margin-bottom">
         <button type="button" class="add-charge btn btn-sm bg-olive btn-flat">
-            <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<?= yii::t('hipanel:finance', 'detalization') ?>
+            <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;<?= Yii::t('hipanel:finance', 'detalization') ?>
         </button>
     </div>
 
@@ -65,7 +65,6 @@ use yii\widgets\ActiveForm;
         <?= Html::activeHiddenInput($charge, "[$i][$j]client_id", ['value' => $model->client_id]) ?>
         <?= Html::activeHiddenInput($charge, "[$i][$j]action_id", ['value' => $charge->action_id]) ?>
         <?= Html::activeHiddenInput($charge, "[$i][$j]parent_id", ['value' => $charge->parent_id]) ?>
-        <?= Html::activeHiddenInput($charge, "[$i][$j]unit", ['value' => $charge->unit]) ?>
         <?php if (!$charge->isNewRecord && !$model->isNewRecord): ?>
             <?= Html::activeHiddenInput($charge, "[$i][$j]id") ?>
         <?php endif ?>
