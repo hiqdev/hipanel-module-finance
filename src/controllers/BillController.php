@@ -283,14 +283,6 @@ class BillController extends CrudController
         return $this->billTypesProvider->getTypesList();
     }
 
-    /**
-     * @return array
-     */
-    private function getTypesAndGroups()
-    {
-        return $this->billTypesProvider->getGroupedList();
-    }
-
     private function getExchangeRates(?int $client_id = null): array
     {
         $client_id ??= Yii::$app->user->id;

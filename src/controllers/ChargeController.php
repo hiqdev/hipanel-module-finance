@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Finance module for HiPanel
@@ -14,15 +14,21 @@ namespace hipanel\modules\finance\controllers;
 use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
 use hipanel\actions\RenderAction;
+use hipanel\actions\SmartUpdateAction;
+use hipanel\actions\SwitchAction;
 use hipanel\actions\VariantsAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
+use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\query\ChargeQuery;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use hipanel\modules\finance\widgets\ChargeFinanceSummaryTable;
 use hipanel\widgets\DataProviderGridRenderer;
+use Yii;
 use yii\base\Event;
+use yii\base\InvalidConfigException;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class ChargeController
@@ -49,6 +55,7 @@ class ChargeController extends CrudController
                 'class' => EasyAccessControl::class,
                 'actions' => [
                     '*' => 'bill.charges.read',
+                    'update' => 'bill.update',
                 ],
             ],
         ]);
@@ -66,28 +73,69 @@ class ChargeController extends CrudController
                     /** @var ChargeQuery $query */
                     $query = $event->sender->getDataProvider()->query;
                     $query
-                      ->withCommonObject()
-                      ->withLatestCommonObject()
-                      ->withRootChargeType();
+                        ->withCommonObject()
+                        ->withLatestCommonObject()
+                        ->withRootChargeType();
                 },
-                'data' => function (RenderAction $action, array $data): array {
-
-                    return [
-                        'billTypesList' => $this->billTypesProvider->getTypes(),
-                        'clientTypes' => $this->getClientTypes(),
-                        ];
-                },
-                'responseVariants' => [
-                  IndexAction::VARIANT_SUMMARY_RESPONSE => static function (VariantsAction $action): string {
-                      $dataProvider = $action->parent->getDataProvider();
-                      $defaultSummary = (new DataProviderGridRenderer($dataProvider))->renderSummary();
-
-                      return $defaultSummary . ChargeFinanceSummaryTable::widget([
-                          'currencies' => $action->controller->getCurrencyTypes(),
-                          'allModels' => $dataProvider->query->andWhere(['groupby' => 'sum_by_currency', 'hide_child_charges' => true])->all(),
-                        ]);
-                  },
+                'data' => fn(RenderAction $action, array $data): array => [
+                    'billTypesList' => $this->billTypesProvider->getTypes(),
+                    'clientTypes' => $this->getClientTypes(),
                 ],
+                'responseVariants' => [
+                    IndexAction::VARIANT_SUMMARY_RESPONSE => static function (VariantsAction $action): string {
+                        $dataProvider = $action->parent->getDataProvider();
+                        $defaultSummary = (new DataProviderGridRenderer($dataProvider))->renderSummary();
+
+                        return $defaultSummary . ChargeFinanceSummaryTable::widget([
+                                'currencies' => $action->controller->getCurrencyTypes(),
+                                'allModels' => $dataProvider->query->andWhere(['groupby' => 'sum_by_currency', 'hide_child_charges' => true]
+                                )->all(),
+                            ]);
+                    },
+                ],
+            ],
+            'update' => [
+                'class' => SmartUpdateAction::class,
+                'success' => Yii::t('hipanel:finance', 'Charge(s) has been successfully updated'),
+                'POST html' => [
+                    'save' => true,
+                    'success' => [
+                        'class' => RedirectAction::class,
+                        'url' => function (RedirectAction $action) {
+                            $billId = $action->controller->request->get('bill_id');
+                            if ($billId) {
+                                return ['@bill/view', 'id' => $billId];
+                            }
+
+                            return ['@bill/index'];
+                        },
+                    ],
+                ],
+                'collectionLoader' => function (SwitchAction $action) {
+                    $formName = $action->collection->getModel()->formName();
+                    $data = $action->controller->request->post($formName);
+                    $action->collection->load($data[0]);
+                },
+                'data' => function ($action, $data) {
+
+                    $billIds = array_unique(array_values(ArrayHelper::getColumn($data['models'], 'bill_id')));
+
+                    if (count($billIds) !== 1) {
+                        throw new InvalidConfigException('Can not update multiple bills');
+                    }
+
+                    $billID = reset($billIds);
+
+                    $bill = Bill::findOne($billID);
+                    $chargesSum = array_sum(ArrayHelper::getColumn($data['models'], 'sum'));
+                    $bill->sum -= $chargesSum * -1;
+
+                    $data['bill'] = $bill;
+                    $data['billTypesList'] = $this->billTypesProvider->getTypes();
+                    $data['allowedTypes'] = [];
+
+                    return $data;
+                },
             ],
             'view' => [
                 'class' => ViewAction::class,
@@ -104,12 +152,6 @@ class ChargeController extends CrudController
                 ],
             ],
         ]);
-    }
-
-
-    private function getTypesAndGroups(): array
-    {
-        return $this->billTypesProvider->getGroupedList();
     }
 
     private function getClientTypes(): array

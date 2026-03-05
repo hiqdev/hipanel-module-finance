@@ -25,6 +25,35 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $detalizationAllowed = Yii::$app->params['module.finance.bill.detalization.allowed'] || Yii::$app->user->can('bill.charges.read');
 
+$this->registerCss(
+    <<<CSS
+.affix-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    position: relative;
+    overflow: hidden;
+} 
+.affix {
+    top: .5em;
+    z-index: 500;
+    background-color: #fff;
+}
+CSS
+);
+$this->registerJs(
+    <<<'JS'
+const $el = $(".box-bulk-actions");
+$el.affix({
+  offset: {
+    top: $el.offset().top,
+    bottom: function () {
+      return (this.bottom = $(".main-footer").outerHeight(true));
+    },
+  },
+});
+JS
+);
 ?>
 
 <div class="row">
@@ -34,7 +63,10 @@ $detalizationAllowed = Yii::$app->params['module.finance.bill.detalization.allow
             'title' => Yii::t('hipanel:finance', $model->gtype_label),
             'icon' => 'fa-money',
             'subTitle' => ClientSellerLink::widget(['model' => $model]),
-            'menu' => BillDetailMenu::widget(['model' => $model], ['linkTemplate' => '<a href="{url}" {linkOptions}><span class="pull-right">{icon}</span>&nbsp;{label}</a>']),
+            'menu' => BillDetailMenu::widget(
+                ['model' => $model],
+                ['linkTemplate' => '<a href="{url}" {linkOptions}><span class="pull-right">{icon}</span>&nbsp;{label}</a>']
+            ),
         ]) ?>
         <?= BillGridView::detailView([
             'model' => $model,
@@ -57,7 +89,7 @@ $detalizationAllowed = Yii::$app->params['module.finance.bill.detalization.allow
                 'description',
                 'object',
                 'tariff_link',
-                'requisite'
+                'requisite',
             ],
         ]) ?>
     </div>
@@ -65,26 +97,28 @@ $detalizationAllowed = Yii::$app->params['module.finance.bill.detalization.allow
     <?php if ($detalizationAllowed || Yii::$app->user->can('bill.charges.read')): ?>
         <div class="col-md-9">
             <?php $page = IndexPage::begin(['model' => $model, 'layout' => 'noSearch']) ?>
-                <?php $page->beginContent('show-actions') ?>
-                    <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Detalization') ?></h4>
-                <?php $page->endContent() ?>
-                <?php $page->beginContent('bulk-actions') ?>
-                    <?php if (Yii::$app->user->can('bill.update')) : ?>
-                        <?= $page->renderBulkDeleteButton('charge-delete') ?>
-                    <?php endif ?>
-                <?php $page->endContent() ?>
-                <?= $this->render('_grouping', [
-                    'model' => $model,
-                    'grouper' => $grouper,
-                    'page' => $page,
-                    'currencies' => $currencies,
-                ]) ?>
+            <?php $page->beginContent('show-actions') ?>
+            <h4 class="box-title" style="display: inline-block;">&nbsp;<?= Yii::t('hipanel:finance', 'Detalization') ?></h4>
+            <?php $page->endContent() ?>
+            <?php $page->beginContent('bulk-actions') ?>
+            <?php if (Yii::$app->user->can('bill.update')) : ?>
+                <?= $page->renderBulkButton(['@charge/update', 'bill_id' => $model->id], Yii::t('hipanel', 'Update'), ['color' => 'success']) ?>
+                <?= $page->renderBulkDeleteButton('charge-delete') ?>
+            <?php endif ?>
+            <?php $page->endContent() ?>
+            <?= $this->render('_grouping', [
+                'model' => $model,
+                'grouper' => $grouper,
+                'page' => $page,
+                'currencies' => $currencies,
+            ]) ?>
             <?php IndexPage::end() ?>
         </div>
     <?php endif; ?>
 </div>
 
-<?php $this->registerJs(<<<JS
+<?php $this->registerJs(
+    <<<JS
         let chargeId = getAnchor();
         $('tr [data-key="' + chargeId + '"]').css('background-color', 'lightblue').css('border', '1pt solid #8cb7c5');
 
