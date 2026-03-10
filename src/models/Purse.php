@@ -164,6 +164,11 @@ class Purse extends \hipanel\base\Model
         return $this->getDocumentsOfType(Requisite::TEMPLATE_OLD_PAYMENT_PLAN_PAYMENT_REQUEST);
     }
 
+    public function getReplacementPartNotice(): array
+    {
+        return $this->getDocumentsOfType(Requisite::TEMPLATE_REPLACEMENT_PART_NOTICE);
+    }
+
     public function getDocumentsOfType($type): array
     {
         if (Yii::$app->user->can('document.read') === false) {
