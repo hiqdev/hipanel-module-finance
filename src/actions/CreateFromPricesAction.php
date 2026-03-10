@@ -41,7 +41,7 @@ class CreateFromPricesAction extends BillManagementAction
             }
             $billTypes = $this->billTypesProvider->getTypes();
             $prices = Price::find()
-                ->select(['*', 'main_object_id', 'object'])
+                ->select(['*', 'main_object_id'])
                 ->joinWith(['object'])
                 ->withFormulaLines()
                 ->where(['id_in' => $priceIds])

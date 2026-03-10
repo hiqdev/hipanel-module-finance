@@ -78,6 +78,10 @@ class PurseGridView extends BoxedGridView
                 'class' => MonthlyDocumentsColumn::class,
                 'type' => 'old_payment_plan_payment_request',
             ],
+            'replacementPartNotice' => [
+                'class' => MonthlyDocumentsColumn::class,
+                'type' => 'replacement_part_notice',
+            ],
             'acceptances' => [
                 'class' => MonthlyDocumentsColumn::class,
                 'type' => 'acceptance',
