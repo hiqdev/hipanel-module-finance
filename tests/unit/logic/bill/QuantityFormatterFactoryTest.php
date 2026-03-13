@@ -7,6 +7,7 @@ use hipanel\modules\finance\models\FractionAwareInterface;
 use hipanel\modules\finance\models\HasTimeAttributeInterface;
 use hipanel\modules\finance\tests\unit\TestCase;
 use hiqdev\php\units\Quantity;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use yii\base\InvalidConfigException;
@@ -15,7 +16,6 @@ use yii\di\NotInstantiableException;
 class QuantityFormatterFactoryTest extends TestCase
 {
     /**
-     * @dataProvider createByTypeDataProvider
      * @param string $type
      * @param Quantity $qty
      * @param $context
@@ -24,6 +24,7 @@ class QuantityFormatterFactoryTest extends TestCase
      * @return void
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface|InvalidConfigException|NotInstantiableException
      */
+    #[DataProvider('createByTypeDataProvider')]
     public function testCreateByType(
         string $type,
         Quantity $qty,

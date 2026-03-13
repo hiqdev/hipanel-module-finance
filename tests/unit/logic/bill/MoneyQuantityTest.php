@@ -6,6 +6,7 @@ use hipanel\modules\finance\logic\bill\MoneyQuantity;
 use hipanel\modules\finance\tests\unit\TestCase;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\yii2\formatters\IntlFormatter;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MoneyQuantityTest extends TestCase
 {
@@ -16,9 +17,7 @@ class MoneyQuantityTest extends TestCase
         $this->intlFormatter = $this->di()->get(IntlFormatter::class);
     }
 
-    /**
-     * @dataProvider moneyQuantityDataProvider
-     */
+    #[DataProvider('moneyQuantityDataProvider')]
     public function testFormat(
         float $quantity,
         string $currency,
@@ -33,9 +32,7 @@ class MoneyQuantityTest extends TestCase
         $this->assertEquals($expectedFormat, $moneyQuantity->format());
     }
 
-    /**
-     * @dataProvider moneyQuantityDataProvider
-     */
+    #[DataProvider('moneyQuantityDataProvider')]
     public function testGetAmount(
         float $quantity,
         string $currency,
@@ -51,9 +48,7 @@ class MoneyQuantityTest extends TestCase
         $this->assertEquals($currency, $amount->getCurrency()->getCode());
     }
 
-    /**
-     * @dataProvider moneyQuantityDataProvider
-     */
+    #[DataProvider('moneyQuantityDataProvider')]
     public function testGetCurrency(
         float $quantity,
         string $currency,
