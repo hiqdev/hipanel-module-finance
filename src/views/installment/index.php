@@ -3,7 +3,7 @@
 use hipanel\models\IndexPageUiOptions;
 use hipanel\modules\finance\grid\InstallmentGridView;
 use hipanel\modules\finance\grid\InstallmentRepresentations;
-use hipanel\modules\finance\models\SInstallmentSearch;
+use hipanel\modules\finance\models\InstallmentSearch;
 use hipanel\widgets\gridLegend\GridLegend;
 use hipanel\widgets\IndexPage;
 use yii\bootstrap\Dropdown;
