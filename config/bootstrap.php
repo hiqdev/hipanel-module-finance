@@ -10,7 +10,7 @@
 
 use Yiisoft\Composer\Config\Builder;
 
-error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 date_default_timezone_set('UTC');
 $config = require Builder::path('web');
 

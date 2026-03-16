@@ -17,12 +17,11 @@ use hiqdev\billing\registry\TariffDefinitions\TariffTypeDefinitionFacade;
 use hiqdev\php\billing\product\Application\BillingRegistryService;
 use hiqdev\php\billing\product\Application\BillingRegistryServiceInterface;
 use hiqdev\php\billing\product\BillingRegistry;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PriceUnitAvailabilityServiceTest extends TestCase
 {
-    /**
-     * @dataProvider priceTypeProvider
-     */
+    #[DataProvider('priceTypeProvider')]
     public function testReturnsUnitsForKnownPriceType(
         UnitCollection $collection,
         string $priceType,
