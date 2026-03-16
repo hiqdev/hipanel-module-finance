@@ -30,6 +30,7 @@ return [
         '@consumption' => '/finance/consumption',
         '@pay/check-return' => '/finance/pay/check-return',
         '@billing-registry' => '/finance/billing-registry',
+        '@installment' => '/finance/installment',
     ],
     'modules' => [
         'finance' => [
