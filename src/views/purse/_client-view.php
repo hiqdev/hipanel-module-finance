@@ -17,8 +17,8 @@ $documentType = $isEmployee ? 'acceptance' : 'invoice';
 $documents = [];
 if ($user->can('document.read') && $user->can('bill.read')) {
     $documents = ($isEmployee ? ['acceptances'] : [
-        'serviceInvoices', 'purchaseInvoices', 'installmentInvoices', 'oldInstallmentInvoices',
-        'servicePaymentRequests', 'purchasePaymentRequests', 'installmentPaymentRequests',
+        'servicePaymentRequests', 'serviceInvoices',
+        'installmentPaymentRequests', 'installmentInvoices', 'purchaseInvoices', 'oldInstallmentInvoices',
         'paymentplanPaymentRequests', 'oldPaymentplanPaymentRequests',
     ]);
 }
@@ -51,6 +51,7 @@ if ($user->can('document.read') && $user->can('bill.read')) {
                 $user->can('owner-staff') && $user->can('document.read') && !$isEmployee ? 'detailedServiceInvoices' : null,
                 $user->can('owner-staff') && $user->can('document.read') && !$isEmployee ? 'paymentRequests' : null,
                 $user->can('owner-staff') && $user->can('document.read') && !$isEmployee ? 'detailedServicePaymentRequests' : null,
+                $user->can('owner-staff') && $user->can('document.read') && !$isEmployee ? 'purchasePaymentRequests' : null,
             ], $documents)),
         ]) ?>
     <?php $box->endBody() ?>
