@@ -10,6 +10,7 @@ use hipanel\modules\stock\widgets\combo\PartnoCombo;
 use hipanel\modules\client\grid\ClientColumn;
 use hipanel\modules\stock\widgets\combo\LocationsCombo;
 use hipanel\modules\finance\models\Installment;
+use hipanel\grid\CurrencyColumn;
 use Yii;
 use yii\helpers\Html;
 
@@ -66,6 +67,55 @@ class InstallmentGridView extends BoxedGridView
                 'value' => static function (Installment $model) {
                     return Html::tag('b', Html::encode($model->device), ['style' => 'margin-left:1em']);
                 },
+            ],
+            'total_sum' => [
+                'class' => CurrencyColumn::class,
+                'filter' => false,
+                'attribute' => 'total_sum',
+                'colors' => ['danger' => 'warning'],
+                'headerOptions' => ['class' => 'text-right'],
+                'contentOptions' => function (Installment $model) {
+                    return ['class' => 'text-right' . ($model->total_sum > 0 ? ' text-bold' : '')];
+                },
+            ],
+            'monthly_sum' => [
+                'class' => CurrencyColumn::class,
+                'filter' => false,
+                'attribute' => 'monthly_sum',
+                'colors' => ['danger' => 'warning'],
+                'headerOptions' => ['class' => 'text-right'],
+                'contentOptions' => function (Installment $model) {
+                    return ['class' => 'text-right' . ($model->monthly_sum > 0 ? ' text-bold' : '')];
+                },
+            ],
+            'left_sum' => [
+                'class' => CurrencyColumn::class,
+                'filter' => false,
+                'attribute' => 'left_sum',
+                'colors' => ['danger' => 'warning'],
+                'headerOptions' => ['class' => 'text-right'],
+                'contentOptions' => function (Installment $model) {
+                    return ['class' => 'text-right' . ($model->left_sum > 0 ? ' text-bold' : '')];
+                },
+            ],
+            'paid_sum' => [
+                'class' => CurrencyColumn::class,
+                'filter' => false,
+                'attribute' => 'paid_sum',
+                'colors' => ['danger' => 'warning'],
+                'headerOptions' => ['class' => 'text-right'],
+                'contentOptions' => function (Installment $model) {
+                    return ['class' => 'text-right' . ($model->paid_sum > 0 ? ' text-bold' : '')];
+                },
+            ],
+            'period' => [
+                'filter' => false,
+            ],
+            'start' => [
+                'filter' => false,
+            ],
+            'finish' => [
+                'filter' => false,
             ],
         ]);
     }

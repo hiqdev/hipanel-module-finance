@@ -27,8 +27,8 @@ class Installment extends \hipanel\base\Model
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['id', 'client_id', 'seller_id', 'part_id', 'model_id', 'model_type_id', 'model_brand_id', 'device_id'], 'integer'],
-            [['client', 'seller', 'serial', 'model', 'model_type', 'model_type_label', 'model_brand', 'model_brand_label', 'device'], 'string'],
+            [['id', 'client_id', 'seller_id', 'part_id', 'model_id', 'model_type_id', 'model_brand_id', 'device_id', 'currency_id'], 'integer'],
+            [['client', 'seller', 'serial', 'model', 'model_type', 'model_type_label', 'model_brand', 'model_brand_label', 'device', 'currency'], 'string'],
             [['start', 'finish'], 'datetime', 'format' => 'php:Y-m-d'],
             [['period'], 'integer'],
             [['paid_sum', 'monthly_sum', 'total_sum', 'left_sum'], 'number'],
