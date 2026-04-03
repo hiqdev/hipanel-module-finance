@@ -2,6 +2,7 @@
 
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\ProgressivePrice;
+use hipanel\modules\finance\models\TemplatePrice;
 use hipanel\modules\finance\widgets\ProgressivePresenter;
 use hipanel\widgets\DynamicFormWidget;
 use yii\widgets\ActiveForm;
@@ -52,6 +53,17 @@ $unitCollection = $model->getUnitCollection();
                 ]) ?>
             </div>
             <div class="price-estimates"></div>
+            <?php if ($model instanceof TemplatePrice && !empty($model->subprices)): ?>
+                <?php foreach ($model->subprices as $currency => $subprice): ?>
+                    <div class="form-group">
+                        <?= Html::label(Yii::t('hipanel:finance', 'Price in {currency}', ['currency' => strtoupper($currency)])) ?>
+                        <?= Html::input('number', $model->formName() . "[{$index}][subprices][{$currency}]", $subprice, [
+                            'class' => 'form-control',
+                            'step' => '0.01',
+                        ]) ?>
+                    </div>
+                <?php endforeach ?>
+            <?php endif ?>
         <?php endif ?>
     </div>
     <?php if ($model->isProgressive()) : ?>
