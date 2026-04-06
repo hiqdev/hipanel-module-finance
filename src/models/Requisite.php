@@ -59,7 +59,7 @@ class Requisite extends Contact
     const string TEMPLATE_DETAILED_PAYMENT_REQUEST = 'detailed_service_payment_request';
     const string TEMPLATE_PAYMENT_PLAN_PAYMENT_REQUEST = 'payment_plan_payment_request';
     const string TEMPLATE_OLD_PAYMENT_PLAN_PAYMENT_REQUEST = 'old_payment_plan_payment_request';
-    const string TEMPLATE_REPLACEMENT_PART_NOTICE = 'replacement_part_notice';
+    const string TEMPLATE_REPLACEMENT_PART_NOTICE = 'part_replacement_notice';
 
     public static function tableName()
     {
@@ -96,7 +96,7 @@ class Requisite extends Contact
                     'detailed_service_invoice_id',
                     'payment_plan_payment_request_id',
                     'old_payment_plan_payment_request_id',
-                    'replacement_part_notice_id',
+                    'part_replacement_notice_id',
                     'nda_id',
                 ],
                 'string', // template2pdf ID
@@ -120,7 +120,7 @@ class Requisite extends Contact
                     'old_payment_plan_payment_request_name',
                     'detailed_service_payment_request_name',
                     'detailed_service_invoice_name',
-                    'replacement_part_notice_name',
+                    'part_replacement_notice_name',
                     'nda_name',
                 ],
                 'string',
