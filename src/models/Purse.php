@@ -217,6 +217,8 @@ class Purse extends \hipanel\base\Model
             'purchasePaymentRequests' => Yii::t('hipanel:finance', 'Purchase Payment Request'),
             'installmentPaymentRequests' => Yii::t('hipanel:finance', 'Installment Payment Request'),
             'servicePaymentRequests' => Yii::t('hipanel:finance', 'Service Payment Request'),
+            'paymentplanPaymentRequests' => Yii::t('hipanel:finance', 'Installment Payment Plan'),
+            'oldPaymentplanPaymentRequests' => Yii::t('hipanel:finance', 'Old Installment Payment Plan'),
             'acceptances' => Yii::t('hipanel:finance', 'Acceptance reports'),
             'contracts' => Yii::t('hipanel:finance', 'Contracts'),
             'probations' => Yii::t('hipanel:finance', 'Probation'),

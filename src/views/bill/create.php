@@ -1,11 +1,11 @@
 <?php
 
-use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\forms\BillForm;
 use yii\web\View;
 
 /**
  * @var View $this
- * @var Bill[] $models
+ * @var BillForm[] $models
  * @var array $billTypesList
  * @var array $allowedTypes
  */
@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="bill-create">
     <?= $this->render('_form', [
+        'model' => reset($models),
         'models' => $models,
         'billTypesList' => $billTypesList,
         'allowedTypes' => $allowedTypes,
