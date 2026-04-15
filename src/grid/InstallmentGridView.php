@@ -32,7 +32,7 @@ class InstallmentGridView extends BoxedGridView
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'filterAttribute' => 'serial_ilike',
                 'format' => 'raw',
-                'value' => fn($model) => Html::a(Html::encode($model->serial), ['@part/view', 'id' => $model->id], ['class' => 'text-bold']),
+                'value' => fn($model) => Html::a(Html::encode($model->serial), ['@part/view', 'id' => $model->part_id], ['class' => 'text-bold']),
             ],
             'model' => [
                 'filterAttribute' => 'model_like',
