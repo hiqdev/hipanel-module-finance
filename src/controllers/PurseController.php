@@ -24,6 +24,8 @@ use hipanel\components\Response;
 use hipanel\filters\EasyAccessControl;
 use hipanel\helpers\Url;
 use hipanel\modules\document\models\Statistic as DocumentStatisticModel;
+use hipanel\modules\finance\actions\GenerateAndSaveMonthlyDocumentAction;
+use hipanel\modules\finance\helpers\DocumentGenerationErrorOps;
 use hipanel\modules\finance\models\Costprice;
 use hipanel\modules\finance\models\Purse;
 use hipanel\modules\finance\widgets\ProcessTableGenerator;
@@ -87,7 +89,7 @@ class PurseController extends \hipanel\base\CrudController
                 'error' => Yii::t('hipanel', 'Under construction'),
             ],
             'generate-and-save-monthly-document' => [
-                'class' => SmartPerformAction::class,
+                'class' => GenerateAndSaveMonthlyDocumentAction::class,
                 'success' => Yii::t('hipanel:finance', 'Document updated'),
             ],
             'generate-acts' => [
@@ -217,17 +219,17 @@ class PurseController extends \hipanel\base\CrudController
         try {
             $content = Purse::perform($action, $params);
         } catch (ResponseErrorException $e) {
-            $responseData = $e->getResponse()->getData();
-            if (!isset($responseData['_error_ops']['requisite_id']) || !isset($responseData['_error_ops']['type'])) {
+            $errorOps = DocumentGenerationErrorOps::extract($e->getResponse()->getData());
+            if ($errorOps === null) {
                 Yii::$app->getSession()->setFlash('error', Yii::t('hipanel:finance', 'Failed to generate document'));
-                return $this->redirect(['@client/view', 'id' => $params['client_id']]);
+                return $this->redirectAfterDocumentGenerationFailure($params);
             }
 
             $contactUrl = Html::a(
-                Url::toRoute(['@requisite/view', 'id' => $responseData['_error_ops']['requisite_id']], true),
-                ['@requisite/view', 'id' => $responseData['_error_ops']['requisite_id']]
+                Url::toRoute(['@requisite/view', 'id' => $errorOps['requisite_id']], true),
+                ['@requisite/view', 'id' => $errorOps['requisite_id']]
             );
-            $type = $responseData['_error_ops']['type'];
+            $type = $errorOps['type'];
             if (Yii::$app->user->can('requisites.update')) {
                 Yii::$app->getSession()->setFlash('error',
                     Yii::t('hipanel:finance',
@@ -240,11 +242,20 @@ class PurseController extends \hipanel\base\CrudController
                     Yii::t('hipanel:finance', 'No templates for requisite. Please contact finance department'));
             }
 
-            return $this->redirect(['@client/view', 'id' => $params['client_id']]);
+            return $this->redirectAfterDocumentGenerationFailure($params);
         }
         $this->asPdf();
 
         return $content;
+    }
+
+    private function redirectAfterDocumentGenerationFailure(array $params): \yii\web\Response
+    {
+        if (isset($params['client_id'])) {
+            return $this->redirect(['@client/view', 'id' => $params['client_id']]);
+        }
+
+        return $this->redirect($this->request->referrer ?: ['index']);
     }
 
     protected function asPdf(): void

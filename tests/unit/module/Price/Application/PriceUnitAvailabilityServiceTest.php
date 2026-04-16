@@ -38,14 +38,14 @@ class PriceUnitAvailabilityServiceTest extends TestCase
     {
         return new PriceUnitAvailabilityService(
             $this->createBillingRegistryService(),
-            $this->createUnitRepositoryMock($collection),
+            $this->createUnitRepositoryStub($collection),
             $this->di()->get(UnitService::class),
         );
     }
 
-    private function createUnitRepositoryMock(UnitCollection $collection): RefUnitRepository
+    private function createUnitRepositoryStub(UnitCollection $collection): RefUnitRepository
     {
-        $unitRepository = $this->createMock(RefUnitRepository::class);
+        $unitRepository = $this->createStub(RefUnitRepository::class);
 
         $unitRepository->method('findAll')->willReturn($collection);
 
