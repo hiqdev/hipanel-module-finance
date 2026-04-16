@@ -17,9 +17,9 @@ class ProgressivePricePresenterTest extends TestCase
     {
         parent::setUp();
 
-        $formatter = $this->createMock(Formatter::class);
+        $formatter = $this->createStub(Formatter::class);
         $formatter->method('asCurrency')->willReturnCallback(fn($value, $currency) => '$' . number_format((float)$value, 2));
-        $user = $this->createMock(User::class);
+        $user = $this->createStub(User::class);
         $user->method('can')->willReturn(true);
 
         $this->presenter = new ProgressivePricePresenter($formatter, $user);
@@ -143,7 +143,7 @@ class ProgressivePricePresenterTest extends TestCase
     {
         // Arrange
         // a single threshold that is a new record (empty price)
-        $threshold = $this->createMock(Threshold::class);
+        $threshold = $this->createStub(Threshold::class);
         $threshold->method('getIsNewRecord')->willReturn(true);
         $threshold->method('getUnitLabel')->willReturn('GB');
 
@@ -305,7 +305,7 @@ class ProgressivePricePresenterTest extends TestCase
 
     private function createThreshold(string $price, string $quantity, string $unit, string $currency): Threshold
     {
-        $threshold = $this->createMock(Threshold::class);
+        $threshold = $this->createStub(Threshold::class);
         $threshold->price = $price;
         $threshold->quantity = $quantity;
         $threshold->unit = $unit;
