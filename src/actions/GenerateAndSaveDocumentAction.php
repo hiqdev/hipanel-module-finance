@@ -11,7 +11,7 @@ use yii\base\InvalidCallException;
 
 final class GenerateAndSaveDocumentAction extends SmartPerformAction
 {
-    private ?array $responseData = null;
+    private mixed $responseData = null;
 
     /**
      * Overrides SmartPerformAction::perform() to always execute the save regardless of rule->save,
