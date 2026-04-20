@@ -8,7 +8,6 @@ use hipanel\modules\finance\helpers\DocumentGenerationErrorOps;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\InvalidCallException;
-use yii\helpers\Html;
 
 final class GenerateAndSaveDocumentAction extends SmartPerformAction
 {
@@ -61,19 +60,6 @@ final class GenerateAndSaveDocumentAction extends SmartPerformAction
                 : $this->getFlashText('error');
         }
 
-        if (Yii::$app->user->can('requisites.update')) {
-            $requisiteId = $errorOps['requisite_id'];
-            $contactUrl = Html::a(
-                Yii::t('hipanel:finance', 'requisite settings'),
-                ['@requisite/view', 'id' => $requisiteId]
-            );
-            return Yii::t(
-                'hipanel:finance',
-                "No templates for requisite. Follow this link {contactUrl} and set template of type '{type}'",
-                ['contactUrl' => $contactUrl, 'type' => $errorOps['type']]
-            );
-        }
-
-        return Yii::t('hipanel:finance', 'No templates for requisite. Please contact finance department');
+        return DocumentGenerationErrorOps::buildMessage($errorOps);
     }
 }

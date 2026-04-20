@@ -219,27 +219,8 @@ class PurseController extends \hipanel\base\CrudController
             $content = $this->performDocumentAction($action, $params);
         } catch (ResponseErrorException $e) {
             $errorOps = DocumentGenerationErrorOps::extract($e->getResponse()->getData());
-            if ($errorOps === null) {
-                Yii::$app->getSession()->setFlash('error', Yii::t('hipanel:finance', 'Failed to generate document'));
-                return $this->redirectAfterDocumentGenerationFailure($params);
-            }
 
-            $contactUrl = Html::a(
-                Yii::t('hipanel:finance', 'requisite settings'),
-                ['@requisite/view', 'id' => $errorOps['requisite_id']]
-            );
-            $type = $errorOps['type'];
-            if (Yii::$app->user->can('requisites.update')) {
-                Yii::$app->getSession()->setFlash('error',
-                    Yii::t('hipanel:finance',
-                        "No templates for requisite. Follow this link {contactUrl} and set template of type '{type}'", [
-                            'contactUrl' => $contactUrl,
-                            'type' => $type,
-                        ]));
-            } else {
-                Yii::$app->getSession()->setFlash('error',
-                    Yii::t('hipanel:finance', 'No templates for requisite. Please contact finance department'));
-            }
+            Yii::$app->getSession()->setFlash('error', DocumentGenerationErrorOps::buildMessage($errorOps));
 
             return $this->redirectAfterDocumentGenerationFailure($params);
         }

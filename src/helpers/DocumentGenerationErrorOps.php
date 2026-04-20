@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace hipanel\modules\finance\helpers;
 
+use Yii;
+use yii\helpers\Html;
+
 final class DocumentGenerationErrorOps
 {
     private const TEMPLATE_NOT_FOUND_ERRORS = [
@@ -23,6 +26,29 @@ final class DocumentGenerationErrorOps
         }
 
         return self::extractFromArray($responseData);
+    }
+
+    public static function buildMessage(?array $errorOps): string
+    {
+        if ($errorOps === null) {
+            return Yii::t('hipanel:finance', 'Failed to generate document');
+        }
+
+        if (Yii::$app->user->can('requisites.update')) {
+            $requisiteId = $errorOps['requisite_id'];
+            $contactUrl = Html::a(
+                Yii::t('hipanel:finance', 'requisite settings'),
+                ['@requisite/view', 'id' => $requisiteId]
+            );
+
+            return Yii::t(
+                'hipanel:finance',
+                "No templates for requisite. Follow this link {contactUrl} and set template of type '{type}'",
+                ['contactUrl' => $contactUrl, 'type' => $errorOps['type']]
+            );
+        }
+
+        return Yii::t('hipanel:finance', 'No templates for requisite. Please contact finance department');
     }
 
     private static function extractFromArray(array $payload): ?array
