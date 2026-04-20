@@ -5,11 +5,16 @@ namespace hipanel\modules\finance\helpers;
 
 final class DocumentGenerationErrorOps
 {
+    private const TEMPLATE_NOT_FOUND_ERRORS = [
+        'failed find document template',
+        'No templates for requisite',
+    ];
+
     /**
      * Extracts _error_ops from a HiArt response payload.
      *
-     * Supports both flat responses (root-level _error_ops) and batch responses
-     * where _error_ops is nested inside a per-model entry.
+     * Supports flat responses and nested batch responses where template-related
+     * _error_ops can be placed multiple levels deep inside per-model entries.
      */
     public static function extract(mixed $responseData): ?array
     {
@@ -17,18 +22,23 @@ final class DocumentGenerationErrorOps
             return null;
         }
 
-        $errorOps = $responseData['_error_ops'] ?? null;
-        if (self::isValid($errorOps)) {
+        return self::extractFromArray($responseData);
+    }
+
+    private static function extractFromArray(array $payload): ?array
+    {
+        $errorOps = $payload['_error_ops'] ?? null;
+        if (self::isValid($errorOps) && self::isTemplateMissingError($payload)) {
             return $errorOps;
         }
 
-        foreach ($responseData as $payload) {
-            if (!is_array($payload)) {
+        foreach ($payload as $nestedPayload) {
+            if (!is_array($nestedPayload)) {
                 continue;
             }
 
-            $errorOps = $payload['_error_ops'] ?? null;
-            if (self::isValid($errorOps)) {
+            $errorOps = self::extractFromArray($nestedPayload);
+            if ($errorOps !== null) {
                 return $errorOps;
             }
         }
@@ -40,5 +50,21 @@ final class DocumentGenerationErrorOps
     {
         return is_array($errorOps)
             && isset($errorOps['requisite_id'], $errorOps['type']);
+    }
+
+    private static function isTemplateMissingError(array $payload): bool
+    {
+        $error = $payload['_error'] ?? null;
+        if (!is_string($error)) {
+            return false;
+        }
+
+        foreach (self::TEMPLATE_NOT_FOUND_ERRORS as $needle) {
+            if (str_contains($error, $needle)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

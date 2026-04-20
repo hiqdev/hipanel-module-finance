@@ -4,19 +4,18 @@ declare(strict_types=1);
 namespace hipanel\modules\finance\actions;
 
 use hipanel\actions\SmartPerformAction;
-use hipanel\helpers\Url;
 use hipanel\modules\finance\helpers\DocumentGenerationErrorOps;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\InvalidCallException;
 use yii\helpers\Html;
 
-final class GenerateAndSaveMonthlyDocumentAction extends SmartPerformAction
+final class GenerateAndSaveDocumentAction extends SmartPerformAction
 {
     private ?array $responseData = null;
 
     /**
-     * Overrides SwitchAction::perform() to always execute the save regardless of rule->save,
+     * Overrides SmartPerformAction::perform() to always execute the save regardless of rule->save,
      * and captures response data from ResponseErrorException for use in addFlash().
      */
     public function perform()
@@ -65,7 +64,7 @@ final class GenerateAndSaveMonthlyDocumentAction extends SmartPerformAction
         if (Yii::$app->user->can('requisites.update')) {
             $requisiteId = $errorOps['requisite_id'];
             $contactUrl = Html::a(
-                Url::toRoute(['@requisite/view', 'id' => $requisiteId], true),
+                Yii::t('hipanel:finance', 'requisite settings'),
                 ['@requisite/view', 'id' => $requisiteId]
             );
             return Yii::t(

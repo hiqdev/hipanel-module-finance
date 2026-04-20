@@ -22,9 +22,8 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\components\Response;
 use hipanel\filters\EasyAccessControl;
-use hipanel\helpers\Url;
 use hipanel\modules\document\models\Statistic as DocumentStatisticModel;
-use hipanel\modules\finance\actions\GenerateAndSaveMonthlyDocumentAction;
+use hipanel\modules\finance\actions\GenerateAndSaveDocumentAction;
 use hipanel\modules\finance\helpers\DocumentGenerationErrorOps;
 use hipanel\modules\finance\models\Costprice;
 use hipanel\modules\finance\models\Purse;
@@ -89,15 +88,15 @@ class PurseController extends \hipanel\base\CrudController
                 'error' => Yii::t('hipanel', 'Under construction'),
             ],
             'generate-and-save-monthly-document' => [
-                'class' => GenerateAndSaveMonthlyDocumentAction::class,
+                'class' => GenerateAndSaveDocumentAction::class,
                 'success' => Yii::t('hipanel:finance', 'Document updated'),
             ],
             'generate-acts' => [
-                'class' => SmartPerformAction::class,
+                'class' => GenerateAndSaveDocumentAction::class,
                 'success' => Yii::t('hipanel:finance', 'Document updated'),
             ],
             'generate-and-save-document' => [
-                'class' => SmartPerformAction::class,
+                'class' => GenerateAndSaveDocumentAction::class,
                 'success' => Yii::t('hipanel:finance', 'Document updated'),
             ],
             'calculate' => [
@@ -217,7 +216,7 @@ class PurseController extends \hipanel\base\CrudController
     public function generateDocument($action, $params)
     {
         try {
-            $content = Purse::perform($action, $params);
+            $content = $this->performDocumentAction($action, $params);
         } catch (ResponseErrorException $e) {
             $errorOps = DocumentGenerationErrorOps::extract($e->getResponse()->getData());
             if ($errorOps === null) {
@@ -226,7 +225,7 @@ class PurseController extends \hipanel\base\CrudController
             }
 
             $contactUrl = Html::a(
-                Url::toRoute(['@requisite/view', 'id' => $errorOps['requisite_id']], true),
+                Yii::t('hipanel:finance', 'requisite settings'),
                 ['@requisite/view', 'id' => $errorOps['requisite_id']]
             );
             $type = $errorOps['type'];
@@ -247,6 +246,11 @@ class PurseController extends \hipanel\base\CrudController
         $this->asPdf();
 
         return $content;
+    }
+
+    protected function performDocumentAction(string $action, array $params): mixed
+    {
+        return Purse::perform($action, $params);
     }
 
     private function redirectAfterDocumentGenerationFailure(array $params): \yii\web\Response
