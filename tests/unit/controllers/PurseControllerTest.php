@@ -32,6 +32,8 @@ class PurseControllerTest extends \PHPUnit\Framework\TestCase
     private object $originalSession;
     private object $originalUser;
     private array $originalI18nTranslations;
+    private string|bool $originalRequisiteAlias;
+    private string|bool $originalClientAlias;
 
     protected function setUp(): void
     {
@@ -40,6 +42,8 @@ class PurseControllerTest extends \PHPUnit\Framework\TestCase
         $this->originalSession = Yii::$app->session;
         $this->originalUser = Yii::$app->user;
         $this->originalI18nTranslations = Yii::$app->i18n->translations;
+        $this->originalRequisiteAlias = Yii::getAlias('@requisite', false);
+        $this->originalClientAlias = Yii::getAlias('@client', false);
 
         Yii::setAlias('@requisite', '/requisite');
         Yii::setAlias('@client', '/client');
@@ -53,6 +57,8 @@ class PurseControllerTest extends \PHPUnit\Framework\TestCase
         Yii::$app->set('session', $this->originalSession);
         Yii::$app->set('user', $this->originalUser);
         Yii::$app->i18n->translations = $this->originalI18nTranslations;
+        Yii::setAlias('@requisite', $this->originalRequisiteAlias ?: null);
+        Yii::setAlias('@client', $this->originalClientAlias ?: null);
     }
 
     public function testActions(): void

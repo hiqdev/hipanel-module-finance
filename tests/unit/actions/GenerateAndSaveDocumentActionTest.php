@@ -26,6 +26,7 @@ final class GenerateAndSaveDocumentActionTest extends TestCase
     private object $originalSession;
     private object $originalUser;
     private array $originalI18nTranslations;
+    private string|bool $originalRequisiteAlias;
 
     protected function setUp(): void
     {
@@ -34,6 +35,7 @@ final class GenerateAndSaveDocumentActionTest extends TestCase
         $this->originalSession = Yii::$app->session;
         $this->originalUser = Yii::$app->user;
         $this->originalI18nTranslations = Yii::$app->i18n->translations;
+        $this->originalRequisiteAlias = Yii::getAlias('@requisite', false);
 
         Yii::setAlias('@requisite', '/requisite');
         Yii::$app->set('session', new TestSession());
@@ -48,6 +50,7 @@ final class GenerateAndSaveDocumentActionTest extends TestCase
         Yii::$app->set('session', $this->originalSession);
         Yii::$app->set('user', $this->originalUser);
         Yii::$app->i18n->translations = $this->originalI18nTranslations;
+        Yii::setAlias('@requisite', $this->originalRequisiteAlias ?: null);
 
         parent::tearDown();
     }
