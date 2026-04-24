@@ -21,6 +21,7 @@ use hiqdev\hiart\Collection;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\Action;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Request;
 use yii\web\Response;
@@ -87,6 +88,16 @@ class BillManagementAction extends Action
 
     private function findBills(): void
     {
+        if ($this->request->isGet && ($preloadKey = $this->request->get('_preload')) !== null) {
+            $sessionKey = 'bill_preload_' . $preloadKey;
+            if (Yii::$app->session->has($sessionKey)) {
+                $billsData = Yii::$app->session->get($sessionKey);
+                Yii::$app->session->remove($sessionKey);
+                $this->collection->set($this->buildFormsFromPreloadData($billsData));
+                return;
+            }
+        }
+
         $ids = $this->getRequestedIds();
 
         if ($ids === false) {
@@ -107,6 +118,37 @@ class BillManagementAction extends Action
             }
         }
         $this->collection->set($billForms);
+    }
+
+    private function buildFormsFromPreloadData(array $billsData): array
+    {
+        $typeIndex = ArrayHelper::map($this->billTypesProvider->getTypes(), 'name', 'id');
+
+        $forms = [];
+        foreach ($billsData as $billData) {
+            $attrs = $billData['attributes'] ?? [];
+            $form = new BillForm(['scenario' => $this->scenario]);
+            $form->setAttributes($attrs, false);
+
+            $typeStr = $attrs['type'] ?? null;
+            if ($typeStr !== null && isset($typeIndex[$typeStr])) {
+                $form->type_id = $typeIndex[$typeStr];
+            }
+
+            $charges = [];
+            foreach ($billData['charges'] ?? [] as $chargeData) {
+                $charge = $form->newCharge();
+                foreach ($chargeData as $attr => $value) {
+                    $charge->$attr = $value;
+                }
+                $charges[] = $charge;
+            }
+            $form->charges = $charges;
+
+            $forms[] = $form;
+        }
+
+        return $forms;
     }
 
     private function getRequestedIds()
