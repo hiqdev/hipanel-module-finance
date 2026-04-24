@@ -92,9 +92,12 @@ class BillManagementAction extends Action
             $sessionKey = 'bill_preload_' . $preloadKey;
             if (Yii::$app->session->has($sessionKey)) {
                 $billsData = Yii::$app->session->get($sessionKey);
-                Yii::$app->session->remove($sessionKey);
-                $this->collection->set($this->buildFormsFromPreloadData($billsData));
-                return;
+                if (is_array($billsData)) {
+                    Yii::$app->session->remove($sessionKey);
+                    $this->collection->set($this->buildFormsFromPreloadData($billsData));
+
+                    return;
+                }
             }
         }
 
@@ -138,9 +141,15 @@ class BillManagementAction extends Action
             $charges = [];
             foreach ($billData['charges'] ?? [] as $chargeData) {
                 $charge = $form->newCharge();
-                foreach ($chargeData as $attr => $value) {
-                    $charge->$attr = $value;
+                $charge->scenario = $form->scenario;
+                $charge->load($chargeData, '');
+
+                $chargeType = $chargeData['type'] ?? null;
+                if ($chargeType !== null && isset($typeIndex[$chargeType])) {
+                    $charge->type_id = $typeIndex[$chargeType];
                 }
+
+                $charge->markAsNotNew();
                 $charges[] = $charge;
             }
             $form->charges = $charges;
