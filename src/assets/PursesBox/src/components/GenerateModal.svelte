@@ -36,30 +36,43 @@
   let existingForType = $derived(existingMonths[type] ?? []);
 </script>
 
+<div class="modal-backdrop fade in"></div>
+
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div class="modal-backdrop" onclick={busy ? undefined : onClose} onkeydown={() => {}}>
-  <div class="modal" role="dialog" aria-modal="true" tabindex="-1" onclick={(e) => e.stopPropagation()} onkeydown={() => {}}>
-    <div class="modal-hd">
-      <h3><i class="fa {t.icon}"></i> {t.title}</h3>
-      {#if !busy}
-        <button class="modal-x" onclick={onClose} aria-label="Close"><i class="fa fa-times"></i></button>
-      {/if}
-    </div>
+<div
+  class="modal fade in"
+  style="display:block"
+  role="dialog"
+  aria-modal="true"
+  tabindex="-1"
+  onclick={busy ? undefined : onClose}
+  onkeydown={() => {}}
+>
+  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+  <div class="modal-dialog" role="document" onclick={(e) => e.stopPropagation()} onkeydown={() => {}}>
+    <div class="modal-content">
+      <div class="modal-header">
+        {#if !busy}
+          <button type="button" class="close" onclick={onClose} aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        {/if}
+        <h4 class="modal-title"><i class="fa {t.icon}"></i> {t.title}</h4>
+      </div>
 
-    <div class="modal-bd">
-      {#if locked}
-        <div class="modal-note">
-          <i class="fa fa-info-circle"></i>
-          Regenerating the document for the same type and month as the original.
-        </div>
-      {/if}
+      <div class="modal-body">
+        {#if locked}
+          <div class="modal-note">
+            <i class="fa fa-info-circle"></i>
+            Regenerating the document for the same type and month as the original.
+          </div>
+        {/if}
 
-      <div class="form-row">
-        <label for="gen-doc-type">Document type</label>
-        <div class="select-wrap">
+        <div class="form-group">
+          <label class="control-label" for="gen-doc-type">Document type</label>
           <select
             id="gen-doc-type"
-            class="form-select"
+            class="form-control"
             value={type}
             onchange={(e) => (type = (e.target as HTMLSelectElement).value)}
             disabled={locked}
@@ -68,77 +81,78 @@
               <option value={dt.id}>{dt.label}</option>
             {/each}
           </select>
-          <i class="fa fa-caret-down select-caret"></i>
         </div>
-      </div>
 
-      <div class="form-row">
-        <p class="form-row-label">Period</p>
-        <div class="month-picker">
-          {#each months as m}
-            {@const exists = existingForType.includes(m.key)}
-            {@const isOn = month === m.key}
-            <button
-              class="month-opt {isOn ? 'is-on' : ''} {exists ? 'has-existing' : ''}"
-              onclick={() => { if (!locked) month = m.key; }}
-              disabled={locked}
-              title={exists ? 'A document already exists for this month' : ''}
-            >
-              <span class="m-label">{m.label}</span>
-              {#if exists}<span class="m-dot" title="Document exists"></span>{/if}
-            </button>
-          {/each}
-        </div>
-      </div>
-
-      {#if willReplace}
-        <div class="modal-warn">
-          <i class="fa fa-exclamation-triangle"></i>
-          <div>
-            <strong>A document already exists for this type and period.</strong>
-            <div>Proceeding will <strong>replace</strong> the existing document. This action cannot be undone.</div>
+        <div class="form-group">
+          <p class="form-row-label">Period</p>
+          <div class="month-picker">
+            {#each months as m}
+              {@const exists = existingForType.includes(m.key)}
+              {@const isOn = month === m.key}
+              <button
+                type="button"
+                class="month-opt {isOn ? 'is-on' : ''} {exists ? 'has-existing' : ''}"
+                onclick={() => { if (!locked) month = m.key; }}
+                disabled={locked}
+                title={exists ? 'A document already exists for this month' : ''}
+              >
+                <span class="m-label">{m.label}</span>
+                {#if exists}<span class="m-dot" title="Document exists"></span>{/if}
+              </button>
+            {/each}
           </div>
         </div>
-      {/if}
 
-      {#if mode === 'preview' || mode === 'preview-updated'}
-        <div class="modal-note modal-note-info">
-          <i class="fa fa-eye"></i>
-          Preview mode — the generated document will be shown but <strong>not saved</strong>.
-        </div>
-      {/if}
-
-      {#if busy}
-        <div class="modal-progress">
-          <div class="modal-progress-text">
-            <span class="spinner spinner-lg"></span>
+        {#if willReplace}
+          <div class="modal-warn">
+            <i class="fa fa-exclamation-triangle"></i>
             <div>
-              <strong>{t.btnBusy}</strong>
-              <div class="progress-sub">This can take up to 30 seconds. Please don't close this window.</div>
+              <strong>A document already exists for this type and period.</strong>
+              <div>Proceeding will <strong>replace</strong> the existing document. This action cannot be undone.</div>
             </div>
           </div>
-          <div class="progress-bar-wrap">
-            <div class="progress-bar-inner" style="width: {progress}%"></div>
-          </div>
-        </div>
-      {/if}
-    </div>
-
-    <div class="modal-ft">
-      <button class="btn-ghost" onclick={onClose} disabled={busy}>
-        {busy ? 'Working…' : 'Cancel'}
-      </button>
-      <button
-        class="btn-act {willReplace ? 'is-warn' : 'is-primary'}"
-        onclick={() => onSubmit({ type, month, willReplace, mode })}
-        disabled={busy}
-      >
-        {#if busy}
-          <span class="spinner spinner-on-btn"></span> {t.btnBusy}
-        {:else}
-          <i class="fa {t.icon}"></i> {t.btn}
         {/if}
-      </button>
+
+        {#if mode === 'preview' || mode === 'preview-updated'}
+          <div class="modal-note modal-note-info">
+            <i class="fa fa-eye"></i>
+            Preview mode — the generated document will be shown but <strong>not saved</strong>.
+          </div>
+        {/if}
+
+        {#if busy}
+          <div class="modal-progress">
+            <div class="modal-progress-text">
+              <span class="spinner spinner-lg"></span>
+              <div>
+                <strong>{t.btnBusy}</strong>
+                <div class="progress-sub">This can take up to 30 seconds. Please don't close this window.</div>
+              </div>
+            </div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-inner" style="width: {progress}%"></div>
+            </div>
+          </div>
+        {/if}
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" onclick={onClose} disabled={busy}>
+          {busy ? 'Working…' : 'Cancel'}
+        </button>
+        <button
+          type="button"
+          class="btn {willReplace ? 'btn-warning' : 'btn-primary'}"
+          onclick={() => onSubmit({ type, month, willReplace, mode })}
+          disabled={busy}
+        >
+          {#if busy}
+            <span class="spinner spinner-on-btn"></span> {t.btnBusy}
+          {:else}
+            <i class="fa {t.icon}"></i> {t.btn}
+          {/if}
+        </button>
+      </div>
     </div>
   </div>
 </div>

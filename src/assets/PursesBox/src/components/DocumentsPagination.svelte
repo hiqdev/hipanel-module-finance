@@ -14,26 +14,37 @@
 </script>
 
 <div class="docs-foot">
-  <div>
+  <div class="docs-foot-count">
     {#if totalFiltered === 0}
       No documents
     {:else}
       Showing <strong>{from}–{to}</strong> of <strong>{totalFiltered}</strong>
       {#if totalFiltered !== totalBase}
-        <span style="color: var(--fg-5)"> (filtered from {totalBase})</span>
+        <span class="text-muted"> (filtered from {totalBase})</span>
       {/if}
     {/if}
   </div>
 
-  <div class="pager">
-    <button disabled={page === 1} onclick={() => onPage(page - 1)}>
-      <i class="fa fa-angle-left"></i> Prev
-    </button>
-    {#each pages as p}
-      <button class={page === p ? 'is-active' : ''} onclick={() => onPage(p)}>{p}</button>
-    {/each}
-    <button disabled={page === pageCount} onclick={() => onPage(page + 1)}>
-      Next <i class="fa fa-angle-right"></i>
-    </button>
-  </div>
+  {#if pageCount > 1}
+    <ul class="pagination pagination-sm" style="margin: 0">
+      <li class={page === 1 ? 'disabled' : ''}>
+        <!-- svelte-ignore a11y_invalid_attribute -->
+        <a href="#" aria-label="Previous page" onclick={(e) => { e.preventDefault(); if (page > 1) onPage(page - 1); }}>
+          <i class="fa fa-angle-left"></i>
+        </a>
+      </li>
+      {#each pages as p}
+        <li class={p === page ? 'active' : ''}>
+          <!-- svelte-ignore a11y_invalid_attribute -->
+          <a href="#" onclick={(e) => { e.preventDefault(); onPage(p); }}>{p}</a>
+        </li>
+      {/each}
+      <li class={page === pageCount ? 'disabled' : ''}>
+        <!-- svelte-ignore a11y_invalid_attribute -->
+        <a href="#" aria-label="Next page" onclick={(e) => { e.preventDefault(); if (page < pageCount) onPage(page + 1); }}>
+          <i class="fa fa-angle-right"></i>
+        </a>
+      </li>
+    </ul>
+  {/if}
 </div>

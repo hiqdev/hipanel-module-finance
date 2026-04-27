@@ -13,7 +13,7 @@
 </script>
 
 <div class="docs-table-wrap">
-  <table class="docs-table">
+  <table class="table table-hover table-condensed docs-table">
     <thead>
       <tr>
         <th

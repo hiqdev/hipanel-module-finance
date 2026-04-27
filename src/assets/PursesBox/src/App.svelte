@@ -363,10 +363,10 @@
       </div>
 
       <div class="right">
-        <button class="btn-act" onclick={() => (modal = { kind: 'preview' })}>
+        <button class="btn btn-default" onclick={() => (modal = { kind: 'preview' })}>
           <i class="fa fa-eye"></i> Preview
         </button>
-        <button class="btn-act is-primary" onclick={() => (modal = { kind: 'generate' })}>
+        <button class="btn btn-primary" onclick={() => (modal = { kind: 'generate' })}>
           <i class="fa fa-plus"></i> Generate
         </button>
       </div>

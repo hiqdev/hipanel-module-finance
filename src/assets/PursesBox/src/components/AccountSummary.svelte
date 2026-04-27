@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { Account } from '../types';
+  import type { Account } from "../types";
 
   let { account, onRecharge, onKpiClick }: {
-    account: Account;
-    onRecharge: () => void;
-    onKpiClick: (which: string) => void;
+      account: Account;
+      onRecharge: () => void;
+      onKpiClick: (which: string) => void;
   } = $props();
 </script>
 
@@ -15,20 +15,23 @@
       <div class="kpi">
         <span class="kpi-label">Balance</span>
         <span
-          class="kpi-value is-link"
-          onclick={() => onKpiClick('balance')}
-          onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onKpiClick('balance'); } }}
-          title="View balance history"
-          role="button"
-          tabindex="0"
+            class="kpi-value is-link"
+            onclick={() => onKpiClick('balance')}
+            onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onKpiClick('balance'); } }}
+            title="View balance history"
+            role="button"
+            tabindex="0"
         >
-          <span class="currency">{account.symbol}</span>{account.balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          <span class="currency">{account.symbol}</span>{account.balance.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}
         </span>
       </div>
     </div>
   </div>
   <div class="acct-summary-right">
-    <a href="#" class="btn btn-flat btn-success btn-recharge" onclick={onRecharge}>
+    <a href="/merchant/pay/deposit?currency={account.code.toLocaleLowerCase()}" class="btn btn-flat btn-success btn-recharge" onclick={onRecharge}>
       <i class="fa fa-plus-circle"></i> Top-up account balance
     </a>
   </div>

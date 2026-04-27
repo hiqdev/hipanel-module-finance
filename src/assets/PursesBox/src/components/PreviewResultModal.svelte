@@ -14,46 +14,59 @@
   let lines2 = $derived(Array.from({ length: 4 }, (_, i) => 70 - i * 8));
 </script>
 
+<div class="modal-backdrop fade in"></div>
+
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div class="modal-backdrop" onclick={onClose} onkeydown={() => {}}>
-  <div class="modal modal-lg" role="dialog" aria-modal="true" tabindex="-1" onclick={(e) => e.stopPropagation()} onkeydown={() => {}}>
-    <div class="modal-hd">
-      <h3><i class="fa fa-file-text-o"></i> Preview — {t.label}</h3>
-      <button class="modal-x" onclick={onClose} aria-label="Close"><i class="fa fa-times"></i></button>
-    </div>
-
-    <div class="modal-bd modal-bd-preview">
-      <div class="preview-sheet">
-        <div class="preview-sheet-hd">
-          <div>
-            <div class="ps-kind">{t.label}</div>
-            <div class="ps-ref">{doc.ref}</div>
-          </div>
-          <div class="ps-date">{date.short} {date.year}</div>
-        </div>
-        <div class="preview-lines">
-          {#each lines1 as w}
-            <div class="ps-line" style="width: {w}%"></div>
-          {/each}
-        </div>
-        <div class="preview-lines" style="margin-top: 24px">
-          {#each lines2 as w}
-            <div class="ps-line" style="width: {w}%"></div>
-          {/each}
-        </div>
-        <div class="preview-watermark">PREVIEW — NOT SAVED</div>
-      </div>
-    </div>
-
-    <div class="modal-ft">
-      <button class="btn-ghost" onclick={onClose}>
-        <i class="fa fa-times"></i> Discard
-      </button>
-      {#if onSave}
-        <button class="btn-act is-primary" onclick={onSave}>
-          <i class="fa fa-save"></i> Save this version
+<div
+  class="modal fade in"
+  style="display:block"
+  role="dialog"
+  aria-modal="true"
+  tabindex="-1"
+  onclick={onClose}
+  onkeydown={() => {}}
+>
+  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+  <div class="modal-dialog modal-lg" role="document" onclick={(e) => e.stopPropagation()} onkeydown={() => {}}>
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" onclick={onClose} aria-label="Close">
+          <span aria-hidden="true">&times;</span>
         </button>
-      {/if}
+        <h4 class="modal-title"><i class="fa fa-file-text-o"></i> Preview — {t.label}</h4>
+      </div>
+      <div class="modal-body" style="background: #ecf0f5; padding: 20px;">
+        <div class="preview-sheet">
+          <div class="preview-sheet-hd">
+            <div>
+              <div class="ps-kind">{t.label}</div>
+              <div class="ps-ref">{doc.ref}</div>
+            </div>
+            <div class="ps-date">{date.short} {date.year}</div>
+          </div>
+          <div class="preview-lines">
+            {#each lines1 as w}
+              <div class="ps-line" style="width: {w}%"></div>
+            {/each}
+          </div>
+          <div class="preview-lines" style="margin-top: 24px">
+            {#each lines2 as w}
+              <div class="ps-line" style="width: {w}%"></div>
+            {/each}
+          </div>
+          <div class="preview-watermark">PREVIEW — NOT SAVED</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" onclick={onClose}>
+          <i class="fa fa-times"></i> Discard
+        </button>
+        {#if onSave}
+          <button type="button" class="btn btn-primary" onclick={onSave}>
+            <i class="fa fa-save"></i> Save this version
+          </button>
+        {/if}
+      </div>
     </div>
   </div>
 </div>

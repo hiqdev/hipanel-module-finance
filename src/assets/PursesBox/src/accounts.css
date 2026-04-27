@@ -231,24 +231,6 @@ button.x {
   gap: 8px;
 }
 
-.btn-ghost {
-  background: #fff;
-  color: var(--fg-2);
-  border: 1px solid var(--border-default);
-  padding: 10px 14px;
-  font-size: 13px;
-  border-radius: 3px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: background .15s;
-}
-
-.btn-ghost:hover {
-  background: var(--bg-subtle);
-}
-
 /* 3. SETTINGS */
 .acct-settings {
   display: grid;
@@ -570,54 +552,6 @@ button.x {
   font-size: 11px;
 }
 
-.btn-act {
-  background: #fff;
-  border: 1px solid var(--border-default);
-  border-radius: 3px;
-  padding: 8px 12px;
-  font-size: 13px;
-  color: var(--fg-2);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  transition: background .15s;
-  font-family: inherit;
-}
-
-.btn-act:hover {
-  background: var(--bg-subtle);
-}
-
-.btn-act.is-primary {
-  background: var(--primary);
-  color: #fff;
-  border-color: #367fa9;
-}
-
-.btn-act.is-primary:hover {
-  background: #367fa9;
-}
-
-.btn-act.is-warn {
-  background: var(--warning);
-  color: #fff;
-  border-color: #d68f0d;
-}
-
-.btn-act.is-warn:hover {
-  background: #d68f0d;
-}
-
-.btn-act:disabled {
-  opacity: .6;
-  cursor: not-allowed;
-}
-
-.btn-act .fa {
-  font-size: 12px;
-}
-
 .active-filters {
   display: flex;
   gap: 6px;
@@ -820,15 +754,11 @@ button.x {
 }
 
 .doc-new-badge {
-  display: inline-block;
-  background: var(--warning);
-  color: #fff;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
   padding: 1px 5px;
-  border-radius: 2px;
   margin-left: 6px;
   vertical-align: middle;
 }
@@ -929,166 +859,6 @@ button.x {
   border-top-color: #fff;
   margin-right: 6px;
   vertical-align: middle;
-}
-
-/* Modal */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, .45);
-  z-index: 500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  animation: fadeIn .15s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.modal {
-  background: #fff;
-  border-top: 3px solid var(--primary);
-  border-radius: 3px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, .25);
-  width: 560px;
-  max-width: 100%;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  animation: modalIn .2s ease-out;
-}
-
-.modal-lg {
-  width: 720px;
-}
-
-.modal-sm {
-  width: 440px;
-}
-
-@keyframes modalIn {
-  from {
-    transform: translateY(12px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.modal-hd {
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--border-subtle);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-hd h3 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--fg-2);
-}
-
-.modal-hd h3 .fa {
-  color: var(--primary);
-  margin-right: 6px;
-}
-
-.modal-x {
-  background: transparent;
-  border: 0;
-  color: var(--fg-4);
-  cursor: pointer;
-  padding: 4px 8px;
-  font-size: 16px;
-}
-
-.modal-x:hover {
-  color: var(--fg-1);
-}
-
-.modal-bd {
-  padding: 18px;
-  overflow: auto;
-}
-
-.modal-bd-preview {
-  background: var(--bg-body);
-  padding: 20px;
-}
-
-.modal-ft {
-  padding: 12px 18px;
-  border-top: 1px solid var(--border-subtle);
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  background: #fafbfc;
-}
-
-.form-row {
-  margin-bottom: 16px;
-}
-
-.form-row label {
-  display: block;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  color: var(--fg-4);
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.select-wrap {
-  position: relative;
-}
-
-.form-select {
-  width: 100%;
-  appearance: none;
-  -webkit-appearance: none;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  padding: 9px 32px 9px 12px;
-  font-size: 13px;
-  color: var(--fg-2);
-  font-family: inherit;
-  cursor: pointer;
-  transition: border-color .12s;
-}
-
-.form-select:focus {
-  outline: none;
-  border-color: var(--primary);
-}
-
-.form-select:disabled {
-  background: var(--bg-subtle);
-  color: var(--fg-3);
-  cursor: not-allowed;
-}
-
-.select-caret {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--fg-4);
-  font-size: 12px;
-  pointer-events: none;
 }
 
 .month-picker {
@@ -1431,38 +1201,6 @@ button.x {
   padding: 12px 2px 0;
   font-size: 12px;
   color: var(--fg-4);
-}
-
-.docs-foot .pager {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-
-.docs-foot .pager button {
-  background: #fff;
-  border: 1px solid var(--border-default);
-  padding: 4px 10px;
-  font-size: 12px;
-  color: var(--fg-2);
-  cursor: pointer;
-  border-radius: 2px;
-  font-family: inherit;
-}
-
-.docs-foot .pager button:hover {
-  background: var(--bg-subtle);
-}
-
-.docs-foot .pager button.is-active {
-  background: var(--primary);
-  color: #fff;
-  border-color: #367fa9;
-}
-
-.docs-foot .pager button:disabled {
-  opacity: .4;
-  cursor: not-allowed;
 }
 
 /* Empty state */
