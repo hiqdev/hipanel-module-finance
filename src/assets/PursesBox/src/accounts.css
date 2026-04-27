@@ -87,31 +87,6 @@ button.x {
   gap: 8px;
 }
 
-.acct-tab .flag {
-  display: inline-flex;
-  width: 22px;
-  height: 16px;
-  border-radius: 2px;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 0;
-}
-
-.acct-tab .flag-usd {
-  background: #2e7d32;
-}
-
-.acct-tab .flag-eur {
-  background: #1565c0;
-}
-
-.acct-tab .flag-gbp {
-  background: #6a1b9a;
-}
-
 .acct-tab:hover {
   color: var(--fg-2);
 }

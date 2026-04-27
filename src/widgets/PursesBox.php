@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\widgets;
 
 use hipanel\modules\finance\assets\PursesBox\PursesBoxAsset;
+use Yii;
 use yii\base\Widget;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -16,6 +17,10 @@ class PursesBox extends Widget
         PursesBoxAsset::register($this->view);
         $props = Json::encode(
             [
+                'language' => Yii::$app->language,
+                'contacts' => [],
+                'paymentDetails' => [],
+                'documentTypes' => [],
                 'purses' => $this->purses,
             ],
             JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP

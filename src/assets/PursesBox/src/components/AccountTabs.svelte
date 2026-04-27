@@ -12,17 +12,17 @@
 <ul class="acct-tabs nav nav-tabs" role="tablist">
   {#each accounts as a}
       <li class="{a.id === activeId ? 'active' : ''}">
-        <button
-            role="tab"
-            class="acct-tab {a.id === activeId ? 'is-active active' : ''}"
-            onclick={(e) => {
+            <button
+                role="tab"
+                class="acct-tab {a.id === activeId ? 'is-active active' : ''}"
+                onclick={(e) => {
                 e.preventDefault();
                 onChange(a.id)
             }}
-        >
-          <span class="flag flag-{a.id}">{a.code}</span>
-          <span class="balance-mini">{fmtMoney(a.balance, a.symbol)}</span>
-        </button>
+            >
+              <span>{a.code}</span>
+              <span class="balance-mini">{fmtMoney(a.balance, a.symbol)}</span>
+            </button>
       </li>
   {/each}
     <div class="acct-tabs-spacer"></div>

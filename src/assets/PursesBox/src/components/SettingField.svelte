@@ -42,7 +42,7 @@
         <i class="fa {icon}" style="color: var(--fg-4); font-size: 12px"></i>
       {/if}
       <span>{value}</span>
-      <i class="fa fa-caret-down caret"></i>
+      <i class="caret"></i>
       <span class="edit-hint">click to edit</span>
     </div>
 
