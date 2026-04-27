@@ -1,0 +1,64 @@
+<script lang="ts">
+  import type { Doc } from '../types';
+  import { typeMeta, fmtDate } from '../data';
+
+  let { doc, density, busy, onAction }: {
+    doc: Doc;
+    density: string;
+    busy: boolean;
+    onAction: (kind: string, doc: Doc) => void;
+  } = $props();
+
+  let t = $derived(typeMeta(doc.type));
+  let date = $derived(fmtDate(doc.date));
+  let rowPad = $derived(density === 'compact' ? '8px 14px' : '12px 14px');
+</script>
+
+<tr class="{doc.isNew ? 'is-new' : ''} {busy ? 'is-busy' : ''}">
+  <td style="padding: {rowPad}">
+    <span class="type-pill {t.className}">
+      <span class="dot"></span>
+      {t.label}
+    </span>
+  </td>
+  <td style="padding: {rowPad}">
+    <div class="doc-name">
+      <i class="fa fa-file-text-o"></i>
+      <span class="doc-ref">{doc.ref}</span>
+      {#if doc.isNew}<span class="doc-new-badge">New</span>{/if}
+      <span class="doc-sub">{doc.name}</span>
+    </div>
+  </td>
+  <td style="padding: {rowPad}">
+    <span class="doc-date">
+      {date.short} <span class="year">{date.year}</span>
+    </span>
+  </td>
+  <td style="padding: {rowPad}" class="row-actions-cell">
+    {#if busy}
+      <div class="row-busy">
+        <span class="spinner"></span> Generating…
+      </div>
+    {:else}
+      <div class="row-actions">
+        <button class="ra-btn" onclick={() => onAction('download', doc)} title="Download file">
+          <i class="fa fa-download"></i>
+        </button>
+        <a
+          class="ra-btn"
+          href="document/view?id={doc.id}"
+          onclick={(e) => { e.preventDefault(); onAction('view', doc); }}
+          title="View document"
+        >
+          <i class="fa fa-eye"></i>
+        </a>
+        <button class="ra-btn" onclick={() => onAction('preview-updated', doc)} title="Preview updated version (do not save)">
+          <i class="fa fa-search-plus"></i>
+        </button>
+        <button class="ra-btn ra-btn-warn" onclick={() => onAction('update-replace', doc)} title="Regenerate and replace this document">
+          <i class="fa fa-refresh"></i>
+        </button>
+      </div>
+    {/if}
+  </td>
+</tr>
