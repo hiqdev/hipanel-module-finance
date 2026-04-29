@@ -1,28 +1,29 @@
 <script lang="ts">
-  import type { Account } from "../types";
+  import type { Purse } from "../types";
   import { fmtMoney } from "../data";
 
-  let { accounts, activeId, onChange }: {
-      accounts: Account[];
+  let { purses, activeId, onChange }: {
+      purses: Purse[];
       activeId: string;
       onChange: (id: string) => void;
   } = $props();
 </script>
 
 <ul class="acct-tabs nav nav-tabs" role="tablist">
-  {#each accounts as a}
-      <li class="{a.id === activeId ? 'active' : ''}">
-            <button
+  {#each purses as p}
+      <li class:active={p.id === activeId}>
+            <a
+                href="#{p.id}"
                 role="tab"
-                class="acct-tab {a.id === activeId ? 'is-active active' : ''}"
+                class="acct-tab {p.id === activeId ? 'is-active active' : ''}"
                 onclick={(e) => {
                 e.preventDefault();
-                onChange(a.id)
+                onChange(p.id)
             }}
             >
-              <span>{a.code}</span>
-              <span class="balance-mini">{fmtMoney(a.balance, a.symbol)}</span>
-            </button>
+              <span>{p.currency.toLocaleUpperCase()}</span>
+              <span class="balance-mini">{fmtMoney(p.balance, p.currency)}</span>
+            </a>
       </li>
   {/each}
     <div class="acct-tabs-spacer"></div>

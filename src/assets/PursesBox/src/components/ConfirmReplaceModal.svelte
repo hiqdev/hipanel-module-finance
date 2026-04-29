@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { Doc } from '../types';
-  import { typeMeta, fmtDate } from '../data';
+  import type { Doc } from "../types";
+  import { fmtDate, typeMeta } from "../data";
 
   let { doc, onClose, onConfirm }: {
-    doc: Doc;
-    onClose: () => void;
-    onConfirm: () => void;
+      doc: Doc;
+      onClose: () => void;
+      onConfirm: () => void;
   } = $props();
 
   let t = $derived(typeMeta(doc.type));
@@ -16,13 +16,13 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-  class="modal fade in"
-  style="display:block"
-  role="dialog"
-  aria-modal="true"
-  tabindex="-1"
-  onclick={onClose}
-  onkeydown={() => {}}
+    class="modal fade in"
+    style="display:block"
+    role="dialog"
+    aria-modal="true"
+    tabindex="-1"
+    onclick={onClose}
+    onkeydown={() => {}}
 >
   <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
   <div class="modal-dialog modal-sm" role="document" onclick={(e) => e.stopPropagation()} onkeydown={() => {}}>
@@ -37,7 +37,7 @@
       </div>
       <div class="modal-body">
         <p>
-          The existing document <strong>{doc.ref}</strong> ({t.label}, {date.short} {date.year})
+          The existing document <strong>{doc.number}</strong> ({t.label}, {date.short} {date.year})
           will be regenerated and <strong>replaced</strong>.
         </p>
         <p class="text-muted">This action cannot be undone.</p>

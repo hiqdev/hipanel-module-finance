@@ -1,6 +1,9 @@
 <script lang="ts">
-  import type { Account, AccountFilters, DateRange, Doc, FilterOption, ModalState, SortState, ToastState } from "./types";
-  import { ACCOUNTS, defaultFilters, DOC_TYPES, DOCS, fmtMonthKey, MONTH_NAMES, typeMeta } from "./data";
+  import { untrack } from "svelte";
+  import type { AccountFilters, DateRange, Doc, FilterOption, ModalState, Purse, PursesBoxProps, SortState, ToastState } from "./types";
+  import { defaultFilters, docTypeColor, docTypesFromDocs, fmtMonthKey, MONTH_NAMES, typeMeta } from "./data";
+  import { initI18n } from "./i18n";
+  import { permissions } from "./permissions";
   import AccountTabs from "./components/AccountTabs.svelte";
   import AccountSummary from "./components/AccountSummary.svelte";
   import AccountSettings from "./components/AccountSettings.svelte";
@@ -12,20 +15,25 @@
   import PreviewResultModal from "./components/PreviewResultModal.svelte";
   import ConfirmReplaceModal from "./components/ConfirmReplaceModal.svelte";
 
-  // Optional data prop for real backend integration
-  let { data = {} }: { data?: Record<string, any> } = $props();
+  let { language, permissions: permKeys = [], purses: initialPurses = [] }: PursesBoxProps = $props();
 
-  const PAGE_SIZE = 8;
+  $effect(() => {
+      initI18n(language);
+      permissions.init(permKeys);
+  });
 
-  // ── Per-account state ─────────────────────────────────────────────────────
-  // State is scoped per account so tab switching preserves filters/sort/page.
-  let activeId = $state<string>(localStorage.getItem("acct.active") ?? ACCOUNTS[0].id);
-  let accounts = $state<Account[]>([...ACCOUNTS]);
-  let docsByAcct = $state<Record<string, Doc[]>>(
-      Object.fromEntries(Object.entries(DOCS).map(([k, v]) => [k, [...v]])),
+  const PAGE_SIZE = 10;
+
+  // ── Per-purse state ─────────────────────────────────────────────────────
+  // State is scoped per purse so tab switching preserves filters/sort/page.
+  const seedPurses = untrack(() => initialPurses.length ? initialPurses : []);
+  let activeId = $state<string>(seedPurses[0].id);
+  let purses = $state<Purse[]>([...seedPurses]);
+  let docsByPurse = $state<Record<string, Doc[]>>(
+      Object.fromEntries(seedPurses.map(purse => [purse.id, [...purse.documents]])),
   );
-  let filtersByAcct = $state<Record<string, AccountFilters>>(
-      Object.fromEntries(ACCOUNTS.map(a => [a.id, defaultFilters()])),
+  let filtersByPurse = $state<Record<string, AccountFilters>>(
+      Object.fromEntries(seedPurses.map(p => [p.id, defaultFilters()])),
   );
 
   // ── Global UI state ───────────────────────────────────────────────────────
@@ -36,30 +44,18 @@
   let toast = $state<ToastState | null>(null);
   let toastTimeout: ReturnType<typeof setTimeout> | undefined;
 
-  // ── Persist active tab ────────────────────────────────────────────────────
-  $effect(() => {
-      localStorage.setItem("acct.active", activeId);
-  });
-
-  // ── Current account + docs ────────────────────────────────────────────────
-  let account = $derived(accounts.find(a => a.id === activeId)!);
-  let baseDocs = $derived(docsByAcct[activeId] ?? []);
-  let filters = $derived(filtersByAcct[activeId] ?? defaultFilters());
+  // ── Current purse + docs ────────────────────────────────────────────────
+  let account = $derived(purses.find(p => p.id === activeId)!);
+  let baseDocs = $derived(docsByPurse[activeId] ?? []);
+  let filters = $derived(filtersByPurse[activeId] ?? defaultFilters());
 
   // ── Type options — only types present in this account's docs ──────────────
-  const TYPE_COLORS: Record<string, string> = {
-      invoice: "#3c8dbc", service: "#39CCCC", payment: "#f39c12", installment: "#605ca8",
-  };
-
-  let availableTypes = $derived.by(() => {
-      const set = new Set(baseDocs.map(d => d.type));
-      return DOC_TYPES.filter(t => set.has(t.id));
-  });
+  let availableTypes = $derived(docTypesFromDocs(baseDocs));
 
   let typeOptions = $derived<FilterOption[]>(availableTypes.map(t => ({
       id: t.id,
       label: t.label,
-      dot: TYPE_COLORS[t.id],
+      dot: docTypeColor(t.id),
       count: baseDocs.filter(d => d.type === t.id).length,
   })));
 
@@ -72,17 +68,18 @@
           const key = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}`;
           if (dateRange.from && key < dateRange.from) return false;
           if (dateRange.to && key > dateRange.to) return false;
-          if (search && !d.ref.toLowerCase().includes(search.toLowerCase())) return false;
+          if (search && !d.number.toLowerCase().includes(search.toLowerCase())) return false;
           return true;
       });
       rows.sort((a, b) => {
           const k = sort.key;
-          const av: string = k === "type" ? typeMeta(a.type).label : (a as any)[k];
-          const bv: string = k === "type" ? typeMeta(b.type).label : (b as any)[k];
+          const av: string = k === "type" ? a.type_label : (a as any)[k];
+          const bv: string = k === "type" ? b.type_label : (b as any)[k];
           if (av < bv) return sort.dir === "asc" ? -1 : 1;
           if (av > bv) return sort.dir === "asc" ? 1 : -1;
           return 0;
       });
+
       return rows;
   });
 
@@ -106,7 +103,7 @@
       const chips: Array<{ k: string; label: string; onX: () => void }> = [];
       filters.typeFilter.forEach(t => chips.push({
           k: `t-${t}`,
-          label: typeMeta(t)?.label ?? t,
+          label: typeOptions.find(type => type.id === t)?.label ?? t,
           onX: () => setTypeFilter(filters.typeFilter.filter(x => x !== t)),
       }));
       const { from, to } = filters.dateRange;
@@ -124,10 +121,10 @@
 
   // ── Per-account filter setters ────────────────────────────────────────────
   function updateFilters(patch: Partial<AccountFilters>) {
-      const current = filtersByAcct[activeId] ?? defaultFilters();
+      const current = filtersByPurse[activeId] ?? defaultFilters();
       // Reset page whenever a filter other than page itself changes
       const resetPage = !("page" in patch);
-      filtersByAcct[activeId] = { ...current, ...patch, ...(resetPage ? { page: 1 } : {}) };
+      filtersByPurse[activeId] = { ...current, ...patch, ...(resetPage ? { page: 1 } : {}) };
   }
 
   function setSearch(v: string) {
@@ -155,7 +152,7 @@
   }
 
   function handleClearFilters() {
-      filtersByAcct[activeId] = defaultFilters();
+      filtersByPurse[activeId] = defaultFilters();
   }
 
   // ── Toast helper ──────────────────────────────────────────────────────────
@@ -201,23 +198,24 @@
               const newDoc: Doc = {
                   id: `gen-${Date.now()}`,
                   type,
-                  name: `${tm.label} ${monthLabel}`,
-                  ref: `${type.slice(0, 3).toUpperCase()}-${yr}-${String(Math.floor(Math.random() * 900) + 100)}`,
+                  type_label: tm.label,
+                  filename: `${tm.label} ${monthLabel}`,
+                  number: `${type.slice(0, 3).toUpperCase()}-${yr}-${String(Math.floor(Math.random() * 900) + 100)}`,
                   date: `${yr}-${mo}-15`,
                   isNew: true,
               };
 
               if (mode === "generate" || mode === "update-replace") {
-                  const list = docsByAcct[activeId] ?? [];
+                  const list = docsByPurse[activeId] ?? [];
                   const kept = list.filter(d => {
                       if (d.type !== type) return true;
                       const dt = new Date(d.date);
                       const key = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}`;
                       return key !== month;
                   });
-                  docsByAcct[activeId] = [newDoc, ...kept];
+                  docsByPurse[activeId] = [newDoc, ...kept];
                   modal = null;
-                  showToast(willReplace ? `Document replaced — ${newDoc.ref}` : `Document generated — ${newDoc.ref}`);
+                  showToast(willReplace ? `Document replaced — ${newDoc.number}` : `Document generated — ${newDoc.number}`);
               } else {
                   modal = null;
                   previewResult = { doc: newDoc, canSave: mode === "preview-updated" };
@@ -229,11 +227,11 @@
   // ── Row actions ───────────────────────────────────────────────────────────
   function handleRowAction(kind: string, doc: Doc) {
       if (kind === "download") {
-          showToast(`Downloading ${doc.ref}…`, "fa-download");
+          showToast(`Downloading ${doc.number}…`, "fa-download");
           return;
       }
       if (kind === "view") {
-          showToast(`Opening ${doc.ref}`, "fa-eye");
+          showToast(`Opening ${doc.number}`, "fa-eye");
           return;
       }
 
@@ -265,23 +263,24 @@
               const newDoc: Doc = {
                   ...doc,
                   id: `gen-${Date.now()}`,
-                  ref: `${doc.type.slice(0, 3).toUpperCase()}-${monthKey.replace("-", "")}-${String(Math.floor(Math.random() * 900) + 100)}`,
+                  number: `${doc.type.slice(0, 3).toUpperCase()}-${monthKey.replace("-", "")}-${String(Math.floor(Math.random() * 900) + 100)}`,
                   isNew: true,
               };
-              const list = docsByAcct[activeId] ?? [];
-              docsByAcct[activeId] = list.map(d => d.id === doc.id ? newDoc : d);
+              const list = docsByPurse[activeId] ?? [];
+              docsByPurse[activeId] = list.map(d => d.id === doc.id ? newDoc : d);
               busyRowIds = busyRowIds.filter(x => x !== doc.id);
-              showToast(`${tm.label} replaced — ${newDoc.ref}`, "fa-refresh");
+              showToast(`${tm.label} replaced — ${newDoc.number}`, "fa-refresh");
           },
       });
   }
 
   // ── Settings handlers ─────────────────────────────────────────────────────
   function handleSettingChange(field: string, value: string) {
-      accounts = accounts.map(a => {
-          if (a.id !== activeId) return a;
-          if (field === "contact") return { ...a, contact: { ...a.contact, name: value } };
-          return { ...a, [field]: value };
+      purses = purses.map(p => {
+          if (p.id !== activeId) return p;
+          if (field === "contact") return { ...p, contact: { ...p.contact, name: value } };
+
+          return { ...p, [field]: value };
       });
       showToast(`Updated ${field === "paymentDetails" ? "payment details" : "contact"}`);
   }
@@ -300,22 +299,22 @@
       const doc = previewResult.doc;
       const dt = new Date(doc.date);
       const monthKey = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}`;
-      const list = docsByAcct[activeId] ?? [];
+      const list = docsByPurse[activeId] ?? [];
       const kept = list.filter(d => {
           if (d.type !== doc.type) return true;
           const ddt = new Date(d.date);
           return `${ddt.getFullYear()}-${String(ddt.getMonth() + 1).padStart(2, "0")}` !== monthKey;
       });
-      docsByAcct[activeId] = [doc, ...kept];
+      docsByPurse[activeId] = [doc, ...kept];
       previewResult = null;
-      showToast(`Preview saved — ${doc.ref}`);
+      showToast(`Preview saved — ${doc.number}`);
   }
 </script>
 
 <div class="accounts-block nav-tabs-custom">
 
   <AccountTabs
-      {accounts}
+      {purses}
       {activeId}
       onChange={(id) => (activeId = id)}
   />
@@ -364,16 +363,16 @@
 
       <div class="right">
         <button class="btn btn-default" onclick={() => (modal = { kind: 'preview' })}>
-          <i class="fa fa-eye"></i> Preview
+          <i class="fa fa-fw fa-eye"></i> Preview
         </button>
         <button class="btn btn-primary" onclick={() => (modal = { kind: 'generate' })}>
-          <i class="fa fa-plus"></i> Generate
+          <i class="fa fa-fw fa-plus"></i> Generate
         </button>
       </div>
     </div>
 
       <!-- Active filter chips -->
-      {#if activeChips.length > 0}
+    {#if activeChips.length > 0}
       <div class="active-filters">
         <span>Filtered:</span>
           {#each activeChips as chip (chip.k)}
@@ -413,6 +412,7 @@
   <GenerateModal
       mode={modal.kind}
       initial={modal.initial}
+      types={availableTypes}
       {existingMonths}
       busy={!!modal.busy}
       progress={modal.progress ?? 0}

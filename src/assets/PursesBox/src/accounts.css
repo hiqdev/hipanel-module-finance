@@ -615,15 +615,15 @@ button.x {
 }
 
 .docs-table thead th.type-col {
-  width: 180px;
+  /*width: 180px;*/
 }
 
 .docs-table thead th.date-col {
-  width: 130px;
+  /*width: 130px;*/
 }
 
 .docs-table thead th.act-col {
-  width: 170px;
+  /*width: 170px;*/
   text-align: right;
   cursor: default;
 }
@@ -680,22 +680,6 @@ button.x {
   height: 6px;
   border-radius: 50%;
   flex-shrink: 0;
-}
-
-.type-pill.t-invoice .dot {
-  background: var(--primary);
-}
-
-.type-pill.t-service .dot {
-  background: var(--adminlte-teal);
-}
-
-.type-pill.t-payment .dot {
-  background: var(--warning);
-}
-
-.type-pill.t-installment .dot {
-  background: var(--adminlte-purple);
 }
 
 .doc-name {

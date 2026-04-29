@@ -1,10 +1,7 @@
 import { mount as svelteMount, unmount as svelteUnmount } from "svelte";
-import './accounts.css';
+import "./accounts.css";
 import PursesBox from "./App.svelte";
-
-export interface PursesBoxProps {
-  data: Record<string, any>;
-}
+import type { PursesBoxProps } from "./types";
 
 interface PursesBoxApi {
   mount: (el: HTMLElement, props: PursesBoxProps) => void;

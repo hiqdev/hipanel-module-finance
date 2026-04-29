@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { Doc } from '../types';
-  import { typeMeta, fmtDate } from '../data';
+  import type { Doc } from "../types";
+  import { fmtDate, typeMeta } from "../data";
 
   let { doc, onClose, onSave }: {
-    doc: Doc;
-    onClose: () => void;
-    onSave?: (() => void) | null;
+      doc: Doc;
+      onClose: () => void;
+      onSave?: (() => void) | null;
   } = $props();
 
   let t = $derived(typeMeta(doc.type));
@@ -18,13 +18,13 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-  class="modal fade in"
-  style="display:block"
-  role="dialog"
-  aria-modal="true"
-  tabindex="-1"
-  onclick={onClose}
-  onkeydown={() => {}}
+    class="modal fade in"
+    style="display:block"
+    role="dialog"
+    aria-modal="true"
+    tabindex="-1"
+    onclick={onClose}
+    onkeydown={() => {}}
 >
   <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
   <div class="modal-dialog modal-lg" role="document" onclick={(e) => e.stopPropagation()} onkeydown={() => {}}>
@@ -40,7 +40,7 @@
           <div class="preview-sheet-hd">
             <div>
               <div class="ps-kind">{t.label}</div>
-              <div class="ps-ref">{doc.ref}</div>
+              <div class="ps-ref">{doc.number}</div>
             </div>
             <div class="ps-date">{date.short} {date.year}</div>
           </div>
@@ -61,7 +61,7 @@
         <button type="button" class="btn btn-default" onclick={onClose}>
           <i class="fa fa-times"></i> Discard
         </button>
-        {#if onSave}
+          {#if onSave}
           <button type="button" class="btn btn-primary" onclick={onSave}>
             <i class="fa fa-save"></i> Save this version
           </button>

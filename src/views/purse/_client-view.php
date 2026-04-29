@@ -11,8 +11,7 @@ use yii\helpers\Html;
 
 $user = Yii::$app->user;
 $client = $model->clientModel;
-$isEmployee = $client->type === $client::TYPE_EMPLOYEE;
-$documentType = $isEmployee ? 'acceptance' : 'invoice';
+$isEmployee = $client->isEmployee();
 
 $documents = [];
 if ($user->can('document.read') && $user->can('bill.read')) {

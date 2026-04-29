@@ -1,25 +1,48 @@
-export interface Account {
+export type PermissionKey =
+  | "bill.read"
+  | "document.read"
+  | "document.generate"
+  | "purse.update"
+  | "client.update"
+  | "owner-staff"
+  | "has-own-seller"
+  | "is-employee";
+
+export interface PursesBoxProps {
+  language: string,
+  purses: Purse[];
+  permissions: PermissionKey[];
+}
+
+export interface Purse {
   id: string;
-  code: string;
+  currency: string;
   symbol: string;
   title: string;
   balance: number;
-  credit: number;
-  contact: { name: string; email: string };
+  contact: { organization: string; name: string; email: string; first_name: string; last_name: string; };
+  requisite?: { organization: string; name: string; };
+  documents: Doc[];
   paymentDetails: string;
+}
+
+export interface Contact {
+  id: string;
+  name: string;
+  email: string;
 }
 
 export interface DocType {
   id: string;
   label: string;
-  className: string;
 }
 
 export interface Doc {
   id: string;
   type: string;
-  name: string;
-  ref: string;
+  type_label: string;
+  filename: string;
+  number: string;
   date: string;
   isNew: boolean;
 }
