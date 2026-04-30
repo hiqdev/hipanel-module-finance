@@ -4,14 +4,14 @@
   import { useAsync } from "../async.svelte";
   import SettingField from "./SettingField.svelte";
 
-  let { account, onChange }: {
-      account: Purse;
+  let { purse, onChange }: {
+      purse: Purse;
       onChange: (field: string, value: string) => void;
   } = $props();
 
   // Contacts: lazy load on dropdown open
   let contacts = $derived.by(() =>
-      useAsync(() => purseSettingsApi.getContacts(account.client_id), { lazy: true }),
+      useAsync(() => purseSettingsApi.getContacts(purse.client_id), { lazy: true }),
   );
 
   let requisiteData = $state<Requisite[]>([]);
@@ -19,7 +19,7 @@
   let fetchSeq = 0;
 
   $effect(() => {
-      account.seller_id; // reset on account switch
+      purse.seller_id; // reset on account switch
       requisiteData = [];
       requisiteLoading = false;
   });
@@ -28,7 +28,7 @@
       const seq = ++fetchSeq;
       requisiteLoading = true;
       try {
-          const data = await purseSettingsApi.getRequisites(account.seller_id, query);
+          const data = await purseSettingsApi.getRequisites(purse.seller_id, query);
           if (seq === fetchSeq) requisiteData = data;
       } finally {
           if (seq === fetchSeq) requisiteLoading = false;
@@ -61,20 +61,20 @@
   );
 
   let contactDisplayValue = $derived(
-      selectedContacts[account.id]?.name ?? account.contact.name,
+      selectedContacts[purse.id]?.name ?? purse.contact.name,
   );
 
   let requisiteDisplayValue = $derived(
-      account.id in selectedRequisites
-          ? requisiteLabel(selectedRequisites[account.id])
-          : account.requisite ? requisiteLabel(account.requisite) : "",
+      purse.id in selectedRequisites
+          ? requisiteLabel(selectedRequisites[purse.id])
+          : purse.requisite ? requisiteLabel(purse.requisite) : "",
   );
 
   function saveContact(value: string) {
       const contact = contacts.data?.find(c => c.name === value);
       if (contact) {
-          selectedContacts = { ...selectedContacts, [account.id]: contact };
-          purseSettingsApi.updateContact(account.id, contact.id);
+          selectedContacts = { ...selectedContacts, [purse.id]: contact };
+          purseSettingsApi.updateContact(purse.id, contact.id);
       }
       onChange("contact", value);
   }
@@ -82,14 +82,14 @@
   function saveRequisite(value: string) {
       const requisite = requisiteData.find(r => requisiteLabel(r) === value);
       if (requisite) {
-          selectedRequisites = { ...selectedRequisites, [account.id]: requisite };
-          purseSettingsApi.updateRequisite(account.id, requisite.id);
+          selectedRequisites = { ...selectedRequisites, [purse.id]: requisite };
+          purseSettingsApi.updateRequisite(purse.id, requisite.id);
       }
       onChange("paymentDetails", value);
   }
 </script>
 
-<div class="acct-settings">
+<div class="purse-settings">
   <SettingField
       label="Contact"
       value={contactDisplayValue}

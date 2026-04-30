@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Purse } from "../types";
 
-  let { account, onRecharge, onKpiClick }: {
-      account: Purse;
+  let { purse, onRecharge, onKpiClick }: {
+      purse: Purse;
       onRecharge: () => void;
       onKpiClick: (which: string) => void;
   } = $props();
@@ -16,10 +16,10 @@
 
 </script>
 
-<div class="acct-summary">
-  <div class="acct-summary-left">
-    <h4 class="acct-title">{account.title}</h4>
-    <div class="acct-kpis">
+<div class="purse-summary">
+  <div class="purse-summary-left">
+    <h4 class="purse-title">Purse: {purse.id}</h4>
+    <div class="purse-kpis">
       <div class="kpi">
         <span class="kpi-label">Balance</span>
         <span
@@ -30,8 +30,8 @@
             role="button"
             tabindex="0"
         >
-          <span class="currency">{getCurrencySymbol('en-US', account.currency)}</span>
-            {Number(account.balance).toLocaleString('en-US', {
+          <span class="currency">{getCurrencySymbol('en-US', purse.currency)}</span>
+            {Number(purse.balance).toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
                 useGrouping: true,
@@ -40,8 +40,8 @@
       </div>
     </div>
   </div>
-  <div class="acct-summary-right">
-    <a href="/merchant/pay/deposit?currency={account.currency.toLocaleLowerCase()}"
+  <div class="purse-summary-right">
+    <a href="/merchant/pay/deposit?currency={purse.currency.toLocaleLowerCase()}"
        class="btn btn-flat btn-success btn-recharge"
        onclick={onRecharge}>
       <i class="fa fa-plus-circle"></i> Top-up account balance

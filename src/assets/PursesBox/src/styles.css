@@ -62,7 +62,7 @@ button.x {
 }
 
 /* 1. TABS */
-.acct-tabs {
+.purse-tabs {
   display: flex;
   align-items: flex-end;
   gap: 0;
@@ -71,7 +71,7 @@ button.x {
   background: #fafbfc;
 }
 
-.acct-tab {
+.purse-tab {
   position: relative;
   padding: 14px 20px 12px;
   font-size: 14px;
@@ -87,16 +87,16 @@ button.x {
   gap: 8px;
 }
 
-.acct-tab:hover {
+.purse-tab:hover {
   color: var(--fg-2);
 }
 
-.acct-tab.is-active {
+.purse-tab.is-active {
   color: var(--primary);
   font-weight: 600;
 }
 
-.acct-tab.is-active::after {
+.purse-tab.is-active::after {
   content: "";
   position: absolute;
   left: 12px;
@@ -106,7 +106,7 @@ button.x {
   background: var(--primary);
 }
 
-.acct-tab .balance-mini {
+.purse-tab .balance-mini {
   font-size: 11px;
   color: var(--fg-5);
   margin-left: 6px;
@@ -114,12 +114,12 @@ button.x {
   letter-spacing: 0;
 }
 
-.acct-tabs-spacer {
+.purse-tabs-spacer {
   flex: 1;
 }
 
 /* 2. SUMMARY */
-.acct-summary {
+.purse-summary {
   display: flex;
   align-items: center;
   padding: 22px 24px;
@@ -127,12 +127,12 @@ button.x {
   border-bottom: 1px solid var(--border-subtle);
 }
 
-.acct-summary-left {
+.purse-summary-left {
   flex: 1;
   min-width: 0;
 }
 
-.acct-title {
+.purse-title {
   font-size: 13px;
   color: var(--fg-4);
   text-transform: uppercase;
@@ -141,7 +141,7 @@ button.x {
   font-weight: 600;
 }
 
-.acct-kpis {
+.purse-kpis {
   display: flex;
   gap: 40px;
   align-items: baseline;
@@ -188,7 +188,7 @@ button.x {
   font-weight: 400;
 }
 
-.acct-summary-right {
+.purse-summary-right {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -205,7 +205,7 @@ button.x {
 }
 
 /* 3. SETTINGS */
-.acct-settings {
+.purse-settings {
   display: grid;
   grid-template-columns: 1fr 1fr;
   padding: 14px 24px 16px;
@@ -366,7 +366,7 @@ button.x {
 }
 
 /* 4. DOCUMENTS */
-.acct-docs {
+.purse-docs {
   padding: 16px 24px 20px;
 }
 
@@ -638,15 +638,15 @@ button.x {
 }
 
 .docs-table thead th.type-col {
-  /*width: 180px;*/
+  width: 250px;
 }
 
 .docs-table thead th.date-col {
-  /*width: 130px;*/
+  width: 130px;
 }
 
 .docs-table thead th.act-col {
-  /*width: 170px;*/
+  width: 170px;
   text-align: right;
   cursor: default;
 }

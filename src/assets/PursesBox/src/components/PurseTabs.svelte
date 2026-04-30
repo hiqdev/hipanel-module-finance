@@ -9,13 +9,13 @@
   } = $props();
 </script>
 
-<ul class="acct-tabs nav nav-tabs" role="tablist">
+<ul class="purse-tabs nav nav-tabs" role="tablist">
   {#each purses as p}
       <li class:active={p.id === activeId}>
             <a
                 href="#{p.id}"
                 role="tab"
-                class="acct-tab {p.id === activeId ? 'is-active active' : ''}"
+                class="purse-tab {p.id === activeId ? 'is-active active' : ''}"
                 onclick={(e) => {
                 e.preventDefault();
                 onChange(p.id)
@@ -26,5 +26,5 @@
             </a>
       </li>
   {/each}
-    <div class="acct-tabs-spacer"></div>
+    <div class="purse-tabs-spacer"></div>
 </ul>

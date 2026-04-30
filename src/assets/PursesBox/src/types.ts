@@ -20,7 +20,6 @@ export interface Purse {
   seller_id: string;
   currency: string;
   symbol: string;
-  title: string;
   balance: number;
   contact: Contact;
   requisite?: Requisite;

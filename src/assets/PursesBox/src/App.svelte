@@ -4,9 +4,9 @@
   import { defaultFilters, docTypeColor, docTypesFromDocs, fmtMonthKey, MONTH_NAMES, typeMeta } from "./data";
   import { initI18n } from "./i18n";
   import { permissions } from "./permissions";
-  import AccountTabs from "./components/AccountTabs.svelte";
-  import AccountSummary from "./components/AccountSummary.svelte";
-  import AccountSettings from "./components/AccountSettings.svelte";
+  import PurseTabs from "./components/PurseTabs.svelte";
+  import PurseSummary from "./components/PurseSummary.svelte";
+  import PurseSettings from "./components/PurseSettings.svelte";
   import FilterDropdown from "./components/FilterDropdown.svelte";
   import MonthRangeFilter from "./components/MonthRangeFilter.svelte";
   import DocumentsTable from "./components/DocumentsTable.svelte";
@@ -46,10 +46,11 @@
 
   // ── Current purse + docs ────────────────────────────────────────────────
   let account = $derived(purses.find(p => p.id === activeId)!);
+  let purse = $derived(purses.find(p => p.id === activeId)!);
   let baseDocs = $derived(docsByPurse[activeId] ?? []);
   let filters = $derived(filtersByPurse[activeId] ?? defaultFilters());
 
-  // ── Type options — only types present in this account's docs ──────────────
+  // ── Type options — only types present in this purse's docs ──────────────
   let availableTypes = $derived(docTypesFromDocs(baseDocs));
 
   let typeOptions = $derived<FilterOption[]>(availableTypes.map(t => ({
@@ -119,7 +120,7 @@
       return chips;
   });
 
-  // ── Per-account filter setters ────────────────────────────────────────────
+  // ── Per-purse filter setters ────────────────────────────────────────────
   function updateFilters(patch: Partial<AccountFilters>) {
       const current = filtersByPurse[activeId] ?? defaultFilters();
       // Reset page whenever a filter other than page itself changes
@@ -286,7 +287,7 @@
   }
 
   function handleRecharge() {
-      showToast(`Opening top-up flow for ${account.title}`, "fa-plus-circle");
+      showToast(`Opening top-up flow for ${purse.id}`, "fa-plus-circle");
   }
 
   function handleKpiClick(which: string) {
@@ -313,24 +314,24 @@
 
 <div class="accounts-block nav-tabs-custom">
 
-  <AccountTabs
+  <PurseTabs
       {purses}
       {activeId}
       onChange={(id) => (activeId = id)}
   />
 
-  <AccountSummary
-      {account}
+  <PurseSummary
+      {purse}
       onRecharge={handleRecharge}
       onKpiClick={handleKpiClick}
   />
 
-  <AccountSettings
-      {account}
+  <PurseSettings
+      {purse}
       onChange={handleSettingChange}
   />
 
-  <div class="acct-docs">
+  <div class="purse-docs">
     <!-- Toolbar: search + filters + actions -->
     <div class="docs-head">
       <div class="left">
@@ -372,7 +373,7 @@
     </div>
 
       <!-- Active filter chips -->
-    {#if activeChips.length > 0}
+      {#if activeChips.length > 0}
       <div class="active-filters">
         <span>Filtered:</span>
           {#each activeChips as chip (chip.k)}
