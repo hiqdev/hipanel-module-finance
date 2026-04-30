@@ -9,10 +9,33 @@
       onChange: (field: string, value: string) => void;
   } = $props();
 
-  let contacts = $derived.by(() => useAsync(() => purseSettingsApi.getContacts(account.client_id), { lazy: true }));
-  let requisites = $derived.by(() => useAsync(() => purseSettingsApi.getRequisites(account.seller_id), { lazy: true }));
+  // Contacts: lazy load on dropdown open
+  let contacts = $derived.by(() =>
+      useAsync(() => purseSettingsApi.getContacts(account.client_id), { lazy: true }),
+  );
 
-  // Selections are keyed by purse id — no $effect needed, no race with onChange
+  let requisiteData = $state<Requisite[]>([]);
+  let requisiteLoading = $state(false);
+  let fetchSeq = 0;
+
+  $effect(() => {
+      account.seller_id; // reset on account switch
+      requisiteData = [];
+      requisiteLoading = false;
+  });
+
+  async function fetchRequisites(query?: string) {
+      const seq = ++fetchSeq;
+      requisiteLoading = true;
+      try {
+          const data = await purseSettingsApi.getRequisites(account.seller_id, query);
+          if (seq === fetchSeq) requisiteData = data;
+      } finally {
+          if (seq === fetchSeq) requisiteLoading = false;
+      }
+  }
+
+  // Selections keyed by purse id
   let selectedContacts = $state<Record<string, Contact>>({});
   let selectedRequisites = $state<Record<string, Requisite>>({});
 
@@ -30,7 +53,7 @@
   );
 
   let requisiteOptions = $derived<SelectOption[]>(
-      (requisites.data ?? []).map(r => ({
+      requisiteData.map(r => ({
           value: requisiteLabel(r),
           label: requisiteLabel(r),
           icon: "fa-university",
@@ -57,7 +80,7 @@
   }
 
   function saveRequisite(value: string) {
-      const requisite = requisites.data?.find(r => requisiteLabel(r) === value);
+      const requisite = requisiteData.find(r => requisiteLabel(r) === value);
       if (requisite) {
           selectedRequisites = { ...selectedRequisites, [account.id]: requisite };
           purseSettingsApi.updateRequisite(account.id, requisite.id);
@@ -82,8 +105,10 @@
       value={requisiteDisplayValue}
       icon="fa-university"
       options={requisiteOptions}
-      loading={requisites.loading}
-      onOpen={() => { if (!requisites.data) requisites.refetch(); }}
+      loading={requisiteLoading}
+      searchable={true}
+      onOpen={() => { if (requisiteData.length === 0) fetchRequisites(); }}
+      onSearch={(q) => fetchRequisites(q || undefined)}
       onSave={saveRequisite}
       createNewUrl="/finance/requisite/create"
   />

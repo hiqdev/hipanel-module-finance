@@ -43,7 +43,11 @@ export const api = {
 
 export const purseSettingsApi = {
   getContacts: (client_id: string) => api.post<Contact[]>(`/client/contact/search`, { client_id }),
-  getRequisites: (client_id?: string) => api.post<Requisite[]>(`/finance/requisite/search`, { client_id }),
+  getRequisites: (client_id?: string, query?: string) =>
+    api.post<Requisite[]>(`/finance/requisite/search`, {
+      client_id,
+      name_ilike: query,
+    }),
   updateContact: (purseId: string, contactId: string) =>
     api.post<void>(`/finance/purse/update-contact`, { name: "contact_id", pk: purseId, value: contactId }),
   updateRequisite: (purseId: string, requisiteId: string) =>

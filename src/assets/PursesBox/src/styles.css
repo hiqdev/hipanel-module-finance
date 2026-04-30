@@ -171,7 +171,6 @@ button.x {
 }
 
 .kpi-value.is-link {
-  color: var(--link);
   cursor: pointer;
   border-bottom: 1px dashed transparent;
   display: inline-block;
@@ -179,7 +178,6 @@ button.x {
 }
 
 .kpi-value.is-link:hover {
-  color: var(--link-hover);
   border-bottom-color: var(--link-hover);
 }
 
@@ -302,8 +300,33 @@ button.x {
   border-radius: 2px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
   z-index: 50;
-  max-height: 240px;
+  max-height: 280px;
   overflow: auto;
+}
+
+.set-search {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: #fafbfc;
+}
+
+.set-search .form-control {
+  padding-right: 28px;
+  font-size: 13px;
+  height: 30px;
+}
+
+.set-search-spin {
+  position: absolute;
+  right: 16px;
+  top: 35%;
+  transform: translateY(-50%);
+  color: var(--fg-4);
+  font-size: 12px;
+  pointer-events: none;
 }
 
 .set-option {
