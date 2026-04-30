@@ -1,5 +1,7 @@
 <script lang="ts">
-  import type { Purse, SelectOption } from "../types";
+  import type { Contact, Purse, Requisite, SelectOption } from "../types";
+  import { purseApi } from "../api";
+  import { useAsync } from "../async.svelte";
   import SettingField from "./SettingField.svelte";
 
   let { account, onChange }: {
@@ -7,41 +9,82 @@
       onChange: (field: string, value: string) => void;
   } = $props();
 
+  let contacts = $derived.by(() => useAsync(() => purseApi.getContacts(account.client_id), { lazy: true }));
+  let requisites = $derived.by(() => useAsync(() => purseApi.getRequisites(account.seller_id), { lazy: true }));
+
+  // Selections are keyed by purse id — no $effect needed, no race with onChange
+  let selectedContacts = $state<Record<string, Contact>>({});
+  let selectedRequisites = $state<Record<string, Requisite>>({});
+
+  function requisiteLabel(r: { name: string; organization: string }): string {
+      return r.organization ? `${r.organization} / ${r.name}` : r.name;
+  }
+
   let contactOptions = $derived<SelectOption[]>(
-      [
-          { value: account.contact.name, label: account.contact.name, sub: account.contact.email, icon: "fa-user" },
-          { value: "Olivia Martinez", label: "Olivia Martinez", sub: "o.martinez@acme.co", icon: "fa-user" },
-          { value: "Jonas Weber", label: "Jonas Weber", sub: "j.weber@acme.co", icon: "fa-user" },
-          { value: "Priya Shah", label: "Priya Shah", sub: "p.shah@acme.co", icon: "fa-user" },
-          { value: "Marcus Lee", label: "Marcus Lee", sub: "m.lee@acme.co", icon: "fa-user" },
-      ].filter((v, i, arr) => arr.findIndex(x => x.value === v.value) === i),
+      (contacts.data ?? []).map(c => ({
+          value: c.name,
+          label: c.name,
+          sub: c.email,
+          icon: "fa-user",
+      })),
   );
 
-  let paymentOptions = $derived<SelectOption[]>(
-      [
-          { value: account.paymentDetails, label: account.paymentDetails, icon: "fa-university" },
-          { value: "Chase Bank · 2847", label: "Chase Bank · 2847", icon: "fa-university" },
-          { value: "Wire transfer · SWIFT", label: "Wire transfer · SWIFT", sub: "Default for international", icon: "fa-exchange" },
-          { value: "Stripe · card ending 4421", label: "Stripe · card ending 4421", icon: "fa-credit-card" },
-      ].filter((v, i, arr) => arr.findIndex(x => x.value === v.value) === i),
+  let requisiteOptions = $derived<SelectOption[]>(
+      (requisites.data ?? []).map(r => ({
+          value: requisiteLabel(r),
+          label: requisiteLabel(r),
+          icon: "fa-university",
+      })),
   );
+
+  let contactDisplayValue = $derived(
+      selectedContacts[account.id]?.name ?? account.contact.name,
+  );
+
+  let requisiteDisplayValue = $derived(
+      account.id in selectedRequisites
+          ? requisiteLabel(selectedRequisites[account.id])
+          : account.requisite ? requisiteLabel(account.requisite) : "",
+  );
+
+  function saveContact(value: string) {
+      const contact = contacts.data?.find(c => c.name === value);
+      if (contact) {
+          selectedContacts = { ...selectedContacts, [account.id]: contact };
+          purseApi.updateContact(account.id, contact.id);
+      }
+      onChange("contact", value);
+  }
+
+  function saveRequisite(value: string) {
+      const requisite = requisites.data?.find(r => requisiteLabel(r) === value);
+      if (requisite) {
+          selectedRequisites = { ...selectedRequisites, [account.id]: requisite };
+          purseApi.updateRequisite(account.id, requisite.id);
+      }
+      onChange("paymentDetails", value);
+  }
 </script>
 
 <div class="acct-settings">
   <SettingField
       label="Contact"
-      value={account.contact.name}
+      value={contactDisplayValue}
       icon="fa-user-o"
       options={contactOptions}
-      onSave={(v) => onChange('contact', v)}
+      loading={contacts.loading}
+      onOpen={() => { if (!contacts.data) contacts.refetch(); }}
+      onSave={saveContact}
       createNewUrl="/client/contact/create"
   />
   <SettingField
-      label="Payment details"
-      value={account.requisite ? [account.requisite.organization, account.requisite.name].filter(Boolean).join(' / ') : ''}
+      label="Requisite"
+      value={requisiteDisplayValue}
       icon="fa-university"
-      options={paymentOptions}
-      onSave={(v) => onChange('paymentDetails', v)}
+      options={requisiteOptions}
+      loading={requisites.loading}
+      onOpen={() => { if (!requisites.data) requisites.refetch(); }}
+      onSave={saveRequisite}
       createNewUrl="/finance/requisite/create"
   />
 </div>

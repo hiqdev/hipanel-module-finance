@@ -1191,7 +1191,7 @@ button.x {
 /* Toast */
 .toast {
   position: fixed;
-  bottom: 24px;
+  bottom: 44px;
   right: 24px;
   background: #2b3a40;
   color: #fff;

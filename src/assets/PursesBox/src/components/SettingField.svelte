@@ -1,12 +1,14 @@
 <script lang="ts">
   import type { SelectOption } from "../types";
 
-  let { label, value, options, createNewUrl, icon, onSave }: {
+  let { label, value, options, createNewUrl, icon, loading = false, onOpen, onSave }: {
       label: string;
       value: string;
       options: SelectOption[];
       createNewUrl: string;
       icon?: string;
+      loading?: boolean;
+      onOpen?: () => void;
       onSave: (v: string) => void;
   } = $props();
 
@@ -40,18 +42,22 @@
   <span class="set-label">{label}</span>
   <div class="set-field-wrap" bind:this={wrapEl}>
     <div
-        class="set-value {open ? 'is-editing' : ''}"
+        class="set-value {open ? 'is-editing' : ''} {loading ? 'is-loading' : ''}"
         role="button"
-        tabindex="0"
-        onclick={() => (open = !open)}
-        onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open = !open; } }}
+        tabindex={loading ? -1 : 0}
+        onclick={() => { if (!loading) { onOpen?.(); open = !open; } }}
+        onkeydown={(e) => { if (!loading && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onOpen?.(); open = !open; } }}
     >
       {#if icon}
         <i class="fa {icon}" style="color: var(--fg-4); font-size: 12px"></i>
       {/if}
         <span>{value}</span>
-      <i class="caret"></i>
-      <span class="edit-hint">click to edit</span>
+        {#if loading}
+        <i class="fa fa-spinner fa-spin" style="color: var(--fg-4); font-size: 12px; margin-left: auto"></i>
+      {:else}
+        <i class="caret"></i>
+        <span class="edit-hint">click to edit</span>
+      {/if}
     </div>
 
       {#if open}

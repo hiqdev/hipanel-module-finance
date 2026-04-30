@@ -16,12 +16,14 @@ export interface PursesBoxProps {
 
 export interface Purse {
   id: string;
+  client_id: string;
+  seller_id: string;
   currency: string;
   symbol: string;
   title: string;
   balance: number;
-  contact: { organization: string; name: string; email: string; first_name: string; last_name: string; };
-  requisite?: { organization: string; name: string; };
+  contact: Contact;
+  requisite?: Requisite;
   documents: Doc[];
   paymentDetails: string;
 }
@@ -30,6 +32,12 @@ export interface Contact {
   id: string;
   name: string;
   email: string;
+}
+
+export interface Requisite {
+  id: string;
+  name: string;
+  organization: string;
 }
 
 export interface DocType {

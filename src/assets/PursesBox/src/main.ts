@@ -1,5 +1,5 @@
 import { mount as svelteMount, unmount as svelteUnmount } from "svelte";
-import "./accounts.css";
+import "./styles.css";
 import PursesBox from "./App.svelte";
 import type { PursesBoxProps } from "./types";
 
