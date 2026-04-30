@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Contact, Purse, Requisite, SelectOption } from "../types";
-  import { purseApi } from "../api";
+  import { purseSettingsApi } from "../api";
   import { useAsync } from "../async.svelte";
   import SettingField from "./SettingField.svelte";
 
@@ -9,8 +9,8 @@
       onChange: (field: string, value: string) => void;
   } = $props();
 
-  let contacts = $derived.by(() => useAsync(() => purseApi.getContacts(account.client_id), { lazy: true }));
-  let requisites = $derived.by(() => useAsync(() => purseApi.getRequisites(account.seller_id), { lazy: true }));
+  let contacts = $derived.by(() => useAsync(() => purseSettingsApi.getContacts(account.client_id), { lazy: true }));
+  let requisites = $derived.by(() => useAsync(() => purseSettingsApi.getRequisites(account.seller_id), { lazy: true }));
 
   // Selections are keyed by purse id — no $effect needed, no race with onChange
   let selectedContacts = $state<Record<string, Contact>>({});
@@ -51,7 +51,7 @@
       const contact = contacts.data?.find(c => c.name === value);
       if (contact) {
           selectedContacts = { ...selectedContacts, [account.id]: contact };
-          purseApi.updateContact(account.id, contact.id);
+          purseSettingsApi.updateContact(account.id, contact.id);
       }
       onChange("contact", value);
   }
@@ -60,7 +60,7 @@
       const requisite = requisites.data?.find(r => requisiteLabel(r) === value);
       if (requisite) {
           selectedRequisites = { ...selectedRequisites, [account.id]: requisite };
-          purseApi.updateRequisite(account.id, requisite.id);
+          purseSettingsApi.updateRequisite(account.id, requisite.id);
       }
       onChange("paymentDetails", value);
   }
