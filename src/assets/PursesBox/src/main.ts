@@ -11,6 +11,7 @@ interface PursesBoxApi {
 declare global {
   interface Window {
     PursesBox: PursesBoxApi;
+    hipanel: any;
   }
 }
 

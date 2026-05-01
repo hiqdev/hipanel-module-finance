@@ -345,7 +345,7 @@ button.x {
 }
 
 .set-option:hover {
-  background-color: #eef5fb;
+    background-color: #eef5fb;
 }
 
 .set-option.is-selected {
@@ -1209,38 +1209,4 @@ button.x {
 .docs-empty p {
   margin: 0;
   font-size: 13px;
-}
-
-/* Toast */
-.toast {
-  position: fixed;
-  bottom: 44px;
-  right: 24px;
-  background: #2b3a40;
-  color: #fff;
-  padding: 12px 18px;
-  border-radius: 3px;
-  font-size: 13px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 9999;
-  animation: toastIn .2s ease-out;
-}
-
-.toast .fa-check-circle {
-  color: var(--success);
-  font-size: 16px;
-}
-
-@keyframes toastIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

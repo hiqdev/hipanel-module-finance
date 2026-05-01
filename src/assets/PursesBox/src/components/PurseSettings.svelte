@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Contact, Purse, Requisite, SelectOption } from "../types";
   import { purseSettingsApi } from "../api";
-  import { useAsync } from "../async.svelte";
+  import { useAsync } from "../composables/useAsync.svelte";
   import SettingField from "./SettingField.svelte";
 
   let { purse, onChange }: {
