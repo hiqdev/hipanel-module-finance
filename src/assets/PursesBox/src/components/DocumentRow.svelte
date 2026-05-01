@@ -2,14 +2,15 @@
   import type { Doc } from "../types";
   import { docTypeColor, fmtDate } from "../data";
 
-  let { doc, density, busy, onAction }: {
+  let { doc, density, busy, onAction, language }: {
       doc: Doc;
       density: string;
       busy: boolean;
       onAction: (kind: string, doc: Doc) => void;
+      language: string;
   } = $props();
 
-  let date = $derived(fmtDate(doc.date));
+  let date = $derived(fmtDate(doc.date, language));
   let rowPad = $derived(density === "compact" ? "8px 14px" : "12px 14px");
 </script>
 
@@ -23,7 +24,7 @@
   <td style="padding: {rowPad}">
     <div class="doc-name">
         <i class="fa fa-file-text-o"></i>
-        <span class="doc-ref">{doc.number.length ? doc.number : '--'}</span>
+        <span class="doc-ref">{doc.number.length ? doc.number : '- no document number -'}</span>
         {#if doc.isNew}<span class="label label-warning doc-new-badge">NEW</span>{/if}
         <span class="doc-sub">{doc.filename}</span>
     </div>

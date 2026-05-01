@@ -1,11 +1,14 @@
 <script lang="ts">
   import type { Purse } from "../types";
+  import { useI18n } from "../i18n";
 
   let { purse, onRecharge, onKpiClick }: {
       purse: Purse;
       onRecharge: () => void;
       onKpiClick: (which: string) => void;
   } = $props();
+
+  const t = useI18n();
 
   const getCurrencySymbol = (locale: string, currency: string) => (0).toLocaleString(locale, {
       style: "currency",
@@ -18,10 +21,10 @@
 
 <div class="purse-summary">
   <div class="purse-summary-left">
-    <h4 class="purse-title">{purse.currency} account</h4>
+    <h4 class="purse-title">{purse.currency} {t('account')}</h4>
     <div class="purse-kpis">
       <div class="kpi">
-        <span class="kpi-label">Balance</span>
+        <span class="kpi-label">{t('Balance')}</span>
         <span
             class="kpi-value is-link"
             onclick={() => onKpiClick('balance')}
@@ -44,7 +47,7 @@
     <a href="/merchant/pay/deposit?currency={purse.currency.toLocaleLowerCase()}"
        class="btn btn-flat btn-success btn-recharge"
        onclick={onRecharge}>
-      <i class="fa fa-plus-circle"></i> Top-up account balance
+      <i class="fa fa-plus-circle"></i> {t('Top-up account balance')}
     </a>
   </div>
 </div>

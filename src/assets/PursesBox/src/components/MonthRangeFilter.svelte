@@ -1,10 +1,11 @@
 <script lang="ts">
   import type { DateRange } from "../types";
-  import { currentMonthKey, MONTH_NAMES, monthOptions } from "../data";
+  import { currentMonthKey, fmtMonthKey, monthOptions } from "../data";
 
-  let { value, onChange, monthsBack = 24 }: {
+  let { value, onChange, language, monthsBack = 24 }: {
       value: DateRange;
       onChange: (range: DateRange) => void;
+      language: string;
       monthsBack?: number;
   } = $props();
 
@@ -24,11 +25,14 @@
   });
 
   // oldest → newest
-  let months = $derived(monthOptions(monthsBack).reverse());
+  let months = $derived(monthOptions(monthsBack, language).reverse());
 
   function formatLabel(key: string): string {
-      const [y, m] = key.split("-");
-      return `${MONTH_NAMES[parseInt(m, 10) - 1]} ${y}`;
+      return fmtMonthKey(key, language);
+  }
+
+  function formatMonthKey(key: string): string {
+      return fmtMonthKey(key, language, { month: "short" });
   }
 
   let isActive = $derived(!!(value.from || value.to));
@@ -175,7 +179,7 @@
                       onmouseenter={() => (hover = m.key)}
                       onmouseleave={() => (hover = null)}
                   >
-                  {MONTH_NAMES[parseInt(m.key.split('-')[1], 10) - 1]}
+                  {formatMonthKey(m.key)}
                 </button>
               {/each}
             </div>

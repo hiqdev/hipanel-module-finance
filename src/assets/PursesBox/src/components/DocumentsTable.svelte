@@ -2,13 +2,14 @@
   import type { Doc, SortState } from "../types";
   import DocumentRow from "./DocumentRow.svelte";
 
-  let { docs, sort, onSort, density, busyIds, onRowAction }: {
+  let { docs, sort, onSort, density, busyIds, onRowAction, language }: {
       docs: Doc[];
       sort: SortState;
       onSort: (key: SortState["key"]) => void;
       density: string;
       busyIds: string[];
       onRowAction: (kind: string, doc: Doc) => void;
+      language: string;
   } = $props();
 </script>
 
@@ -64,6 +65,7 @@
               {density}
               busy={busyIds.includes(doc.id)}
               onAction={onRowAction}
+              {language}
           />
         {/each}
       {/if}

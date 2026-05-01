@@ -75,7 +75,9 @@
   <span class="set-label">{label}</span>
   <div class="set-field-wrap" bind:this={wrapEl}>
     <div
-        class="set-value {open ? 'is-editing' : ''} {loading ? 'is-loading' : ''}"
+        class="set-value"
+        class:is-loading={loading}
+        class:is-editing={open}
         role="button"
         tabindex={loading ? -1 : 0}
         onclick={toggle}

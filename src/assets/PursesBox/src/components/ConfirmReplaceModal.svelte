@@ -2,14 +2,15 @@
   import type { Doc } from "../types";
   import { fmtDate, typeMeta } from "../data";
 
-  let { doc, onClose, onConfirm }: {
+  let { doc, onClose, onConfirm, language }: {
       doc: Doc;
       onClose: () => void;
       onConfirm: () => void;
+      language: string;
   } = $props();
 
   let t = $derived(typeMeta(doc.type));
-  let date = $derived(fmtDate(doc.date));
+  let date = $derived(fmtDate(doc.date, language));
 </script>
 
 <div class="modal-backdrop fade in"></div>

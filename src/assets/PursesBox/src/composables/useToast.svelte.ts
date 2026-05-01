@@ -1,5 +1,7 @@
+export type ToastType = "success" | "error";
+
 export function useToast() {
-  function show(msg: string, type: "success" | "error" = "success") {
+  function show(msg: string, type: ToastType = "success") {
     window.hipanel.notify[type](msg);
   }
 

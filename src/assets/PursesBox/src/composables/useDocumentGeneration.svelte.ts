@@ -1,5 +1,6 @@
 import type { Doc, ModalState } from "../types";
 import { docMonthKey, fmtMonthKey, typeMeta } from "../data";
+import type { ToastType } from "./useToast.svelte";
 
 function runGeneration({ durationMs = 2400, onProgress, onDone }: {
   durationMs?: number;
@@ -23,12 +24,14 @@ function excludeDocForMonth(docs: Doc[], type: string, monthKey: string): Doc[] 
 export function useDocumentGeneration(
   getDocs: () => Doc[],
   setDocs: (docs: Doc[]) => void,
-  showToast: (msg: string, icon?: string) => void,
+  showToast: (msg: string, type?: ToastType) => void,
+  getLocale: () => string,
 ) {
   let modal = $state<ModalState | null>(null);
   let confirmReplace = $state<Doc | null>(null);
   let previewResult = $state<{ doc: Doc; canSave: boolean } | null>(null);
   let busyRowIds = $state<string[]>([]);
+  let locale = $derived(getLocale());
 
   function handleSubmitGenerate({ type, month, willReplace, mode }: {
     type: string; month: string; willReplace: boolean; mode: string;
@@ -47,7 +50,7 @@ export function useDocumentGeneration(
           id: `gen-${Date.now()}`,
           type,
           type_label: tm.label,
-          filename: `${tm.label} ${fmtMonthKey(month)}`,
+          filename: `${tm.label} ${fmtMonthKey(month, locale)}`,
           number: `${type.slice(0, 3).toUpperCase()}-${yr}-${String(Math.floor(Math.random() * 900) + 100)}`,
           date: `${yr}-${mo}-15`,
           isNew: true,
@@ -66,11 +69,11 @@ export function useDocumentGeneration(
 
   function handleRowAction(kind: string, doc: Doc) {
     if (kind === "download") {
-      showToast(`Downloading ${doc.number}…`, "fa-download");
+      showToast(`Downloading ${doc.number}…`);
       return;
     }
     if (kind === "view") {
-      showToast(`Opening ${doc.number}`, "fa-eye");
+      showToast(`Opening ${doc.number}`);
       return;
     }
 
@@ -103,7 +106,7 @@ export function useDocumentGeneration(
         };
         setDocs(getDocs().map(d => d.id === doc.id ? newDoc : d));
         busyRowIds = busyRowIds.filter(x => x !== doc.id);
-        showToast(`${tm.label} replaced — ${newDoc.number}`, "fa-refresh");
+        showToast(`${tm.label} replaced — ${newDoc.number}`);
       },
     });
   }

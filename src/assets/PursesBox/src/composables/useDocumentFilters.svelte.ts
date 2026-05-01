@@ -1,16 +1,18 @@
 import type { AccountFilters, DateRange, Doc, DocType, FilterOption, SortState } from "../types";
 import { defaultFilters, docMonthKey, docTypeColor, docTypesFromDocs, fmtMonthKey } from "../data";
 
-export const PAGE_SIZE = 50;
+export const PAGE_SIZE = 25;
 
 export function useDocumentFilters(
   getBaseDocs: () => Doc[],
   getActiveId: () => string,
+  getLocale: () => string,
 ) {
   let filtersByPurse = $state<Record<string, AccountFilters>>({});
 
   let baseDocs = $derived(getBaseDocs());
   let activeId = $derived(getActiveId());
+  let locale = $derived(getLocale());
   let filters = $derived(filtersByPurse[activeId] ?? defaultFilters());
 
   let availableTypes: DocType[] = $derived(docTypesFromDocs(baseDocs));
@@ -70,8 +72,8 @@ export function useDocumentFilters(
     const { from, to } = filters.dateRange;
     if (from || to) {
       const lbl = from && to
-        ? (from === to ? fmtMonthKey(from) : `${fmtMonthKey(from)} – ${fmtMonthKey(to)}`)
-        : from ? `From ${fmtMonthKey(from)}` : `Until ${fmtMonthKey(to!)}`;
+        ? (from === to ? fmtMonthKey(from, locale) : `${fmtMonthKey(from, locale)} – ${fmtMonthKey(to, locale)}`)
+        : from ? `From ${fmtMonthKey(from, locale)}` : `Until ${fmtMonthKey(to!, locale)}`;
       chips.push({ k: "date", label: lbl, onX: () => setDateRange({ from: null, to: null }) });
     }
     if (filters.search) {

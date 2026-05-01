@@ -1,7 +1,7 @@
 <script lang="ts">
   import { untrack } from "svelte";
   import type { Doc, Purse, PursesBoxProps } from "./types";
-  import { initI18n } from "./i18n";
+  import { initI18n, useI18n } from "./i18n";
   import { permissions } from "./permissions";
   import { useToast } from "./composables/useToast.svelte";
   import { PAGE_SIZE, useDocumentFilters } from "./composables/useDocumentFilters.svelte";
@@ -19,8 +19,10 @@
 
   let { language, permissions: permKeys = [], purses: initialPurses = [] }: PursesBoxProps = $props();
 
+  initI18n(() => language);
+  const t = useI18n();
+
   $effect(() => {
-      initI18n(language);
       permissions.init(permKeys);
   });
 
@@ -38,6 +40,7 @@
   const docFilters = useDocumentFilters(
       () => docsByPurse[activeId] ?? [],
       () => activeId,
+      () => language,
   );
   const generation = useDocumentGeneration(
       () => docsByPurse[activeId] ?? [],
@@ -45,6 +48,7 @@
           docsByPurse[activeId] = docs;
       },
       toast.show,
+      () => language,
   );
 
   function handleSettingChange(field: string, value: string) {
@@ -57,17 +61,17 @@
   }
 
   function handleRecharge() {
-      toast.show(`Opening top-up flow for ${purse.currency.toUpperCase()}`, "fa-plus-circle");
+      toast.show(`Opening top-up flow for ${purse.currency.toUpperCase()}`);
   }
 
   function handleKpiClick(which: string) {
-      toast.show(`Opened ${which} history`, "fa-line-chart");
+      toast.show(`Opened ${which} history`);
   }
 </script>
 
 <div class="accounts-block nav-tabs-custom">
 
-  <PurseTabs {purses} {activeId} onChange={(id) => (activeId = id)}/>
+  <PurseTabs {purses} {activeId} onChange={(id) => (activeId = id)} {language}/>
 
   <PurseSummary {purse} onRecharge={handleRecharge} onKpiClick={handleKpiClick}/>
 
@@ -99,7 +103,7 @@
             onChange={docFilters.setTypeFilter}
         />
 
-        <MonthRangeFilter value={docFilters.filters.dateRange} onChange={docFilters.setDateRange}/>
+        <MonthRangeFilter value={docFilters.filters.dateRange} onChange={docFilters.setDateRange} {language}/>
       </div>
 
       <div class="right">
@@ -114,7 +118,7 @@
 
       {#if docFilters.activeChips.length > 0}
       <div class="active-filters">
-        <span>Filtered:</span>
+        <span>{t('Filtered:')}</span>
           {#each docFilters.activeChips as chip (chip.k)}
           <span class="afilter-chip">
             {chip.label}
@@ -123,7 +127,7 @@
             </button>
           </span>
         {/each}
-          <button type="button" class="afilter-clear" onclick={docFilters.handleClearFilters}>Clear all</button>
+          <button type="button" class="afilter-clear" onclick={docFilters.handleClearFilters}>{t('Clear all')}</button>
       </div>
     {/if}
 
@@ -134,6 +138,7 @@
           density="compact"
           busyIds={generation.busyRowIds}
           onRowAction={generation.handleRowAction}
+          {language}
       />
 
     <DocumentsPagination
@@ -157,6 +162,7 @@
       progress={generation.modal.progress ?? 0}
       onClose={generation.closeModal}
       onSubmit={generation.handleSubmitGenerate}
+      {language}
   />
 {/if}
 
@@ -165,6 +171,7 @@
       doc={generation.confirmReplace}
       onClose={generation.closeConfirm}
       onConfirm={generation.confirmReplaceNow}
+      {language}
   />
 {/if}
 
@@ -173,5 +180,6 @@
       doc={generation.previewResult.doc}
       onClose={generation.closePreview}
       onSave={generation.previewResult.canSave ? generation.savePreviewResult : null}
+      {language}
   />
 {/if}

@@ -2,14 +2,15 @@
   import type { Doc } from "../types";
   import { fmtDate, typeMeta } from "../data";
 
-  let { doc, onClose, onSave }: {
+  let { doc, onClose, onSave, language }: {
       doc: Doc;
       onClose: () => void;
       onSave?: (() => void) | null;
+      language: string;
   } = $props();
 
   let t = $derived(typeMeta(doc.type));
-  let date = $derived(fmtDate(doc.date));
+  let date = $derived(fmtDate(doc.date, language));
   let lines1 = $derived(Array.from({ length: 8 }, (_, i) => 90 - (i % 3) * 12));
   let lines2 = $derived(Array.from({ length: 4 }, (_, i) => 70 - i * 8));
 </script>

@@ -3,7 +3,7 @@
   import type { DocType, ModalKind } from "../types";
   import { currentMonthKey, monthOptions } from "../data";
 
-  let { mode, initial, types, existingMonths, busy, progress, onClose, onSubmit }: {
+  let { mode, initial, types, existingMonths, busy, progress, onClose, onSubmit, language }: {
       mode: ModalKind;
       initial?: { type: string; month: string };
       types: DocType[];
@@ -12,6 +12,7 @@
       progress: number;
       onClose: () => void;
       onSubmit: (args: { type: string; month: string; willReplace: boolean; mode: ModalKind }) => void;
+      language: string;
   } = $props();
 
   // untrack: deliberately read initial prop only once — the modal remounts on each open.
@@ -38,7 +39,7 @@
   };
 
   let t = $derived(titles[mode]);
-  let months = $derived(monthOptions(12));
+  let months = $derived(monthOptions(12, language));
   let existingForType = $derived(existingMonths[type] ?? []);
 </script>
 

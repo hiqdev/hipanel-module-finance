@@ -2,10 +2,11 @@
   import type { Purse } from "../types";
   import { fmtMoney } from "../data";
 
-  let { purses, activeId, onChange }: {
+  let { purses, activeId, onChange, language }: {
       purses: Purse[];
       activeId: string;
       onChange: (id: string) => void;
+      language: string;
   } = $props();
 </script>
 
@@ -26,7 +27,7 @@
                     class:red-balance={p.balance < 0}
                     class:green-balance={p.balance > 0}
               >
-                  {fmtMoney(p.balance, p.currency)}
+                  {fmtMoney(p.balance, p.currency, language)}
               </span>
             </a>
       </li>
