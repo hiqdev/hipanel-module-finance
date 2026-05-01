@@ -1,7 +1,7 @@
 import type { AccountFilters, DateRange, Doc, DocType, FilterOption, SortState } from "../types";
 import { defaultFilters, docMonthKey, docTypeColor, docTypesFromDocs, fmtMonthKey } from "../data";
 
-export const PAGE_SIZE = 10;
+export const PAGE_SIZE = 50;
 
 export function useDocumentFilters(
   getBaseDocs: () => Doc[],
