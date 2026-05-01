@@ -84,6 +84,11 @@ export function currentMonthKey(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
 }
 
+export function docMonthKey(date: string): string {
+  const d = new Date(date);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+}
+
 export function monthOptions(n: number): MonthOption[] {
   const out: MonthOption[] = [];
   const start = new Date();

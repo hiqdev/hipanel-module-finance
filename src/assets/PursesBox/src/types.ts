@@ -71,7 +71,7 @@ export interface Doc {
 }
 
 export interface SortState {
-  key: "type" | "ref" | "date";
+  key: "type" | "number" | "date";
   dir: "asc" | "desc";
 }
 

@@ -36,10 +36,10 @@
 
 <style>
     .red-balance {
-        color: red;
+        color: #f56954;
     }
 
     .green-balance {
-        color: green;
+        color: #00a65a;
     }
 </style>
