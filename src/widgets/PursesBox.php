@@ -77,20 +77,23 @@ class PursesBox extends Widget
         $purse = $purseModel->toArray();
         $purse['contact'] = $purseModel->contact->toArray();
         $purse['requisite'] = $purseModel->requisite->toArray();
-        $purse['documents'] = array_map(
-            static function ($document) use ($i18n): array {
-                $data = array_map(
-                    static fn($v) => $i18n::removeLegacyLangTags($v),
-                    $document->toArray()
-                );
+        $purse['documents'] = [];
+        if ($purseModel->isRelationPopulated('documents')) {
+            $purse['documents'] = array_map(
+                static function ($document) use ($i18n): array {
+                    $data = array_map(
+                        static fn($v) => $i18n::removeLegacyLangTags($v),
+                        $document->toArray()
+                    );
 
-                $data['date'] = explode(' ', $document->validity_start ?? '', 2)[0];
+                    $data['date'] = explode(' ', $document->validity_start ?? '', 2)[0];
 
 
-                return $data;
-            },
-            $purseModel->isRelationPopulated('documents') ? $purseModel->documents : []
-        );
+                    return $data;
+                },
+                $purseModel->documents
+            );
+        }
 
         return $purse;
     }

@@ -18,7 +18,7 @@
 
 <div class="purse-summary">
   <div class="purse-summary-left">
-    <h4 class="purse-title">Purse: {purse.id}</h4>
+    <h4 class="purse-title">{purse.currency} account</h4>
     <div class="purse-kpis">
       <div class="kpi">
         <span class="kpi-label">Balance</span>

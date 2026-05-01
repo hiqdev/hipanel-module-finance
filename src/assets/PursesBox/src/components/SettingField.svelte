@@ -106,7 +106,7 @@
                 oninput={handleSearch}
                 onkeydown={(e) => { if (e.key === 'Escape') open = false; }}
             />
-            {#if loading}
+              {#if loading}
               <i class="fa fa-spinner fa-spin set-search-spin"></i>
             {/if}
           </div>

@@ -22,9 +22,24 @@
             }}
             >
               <span>{p.currency.toLocaleUpperCase()}</span>
-              <span class="balance-mini">{fmtMoney(p.balance, p.currency)}</span>
+              <span class="balance-mini"
+                    class:red-balance={p.balance < 0}
+                    class:green-balance={p.balance > 0}
+              >
+                  {fmtMoney(p.balance, p.currency)}
+              </span>
             </a>
       </li>
   {/each}
     <div class="purse-tabs-spacer"></div>
 </ul>
+
+<style>
+    .red-balance {
+        color: red;
+    }
+
+    .green-balance {
+        color: green;
+    }
+</style>

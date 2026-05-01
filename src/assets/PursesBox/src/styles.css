@@ -345,7 +345,7 @@ button.x {
 }
 
 .set-option:hover {
-  background: var(--bg-subtle);
+  background-color: #eef5fb;
 }
 
 .set-option.is-selected {
