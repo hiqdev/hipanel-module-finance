@@ -85,7 +85,7 @@
           selectedRequisites = { ...selectedRequisites, [purse.id]: requisite };
           purseSettingsApi.updateRequisite(purse.id, requisite.id);
       }
-      onChange("paymentDetails", value);
+      onChange("requisite", value);
   }
 </script>
 

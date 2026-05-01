@@ -75,8 +75,17 @@ class PursesBox extends Widget
     {
         $i18n = $this->app->i18n;
         $purse = $purseModel->toArray();
+
         $purse['contact'] = $purseModel->contact->toArray();
         $purse['requisite'] = $purseModel->requisite->toArray();
+
+        foreach (['contact', 'requisite'] as $attribute) {
+            $purse[$attribute]['bankDetails'] = $purseModel->{$attribute}->hasBankDetails() ? array_map(
+                static fn($p) => $p->toArray(),
+                $purseModel->{$attribute}->bankDetails
+            ) : [];
+        }
+
         $purse['documents'] = [];
         if ($purseModel->isRelationPopulated('documents')) {
             $purse['documents'] = array_map(

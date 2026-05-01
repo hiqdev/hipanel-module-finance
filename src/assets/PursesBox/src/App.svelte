@@ -283,7 +283,7 @@
 
           return { ...p, [field]: value };
       });
-      showToast(`Updated ${field === "paymentDetails" ? "payment details" : "contact"}`);
+      showToast(`Updated ${field === "requisite" ? "requisite" : "contact"}`);
   }
 
   function handleRecharge() {

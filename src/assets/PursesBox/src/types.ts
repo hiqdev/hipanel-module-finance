@@ -24,19 +24,35 @@ export interface Purse {
   contact: Contact;
   requisite?: Requisite;
   documents: Doc[];
-  paymentDetails: string;
 }
 
-export interface Contact {
+export interface Party {
   id: string;
   name: string;
+  bankDetails: BankDetails[];
+}
+
+export interface Contact extends Party {
   email: string;
 }
 
-export interface Requisite {
-  id: string;
-  name: string;
+export interface Requisite extends Party {
   organization: string;
+}
+
+export interface BankDetails {
+  id: string;
+  requisite_id: string;
+  currency_id: string;
+  no: string;
+  currency: string;
+  bank_name?: string;
+  bank_account?: string;
+  bank_address?: string;
+  bank_swift?: string;
+  bank_correspondent?: string;
+  bank_correspondent_swift?: string;
+  summary?: string;
 }
 
 export interface DocType {
