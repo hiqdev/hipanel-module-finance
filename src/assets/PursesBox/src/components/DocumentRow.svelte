@@ -41,14 +41,17 @@
       </div>
     {:else}
       <div class="row-actions">
-        <button class="ra-btn" onclick={() => onAction('download', doc)} title="Download file">
+        <a class="ra-btn"
+           target="_blank"
+           href={`/file/get?id=${doc.file_id}&downloadname=${encodeURIComponent(doc.filename)}&nocache=1`}
+           title={"Download file"}
+        >
           <i class="fa fa-download"></i>
-        </button>
-        <a
-            class="ra-btn"
-            href="document/view?id={doc.id}"
-            onclick={(e) => { e.preventDefault(); onAction('view', doc); }}
-            title="View document"
+        </a>
+        <a class="ra-btn"
+           target="_blank"
+           href={`/file/${doc.file_id}/${encodeURIComponent(doc.filename)}?nocache=1`}
+           title={"View document"}
         >
           <i class="fa fa-eye"></i>
         </a>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { untrack } from "svelte";
   import type { DocType, ModalKind } from "../types";
-  import { currentMonthKey, monthOptions } from "../data";
+  import { currentMonthKey, monthsForYear } from "../data";
 
   let { mode, initial, types, existingMonths, busy, progress, onClose, onSubmit, language }: {
       mode: ModalKind;
@@ -17,7 +17,9 @@
 
   // untrack: deliberately read initial prop only once — the modal remounts on each open.
   let type = $state(untrack(() => initial?.type ?? types[0]?.id ?? ""));
-  let month = $state(untrack(() => initial?.month ?? currentMonthKey()));
+  let selectedYear = $state(untrack(() => +(initial?.month ?? currentMonthKey()).split("-")[0]));
+  let selectedMonthNum = $state(untrack(() => +(initial?.month ?? currentMonthKey()).split("-")[1]));
+  let month = $derived(`${selectedYear}-${String(selectedMonthNum).padStart(2, "0")}`);
 
   let locked = $derived(mode === "update-replace" || mode === "preview-updated");
 
@@ -39,7 +41,15 @@
   };
 
   let t = $derived(titles[mode]);
-  let months = $derived(monthOptions(12, language));
+  let minYear = $derived.by(() => {
+      const allKeys = Object.values(existingMonths).flat();
+      const cur = new Date().getFullYear();
+      return allKeys.length ? Math.min(...allKeys.map(k => +k.split("-")[0])) : cur - 5;
+  });
+  let yearOptions = $derived(
+      Array.from({ length: new Date().getFullYear() - minYear + 1 }, (_, i) => minYear + i).reverse(),
+  );
+  let months12 = $derived(monthsForYear(selectedYear, language));
   let existingForType = $derived(existingMonths[type] ?? []);
 </script>
 
@@ -92,19 +102,30 @@
 
         <div class="form-group">
           <p class="form-row-label">Period</p>
+          <select
+              class="form-control"
+              style="width:auto;display:inline-block;margin-bottom:8px"
+              value={selectedYear}
+              onchange={(e) => (selectedYear = +(e.target as HTMLSelectElement).value)}
+              disabled={locked}
+          >
+            {#each yearOptions as y}
+              <option value={y}>{y}</option>
+            {/each}
+          </select>
           <div class="month-picker">
-            {#each months as m}
+            {#each months12 as m}
               {@const exists = existingForType.includes(m.key)}
-                {@const isOn = month === m.key}
-                <button
-                    type="button"
-                    class="month-opt {isOn ? 'is-on' : ''} {exists ? 'has-existing' : ''}"
-                    onclick={() => { if (!locked) month = m.key; }}
-                    disabled={locked}
-                    title={exists ? 'A document already exists for this month' : ''}
-                >
+              {@const isOn = month === m.key}
+              <button
+                  type="button"
+                  class="month-opt {isOn ? 'is-on' : ''} {exists ? 'has-existing' : ''}"
+                  onclick={() => { if (!locked) selectedMonthNum = +m.key.split("-")[1]; }}
+                  disabled={locked}
+                  title={exists ? 'A document already exists for this month' : ''}
+              >
                 <span class="m-label">{m.label}</span>
-                    {#if exists}<span class="m-dot" title="Document exists"></span>{/if}
+                {#if exists}<span class="m-dot" title="Document exists"></span>{/if}
               </button>
             {/each}
           </div>

@@ -26,12 +26,29 @@ button.x {
 
 :root {
   --font-mono: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+
+  --primary:        #3c8dbc;
+  --link:           #3c8dbc;
+  --link-hover:     #277099;
+  --warning:        #f39c12;
+  --danger:         #dd4b39;
+
+  --fg-1:           #222222;
+  --fg-2:           #444444;
+  --fg-3:           #666666;
+  --fg-4:           #888888;
+  --fg-5:           #aaaaaa;
+
+  --border:         #d2d6de;
+  --border-subtle:  #eaecef;
+  --bg-subtle:      #f8f9fa;
+  --shadow-box:     0 1px 3px rgba(0, 0, 0, .12), 0 0 1px rgba(0, 0, 0, .05);
 }
 
 /* --- Block container --- */
 .accounts-block {
   background: #fff;
-  border-top: 3px solid var(--primary);
+  /*border-top: 3px solid var(--primary);*/
   border-radius: 3px;
   box-shadow: var(--shadow-box);
   position: relative;
@@ -67,7 +84,7 @@ button.x {
   align-items: flex-end;
   gap: 0;
   padding: 0;
-  border-bottom: 1px solid var(--border-subtle);
+  /*border-bottom: 1px solid var(--border-subtle);*/
   background: #fafbfc;
 }
 
@@ -103,7 +120,6 @@ button.x {
   right: 12px;
   bottom: -1px;
   height: 2px;
-  background: var(--primary);
 }
 
 .purse-tab .balance-mini {

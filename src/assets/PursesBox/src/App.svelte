@@ -1,6 +1,7 @@
 <script lang="ts">
   import { untrack } from "svelte";
   import type { Doc, Purse, PursesBoxProps } from "./types";
+  import { docMonthKey } from "./data";
   import { initI18n, useI18n } from "./i18n";
   import { permissions } from "./permissions";
   import { useToast } from "./composables/useToast.svelte";
@@ -35,6 +36,10 @@
   );
 
   let purse = $derived(purses.find(p => p.id === activeId)!);
+  let minDocYear = $derived.by(() => {
+      const years = Object.values(docsByPurse).flat().map(d => +docMonthKey(d.date).split("-")[0]);
+      return years.length ? Math.min(...years) : new Date().getFullYear() - 3;
+  });
 
   const toast = useToast();
   const docFilters = useDocumentFilters(
@@ -49,6 +54,7 @@
       },
       toast.show,
       () => language,
+      () => purse,
   );
 
   function handleSettingChange(field: string, value: string) {
@@ -103,7 +109,7 @@
             onChange={docFilters.setTypeFilter}
         />
 
-        <MonthRangeFilter value={docFilters.filters.dateRange} onChange={docFilters.setDateRange} {language}/>
+        <MonthRangeFilter value={docFilters.filters.dateRange} onChange={docFilters.setDateRange} {language} minYear={minDocYear}/>
       </div>
 
       <div class="right">

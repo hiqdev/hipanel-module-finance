@@ -100,6 +100,32 @@ export function monthOptions(n: number, locale: string): MonthOption[] {
   return out;
 }
 
+export function monthsForYear(year: number, locale: string): MonthOption[] {
+  return Array.from({ length: 12 }, (_, i) => {
+    const d = new Date(year, i, 1);
+    return {
+      key: `${year}-${String(i + 1).padStart(2, "0")}`,
+      label: new Intl.DateTimeFormat(locale, { month: "short" }).format(d),
+    };
+  });
+}
+
+export function monthOptionsBetween(fromKey: string, toKey: string, locale: string): MonthOption[] {
+  const out: MonthOption[] = [];
+  const [fy, fm] = fromKey.split("-").map(Number);
+  const [ty, tm] = toKey.split("-").map(Number);
+  let y = fy, m = fm;
+  while (y < ty || (y === ty && m <= tm)) {
+    const d = new Date(y, m - 1, 1);
+    out.push({
+      key: `${y}-${String(m).padStart(2, "0")}`,
+      label: new Intl.DateTimeFormat(locale, { month: "short", year: "2-digit" }).format(d),
+    });
+    m++; if (m > 12) { m = 1; y++; }
+  }
+  return out;
+}
+
 export function fmtMonthKey(
   key: string,
   locale: string,

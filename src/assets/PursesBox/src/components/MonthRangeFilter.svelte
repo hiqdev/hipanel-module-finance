@@ -1,12 +1,12 @@
 <script lang="ts">
   import type { DateRange } from "../types";
-  import { currentMonthKey, fmtMonthKey, monthOptions } from "../data";
+  import { currentMonthKey, fmtMonthKey, monthOptionsBetween } from "../data";
 
-  let { value, onChange, language, monthsBack = 24 }: {
+  let { value, onChange, language, minYear = new Date().getFullYear() - 3 }: {
       value: DateRange;
       onChange: (range: DateRange) => void;
       language: string;
-      monthsBack?: number;
+      minYear?: number;
   } = $props();
 
   let open = $state(false);
@@ -25,7 +25,7 @@
   });
 
   // oldest → newest
-  let months = $derived(monthOptions(monthsBack, language).reverse());
+  let months = $derived(monthOptionsBetween(`${minYear}-01`, currentMonthKey(), language));
 
   function formatLabel(key: string): string {
       return fmtMonthKey(key, language);

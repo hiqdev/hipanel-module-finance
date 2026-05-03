@@ -1,3 +1,5 @@
+import type { Contact, Doc, DocParams, Requisite } from "./types.ts";
+
 const BASE_URL = "";
 
 interface ApiError {
@@ -34,15 +36,28 @@ async function request<T>(url: string, options: RequestInit = {}): Promise<T> {
   return (text ? JSON.parse(text) : null) as T;
 }
 
-import type { Contact, Requisite } from "./types.ts";
 
-export const api = {
+const api = {
   get: <T>(url: string) => request<T>(url),
   post: <T>(url: string, data: unknown) => request<T>(url, { method: "POST", body: JSON.stringify(data) }),
 };
 
+function qs(params: object): string {
+  return "?" + new URLSearchParams(Object.entries(params).map(([k, v]) => [k, String(v)])).toString();
+}
+
+export const purseDocumentsApi = {
+  previewMonthlyDocument: (p: DocParams) =>
+    api.get<Doc>(`/finance/purse/generate-monthly-document${qs(p)}`),
+  generateAndSaveDocument: (p: DocParams) =>
+    api.get<Doc>(`/finance/purse/generate-and-save-document${qs(p)}`),
+  generateAndSaveMonthlyDocument: (p: DocParams) =>
+    api.get<Doc>(`/finance/purse/generate-and-save-monthly-document${qs(p)}`),
+};
+
 export const purseSettingsApi = {
-  getContacts: (client_id: string) => api.post<Contact[]>(`/client/contact/search`, { client_id }),
+  getContacts: (client_id: string) =>
+    api.post<Contact[]>(`/client/contact/search`, { client_id }),
   getRequisites: (client_id?: string, query?: string) =>
     api.post<Requisite[]>(`/finance/requisite/search`, {
       client_id,

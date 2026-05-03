@@ -1,6 +1,7 @@
-import type { Doc, ModalState } from "../types";
+import type { Doc, ModalState, Purse } from "../types";
 import { docMonthKey, fmtMonthKey, typeMeta } from "../data";
 import type { ToastType } from "./useToast.svelte";
+import { purseDocumentsApi } from "../api";
 
 function runGeneration({ durationMs = 2400, onProgress, onDone }: {
   durationMs?: number;
@@ -26,6 +27,7 @@ export function useDocumentGeneration(
   setDocs: (docs: Doc[]) => void,
   showToast: (msg: string, type?: ToastType) => void,
   getLocale: () => string,
+  getPurse: () => Pick<Purse, "id" | "client_id">,
 ) {
   let modal = $state<ModalState | null>(null);
   let confirmReplace = $state<Doc | null>(null);
@@ -33,11 +35,26 @@ export function useDocumentGeneration(
   let busyRowIds = $state<string[]>([]);
   let locale = $derived(getLocale());
 
-  function handleSubmitGenerate({ type, month, willReplace, mode }: {
-    type: string; month: string; willReplace: boolean; mode: string;
+  function handleSubmitGenerate({ type, month, willReplace, mode, seller_bank_account_no = 0 }: {
+    type: string; month: string; willReplace: boolean; mode: string; seller_bank_account_no?: number;
   }) {
     if (!modal) return;
     modal = { ...modal, busy: true, progress: 0 };
+
+    if (mode === "preview-updated") {
+      const { id, client_id } = getPurse();
+      debugger
+      purseDocumentsApi.previewMonthlyDocument({ type, month, seller_bank_account_no, client_id, id })
+        .then(doc => {
+          modal = null;
+          previewResult = { doc, canSave: true };
+        })
+        .catch((e: any) => {
+          modal = null;
+          showToast(e.message ?? "Generation failed", "error");
+        });
+      return;
+    }
 
     runGeneration({
       onProgress: p => {
@@ -51,32 +68,19 @@ export function useDocumentGeneration(
           type,
           type_label: tm.label,
           filename: `${tm.label} ${fmtMonthKey(month, locale)}`,
+          file_id: `gen-${Date.now()}`,
           number: `${type.slice(0, 3).toUpperCase()}-${yr}-${String(Math.floor(Math.random() * 900) + 100)}`,
           date: `${yr}-${mo}-15`,
           isNew: true,
         };
-        if (mode === "generate" || mode === "update-replace") {
-          setDocs([newDoc, ...excludeDocForMonth(getDocs(), type, month)]);
-          modal = null;
-          showToast(willReplace ? `Document replaced — ${newDoc.number}` : `Document generated — ${newDoc.number}`);
-        } else {
-          modal = null;
-          previewResult = { doc: newDoc, canSave: mode === "preview-updated" };
-        }
+        setDocs([newDoc, ...excludeDocForMonth(getDocs(), type, month)]);
+        modal = null;
+        showToast(willReplace ? `Document replaced — ${newDoc.number}` : `Document generated — ${newDoc.number}`);
       },
     });
   }
 
   function handleRowAction(kind: string, doc: Doc) {
-    if (kind === "download") {
-      showToast(`Downloading ${doc.number}…`);
-      return;
-    }
-    if (kind === "view") {
-      showToast(`Opening ${doc.number}`);
-      return;
-    }
-
     const initial = { type: doc.type, month: docMonthKey(doc.date) };
     if (kind === "update-replace") {
       confirmReplace = doc;

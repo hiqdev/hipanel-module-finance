@@ -30,6 +30,7 @@ export interface Party {
   id: string;
   name: string;
   bankDetails: BankDetails[];
+  organization?: string;
 }
 
 export interface Contact extends Party {
@@ -37,7 +38,6 @@ export interface Contact extends Party {
 }
 
 export interface Requisite extends Party {
-  organization: string;
 }
 
 export interface BankDetails {
@@ -65,6 +65,7 @@ export interface Doc {
   type: string;
   type_label: string;
   filename: string;
+  file_id: string;
   number: string;
   date: string;
   isNew: boolean;
@@ -88,6 +89,14 @@ export interface ModalState {
   doc?: Doc;
   busy?: boolean;
   progress?: number;
+}
+
+export interface DocParams {
+  client_id: string;
+  id: string;
+  type: string;
+  month: string;
+  seller_bank_account_no: number;
 }
 
 export interface ToastState {
