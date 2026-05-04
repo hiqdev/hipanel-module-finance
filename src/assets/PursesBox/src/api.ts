@@ -48,11 +48,13 @@ function qs(params: object): string {
 
 export const purseDocumentsApi = {
   previewMonthlyDocument: (p: DocParams) =>
-    api.get<Doc>(`/finance/purse/generate-monthly-document${qs(p)}`),
+    api.post<Doc>(`/finance/purse/pre-generate-document${qs(p)}`, p),
   generateAndSaveDocument: (p: DocParams) =>
-    api.get<Doc>(`/finance/purse/generate-and-save-document${qs(p)}`),
+    api.post<Doc>(`/finance/purse/generate-and-save-document${qs(p)}`, p),
   generateAndSaveMonthlyDocument: (p: DocParams) =>
-    api.get<Doc>(`/finance/purse/generate-and-save-monthly-document${qs(p)}`),
+    api.post<Doc>(`/finance/purse/generate-and-save-monthly-document${qs(p)}`, p),
+  generateAndSaveActs: (p: DocParams) =>
+    api.post<Doc>(`/finance/purse/generate-and-save-acts${qs(p)}`, p),
 };
 
 export const purseSettingsApi = {

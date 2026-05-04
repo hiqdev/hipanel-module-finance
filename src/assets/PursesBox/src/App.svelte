@@ -53,7 +53,6 @@
           docsByPurse[activeId] = docs;
       },
       toast.show,
-      () => language,
       () => purse,
   );
 
@@ -70,16 +69,13 @@
       toast.show(`Opening top-up flow for ${purse.currency.toUpperCase()}`);
   }
 
-  function handleKpiClick(which: string) {
-      toast.show(`Opened ${which} history`);
-  }
 </script>
 
 <div class="accounts-block nav-tabs-custom">
 
   <PurseTabs {purses} {activeId} onChange={(id) => (activeId = id)} {language}/>
 
-  <PurseSummary {purse} onRecharge={handleRecharge} onKpiClick={handleKpiClick}/>
+  <PurseSummary {purse} onRecharge={handleRecharge}/>
 
   <PurseSettings {purse} onChange={handleSettingChange}/>
 
@@ -116,7 +112,7 @@
         <button class="btn btn-default" onclick={generation.openPreview}>
           <i class="fa fa-fw fa-eye"></i> Preview
         </button>
-        <button class="btn btn-primary" onclick={generation.openGenerate}>
+        <button class="btn btn-primary" onclick={generation.openUpdate}>
           <i class="fa fa-fw fa-plus"></i> Generate
         </button>
       </div>
@@ -167,16 +163,17 @@
       busy={!!generation.modal.busy}
       progress={generation.modal.progress ?? 0}
       onClose={generation.closeModal}
-      onSubmit={generation.handleSubmitGenerate}
+      onSubmit={generation.handleSubmit}
       {language}
+      {purse}
   />
 {/if}
 
-{#if generation.confirmReplace}
+{#if generation.pendingUpdate}
   <ConfirmReplaceModal
-      doc={generation.confirmReplace}
-      onClose={generation.closeConfirm}
-      onConfirm={generation.confirmReplaceNow}
+      doc={generation.pendingUpdate}
+      onClose={generation.cancelUpdate}
+      onConfirm={generation.applyUpdate}
       {language}
   />
 {/if}
@@ -185,7 +182,7 @@
   <PreviewResultModal
       doc={generation.previewResult.doc}
       onClose={generation.closePreview}
-      onSave={generation.previewResult.canSave ? generation.savePreviewResult : null}
+      onApply={generation.previewResult.canSave ? generation.applyPreview : null}
       {language}
   />
 {/if}

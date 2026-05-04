@@ -1,17 +1,53 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace hipanel\modules\finance\actions;
 
+use hipanel\actions\RenderJsonAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\modules\finance\helpers\DocumentGenerationErrorOps;
 use hiqdev\hiart\ResponseErrorException;
 use Yii;
 use yii\base\InvalidCallException;
 
+/**
+ *
+ * @property-read mixed $defaultRules
+ */
 final class GenerateAndSaveDocumentAction extends SmartPerformAction
 {
     private mixed $responseData = null;
+
+    public function getDefaultRules()
+    {
+        return array_merge(parent::getDefaultRules(), [
+            'POST ajax' => [
+                'save' => true,
+                'flash' => true,
+                'success' => [
+                    'class' => RenderJsonAction::class,
+                    'return' => function ($action) {
+                        $message = Yii::$app->session->removeFlash('success');
+
+                        return [
+                            'success' => true,
+                            'message' => Yii::t('hipanel:client', reset($message)['text']),
+                        ];
+                    },
+                ],
+                'error' => [
+                    'class' => RenderJsonAction::class,
+                    'return' => function ($action) {
+                        $message = Yii::$app->session->removeFlash('error');
+
+                        return [
+                            'success' => false,
+                            'message' => reset($message)['text'],
+                        ];
+                    },
+                ],
+            ],
+        ]);
+    }
 
     /**
      * Overrides SmartPerformAction::perform() to always execute the save regardless of rule->save,
@@ -44,6 +80,7 @@ final class GenerateAndSaveDocumentAction extends SmartPerformAction
     {
         if ($type === 'error') {
             Yii::$app->session->addFlash('error', ['text' => $this->buildErrorText($error)]);
+
             return;
         }
 

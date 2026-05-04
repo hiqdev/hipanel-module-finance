@@ -55,10 +55,10 @@
         >
           <i class="fa fa-eye"></i>
         </a>
-        <button class="ra-btn" onclick={() => onAction('preview-updated', doc)} title="Preview updated version (do not save)">
+        <button class="ra-btn" onclick={() => onAction('preview', doc)} title="Preview updated version (do not save)">
           <i class="fa fa-search-plus"></i>
         </button>
-        <button class="ra-btn ra-btn-warn" onclick={() => onAction('update-replace', doc)} title="Regenerate and replace this document">
+        <button class="ra-btn ra-btn-warn" onclick={() => onAction('update', doc)} title="Regenerate and replace this document">
           <i class="fa fa-refresh"></i>
         </button>
       </div>

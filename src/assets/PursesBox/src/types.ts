@@ -81,7 +81,7 @@ export interface DateRange {
   to: string | null;
 }
 
-export type ModalKind = "generate" | "preview" | "update-replace" | "preview-updated";
+export type ModalKind = "update" | "preview" | "update-locked" | "preview-locked";
 
 export interface ModalState {
   kind: ModalKind;
@@ -92,11 +92,12 @@ export interface ModalState {
 }
 
 export interface DocParams {
-  client_id: string;
   id: string;
+  client_id: string;
   type: string;
   month: string;
-  seller_bank_account_no: number;
+  seller_bank_account_no?: number;
+  client_bank_account_no?: number;
 }
 
 export interface ToastState {

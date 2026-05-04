@@ -15,11 +15,12 @@ use hipanel\actions\IndexAction;
 use hipanel\actions\ProgressAction;
 use hipanel\actions\RedirectAction;
 use hipanel\actions\RunProcessAction;
-use hipanel\actions\SmartPerformAction;
-use hipanel\actions\SmartUpdateAction;
+use hipanel\actions\SearchAction;
 use hipanel\actions\SmartCreateAction;
+use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
+use hipanel\base\CrudController;
 use hipanel\components\Response;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\document\models\Statistic as DocumentStatisticModel;
@@ -29,13 +30,11 @@ use hipanel\modules\finance\models\Costprice;
 use hipanel\modules\finance\models\Purse;
 use hipanel\modules\finance\widgets\ProcessTableGenerator;
 use hipanel\modules\finance\widgets\StatisticTableGenerator;
-use hiqdev\hiart\ResponseErrorException;
 use RuntimeException;
 use Yii;
 use yii\base\Event;
-use yii\helpers\Html;
 
-class PurseController extends \hipanel\base\CrudController
+class PurseController extends CrudController
 {
     public function behaviors()
     {
@@ -44,7 +43,7 @@ class PurseController extends \hipanel\base\CrudController
                 'class' => EasyAccessControl::class,
                 'actions' => [
                     'update,update-requisite,update-contact' => 'purse.update',
-                    'pre-generate-document,generate-monthly-document,generate-document' => 'document.generate',
+                    'pre-generate-document,generate-monthly-document,generate-document,generate-and-save-acts' => 'document.generate',
                     'calculate-costprice' => 'costprice.read',
                     'finance-tools' => ['document.generate-all', 'costprice.read'],
                     '*' => 'bill.read',
@@ -59,7 +58,7 @@ class PurseController extends \hipanel\base\CrudController
             'index' => [
                 'class' => IndexAction::class,
                 'on beforePerform' => static function (Event $event): void {
-                    /** @var \hipanel\actions\SearchAction $action */
+                    /** @var SearchAction $action */
                     $action = $event->sender;
                     $query = $action->getDataProvider()->query;
                     $query->joinWith(['contact', 'requisite'])->addSelect(['*', 'contact', 'requisite']);
@@ -91,7 +90,7 @@ class PurseController extends \hipanel\base\CrudController
                 'class' => GenerateAndSaveDocumentAction::class,
                 'success' => Yii::t('hipanel:finance', 'Document updated'),
             ],
-            'generate-acts' => [
+            'generate-and-save-acts' => [
                 'class' => GenerateAndSaveDocumentAction::class,
                 'success' => Yii::t('hipanel:finance', 'Document updated'),
             ],
@@ -128,7 +127,7 @@ class PurseController extends \hipanel\base\CrudController
                         'type' => $type,
                         'client_types' => $type === 'acceptance' ? 'employee' : null,
                     ]);
-                }
+                },
             ],
             'generation-progress' => [
                 'class' => ProgressAction::class,
@@ -217,9 +216,8 @@ class PurseController extends \hipanel\base\CrudController
     {
         try {
             $content = $this->performDocumentAction($action, $params);
-        } catch (ResponseErrorException $e) {
+        } catch (Exception $e) {
             $errorOps = DocumentGenerationErrorOps::extract($e->getResponse()->getData());
-
             Yii::$app->getSession()->setFlash('error', DocumentGenerationErrorOps::buildMessage($errorOps));
 
             return $this->redirectAfterDocumentGenerationFailure($params);
@@ -252,7 +250,12 @@ class PurseController extends \hipanel\base\CrudController
     public function actionPreGenerateDocument($type, $client_id)
     {
         $purse = new Purse(['scenario' => 'generate-and-save-monthly-document']);
-        if ($purse->load($this->request->post()) && $purse->validate()) {
+        $post = $this->request->post();
+        if (!$purse->load($this->request->post())) {
+            $purse->load($post, '');
+        }
+
+        if ($purse->validate()) {
             $payload = array_merge([
                 '@purse/generate-monthly-document',
                 'type' => $type,

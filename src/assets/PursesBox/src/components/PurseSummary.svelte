@@ -2,10 +2,9 @@
   import type { Purse } from "../types";
   import { useI18n } from "../i18n";
 
-  let { purse, onRecharge, onKpiClick }: {
+  let { purse, onRecharge }: {
       purse: Purse;
       onRecharge: () => void;
-      onKpiClick: (which: string) => void;
   } = $props();
 
   const t = useI18n();
@@ -22,16 +21,13 @@
 <div class="purse-summary">
   <div class="purse-summary-left">
     <h4 class="purse-title">{purse.currency} {t('account')}</h4>
-    <div class="purse-kpis">
-      <div class="kpi">
-        <span class="kpi-label">{t('Balance')}</span>
-        <span
-            class="kpi-value is-link"
-            onclick={() => onKpiClick('balance')}
-            onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onKpiClick('balance'); } }}
+    <div class="purse-balance">
+      <div class="balance">
+        <span class="balance-label">{t('Balance')}</span>
+        <a
+            class="balance-value is-link"
+            href="/finance/bill/index?BillSearch[currency_in][0]={purse.currency}&BillSearch[purse_id]={purse.id}&BillSearch[client_id]={purse.client_id}"
             title="View balance history"
-            role="button"
-            tabindex="0"
         >
           <span class="currency">{getCurrencySymbol('en-US', purse.currency)}</span>
             {Number(purse.balance).toLocaleString('en-US', {
@@ -39,7 +35,7 @@
                 maximumFractionDigits: 2,
                 useGrouping: true,
             })}
-        </span>
+        </a>
       </div>
     </div>
   </div>

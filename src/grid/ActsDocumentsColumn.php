@@ -16,6 +16,6 @@ class ActsDocumentsColumn extends DocumentsColumn
 
     protected function getRouteForUpdate()
     {
-        return ['@purse/generate-acts'];
+        return ['@purse/generate-and-save-acts'];
     }
 }

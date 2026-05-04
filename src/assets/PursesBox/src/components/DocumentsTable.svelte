@@ -27,11 +27,11 @@
           {/if}
         </th>
         <th
-            class="{sort.key === 'ref' ? 'sorted' : ''}"
-            onclick={() => onSort('ref')}
+            class="{sort.key === 'number' ? 'sorted' : ''}"
+            onclick={() => onSort('number')}
         >
           Document no.
-            {#if sort.key === 'ref'}
+            {#if sort.key === 'number'}
             <i class="fa sort-i fa-caret-{sort.dir === 'asc' ? 'up' : 'down'}"></i>
           {/if}
         </th>

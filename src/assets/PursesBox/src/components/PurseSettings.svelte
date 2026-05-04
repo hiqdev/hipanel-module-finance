@@ -39,7 +39,7 @@
   let selectedContacts = $state<Record<string, Contact>>({});
   let selectedRequisites = $state<Record<string, Requisite>>({});
 
-  function requisiteLabel(r: { name: string; organization: string }): string {
+  function requisiteLabel(r: { name: string; organization?: string }): string {
       return r.organization ? `${r.organization} / ${r.name}` : r.name;
   }
 

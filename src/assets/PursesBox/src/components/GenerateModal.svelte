@@ -1,43 +1,48 @@
 <script lang="ts">
   import { untrack } from "svelte";
-  import type { DocType, ModalKind } from "../types";
+  import type { DocType, ModalKind, Purse } from "../types";
   import { currentMonthKey, monthsForYear } from "../data";
 
-  let { mode, initial, types, existingMonths, busy, progress, onClose, onSubmit, language }: {
+  let { mode, initial, types, existingMonths, busy, progress, onClose, onSubmit, language, purse }: {
       mode: ModalKind;
-      initial?: { type: string; month: string };
+      initial?: { type: string; month: string; clientBankAccountNo?: number, sellerBankAccountNo?: number };
       types: DocType[];
       existingMonths: Record<string, string[]>;
       busy: boolean;
       progress: number;
       onClose: () => void;
-      onSubmit: (args: { type: string; month: string; willReplace: boolean; mode: ModalKind }) => void;
+      onSubmit: (args: {
+          type: string;
+          month: string;
+          willReplace: boolean;
+          mode: ModalKind;
+          client_bank_account_no?: number;
+          seller_bank_account_no?: number;
+      }) => void;
       language: string;
+      purse: Purse;
   } = $props();
 
   // untrack: deliberately read initial prop only once — the modal remounts on each open.
   let type = $state(untrack(() => initial?.type ?? types[0]?.id ?? ""));
+  let clientBankAccountNo = $state(untrack(() => initial?.clientBankAccountNo ?? null));
+  let sellerBankAccountNo = $state(untrack(() => initial?.sellerBankAccountNo ?? null));
   let selectedYear = $state(untrack(() => +(initial?.month ?? currentMonthKey()).split("-")[0]));
   let selectedMonthNum = $state(untrack(() => +(initial?.month ?? currentMonthKey()).split("-")[1]));
   let month = $derived(`${selectedYear}-${String(selectedMonthNum).padStart(2, "0")}`);
 
-  let locked = $derived(mode === "update-replace" || mode === "preview-updated");
+  let locked = $derived(mode === "update-locked" || mode === "preview-locked");
 
   let willReplace = $derived.by(() => {
-      if (mode === "preview" || mode === "preview-updated") return false;
+      if (mode === "preview" || mode === "preview-locked") return false;
       return !!(existingMonths[type]?.includes(month));
   });
 
   const titles: Record<ModalKind, { title: string; btn: string; icon: string; btnBusy: string }> = {
-      "generate": { title: "Generate document", btn: "Generate", icon: "fa-cog", btnBusy: "Generating…" },
+      "update": { title: "Generate document", btn: "Generate", icon: "fa-cog", btnBusy: "Generating…" },
       "preview": { title: "Preview document", btn: "Preview", icon: "fa-eye", btnBusy: "Building preview…" },
-      "update-replace": { title: "Update and replace document", btn: "Generate & replace", icon: "fa-refresh", btnBusy: "Generating…" },
-      "preview-updated": {
-          title: "Preview updated document",
-          btn: "Preview updated",
-          icon: "fa-search-plus",
-          btnBusy: "Building preview…",
-      },
+      "update-locked": { title: "Update and replace document", btn: "Update & replace", icon: "fa-refresh", btnBusy: "Generating…" },
+      "preview-locked": { title: "Preview updated document", btn: "Preview updated", icon: "fa-search-plus", btnBusy: "Building preview…" },
   };
 
   let t = $derived(titles[mode]);
@@ -51,6 +56,22 @@
   );
   let months12 = $derived(monthsForYear(selectedYear, language));
   let existingForType = $derived(existingMonths[type] ?? []);
+
+  let sellerBankDetails = $derived(purse.requisite?.bankDetails ?? []);
+  let clientBankDetails = $derived(purse.contact?.bankDetails ?? []);
+
+  $effect(() => {
+      if (sellerBankAccountNo === null && sellerBankDetails.length > 1) {
+          sellerBankAccountNo = +sellerBankDetails[0].no;
+      }
+      if (clientBankAccountNo === null && clientBankDetails.length > 1) {
+          clientBankAccountNo = +clientBankDetails[0].no;
+      }
+  });
+
+  function bankDetailsLabel(bankDetails: { summary?: string; bank_account?: string }): string {
+      return bankDetails.summary?.trim() || bankDetails.bank_account?.trim() || "";
+  }
 </script>
 
 <div class="modal-backdrop fade in"></div>
@@ -90,8 +111,7 @@
           <select
               id="gen-doc-type"
               class="form-control"
-              value={type}
-              onchange={(e) => (type = (e.target as HTMLSelectElement).value)}
+              bind:value={type}
               disabled={locked}
           >
             {#each types as dt}
@@ -100,13 +120,44 @@
           </select>
         </div>
 
-        <div class="form-group">
+        {#if sellerBankDetails.length > 1}
+          <div class="form-group">
+            <label class="control-label" for="gen-seller-bank-account">Customer bank account</label>
+            <select
+                id="gen-seller-bank-account"
+                class="form-control"
+                bind:value={sellerBankAccountNo}
+                disabled={locked}
+            >
+              {#each sellerBankDetails as bd (bd.no)}
+                <option value={+bd.no}>{bankDetailsLabel(bd)}</option>
+              {/each}
+            </select>
+          </div>
+        {/if}
+
+        {#if clientBankDetails.length > 1}
+          <div class="form-group">
+            <label class="control-label" for="gen-client-bank-account">Contractor bank account</label>
+            <select
+                id="gen-client-bank-account"
+                class="form-control"
+                bind:value={clientBankAccountNo}
+                disabled={locked}
+            >
+              {#each clientBankDetails as bd (bd.no)}
+                <option value={+bd.no}>{bankDetailsLabel(bd)}</option>
+              {/each}
+            </select>
+          </div>
+        {/if}
+
+          <div class="form-group">
           <p class="form-row-label">Period</p>
           <select
               class="form-control"
               style="width:auto;display:inline-block;margin-bottom:8px"
-              value={selectedYear}
-              onchange={(e) => (selectedYear = +(e.target as HTMLSelectElement).value)}
+              bind:value={selectedYear}
               disabled={locked}
           >
             {#each yearOptions as y}
@@ -116,16 +167,16 @@
           <div class="month-picker">
             {#each months12 as m}
               {@const exists = existingForType.includes(m.key)}
-              {@const isOn = month === m.key}
-              <button
-                  type="button"
-                  class="month-opt {isOn ? 'is-on' : ''} {exists ? 'has-existing' : ''}"
-                  onclick={() => { if (!locked) selectedMonthNum = +m.key.split("-")[1]; }}
-                  disabled={locked}
-                  title={exists ? 'A document already exists for this month' : ''}
-              >
+                {@const isOn = month === m.key}
+                <button
+                    type="button"
+                    class="month-opt {isOn ? 'is-on' : ''} {exists ? 'has-existing' : ''}"
+                    onclick={() => { if (!locked) selectedMonthNum = +m.key.split("-")[1]; }}
+                    disabled={locked}
+                    title={exists ? 'A document already exists for this month' : ''}
+                >
                 <span class="m-label">{m.label}</span>
-                {#if exists}<span class="m-dot" title="Document exists"></span>{/if}
+                    {#if exists}<span class="m-dot" title="Document exists"></span>{/if}
               </button>
             {/each}
           </div>
@@ -141,7 +192,7 @@
           </div>
         {/if}
 
-          {#if mode === 'preview' || mode === 'preview-updated'}
+          {#if mode === 'preview' || mode === 'preview-locked'}
           <div class="modal-note modal-note-info">
             <i class="fa fa-eye"></i>
             Preview mode — the generated document will be shown but <strong>not saved</strong>.
@@ -171,7 +222,14 @@
         <button
             type="button"
             class="btn {willReplace ? 'btn-warning' : 'btn-primary'}"
-            onclick={() => onSubmit({ type, month, willReplace, mode })}
+            onclick={() => onSubmit({
+                type,
+                month,
+                willReplace,
+                mode,
+                client_bank_account_no: clientBankAccountNo ?? undefined,
+                seller_bank_account_no: sellerBankAccountNo ?? undefined,
+            })}
             disabled={busy}
         >
           {#if busy}

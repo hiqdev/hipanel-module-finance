@@ -2,10 +2,10 @@
   import type { Doc } from "../types";
   import { fmtDate, typeMeta } from "../data";
 
-  let { doc, onClose, onSave, language }: {
+  let { doc, onClose, onApply, language }: {
       doc: Doc;
       onClose: () => void;
-      onSave?: (() => void) | null;
+      onApply?: (() => void) | null;
       language: string;
   } = $props();
 
@@ -62,8 +62,8 @@
         <button type="button" class="btn btn-default" onclick={onClose}>
           <i class="fa fa-times"></i> Discard
         </button>
-          {#if onSave}
-          <button type="button" class="btn btn-primary" onclick={onSave}>
+          {#if onApply}
+          <button type="button" class="btn btn-primary" onclick={onApply}>
             <i class="fa fa-save"></i> Save this version
           </button>
         {/if}

@@ -157,20 +157,20 @@ button.x {
   font-weight: 600;
 }
 
-.purse-kpis {
+.purse-balance {
   display: flex;
   gap: 40px;
   align-items: baseline;
 }
 
-.kpi {
+.balance {
   display: flex;
   flex-direction: column;
   gap: 2px;
   min-width: 0;
 }
 
-.kpi-label {
+.balance-label {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: .08em;
@@ -178,26 +178,27 @@ button.x {
   font-weight: 600;
 }
 
-.kpi-value {
+.balance-value {
   font-size: 26px;
   font-weight: 300;
   color: var(--fg-2);
   line-height: 1.1;
   white-space: nowrap;
+  text-decoration: none;
 }
 
-.kpi-value.is-link {
+.balance-value.is-link {
   cursor: pointer;
   border-bottom: 1px dashed transparent;
   display: inline-block;
   transition: color .15s, border-color .15s;
 }
 
-.kpi-value.is-link:hover {
+.balance-value.is-link:hover {
   border-bottom-color: var(--link-hover);
 }
 
-.kpi-value .currency {
+.balance-value .currency {
   font-size: 16px;
   color: var(--fg-4);
   margin-right: 3px;

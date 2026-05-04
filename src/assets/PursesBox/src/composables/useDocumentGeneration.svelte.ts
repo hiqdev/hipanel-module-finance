@@ -1,21 +1,27 @@
-import type { Doc, ModalState, Purse } from "../types";
-import { docMonthKey, fmtMonthKey, typeMeta } from "../data";
+import type { Doc, DocParams, ModalState, Purse } from "../types";
+import { docMonthKey } from "../data";
 import type { ToastType } from "./useToast.svelte";
 import { purseDocumentsApi } from "../api";
 
-function runGeneration({ durationMs = 2400, onProgress, onDone }: {
-  durationMs?: number;
-  onProgress: (p: number) => void;
-  onDone: () => void;
-}) {
-  const start = Date.now();
-  const tick = () => {
-    const p = Math.min(100, Math.round(((Date.now() - start) / durationMs) * 100));
-    onProgress(p);
-    if (p < 100) setTimeout(tick, 80);
-    else onDone();
-  };
-  tick();
+type DocEndpoint = (p: DocParams) => Promise<Doc>;
+type DocEndpoints = { preview: DocEndpoint; update: DocEndpoint };
+
+const defaultEndpoints: DocEndpoints = {
+  preview: purseDocumentsApi.previewMonthlyDocument,
+  update:  purseDocumentsApi.generateAndSaveMonthlyDocument,
+};
+
+// Add a row here when a document type needs non-default endpoints.
+// Omit a key to fall back to defaultEndpoints for that action.
+const routesByType: Record<string, Partial<DocEndpoints>> = {
+  contracts:        { update: purseDocumentsApi.generateAndSaveDocument },
+  probations:       { update: purseDocumentsApi.generateAndSaveDocument },
+  nda:              { update: purseDocumentsApi.generateAndSaveDocument },
+  internalinvoices: { update: purseDocumentsApi.generateAndSaveActs },
+};
+
+function pickEndpoint(type: string, action: keyof DocEndpoints): DocEndpoint {
+  return (routesByType[type]?.[action] ?? defaultEndpoints[action]);
 }
 
 function excludeDocForMonth(docs: Doc[], type: string, monthKey: string): Doc[] {
@@ -26,110 +32,83 @@ export function useDocumentGeneration(
   getDocs: () => Doc[],
   setDocs: (docs: Doc[]) => void,
   showToast: (msg: string, type?: ToastType) => void,
-  getLocale: () => string,
   getPurse: () => Pick<Purse, "id" | "client_id">,
 ) {
   let modal = $state<ModalState | null>(null);
-  let confirmReplace = $state<Doc | null>(null);
+  let pendingUpdate = $state<Doc | null>(null);
   let previewResult = $state<{ doc: Doc; canSave: boolean } | null>(null);
   let busyRowIds = $state<string[]>([]);
-  let locale = $derived(getLocale());
 
-  function handleSubmitGenerate({ type, month, willReplace, mode, seller_bank_account_no = 0 }: {
-    type: string; month: string; willReplace: boolean; mode: string; seller_bank_account_no?: number;
+  function handleSubmit({ type, month, willReplace, mode, seller_bank_account_no = 0, client_bank_account_no }: {
+    type: string; month: string; willReplace: boolean; mode: string; seller_bank_account_no?: number; client_bank_account_no?: number;
   }) {
     if (!modal) return;
     modal = { ...modal, busy: true, progress: 0 };
+    const { id, client_id } = getPurse();
+    const action = mode.startsWith("preview") ? "preview" : "update";
 
-    if (mode === "preview-updated") {
-      const { id, client_id } = getPurse();
-      debugger
-      purseDocumentsApi.previewMonthlyDocument({ type, month, seller_bank_account_no, client_id, id })
-        .then(doc => {
-          modal = null;
-          previewResult = { doc, canSave: true };
-        })
-        .catch((e: any) => {
-          modal = null;
-          showToast(e.message ?? "Generation failed", "error");
-        });
-      return;
-    }
-
-    runGeneration({
-      onProgress: p => {
-        if (modal) modal = { ...modal, progress: p };
-      },
-      onDone: () => {
-        const tm = typeMeta(type);
-        const [yr, mo] = month.split("-");
-        const newDoc: Doc = {
-          id: `gen-${Date.now()}`,
-          type,
-          type_label: tm.label,
-          filename: `${tm.label} ${fmtMonthKey(month, locale)}`,
-          file_id: `gen-${Date.now()}`,
-          number: `${type.slice(0, 3).toUpperCase()}-${yr}-${String(Math.floor(Math.random() * 900) + 100)}`,
-          date: `${yr}-${mo}-15`,
-          isNew: true,
-        };
-        setDocs([newDoc, ...excludeDocForMonth(getDocs(), type, month)]);
+    pickEndpoint(type, action)({ type, month, seller_bank_account_no, client_bank_account_no, client_id, id })
+      .then(doc => {
         modal = null;
-        showToast(willReplace ? `Document replaced — ${newDoc.number}` : `Document generated — ${newDoc.number}`);
-      },
-    });
+        if (action === "preview") {
+          previewResult = { doc, canSave: true };
+        } else {
+          const saved = { ...doc, isNew: true };
+          setDocs([saved, ...excludeDocForMonth(getDocs(), type, month)]);
+          showToast(willReplace ? `Document replaced — ${saved.number}` : `Document generated — ${saved.number}`);
+        }
+      })
+      .catch((e: any) => {
+        modal = null;
+        showToast(e.message ?? "Generation failed", "error");
+      });
   }
 
   function handleRowAction(kind: string, doc: Doc) {
     const initial = { type: doc.type, month: docMonthKey(doc.date) };
-    if (kind === "update-replace") {
-      confirmReplace = doc;
+    if (kind === "update") {
+      pendingUpdate = doc;
       return;
     }
-    if (kind === "preview-updated") {
-      modal = { kind: "preview-updated", initial, doc };
+    if (kind === "preview") {
+      modal = { kind: "preview-locked", initial, doc };
     }
   }
 
-  function confirmReplaceNow() {
-    const doc = confirmReplace!;
+  function applyUpdate() {
+    const doc = pendingUpdate!;
     const monthKey = docMonthKey(doc.date);
-    confirmReplace = null;
-
+    pendingUpdate = null;
     busyRowIds = [...busyRowIds, doc.id];
-    runGeneration({
-      onProgress: () => {
-      },
-      onDone: () => {
-        const tm = typeMeta(doc.type);
-        const newDoc: Doc = {
-          ...doc,
-          id: `gen-${Date.now()}`,
-          number: `${doc.type.slice(0, 3).toUpperCase()}-${monthKey.replace("-", "")}-${String(Math.floor(Math.random() * 900) + 100)}`,
-          isNew: true,
-        };
-        setDocs(getDocs().map(d => d.id === doc.id ? newDoc : d));
+
+    const { id, client_id } = getPurse();
+    pickEndpoint(doc.type, "update")({ type: doc.type, month: monthKey, seller_bank_account_no: 0, client_id, id })
+      .then(newDoc => {
+        setDocs(getDocs().map(d => d.id === doc.id ? { ...newDoc, isNew: true } : d));
         busyRowIds = busyRowIds.filter(x => x !== doc.id);
-        showToast(`${tm.label} replaced — ${newDoc.number}`);
-      },
-    });
+        showToast(`${doc.type_label} replaced — ${newDoc.number}`);
+      })
+      .catch((e: any) => {
+        busyRowIds = busyRowIds.filter(x => x !== doc.id);
+        showToast(e.message ?? "Generation failed", "error");
+      });
   }
 
-  function savePreviewResult() {
+  function applyPreview() {
     if (!previewResult) return;
     const doc = previewResult.doc;
     const monthKey = docMonthKey(doc.date);
     setDocs([doc, ...excludeDocForMonth(getDocs(), doc.type, monthKey)]);
     previewResult = null;
-    showToast(`Preview saved — ${doc.number}`);
+    showToast(`Preview applied — ${doc.number}`);
   }
 
   return {
     get modal() {
       return modal;
     },
-    get confirmReplace() {
-      return confirmReplace;
+    get pendingUpdate() {
+      return pendingUpdate;
     },
     get previewResult() {
       return previewResult;
@@ -137,8 +116,8 @@ export function useDocumentGeneration(
     get busyRowIds() {
       return busyRowIds;
     },
-    openGenerate: () => {
-      modal = { kind: "generate" };
+    openUpdate: () => {
+      modal = { kind: "update" };
     },
     openPreview: () => {
       modal = { kind: "preview" };
@@ -146,15 +125,15 @@ export function useDocumentGeneration(
     closeModal: () => {
       if (!modal?.busy) modal = null;
     },
-    closeConfirm: () => {
-      confirmReplace = null;
+    cancelUpdate: () => {
+      pendingUpdate = null;
     },
     closePreview: () => {
       previewResult = null;
     },
-    handleSubmitGenerate,
+    handleSubmit,
     handleRowAction,
-    confirmReplaceNow,
-    savePreviewResult,
+    applyUpdate,
+    applyPreview,
   };
 }

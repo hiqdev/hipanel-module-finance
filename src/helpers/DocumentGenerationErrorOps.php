@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace hipanel\modules\finance\helpers;
 
@@ -8,8 +7,8 @@ use yii\helpers\Html;
 
 final class DocumentGenerationErrorOps
 {
-    private const TEMPLATE_NOT_FOUND_ERRORS = [
-        'failed find document template',
+    private const array TEMPLATE_NOT_FOUND_ERRORS = [
+        'failed to find the document template',
         'No templates for requisite',
     ];
 
