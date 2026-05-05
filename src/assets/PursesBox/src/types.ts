@@ -1,12 +1,4 @@
-export type PermissionKey =
-  | "bill.read"
-  | "document.read"
-  | "document.generate"
-  | "purse.update"
-  | "client.update"
-  | "owner-staff"
-  | "has-own-seller"
-  | "is-employee";
+export type PermissionKey = string;
 
 export interface PursesBoxProps {
   language: string,

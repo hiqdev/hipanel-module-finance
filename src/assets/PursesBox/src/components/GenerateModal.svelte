@@ -120,7 +120,7 @@
           </select>
         </div>
 
-        {#if sellerBankDetails.length > 1}
+          {#if sellerBankDetails.length > 1}
           <div class="form-group">
             <label class="control-label" for="gen-seller-bank-account">Customer bank account</label>
             <select
@@ -136,7 +136,7 @@
           </div>
         {/if}
 
-        {#if clientBankDetails.length > 1}
+          {#if clientBankDetails.length > 1}
           <div class="form-group">
             <label class="control-label" for="gen-client-bank-account">Contractor bank account</label>
             <select

@@ -18,7 +18,7 @@ class PursesBox extends Widget
     public Client $client;
     private Application $app;
 
-    public function init()
+    public function init(): void
     {
         $this->app = Yii::$app;
     }
@@ -88,6 +88,8 @@ class PursesBox extends Widget
 
         $purse['documents'] = [];
         if ($purseModel->isRelationPopulated('documents')) {
+            $filteredDocuments = $this->filterAccessibleDocuments($purseModel);
+
             $purse['documents'] = array_map(
                 static function ($document) use ($i18n): array {
                     $data = array_map(
@@ -100,10 +102,71 @@ class PursesBox extends Widget
 
                     return $data;
                 },
-                $purseModel->documents
+                $filteredDocuments
             );
         }
 
         return $purse;
+    }
+
+    private function filterAccessibleDocuments(Purse $purseModel): array
+    {
+        $allowedTypes = $this->resolveAccessibleDocumentTypes($purseModel);
+
+        if ($allowedTypes === []) {
+            return [];
+        }
+
+        return array_values(array_filter(
+            $purseModel->documents,
+            static fn($document): bool => in_array((string)$document->type, $allowedTypes, true)
+        ));
+    }
+
+    private function resolveAccessibleDocumentTypes(Purse $purseModel): array
+    {
+        $user = $this->app->user;
+        $isEmployee = $purseModel->clientModel->isEmployee();
+
+        if (!$user->can('document.read')) {
+            return [];
+        }
+
+        $documentTypes = [];
+
+        if ($isEmployee) {
+            $documentTypes = array_merge($documentTypes, [
+                'contract',
+                'probation',
+                'nda',
+                'internal_invoice',
+                'acceptance',
+            ]);
+        } else {
+            $documentTypes = array_merge($documentTypes, [
+                'service_invoice',
+                'installment_invoice',
+                'purchase_invoice',
+                'old_installment_invoice',
+                'old_payment_plan_payment_request',
+                'service_payment_request',
+                'installment_payment_request',
+                'payment_plan_payment_request',
+                'part_replacement_notice',
+                'purchase_payment_request',
+            ]);
+        }
+
+        if ($user->can('owner-staff') && !$isEmployee) {
+            $documentTypes = array_merge($documentTypes, [
+                'invoice',
+                'detailed_service_invoice',
+                'payment_request',
+                'detailed_service_payment_request',
+                'purchase_payment_request',
+            ]);
+        }
+
+        return array_values(array_unique($documentTypes));
     }
 }

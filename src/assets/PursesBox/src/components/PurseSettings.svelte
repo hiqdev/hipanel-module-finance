@@ -3,6 +3,7 @@
   import { purseSettingsApi } from "../api";
   import { useAsync } from "../composables/useAsync.svelte";
   import SettingField from "./SettingField.svelte";
+  import { permissions } from "../permissions";
 
   let { purse, onChange }: {
       purse: Purse;
@@ -16,6 +17,7 @@
 
   let requisiteData = $state<Requisite[]>([]);
   let requisiteLoading = $state(false);
+  let locked = !permissions.can("purse.update");
   let fetchSeq = 0;
 
   $effect(() => {
@@ -96,6 +98,7 @@
       icon="fa-user-o"
       options={contactOptions}
       loading={contacts.loading}
+      {locked}
       onOpen={() => { if (!contacts.data) contacts.refetch(); }}
       onSave={saveContact}
       createNewUrl="/client/contact/create"
@@ -107,6 +110,7 @@
       options={requisiteOptions}
       loading={requisiteLoading}
       searchable={true}
+      {locked}
       onOpen={() => { if (requisiteData.length === 0) fetchRequisites(); }}
       onSearch={(q) => fetchRequisites(q || undefined)}
       onSave={saveRequisite}

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { SelectOption } from "../types";
 
-  let { label, value, options, createNewUrl, icon, loading = false, searchable = false, onOpen, onSearch, onSave }: {
+  let { label, value, options, createNewUrl, icon, loading = false, searchable = false, locked, onOpen, onSearch, onSave }: {
       label: string;
       value: string;
       options: SelectOption[];
@@ -9,6 +9,7 @@
       icon?: string;
       loading?: boolean;
       searchable?: boolean;
+      locked?: boolean;
       onOpen?: () => void;
       onSearch?: (q: string) => void;
       onSave: (v: string) => void;
@@ -47,7 +48,7 @@
   });
 
   function toggle() {
-      if (loading) return;
+      if (loading || locked) return;
       if (!open) onOpen?.();
       open = !open;
   }
@@ -89,7 +90,7 @@
         <span>{value}</span>
         {#if loading && !open}
         <i class="fa fa-spinner fa-spin" style="color: var(--fg-4); font-size: 12px; margin-left: auto"></i>
-      {:else}
+      {:else if !locked}
         <i class="caret"></i>
         <span class="edit-hint">click to edit</span>
       {/if}

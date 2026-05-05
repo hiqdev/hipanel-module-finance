@@ -4,7 +4,7 @@ class Permissions {
   private granted: ReadonlySet<PermissionKey> = new Set();
 
   init(keys: PermissionKey[]): void {
-    this.granted = new Set(keys);
+    this.granted = new Set(Array.isArray(keys) ? keys : []);
   }
 
   can(key: PermissionKey): boolean {
