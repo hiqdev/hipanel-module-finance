@@ -21,11 +21,11 @@ use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
-use hipanel\components\Response;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\document\models\Statistic as DocumentStatisticModel;
 use hipanel\modules\finance\actions\GenerateAndSaveDocumentAction;
-use hipanel\modules\finance\helpers\DocumentGenerationErrorOps;
+use hipanel\modules\finance\actions\PreGenerateDocumentAction;
+use hipanel\modules\finance\actions\PreviewDocumentAction;
 use hipanel\modules\finance\models\Costprice;
 use hipanel\modules\finance\models\Purse;
 use hipanel\modules\finance\widgets\ProcessTableGenerator;
@@ -85,6 +85,17 @@ class PurseController extends CrudController
             'invoice-archive' => [
                 'class' => RedirectAction::class,
                 'error' => Yii::t('hipanel', 'Under construction'),
+            ],
+            'generate-monthly-document' => [
+                'class' => PreviewDocumentAction::class,
+                'action' => 'generate-monthly-document',
+            ],
+            'generate-document' => [
+                'class' => PreviewDocumentAction::class,
+                'action' => 'generate-document',
+            ],
+            'pre-generate-document' => [
+                'class' => PreGenerateDocumentAction::class,
             ],
             'generate-and-save-monthly-document' => [
                 'class' => GenerateAndSaveDocumentAction::class,
@@ -200,69 +211,5 @@ class PurseController extends CrudController
         );
 
         return $this->render('generate-all', ['statisticByTypes' => $statisticByTypes]);
-    }
-
-    public function actionGenerateMonthlyDocument()
-    {
-        return $this->generateDocument('generate-monthly-document', $this->request->get());
-    }
-
-    public function actionGenerateDocument($id, $type)
-    {
-        return $this->generateDocument('generate-document', ['id' => $id, 'type' => $type]);
-    }
-
-    public function generateDocument($action, $params)
-    {
-        try {
-            $content = $this->performDocumentAction($action, $params);
-        } catch (Exception $e) {
-            $errorOps = DocumentGenerationErrorOps::extract($e->getResponse()->getData());
-            Yii::$app->getSession()->setFlash('error', DocumentGenerationErrorOps::buildMessage($errorOps));
-
-            return $this->redirectAfterDocumentGenerationFailure($params);
-        }
-        $this->asPdf();
-
-        return $content;
-    }
-
-    protected function performDocumentAction(string $action, array $params): mixed
-    {
-        return Purse::perform($action, $params);
-    }
-
-    private function redirectAfterDocumentGenerationFailure(array $params): \yii\web\Response
-    {
-        if (isset($params['client_id'])) {
-            return $this->redirect(['@client/view', 'id' => $params['client_id']]);
-        }
-
-        return $this->redirect($this->request->referrer ?: ['index']);
-    }
-
-    protected function asPdf(): void
-    {
-        $this->response->format = Response::FORMAT_RAW;
-        $this->response->getHeaders()->add('content-type', 'application/pdf');
-    }
-
-    public function actionPreGenerateDocument($type, $client_id)
-    {
-        $purse = new Purse(['scenario' => 'generate-and-save-monthly-document']);
-        $post = $this->request->post();
-        if (!$purse->load($this->request->post())) {
-            $purse->load($post, '');
-        }
-
-        if ($purse->validate()) {
-            $payload = array_merge([
-                '@purse/generate-monthly-document',
-                'type' => $type,
-                'client_id' => $client_id,
-            ], $purse->toArray());
-
-            return $this->redirect($payload);
-        }
     }
 }
