@@ -699,6 +699,7 @@ button.x {
 
 .docs-table tbody tr.is-busy td {
   opacity: .7;
+  vertical-align: middle;
 }
 
 .docs-table tbody td {

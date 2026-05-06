@@ -1,22 +1,22 @@
-import type { Doc, DocParams, ModalState, Purse } from "../types";
+import type { Doc, DocParams, GenerationResponse, ModalState, Purse } from "../types";
 import { docMonthKey } from "../data";
 import type { ToastType } from "./useToast.svelte";
 import { purseDocumentsApi } from "../api";
 
-type DocEndpoint = (p: DocParams) => Promise<Doc>;
+type DocEndpoint = (p: DocParams) => Promise<GenerationResponse>;
 type DocEndpoints = { preview: DocEndpoint; update: DocEndpoint };
 
 const defaultEndpoints: DocEndpoints = {
   preview: purseDocumentsApi.previewMonthlyDocument,
-  update:  purseDocumentsApi.generateAndSaveMonthlyDocument,
+  update: purseDocumentsApi.generateAndSaveMonthlyDocument,
 };
 
 // Add a row here when a document type needs non-default endpoints.
 // Omit a key to fall back to defaultEndpoints for that action.
 const routesByType: Record<string, Partial<DocEndpoints>> = {
-  contracts:        { update: purseDocumentsApi.generateAndSaveDocument },
-  probations:       { update: purseDocumentsApi.generateAndSaveDocument },
-  nda:              { update: purseDocumentsApi.generateAndSaveDocument },
+  contracts: { update: purseDocumentsApi.generateAndSaveDocument },
+  probations: { update: purseDocumentsApi.generateAndSaveDocument },
+  nda: { update: purseDocumentsApi.generateAndSaveDocument },
   internalinvoices: { update: purseDocumentsApi.generateAndSaveActs },
 };
 
@@ -39,8 +39,15 @@ export function useDocumentGeneration(
   let previewResult = $state<{ doc: Doc; canSave: boolean } | null>(null);
   let busyRowIds = $state<string[]>([]);
 
-  function handleSubmit({ type, month, willReplace, mode, seller_bank_account_no = 0, client_bank_account_no }: {
-    type: string; month: string; willReplace: boolean; mode: string; seller_bank_account_no?: number; client_bank_account_no?: number;
+  function handleSubmit({ type, month, willReplace, mode, seller_bank_account_no = 0, client_bank_account_no, location, bill_id }: {
+    type: string;
+    month: string;
+    willReplace: boolean;
+    mode: string;
+    seller_bank_account_no?: number;
+    client_bank_account_no?: number;
+    location?: string;
+    bill_id?: string;
   }) {
     if (!modal) return;
     modal = { ...modal, busy: true, progress: 0 };
@@ -48,7 +55,7 @@ export function useDocumentGeneration(
     const action = mode.startsWith("preview") ? "preview" : "update";
 
     pickEndpoint(type, action)({ type, month, seller_bank_account_no, client_bank_account_no, client_id, id })
-      .then(doc => {
+      .then(rsp => {
         modal = null;
         if (action === "preview") {
           previewResult = { doc, canSave: true };
@@ -82,11 +89,20 @@ export function useDocumentGeneration(
     busyRowIds = [...busyRowIds, doc.id];
 
     const { id, client_id } = getPurse();
-    pickEndpoint(doc.type, "update")({ type: doc.type, month: monthKey, seller_bank_account_no: 0, client_id, id })
-      .then(newDoc => {
-        setDocs(getDocs().map(d => d.id === doc.id ? { ...newDoc, isNew: true } : d));
+    pickEndpoint(doc.type, "update")({
+      type: doc.type,
+      month: monthKey,
+      seller_bank_account_no: 0,
+      client_bank_account_no: 0,
+      client_id,
+      id,
+      bill_id: doc.bill_id,
+      location: doc.location,
+    })
+      .then(rsp => {
+        setDocs(getDocs().map(d => d.id === doc.id ? { ...doc, isNew: true } : d));
         busyRowIds = busyRowIds.filter(x => x !== doc.id);
-        showToast(`${doc.type_label} replaced — ${newDoc.number}`);
+        showToast(`${doc.type_label} replaced — ${doc.number}`);
       })
       .catch((e: any) => {
         busyRowIds = busyRowIds.filter(x => x !== doc.id);
@@ -96,6 +112,7 @@ export function useDocumentGeneration(
 
   function applyPreview() {
     if (!previewResult) return;
+    debugger
     const doc = previewResult.doc;
     const monthKey = docMonthKey(doc.date);
     setDocs([doc, ...excludeDocForMonth(getDocs(), doc.type, monthKey)]);

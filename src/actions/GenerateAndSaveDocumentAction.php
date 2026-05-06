@@ -17,6 +17,20 @@ final class GenerateAndSaveDocumentAction extends SmartPerformAction
 {
     private mixed $responseData = null;
 
+    public function init(): void
+    {
+        parent::init();
+        $this->collectionLoader = static function (GenerateAndSaveDocumentAction $action): void {
+            $request = $action->controller->request;
+            $data = $request->post();
+            if ($request->isAjax && !isset($data[$action->collection->getModel()->formName()])) {
+                $action->collection->load([$data]);
+            } else {
+                $action->collection->load();
+            }
+        };
+    }
+
     public function getDefaultRules()
     {
         return array_merge(parent::getDefaultRules(), [
@@ -29,7 +43,7 @@ final class GenerateAndSaveDocumentAction extends SmartPerformAction
                         $message = Yii::$app->session->removeFlash('success');
 
                         return [
-                            'success' => true,
+                            'status' => 'success',
                             'message' => Yii::t('hipanel:client', reset($message)['text']),
                         ];
                     },
@@ -40,8 +54,9 @@ final class GenerateAndSaveDocumentAction extends SmartPerformAction
                         $message = Yii::$app->session->removeFlash('error');
 
                         return [
-                            'success' => false,
+                            'status' => 'error',
                             'message' => reset($message)['text'],
+                            'errors' => $message,
                         ];
                     },
                 ],

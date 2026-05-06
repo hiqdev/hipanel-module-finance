@@ -23,9 +23,8 @@
   initI18n(() => language);
   const t = useI18n();
 
-  $effect(() => {
-      permissions.init(permKeys);
-  });
+  untrack(() => permissions.init(permKeys));
+  let canPreviewAndGenerate = permissions.can("document.generate") && !permissions.can("has-own-seller");
 
   // State is scoped per purse so tab switching preserves filters/sort/page.
   const seedPurses = untrack(() => initialPurses.length ? initialPurses : []);
@@ -108,14 +107,16 @@
         <MonthRangeFilter value={docFilters.filters.dateRange} onChange={docFilters.setDateRange} {language} minYear={minDocYear}/>
       </div>
 
-      <div class="right">
-        <button class="btn btn-default" onclick={generation.openPreview}>
-          <i class="fa fa-fw fa-eye"></i> Preview
-        </button>
-        <button class="btn btn-primary" onclick={generation.openUpdate}>
-          <i class="fa fa-fw fa-plus"></i> Generate
-        </button>
-      </div>
+        {#if canPreviewAndGenerate}
+        <div class="right">
+          <button class="btn btn-default" onclick={generation.openPreview}>
+            <i class="fa fa-fw fa-eye"></i> Preview
+          </button>
+          <button class="btn btn-primary" onclick={generation.openUpdate}>
+            <i class="fa fa-fw fa-plus"></i> Generate
+          </button>
+        </div>
+      {/if}
     </div>
 
       {#if docFilters.activeChips.length > 0}
@@ -141,6 +142,7 @@
           busyIds={generation.busyRowIds}
           onRowAction={generation.handleRowAction}
           {language}
+          {canPreviewAndGenerate}
       />
 
     <DocumentsPagination

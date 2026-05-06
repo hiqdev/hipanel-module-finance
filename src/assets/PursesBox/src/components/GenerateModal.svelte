@@ -120,7 +120,7 @@
           </select>
         </div>
 
-          {#if sellerBankDetails.length > 1}
+        {#if sellerBankDetails.length > 1}
           <div class="form-group">
             <label class="control-label" for="gen-seller-bank-account">Customer bank account</label>
             <select
@@ -136,7 +136,7 @@
           </div>
         {/if}
 
-          {#if clientBankDetails.length > 1}
+        {#if clientBankDetails.length > 1}
           <div class="form-group">
             <label class="control-label" for="gen-client-bank-account">Contractor bank account</label>
             <select
@@ -182,7 +182,7 @@
           </div>
         </div>
 
-          {#if willReplace}
+        {#if willReplace}
           <div class="modal-warn">
             <i class="fa fa-exclamation-triangle"></i>
             <div>
@@ -192,11 +192,20 @@
           </div>
         {/if}
 
-          {#if mode === 'preview' || mode === 'preview-locked'}
-          <div class="modal-note modal-note-info">
-            <i class="fa fa-eye"></i>
-            Preview mode — the generated document will be shown but <strong>not saved</strong>.
-          </div>
+        {#if mode === 'preview' || mode === 'preview-locked'}
+          {#if type === 'internal_invoice'}
+            <div class="modal-warn">
+              <i class="fa fa-exclamation-triangle"></i>
+              <div>
+                  An <strong>Internal invoice</strong> documents cannot be previwed.
+              </div>
+            </div>
+          {:else}
+            <div class="modal-note modal-note-info">
+              <i class="fa fa-eye"></i>
+              Preview mode — the generated document will be shown but <strong>not saved</strong>.
+            </div>
+          {/if}
         {/if}
 
           {#if busy}
@@ -230,7 +239,7 @@
                 client_bank_account_no: clientBankAccountNo ?? undefined,
                 seller_bank_account_no: sellerBankAccountNo ?? undefined,
             })}
-            disabled={busy}
+            disabled={busy || type === 'internal_invoice'}
         >
           {#if busy}
             <span class="spinner spinner-on-btn"></span> {t.btnBusy}

@@ -61,6 +61,8 @@ export interface Doc {
   number: string;
   date: string;
   isNew: boolean;
+  location?: string;
+  bill_id?: string;
 }
 
 export interface SortState {
@@ -90,6 +92,8 @@ export interface DocParams {
   month: string;
   seller_bank_account_no?: number;
   client_bank_account_no?: number;
+  location?: string;
+  bill_id?: string;
 }
 
 export interface ToastState {
@@ -122,4 +126,16 @@ export interface AccountFilters {
   dateRange: DateRange;
   sort: SortState;
   page: number;
+}
+
+export interface GenerationResponse {
+  status: "success" | "error";
+  errors: string[];
+  message: string;
+  data?: unknown;
+}
+
+export interface ApiError {
+  status: number;
+  message: string;
 }

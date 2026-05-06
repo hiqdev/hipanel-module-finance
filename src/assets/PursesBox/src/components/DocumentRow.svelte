@@ -2,12 +2,13 @@
   import type { Doc } from "../types";
   import { docTypeColor, fmtDate } from "../data";
 
-  let { doc, density, busy, onAction, language }: {
+  let { doc, density, busy, onAction, language, canPreviewAndGenerate }: {
       doc: Doc;
       density: string;
       busy: boolean;
       onAction: (kind: string, doc: Doc) => void;
       language: string;
+      canPreviewAndGenerate: boolean;
   } = $props();
 
   let date = $derived(fmtDate(doc.date, language));
@@ -55,12 +56,17 @@
         >
           <i class="fa fa-eye"></i>
         </a>
-        <button class="ra-btn" onclick={() => onAction('preview', doc)} title="Preview updated version (do not save)">
-          <i class="fa fa-search-plus"></i>
-        </button>
-        <button class="ra-btn ra-btn-warn" onclick={() => onAction('update', doc)} title="Regenerate and replace this document">
-          <i class="fa fa-refresh"></i>
-        </button>
+
+        {#if canPreviewAndGenerate && doc.type !== 'internal_invoice'}
+          <button class="ra-btn" onclick={() => onAction('preview', doc)} title="Preview updated version (do not save)">
+            <i class="fa fa-search-plus"></i>
+          </button>
+        {/if}
+        {#if canPreviewAndGenerate}
+          <button class="ra-btn ra-btn-warn" onclick={() => onAction('update', doc)} title="Regenerate and replace this document">
+            <i class="fa fa-refresh"></i>
+          </button>
+        {/if}
       </div>
     {/if}
   </td>

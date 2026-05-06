@@ -1,0 +1,27 @@
+# Build outputs
+build/
+dist/
+
+# Dependencies
+node_modules/
+
+# Lock files
+pnpm-lock.yaml
+
+# TypeScript
+*.tsbuildinfo
+
+# Vite
+.vite-temp/
+node_modules/.vite/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+.claude

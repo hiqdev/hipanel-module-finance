@@ -1,10 +1,21 @@
-import type { Contact, Doc, DocParams, Requisite } from "./types.ts";
+import type { ApiError, Contact, DocParams, GenerationResponse, Requisite } from "./types.ts";
 
 const BASE_URL = "";
 
-interface ApiError {
-  status: number;
-  message: string;
+function extractErrorMessage(payload: unknown): string | null {
+  if (payload && typeof payload === "object" && "error" in payload) {
+    const errorValue = (payload as { error: unknown }).error;
+
+    if (typeof errorValue === "string" && errorValue.trim().length > 0) {
+      return errorValue;
+    }
+
+    if (errorValue !== null && errorValue !== undefined && String(errorValue).trim().length > 0) {
+      return String(errorValue);
+    }
+  }
+
+  return null;
 }
 
 function getCsrfToken(): string {
@@ -23,17 +34,36 @@ async function request<T>(url: string, options: RequestInit = {}): Promise<T> {
     ...options,
   });
 
+  const text = await response.text();
+
+  let payload: unknown = null;
+  if (text) {
+    try {
+      payload = JSON.parse(text);
+    } catch {
+      payload = text;
+    }
+  }
+
+  const payloadErrorMessage = extractErrorMessage(payload);
+
   if (!response.ok) {
     const error: ApiError = {
       status: response.status,
-      message: await response.text(),
+      message: payloadErrorMessage ?? text,
     };
     throw error;
   }
 
-  const text = await response.text();
+  if (payloadErrorMessage !== null) {
+    const error: ApiError = {
+      status: response.status,
+      message: payloadErrorMessage,
+    };
+    throw error;
+  }
 
-  return (text ? JSON.parse(text) : null) as T;
+  return payload as T;
 }
 
 
@@ -48,13 +78,13 @@ function qs(params: object): string {
 
 export const purseDocumentsApi = {
   previewMonthlyDocument: (p: DocParams) =>
-    api.post<Doc>(`/finance/purse/pre-generate-document${qs(p)}`, p),
+    api.post<GenerationResponse>(`/finance/purse/pre-generate-document${qs(p)}`, p),
   generateAndSaveDocument: (p: DocParams) =>
-    api.post<Doc>(`/finance/purse/generate-and-save-document${qs(p)}`, p),
+    api.post<GenerationResponse>("/finance/purse/generate-and-save-document", p),
   generateAndSaveMonthlyDocument: (p: DocParams) =>
-    api.post<Doc>(`/finance/purse/generate-and-save-monthly-document${qs(p)}`, p),
+    api.post<GenerationResponse>("/finance/purse/generate-and-save-monthly-document", p),
   generateAndSaveActs: (p: DocParams) =>
-    api.post<Doc>(`/finance/purse/generate-and-save-acts${qs(p)}`, p),
+    api.post<GenerationResponse>("/finance/purse/generate-and-save-acts", p),
 };
 
 export const purseSettingsApi = {

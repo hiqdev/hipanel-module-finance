@@ -11,7 +11,7 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\Application;
 
-class PursesBox extends Widget
+final class PursesBox extends Widget
 {
     /** * @var Purse[] */
     public array $purses = [];
@@ -97,8 +97,10 @@ class PursesBox extends Widget
                         $document->toArray()
                     );
 
-                    $data['date'] = explode(' ', $document->validity_start ?? '', 2)[0];
-
+                    $data['date'] = explode(' ', $document->validity_start ?? $document->create_time ?? '', 2)[0];
+                    $data['number'] = $document->number ?: (string)$document->id;
+                    $data['location'] = $document->data_location;
+                    $data['bill_id'] = $document->data_bill_id;
 
                     return $data;
                 },
