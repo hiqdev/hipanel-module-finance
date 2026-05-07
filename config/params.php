@@ -13,6 +13,7 @@ return [
     'module.finance.merchant.pay.cashew.only' => null,
     'module.finance.plan.required.additional.rights' => null,
     'module.finance.bill.service.email' => null,
+    'module.finance.installment-plan.enabled' => null,
 
     'module.finance.bill.import' => [
         'requisite.types' => null,

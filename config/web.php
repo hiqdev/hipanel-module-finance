@@ -31,6 +31,7 @@ return [
         '@pay/check-return' => '/finance/pay/check-return',
         '@billing-registry' => '/finance/billing-registry',
         '@installment' => '/finance/installment',
+        '@installment-plan' => '/finance/installment-plan',
     ],
     'modules' => [
         'finance' => [

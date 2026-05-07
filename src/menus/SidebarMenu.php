@@ -110,6 +110,12 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                         'label'   => Yii::t('hipanel:finance', 'Installments'),
                         'url'     => ['@installment/index'],
                     ],
+                    'installment-plan' => [
+                        'label'   => Yii::t('hipanel:finance', 'Installment plans'),
+                        'url'     => ['@installment-plan/index'],
+                        'icon'    => 'fa-credit-card',
+                        'visible' => $user->can('sale.read') && (bool)(Yii::$app->params['module.finance.installment-plan.enabled'] ?? false),
+                    ],
                     'billing-registry' => [
                         'label'   => Yii::t('hipanel:finance', 'Billing registry'),
                         'url'     => ['@billing-registry/index'],
