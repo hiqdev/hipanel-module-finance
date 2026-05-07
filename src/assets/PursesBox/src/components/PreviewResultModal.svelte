@@ -1,17 +1,19 @@
 <script lang="ts">
-  import type { Doc } from "../types";
-  import { fmtDate, typeMeta } from "../data";
-
-  let { doc, files, onClose, onApply, language }: {
-      doc?: Doc;
+  let { files, onClose }: {
       files: string[];
       onClose: () => void;
-      onApply?: (() => void) | null;
-      language: string;
   } = $props();
 
-  let t = $derived(doc ? typeMeta(doc.type) : null);
-  let date = $derived(doc ? fmtDate(doc.date, language) : null);
+  let activeIdx = $state(0);
+
+  function tabLabel(url: string, idx: number): string {
+    try {
+      const name = new URL(url).pathname.split("/").pop() ?? "";
+      return name || `File ${idx + 1}`;
+    } catch {
+      return `File ${idx + 1}`;
+    }
+  }
 </script>
 
 <div class="modal-backdrop fade in"></div>
@@ -33,37 +35,51 @@
         <button type="button" class="close" onclick={onClose} aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">
-          <i class="fa fa-file-text-o"></i>
-          {#if t && date}
-            Preview — {t.label}
-            <span class="modal-title-sub">{doc?.number} · {date.short} {date.year}</span>
-          {:else}
-            Preview
-          {/if}
-        </h4>
+        <h4 class="modal-title"><i class="fa fa-eye"></i> Preview</h4>
       </div>
+
       <div class="modal-body preview-modal-body">
-        {#if files.length > 0}
-          {#each files as url (url)}
-            <iframe src={url} class="preview-iframe" title="Document preview"></iframe>
-          {/each}
-        {:else}
+        {#if files.length === 0}
           <div class="preview-no-files">
             <i class="fa fa-file-text-o"></i>
             <span>No preview available</span>
           </div>
+        {:else if files.length === 1}
+          <iframe src={files[0]} class="preview-iframe" title="Document preview"></iframe>
+        {:else}
+          <div class="preview-tabs">
+            <ul class="preview-tab-list" role="tablist">
+              {#each files as url, idx (url)}
+                <li role="presentation">
+                  <button
+                      type="button"
+                      role="tab"
+                      class="preview-tab {activeIdx === idx ? 'is-active' : ''}"
+                      aria-selected={activeIdx === idx}
+                      onclick={() => { activeIdx = idx; }}
+                  >
+                    <i class="fa fa-file-text-o"></i>
+                    {tabLabel(url, idx)}
+                  </button>
+                </li>
+              {/each}
+            </ul>
+            {#each files as url, idx (url)}
+              <iframe
+                  src={url}
+                  class="preview-iframe"
+                  title="Document preview {idx + 1}"
+                  hidden={activeIdx !== idx}
+              ></iframe>
+            {/each}
+          </div>
         {/if}
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-default" onclick={onClose}>
-          <i class="fa fa-times"></i> Discard
+          <i class="fa fa-times"></i> Close
         </button>
-          {#if onApply}
-          <button type="button" class="btn btn-primary" onclick={onApply}>
-            <i class="fa fa-save"></i> Save this version
-          </button>
-        {/if}
       </div>
     </div>
   </div>

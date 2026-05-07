@@ -1021,6 +1021,53 @@ button.x {
   border: none;
 }
 
+.preview-iframe[hidden] {
+  display: none;
+}
+
+.preview-tabs {
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-tab-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0 12px;
+  background: var(--bg-1);
+  border-bottom: 1px solid var(--border-subtle);
+  gap: 2px;
+}
+
+.preview-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 13px;
+  color: var(--fg-3);
+  cursor: pointer;
+  white-space: nowrap;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color .1s, border-color .1s;
+}
+
+.preview-tab:hover {
+  color: var(--fg-1);
+}
+
+.preview-tab.is-active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  font-weight: 500;
+}
+
 .preview-no-files {
   display: flex;
   flex-direction: column;

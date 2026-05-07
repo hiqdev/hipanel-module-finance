@@ -24,10 +24,6 @@ function pickEndpoint(type: string, action: keyof DocEndpoints): DocEndpoint {
   return (routesByType[type]?.[action] ?? defaultEndpoints[action]);
 }
 
-function excludeDocForMonth(docs: Doc[], type: string, monthKey: string): Doc[] {
-  return docs.filter(d => d.type !== type || docMonthKey(d.date) !== monthKey);
-}
-
 function markAsNew(docs: Doc[], ids: string[]): Doc[] {
   return docs.map(d => ids.includes(d.id) ? { ...d, isNew: true } : d);
 }
@@ -45,7 +41,7 @@ export function useDocumentGeneration(
   // ── State ──────────────────────────────────────────────────────────────────
   let modal = $state<ModalState | null>(null);
   let pendingUpdate = $state<Doc | null>(null);
-  let previewResult = $state<{ doc?: Doc; files: string[]; canSave: boolean } | null>(null);
+  let previewResult = $state<{ files: string[] } | null>(null);
   let busyRowIds = $state<string[]>([]);
 
   // ── Flow A: free-form modal (top "Preview" / "Generate" buttons) ───────────
@@ -80,9 +76,7 @@ export function useDocumentGeneration(
         busyRowIds = busyRowIds.filter(x => !affectedIds.includes(x));
 
         if (isPreview) {
-          const files = extractUrls(rsp?.data);
-          const existingDoc = affectedDocs[0];
-          previewResult = { doc: existingDoc, files, canSave: !!existingDoc };
+          previewResult = { files: extractUrls(rsp?.data) };
         } else {
           setDocs(markAsNew(getDocs(), affectedIds));
           showToast(willReplace ? "Document replaced" : "Document generated");
@@ -123,8 +117,7 @@ export function useDocumentGeneration(
     })
       .then(rsp => {
         busyRowIds = busyRowIds.filter(x => x !== doc.id);
-        const files = extractUrls(rsp?.data);
-        previewResult = { doc, files, canSave: true };
+        previewResult = { files: extractUrls(rsp?.data) };
       })
       .catch((e: any) => {
         busyRowIds = busyRowIds.filter(x => x !== doc.id);
@@ -159,16 +152,6 @@ export function useDocumentGeneration(
       });
   }
 
-  // ── Shared: preview result (both flows converge here) ──────────────────────
-  function applyPreview() {
-    if (!previewResult) return;
-    const { doc } = previewResult;
-    previewResult = null;
-    if (!doc) return;
-    setDocs([{ ...doc, isNew: true }, ...excludeDocForMonth(getDocs(), doc.type, docMonthKey(doc.date))]);
-    showToast(`Preview applied — ${doc.number}`);
-  }
-
   return {
     get modal() {
       return modal;
@@ -200,6 +183,5 @@ export function useDocumentGeneration(
     handleSubmit,
     handleRowAction,
     applyUpdate,
-    applyPreview,
   };
 }

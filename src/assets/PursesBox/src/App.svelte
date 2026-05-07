@@ -182,10 +182,7 @@
 
 {#if generation.previewResult}
   <PreviewResultModal
-      doc={generation.previewResult.doc}
       files={generation.previewResult.files}
       onClose={generation.closePreview}
-      onApply={generation.previewResult.canSave ? generation.applyPreview : null}
-      {language}
   />
 {/if}
