@@ -350,7 +350,6 @@ return [
     'No installment plans in Ongoing or Interrupted state were selected.' => 'Не выбрано ни одного плана на выплату в состоянии "Выплата продолжается" или "Выплата прервана".',
     'The following bills will be created:' => 'Будут созданы следующие счета:',
     'Proceed to bill form' => 'Перейти к форме счёта',
-    'Create bill' => 'Создать счёт',
     'Month within plan period' => 'Месяц в периоде выплаты',
     'Serial' => 'Серийный номер',
     'Part No.' => 'Артикул',
