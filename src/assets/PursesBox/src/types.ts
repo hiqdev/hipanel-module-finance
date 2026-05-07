@@ -75,12 +75,11 @@ export interface DateRange {
   to: string | null;
 }
 
-export type ModalKind = "update" | "preview" | "update-locked" | "preview-locked";
+export type ModalKind = "update" | "preview";
 
 export interface ModalState {
   kind: ModalKind;
   initial?: { type: string; month: string };
-  doc?: Doc;
   busy?: boolean;
   progress?: number;
 }
@@ -132,7 +131,7 @@ export interface GenerationResponse {
   status: "success" | "error";
   errors: string[];
   message: string;
-  data?: unknown;
+  data?: Doc;
 }
 
 export interface ApiError {

@@ -5,7 +5,7 @@
 
   let { mode, initial, types, existingMonths, busy, progress, onClose, onSubmit, language, purse }: {
       mode: ModalKind;
-      initial?: { type: string; month: string; clientBankAccountNo?: number, sellerBankAccountNo?: number };
+      initial?: { type: string; month: string; clientBankAccountNo?: number; sellerBankAccountNo?: number };
       types: DocType[];
       existingMonths: Record<string, string[]>;
       busy: boolean;
@@ -31,18 +31,14 @@
   let selectedMonthNum = $state(untrack(() => +(initial?.month ?? currentMonthKey()).split("-")[1]));
   let month = $derived(`${selectedYear}-${String(selectedMonthNum).padStart(2, "0")}`);
 
-  let locked = $derived(mode === "update-locked" || mode === "preview-locked");
-
   let willReplace = $derived.by(() => {
-      if (mode === "preview" || mode === "preview-locked") return false;
+      if (mode === "preview") return false;
       return !!(existingMonths[type]?.includes(month));
   });
 
   const titles: Record<ModalKind, { title: string; btn: string; icon: string; btnBusy: string }> = {
-      "update": { title: "Generate document", btn: "Generate", icon: "fa-cog", btnBusy: "Generating…" },
-      "preview": { title: "Preview document", btn: "Preview", icon: "fa-eye", btnBusy: "Building preview…" },
-      "update-locked": { title: "Update and replace document", btn: "Update & replace", icon: "fa-refresh", btnBusy: "Generating…" },
-      "preview-locked": { title: "Preview updated document", btn: "Preview updated", icon: "fa-search-plus", btnBusy: "Building preview…" },
+      "update":  { title: "Generate document", btn: "Generate", icon: "fa-cog", btnBusy: "Generating…"       },
+      "preview": { title: "Preview document",  btn: "Preview",  icon: "fa-eye", btnBusy: "Building preview…" },
   };
 
   let t = $derived(titles[mode]);
@@ -99,20 +95,12 @@
       </div>
 
       <div class="modal-body">
-        {#if locked}
-          <div class="modal-note">
-            <i class="fa fa-info-circle"></i>
-            Regenerating the document for the same type and month as the original.
-          </div>
-        {/if}
-
           <div class="form-group">
           <label class="control-label" for="gen-doc-type">Document type</label>
           <select
               id="gen-doc-type"
               class="form-control"
               bind:value={type}
-              disabled={locked}
           >
             {#each types as dt}
               <option value={dt.id}>{dt.label}</option>
@@ -127,7 +115,6 @@
                 id="gen-seller-bank-account"
                 class="form-control"
                 bind:value={sellerBankAccountNo}
-                disabled={locked}
             >
               {#each sellerBankDetails as bd (bd.no)}
                 <option value={+bd.no}>{bankDetailsLabel(bd)}</option>
@@ -143,7 +130,6 @@
                 id="gen-client-bank-account"
                 class="form-control"
                 bind:value={clientBankAccountNo}
-                disabled={locked}
             >
               {#each clientBankDetails as bd (bd.no)}
                 <option value={+bd.no}>{bankDetailsLabel(bd)}</option>
@@ -158,7 +144,6 @@
               class="form-control"
               style="width:auto;display:inline-block;margin-bottom:8px"
               bind:value={selectedYear}
-              disabled={locked}
           >
             {#each yearOptions as y}
               <option value={y}>{y}</option>
@@ -171,8 +156,7 @@
                 <button
                     type="button"
                     class="month-opt {isOn ? 'is-on' : ''} {exists ? 'has-existing' : ''}"
-                    onclick={() => { if (!locked) selectedMonthNum = +m.key.split("-")[1]; }}
-                    disabled={locked}
+                    onclick={() => { selectedMonthNum = +m.key.split("-")[1]; }}
                     title={exists ? 'A document already exists for this month' : ''}
                 >
                 <span class="m-label">{m.label}</span>
@@ -192,7 +176,7 @@
           </div>
         {/if}
 
-        {#if mode === 'preview' || mode === 'preview-locked'}
+        {#if mode === 'preview'}
           {#if type === 'internal_invoice'}
             <div class="modal-warn">
               <i class="fa fa-exclamation-triangle"></i>

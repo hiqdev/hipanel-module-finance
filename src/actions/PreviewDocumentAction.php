@@ -3,9 +3,9 @@
 namespace hipanel\modules\finance\actions;
 
 use Exception;
+use hipanel\actions\Action;
 use hipanel\modules\finance\helpers\DocumentGenerationErrorOps;
 use hipanel\modules\finance\models\Purse;
-use yii\base\Action;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\web\Session;
@@ -42,7 +42,11 @@ class PreviewDocumentAction extends Action
 
     private function ajaxResponse(?Exception $error, mixed $content): mixed
     {
-        // TODO: determine AJAX response behavior
+        return $this->asJson([
+            'status' => $error !== null ? 'error' : 'success',
+            'data' => $content,
+            'errors' => $error !== null ? DocumentGenerationErrorOps::extract($error->getResponse()->getData()) : [],
+        ]);
     }
 
     private function httpResponse(?Exception $error, mixed $content, array $params): mixed

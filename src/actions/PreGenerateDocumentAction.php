@@ -2,8 +2,8 @@
 
 namespace hipanel\modules\finance\actions;
 
+use hipanel\actions\Action;
 use hipanel\modules\finance\models\Purse;
-use yii\base\Action;
 use yii\web\Response;
 
 class PreGenerateDocumentAction extends Action
@@ -25,10 +25,24 @@ class PreGenerateDocumentAction extends Action
         return $this->httpResponse($valid, $purse, $type, $client_id);
     }
 
-    private function ajaxResponse(bool $valid, Purse $purse, string $type, string $client_id): ?Response
+    private function ajaxResponse(bool $valid, Purse $purse, string $type, string $client_id): Response
     {
-        // TODO: determine AJAX response behavior
-        return null;
+        return $this->asJson([
+            'status' => $valid ? 'success' : 'error',
+            'errors' => $valid ? [] : $purse->getErrors(),
+            'message' => $valid ? 'Test data.' : 'Validation failed.',
+            'data' => $valid ? [
+                [
+                    'id' => mt_rand(),
+                    'type' => $type,
+                    'type_label' => $type,
+                    'filename' => mt_rand() . '.pdf',
+                    'file_id' => mt_rand(),
+                    'number' => mt_rand(),
+                    'date' => date('Y-m-d'),
+                ],
+            ] : [],
+        ]);
     }
 
     private function httpResponse(bool $valid, Purse $purse, string $type, string $client_id): ?Response
