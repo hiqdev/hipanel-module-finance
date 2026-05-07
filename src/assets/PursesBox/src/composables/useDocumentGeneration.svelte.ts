@@ -28,6 +28,14 @@ function excludeDocForMonth(docs: Doc[], type: string, monthKey: string): Doc[] 
   return docs.filter(d => d.type !== type || docMonthKey(d.date) !== monthKey);
 }
 
+function markAsNew(docs: Doc[], ids: string[]): Doc[] {
+  return docs.map(d => ids.includes(d.id) ? { ...d, isNew: true } : d);
+}
+
+function extractUrls(data: Doc[] | undefined): string[] {
+  return (data ?? []).map(d => d.url).filter((u): u is string => !!u);
+}
+
 export function useDocumentGeneration(
   getDocs: () => Doc[],
   setDocs: (docs: Doc[]) => void,
@@ -37,12 +45,13 @@ export function useDocumentGeneration(
   // ── State ──────────────────────────────────────────────────────────────────
   let modal = $state<ModalState | null>(null);
   let pendingUpdate = $state<Doc | null>(null);
-  let previewResult = $state<{ doc: Doc; canSave: boolean } | null>(null);
+  let previewResult = $state<{ doc?: Doc; files: string[]; canSave: boolean } | null>(null);
   let busyRowIds = $state<string[]>([]);
 
   // ── Flow A: free-form modal (top "Preview" / "Generate" buttons) ───────────
-  // Called by GenerateModal onSubmit. Marks matching rows busy while the API
-  // runs, then transitions them in-place to isNew on success.
+  // Captures affected rows before the API call, marks them busy, then on
+  // success transitions them in-place to isNew (update) or opens the preview
+  // modal with file URLs from the response (preview).
   function handleSubmit({ type, month, willReplace, mode, seller_bank_account_no, client_bank_account_no }: {
     type: string;
     month: string;
@@ -54,9 +63,8 @@ export function useDocumentGeneration(
     if (!modal) return;
     modal = { ...modal, busy: true, progress: 0 };
 
-    const affectedIds = getDocs()
-      .filter(d => d.type === type && docMonthKey(d.date) === month)
-      .map(d => d.id);
+    const affectedDocs = getDocs().filter(d => d.type === type && docMonthKey(d.date) === month);
+    const affectedIds = affectedDocs.map(d => d.id);
     busyRowIds = [...busyRowIds, ...affectedIds];
 
     const { id, client_id } = getPurse();
@@ -70,34 +78,14 @@ export function useDocumentGeneration(
       .then(rsp => {
         modal = null;
         busyRowIds = busyRowIds.filter(x => !affectedIds.includes(x));
-        const data = rsp?.data;
-        if (!data) {
-          showToast("No document data returned", "error");
-          return;
-        }
-        const newDoc = { ...data, isNew: true };
 
         if (isPreview) {
-          previewResult = { doc: newDoc, canSave: true };
+          const files = extractUrls(rsp?.data);
+          const existingDoc = affectedDocs[0];
+          previewResult = { doc: existingDoc, files, canSave: !!existingDoc };
         } else {
-          // Busy rows transition in place to isNew: true.
-          // First matching row is replaced with the new doc; extras removed.
-          // If no existing docs matched, prepend the new one.
-          const current = getDocs();
-          let placed = false;
-          const next: Doc[] = affectedIds.length === 0 ? [newDoc] : [];
-          for (const d of current) {
-            if (!affectedIds.includes(d.id)) {
-              next.push(d);
-              continue;
-            }
-            if (!placed) {
-              next.push(newDoc);
-              placed = true;
-            }
-          }
-          setDocs(next);
-          showToast(willReplace ? `Document replaced — ${newDoc.number}` : `Document generated — ${newDoc.number}`);
+          setDocs(markAsNew(getDocs(), affectedIds));
+          showToast(willReplace ? "Document replaced" : "Document generated");
         }
       })
       .catch((e: any) => {
@@ -119,16 +107,15 @@ export function useDocumentGeneration(
     }
   }
 
-  // Row "preview": call the preview API directly; no form modal needed since
-  // type, month, and all params are already known from the existing doc.
+  // Row "preview": call the preview API and open the result modal with the
+  // returned file URLs. The existing doc is passed as context for the header.
   function previewRowDoc(doc: Doc) {
-    const monthKey = docMonthKey(doc.date);
     busyRowIds = [...busyRowIds, doc.id];
     const { id, client_id } = getPurse();
 
     pickEndpoint(doc.type, "preview")({
       type: doc.type,
-      month: monthKey,
+      month: docMonthKey(doc.date),
       client_id,
       id,
       bill_id: doc.bill_id,
@@ -136,12 +123,8 @@ export function useDocumentGeneration(
     })
       .then(rsp => {
         busyRowIds = busyRowIds.filter(x => x !== doc.id);
-        const data = rsp?.data;
-        if (!data) {
-          showToast("Preview returned no document data", "error");
-          return;
-        }
-        previewResult = { doc: data as Doc, canSave: true };
+        const files = extractUrls(rsp?.data);
+        previewResult = { doc, files, canSave: true };
       })
       .catch((e: any) => {
         busyRowIds = busyRowIds.filter(x => x !== doc.id);
@@ -150,6 +133,7 @@ export function useDocumentGeneration(
   }
 
   // Row "update": called after ConfirmReplaceModal is confirmed.
+  // API response data is not used — the existing doc is marked isNew in place.
   function applyUpdate() {
     const doc = pendingUpdate!;
     pendingUpdate = null;
@@ -164,15 +148,10 @@ export function useDocumentGeneration(
       bill_id: doc.bill_id,
       location: doc.location,
     })
-      .then(rsp => {
+      .then(() => {
         busyRowIds = busyRowIds.filter(x => x !== doc.id);
-        const data = rsp?.data;
-        if (!data) {
-          showToast("Update returned no document data", "error");
-          return;
-        }
-        setDocs(getDocs().map((d): Doc => (d.id === doc.id ? ({ ...(data as Doc), isNew: true }) : d)));
-        showToast(`${doc.type_label} replaced — ${data.number}`);
+        setDocs(markAsNew(getDocs(), [doc.id]));
+        showToast(`${doc.type_label} replaced`);
       })
       .catch((e: any) => {
         busyRowIds = busyRowIds.filter(x => x !== doc.id);
@@ -183,9 +162,10 @@ export function useDocumentGeneration(
   // ── Shared: preview result (both flows converge here) ──────────────────────
   function applyPreview() {
     if (!previewResult) return;
-    const doc = previewResult.doc;
-    setDocs([doc, ...excludeDocForMonth(getDocs(), doc.type, docMonthKey(doc.date))]);
+    const { doc } = previewResult;
     previewResult = null;
+    if (!doc) return;
+    setDocs([{ ...doc, isNew: true }, ...excludeDocForMonth(getDocs(), doc.type, docMonthKey(doc.date))]);
     showToast(`Preview applied — ${doc.number}`);
   }
 

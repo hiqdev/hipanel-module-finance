@@ -63,6 +63,7 @@ export interface Doc {
   isNew: boolean;
   location?: string;
   bill_id?: string;
+  url?: string;
 }
 
 export interface SortState {
@@ -131,7 +132,7 @@ export interface GenerationResponse {
   status: "success" | "error";
   errors: string[];
   message: string;
-  data?: Doc;
+  data?: Doc[];
 }
 
 export interface ApiError {
