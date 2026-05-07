@@ -61,12 +61,12 @@ return [
         'urlManager' => [
             'rules' => [
                 [
-                    'pattern' => 'finance/purse/<id:\d+>/generate/monthly/<type:\w+>.<login:[.\@\w\d_]+>.<currency:\w+>.<month:[\d-]+>.pdf',
-                    'route' => 'finance/purse/generate-monthly-document',
+                    'pattern' => 'finance/purse/<id:\d+>/preview/monthly/<type:\w+>.<login:[.\@\w\d_]+>.<currency:\w+>.<month:[\d-]+>.pdf',
+                    'route' => 'finance/purse/preview-monthly-document',
                 ],
                 [
                     'pattern' => 'finance/purse/<id:\d+>/generate/<type:\w+>.<login:[.\@\w\d_]+>.<currency:\w+>.pdf',
-                    'route' => 'finance/purse/generate-document',
+                    'route' => 'finance/purse/preview-document',
                 ],
                 [
                     'pattern' => 'finance/pay/return/<username:.+>/<merchant:[\w\d_]+>/<transactionId:[\w\d]+>',

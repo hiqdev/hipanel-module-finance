@@ -78,7 +78,7 @@ function qs(params: object): string {
 
 export const purseDocumentsApi = {
   previewMonthlyDocument: (p: DocParams) =>
-    api.post<GenerationResponse>(`/finance/purse/pre-generate-document${qs(p)}`, p),
+    api.post<GenerationResponse>(`/finance/purse/preview-monthly-document`, p),
   generateAndSaveDocument: (p: DocParams) =>
     api.post<GenerationResponse>("/finance/purse/generate-and-save-document", p),
   generateAndSaveMonthlyDocument: (p: DocParams) =>

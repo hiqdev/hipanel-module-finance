@@ -46,7 +46,7 @@
   }
 
   let contactOptions = $derived<SelectOption[]>(
-      (contacts.data ?? []).map(c => ({
+      (Array.isArray(contacts.data) ? contacts.data : []).map(c => ({
           value: c.name,
           label: c.name,
           sub: c.email,

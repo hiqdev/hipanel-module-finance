@@ -63,7 +63,6 @@ export interface Doc {
   isNew: boolean;
   location?: string;
   bill_id?: string;
-  url?: string;
 }
 
 export interface SortState {
@@ -128,11 +127,18 @@ export interface AccountFilters {
   page: number;
 }
 
+export interface PreviewDocumentEntry {
+  uuid: string;
+  url: string;
+  requisite: { id: number; name: string };
+}
+
 export interface GenerationResponse {
   status: "success" | "error";
   errors: string[];
   message: string;
-  data?: Doc[];
+  /** Keyed by document type label (e.g. "default"). Only present for preview endpoints. */
+  data?: Record<string, PreviewDocumentEntry>;
 }
 
 export interface ApiError {

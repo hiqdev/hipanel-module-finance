@@ -19,11 +19,9 @@ class PreviewDocumentAction extends Action
         parent::__construct($id, $controller, $config);
     }
 
-    public function run(?string $id = null, ?string $type = null): mixed
+    public function run(): mixed
     {
-        $params = ($id !== null && $type !== null)
-            ? ['id' => $id, 'type' => $type]
-            : $this->controller->request->get();
+        $params = $this->controller->request->post();
 
         $error = null;
         $content = null;
@@ -40,6 +38,27 @@ class PreviewDocumentAction extends Action
         return $this->httpResponse($error, $content, $params);
     }
 
+    /**
+     * @param mixed $content Result of Purse::perform(), keyed by document type label.
+     *
+     * Response shape:
+     * {
+     *   "status": "success" | "error",
+     *   "errors": string[],
+     *   "message": string | null,
+     *   "data": {
+     *     "<location>": {          // e.g. "default", "fr", "lt" etc.
+     *       "uuid": string,
+     *       "url": string,         // URL to the cached preview file
+     *       "requisite": {
+     *         "id": int,
+     *         "name": string
+     *       }
+     *     },
+     *     ...
+     *   }
+     * }
+     */
     private function ajaxResponse(?Exception $error, mixed $content): mixed
     {
         return $this->asJson([

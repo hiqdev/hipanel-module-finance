@@ -1,4 +1,4 @@
-import type { Doc, DocParams, GenerationResponse, ModalState, Purse } from "../types";
+import type { Doc, DocParams, GenerationResponse, ModalState, PreviewDocumentEntry, Purse } from "../types";
 import { docMonthKey } from "../data";
 import type { ToastType } from "./useToast.svelte";
 import { purseDocumentsApi } from "../api";
@@ -14,10 +14,10 @@ const defaultEndpoints: DocEndpoints = {
 // Add a row here when a document type needs non-default endpoints.
 // Omit a key to fall back to defaultEndpoints for that action.
 const routesByType: Record<string, Partial<DocEndpoints>> = {
-  contracts: { update: purseDocumentsApi.generateAndSaveDocument },
-  probations: { update: purseDocumentsApi.generateAndSaveDocument },
-  nda: { update: purseDocumentsApi.generateAndSaveDocument },
-  internalinvoices: { update: purseDocumentsApi.generateAndSaveActs },
+  contract: { update: purseDocumentsApi.generateAndSaveDocument, preview: purseDocumentsApi.previewMonthlyDocument },
+  probation: { update: purseDocumentsApi.generateAndSaveDocument, preview: purseDocumentsApi.previewMonthlyDocument },
+  nda: { update: purseDocumentsApi.generateAndSaveDocument, preview: purseDocumentsApi.previewMonthlyDocument },
+  internal_invoice: { update: purseDocumentsApi.generateAndSaveActs },
 };
 
 function pickEndpoint(type: string, action: keyof DocEndpoints): DocEndpoint {
@@ -28,8 +28,8 @@ function markAsNew(docs: Doc[], ids: string[]): Doc[] {
   return docs.map(d => ids.includes(d.id) ? { ...d, isNew: true } : d);
 }
 
-function extractUrls(data: Doc[] | undefined): string[] {
-  return (data ?? []).map(d => d.url).filter((u): u is string => !!u);
+function extractUrls(data: Record<string, PreviewDocumentEntry> | undefined): string[] {
+  return Object.values(data ?? {}).map(e => e.url).filter(Boolean);
 }
 
 export function useDocumentGeneration(

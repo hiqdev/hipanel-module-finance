@@ -31,7 +31,7 @@ final class GenerateAndSaveDocumentAction extends SmartPerformAction
         };
     }
 
-    public function getDefaultRules()
+    public function getDefaultRules(): array
     {
         return array_merge(parent::getDefaultRules(), [
             'POST ajax' => [
@@ -39,7 +39,7 @@ final class GenerateAndSaveDocumentAction extends SmartPerformAction
                 'flash' => true,
                 'success' => [
                     'class' => RenderJsonAction::class,
-                    'return' => function ($action) {
+                    'return' => function () {
                         $message = Yii::$app->session->removeFlash('success');
 
                         return [
@@ -50,7 +50,7 @@ final class GenerateAndSaveDocumentAction extends SmartPerformAction
                 ],
                 'error' => [
                     'class' => RenderJsonAction::class,
-                    'return' => function ($action) {
+                    'return' => function () {
                         $message = Yii::$app->session->removeFlash('error');
 
                         return [
@@ -91,7 +91,7 @@ final class GenerateAndSaveDocumentAction extends SmartPerformAction
         return $error;
     }
 
-    public function addFlash($type, $error = null)
+    public function addFlash($type, $error = null): void
     {
         if ($type === 'error') {
             Yii::$app->session->addFlash('error', ['text' => $this->buildErrorText($error)]);

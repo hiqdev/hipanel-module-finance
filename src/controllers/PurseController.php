@@ -24,7 +24,6 @@ use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\document\models\Statistic as DocumentStatisticModel;
 use hipanel\modules\finance\actions\GenerateAndSaveDocumentAction;
-use hipanel\modules\finance\actions\PreGenerateDocumentAction;
 use hipanel\modules\finance\actions\PreviewDocumentAction;
 use hipanel\modules\finance\models\Costprice;
 use hipanel\modules\finance\models\Purse;
@@ -43,7 +42,7 @@ class PurseController extends CrudController
                 'class' => EasyAccessControl::class,
                 'actions' => [
                     'update,update-requisite,update-contact' => 'purse.update',
-                    'pre-generate-document,generate-monthly-document,generate-document,generate-and-save-acts' => 'document.generate',
+                    'preview-document,preview-monthly-document,generate-and-save-document,generate-and-save-monthly,generate-and-save-acts' => 'document.generate',
                     'calculate-costprice' => 'costprice.read',
                     'finance-tools' => ['document.generate-all', 'costprice.read'],
                     '*' => 'bill.read',
@@ -86,16 +85,13 @@ class PurseController extends CrudController
                 'class' => RedirectAction::class,
                 'error' => Yii::t('hipanel', 'Under construction'),
             ],
-            'generate-monthly-document' => [
+            'preview-monthly-document' => [
                 'class' => PreviewDocumentAction::class,
                 'action' => 'generate-monthly-document',
             ],
-            'generate-document' => [
+            'preview-document' => [
                 'class' => PreviewDocumentAction::class,
                 'action' => 'generate-document',
-            ],
-            'pre-generate-document' => [
-                'class' => PreGenerateDocumentAction::class,
             ],
             'generate-and-save-monthly-document' => [
                 'class' => GenerateAndSaveDocumentAction::class,
