@@ -27,6 +27,7 @@ use Yii;
  * @property string $serialno
  * @property int    $model_id
  * @property string $model
+ * @property string $partno
  * @property int    $brand_id
  * @property string $brand
  * @property int    $part_type_id
@@ -66,7 +67,7 @@ class InstallmentPlan extends \hipanel\base\Model
     {
         return array_merge(parent::rules(), [
             [['id', 'state_id', 'seller_id', 'client_id', 'part_id', 'model_id', 'brand_id', 'part_type_id', 'device_id', 'currency_id'], 'integer'],
-            [['state', 'state_name', 'seller', 'client', 'serialno', 'model', 'brand', 'part_type', 'device', 'currency', 'reason', 'order_name', 'company', 'tariff'], 'string'],
+            [['state', 'state_name', 'seller', 'client', 'serialno', 'model', 'partno', 'brand', 'part_type', 'device', 'currency', 'reason', 'order_name', 'company', 'tariff'], 'string'],
             [['since', 'till', 'warranty_till'], 'datetime', 'format' => 'php:Y-m-d H:i:s'],
             [['quantity', 'order_id', 'company_id', 'tariff_id'], 'integer'],
             [['expected_monthly_sum', 'expected_sum', 'charged_sum', 'left_sum'], 'number'],
@@ -84,8 +85,9 @@ class InstallmentPlan extends \hipanel\base\Model
             'client_id'             => Yii::t('hipanel:finance:sale', 'Buyer'),
             'part_id'               => Yii::t('hipanel:finance', 'Part No.'),
             'serialno'              => Yii::t('hipanel:finance', 'Serial'),
-            'model_id'              => Yii::t('hipanel:finance', 'Part No.'),
-            'model'                 => Yii::t('hipanel:finance', 'Part No.'),
+            'model_id'              => Yii::t('hipanel:finance', 'Model'),
+            'model'                 => Yii::t('hipanel:finance', 'Model'),
+            'partno'                => Yii::t('hipanel:finance', 'Part No.'),
             'brand_id'              => Yii::t('hipanel:finance', 'Manufacturer'),
             'brand'                 => Yii::t('hipanel:finance', 'Manufacturer'),
             'part_type_id'          => Yii::t('hipanel', 'Type'),

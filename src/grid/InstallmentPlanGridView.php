@@ -19,7 +19,7 @@ use hipanel\modules\finance\models\InstallmentPlan;
 use hipanel\modules\finance\widgets\combo\InstallmentPlanStateCombo;
 use hipanel\modules\stock\grid\CompanyColumn;
 use hipanel\modules\stock\grid\WarrantyColumn;
-use hipanel\modules\stock\widgets\combo\PartnoCombo;
+use hipanel\modules\server\widgets\combo\DeviceCombo;
 use hipanel\widgets\gridLegend\GridLegend;
 use Yii;
 use yii\helpers\Html;
@@ -55,26 +55,17 @@ class InstallmentPlanGridView extends BoxedGridView
             'serialno' => [
                 'label' => Yii::t('hipanel:finance', 'Serial'),
                 'filterOptions' => ['class' => 'narrow-filter'],
-                'filterAttribute' => 'serialno_ilike',
+                'filterAttribute' => 'serialno_inilike',
                 'format' => 'raw',
                 'value' => fn(InstallmentPlan $model) => Html::a(Html::encode($model->serialno), ['@part/view', 'id' => $model->part_id], ['class' => 'text-bold']),
             ],
             'model' => [
-                'filterAttribute' => 'model_like',
+                'filterAttribute' => 'partno_inilike',
                 'filterOptions' => ['class' => 'narrow-filter'],
-                'filter' => Yii::$app->user->can('model.read')
-                    ? function ($column, $model, $attribute) {
-                        return PartnoCombo::widget([
-                            'model' => $model,
-                            'attribute' => $attribute,
-                            'formElementSelector' => 'td',
-                        ]);
-                    }
-                    : true,
                 'format' => 'raw',
                 'label' => Yii::t('hipanel:finance', 'Part No.'),
                 'value' => static function (InstallmentPlan $model): string {
-                    $partNo = Html::encode($model->model);
+                    $partNo = Html::encode($model->partno);
                     if (Yii::$app->user->can('model.read')) {
                         return Html::a($partNo, ['@model/view', 'id' => $model->model_id], [
                             'data' => ['toggle' => 'tooltip'],
@@ -91,6 +82,13 @@ class InstallmentPlanGridView extends BoxedGridView
             ],
             'device' => [
                 'filterAttribute' => 'device_like',
+                'filter' => static function ($column, $model, $attribute) {
+                    return DeviceCombo::widget([
+                        'model' => $model,
+                        'attribute' => $column->getFilterAttribute(),
+                        'formElementSelector' => 'td',
+                    ]);
+                },
                 'format' => 'raw',
                 'value' => static function (InstallmentPlan $model) {
                     return Html::tag('b', Html::encode($model->device), ['style' => 'margin-left:1em']);
