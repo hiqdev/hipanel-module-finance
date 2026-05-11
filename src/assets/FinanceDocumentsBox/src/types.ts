@@ -1,9 +1,15 @@
 export type PermissionKey = string;
 
-export interface PursesBoxProps {
+export interface PursesDocumentsProps {
   language: string,
   purses: Purse[];
   permissions: PermissionKey[];
+}
+
+export interface PartyDocumentsProps {
+  language: string;
+  permissions: PermissionKey[];
+  documents: Doc[];
 }
 
 export interface Purse {
@@ -23,6 +29,7 @@ export interface Party {
   name: string;
   bankDetails: BankDetails[];
   organization?: string;
+  documents?: Doc[];
 }
 
 export interface Contact extends Party {

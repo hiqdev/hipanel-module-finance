@@ -113,7 +113,7 @@ class DocumentsColumn extends DataColumn
     protected function getRouteForSeeNew($clientId)
     {
         return [
-            '@purse/pre-generate-document',
+            '@purse/preview-document',
             'type' => $this->type,
             'client_id' => $clientId,
         ];

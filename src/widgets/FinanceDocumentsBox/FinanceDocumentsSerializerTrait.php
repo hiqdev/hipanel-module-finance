@@ -1,0 +1,88 @@
+<?php declare(strict_types=1);
+
+namespace hipanel\modules\finance\widgets\FinanceDocumentsBox;
+
+use hipanel\modules\client\models\Client;
+use hipanel\modules\document\models\Document;
+use yii\web\Application;
+
+trait FinanceDocumentsSerializerTrait
+{
+    private function buildPermissionList(Application $app, Client $client): array
+    {
+        $currentUser = $app->user;
+
+        return array_keys(array_filter([
+            'document.read' => $currentUser->can('document.read'),
+            'document.generate' => $currentUser->can('document.generate'),
+            'purse.update' => $currentUser->can('purse.update'),
+            'client.update' => $currentUser->can('client.update'),
+            'owner-staff' => $currentUser->can('owner-staff'),
+            'has-own-seller' => $currentUser->identity->hasOwnSeller($client->id),
+            'is-employee' => $currentUser->can('is-employee'),
+        ]));
+    }
+
+    private function filterAccessibleDocuments(Application $app, array $documents, bool $isEmployee): array
+    {
+        $allowedTypes = $this->resolveAccessibleDocumentTypes($app, $isEmployee);
+
+        if ($allowedTypes === []) {
+            return [];
+        }
+
+        return array_values(array_filter(
+            $documents,
+            static fn($document): bool => in_array((string)$document->type, $allowedTypes, true)
+        ));
+    }
+
+    private function resolveAccessibleDocumentTypes(Application $app, bool $isEmployee): array
+    {
+        $user = $app->user;
+
+        if (!$user->can('document.read')) {
+            return [];
+        }
+
+        $documentTypes = $isEmployee
+            ? ['contract', 'probation', 'nda', 'internal_invoice', 'acceptance']
+            : [
+                'service_invoice',
+                'installment_invoice',
+                'purchase_invoice',
+                'old_installment_invoice',
+                'old_payment_plan_payment_request',
+                'service_payment_request',
+                'installment_payment_request',
+                'payment_plan_payment_request',
+                'part_replacement_notice',
+                'purchase_payment_request',
+            ];
+
+        if ($user->can('owner-staff') && !$isEmployee) {
+            $documentTypes = array_merge($documentTypes, [
+                'invoice',
+                'detailed_service_invoice',
+                'payment_request',
+                'detailed_service_payment_request',
+                'purchase_payment_request',
+            ]);
+        }
+
+        return array_values(array_unique($documentTypes));
+    }
+
+    private function serializeDocument(Application $app, Document $document): array
+    {
+        $i18n = $app->i18n;
+        $data = array_map(static fn($v) => $i18n::removeLegacyLangTags($v), $document->toArray());
+
+        $data['date'] = explode(' ', $document->validifty_start ?? $document->create_time ?? '', 2)[0];
+        $data['number'] = $document->number ?: (string)$document->id;
+        $data['location'] = $document->data_location;
+        $data['bill_id'] = $document->data_bill_id;
+
+        return $data;
+    }
+}

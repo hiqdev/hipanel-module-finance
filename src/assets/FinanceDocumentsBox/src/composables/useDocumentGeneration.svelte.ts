@@ -59,6 +59,12 @@ export function useDocumentGeneration(
     if (!modal) return;
     modal = { ...modal, busy: true, progress: 0 };
 
+    const timer = setInterval(() => {
+      if (modal && (modal.progress ?? 0) < 90) {
+        modal = { ...modal, progress: (modal.progress ?? 0) + (90 - (modal.progress ?? 0)) * 0.07 };
+      }
+    }, 400);
+
     const affectedDocs = getDocs().filter(d => d.type === type && docMonthKey(d.date) === month);
     const affectedIds = affectedDocs.map(d => d.id);
     busyRowIds = [...busyRowIds, ...affectedIds];
@@ -72,17 +78,28 @@ export function useDocumentGeneration(
       ...(client_bank_account_no != null ? { client_bank_account_no } : {}),
     })
       .then(rsp => {
+        clearInterval(timer);
         modal = null;
         busyRowIds = busyRowIds.filter(x => !affectedIds.includes(x));
 
         if (isPreview) {
           previewResult = { files: extractUrls(rsp?.data) };
-        } else {
+        } else if (affectedDocs.length > 0) {
           setDocs(markAsNew(getDocs(), affectedIds));
           showToast(willReplace ? "Document replaced" : "Document generated");
+        } else {
+          purseDocumentsApi.search({ client_id, type, validity_start_month: month })
+            .then((founds: Doc[]) => {
+              if (founds.length > 0) {
+                setDocs([...founds.map((d: Doc) => ({ ...d, isNew: true })), ...getDocs()]);
+              }
+              showToast("Document generated");
+            })
+            .catch(() => showToast("Document generated"));
         }
       })
       .catch((e: any) => {
+        clearInterval(timer);
         modal = null;
         busyRowIds = busyRowIds.filter(x => !affectedIds.includes(x));
         showToast(e.message ?? "Generation failed", "error");

@@ -20,9 +20,9 @@ export default defineConfig(({
     ssr: false,
     lib: {
       entry: resolve(__dirname, "src/main.ts"),
-      name: "PursesBox",
+      name: "FinanceDocumentsBox",
       formats: ["iife"],
-      fileName: () => "purses-box.js",
+      fileName: () => "finance-documents-box.js",
     },
     outDir: "build",
     emptyOutDir: true,

@@ -37,7 +37,7 @@
   });
 
   const titles: Record<ModalKind, { title: string; btn: string; icon: string; btnBusy: string }> = {
-      "update":  { title: "Generate document", btn: "Generate", icon: "fa-cog", btnBusy: "Generating…"       },
+      "update":  { title: "Generate document", btn: "Generate", icon: "fa-cog", btnBusy: "Processing…"       },
       "preview": { title: "Preview document",  btn: "Preview",  icon: "fa-eye", btnBusy: "Building preview…" },
   };
 
@@ -192,7 +192,7 @@
           {/if}
         {/if}
 
-          {#if busy}
+        {#if busy}
           <div class="modal-progress">
             <div class="modal-progress-text">
               <span class="spinner spinner-lg"></span>

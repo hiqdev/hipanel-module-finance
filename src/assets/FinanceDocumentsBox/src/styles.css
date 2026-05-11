@@ -998,7 +998,7 @@ button.x {
 .progress-bar-inner {
   height: 100%;
   background: var(--primary);
-  transition: width .12s linear;
+  transition: width 0.35s ease-out;
 }
 
 /* Preview modal */

@@ -30,7 +30,10 @@ export function useDocumentFilters(
 
   let filtered: Doc[] = $derived.by(() => {
     const { search, typeFilter, dateRange, sort } = filters;
+    const pinnedNew = baseDocs.filter(d => d.isNew);
+    const pinnedNewIds = new Set(pinnedNew.map(d => d.id));
     const rows = baseDocs.filter(d => {
+      if (pinnedNewIds.has(d.id)) return false;
       if (typeFilter.length > 0 && !typeFilter.includes(d.type)) return false;
       const key = docMonthKey(d.date);
       if (dateRange.from && key < dateRange.from) return false;
@@ -46,7 +49,7 @@ export function useDocumentFilters(
       if (av > bv) return sort.dir === "asc" ? 1 : -1;
       return 0;
     });
-    return rows;
+    return [...pinnedNew, ...rows];
   });
 
   let pageCount = $derived(Math.max(1, Math.ceil(filtered.length / PAGE_SIZE)));
