@@ -143,7 +143,7 @@ export interface PreviewDocumentEntry {
 export interface GenerationResponse {
   status: "success" | "error";
   errors: string[];
-  message: string;
+  message: string | null;
   /** Keyed by document type label (e.g. "default"). Only present for preview endpoints. */
   data?: Record<string, PreviewDocumentEntry>;
 }

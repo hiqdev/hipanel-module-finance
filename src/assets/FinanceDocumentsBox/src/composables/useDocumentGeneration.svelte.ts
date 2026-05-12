@@ -28,8 +28,12 @@ function markAsNew(docs: Doc[], ids: string[]): Doc[] {
   return docs.map(d => ids.includes(d.id) ? { ...d, isNew: true } : d);
 }
 
+function cryptoRand(min, max) {
+  return crypto.getRandomValues(new Uint32Array(1))[0] % (max - min + 1) + min;
+}
+
 function extractUrls(data: Record<string, PreviewDocumentEntry> | undefined): string[] {
-  return Object.values(data ?? {}).map(e => e.url).filter(Boolean);
+  return Object.values(data ?? {}).map(e => `/document/document/get-cached-file?uuid=${e.uuid}&v=${cryptoRand(1, 1000000)}`).filter(Boolean);
 }
 
 export function useDocumentGeneration(

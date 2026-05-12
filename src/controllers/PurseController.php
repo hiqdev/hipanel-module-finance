@@ -95,15 +95,12 @@ class PurseController extends CrudController
             ],
             'generate-and-save-monthly-document' => [
                 'class' => GenerateAndSaveDocumentAction::class,
-                'success' => Yii::t('hipanel:finance', 'Document updated'),
             ],
             'generate-and-save-acts' => [
                 'class' => GenerateAndSaveDocumentAction::class,
-                'success' => Yii::t('hipanel:finance', 'Document updated'),
             ],
             'generate-and-save-document' => [
                 'class' => GenerateAndSaveDocumentAction::class,
-                'success' => Yii::t('hipanel:finance', 'Document updated'),
             ],
             'calculate' => [
                 'class' => ProgressAction::class,

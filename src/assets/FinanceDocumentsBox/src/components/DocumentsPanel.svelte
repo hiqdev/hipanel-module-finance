@@ -118,7 +118,6 @@
       docs={pagedDocs}
       sort={filters.sort}
       onSort={onSort}
-      density="compact"
       busyIds={busyIds}
       onRowAction={onRowAction}
       {language}

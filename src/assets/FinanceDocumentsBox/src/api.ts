@@ -3,6 +3,21 @@ import type { ApiError, Contact, Doc, DocParams, GenerationResponse, Requisite }
 const BASE_URL = "";
 
 function extractErrorMessage(payload: unknown): string | null {
+  if (payload && typeof payload === "object" && "status" in payload && (payload as { status: unknown }).status === "error") {
+    const response = payload as { message?: unknown; errors?: unknown };
+
+    if (typeof response.message === "string" && response.message.trim().length > 0) {
+      return response.message;
+    }
+
+    if (Array.isArray(response.errors)) {
+      const error = response.errors.find(e => typeof e === "string" && e.trim().length > 0);
+      if (error) {
+        return error;
+      }
+    }
+  }
+
   if (payload && typeof payload === "object" && "error" in payload) {
     const errorValue = (payload as { error: unknown }).error;
 

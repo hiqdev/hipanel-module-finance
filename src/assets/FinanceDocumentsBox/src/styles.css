@@ -443,13 +443,13 @@ button.x {
 
 .search-input .clear {
   position: absolute;
-  right: 8px;
+  right: 13%;
   top: 50%;
   transform: translateY(-50%);
   color: var(--fg-5);
   cursor: pointer;
   font-size: 12px;
-  padding: 3px;
+  padding: 0px;
 }
 
 .search-input .clear:hover {
@@ -703,7 +703,7 @@ button.x {
 }
 
 .docs-table tbody td {
-  padding: 12px 14px;
+  padding: 8px 14px!important;
   color: var(--fg-2);
   vertical-align: middle;
 }

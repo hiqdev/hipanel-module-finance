@@ -2,11 +2,10 @@
   import type { Doc, SortState } from "../types";
   import DocumentRow from "./DocumentRow.svelte";
 
-  let { docs, sort, onSort, density, busyIds, onRowAction, language, canPreviewAndGenerate }: {
+  let { docs, sort, onSort, busyIds, onRowAction, language, canPreviewAndGenerate }: {
       docs: Doc[];
       sort: SortState;
       onSort: (key: SortState["key"]) => void;
-      density: string;
       busyIds: string[];
       onRowAction: (kind: string, doc: Doc) => void;
       language: string;
@@ -63,7 +62,6 @@
         {#each docs as doc (doc.id)}
           <DocumentRow
               {doc}
-              {density}
               busy={busyIds.includes(doc.id)}
               onAction={onRowAction}
               {language}

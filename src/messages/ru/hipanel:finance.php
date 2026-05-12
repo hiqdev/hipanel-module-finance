@@ -96,8 +96,8 @@ return [
     'Bill was updated successfully' => 'Счёт был успешно изменён',
     'Charge was deleted successfully' => 'Списание было успешно удалено',
 
-    'No templates for requisite. Follow this link {contactUrl} and set template of type \'{type}\'' => 'Нет шаблонов для реквизита. Перейдите по этой ссылке {contactUrl} и установите шаблон типа \'{type}\'',
-    'No templates for requisite. Please contact finance department' => 'Нет шаблонов для реквизита. Пожалуйста, свяжитесь с финансовым отделом',
+    'No templates for the requisite. Follow this link {contactUrl} and set a template of type \'{type}\'' => 'Нет шаблонов для реквизита. Перейдите по этой ссылке {contactUrl} и установите шаблон типа \'{type}\'',
+    'No templates for the requisite. Please contact the finance department' => 'Нет шаблонов для реквизита. Пожалуйста, свяжитесь с финансовым отделом',
 
     'The entered value for the selected payment type can not be negative.' => 'Для выбранного типа платежа введенное значение не может быть отрицательным числом.',
 

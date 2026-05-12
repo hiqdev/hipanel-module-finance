@@ -6,6 +6,7 @@ use Exception;
 use hipanel\actions\Action;
 use hipanel\modules\finance\helpers\DocumentGenerationErrorOps;
 use hipanel\modules\finance\models\Purse;
+use hipanel\modules\finance\responses\DocumentGenerationAjaxResponse;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\web\Session;
@@ -38,41 +39,21 @@ class PreviewDocumentAction extends Action
         return $this->httpResponse($error, $content, $params);
     }
 
-    /**
-     * @param mixed $content Result of Purse::perform(), keyed by document type label.
-     *
-     * Response shape:
-     * {
-     *   "status": "success" | "error",
-     *   "errors": string[],
-     *   "message": string | null,
-     *   "data": {
-     *     "<location>": {          // e.g. "default", "fr", "lt" etc.
-     *       "uuid": string,
-     *       "url": string,         // URL to the cached preview file
-     *       "requisite": {
-     *         "id": int,
-     *         "name": string
-     *       }
-     *     },
-     *     ...
-     *   }
-     * }
-     */
     private function ajaxResponse(?Exception $error, mixed $content): mixed
     {
-        return $this->asJson([
-            'status' => $error !== null ? 'error' : 'success',
-            'data' => $content,
-            'errors' => $error !== null ? DocumentGenerationErrorOps::extract($error->getResponse()->getData()) : [],
-        ]);
+        if ($error !== null) {
+            $message = $this->buildErrorMessage($error);
+
+            return $this->asJson(DocumentGenerationAjaxResponse::error($message)->asArray());
+        }
+
+        return $this->asJson(DocumentGenerationAjaxResponse::success((array)$content)->asArray());
     }
 
     private function httpResponse(?Exception $error, mixed $content, array $params): mixed
     {
         if ($error !== null) {
-            $errorOps = DocumentGenerationErrorOps::extract($error->getResponse()->getData());
-            $this->session->setFlash('error', DocumentGenerationErrorOps::buildMessage($errorOps));
+            $this->session->setFlash('error', DocumentGenerationErrorOps::buildMessage($error->getResponse()->getData()));
 
             return $this->redirectAfterFailure($params);
         }
@@ -95,5 +76,14 @@ class PreviewDocumentAction extends Action
     {
         $this->controller->response->format = Response::FORMAT_RAW;
         $this->controller->response->getHeaders()->add('content-type', 'application/pdf');
+    }
+
+    private function buildErrorMessage(Exception $error): string
+    {
+        if (method_exists($error, 'getResponse')) {
+            return DocumentGenerationErrorOps::buildMessage($error->getResponse()->getData());
+        }
+
+        return $error->getMessage();
     }
 }
