@@ -1,4 +1,4 @@
-import type { ApiError, Contact, Doc, DocParams, GenerationResponse, Requisite } from "./types.ts";
+import type { ApiError, Contact, DocParams, GenerationResponse, Requisite } from "./types.ts";
 
 const BASE_URL = "";
 
@@ -87,12 +87,6 @@ const api = {
   post: <T>(url: string, data: unknown) => request<T>(url, { method: "POST", body: JSON.stringify(data) }),
 };
 
-function qs(params: object): string {
-  return "?" + new URLSearchParams(Object.entries(params).map(([k, v]) => [k, String(v)])).toString();
-}
-
-type RawDocSearchResult = Omit<Doc, "type_label" | "date"> & { type: string };
-
 export const purseDocumentsApi = {
   previewMonthlyDocument: (p: DocParams) =>
     api.post<GenerationResponse>(`/finance/purse/preview-monthly-document`, p),
@@ -102,15 +96,6 @@ export const purseDocumentsApi = {
     api.post<GenerationResponse>("/finance/purse/generate-and-save-monthly-document", p),
   generateAndSaveActs: (p: DocParams) =>
     api.post<GenerationResponse>("/finance/purse/generate-and-save-acts", p),
-  search: (params: { client_id: string; type: string; validity_start_month: string }): Promise<Doc[]> =>
-    api.post<RawDocSearchResult[]>(`/document/document/index${qs(params)}`, params)
-      .then(raws => raws.map(raw => ({
-        ...raw,
-        type: params.type,
-        type_label: raw.type,
-        date: `${params.validity_start_month}-01`,
-        isNew: false,
-      }))),
 };
 
 export const purseSettingsApi = {

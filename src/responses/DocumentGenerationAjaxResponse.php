@@ -92,35 +92,6 @@ final class DocumentGenerationAjaxResponse
         return $result;
     }
 
-    /**
-     * Response shape:
-     * {
-     *   "status": "success" | "error",
-     *   "errors": string[],
-     *   "message": string | null,
-     *   "data": {
-     *     "<location>": {
-     *       "uuid": string,
-     *       "url": string,
-     *       "requisite": {
-     *         "id": int,
-     *         "name": string
-     *       }
-     *     }
-     *   }
-     * }
-     *
-     * @return array{
-     *     status: string,
-     *     errors: string[],
-     *     message: string|null,
-     *     data: array<string, array{
-     *         uuid: string,
-     *         url: string,
-     *         requisite: array{id: int, name: string}
-     *     }>
-     * }
-     */
     public function asArray(): array
     {
         return [

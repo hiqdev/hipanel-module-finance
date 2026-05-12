@@ -95,7 +95,7 @@ export interface DocParams {
   id: string;
   client_id: string;
   type: string;
-  month: string;
+  period: string;
   seller_bank_account_no?: number;
   client_bank_account_no?: number;
   location?: string;

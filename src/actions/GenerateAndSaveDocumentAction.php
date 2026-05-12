@@ -6,8 +6,8 @@ use hipanel\actions\Action;
 use hipanel\modules\finance\helpers\DocumentGenerationErrorOps;
 use hipanel\modules\finance\models\Purse;
 use hipanel\modules\finance\responses\DocumentGenerationAjaxResponse;
+use hipanel\modules\finance\widgets\FinanceDocumentsBox\FinanceDocumentsSerializerTrait;
 use hiqdev\hiart\ResponseErrorException;
-use Yii;
 use yii\base\InvalidCallException;
 
 final class GenerateAndSaveDocumentAction extends Action
@@ -28,6 +28,8 @@ final class GenerateAndSaveDocumentAction extends Action
             return $this->asJson(DocumentGenerationAjaxResponse::error($message)->asArray());
         }
 
-        return $this->asJson(DocumentGenerationAjaxResponse::success((array)$rsp)->asArray());
+        $data = array_map([FinanceDocumentsSerializerTrait::class, 'serializeRawDocumentEntry'], (array)$rsp);
+
+        return $this->asJson(DocumentGenerationAjaxResponse::success($data)->asArray());
     }
 }

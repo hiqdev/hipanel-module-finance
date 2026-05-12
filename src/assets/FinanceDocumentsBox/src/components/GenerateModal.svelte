@@ -13,7 +13,7 @@
       onClose: () => void;
       onSubmit: (args: {
           type: string;
-          month: string;
+          period: string;
           willReplace: boolean;
           mode: ModalKind;
           client_bank_account_no?: number;
@@ -37,8 +37,8 @@
   });
 
   const titles: Record<ModalKind, { title: string; btn: string; icon: string; btnBusy: string }> = {
-      "update":  { title: "Generate document", btn: "Generate", icon: "fa-cog", btnBusy: "Processing…"       },
-      "preview": { title: "Preview document",  btn: "Preview",  icon: "fa-eye", btnBusy: "Building preview…" },
+      "update": { title: "Generate document", btn: "Generate", icon: "fa-cog", btnBusy: "Processing…" },
+      "preview": { title: "Preview document", btn: "Preview", icon: "fa-eye", btnBusy: "Building preview…" },
   };
 
   let t = $derived(titles[mode]);
@@ -108,7 +108,7 @@
           </select>
         </div>
 
-        {#if sellerBankDetails.length > 1}
+          {#if sellerBankDetails.length > 1}
           <div class="form-group">
             <label class="control-label" for="gen-seller-bank-account">Customer bank account</label>
             <select
@@ -123,7 +123,7 @@
           </div>
         {/if}
 
-        {#if clientBankDetails.length > 1}
+          {#if clientBankDetails.length > 1}
           <div class="form-group">
             <label class="control-label" for="gen-client-bank-account">Contractor bank account</label>
             <select
@@ -166,7 +166,7 @@
           </div>
         </div>
 
-        {#if willReplace}
+          {#if willReplace}
           <div class="modal-warn">
             <i class="fa fa-exclamation-triangle"></i>
             <div>
@@ -176,7 +176,7 @@
           </div>
         {/if}
 
-        {#if mode === 'preview'}
+          {#if mode === 'preview'}
           {#if type === 'internal_invoice'}
             <div class="modal-warn">
               <i class="fa fa-exclamation-triangle"></i>
@@ -192,7 +192,7 @@
           {/if}
         {/if}
 
-        {#if busy}
+          {#if busy}
           <div class="modal-progress">
             <div class="modal-progress-text">
               <span class="spinner spinner-lg"></span>
@@ -217,13 +217,13 @@
             class="btn {willReplace ? 'btn-warning' : 'btn-primary'}"
             onclick={() => onSubmit({
                 type,
-                month,
+                period: month,
                 willReplace,
                 mode,
                 client_bank_account_no: clientBankAccountNo ?? undefined,
                 seller_bank_account_no: sellerBankAccountNo ?? undefined,
             })}
-            disabled={busy || type === 'internal_invoice'}
+            disabled={busy || !type || type === 'internal_invoice'}
         >
           {#if busy}
             <span class="spinner spinner-on-btn"></span> {t.btnBusy}

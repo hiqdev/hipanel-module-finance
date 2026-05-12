@@ -28,7 +28,7 @@ function markAsNew(docs: Doc[], ids: string[]): Doc[] {
   return docs.map(d => ids.includes(d.id) ? { ...d, isNew: true } : d);
 }
 
-function cryptoRand(min, max) {
+function cryptoRand(min: number, max: number) {
   return crypto.getRandomValues(new Uint32Array(1))[0] % (max - min + 1) + min;
 }
 
@@ -52,9 +52,9 @@ export function useDocumentGeneration(
   // Captures affected rows before the API call, marks them busy, then on
   // success transitions them in-place to isNew (update) or opens the preview
   // modal with file URLs from the response (preview).
-  function handleSubmit({ type, month, willReplace, mode, seller_bank_account_no, client_bank_account_no }: {
+  function handleSubmit({ type, period, willReplace, mode, seller_bank_account_no, client_bank_account_no }: {
     type: string;
-    month: string;
+    period: string;
     willReplace: boolean;
     mode: string;
     seller_bank_account_no?: number;
@@ -69,7 +69,7 @@ export function useDocumentGeneration(
       }
     }, 400);
 
-    const affectedDocs = getDocs().filter(d => d.type === type && docMonthKey(d.date) === month);
+    const affectedDocs = getDocs().filter(d => d.type === type && docMonthKey(d.date) === period);
     const affectedIds = affectedDocs.map(d => d.id);
     busyRowIds = [...busyRowIds, ...affectedIds];
 
@@ -77,7 +77,7 @@ export function useDocumentGeneration(
     const isPreview = mode === "preview";
 
     pickEndpoint(type, isPreview ? "preview" : "update")({
-      type, month, client_id, id,
+      type, period: period, client_id, id,
       ...(seller_bank_account_no != null ? { seller_bank_account_no } : {}),
       ...(client_bank_account_no != null ? { client_bank_account_no } : {}),
     })
@@ -92,14 +92,11 @@ export function useDocumentGeneration(
           setDocs(markAsNew(getDocs(), affectedIds));
           showToast(willReplace ? "Document replaced" : "Document generated");
         } else {
-          purseDocumentsApi.search({ client_id, type, validity_start_month: month })
-            .then((founds: Doc[]) => {
-              if (founds.length > 0) {
-                setDocs([...founds.map((d: Doc) => ({ ...d, isNew: true })), ...getDocs()]);
-              }
-              showToast("Document generated");
-            })
-            .catch(() => showToast("Document generated"));
+          const founds = (Object.values((rsp?.data ?? {}) as unknown as Record<string, Doc>)).map(d => ({ ...d, isNew: true as const }));
+          if (founds.length > 0) {
+            setDocs([...founds, ...getDocs()]);
+          }
+          showToast("Document generated");
         }
       })
       .catch((e: any) => {
@@ -130,7 +127,7 @@ export function useDocumentGeneration(
 
     pickEndpoint(doc.type, "preview")({
       type: doc.type,
-      month: docMonthKey(doc.date),
+      period: docMonthKey(doc.date),
       client_id,
       id,
       bill_id: doc.bill_id,
@@ -156,7 +153,7 @@ export function useDocumentGeneration(
 
     pickEndpoint(doc.type, "update")({
       type: doc.type,
-      month: docMonthKey(doc.date),
+      period: docMonthKey(doc.date),
       client_id,
       id,
       bill_id: doc.bill_id,

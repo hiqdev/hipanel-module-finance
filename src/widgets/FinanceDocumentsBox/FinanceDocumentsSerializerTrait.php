@@ -4,10 +4,27 @@ namespace hipanel\modules\finance\widgets\FinanceDocumentsBox;
 
 use hipanel\modules\client\models\Client;
 use hipanel\modules\document\models\Document;
+use Yii;
 use yii\web\Application;
 
 trait FinanceDocumentsSerializerTrait
 {
+    public static function serializeRawDocumentEntry(array $raw): array
+    {
+        $parsed = json_decode($raw['data'] ?? '{}', true) ?: [];
+        $raw['id'] = (string)($raw['id'] ?? '');
+        $raw['file_id'] = (string)($raw['file_id'] ?? '');
+        $raw['type'] = $parsed['type'] ?? $raw['type'] ?? '';
+        $raw['type_label'] = Yii::$app->i18n::removeLegacyLangTags($parsed['type_label'] ?? $raw['type'] ?? '');
+        $raw['date'] = explode(' ', $raw['validity_start'] ?? '', 2)[0];
+        $raw['number'] = $parsed['no'] ?? $raw['id'];
+        $raw['filename'] = $parsed['filename'] ?? '';
+        $raw['location'] = $parsed['location'] ?? null;
+        $raw['bill_id'] = $parsed['bill_id'] ?? null;
+
+        return $raw;
+    }
+
     private function buildPermissionList(Application $app, Client $client): array
     {
         $currentUser = $app->user;
@@ -78,7 +95,7 @@ trait FinanceDocumentsSerializerTrait
         $i18n = $app->i18n;
         $data = array_map(static fn($v) => $i18n::removeLegacyLangTags($v), $document->toArray());
 
-        $data['date'] = explode(' ', $document->validifty_start ?? $document->create_time ?? '', 2)[0];
+        $data['date'] = explode(' ', $document->validity_start ?? $document->create_time ?? '', 2)[0];
         $data['number'] = $document->number ?: (string)$document->id;
         $data['location'] = $document->data_location;
         $data['bill_id'] = $document->data_bill_id;
