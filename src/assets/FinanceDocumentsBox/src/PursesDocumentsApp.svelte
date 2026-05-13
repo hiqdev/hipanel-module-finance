@@ -7,6 +7,7 @@
   import { useToast } from "./composables/useToast.svelte";
   import { useDocumentFilters } from "./composables/useDocumentFilters.svelte";
   import { useDocumentGeneration } from "./composables/useDocumentGeneration.svelte";
+  import { usePurseCreation } from "./composables/usePurseCreation.svelte";
   import PurseTabs from "./components/PurseTabs.svelte";
   import PurseSummary from "./components/PurseSummary.svelte";
   import PurseSettings from "./components/PurseSettings.svelte";
@@ -19,7 +20,7 @@
       language,
       permissions: permKeys = [],
       purses: initialPurses = [],
-      // currencies: currencyList = [],
+      currencies = [],
       documentTypes: allTypes = [],
   }: PursesDocumentsProps = $props();
 
@@ -27,6 +28,7 @@
 
   untrack(() => permissions.init(permKeys));
   let canPreviewAndGenerate = permissions.can("document.generate") && !permissions.can("has-own-seller");
+  let canAddPurse = permissions.can("purse.update") && permissions.can("owner-staff");
 
   // State is scoped per purse so tab switching preserves filters/sort/page.
   const seedPurses = untrack(() => initialPurses.length ? initialPurses : []);
@@ -57,6 +59,14 @@
       () => purse,
   );
 
+  function handleStateRefresh(state: PursesDocumentsProps) {
+      purses = [...state.purses];
+      docsByPurse = Object.fromEntries(state.purses.map(p => [p.id, [...p.documents]]));
+      if (state.purses.length > 0) activeId = state.purses[state.purses.length - 1].id;
+  }
+
+  const purseCreation = usePurseCreation(() => purse, handleStateRefresh, toast.show);
+
   function handleSettingChange(field: string, value: string) {
       purses = purses.map(p => {
           if (p.id !== activeId) return p;
@@ -74,7 +84,16 @@
 
 <div class="accounts-block nav-tabs-custom">
 
-  <PurseTabs {purses} {activeId} onChange={(id) => (activeId = id)} {language}/>
+  <PurseTabs
+      {purses}
+      {activeId}
+      onChange={(id) => (activeId = id)}
+      {language}
+      {canAddPurse}
+      {currencies}
+      {purse}
+      {purseCreation}
+  />
 
   <PurseSummary {purse} onRecharge={handleRecharge}/>
 

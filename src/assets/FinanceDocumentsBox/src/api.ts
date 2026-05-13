@@ -1,4 +1,4 @@
-import type { ApiError, Contact, DocParams, GenerationResponse, Requisite } from "./types.ts";
+import type { ApiError, Contact, CreatePurseParams, DocParams, GenerationResponse, PursesDocumentsProps, Requisite } from "./types.ts";
 
 const BASE_URL = "";
 
@@ -98,6 +98,13 @@ export const purseDocumentsApi = {
     api.post<GenerationResponse>("/finance/purse/generate-and-save-monthly-document", p),
   generateAndSaveActs: (p: DocParams) =>
     api.post<GenerationResponse>("/finance/purse/generate-and-save-acts", p),
+};
+
+export const purseApi = {
+  createPurse: (p: CreatePurseParams) =>
+    api.post<void>("/finance/purse/create", p),
+  fetchState: (p: { client_id: string }) =>
+    api.post<PursesDocumentsProps>("/finance/purse/get-documents-state", p),
 };
 
 export const purseSettingsApi = {

@@ -1,12 +1,18 @@
 <script lang="ts">
-  import type { Purse } from "../types";
+  import type { Currency, Purse } from "../types";
   import { fmtMoney } from "../data";
+  import CreatePursePop from "./CreatePursePop.svelte";
+  import type { usePurseCreation } from "../composables/usePurseCreation.svelte";
 
-  let { purses, activeId, onChange, language }: {
+  let { purses, activeId, onChange, language, canAddPurse = false, currencies = [], purse, purseCreation }: {
       purses: Purse[];
       activeId: string;
       onChange: (id: string) => void;
       language: string;
+      canAddPurse?: boolean;
+      currencies?: Currency[];
+      purse?: Purse;
+      purseCreation?: ReturnType<typeof usePurseCreation>;
   } = $props();
 </script>
 
@@ -32,6 +38,15 @@
             </a>
       </li>
   {/each}
+  {#if canAddPurse && purse && purseCreation && currencies.length > 0}
+    <CreatePursePop
+        {currencies}
+        {purse}
+        busy={purseCreation.busy}
+        error={purseCreation.error}
+        onSubmit={purseCreation.submit}
+    />
+  {/if}
     <div class="purse-tabs-spacer"></div>
 </ul>
 

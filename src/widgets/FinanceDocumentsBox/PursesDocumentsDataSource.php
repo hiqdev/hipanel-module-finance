@@ -35,11 +35,16 @@ final class PursesDocumentsDataSource implements FinanceDocumentsDataSource
         $availableTypes = $this->resolveAccessibleDocumentTypes($this->app, $this->client->isEmployee());
         $types = array_filter($this->documentTypes, static fn($type) => in_array($type, $availableTypes, true), ARRAY_FILTER_USE_KEY);
 
+        $availableCurrencies = array_column($this->purses, 'currency');
+        $currencies = array_filter($this->currencies,
+            static fn($currency) => !in_array($currency, $availableCurrencies, true),
+            ARRAY_FILTER_USE_KEY);
+
         $payload = [
             'language' => $this->app->language,
             'purses' => array_map(fn($p) => $this->serializePurse($this->app, $p), $this->purses),
             'permissions' => $this->buildPermissionList($this->app, $this->client),
-            'currencies' => $this->prepareAssoc($this->currencies),
+            'currencies' => $this->prepareAssoc($currencies),
             'documentTypes' => $this->prepareAssoc($types),
         ];
 

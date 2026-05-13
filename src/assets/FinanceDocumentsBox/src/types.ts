@@ -5,7 +5,13 @@ export interface PursesDocumentsProps {
   purses: Purse[];
   permissions: PermissionKey[];
   documentTypes: DocType[];
-  curnencies: Currency[];
+  currencies: Currency[];
+}
+
+export interface CreatePurseParams {
+  currency: string;
+  client_id: string;
+  seller_id: string;
 }
 
 export interface PartyDocumentsProps {
@@ -18,6 +24,8 @@ export interface Purse {
   id: string;
   client_id: string;
   seller_id: string;
+  client: string;
+  seller: string;
   currency: string;
   symbol: string;
   balance: number;

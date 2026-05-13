@@ -80,11 +80,11 @@ button.x {
 
 /* 1. TABS */
 .purse-tabs {
-  display: flex;
-  align-items: flex-end;
-  gap: 0;
-  padding: 0;
-  /*border-bottom: 1px solid var(--border-subtle);*/
+  /*display: flex;*/
+  /*align-items: flex-end;*/
+  /*gap: 0;*/
+  /*padding: 0;*/
+  border-bottom: 1px solid var(--border-subtle);
   background: #fafbfc;
 }
 
@@ -102,24 +102,15 @@ button.x {
   display: flex;
   align-items: center;
   gap: 8px;
+
+}
+
+.nav-tabs-custom > .purse-tabs.nav-tabs > li {
+  margin-bottom: -5px;
 }
 
 .purse-tab:hover {
   color: var(--fg-2);
-}
-
-.purse-tab.is-active {
-  color: var(--primary);
-  font-weight: 600;
-}
-
-.purse-tab.is-active::after {
-  content: "";
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: -1px;
-  height: 2px;
 }
 
 .purse-tab .balance-mini {

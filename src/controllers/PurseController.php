@@ -99,6 +99,7 @@ class PurseController extends CrudController
             ],
             'generate-and-save-monthly-document' => [
                 'class' => GenerateAndSaveDocumentAction::class,
+                'action' => 'generate-and-save-monthly-document',
             ],
             'generate-and-save-acts' => [
                 'class' => GenerateAndSaveDocumentAction::class,
