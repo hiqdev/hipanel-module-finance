@@ -12,12 +12,14 @@ use yii\base\InvalidCallException;
 
 final class GenerateAndSaveDocumentAction extends Action
 {
+    public string $action = 'generate-and-save-document';
+
     public function run()
     {
         $payload = $this->controller->request->post();
 
         try {
-            $rsp = Purse::perform('generate-and-save-monthly-document', $payload);
+            $rsp = Purse::perform($this->action, $payload);
         } catch (ResponseErrorException $e) {
             $message = DocumentGenerationErrorOps::buildMessage($e->getResponse()->getData());
 

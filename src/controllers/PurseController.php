@@ -93,11 +93,16 @@ class PurseController extends CrudController
                 'class' => PreviewDocumentAction::class,
                 'action' => 'generate-document',
             ],
+            'preview-acts' => [
+                'class' => PreviewDocumentAction::class,
+                'action' => 'generate-acts',
+            ],
             'generate-and-save-monthly-document' => [
                 'class' => GenerateAndSaveDocumentAction::class,
             ],
             'generate-and-save-acts' => [
                 'class' => GenerateAndSaveDocumentAction::class,
+                'action' => 'generate-and-save-acts',
             ],
             'generate-and-save-document' => [
                 'class' => GenerateAndSaveDocumentAction::class,
