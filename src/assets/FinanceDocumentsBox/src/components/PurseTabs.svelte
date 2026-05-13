@@ -38,7 +38,7 @@
             </a>
       </li>
   {/each}
-    {#if canAddPurse && purse && purseCreation && currencies.length > 0}
+  {#if canAddPurse && purse && purseCreation && currencies.length > 0}
     <CreatePursePop
         {currencies}
         busy={purseCreation.busy}

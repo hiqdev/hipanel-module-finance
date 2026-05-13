@@ -37,14 +37,14 @@
 </script>
 
 <li class="purse-add-wrap" bind:this={wrapEl}>
-  <button
-      type="button"
+  <a
+      href="#"
       class="purse-tab purse-tab-add"
-      onclick={() => (open = !open)}
+      onclick={(e) => { e.preventDefault(); return (open = !open); }}
       title="Create new purse"
   >
-    <i class="fa fa-plus"></i> New
-  </button>
+    <i class="fa fa-plus fa-fw"></i> New
+  </a>
 
   {#if open}
     <div class="popover bottom in" role="tooltip" style="display:block; min-width:240px; left:0; top:100%; margin-top:2px">
