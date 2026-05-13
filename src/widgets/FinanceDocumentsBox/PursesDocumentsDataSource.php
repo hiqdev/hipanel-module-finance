@@ -55,4 +55,9 @@ final class PursesDocumentsDataSource implements FinanceDocumentsDataSource
 
         return $purse;
     }
+
+    public function hasDocuments(): bool
+    {
+        return array_any($this->purses, fn($purse) => $purse->isRelationPopulated('documents'));
+    }
 }

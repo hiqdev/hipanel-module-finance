@@ -39,4 +39,11 @@ final class PartyDocumentsDataSource implements FinanceDocumentsDataSource
             JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP
         );
     }
+
+    public function hasDocuments(): bool
+    {
+        $r = $this->contact->isRelationPopulated('documents');
+
+        return $r;
+    }
 }

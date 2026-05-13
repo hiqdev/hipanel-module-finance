@@ -11,4 +11,6 @@ interface FinanceDocumentsDataSource
 
     /** Returns a JSON-encoded props string ready to pass to the JS mount call. */
     public function buildJsProps(Application $app): string;
+
+    public function hasDocuments(): bool;
 }
