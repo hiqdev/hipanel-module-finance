@@ -15,7 +15,7 @@ export function usePurseCreation(
     error = null;
     const p = getPurse();
     try {
-      await purseApi.createPurse({ Purse: { currency, client_id: p.client_id, seller_id: p.seller_id }});
+      await purseApi.createPurse({ Purse: { currency, client_id: p.client_id, seller_id: p.seller_id } });
       const state = await purseApi.fetchState({ client_id: p.client_id });
       onRefresh(state);
       showToast("Purse created");
@@ -24,6 +24,7 @@ export function usePurseCreation(
       showToast(error!, "error");
     } finally {
       busy = false;
+      error = null;
     }
   }
 

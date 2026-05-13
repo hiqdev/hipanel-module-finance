@@ -1,9 +1,8 @@
 <script lang="ts">
-  import type { Currency, Purse } from "../types";
+  import type { Currency } from "../types";
 
-  let { currencies, purse, busy, error, onSubmit }: {
+  let { currencies, busy, error, onSubmit }: {
       currencies: Currency[];
-      purse: Purse;
       busy: boolean;
       error: string | null;
       onSubmit: (currency: string) => void;
@@ -46,19 +45,11 @@
     <i class="fa fa-plus"></i> Add new
   </button>
 
-    {#if open}
+  {#if open}
     <div class="popover bottom in" role="tooltip" style="display:block; min-width:240px; left:0; top:100%; margin-top:2px">
       <div class="arrow" style="left:18px"></div>
-      <h3 class="popover-title">Create purse</h3>
+      <h3 class="popover-title">Add new purse</h3>
       <div class="popover-content">
-        <div class="form-group" style="margin-bottom:6px">
-          <label style="font-weight:normal; color:#777; font-size:12px; margin-bottom:1px">Client</label>
-          <div style="font-size:13px">{purse.client}</div>
-        </div>
-        <div class="form-group" style="margin-bottom:8px">
-          <label style="font-weight:normal; color:#777; font-size:12px; margin-bottom:1px">Seller</label>
-          <div style="font-size:13px">{purse.seller}</div>
-        </div>
         <div class="form-group" style="margin-bottom:8px">
           <label class="control-label" for="new-purse-currency" style="font-size:12px; margin-bottom:3px">Currency</label>
           <select
@@ -73,7 +64,7 @@
           </select>
         </div>
 
-          {#if error}
+        {#if error}
           <div class="text-danger" style="font-size:12px; margin-bottom:6px">
             <i class="fa fa-exclamation-circle"></i> {error}
           </div>
@@ -105,13 +96,4 @@
 </li>
 
 <style>
-  .purse-add-wrap {
-      position: relative;
-  }
-
-  .purse-add-wrap .popover {
-      position: absolute;
-      z-index: 1060;
-      white-space: normal;
-  }
 </style>

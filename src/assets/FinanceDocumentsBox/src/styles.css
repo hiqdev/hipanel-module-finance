@@ -1247,3 +1247,13 @@ button.x {
   margin: 0;
   font-size: 13px;
 }
+
+.purse-add-wrap {
+  position: relative;
+}
+
+.purse-add-wrap .popover {
+  position: absolute;
+  z-index: 1060;
+  white-space: normal;
+}
