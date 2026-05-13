@@ -40,7 +40,7 @@
   <td class="row-actions-cell">
     {#if busy}
       <div class="row-busy">
-        <span class="spinner"></span> Generating…
+        <span class="spinner"></span> Processing…
       </div>
     {:else}
       <div class="row-actions">
@@ -59,7 +59,7 @@
           <i class="fa fa-eye"></i>
         </a>
 
-          {#if canPreviewAndGenerate && doc.type !== 'internal_invoice'}
+          {#if canPreviewAndGenerate}
           <button class="ra-btn" onclick={() => onAction('preview', doc)} title="Preview updated version (do not save)">
             <i class="fa fa-search-plus"></i>
           </button>

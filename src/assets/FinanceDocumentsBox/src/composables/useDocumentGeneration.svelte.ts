@@ -17,7 +17,7 @@ const routesByType: Record<string, Partial<DocEndpoints>> = {
   contract: { update: purseDocumentsApi.generateAndSaveDocument, preview: purseDocumentsApi.previewMonthlyDocument },
   probation: { update: purseDocumentsApi.generateAndSaveDocument, preview: purseDocumentsApi.previewMonthlyDocument },
   nda: { update: purseDocumentsApi.generateAndSaveDocument, preview: purseDocumentsApi.previewMonthlyDocument },
-  internal_invoice: { update: purseDocumentsApi.generateAndSaveActs },
+  internal_invoice: { update: purseDocumentsApi.generateAndSaveActs, preview: purseDocumentsApi.previewActs },
 };
 
 function pickEndpoint(type: string, action: keyof DocEndpoints): DocEndpoint {

@@ -223,7 +223,7 @@
                 client_bank_account_no: clientBankAccountNo ?? undefined,
                 seller_bank_account_no: sellerBankAccountNo ?? undefined,
             })}
-            disabled={busy || !type || type === 'internal_invoice'}
+            disabled={busy || !type}
         >
           {#if busy}
             <span class="spinner spinner-on-btn"></span> {t.btnBusy}

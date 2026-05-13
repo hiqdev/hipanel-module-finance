@@ -387,6 +387,10 @@ button.x {
   padding: 16px 24px 20px;
 }
 
+.box-body .purse-docs {
+  padding: 0;
+}
+
 .docs-head {
   display: flex;
   align-items: center;

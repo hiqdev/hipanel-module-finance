@@ -75,7 +75,6 @@
           </div>
         {/if}
       </div>
-
       <div class="modal-footer">
         <button type="button" class="btn btn-default" onclick={onClose}>
           <i class="fa fa-times"></i> Close
