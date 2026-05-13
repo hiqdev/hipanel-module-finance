@@ -9,9 +9,11 @@ export interface PursesDocumentsProps {
 }
 
 export interface CreatePurseParams {
-  currency: string;
-  client_id: string;
-  seller_id: string;
+  Purse: {
+    currency: string;
+    client_id: string;
+    seller_id: string;
+  };
 }
 
 export interface PartyDocumentsProps {
