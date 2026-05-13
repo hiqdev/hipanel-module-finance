@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\widgets\FinanceDocumentsBox;
 
 use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\models\Purse;
+use Yii;
 use yii\helpers\Json;
 use yii\web\Application;
 
@@ -11,9 +12,12 @@ final class PursesDocumentsDataSource implements FinanceDocumentsDataSource
 {
     use FinanceDocumentsSerializerTrait;
 
+    private \yii\console\Application|null|Application $app;
+
     /** @param Purse[] $purses */
     public function __construct(readonly private array $purses, readonly private Client $client)
     {
+        $this->app = Yii::$app;
     }
 
     public function getMountFunctionName(): string
@@ -21,13 +25,13 @@ final class PursesDocumentsDataSource implements FinanceDocumentsDataSource
         return 'mountPursesDocuments';
     }
 
-    public function buildJsProps(Application $app): string
+    public function buildJsProps(): string
     {
         return Json::encode(
             [
-                'language' => $app->language,
-                'purses' => array_map(fn($p) => $this->serializePurse($app, $p), $this->purses),
-                'permissions' => $this->buildPermissionList($app, $this->client),
+                'language' => $this->app->language,
+                'purses' => array_map(fn($p) => $this->serializePurse($this->app, $p), $this->purses),
+                'permissions' => $this->buildPermissionList($this->app, $this->client),
             ],
             JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP
         );

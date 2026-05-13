@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\widgets\FinanceDocumentsBox;
 
 use hipanel\modules\client\models\Client;
 use hipanel\modules\client\models\Contact;
+use Yii;
 use yii\helpers\Json;
 use yii\web\Application;
 
@@ -11,9 +12,12 @@ final class PartyDocumentsDataSource implements FinanceDocumentsDataSource
 {
     use FinanceDocumentsSerializerTrait;
 
+    private \yii\console\Application|null|Application $app;
+
     /** @param Contact $contact Model with a populated `documents` relation (Contact, Requisite, etc.) */
     public function __construct(readonly private Contact $contact, readonly private Client $client)
     {
+        $this->app = Yii::$app;
     }
 
     public function getMountFunctionName(): string
@@ -21,10 +25,10 @@ final class PartyDocumentsDataSource implements FinanceDocumentsDataSource
         return 'mountPartyDocuments';
     }
 
-    public function buildJsProps(Application $app): string
+    public function buildJsProps(): string
     {
         $filtered = $this->filterAccessibleDocuments(
-            $app,
+            $this->app,
             $this->contact->documents ?? [],
             $this->client->isEmployee()
         );
