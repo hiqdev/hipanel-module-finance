@@ -15,7 +15,12 @@ final class PursesDocumentsDataSource implements FinanceDocumentsDataSource
     private \yii\console\Application|null|Application $app;
 
     /** @param Purse[] $purses */
-    public function __construct(readonly private array $purses, readonly private Client $client)
+    public function __construct(
+        readonly private array $purses,
+        readonly private Client $client,
+        readonly private array $currencies,
+        readonly private array $documentTypes,
+    )
     {
         $this->app = Yii::$app;
     }
@@ -27,14 +32,18 @@ final class PursesDocumentsDataSource implements FinanceDocumentsDataSource
 
     public function buildJsProps(): string
     {
-        return Json::encode(
-            [
-                'language' => $this->app->language,
-                'purses' => array_map(fn($p) => $this->serializePurse($this->app, $p), $this->purses),
-                'permissions' => $this->buildPermissionList($this->app, $this->client),
-            ],
-            JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP
-        );
+        $availableTypes = $this->resolveAccessibleDocumentTypes($this->app, $this->client->isEmployee());
+        $types = array_filter($this->documentTypes, static fn($type) => in_array($type, $availableTypes, true), ARRAY_FILTER_USE_KEY);
+
+        $payload = [
+            'language' => $this->app->language,
+            'purses' => array_map(fn($p) => $this->serializePurse($this->app, $p), $this->purses),
+            'permissions' => $this->buildPermissionList($this->app, $this->client),
+            'currencies' => $this->prepareAssoc($this->currencies),
+            'documentTypes' => $this->prepareAssoc($types),
+        ];
+
+        return Json::encode($payload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP);
     }
 
     private function serializePurse(Application $app, Purse $purseModel): array
@@ -60,6 +69,16 @@ final class PursesDocumentsDataSource implements FinanceDocumentsDataSource
         return $purse;
     }
 
+    private function prepareAssoc(array $assoc): array
+    {
+        return array_map(
+            static fn(string $id, string $label): array => ['id' => $id, 'label' => $label],
+            array_keys($assoc),
+            $assoc
+        );
+    }
+
+    /** Checks whether at least one purse has the 'documents' relation populated. */
     public function hasDocuments(): bool
     {
         return array_any($this->purses, fn($purse) => $purse->isRelationPopulated('documents'));

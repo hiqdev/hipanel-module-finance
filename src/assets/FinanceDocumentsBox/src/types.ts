@@ -4,6 +4,8 @@ export interface PursesDocumentsProps {
   language: string,
   purses: Purse[];
   permissions: PermissionKey[];
+  documentTypes: DocType[];
+  curnencies: Currency[];
 }
 
 export interface PartyDocumentsProps {
@@ -55,6 +57,11 @@ export interface BankDetails {
 }
 
 export interface DocType {
+  id: string;
+  label: string;
+}
+
+export interface Currency {
   id: string;
   label: string;
 }

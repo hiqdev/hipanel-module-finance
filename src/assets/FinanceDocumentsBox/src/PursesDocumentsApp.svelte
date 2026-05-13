@@ -15,7 +15,13 @@
   import PreviewResultModal from "./components/PreviewResultModal.svelte";
   import ConfirmReplaceModal from "./components/ConfirmReplaceModal.svelte";
 
-  let { language, permissions: permKeys = [], purses: initialPurses = [] }: PursesDocumentsProps = $props();
+  let {
+      language,
+      permissions: permKeys = [],
+      purses: initialPurses = [],
+      // currencies: currencyList = [],
+      documentTypes: allTypes = [],
+  }: PursesDocumentsProps = $props();
 
   initI18n(() => language);
 
@@ -102,7 +108,7 @@
   <GenerateModal
       mode={generation.modal.kind}
       initial={generation.modal.initial}
-      types={docFilters.availableTypes}
+      types={allTypes}
       existingMonths={docFilters.existingMonths}
       busy={!!generation.modal.busy}
       progress={generation.modal.progress ?? 0}

@@ -27,16 +27,17 @@ trait FinanceDocumentsSerializerTrait
 
     private function buildPermissionList(Application $app, Client $client): array
     {
-        $currentUser = $app->user;
+        $identityUser = $app->user;
 
         return array_keys(array_filter([
-            'document.read' => $currentUser->can('document.read'),
-            'document.generate' => $currentUser->can('document.generate'),
-            'purse.update' => $currentUser->can('purse.update'),
-            'client.update' => $currentUser->can('client.update'),
-            'owner-staff' => $currentUser->can('owner-staff'),
-            'has-own-seller' => $currentUser->identity->hasOwnSeller($client->id),
-            'is-employee' => $currentUser->can('is-employee'),
+            'top-up' => $identityUser->can('deposit') && $this->client->isSameAsIdentity(),
+            'document.read' => $identityUser->can('document.read'),
+            'document.generate' => $identityUser->can('document.generate'),
+            'purse.update' => $identityUser->can('purse.update'),
+            'client.update' => $identityUser->can('client.update'),
+            'owner-staff' => $identityUser->can('owner-staff'),
+            'has-own-seller' => $identityUser->identity->hasOwnSeller($client->id),
+            'is-employee' => $identityUser->can('is-employee'),
         ]));
     }
 

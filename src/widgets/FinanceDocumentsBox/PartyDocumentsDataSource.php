@@ -32,13 +32,13 @@ final class PartyDocumentsDataSource implements FinanceDocumentsDataSource
             $this->contact->documents ?? [],
             $this->client->isEmployee()
         );
-        $documents = array_map(fn($d) => $this->serializeDocument($app, $d), $filtered);
+        $documents = array_map(fn($d) => $this->serializeDocument($this->app, $d), $filtered);
 
         return Json::encode(
             [
-                'language' => $app->language,
+                'language' => $this->app->language,
                 'documents' => $documents,
-                'permissions' => $this->buildPermissionList($app, $this->client),
+                'permissions' => $this->buildPermissionList($this->app, $this->client),
             ],
             JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP
         );
@@ -46,8 +46,6 @@ final class PartyDocumentsDataSource implements FinanceDocumentsDataSource
 
     public function hasDocuments(): bool
     {
-        $r = $this->contact->isRelationPopulated('documents');
-
-        return $r;
+        return $this->contact->isRelationPopulated('documents');
     }
 }

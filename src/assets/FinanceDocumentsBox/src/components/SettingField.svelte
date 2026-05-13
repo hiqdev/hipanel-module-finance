@@ -156,6 +156,8 @@
               tabindex="0"
               style="color: var(--link); border-top: 1px solid var(--border-subtle)"
               href="{createNewUrl}"
+              target="_blank"
+              rel="noopener noreferrer"
           >
           <i class="fa fa-plus" style="width: 14px"></i>
           <span>Add new…</span>

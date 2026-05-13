@@ -28,7 +28,7 @@ final class FinanceDocumentsBox extends Widget
         FinanceDocumentsBoxAsset::register($this->view);
 
         $mfn = $this->dataSource->getMountFunctionName();
-        $props = $this->dataSource->buildJsProps($this->app);
+        $props = $this->dataSource->buildJsProps();
         $this->view->registerJs(
             "window.FinanceDocumentsBox.$mfn(document.getElementById('$this->id'), $props);"
         );

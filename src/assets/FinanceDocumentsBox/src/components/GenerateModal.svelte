@@ -176,23 +176,14 @@
           </div>
         {/if}
 
-          {#if mode === 'preview'}
-          {#if type === 'internal_invoice'}
-            <div class="modal-warn">
-              <i class="fa fa-exclamation-triangle"></i>
-              <div>
-                  An <strong>Internal invoice</strong> documents cannot be previwed.
-              </div>
-            </div>
-          {:else}
-            <div class="modal-note modal-note-info">
-              <i class="fa fa-eye"></i>
-              Preview mode — the generated document will be shown but <strong>not saved</strong>.
-            </div>
-          {/if}
+        {#if mode === 'preview'}
+          <div class="modal-note modal-note-info">
+            <i class="fa fa-eye"></i>
+            Preview mode — the generated document will be shown but <strong>not saved</strong>.
+          </div>
         {/if}
 
-          {#if busy}
+        {#if busy}
           <div class="modal-progress">
             <div class="modal-progress-text">
               <span class="spinner spinner-lg"></span>
