@@ -5,7 +5,7 @@
       currencies: Currency[];
       busy: boolean;
       error: string | null;
-      onSubmit: (currency: string) => void;
+      onSubmit: (currency: string) => Promise<boolean>;
   } = $props();
 
   let open = $state(false);
@@ -29,9 +29,10 @@
       return () => document.removeEventListener("mousedown", handler);
   });
 
-  function handleSubmit() {
+  async function handleSubmit() {
       if (!canSubmit) return;
-      onSubmit(currency);
+      const ok = await onSubmit(currency);
+      if (ok) open = false;
   }
 </script>
 
@@ -42,13 +43,13 @@
       onclick={() => (open = !open)}
       title="Create new purse"
   >
-    <i class="fa fa-plus"></i> Add new
+    <i class="fa fa-plus"></i> New
   </button>
 
   {#if open}
     <div class="popover bottom in" role="tooltip" style="display:block; min-width:240px; left:0; top:100%; margin-top:2px">
       <div class="arrow" style="left:18px"></div>
-      <h3 class="popover-title">Add new purse</h3>
+      <h3 class="popover-title">Create new purse</h3>
       <div class="popover-content">
         <div class="form-group" style="margin-bottom:8px">
           <label class="control-label" for="new-purse-currency" style="font-size:12px; margin-bottom:3px">Currency</label>
@@ -94,6 +95,3 @@
     </div>
   {/if}
 </li>
-
-<style>
-</style>

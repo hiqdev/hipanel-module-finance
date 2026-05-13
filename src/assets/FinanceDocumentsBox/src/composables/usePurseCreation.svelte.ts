@@ -10,7 +10,7 @@ export function usePurseCreation(
   let busy = $state(false);
   let error = $state<string | null>(null);
 
-  async function submit(currency: string) {
+  async function submit(currency: string): Promise<boolean> {
     busy = true;
     error = null;
     const p = getPurse();
@@ -19,12 +19,13 @@ export function usePurseCreation(
       const state = await purseApi.fetchState({ client_id: p.client_id });
       onRefresh(state);
       showToast("Purse created");
+      return true;
     } catch (e: any) {
       error = e.message ?? "Failed to create purse";
       showToast(error!, "error");
+      return false;
     } finally {
       busy = false;
-      error = null;
     }
   }
 

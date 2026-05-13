@@ -25,7 +25,7 @@ final class PartyDocumentsDataSource implements FinanceDocumentsDataSource
         return 'mountPartyDocuments';
     }
 
-    public function buildJsProps(): string
+    public function buildJsProps(bool $raw = false): string|array
     {
         $filtered = $this->filterAccessibleDocuments(
             $this->app,
@@ -33,15 +33,13 @@ final class PartyDocumentsDataSource implements FinanceDocumentsDataSource
             $this->client->isEmployee()
         );
         $documents = array_map(fn($d) => $this->serializeDocument($this->app, $d), $filtered);
+        $payload = [
+            'language' => $this->app->language,
+            'documents' => $documents,
+            'permissions' => $this->buildPermissionList($this->app, $this->client),
+        ];
 
-        return Json::encode(
-            [
-                'language' => $this->app->language,
-                'documents' => $documents,
-                'permissions' => $this->buildPermissionList($this->app, $this->client),
-            ],
-            JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP
-        );
+        return $raw ? $payload : Json::encode( $payload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP);
     }
 
     public function hasDocuments(): bool

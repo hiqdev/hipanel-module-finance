@@ -30,7 +30,7 @@ final class PursesDocumentsDataSource implements FinanceDocumentsDataSource
         return 'mountPursesDocuments';
     }
 
-    public function buildJsProps(): string
+    public function buildJsProps(bool $raw = false): string|array
     {
         $availableTypes = $this->resolveAccessibleDocumentTypes($this->app, $this->client->isEmployee());
         $types = array_filter($this->documentTypes, static fn($type) => in_array($type, $availableTypes, true), ARRAY_FILTER_USE_KEY);
@@ -48,7 +48,7 @@ final class PursesDocumentsDataSource implements FinanceDocumentsDataSource
             'documentTypes' => $this->prepareAssoc($types),
         ];
 
-        return Json::encode($payload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP);
+        return $raw ? $payload : Json::encode($payload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP);
     }
 
     private function serializePurse(Application $app, Purse $purseModel): array

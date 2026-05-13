@@ -104,7 +104,7 @@ export const purseApi = {
   createPurse: (p: CreatePurseParams) =>
     api.post<void>("/finance/purse/create", p),
   fetchState: (p: { client_id: string }) =>
-    api.post<PursesDocumentsProps>("/finance/purse/get-documents-state", p),
+    api.post<PursesDocumentsProps>(`/client/client/get-finance-document-state?client_id=${p.client_id}`, p),
 };
 
 export const purseSettingsApi = {
