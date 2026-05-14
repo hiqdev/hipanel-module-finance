@@ -1,8 +1,8 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { resolve } from "path";
 
-export default defineConfig(({
+export default defineConfig({
   plugins: [
     svelte({
       compilerOptions: {
@@ -27,4 +27,7 @@ export default defineConfig(({
     outDir: "build",
     emptyOutDir: true,
   },
-}));
+  test: {
+    environment: "happy-dom",
+  },
+});
