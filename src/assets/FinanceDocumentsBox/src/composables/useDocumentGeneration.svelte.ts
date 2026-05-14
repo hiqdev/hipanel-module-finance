@@ -33,7 +33,10 @@ function cryptoRand(min: number, max: number) {
 }
 
 function extractUrls(data: Record<string, PreviewDocumentEntry> | undefined): string[] {
-  return Object.values(data ?? {}).map(e => `/document/document/get-cached-file?uuid=${e.uuid}&v=${cryptoRand(1, 1000000)}`).filter(Boolean);
+  if (!data || Array.isArray(data)) return [];
+  return Object.values(data)
+    .filter(e => e != null && typeof e === "object" && "uuid" in e)
+    .map(e => `/document/document/get-cached-file?uuid=${e.uuid}&v=${cryptoRand(1, 1000000)}`);
 }
 
 export function useDocumentGeneration(
@@ -92,11 +95,18 @@ export function useDocumentGeneration(
           setDocs(markAsNew(getDocs(), affectedIds));
           showToast(willReplace ? "Document replaced" : "Document generated");
         } else {
-          const founds = (Object.values((rsp?.data ?? {}) as unknown as Record<string, Doc>)).map(d => ({ ...d, isNew: true as const }));
-          if (founds.length > 0) {
-            setDocs([...founds, ...getDocs()]);
+          const rawData = rsp?.data;
+          if (!rawData || Array.isArray(rawData)) {
+            showToast("No documents were generated", "error");
+          } else {
+            const founds = Object.values(rawData as unknown as Record<string, Doc>)
+              .filter(d => d != null && typeof d === "object" && "id" in d)
+              .map(d => ({ ...d, isNew: true as const }));
+            if (founds.length > 0) {
+              setDocs([...founds, ...getDocs()]);
+            }
+            showToast("Document generated");
           }
-          showToast("Document generated");
         }
       })
       .catch((e: any) => {

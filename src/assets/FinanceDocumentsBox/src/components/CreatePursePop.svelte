@@ -37,13 +37,14 @@
 </script>
 
 <li class="purse-add-wrap" bind:this={wrapEl}>
+  <!-- svelte-ignore a11y_invalid_attribute -->
   <a
       href="#"
       class="purse-tab purse-tab-add"
       onclick={(e) => { e.preventDefault(); return (open = !open); }}
       title="Create new purse"
   >
-    <i class="fa fa-plus fa-fw"></i> New
+    <i class="fa fa-plus fa-fw"></i>
   </a>
 
   {#if open}

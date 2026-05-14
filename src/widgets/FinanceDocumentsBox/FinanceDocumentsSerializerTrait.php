@@ -11,6 +11,10 @@ trait FinanceDocumentsSerializerTrait
 {
     public static function serializeRawDocumentEntry(array $raw): array
     {
+        if (empty($raw)) {
+            return [];
+        }
+
         $parsed = json_decode($raw['data'] ?? '{}', true) ?: [];
         $raw['id'] = (string)($raw['id'] ?? '');
         $raw['file_id'] = (string)($raw['file_id'] ?? '');
