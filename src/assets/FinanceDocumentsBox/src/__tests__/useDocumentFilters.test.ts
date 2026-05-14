@@ -4,15 +4,12 @@ import type { Doc } from "../types";
 
 function makeDoc(overrides: Partial<Doc> & { type: string; number: string; date: string }): Doc {
   return {
-    id: overrides.number,
-    type: overrides.type,
-    type_label: overrides.type,
-    number: overrides.number,
-    date: overrides.date,
     filename: "",
     file_id: "",
     isNew: false,
     ...overrides,
+    id: overrides.number,
+    type_label: overrides.type_label ?? overrides.type,
   };
 }
 

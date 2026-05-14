@@ -20,7 +20,7 @@
       language,
       permissions: permKeys = [],
       purses: initialPurses = [],
-      currencies = [],
+      currencies: initialCurrencies = [],
       documentTypes: allTypes = [],
   }: PursesDocumentsProps = $props();
 
@@ -34,6 +34,7 @@
   const seedPurses = untrack(() => initialPurses.length ? initialPurses : []);
   let activeId = $state<string>(seedPurses[0].id);
   let purses = $state<Purse[]>([...seedPurses]);
+  let currencies = $state(initialCurrencies);
   let docsByPurse = $state<Record<string, Doc[]>>(
       Object.fromEntries(seedPurses.map(p => [p.id, [...p.documents]])),
   );
@@ -62,6 +63,7 @@
   function handleStateRefresh(state: PursesDocumentsProps) {
       purses = [...state.purses];
       docsByPurse = Object.fromEntries(state.purses.map(p => [p.id, [...p.documents]]));
+      currencies = [...state.currencies];
       if (state.purses.length > 0) activeId = state.purses[state.purses.length - 1].id;
   }
 
