@@ -41,7 +41,7 @@ trait FinanceDocumentsSerializerTrait
             'client.update' => $identityUser->can('client.update'),
             'owner-staff' => $identityUser->can('owner-staff'),
             'has-own-seller' => $identityUser->identity->hasOwnSeller($client->id),
-            'is-employee' => $identityUser->can('is-employee'),
+            'is-employee' => $client->isEmployee(),
         ]));
     }
 
