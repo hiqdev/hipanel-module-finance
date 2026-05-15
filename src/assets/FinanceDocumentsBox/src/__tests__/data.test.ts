@@ -7,6 +7,7 @@ import {
   monthOptionsBetween,
   monthsForYear,
   fmtDate,
+  fmtMoney,
 } from "../data";
 import type { Doc } from "../types";
 
@@ -119,5 +120,23 @@ describe("fmtDate", () => {
 
   it("returns a non-empty short string", () => {
     expect(fmtDate("2024-03-15", "en").short.length).toBeGreaterThan(0);
+  });
+});
+
+describe("fmtMoney", () => {
+  it("formats standard ISO 4217 currency", () => {
+    expect(fmtMoney(100, "usd", "en")).toContain("100");
+  });
+
+  it("falls back for crypto/non-ISO currency without throwing", () => {
+    expect(() => fmtMoney(50, "usdt", "en")).not.toThrow();
+    const result = fmtMoney(50, "usdt", "en");
+    expect(result).toContain("USDT");
+    expect(result).toContain("50");
+  });
+
+  it("fallback includes the currency code uppercased", () => {
+    const result = fmtMoney(0, "btc", "en");
+    expect(result).toContain("BTC");
   });
 });

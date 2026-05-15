@@ -34,12 +34,15 @@
   const seedPurses = untrack(() => initialPurses.length ? initialPurses : []);
   let activeId = $state<string>(seedPurses[0].id);
   let purses = $state<Purse[]>([...seedPurses]);
-  let currencies = $state(initialCurrencies);
+  let currencies = $state(untrack(() => [...initialCurrencies]));
   let docsByPurse = $state<Record<string, Doc[]>>(
       Object.fromEntries(seedPurses.map(p => [p.id, [...p.documents]])),
   );
 
   let purse = $derived(purses.find(p => p.id === activeId)!);
+  let availableCurrencies = $derived(
+      currencies.filter(c => !purses.some(p => p.currency === c.id)),
+  );
   let minDocYear = $derived.by(() => {
       const years = Object.values(docsByPurse).flat().map(d => +docMonthKey(d.date).split("-")[0]);
       return years.length ? Math.min(...years) : new Date().getFullYear() - 3;
@@ -92,7 +95,7 @@
       onChange={(id) => (activeId = id)}
       {language}
       {canAddPurse}
-      {currencies}
+      currencies={availableCurrencies}
       {purse}
       {purseCreation}
   />

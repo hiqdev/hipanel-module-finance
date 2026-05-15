@@ -60,12 +60,11 @@ export function typeMeta(id: string): DocType {
 }
 
 export function fmtMoney(amt: number, currency: string, locale: string): string {
-  const formatter = new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: currency,
-  });
-
-  return formatter.format(amt);
+  try {
+    return new Intl.NumberFormat(locale, { style: "currency", currency }).format(amt);
+  } catch {
+    return `${currency.toUpperCase()} ${new Intl.NumberFormat(locale).format(amt)}`;
+  }
 }
 
 export function fmtDate(iso: string, locale: string): { short: string; year: number } {

@@ -10,12 +10,18 @@
 
   const t = useI18n();
 
-  const getCurrencySymbol = (locale: string, currency: string) => (0).toLocaleString(locale, {
-      style: "currency",
-      currency,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-  }).replace(/\d/g, "").trim();
+  const getCurrencySymbol = (locale: string, currency: string): string => {
+      try {
+          return (0).toLocaleString(locale, {
+              style: "currency",
+              currency,
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+          }).replace(/\d/g, "").trim();
+      } catch {
+          return currency.toUpperCase();
+      }
+  };
 
 </script>
 
