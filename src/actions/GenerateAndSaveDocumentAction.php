@@ -19,7 +19,7 @@ final class GenerateAndSaveDocumentAction extends Action
         $payload = $this->controller->request->post();
 
         try {
-            $rsp = Purse::batchPerform($this->action, [$payload]);
+            $rsp = Purse::perform($this->action, $payload);
         } catch (ResponseErrorException $e) {
             $message = DocumentGenerationErrorOps::buildMessage($e->getResponse()->getData());
 
