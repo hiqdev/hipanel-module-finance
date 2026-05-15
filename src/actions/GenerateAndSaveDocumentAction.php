@@ -1,65 +1,37 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace hipanel\modules\finance\actions;
 
-use hipanel\actions\SmartPerformAction;
+use hipanel\actions\Action;
 use hipanel\modules\finance\helpers\DocumentGenerationErrorOps;
+use hipanel\modules\finance\models\Purse;
+use hipanel\modules\finance\responses\DocumentGenerationAjaxResponse;
+use hipanel\modules\finance\widgets\FinanceDocumentsBox\FinanceDocumentsSerializerTrait;
 use hiqdev\hiart\ResponseErrorException;
-use Yii;
 use yii\base\InvalidCallException;
 
-final class GenerateAndSaveDocumentAction extends SmartPerformAction
+final class GenerateAndSaveDocumentAction extends Action
 {
-    private mixed $responseData = null;
+    public string $action = 'generate-and-save-document';
 
-    /**
-     * Overrides SmartPerformAction::perform() to always execute the save regardless of rule->save,
-     * and captures response data from ResponseErrorException for use in addFlash().
-     */
-    public function perform()
+    public function run()
     {
-        $this->beforePerform();
-        $this->loadCollection();
+        $payload = $this->controller->request->post();
 
         try {
-            $error = !$this->saveCollection();
-
-            if ($error === true && $this->collection->hasErrors()) {
-                $error = $this->collection->getFirstError();
-            }
+            $rsp = Purse::perform($this->action, $payload);
         } catch (ResponseErrorException $e) {
-            $this->responseData = $e->getResponse()->getData();
-            $error = $e->getMessage();
+            $message = DocumentGenerationErrorOps::buildMessage($e->getResponse()->getData());
+
+            return $this->asJson(DocumentGenerationAjaxResponse::error($message)->asArray());
         } catch (InvalidCallException $e) {
-            $error = $e->getMessage();
+            $message = DocumentGenerationErrorOps::buildMessage($e->getMessage());
+
+            return $this->asJson(DocumentGenerationAjaxResponse::error($message)->asArray());
         }
 
-        $this->afterPerform();
+        $data = array_map([FinanceDocumentsSerializerTrait::class, 'serializeRawDocumentEntry'], (array)$rsp);
 
-        return $error;
-    }
-
-    public function addFlash($type, $error = null)
-    {
-        if ($type === 'error') {
-            Yii::$app->session->addFlash('error', ['text' => $this->buildErrorText($error)]);
-            return;
-        }
-
-        parent::addFlash($type, $error);
-    }
-
-    private function buildErrorText(mixed $error): string
-    {
-        $errorOps = DocumentGenerationErrorOps::extract($this->responseData);
-
-        if ($errorOps === null) {
-            return is_string($error) && $error !== ''
-                ? Yii::t('hipanel', $error)
-                : $this->getFlashText('error');
-        }
-
-        return DocumentGenerationErrorOps::buildMessage($errorOps);
+        return $this->asJson(DocumentGenerationAjaxResponse::success($data)->asArray());
     }
 }

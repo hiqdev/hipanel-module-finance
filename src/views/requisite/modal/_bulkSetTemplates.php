@@ -8,17 +8,27 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use hipanel\widgets\RefCombo;
 
+/**
+ * @var Requisite[] $models
+ * @var Requisite $model
+ */
+
 ?>
 
 <div>
 
-    <!-- Nav tabs -->
     <?php if (count($models) > 1) : ?>
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#bulk" aria-controls="home" role="tab"
-                                                      data-toggle="tab"><?= Yii::t('hipanel', 'Set for all') ?></a></li>
-            <li role="presentation"><a href="#by-one" aria-controls="profile" role="tab"
-                                       data-toggle="tab"><?= Yii::t('hipanel', 'Set by one') ?></a></li>
+            <li role="presentation" class="active">
+                <a href="#bulk" aria-controls="home" role="tab" data-toggle="tab">
+                    <?= Yii::t('hipanel', 'Set for all') ?>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#by-one" aria-controls="profile" role="tab" data-toggle="tab">
+                    <?= Yii::t('hipanel', 'Set by one') ?>
+                </a>
+            </li>
         </ul>
     <?php endif ?>
 

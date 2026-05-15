@@ -15,27 +15,25 @@ use hipanel\actions\IndexAction;
 use hipanel\actions\ProgressAction;
 use hipanel\actions\RedirectAction;
 use hipanel\actions\RunProcessAction;
-use hipanel\actions\SmartPerformAction;
-use hipanel\actions\SmartUpdateAction;
+use hipanel\actions\SearchAction;
 use hipanel\actions\SmartCreateAction;
+use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
-use hipanel\components\Response;
+use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\document\models\Statistic as DocumentStatisticModel;
 use hipanel\modules\finance\actions\GenerateAndSaveDocumentAction;
-use hipanel\modules\finance\helpers\DocumentGenerationErrorOps;
+use hipanel\modules\finance\actions\PreviewDocumentAction;
 use hipanel\modules\finance\models\Costprice;
 use hipanel\modules\finance\models\Purse;
 use hipanel\modules\finance\widgets\ProcessTableGenerator;
 use hipanel\modules\finance\widgets\StatisticTableGenerator;
-use hiqdev\hiart\ResponseErrorException;
 use RuntimeException;
 use Yii;
 use yii\base\Event;
-use yii\helpers\Html;
 
-class PurseController extends \hipanel\base\CrudController
+class PurseController extends CrudController
 {
     public function behaviors()
     {
@@ -44,7 +42,7 @@ class PurseController extends \hipanel\base\CrudController
                 'class' => EasyAccessControl::class,
                 'actions' => [
                     'update,update-requisite,update-contact' => 'purse.update',
-                    'pre-generate-document,generate-monthly-document,generate-document' => 'document.generate',
+                    'preview-document,preview-monthly-document,generate-and-save-document,generate-and-save-monthly,generate-and-save-acts' => 'document.generate',
                     'calculate-costprice' => 'costprice.read',
                     'finance-tools' => ['document.generate-all', 'costprice.read'],
                     '*' => 'bill.read',
@@ -59,7 +57,7 @@ class PurseController extends \hipanel\base\CrudController
             'index' => [
                 'class' => IndexAction::class,
                 'on beforePerform' => static function (Event $event): void {
-                    /** @var \hipanel\actions\SearchAction $action */
+                    /** @var SearchAction $action */
                     $action = $event->sender;
                     $query = $action->getDataProvider()->query;
                     $query->joinWith(['contact', 'requisite'])->addSelect(['*', 'contact', 'requisite']);
@@ -87,17 +85,28 @@ class PurseController extends \hipanel\base\CrudController
                 'class' => RedirectAction::class,
                 'error' => Yii::t('hipanel', 'Under construction'),
             ],
+            'preview-monthly-document' => [
+                'class' => PreviewDocumentAction::class,
+                'action' => 'generate-monthly-document',
+            ],
+            'preview-document' => [
+                'class' => PreviewDocumentAction::class,
+                'action' => 'generate-document',
+            ],
+            'preview-acts' => [
+                'class' => PreviewDocumentAction::class,
+                'action' => 'generate-acts',
+            ],
             'generate-and-save-monthly-document' => [
                 'class' => GenerateAndSaveDocumentAction::class,
-                'success' => Yii::t('hipanel:finance', 'Document updated'),
+                'action' => 'generate-and-save-monthly-document',
             ],
-            'generate-acts' => [
+            'generate-and-save-acts' => [
                 'class' => GenerateAndSaveDocumentAction::class,
-                'success' => Yii::t('hipanel:finance', 'Document updated'),
+                'action' => 'generate-and-save-acts',
             ],
             'generate-and-save-document' => [
                 'class' => GenerateAndSaveDocumentAction::class,
-                'success' => Yii::t('hipanel:finance', 'Document updated'),
             ],
             'calculate' => [
                 'class' => ProgressAction::class,
@@ -128,7 +137,7 @@ class PurseController extends \hipanel\base\CrudController
                         'type' => $type,
                         'client_types' => $type === 'acceptance' ? 'employee' : null,
                     ]);
-                }
+                },
             ],
             'generation-progress' => [
                 'class' => ProgressAction::class,
@@ -201,65 +210,5 @@ class PurseController extends \hipanel\base\CrudController
         );
 
         return $this->render('generate-all', ['statisticByTypes' => $statisticByTypes]);
-    }
-
-    public function actionGenerateMonthlyDocument()
-    {
-        return $this->generateDocument('generate-monthly-document', $this->request->get());
-    }
-
-    public function actionGenerateDocument($id, $type)
-    {
-        return $this->generateDocument('generate-document', ['id' => $id, 'type' => $type]);
-    }
-
-    public function generateDocument($action, $params)
-    {
-        try {
-            $content = $this->performDocumentAction($action, $params);
-        } catch (ResponseErrorException $e) {
-            $errorOps = DocumentGenerationErrorOps::extract($e->getResponse()->getData());
-
-            Yii::$app->getSession()->setFlash('error', DocumentGenerationErrorOps::buildMessage($errorOps));
-
-            return $this->redirectAfterDocumentGenerationFailure($params);
-        }
-        $this->asPdf();
-
-        return $content;
-    }
-
-    protected function performDocumentAction(string $action, array $params): mixed
-    {
-        return Purse::perform($action, $params);
-    }
-
-    private function redirectAfterDocumentGenerationFailure(array $params): \yii\web\Response
-    {
-        if (isset($params['client_id'])) {
-            return $this->redirect(['@client/view', 'id' => $params['client_id']]);
-        }
-
-        return $this->redirect($this->request->referrer ?: ['index']);
-    }
-
-    protected function asPdf(): void
-    {
-        $this->response->format = Response::FORMAT_RAW;
-        $this->response->getHeaders()->add('content-type', 'application/pdf');
-    }
-
-    public function actionPreGenerateDocument($type, $client_id)
-    {
-        $purse = new Purse(['scenario' => 'generate-and-save-monthly-document']);
-        if ($purse->load($this->request->post()) && $purse->validate()) {
-            $payload = array_merge([
-                '@purse/generate-monthly-document',
-                'type' => $type,
-                'client_id' => $client_id,
-            ], $purse->toArray());
-
-            return $this->redirect($payload);
-        }
     }
 }

@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace hipanel\modules\finance\helpers;
 
@@ -8,47 +7,56 @@ use yii\helpers\Html;
 
 final class DocumentGenerationErrorOps
 {
-    private const TEMPLATE_NOT_FOUND_ERRORS = [
-        'failed find document template',
+    private const array TEMPLATE_NOT_FOUND_ERRORS = [
+        'failed to find the document template',
         'No templates for requisite',
     ];
 
-    /**
-     * Extracts _error_ops from a HiArt response payload.
-     *
-     * Supports flat responses and nested batch responses where template-related
-     * _error_ops can be placed multiple levels deep inside per-model entries.
-     */
-    public static function extract(mixed $responseData): ?array
+    public static function buildMessage(mixed $responseData): string
+    {
+        $errorOps = self::extract($responseData);
+
+        if ($errorOps === null) {
+            return self::extractErrorText($responseData)
+                ?? Yii::t('hipanel:finance', 'Failed to generate document');
+        }
+
+        if (Yii::$app->user->can('requisites.update')) {
+            $contactUrl = Html::a(
+                Yii::t('hipanel:finance', 'requisite settings'),
+                ['@requisite/view', 'id' => $errorOps['requisite_id']]
+            );
+
+            return Yii::t(
+                'hipanel:finance',
+                "No templates for the requisite. Follow this link {contactUrl} and set a template of type '{type}'",
+                ['contactUrl' => $contactUrl, 'type' => $errorOps['type']]
+            );
+        }
+
+        return Yii::t('hipanel:finance', 'No templates for the requisite. Please contact the finance department');
+    }
+
+    private static function extractErrorText(mixed $responseData): ?string
+    {
+        if (is_string($responseData) && $responseData !== '') {
+            return $responseData;
+        }
+        if (!is_array($responseData)) {
+            return null;
+        }
+        $error = $responseData['_error'] ?? null;
+
+        return is_string($error) && $error !== '' ? $error : null;
+    }
+
+    private static function extract(mixed $responseData): ?array
     {
         if (!is_array($responseData)) {
             return null;
         }
 
         return self::extractFromArray($responseData);
-    }
-
-    public static function buildMessage(?array $errorOps): string
-    {
-        if ($errorOps === null) {
-            return Yii::t('hipanel:finance', 'Failed to generate document');
-        }
-
-        if (Yii::$app->user->can('requisites.update')) {
-            $requisiteId = $errorOps['requisite_id'];
-            $contactUrl = Html::a(
-                Yii::t('hipanel:finance', 'requisite settings'),
-                ['@requisite/view', 'id' => $requisiteId]
-            );
-
-            return Yii::t(
-                'hipanel:finance',
-                "No templates for requisite. Follow this link {contactUrl} and set template of type '{type}'",
-                ['contactUrl' => $contactUrl, 'type' => $errorOps['type']]
-            );
-        }
-
-        return Yii::t('hipanel:finance', 'No templates for requisite. Please contact finance department');
     }
 
     private static function extractFromArray(array $payload): ?array
@@ -85,12 +93,6 @@ final class DocumentGenerationErrorOps
             return false;
         }
 
-        foreach (self::TEMPLATE_NOT_FOUND_ERRORS as $needle) {
-            if (str_contains($error, $needle)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any(self::TEMPLATE_NOT_FOUND_ERRORS, fn($needle) => str_contains($error, $needle));
     }
 }
