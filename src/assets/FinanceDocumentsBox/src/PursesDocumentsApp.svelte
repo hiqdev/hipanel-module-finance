@@ -61,6 +61,7 @@
       },
       toast.show,
       () => purse,
+      () => docFilters.setShowNewOnly(true),
   );
 
   function handleStateRefresh(state: PursesDocumentsProps) {
@@ -123,6 +124,7 @@
       onPage={docFilters.setPage}
       onSort={docFilters.handleSort}
       onClearFilters={docFilters.handleClearFilters}
+      onShowNewOnly={docFilters.setShowNewOnly}
       onOpenPreview={generation.openPreview}
       onOpenUpdate={generation.openUpdate}
   />

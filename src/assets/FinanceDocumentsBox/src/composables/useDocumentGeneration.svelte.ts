@@ -44,6 +44,7 @@ export function useDocumentGeneration(
   setDocs: (docs: Doc[]) => void,
   showToast: (msg: string, type?: ToastType) => void,
   getPurse: () => Pick<Purse, "id" | "client_id">,
+  onGenerated?: () => void,
 ) {
   // ── State ──────────────────────────────────────────────────────────────────
   let modal = $state<ModalState | null>(null);
@@ -94,6 +95,7 @@ export function useDocumentGeneration(
         } else if (affectedDocs.length > 0) {
           setDocs(markAsNew(getDocs(), affectedIds));
           showToast(willReplace ? "Document replaced" : "Document generated");
+          onGenerated?.();
         } else {
           const rawData = rsp?.data;
           if (!rawData || Array.isArray(rawData)) {
@@ -103,9 +105,10 @@ export function useDocumentGeneration(
               .filter(d => d != null && typeof d === "object" && "id" in d)
               .map(d => ({ ...d, isNew: true as const }));
             if (founds.length > 0) {
-              setDocs([...founds, ...getDocs()]);
+              setDocs([...getDocs(), ...founds]);
             }
             showToast("Document generated");
+            onGenerated?.();
           }
         }
       })
@@ -173,6 +176,7 @@ export function useDocumentGeneration(
         busyRowIds = busyRowIds.filter(x => x !== doc.id);
         setDocs(markAsNew(getDocs(), [doc.id]));
         showToast(`${doc.type_label} replaced`);
+        onGenerated?.();
       })
       .catch((e: any) => {
         busyRowIds = busyRowIds.filter(x => x !== doc.id);

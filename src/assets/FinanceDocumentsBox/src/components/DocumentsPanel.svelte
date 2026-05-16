@@ -26,8 +26,9 @@
     onPage,
     onSort,
     onClearFilters,
-    onOpenPreview,
-    onOpenUpdate,
+    onShowNewOnly = undefined,
+    onOpenPreview = undefined,
+    onOpenUpdate = undefined,
   }: {
     pagedDocs: Doc[];
     filters: AccountFilters;
@@ -47,6 +48,7 @@
     onPage: (p: number) => void;
     onSort: (key: SortState["key"]) => void;
     onClearFilters: () => void;
+    onShowNewOnly?: (v: boolean) => void;
     onOpenPreview?: () => void;
     onOpenUpdate?: () => void;
   } = $props();
@@ -81,17 +83,28 @@
       />
 
       <MonthRangeFilter value={filters.dateRange} onChange={onDateRange} {language} minYear={minDocYear}/>
+
+      {#if onShowNewOnly}
+        <button
+            type="button"
+            class="btn-new-only {filters.showNewOnly ? 'is-active' : ''}"
+            onclick={() => onShowNewOnly?.(!filters.showNewOnly)}
+            title={filters.showNewOnly ? t('Show all documents') : t('Show only newly generated or re-generated documents')}
+        >
+          <i class={["fa fa-fw", filters.showNewOnly ? 'fa-check-square-o' : 'fa-square-o']}></i> {t('New only')}
+        </button>
+      {/if}
     </div>
 
     {#if canPreviewAndGenerate && (onOpenPreview || onOpenUpdate)}
       <div class="right">
         {#if onOpenPreview}
-          <button class="btn btn-default" onclick={onOpenPreview}>
+          <button class="btn btn-default btn-flat" onclick={onOpenPreview}>
             <i class="fa fa-fw fa-eye"></i> Preview
           </button>
         {/if}
         {#if onOpenUpdate}
-          <button class="btn btn-primary" onclick={onOpenUpdate}>
+          <button class="btn btn-primary btn-flat" onclick={onOpenUpdate}>
             <i class="fa fa-fw fa-plus"></i> Generate
           </button>
         {/if}

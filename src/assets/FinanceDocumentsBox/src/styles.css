@@ -718,7 +718,7 @@ button.x {
   font-weight: 600;
   color: var(--fg-1);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
   gap: 0;
 }
@@ -742,6 +742,32 @@ button.x {
   font-weight: 400;
   margin-top: 1px;
   width: 100%;
+}
+
+.btn-new-only {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--fg-2);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: border-color .15s, color .15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.btn-new-only:hover {
+  border-color: #b4bac5;
+}
+
+.btn-new-only.is-active {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 8%, #fff);
 }
 
 .doc-new-badge {

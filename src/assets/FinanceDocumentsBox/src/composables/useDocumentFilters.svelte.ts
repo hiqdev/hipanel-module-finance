@@ -29,11 +29,9 @@ export function useDocumentFilters(
   );
 
   let filtered: Doc[] = $derived.by(() => {
-    const { search, typeFilter, dateRange, sort } = filters;
-    const pinnedNew = baseDocs.filter(d => d.isNew);
-    const pinnedNewIds = new Set(pinnedNew.map(d => d.id));
+    const { search, typeFilter, dateRange, sort, showNewOnly } = filters;
     const rows = baseDocs.filter(d => {
-      if (pinnedNewIds.has(d.id)) return false;
+      if (showNewOnly && !d.isNew) return false;
       if (typeFilter.length > 0 && !typeFilter.includes(d.type)) return false;
       const key = docMonthKey(d.date);
       if (dateRange.from && key < dateRange.from) return false;
@@ -49,7 +47,7 @@ export function useDocumentFilters(
       if (av > bv) return sort.dir === "asc" ? 1 : -1;
       return 0;
     });
-    return [...pinnedNew, ...rows];
+    return rows;
   });
 
   let pageCount = $derived(Math.max(1, Math.ceil(filtered.length / PAGE_SIZE)));
@@ -82,6 +80,9 @@ export function useDocumentFilters(
     if (filters.search) {
       chips.push({ k: "search", label: `"${filters.search}"`, onX: () => setSearch("") });
     }
+    if (filters.showNewOnly) {
+      chips.push({ k: "showNewOnly", label: "New only", onX: () => setShowNewOnly(false) });
+    }
     return chips;
   });
 
@@ -106,6 +107,10 @@ export function useDocumentFilters(
 
   function setPage(p: number) {
     updateFilters({ page: p });
+  }
+
+  function setShowNewOnly(v: boolean) {
+    updateFilters({ showNewOnly: v });
   }
 
   function handleSort(key: SortState["key"]) {
@@ -148,7 +153,7 @@ export function useDocumentFilters(
     get activeChips() {
       return activeChips;
     },
-    setSearch, setTypeFilter, setDateRange, setPage,
+    setSearch, setTypeFilter, setDateRange, setPage, setShowNewOnly,
     handleSort, handleClearFilters,
   };
 }

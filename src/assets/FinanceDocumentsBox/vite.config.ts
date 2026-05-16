@@ -17,6 +17,7 @@ export default defineConfig({
     conditions: ["browser", "import", "module"],
   },
   build: {
+    target: "es2022",
     ssr: false,
     lib: {
       entry: resolve(__dirname, "src/main.ts"),

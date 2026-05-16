@@ -149,6 +149,7 @@ export interface AccountFilters {
   dateRange: DateRange;
   sort: SortState;
   page: number;
+  showNewOnly: boolean;
 }
 
 export interface PreviewDocumentEntry {

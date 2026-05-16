@@ -140,5 +140,6 @@ export function defaultFilters(): AccountFilters {
     dateRange: { from: null, to: null },
     sort: { key: "date", dir: "desc" },
     page: 1,
+    showNewOnly: false,
   };
 }
