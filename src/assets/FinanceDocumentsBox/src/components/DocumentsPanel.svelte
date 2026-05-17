@@ -17,6 +17,7 @@
     activeChips,
     language,
     minDocYear = new Date().getFullYear() - 3,
+    maxDocMonth = undefined,
     busyIds = [],
     canPreviewAndGenerate = false,
     onRowAction = () => {},
@@ -39,6 +40,7 @@
     activeChips: Array<{ k: string; label: string; onX: () => void }>;
     language: string;
     minDocYear?: number;
+    maxDocMonth?: string;
     busyIds?: string[];
     canPreviewAndGenerate?: boolean;
     onRowAction?: (kind: string, doc: Doc) => void;
@@ -82,7 +84,7 @@
           onChange={onTypeFilter}
       />
 
-      <MonthRangeFilter value={filters.dateRange} onChange={onDateRange} {language} minYear={minDocYear}/>
+      <MonthRangeFilter value={filters.dateRange} onChange={onDateRange} {language} minYear={minDocYear} maxMonth={maxDocMonth}/>
 
       {#if onShowNewOnly}
         <button

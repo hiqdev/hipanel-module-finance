@@ -19,7 +19,7 @@ final class GenerateAndSaveDocumentAction extends Action
         $payload = $this->controller->request->post();
 
         try {
-            $rsp = Purse::batchPerform($this->action, $payload);
+            $rsp = Purse::batchPerform($this->action, [$payload]);
         } catch (ResponseErrorException $e) {
             $message = DocumentGenerationErrorOps::buildMessage($e->getResponse()->getData());
 
@@ -30,7 +30,9 @@ final class GenerateAndSaveDocumentAction extends Action
             return $this->asJson(DocumentGenerationAjaxResponse::error($message)->asArray());
         }
 
-        $data = array_map([FinanceDocumentsSerializerTrait::class, 'serializeRawDocumentEntry'], (array)$rsp);
+        $data = array_values(array_filter(
+            array_map([FinanceDocumentsSerializerTrait::class, 'serializeRawDocumentEntry'], (array)$rsp)
+        ));
 
         return $this->asJson(DocumentGenerationAjaxResponse::success($data)->asArray());
     }

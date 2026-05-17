@@ -1,7 +1,7 @@
 <script lang="ts">
   import { untrack } from "svelte";
   import type { Doc, Purse, PursesDocumentsProps } from "./types";
-  import { docMonthKey } from "./data";
+  import { currentMonthKey, docMonthKey } from "./data";
   import { initI18n } from "./i18n";
   import { permissions } from "./permissions";
   import { useToast } from "./composables/useToast.svelte";
@@ -47,6 +47,13 @@
       const years = Object.values(docsByPurse).flat().map(d => +docMonthKey(d.date).split("-")[0]);
       return years.length ? Math.min(...years) : new Date().getFullYear() - 3;
   });
+  let maxDocMonth = $derived.by(() => {
+      const cur = currentMonthKey();
+      const keys = Object.values(docsByPurse).flat()
+          .map(d => docMonthKey(d.date))
+          .filter(k => /^\d{4}-\d{2}$/.test(k));
+      return keys.reduce((max, k) => (k > max ? k : max), cur);
+  });
 
   const toast = useToast();
   const docFilters = useDocumentFilters(
@@ -57,7 +64,7 @@
   const generation = useDocumentGeneration(
       () => docsByPurse[activeId] ?? [],
       (docs) => {
-          docsByPurse[activeId] = docs;
+          docsByPurse = { ...docsByPurse, [activeId]: docs };
       },
       toast.show,
       () => purse,
@@ -115,6 +122,7 @@
       activeChips={docFilters.activeChips}
       {language}
       {minDocYear}
+      {maxDocMonth}
       busyIds={generation.busyRowIds}
       {canPreviewAndGenerate}
       onRowAction={generation.handleRowAction}
@@ -136,7 +144,7 @@
       initial={generation.modal.initial}
       types={allTypes}
       existingMonths={docFilters.existingMonths}
-      busy={!!generation.modal.busy}
+      busy={!!(generation.modal?.busy)}
       progress={generation.modal.progress ?? 0}
       onClose={generation.closeModal}
       onSubmit={generation.handleSubmit}

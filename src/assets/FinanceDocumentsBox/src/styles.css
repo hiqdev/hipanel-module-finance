@@ -608,6 +608,7 @@ button.x {
   border: 1px solid var(--border-subtle);
   border-radius: 3px;
   overflow: hidden;
+  min-height: 280px;
 }
 
 .docs-table {

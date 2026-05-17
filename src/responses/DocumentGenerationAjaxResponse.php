@@ -9,32 +9,24 @@ final class DocumentGenerationAjaxResponse
     public const string STATUS_SUCCESS = 'success';
     public const string STATUS_ERROR = 'error';
 
-    /**
-     * @param string[] $errors
-     * @param array<string, array{
-     *     uuid: string,
-     *     url: string,
-     *     requisite: array{id: int, name: string}
-     * }> $data
-     */
+    /** @var array<int, array{uuid: string, url: string, requisite: array{id: int, name: string}}> */
+    private readonly array $data;
+
     private function __construct(
         private readonly string $status,
         private readonly array $errors = [],
         private readonly ?string $message = null,
-        private readonly array $data = [],
+        array $data = [],
     )
     {
         if (!in_array($this->status, [self::STATUS_SUCCESS, self::STATUS_ERROR], true)) {
             throw new InvalidArgumentException("Unsupported ajax response status: {$this->status}");
         }
+        $this->data = array_values($data);
     }
 
     /**
-     * @param array<string, array{
-     *     uuid: string,
-     *     url: string,
-     *     requisite: array{id: int, name: string}
-     * }> $data
+     * @param array<array-key, array{uuid: string, url: string, requisite: array{id: int, name: string}}> $data
      */
     public static function success(array $data = [], ?string $message = null): self
     {
@@ -43,11 +35,7 @@ final class DocumentGenerationAjaxResponse
 
     /**
      * @param string|string[]|array<int, array{text?: string}>|null $errors
-     * @param array<string, array{
-     *     uuid: string,
-     *     url: string,
-     *     requisite: array{id: int, name: string}
-     * }> $data
+     * @param array<array-key, array{uuid: string, url: string, requisite: array{id: int, name: string}}> $data
      */
     public static function error(string|array|null $errors = [], ?string $message = null, array $data = []): self
     {

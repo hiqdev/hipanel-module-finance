@@ -162,8 +162,8 @@ export interface GenerationResponse {
   status: "success" | "error";
   errors: string[];
   message: string | null;
-  /** Keyed by document type label (e.g. "default"). Only present for preview endpoints. */
-  data?: Record<string, PreviewDocumentEntry>;
+  /** Generation endpoints return Doc[]; preview endpoints return Record<string, PreviewDocumentEntry>. */
+  data?: Doc[] | Record<string, PreviewDocumentEntry>;
 }
 
 export interface ApiError {

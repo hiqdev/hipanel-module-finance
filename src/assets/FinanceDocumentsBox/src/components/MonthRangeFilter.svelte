@@ -2,11 +2,12 @@
   import type { DateRange } from "../types";
   import { currentMonthKey, fmtMonthKey, monthOptionsBetween } from "../data";
 
-  let { value, onChange, language, minYear = new Date().getFullYear() - 3 }: {
+  let { value, onChange, language, minYear = new Date().getFullYear() - 3, maxMonth = undefined }: {
       value: DateRange;
       onChange: (range: DateRange) => void;
       language: string;
       minYear?: number;
+      maxMonth?: string;
   } = $props();
 
   let open = $state(false);
@@ -24,8 +25,9 @@
       return () => document.removeEventListener("mousedown", onDocClick);
   });
 
-  // oldest → newest
-  let months = $derived(monthOptionsBetween(`${minYear}-01`, currentMonthKey(), language));
+  // oldest → newest; extend upper bound beyond current month when docs exist in future months
+  let upperMonth = $derived(maxMonth && maxMonth > currentMonthKey() ? maxMonth : currentMonthKey());
+  let months = $derived(monthOptionsBetween(`${minYear}-01`, upperMonth, language));
 
   function formatLabel(key: string): string {
       return fmtMonthKey(key, language);
@@ -112,9 +114,9 @@
   }
 
   function setThisYear() {
-      const c = currentMonthKey();
-      const y = c.split("-")[0];
-      onChange({ from: `${y}-01`, to: c });
+      const y = String(new Date().getFullYear());
+      const to = upperMonth.startsWith(y) ? upperMonth : currentMonthKey();
+      onChange({ from: `${y}-01`, to });
       open = false;
   }
 </script>

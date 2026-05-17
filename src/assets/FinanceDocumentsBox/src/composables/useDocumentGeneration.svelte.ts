@@ -32,10 +32,11 @@ function cryptoRand(min: number, max: number) {
   return crypto.getRandomValues(new Uint32Array(1))[0] % (max - min + 1) + min;
 }
 
-function extractUrls(data: Record<string, PreviewDocumentEntry> | undefined): string[] {
-  if (!data || Array.isArray(data)) return [];
-  return Object.values(data)
-    .filter(e => e != null && typeof e === "object" && "uuid" in e)
+function extractUrls(data: Doc[] | Record<string, PreviewDocumentEntry> | undefined): string[] {
+  if (!data) return [];
+  const items = Array.isArray(data) ? data : Object.values(data);
+  return items
+    .filter((e): e is PreviewDocumentEntry => e != null && typeof e === "object" && "uuid" in e)
     .map(e => `/document/document/get-cached-file?uuid=${e.uuid}&v=${cryptoRand(1, 1000000)}`);
 }
 
@@ -98,17 +99,30 @@ export function useDocumentGeneration(
           onGenerated?.();
         } else {
           const rawData = rsp?.data;
-          if (!rawData || Array.isArray(rawData)) {
-            showToast("No documents were generated", "error");
+          if (!rawData || !Array.isArray(rawData)) {
+            showToast("Unexpected server response", "error");
           } else {
-            const founds = Object.values(rawData as unknown as Record<string, Doc>)
-              .filter(d => d != null && typeof d === "object" && "id" in d)
+            const founds = (rawData as Doc[])
+              .filter(d => d != null && typeof d === "object" && "id" in d && !!d.id)
               .map(d => ({ ...d, isNew: true as const }));
-            if (founds.length > 0) {
-              setDocs([...getDocs(), ...founds]);
+            if (founds.length === 0) {
+              showToast("No documents were generated", "error");
+            } else {
+              const existingDocs = getDocs();
+              const existingById = new Map(existingDocs.map(d => [d.id, d]));
+              const duplicate = founds.find(d => existingById.has(d.id));
+              if (duplicate) {
+                const existing = existingById.get(duplicate.id)!;
+                showToast(
+                  `Document already exists for ${existing.type_label ?? existing.type} (${docMonthKey(existing.date)})`,
+                  "error",
+                );
+              } else {
+                setDocs([...existingDocs, ...founds]);
+                showToast("Document generated");
+                onGenerated?.();
+              }
             }
-            showToast("Document generated");
-            onGenerated?.();
           }
         }
       })

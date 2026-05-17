@@ -27,7 +27,7 @@ class PreviewDocumentAction extends Action
         $error = null;
         $content = null;
         try {
-            $content = Purse::perform($this->action, $params);
+            $content = Purse::batchPerform($this->action, [$params]);
         } catch (Exception $e) {
             $error = $e;
         }
