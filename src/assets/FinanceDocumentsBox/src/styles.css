@@ -694,7 +694,7 @@ button.x {
   vertical-align: middle;
 }
 
-.docs-table tbody td {
+.docs-table tbody tr td {
   padding: 8px 14px!important;
   color: var(--fg-2);
   vertical-align: middle;
