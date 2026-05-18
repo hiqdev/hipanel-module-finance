@@ -88,6 +88,8 @@ const api = {
 };
 
 export const purseDocumentsApi = {
+  previewDocument: (p: DocParams) =>
+    api.post<GenerationResponse>(`/finance/purse/preview-document`, p),
   previewActs: (p: DocParams) =>
     api.post<GenerationResponse>(`/finance/purse/preview-acts`, p),
   previewMonthlyDocument: (p: DocParams) =>

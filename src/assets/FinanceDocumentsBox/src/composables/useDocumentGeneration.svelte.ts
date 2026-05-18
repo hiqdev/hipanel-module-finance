@@ -14,9 +14,9 @@ const defaultEndpoints: DocEndpoints = {
 // Add a row here when a document type needs non-default endpoints.
 // Omit a key to fall back to defaultEndpoints for that action.
 const routesByType: Record<string, Partial<DocEndpoints>> = {
-  contract: { update: purseDocumentsApi.generateAndSaveDocument, preview: purseDocumentsApi.previewMonthlyDocument },
-  probation: { update: purseDocumentsApi.generateAndSaveDocument, preview: purseDocumentsApi.previewMonthlyDocument },
-  nda: { update: purseDocumentsApi.generateAndSaveDocument, preview: purseDocumentsApi.previewMonthlyDocument },
+  contract: { update: purseDocumentsApi.generateAndSaveDocument, preview: purseDocumentsApi.previewDocument },
+  probation: { update: purseDocumentsApi.generateAndSaveDocument, preview: purseDocumentsApi.previewDocument },
+  nda: { update: purseDocumentsApi.generateAndSaveDocument, preview: purseDocumentsApi.previewDocument },
   internal_invoice: { update: purseDocumentsApi.generateAndSaveActs, preview: purseDocumentsApi.previewActs },
 };
 
