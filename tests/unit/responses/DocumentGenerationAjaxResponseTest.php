@@ -9,23 +9,23 @@ final class DocumentGenerationAjaxResponseTest extends TestCase
 {
     public function testCreatesSuccessResponseArray(): void
     {
-        $data = [
-            'default' => [
-                'uuid' => 'preview-uuid',
-                'url' => '/document/document/get-cached-file?uuid=preview-uuid',
-                'requisite' => [
-                    'id' => 123,
-                    'name' => 'Main requisite',
-                ],
+        $entry = [
+            'uuid' => 'preview-uuid',
+            'url' => '/document/document/get-cached-file?uuid=preview-uuid',
+            'requisite' => [
+                'id' => 123,
+                'name' => 'Main requisite',
             ],
         ];
 
+        // array_values() is applied internally so string keys are stripped and data
+        // is serialised as a JSON array (matching what the TypeScript client expects).
         $this->assertSame([
             'status' => 'success',
             'errors' => [],
             'message' => null,
-            'data' => $data,
-        ], DocumentGenerationAjaxResponse::success($data)->asArray());
+            'data' => [$entry],
+        ], DocumentGenerationAjaxResponse::success(['default' => $entry])->asArray());
     }
 
     public function testCreatesErrorResponseArray(): void
