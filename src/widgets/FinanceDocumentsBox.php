@@ -21,7 +21,7 @@ final class FinanceDocumentsBox extends Widget
 
     public function run(): string
     {
-        if (!$this->app->user->can('bill.read') || !$this->dataSource->hasDocuments()) {
+        if (!$this->app->user->can('bill.read')) { // todo: || !$this->dataSource->hasDocuments()
             return '';
         }
 
