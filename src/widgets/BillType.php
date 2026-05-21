@@ -48,16 +48,9 @@ class BillType extends Type
         parent::init();
         $this->setColor('none');
         $this->getView()->registerCss(<<<CSS
-.flex-space-beetween {
-    display: flex;
-    flex-wrap: wrap-reverse;
-    justify-content: space-between;
-}
-.align-center {
-    align-items: center;
-}
-CSS
-        );
+            .flex-space-beetween { display: flex; flex-wrap: nowrap; gap: 1rem; justify-content: space-between; }
+            .align-center { align-items: center; }
+        CSS);
     }
 
     protected function getModelLabel(): string
