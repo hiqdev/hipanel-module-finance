@@ -8,15 +8,14 @@
  * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
+
 return [
     'Tariff' => 'Тариф',
     'Tariff note' => 'Примечание тарифа',
     'Tariff created' => 'Тариф создан',
     'Tariff deleted' => 'Тариф удален',
     'Tariff updated' => 'Тариф обновлен',
-
     'tariff detailed information' => 'детальная информация о тарифе',
-
     'Create domain tariff' => 'Создать тариф для доменов',
     'Create certificate tariff' => 'Создать тариф для сертификатов',
     'Update domain tariff' => 'Редактировать тариф для домена',
@@ -28,7 +27,6 @@ return [
     'Create VDS tariff' => 'Создать тариф для VDS',
     'Create SSD VDS tariff' => 'Создать SSD VDS тариф',
     'Create OpenVZ tariff' => 'Создать OpenVZ тариф',
-
     'Name' => 'Название',
     'Registration' => 'Регистрация',
     'Transfer' => 'Трансфер',
@@ -38,7 +36,6 @@ return [
     'Delete in AGP' => 'Удаление в AGP',
     'Restoring expired' => 'Восстановление после экспаера',
     'Restoring deleted' => 'Восстановление удалённого',
-
     'Parent tariff' => 'Родительский тариф',
     'Note' => 'Заметка',
     'Label' => 'Описание',
@@ -48,18 +45,14 @@ return [
     'Price per period' => 'Стоимость за период',
     'Prepaid amount' => 'Включено в тариф',
     'Overuse price' => 'Стоимость за перебор',
-
     'Model' => 'Модель',
-
     'Tariff must be unlinked form all objects before. Are you sure you want to delete tariff {name}?' => 'Тариф должен быть отвязан от всех объектов перед удалением. Вы уверены, что хотите удалить тариф {name}?',
     'Confirm tariff deleting' => 'Подтвердите удаление тарифа',
     'Delete tariff' => 'Удалить тариф',
     'Deleting tariff...' => 'Удаление тарифа...',
-
     'Price' => 'Стоимость',
     'Parent tariff price' => 'Стоимость родительского тарифа',
     'Profit' => 'Прибыль',
-
     'Unit' => 'Единица измерения',
     'Port speed' => 'Скорость порта',
     '{n, plural, one{# hour} other{# hours}}' => '{n, plural, one{# час} few{# часа} other{# часов}}',
@@ -69,14 +62,31 @@ return [
     'No panel / {hipanelLink}' => 'Без панели / {hipanelLink}',
     'ISP manager' => 'ISP manager',
     'Monthly fee' => 'Месячная абнплата',
-
     'Location' => 'Расположение',
     'Used' => 'Использован',
-
     'hour' => 'час',
     '{n, plural, one{# year} other{# years}}' => '{n, plural, one{# год} few{# года} many{# лет} other{# лет}}',
     '{operation} for {duration}' => '{operation} на {duration}',
-
     'View as plan' => 'Смотреть как план',
     'This target is deleted' => 'Этот таргет удален',
+    '{0}:' => '{0}:',
+    '{0}: {1}' => '{0}: {1}',
+    '95 percentile traffic' => '95-й процентиль трафика',
+    'Backup disk usage' => 'Потребление диска бэкапами',
+    'Chassis' => 'Шасси',
+    'Confirm tariff profile deleting' => 'Подтвердите удаление профиля тарифа',
+    'Copy certificate tariff' => 'Копировать тариф сертификата',
+    'CPU' => 'Процессор',
+    'HDD' => 'Жесткий диск',
+    'IP addresses count' => 'Количество IP-адресов',
+    'ISP Manager' => 'ISP Manager',
+    'ISP Manager 5' => 'ISP Manager 5',
+    'Power consumption' => 'Потребление энергии',
+    'RAM' => 'Оперативная память',
+    'Server disk usage' => 'Потребление диска сервером',
+    'Server traffic' => 'Трафик сервера',
+    'Support time' => 'Время поддержки',
+    'Update server tariff' => 'Обновить тариф сервера',
+    'Update VDS tariff' => 'Обновить VDS тариф',
+    'WHOIS Protect' => 'Защита WHOIS',
 ];

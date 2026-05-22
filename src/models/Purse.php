@@ -223,6 +223,7 @@ class Purse extends \hipanel\base\Model
             'purchaseInvoices' => Yii::t('hipanel:finance', 'Purchase Invoices'),
             'installmentInvoices' => Yii::t('hipanel:finance', 'Installment Invoices'),
             'oldInstallmentInvoices' => Yii::t('hipanel:finance', 'Old Installment Invoices'),
+            'paymentRequests' => Yii::t('hipanel:finance', 'Payment Requests'),
             'payment_requestInvoices' => Yii::t('hipanel:finance', 'Payment Request'),
             'purchasePaymentRequests' => Yii::t('hipanel:finance', 'Purchase Payment Request'),
             'installmentPaymentRequests' => Yii::t('hipanel:finance', 'Installment Payment Request'),
@@ -236,8 +237,11 @@ class Purse extends \hipanel\base\Model
             'contact_id' => Yii::t('hipanel:finance', 'Contact'),
             'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
             'month' => Yii::t('hipanel:finance', 'Period'),
-            'client_bank_account_no' => Yii::t('hipanel:finance', 'Contractor bank acccount'),
-            'seller_bank_account_no' => Yii::t('hipanel:finance', 'Customer bank acccount'),
+            'client_bank_account_no' => Yii::t('hipanel:finance', 'Contractor bank account'),
+            'seller_bank_account_no' => Yii::t('hipanel:finance', 'Customer bank account'),
+            'detailedServiceInvoices' => Yii::t('hipanel:finance', 'Detailed Service Invoices'),
+            'detailedServicePaymentRequests' => Yii::t('hipanel:finance', 'Detailed Service Payment Request'),
+            'replacementPartNotice' => Yii::t('hipanel:finance', 'Replacement part notice'),
         ]);
     }
 

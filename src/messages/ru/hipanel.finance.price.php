@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
+
 return [
     'We could not suggest any new prices of type "{suggestionType}" for the selected object. Probably, they were already created earlier or this suggestion type is not compatible with this object type' => 'Мы не сможем предложить никаких новых цен типа "{suggestionType}" для выбранного объекта. Скорее всего, они уже были созданы раньше, или выбранный объект не поддерживает предложение цен этого типа.',
     'No price suggestions for this object' => 'Нет предложений цен для этого объекта.',
@@ -45,14 +46,11 @@ return [
     'Prices history is empty' => 'История цен пуста',
     'Prices history' => 'История цен',
     'Old price' => 'Старая цена',
-
     'minutes' => 'минут',
     'items' => 'штуки',
     'hours' => 'часы',
     'files' => 'файлы',
-
     'Referral rate' => 'Реферальная ставка (%)',
-
     'Object name' => 'Название объекта',
     'Tariff plan name' => 'Название тарифного плана',
     'Tariff plan type' => 'Тип тарифного плана',
@@ -71,4 +69,14 @@ return [
     'Calculate aggregated traffic' => 'Считать агрегировано траффик',
     '(reasonable for grouping tariffs only)' => 'применимо только для группирующих тарифов',
     'Aggregated' => 'Агрегирован',
+    'Bill every third month, starting from {month.year}.' => 'Выставлять счет каждые три месяца, начиная с {month.year}.',
+    'Bill every year in {month} starting from {month.year}.' => 'Выставлять счет каждый год в {month}, начиная с {month.year}.',
+    '10pp' => '10pp',
+    'Fixed discount' => 'Фиксированная скидка',
+    'Growing discount' => 'Растущая скидка',
+    'Installment' => 'Рассрочка',
+    'Monthly Cap' => 'Месячный лимит',
+    'Old quantity' => 'Старое количество',
+    'Once' => 'Единоразово',
+    'We could not suggest any new prices of type ' => 'Мы не смогли предложить новые цены типа ',
 ];
