@@ -52,6 +52,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'serialno', 'model', 'device',
                                 'state', 'since', 'till', 'quantity',
                                 'expected_monthly_sum', 'charged_sum', 'left_sum', 'expected_sum',
+                                'parent_id', 'child_id',
+                                'note',
                                 'order_name', 'company_id', 'warranty_till',
                             ],
                         ]) ?>
@@ -74,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'boxed' => false,
                 'dataProvider' => $itemsDataProvider,
                 'columns' => array_filter([
-                    'no', 'month', 'tariff_link', 'sum', 'charge_sum',
+                    'no', 'month', 'formula', 'tariff_link', 'sum', 'charge_sum',
                     Yii::$app->user->can('bill.charges.read') ? 'charge_id' : null,
                     'bill_id',
                 ]),

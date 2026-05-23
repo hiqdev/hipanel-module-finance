@@ -24,6 +24,7 @@ use Yii;
  * @property int|null    $charge_id
  * @property string|null $charge_sum
  * @property int|null    $bill_id
+ * @property string|null $formula
  */
 class InstallmentPlanItem extends \hipanel\base\Model
 {
@@ -38,7 +39,7 @@ class InstallmentPlanItem extends \hipanel\base\Model
     {
         return array_merge(parent::rules(), [
             [['id', 'installment_plan_id', 'charge_id', 'bill_id', 'no', 'tariff_id'], 'integer'],
-            [['month', 'currency', 'tariff'], 'string'],
+            [['month', 'currency', 'tariff', 'formula'], 'string'],
             [['sum', 'charge_sum'], 'number'],
         ]);
     }
@@ -54,6 +55,7 @@ class InstallmentPlanItem extends \hipanel\base\Model
             'charge_id'           => Yii::t('hipanel:finance', 'Charge'),
             'bill_id'             => Yii::t('hipanel:finance', 'Bill'),
             'installment_plan_id' => Yii::t('hipanel:finance', 'Installment plan'),
+            'formula'             => Yii::t('hipanel:finance', 'Formula'),
         ]);
     }
 

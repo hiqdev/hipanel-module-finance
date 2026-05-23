@@ -113,10 +113,11 @@ class InstallmentPlanGridView extends BoxedGridView
                 'format' => 'raw',
                 'value' => static function (InstallmentPlan $model) {
                     $labelClass = match ($model->state) {
-                        InstallmentPlan::STATE_FINISHED => 'label-success',
-                        InstallmentPlan::STATE_ONGOING  => 'label-info',
-                        InstallmentPlan::STATE_BUYOUT   => 'label-warning',
-                        default                         => 'label-danger',
+                        InstallmentPlan::STATE_FINISHED  => 'label-success',
+                        InstallmentPlan::STATE_ONGOING   => 'label-info',
+                        InstallmentPlan::STATE_BUYOUT    => 'label-warning',
+                        InstallmentPlan::STATE_ADJOURNED => 'label-default',
+                        default                          => 'label-danger',
                     };
 
                     return Html::tag('span', Html::encode($model->state_name), ['class' => "label {$labelClass}"]);
@@ -248,6 +249,30 @@ class InstallmentPlanGridView extends BoxedGridView
                 'value' => function (InstallmentPlan $model): string {
                     return Html::a(Html::encode($model->order_name), ['@order/view', 'id' => $model->order_id]);
                 },
+            ],
+            'parent_id' => [
+                'attribute' => 'parent_id',
+                'label' => Yii::t('hipanel:finance', 'Parent plan'),
+                'filter' => false,
+                'format' => 'raw',
+                'value' => fn(InstallmentPlan $model) => $model->parent_id
+                    ? Html::a('#' . $model->parent_id, ['@installment-plan/view', 'id' => $model->parent_id])
+                    : '—',
+            ],
+            'child_id' => [
+                'attribute' => 'child_id',
+                'label' => Yii::t('hipanel:finance', 'Child plan'),
+                'filter' => false,
+                'format' => 'raw',
+                'value' => fn(InstallmentPlan $model) => $model->child_id
+                    ? Html::a('#' . $model->child_id, ['@installment-plan/view', 'id' => $model->child_id])
+                    : '—',
+            ],
+            'note' => [
+                'attribute' => 'note',
+                'label' => Yii::t('hipanel', 'Note'),
+                'filter' => false,
+                'value' => fn(InstallmentPlan $model) => $model->note ?: '—',
             ],
             'warranty_till' => [
                 'class' => WarrantyColumn::class,
