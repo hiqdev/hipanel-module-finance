@@ -58,6 +58,7 @@ class InstallmentPlan extends \hipanel\base\Model
     const string STATE_INTERRUPTED = 'interrupted';
     const string STATE_AMBIGUOUS = 'ambiguous';
     const string STATE_ADJOURNED = 'adjourned';
+    const string STATE_PAID_EARLY = 'paid_early';
     const string STATE_DELETED = 'deleted';
 
     use \hipanel\base\ModelTrait;
@@ -122,6 +123,11 @@ class InstallmentPlan extends \hipanel\base\Model
     public function isDeleted(): bool
     {
         return $this->state === self::STATE_DELETED;
+    }
+
+    public function isPaidEarly(): bool
+    {
+        return $this->state === self::STATE_PAID_EARLY;
     }
 
     /**

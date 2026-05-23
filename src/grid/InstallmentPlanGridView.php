@@ -113,11 +113,12 @@ class InstallmentPlanGridView extends BoxedGridView
                 'format' => 'raw',
                 'value' => static function (InstallmentPlan $model) {
                     $labelClass = match ($model->state) {
-                        InstallmentPlan::STATE_FINISHED  => 'label-success',
-                        InstallmentPlan::STATE_ONGOING   => 'label-info',
-                        InstallmentPlan::STATE_BUYOUT    => 'label-warning',
-                        InstallmentPlan::STATE_ADJOURNED => 'label-default',
-                        default                          => 'label-danger',
+                        InstallmentPlan::STATE_FINISHED   => 'label-success',
+                        InstallmentPlan::STATE_PAID_EARLY => 'label-success',
+                        InstallmentPlan::STATE_ONGOING    => 'label-info',
+                        InstallmentPlan::STATE_BUYOUT     => 'label-warning',
+                        InstallmentPlan::STATE_ADJOURNED  => 'label-default',
+                        default                           => 'label-danger',
                     };
 
                     return Html::tag('span', Html::encode($model->state_name), ['class' => "label {$labelClass}"]);
