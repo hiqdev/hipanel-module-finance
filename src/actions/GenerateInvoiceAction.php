@@ -49,11 +49,7 @@ class GenerateInvoiceAction extends BillManagementAction
                 $generateInvoiceForm->data = json_decode($generateInvoiceForm->data, true, 512, JSON_THROW_ON_ERROR);
                 $response = Document::perform('generate', $generateInvoiceForm->attributes);
 
-                return $this->controller->response->sendContentAsFile(
-                    $response,
-                    $generateInvoiceForm->filename,
-                    ['inline' => true, 'mimeType' => 'application/pdf']
-                );
+                return $this->controller->redirect(['@document/get-cached-file', 'uuid' => $response['uuid']]);
             }
             $billIds = $this->controller->request->post('selection', []);
             $bills = $this->getBills($billIds);
