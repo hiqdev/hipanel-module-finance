@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="form-group">
                             <label for="number">Document number</label>
                             <input type="text" class="form-control" id="number"
-                                   v-model="invoice.data.monthly_invoice.number">
+                                   v-model="invoice.data.monthly_document.number">
                         </div>
                         <div class="form-group">
                             <label for="vat_number">VAT Number</label>
@@ -99,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             </div>
 
-            <div class="box-footer" v-for="(item, idx) in invoice.data.monthly_invoice.items" :key="idx">
+            <div class="box-footer" v-for="(item, idx) in invoice.data.monthly_document.items" :key="idx">
                 <div class="row">
 
                     <div class="form-group col-md-9">
@@ -116,14 +116,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="box-footer">
                 <dl class="dl-horizontal pull-right">
-                    <dt>Total for {{ invoice.data.monthly_invoice.period.month }} {{
-                        invoice.data.monthly_invoice.period.year }}
+                    <dt>Total for {{ invoice.data.monthly_document.period.month }} {{
+                        invoice.data.monthly_document.period.year }}
                     </dt>
-                    <dd>{{ invoice.data.monthly_invoice.subtotal }}</dd>
+                    <dd>{{ invoice.data.monthly_document.subtotal }}</dd>
                     <dt>Tax (VAT {{ invoice.data.vat_rate }}%)</dt>
-                    <dd>{{ invoice.data.monthly_invoice.tax_value }}</dd>
+                    <dd>{{ invoice.data.monthly_document.tax_value }}</dd>
                     <dt>TOTAL</dt>
-                    <dd>{{ invoice.data.monthly_invoice.final_total }}</dd>
+                    <dd>{{ invoice.data.monthly_document.final_total }}</dd>
                 </dl>
             </div>
 
