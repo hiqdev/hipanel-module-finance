@@ -42,13 +42,21 @@ final class PursesDocumentsDataSource implements FinanceDocumentsDataSource
 
         $payload = [
             'language' => $this->app->language,
-            'purses' => array_map(fn($p) => $this->serializePurse($this->app, $p), $this->purses),
+            'purses' => $this->serializeSortedPurses(),
             'permissions' => $this->buildPermissionList($this->app, $this->client),
             'currencies' => $this->prepareAssoc($currencies),
             'documentTypes' => $this->prepareAssoc($types),
         ];
 
         return $raw ? $payload : Json::encode($payload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP);
+    }
+
+    private function serializeSortedPurses(): array
+    {
+        $purses = array_map(fn($purse) => $this->serializePurse($this->app, $purse), $this->purses);
+        usort($purses, fn(array $left, array $right): int => $left['id'] <=> $right['id']);
+
+        return $purses;
     }
 
     private function serializePurse(Application $app, Purse $purseModel): array
