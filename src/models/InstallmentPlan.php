@@ -15,36 +15,39 @@ use Yii;
 /**
  * Class InstallmentPlan
  *
- * @property int    $id
- * @property int    $state_id
- * @property string $state
- * @property string $state_name
- * @property int    $seller_id
- * @property string $seller
- * @property int    $client_id
- * @property string $client
- * @property int    $part_id
- * @property string $serialno
- * @property int    $model_id
- * @property string $model
- * @property string $partno
- * @property int    $brand_id
- * @property string $brand
- * @property int    $part_type_id
- * @property string $part_type
- * @property int    $device_id
- * @property string $device
- * @property string $since
- * @property string $till
- * @property int    $quantity
- * @property string $reason
- * @property string $expected_monthly_sum
- * @property string $expected_sum
- * @property string $charged_sum
- * @property string $left_sum
- * @property int    $currency_id
- * @property string $currency
- * @property array  $items
+ * @property int         $id
+ * @property int         $state_id
+ * @property string      $state
+ * @property string      $state_name
+ * @property int         $seller_id
+ * @property string      $seller
+ * @property int         $client_id
+ * @property string      $client
+ * @property int         $part_id
+ * @property string      $serialno
+ * @property int         $model_id
+ * @property string      $model
+ * @property string      $partno
+ * @property int         $brand_id
+ * @property string      $brand
+ * @property int         $part_type_id
+ * @property string      $part_type
+ * @property int         $device_id
+ * @property string      $device
+ * @property string      $since
+ * @property string      $till
+ * @property int         $quantity
+ * @property string      $reason
+ * @property string      $expected_monthly_sum
+ * @property string      $expected_sum
+ * @property string      $charged_sum
+ * @property string      $left_sum
+ * @property int         $currency_id
+ * @property string      $currency
+ * @property int|null    $parent_id
+ * @property int|null    $child_id
+ * @property string|null $note
+ * @property array       $items
  * @property InstallmentPlanItem[] $itemsModels
  */
 class InstallmentPlan extends \hipanel\base\Model
@@ -54,6 +57,8 @@ class InstallmentPlan extends \hipanel\base\Model
     const string STATE_BUYOUT = 'buyout';
     const string STATE_INTERRUPTED = 'interrupted';
     const string STATE_AMBIGUOUS = 'ambiguous';
+    const string STATE_ADJOURNED = 'adjourned';
+    const string STATE_PAID_EARLY = 'paid_early';
     const string STATE_DELETED = 'deleted';
 
     use \hipanel\base\ModelTrait;
@@ -67,9 +72,9 @@ class InstallmentPlan extends \hipanel\base\Model
     {
         return array_merge(parent::rules(), [
             [['id', 'state_id', 'seller_id', 'client_id', 'part_id', 'model_id', 'brand_id', 'part_type_id', 'device_id', 'currency_id'], 'integer'],
-            [['state', 'state_name', 'seller', 'client', 'serialno', 'model', 'partno', 'brand', 'part_type', 'device', 'currency', 'reason', 'order_name', 'company', 'tariff'], 'string'],
+            [['state', 'state_name', 'seller', 'client', 'serialno', 'model', 'partno', 'brand', 'part_type', 'device', 'currency', 'reason', 'order_name', 'company', 'tariff', 'note'], 'string'],
             [['since', 'till', 'warranty_till'], 'datetime', 'format' => 'php:Y-m-d H:i:s'],
-            [['quantity', 'order_id', 'company_id', 'tariff_id'], 'integer'],
+            [['quantity', 'order_id', 'company_id', 'tariff_id', 'parent_id', 'child_id'], 'integer'],
             [['expected_monthly_sum', 'expected_sum', 'charged_sum', 'left_sum'], 'number'],
             [['items'], 'safe'],
             [['id'], 'required', 'on' => ['delete', 'restore', 'update']],
@@ -109,12 +114,20 @@ class InstallmentPlan extends \hipanel\base\Model
             'company_id'            => Yii::t('hipanel:finance', 'Company'),
             'order_id'              => Yii::t('hipanel:finance', 'Order'),
             'warranty_till'         => Yii::t('hipanel:finance', 'Warranty till'),
+            'parent_id'             => Yii::t('hipanel:finance', 'Parent plan'),
+            'child_id'              => Yii::t('hipanel:finance', 'Child plan'),
+            'note'                  => Yii::t('hipanel', 'Note'),
         ]);
     }
 
     public function isDeleted(): bool
     {
         return $this->state === self::STATE_DELETED;
+    }
+
+    public function isPaidEarly(): bool
+    {
+        return $this->state === self::STATE_PAID_EARLY;
     }
 
     /**
