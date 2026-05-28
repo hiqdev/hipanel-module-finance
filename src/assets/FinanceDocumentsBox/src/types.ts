@@ -152,7 +152,7 @@ export interface AccountFilters {
   showNewOnly: boolean;
 }
 
-export interface PreviewDocumentEntry {
+export interface PreviewDoc {
   uuid: string;
   url: string;
   requisite: { id: number; name: string };
@@ -162,8 +162,8 @@ export interface GenerationResponse {
   status: "success" | "error";
   errors: string[];
   message: string | null;
-  /** Generation endpoints return Doc[]; preview endpoints return Record<string, PreviewDocumentEntry>. */
-  data?: Doc[] | Record<string, PreviewDocumentEntry>;
+  /** Generate endpoints return Doc[]; preview endpoints return PreviewDoc[]. */
+  data?: Doc[] | PreviewDoc[];
 }
 
 export interface ApiError {

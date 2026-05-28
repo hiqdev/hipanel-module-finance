@@ -1,4 +1,4 @@
-import type { Doc, DocParams, GenerationResponse, ModalState, PreviewDocumentEntry, Purse } from "../types";
+import type { Doc, DocParams, GenerationResponse, ModalState, PreviewDoc, Purse } from "../types";
 import { docMonthKey } from "../data";
 import type { ToastType } from "./useToast.svelte";
 import { purseDocumentsApi } from "../api";
@@ -32,11 +32,10 @@ function cryptoRand(min: number, max: number) {
   return crypto.getRandomValues(new Uint32Array(1))[0] % (max - min + 1) + min;
 }
 
-function extractUrls(data: Doc[] | Record<string, PreviewDocumentEntry> | undefined): string[] {
+function extractUrls(data: Doc[] | PreviewDoc[] | undefined): string[] {
   if (!data) return [];
-  const items = Array.isArray(data) ? data : Object.values(data);
-  return items
-    .filter((e): e is PreviewDocumentEntry => e != null && typeof e === "object" && "uuid" in e)
+  return data
+    .filter((e): e is PreviewDoc => e != null && typeof e === "object" && "uuid" in e)
     .map(e => `/document/document/get-cached-file?uuid=${e.uuid}&v=${cryptoRand(1, 1000000)}`);
 }
 
