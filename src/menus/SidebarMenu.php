@@ -106,10 +106,6 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                         'url'     => ['@consumption/index'],
                         'visible' => $user->can('consumption.read'),
                     ],
-                    'installment' => [
-                        'label'   => Yii::t('hipanel:finance', 'Installments'),
-                        'url'     => ['@installment/index'],
-                    ],
                     'installment-plan' => [
                         'label'   => Yii::t('hipanel:finance', 'Installment plans'),
                         'url'     => ['@installment-plan/index'],
