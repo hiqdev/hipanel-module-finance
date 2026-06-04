@@ -13,11 +13,15 @@ namespace hipanel\modules\finance\controllers;
 use hipanel\actions\IndexAction;
 use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartPerformAction;
+use hipanel\actions\VariantsAction;
 use hipanel\actions\ViewAction;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\finance\actions\InstallmentPlanCreateBillAction;
 use hipanel\modules\finance\actions\InstallmentPlanProcessAction;
 use hipanel\modules\finance\models\InstallmentPlan;
+use hipanel\modules\finance\widgets\InstallmentPlanSummaryTable;
+use hipanel\widgets\DataProviderGridRenderer;
+use hiqdev\hiart\ActiveDataProvider;
 use Yii;
 use yii\data\ArrayDataProvider;
 
@@ -44,6 +48,19 @@ class InstallmentPlanController extends \hipanel\base\CrudController
         return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
+                'responseVariants' => [
+                    IndexAction::VARIANT_SUMMARY_RESPONSE => function (VariantsAction $action): string {
+                        /** @var ActiveDataProvider $dataProvider */
+                        $dataProvider = $action->parent->getDataProvider();
+                        $defaultSummary = (new DataProviderGridRenderer($dataProvider))->renderSummary();
+                        $installmentPlansSummary = InstallmentPlanSummaryTable::widget([
+                            'currencies' => $action->controller->getCurrencyTypes(),
+                            'allModels'  => $dataProvider->query->andWhere(['groupby' => 'sum_by_currency'])->all(),
+                        ]);
+
+                        return $defaultSummary . $installmentPlansSummary;
+                    },
+                ],
             ],
             'delete' => [
                 'class' => SmartDeleteAction::class,
