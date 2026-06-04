@@ -20,7 +20,7 @@ use hipanel\modules\finance\widgets\combo\InstallmentPlanStateCombo;
 use hipanel\modules\stock\grid\CompanyColumn;
 use hipanel\modules\stock\grid\WarrantyColumn;
 use hipanel\modules\server\widgets\combo\DeviceCombo;
-use hipanel\widgets\gridLegend\GridLegend;
+use hipanel\modules\stock\widgets\combo\OrderCombo;
 use Yii;
 use yii\helpers\Html;
 
@@ -28,13 +28,15 @@ class InstallmentPlanGridView extends BoxedGridView
 {
     public function columns(): array
     {
+        $user = Yii::$app->user;
+
         return array_merge(parent::columns(), [
             'view_link' => [
                 'label' => '',
                 'filter' => false,
                 'format' => 'raw',
                 'headerOptions' => ['style' => 'width:1%'],
-                'contentOptions' => function ($model) {
+                'contentOptions' => function ($model): array {
                     $legend = new InstallmentPlanGridLegend($model);
                     foreach ($legend->items() as $item) {
                         if ($item['rule']) {
@@ -47,7 +49,7 @@ class InstallmentPlanGridView extends BoxedGridView
                     return [];
                 },
                 'value' => fn(InstallmentPlan $model) => Html::a(
-                    '<i class="fa fa-bars"></i>',
+                    '<i class="fa fa-eye fa-fw"></i>',
                     ['@installment-plan/view', 'id' => $model->id],
                     ['class' => 'btn btn-default btn-xs', 'title' => Yii::t('hipanel', 'Details'), 'data-toggle' => 'tooltip'],
                 ),
@@ -64,9 +66,9 @@ class InstallmentPlanGridView extends BoxedGridView
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'format' => 'raw',
                 'label' => Yii::t('hipanel:finance', 'Part No.'),
-                'value' => static function (InstallmentPlan $model): string {
+                'value' => static function (InstallmentPlan $model) use ($user): string {
                     $partNo = Html::encode($model->partno);
-                    if (Yii::$app->user->can('model.read')) {
+                    if ($user->can('model.read')) {
                         return Html::a($partNo, ['@model/view', 'id' => $model->model_id], [
                             'data' => ['toggle' => 'tooltip'],
                             'title' => Html::encode(sprintf(
@@ -130,9 +132,7 @@ class InstallmentPlanGridView extends BoxedGridView
                 'attribute' => 'expected_sum',
                 'colors' => ['danger' => 'warning'],
                 'headerOptions' => ['class' => 'text-right'],
-                'contentOptions' => function (InstallmentPlan $model) {
-                    return ['class' => 'text-right' . ($model->expected_sum > 0 ? ' text-bold' : '')];
-                },
+                'contentOptions' => fn(InstallmentPlan $model) => ['class' => 'text-right' . ($model->expected_sum > 0 ? ' text-bold' : '')],
                 'exportedColumns' => ['export_expected_sum'],
             ],
             'expected_monthly_sum' => [
@@ -174,17 +174,9 @@ class InstallmentPlanGridView extends BoxedGridView
                     if (!$url) {
                         return Html::tag('span', $sum, ['class' => 'text-right' . ($model->left_sum > 0 ? ' text-bold' : '')]);
                     }
-
-                    $icon = Html::tag('i', '', ['class' => 'fa fa-list']);
-
                     $sum = Html::a($sum, $url);
-                    $icon = Html::a($icon, $url, [
-                        'class' => 'btn btn-default btn-xs',
-                        'title' => Yii::t('hipanel:finance', 'Charges'),
-                        'data-toggle' => 'tooltip',
-                        'style' => 'margin-left: .5em',
-                    ]);
-                    return Html::tag('span', $sum . $icon, ['style' => 'display: flex; justify-content: flex-end; align-items: center;']);
+
+                    return Html::tag('span', $sum, ['style' => 'display: flex; justify-content: flex-end; align-items: center;']);
                 },
                 'exportedColumns' => ['export_charged_sum', 'export_currency'],
             ],
@@ -231,22 +223,20 @@ class InstallmentPlanGridView extends BoxedGridView
             ],
             'company_id' => [
                 'class' => CompanyColumn::class,
-                'visible' => Yii::$app->user->can('order.read'),
+                'visible' => $user->can('order.read'),
             ],
             'order_name' => [
                 'attribute' => 'order_id',
                 'filterAttribute' => 'order_id',
-                'filter' => function ($column, $model, $attribute) {
-                    return \hipanel\modules\stock\widgets\combo\OrderCombo::widget([
-                        'model' => $model,
-                        'attribute' => $attribute,
-                        'formElementSelector' => 'td',
-                    ]);
-                },
+                'filter' => fn($column, $model, $attribute) => OrderCombo::widget([
+                    'model' => $model,
+                    'attribute' => $attribute,
+                    'formElementSelector' => 'td',
+                ]),
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'contentOptions' => ['style' => 'white-space: nowrap;'],
                 'format' => 'raw',
-                'visible' => Yii::$app->user->can('order.read') && Yii::$app->user->can('owner-staff'),
+                'visible' => $user->can('order.read') && $user->can('owner-staff'),
                 'value' => function (InstallmentPlan $model): string {
                     return Html::a(Html::encode($model->order_name), ['@order/view', 'id' => $model->order_id]);
                 },
@@ -283,51 +273,47 @@ class InstallmentPlanGridView extends BoxedGridView
             ],
             'actions' => [
                 'class' => ActionColumn::class,
+                'header' => false,
                 'template' => '{delete} {restore}',
                 'visibleButtonsCount' => 2,
-                'visible' => Yii::$app->user->can('installment-plan.delete') || Yii::$app->user->can('installment-plan.restore') || Yii::$app->user->can('installment-plan.update'),
+                'visible' => $user->can('installment-plan.delete') || $user->can('installment-plan.restore') || $user->can('installment-plan.update'),
+                'contentOptions' => ['style' => 'vertical-align: middle; text-align: center;'],
                 'visibleButtons' => [
-                    'delete'  => fn(InstallmentPlan $model) => Yii::$app->user->can('installment-plan.delete') && !$model->isDeleted(),
-                    'restore' => fn(InstallmentPlan $model) => Yii::$app->user->can('installment-plan.restore') && $model->isDeleted(),
+                    'delete'  => fn(InstallmentPlan $model) => $user->can('installment-plan.delete') && !$model->isDeleted(),
+                    'restore' => fn(InstallmentPlan $model) => $user->can('installment-plan.restore') && $model->isDeleted(),
                 ],
                 'buttons' => [
-                    'delete' => function ($url, InstallmentPlan $model) {
-                        return Html::a(
-                            '<i class="fa fa-trash"></i>&nbsp;' . Yii::t('hipanel', 'Delete'),
-                            $url,
-                            [
-                                'class' => 'btn btn-default btn-xs',
-                                'data' => [
-                                    'method' => 'POST',
-                                    'pjax'   => '0',
-                                    'confirm' => Yii::t('hipanel:finance', 'Are you sure you want to delete this installment plan?'),
-                                    'params' => [
-                                        'InstallmentPlan[id]' => $model->id,
-                                    ],
+                    'delete' => fn($url, InstallmentPlan $model): string => Html::a(
+                        '<i class="fa fa-trash fa-fw"></i>&nbsp;' . Yii::t('hipanel', 'Delete'),
+                        $url,
+                        [
+                            'class' => 'btn btn-danger btn-xs',
+                            'data' => [
+                                'method' => 'POST',
+                                'pjax'   => '0',
+                                'confirm' => Yii::t('hipanel:finance', 'Are you sure you want to delete this installment plan?'),
+                                'params' => [
+                                    'InstallmentPlan[id]' => $model->id,
                                 ],
-                            ]
-                        );
-                    },
-                    'restore' => function ($url, InstallmentPlan $model) {
-                        return Html::a(
-                            '<i class="fa fa-undo"></i>&nbsp;' . Yii::t('hipanel', 'Restore'),
-                            $url,
-                            [
-                                'class' => 'btn btn-default btn-xs',
-                                'data' => [
-                                    'method' => 'POST',
-                                    'pjax'   => '0',
-                                    'params' => [
-                                        'InstallmentPlan[id]' => $model->id,
-                                    ],
+                            ],
+                        ]
+                    ),
+                    'restore' => fn($url, InstallmentPlan $model): string => Html::a(
+                        '<i class="fa fa-undo fa-fw"></i>&nbsp;' . Yii::t('hipanel', 'Restore'),
+                        $url,
+                        [
+                            'class' => 'btn btn-default btn-xs',
+                            'data' => [
+                                'method' => 'POST',
+                                'pjax'   => '0',
+                                'params' => [
+                                    'InstallmentPlan[id]' => $model->id,
                                 ],
-                            ]
-                        );
-                    },
+                            ],
+                        ]
+                    ),
                 ],
-                'urlCreator' => function (string $action, InstallmentPlan $model) {
-                    return ['@installment-plan/' . $action, 'id' => $model->id];
-                },
+                'urlCreator' => fn(string $action, InstallmentPlan $model): array => ['@installment-plan/' . $action, 'id' => $model->id],
             ],
         ]);
     }
