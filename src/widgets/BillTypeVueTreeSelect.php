@@ -187,6 +187,7 @@ JS,
     private function buildOptionsArray(array $types): array
     {
         $types = ArrayHelper::index($types, 'id');
+        $typesByName = ArrayHelper::index($this->billTypes, 'name');
         // Each type key is a string like "monthly,hardware" or "monthly,installment"
         // We need to split it by comma and build a recursive array of options for vue-treeselect, where ID is a type name
         $options = [];
@@ -215,7 +216,7 @@ JS,
                 'id' => (string)$id,
                 'label' => $type->label,
                 'type' => $type->name,
-                'treeLabel' => str_contains($type->name, ',') ? $this->findTreeLabel($type) : null,
+                'treeLabel' => str_contains($type->name, ',') ? $this->findTreeLabel($type, $typesByName) : null,
                 'isDisabled' => str_contains($type->name, 'delimiter'),
             ];
             if ($this->behavior === TreeSelectBehavior::Deprecated && $this->isDeprecatedType($type->name)) {
@@ -230,22 +231,24 @@ JS,
         return $this->removeKeysRecursively(array_values($children));
     }
 
-    private function findTreeLabel(Ref $type): ?string
+    private function findTreeLabel(Ref $type, array $typesByName = []): ?string
     {
-        $types = ArrayHelper::index($this->billTypes, 'name');
+        if (empty($typesByName)) {
+            $typesByName = ArrayHelper::index($this->billTypes, 'name');
+        }
         $parts = [];
         $chunks = explode(',', $type->name);
         $key = '';
         foreach ($chunks as $part) {
             $key .= empty($key) ? $part : ',' . $part;
-            if (isset($types[$key]) && $key !== $type->name) {
-                $parts[$key] = Html::tag('span', StringHelper::truncate($this->fixLang($types[$key]->label), 10));
+            if (isset($typesByName[$key]) && $key !== $type->name) {
+                $parts[$key] = Html::tag('span', StringHelper::truncate($this->fixLang($typesByName[$key]->label), 10));
             }
         }
         if ($this->isDeprecatedType($type->name)) {
-            $parts[] = Html::tag('s', $this->fixLang($types[$type->name]->label));
+            $parts[] = Html::tag('s', $this->fixLang($typesByName[$type->name]->label));
         } else {
-            $parts[] = $this->fixLang($types[$type->name]->label);
+            $parts[] = $this->fixLang($typesByName[$type->name]->label);
         }
 
         return !empty($parts) ? implode("", $parts) : null;
@@ -288,19 +291,19 @@ JS,
         return $remained;
     }
 
-    private function isAdjustment($typeId): bool
+    private function isAdjustment($typeId, array $typesById = []): bool
     {
         if (!is_int($typeId)) {
             return false;
         }
-        $types = ArrayHelper::index($this->billTypes, 'id');
-        if (!isset($types[$typeId])) {
+        if (empty($typesById)) {
+            $typesById = ArrayHelper::index($this->billTypes, 'id');
+        }
+        if (!isset($typesById[$typeId])) {
             return false;
         }
 
-        $type = $types[$typeId];
-
-        return str_starts_with($type->name, 'adjustment');
+        return str_starts_with($typesById[$typeId]->name, 'adjustment');
     }
 
     private function prepareOptions(): array
@@ -325,7 +328,7 @@ JS,
 
             return $cache[$cacheKey] = [$options, []];
         }
-        $adjustmentTypes = array_filter($types, fn(Ref $ref) => $this->isAdjustment($ref->id));
+        $adjustmentTypes = array_filter($types, fn(Ref $ref) => $this->isAdjustment($ref->id, $types));
         $typesWithoutAdjustments = array_diff_key($types, $adjustmentTypes);
         $options = $this->buildOptionsArray($typesWithoutAdjustments);
         $adjustmentOptions = $this->buildOptionsArray($adjustmentTypes);

@@ -59,7 +59,15 @@ class BillType extends Type
             return Yii::t('hipanel.finance.billTypes', 'Unknown');
         }
 
-        $billTypes = Ref::getListRecursively('type,bill', false);
+        $labelField = $this->getLabelField();
+        if ($labelField && $this->model->hasAttribute($labelField) && $this->model->getAttribute($labelField) !== null) {
+            return $this->model->getAttribute($labelField);
+        }
+
+        static $billTypes = null;
+        if ($billTypes === null) {
+            $billTypes = Ref::getListRecursively('type,bill', false);
+        }
 
         return $billTypes[$this->getFieldValue()] ?? $this->getFieldValue();
     }
