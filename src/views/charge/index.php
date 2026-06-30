@@ -51,6 +51,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $page->renderRepresentations($representationCollection) ?>
     <?php $page->endContent() ?>
 
+    <?php $page->beginContent('bulk-actions') ?>
+        <?php if (Yii::$app->user->can('bill.charges.change_invoiced')) : ?>
+            <?= $page->renderBulkButton('generate-on-demand-document', Yii::t('hipanel:finance', 'Generate on-demand document')) ?>
+        <?php endif ?>
+    <?php $page->endContent() ?>
+
     <?php $page->beginContent('table') ?>
         <?php $page->beginBulkForm() ?>
             <?= ChargeGridView::widget([

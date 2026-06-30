@@ -69,6 +69,9 @@ $this->params['subtitle'] = $subtitle . ' ' . ExchangeRatesLine::widget(['rates'
             <?= $page->renderBulkButton('copy', Yii::t('hipanel', 'Copy')) ?>
             <?= $page->renderBulkButton('generate-invoice', Yii::t('hipanel:finance', 'Generate invoice')) ?>
         <?php endif ?>
+        <?php if (Yii::$app->user->can('bill.charges.change_invoiced')) : ?>
+            <?= $page->renderBulkButton('generate-on-demand-document', Yii::t('hipanel:finance', 'Generate on-demand document')) ?>
+        <?php endif ?>
         <?php if (Yii::$app->user->can('bill.update')) : ?>
             <?= $page->renderBulkButton('@bill/update', Yii::t('hipanel', 'Update')) ?>
         <?php endif ?>

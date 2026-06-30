@@ -20,6 +20,9 @@ use hipanel\actions\VariantsAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
+use hipanel\modules\finance\actions\GenerateOnDemandDocumentFromChargesAction;
+use hipanel\modules\finance\actions\PreviewOnDemandDocumentAction;
+use hipanel\modules\finance\actions\SaveOnDemandDocumentAction;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\query\ChargeQuery;
 use hipanel\modules\finance\providers\BillTypesProvider;
@@ -54,8 +57,11 @@ class ChargeController extends CrudController
             'access-bill' => [
                 'class' => EasyAccessControl::class,
                 'actions' => [
-                    '*' => 'bill.charges.read',
-                    'update' => 'bill.update',
+                    'generate-on-demand-document' => 'bill.charges.change_invoiced',
+                    'save-on-demand-document'     => 'bill.charges.change_invoiced',
+                    'preview-on-demand-document'  => 'bill.charges.change_invoiced',
+                    'update'                      => 'bill.update',
+                    '*'                           => 'bill.charges.read',
                 ],
             ],
         ]);
@@ -76,6 +82,9 @@ class ChargeController extends CrudController
                         ->withCommonObject()
                         ->withLatestCommonObject()
                         ->withRootChargeType();
+                    if (Yii::$app->user->can('bill.charges.change_invoiced')) {
+                        $query->withIncludedInDocuments();
+                    }
                 },
                 'data' => fn(RenderAction $action, array $data): array => [
                     'billTypesList' => $this->billTypesProvider->getTypes(),
@@ -93,6 +102,15 @@ class ChargeController extends CrudController
                             ]);
                     },
                 ],
+            ],
+            'generate-on-demand-document' => [
+                'class' => GenerateOnDemandDocumentFromChargesAction::class,
+            ],
+            'save-on-demand-document' => [
+                'class' => SaveOnDemandDocumentAction::class,
+            ],
+            'preview-on-demand-document' => [
+                'class' => PreviewOnDemandDocumentAction::class,
             ],
             'update' => [
                 'class' => SmartUpdateAction::class,
