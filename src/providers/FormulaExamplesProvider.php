@@ -54,6 +54,7 @@ class FormulaExamplesProvider
             sprintf("discount.since('%s').grows('10pp').every('month').reason('because')", date('m.Y')) => Yii::t('hipanel.finance.price', '<code>10pp</code> means "10 percent points". A percent point is the arithmetic difference of two percentages. For example, moving up from 40% to 50% is a 10 percentage point increase, but is an actual 25% percent increase in what is being measured.'),
             sprintf("discount.since('%s').grows('10%%').every('month').max('100%%').reason('because')", date('m.Y')),
             sprintf("discount.since('%s').grows('20 %s').every('2 months').min('30 %s').max('80 %s')", date('m.Y'), $this->currencyCode, $this->currencyCode, $this->currencyCode),
+            sprintf("discount.since('%s').grows('30%%').every('year').stopsGrowing('%s')", date('m.Y'), date('m.Y', strtotime('+1 year'))) => Yii::t('hipanel.finance.price', 'This relative discount will stop growing in {month.year}, but will keep applying.', ['month.year' => date('m.Y', strtotime('+1 year'))]),
             sprintf("discount.since('%s').grows('1%%').every('1 months').min('5%%').max('25%%')", date('m.Y')),
             sprintf("increase.since('%s').grows('10%%').every('year')", date('m.Y')) => Yii::t('hipanel.finance.price', 'The example will <b>increase</b> the price by 10% every year instead of decreasing it. You can use all the same options as for <code>discount</code> formula such as <code>min</code>, <code>max</code>, <code>reason</code>.'),
         ];
