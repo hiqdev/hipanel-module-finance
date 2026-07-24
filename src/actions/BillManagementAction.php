@@ -16,6 +16,7 @@ use hipanel\modules\finance\logic\bill\BillTemplateManager;
 use hipanel\modules\finance\logic\bill\template\TemplateInterface;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\Module;
+use hipanel\modules\finance\providers\BillPreloadStorage;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use hiqdev\hiart\Collection;
 use hiqdev\hiart\ResponseErrorException;
@@ -37,13 +38,15 @@ class BillManagementAction extends Action
     protected Collection $collection;
     protected BillTypesProvider $billTypesProvider;
     private BillTemplateManager $billTemplateManager;
+    private BillPreloadStorage $preloadStorage;
 
-    public function __construct($id, Controller $controller, BillTypesProvider $billTypesProvider, array $config = [])
+    public function __construct($id, Controller $controller, BillTypesProvider $billTypesProvider, BillPreloadStorage $preloadStorage, array $config = [])
     {
         parent::__construct($id, $controller, $config);
 
         $this->request = Yii::$app->request;
         $this->billTypesProvider = $billTypesProvider;
+        $this->preloadStorage = $preloadStorage;
         $this->billTemplateManager = new BillTemplateManager($this);
     }
 
@@ -89,15 +92,11 @@ class BillManagementAction extends Action
     private function findBills(): void
     {
         if ($this->request->isGet && ($preloadKey = $this->request->get('_preload')) !== null) {
-            $sessionKey = 'bill_preload_' . $preloadKey;
-            if (Yii::$app->session->has($sessionKey)) {
-                $billsData = Yii::$app->session->get($sessionKey);
-                if (is_array($billsData)) {
-                    Yii::$app->session->remove($sessionKey);
-                    $this->collection->set($this->buildFormsFromPreloadData($billsData));
+            $billsData = $this->preloadStorage->take($preloadKey);
+            if ($billsData !== null) {
+                $this->collection->set($this->buildFormsFromPreloadData($billsData));
 
-                    return;
-                }
+                return;
             }
         }
 
