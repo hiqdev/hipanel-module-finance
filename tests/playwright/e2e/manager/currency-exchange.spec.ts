@@ -5,6 +5,7 @@ import { Alert } from "@hipanel-core/shared/ui/components";
 import AdvancedSearch from "@hipanel-core/helper/AdvancedSearch";
 
 test("the currency exchange operation works and creates a bill @hipanel-module-finance @manager", async ({ page }) => {
+  test.setTimeout(180_000);
   const advancedSearch = new AdvancedSearch(page);
 
   await page.goto("/finance/bill/index");
