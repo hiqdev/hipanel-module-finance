@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
+
 return [
     'Tariff profiles' => 'Профайлы тарифов',
     'Name' => 'Название профайла',
@@ -31,4 +32,11 @@ return [
     'View' => 'Просмотр',
     'Create seller profile: {0}' => 'Создать профайл реселлера: {0}',
     'Update seller profile: {0}' => 'Редактировать профайл реселлера: {0}',
+    'Default' => 'По умолчанию',
+    'Delete tariff profile' => 'Удалить профиль тарифа',
+    'Deleting tariff profile...' => 'Удаление профиля тарифа...',
+    'Kubernetes cluster tariffs' => 'Тарифы Kubernetes кластеров',
+    'Profile deleted' => 'Профиль удален',
+    'Tariff must be unlinked form all objects before. Are you sure you want to delete tariffprofile {name}?' => 'Тариф должен быть отвязан от всех объектов перед удалением. Вы уверены, что хотите удалить профиль тарифа {name}?',
+    'Tariff profile detailed information' => 'Подробная информация о профиле тарифа',
 ];

@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
+
 return [
     'More' => 'Подробнее',
     'Sale' => 'Продажа',
@@ -33,4 +34,16 @@ return [
     'Sale has been successfully created' => 'Продажа была успешно создана',
     'Reduce charges after unsale' => 'Уменьшить начисления после отмены продажи',
     'When checked, the previous client charges in the unsale month will be reduced proportionally to the usage time. When not checked, the charges will remain the same.' => 'Если отмечено, предыдущие клиентские начисления в месяце отмены продажи будут уменьшены пропорционально времени использования. Если снята, начисления останутся прежними.',
+    'Create' => 'Создать',
+    'Description' => 'Описание',
+    'Device' => 'Устройство',
+    'Edit' => 'Редактировать',
+    'Installment' => 'Рассрочка',
+    'Installment end' => 'Конец рассрочки',
+    'Installment start' => 'Начало рассрочки',
+    'Object Types' => 'Типы объектов',
+    'Periods left' => 'Осталось периодов',
+    'Save' => 'Сохранить',
+    'Target was successfully deleted.' => 'Таргет был успешно удален.',
+    'Tariff' => 'Тариф',
 ];

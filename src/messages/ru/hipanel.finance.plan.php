@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
+
 return [
     'Restore' => 'Восстановить',
     'Plan was successfully created' => 'Тарифный план был успешно создан',
@@ -18,6 +19,8 @@ return [
     'Monthly' => 'Ежемесячно',
     'Estimated value' => 'Оценочная стоимость',
     'Grouping' => 'Группирующий',
-
     'Your tariff plan' => 'Ваш тарифный план',
+    'Parent plan was successfully linked' => 'Родительский план успешно связан',
+    'Sale has been successfully changed' => 'Продажа успешно изменена',
+    'This plan doesn\'t have any price yet' => 'В этом плане еще нет цен',
 ];

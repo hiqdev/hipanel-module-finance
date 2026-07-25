@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2015-2019, HiQDev (http://hiqdev.com/)
  */
 
+
 return [
     'Attention!' => 'Внимание!',
     'Your PayPal account must match the contact email address in this panel.' => 'Ваш PayPal аккаунт должен совпадать с контактным email в этой панели.',
@@ -21,4 +22,6 @@ return [
     'In case of any questions, please {contactSupportTeamLink}.' => 'Если у Вас есть вопросы, задайте их {contactSupportTeamLink}.',
     'contact support team' => 'нашей команде поддержки',
     'Please be informed that due to the difficulties in cash withdrawal from Paxum to the bank account,<br/>we open the possibility to pay using this payment method, but we  have the right to refund you the whole amount<br/> and delete the credit from your account in control panel in case of fail of our possibility to withdraw the funds.' => 'В связи со сложностью вывода средств с Paxum на банк, прием возобновлен, но мы оставляем за собой право,<br/>в случае, неудачной попытки вывести средства,  вернуть Вам платеж и убрать зачисление с личного кабинета.',
+    'If you receive a payment from an unverified PayPal account, we may hold it for up to 30 days.' => 'Если вы получили платеж с неверифицированного аккаунта PayPal, мы можем удержать его на срок до 30 дней.',
+    'The payments that do not meet this condition will be returned to the payer' => 'Платежи, не соответствующие этому условию, будут возвращены плательщику',
 ];

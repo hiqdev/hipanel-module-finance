@@ -37,7 +37,7 @@ $this->registerJs(<<<JS
       () => {
         loading.hide();
         showProgress(type);
-        hipanel.notify.success(`Generation request has been sent`);
+        hipanel.notify.success(`<?= Yii::t('hipanel:finance', 'Generation request has been sent') ?>`);
       }
     );
   };
