@@ -48,7 +48,6 @@ $this->registerCss("
   margin-right: -10px;
   margin-left: -10px;
 }
-
 ");
 
 $form = ActiveForm::begin([
@@ -61,6 +60,7 @@ $form = ActiveForm::begin([
         'scenario' => $model->scenario,
     ]),
 ]) ?>
+
 <?php DynamicFormWidget::begin([
     'widgetContainer' => 'bills_dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
     'widgetBody' => '.container-items', // required: css class selector
@@ -163,7 +163,12 @@ $form = ActiveForm::begin([
                             <?= $form->field($model, "[$i]label") ?>
                         </div>
                         <div class="col-md-3">
-                            <?= $form->field($model, "[$i]time")->widget(DateTimePickerWithFormatter::class) ?>
+                            <?= $form->field($model, "[$i]time")->widget(
+                                DateTimePickerWithFormatter::class,
+                                [
+                                    'options' => ['class' => 'bill-time']
+                                ]
+                            ) ?>
                         </div>
                     </div>
 

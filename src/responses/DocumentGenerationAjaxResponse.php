@@ -9,7 +9,7 @@ final class DocumentGenerationAjaxResponse
     public const string STATUS_SUCCESS = 'success';
     public const string STATUS_ERROR = 'error';
 
-    /** @var array<int, array{uuid: string, url: string, requisite: array{id: int, name: string}}> */
+    /** @var list<array<string, mixed>> */
     private readonly array $data;
 
     private function __construct(
@@ -26,7 +26,7 @@ final class DocumentGenerationAjaxResponse
     }
 
     /**
-     * @param array<array-key, array{uuid: string, url: string, requisite: array{id: int, name: string}}> $data
+     * @param list<array<string, mixed>> $data
      */
     public static function success(array $data = [], ?string $message = null): self
     {
@@ -35,7 +35,7 @@ final class DocumentGenerationAjaxResponse
 
     /**
      * @param string|string[]|array<int, array{text?: string}>|null $errors
-     * @param array<array-key, array{uuid: string, url: string, requisite: array{id: int, name: string}}> $data
+     * @param list<array<string, mixed>> $data
      */
     public static function error(string|array|null $errors = [], ?string $message = null, array $data = []): self
     {

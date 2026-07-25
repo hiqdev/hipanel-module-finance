@@ -48,16 +48,9 @@ class BillType extends Type
         parent::init();
         $this->setColor('none');
         $this->getView()->registerCss(<<<CSS
-.flex-space-beetween {
-    display: flex;
-    flex-wrap: wrap-reverse;
-    justify-content: space-between;
-}
-.align-center {
-    align-items: center;
-}
-CSS
-        );
+            .flex-space-beetween { display: flex; flex-wrap: nowrap; gap: 1rem; justify-content: space-between; }
+            .align-center { align-items: center; }
+        CSS);
     }
 
     protected function getModelLabel(): string
@@ -66,7 +59,15 @@ CSS
             return Yii::t('hipanel.finance.billTypes', 'Unknown');
         }
 
-        $billTypes = Ref::getListRecursively('type,bill', false);
+        $labelField = $this->getLabelField();
+        if ($labelField && $this->model->hasAttribute($labelField) && $this->model->getAttribute($labelField) !== null) {
+            return $this->model->getAttribute($labelField);
+        }
+
+        static $billTypes = null;
+        if ($billTypes === null) {
+            $billTypes = Ref::getListRecursively('type,bill', false);
+        }
 
         return $billTypes[$this->getFieldValue()] ?? $this->getFieldValue();
     }

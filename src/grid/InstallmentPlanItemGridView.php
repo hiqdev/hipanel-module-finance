@@ -92,6 +92,12 @@ class InstallmentPlanItemGridView extends BoxedGridView
                     return $this->tariffLink($model);
                 },
             ],
+            'formula' => [
+                'attribute' => 'formula',
+                'label' => Yii::t('hipanel:finance', 'Formula'),
+                'filter' => false,
+                'value' => fn(InstallmentPlanItem $model) => $model->formula ?: '—',
+            ],
         ]);
     }
 

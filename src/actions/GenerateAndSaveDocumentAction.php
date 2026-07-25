@@ -3,6 +3,7 @@
 namespace hipanel\modules\finance\actions;
 
 use hipanel\actions\Action;
+use hipanel\modules\finance\helpers\BatchPerformHelper;
 use hipanel\modules\finance\helpers\DocumentGenerationErrorOps;
 use hipanel\modules\finance\models\Purse;
 use hipanel\modules\finance\responses\DocumentGenerationAjaxResponse;
@@ -31,7 +32,7 @@ final class GenerateAndSaveDocumentAction extends Action
         }
 
         $data = array_values(array_filter(
-            array_map([FinanceDocumentsSerializerTrait::class, 'serializeRawDocumentEntry'], (array)$rsp)
+            array_map([FinanceDocumentsSerializerTrait::class, 'serializeRawDocumentEntry'], BatchPerformHelper::unwrapResults($rsp))
         ));
 
         return $this->asJson(DocumentGenerationAjaxResponse::success($data)->asArray());

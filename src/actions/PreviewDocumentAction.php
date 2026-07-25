@@ -4,6 +4,7 @@ namespace hipanel\modules\finance\actions;
 
 use Exception;
 use hipanel\actions\Action;
+use hipanel\modules\finance\helpers\BatchPerformHelper;
 use hipanel\modules\finance\helpers\DocumentGenerationErrorOps;
 use hipanel\modules\finance\models\Purse;
 use hipanel\modules\finance\responses\DocumentGenerationAjaxResponse;
@@ -47,7 +48,7 @@ class PreviewDocumentAction extends Action
             return $this->asJson(DocumentGenerationAjaxResponse::error($message)->asArray());
         }
 
-        return $this->asJson(DocumentGenerationAjaxResponse::success((array)$content)->asArray());
+        return $this->asJson(DocumentGenerationAjaxResponse::success(BatchPerformHelper::unwrapResults($content))->asArray());
     }
 
     private function httpResponse(?Exception $error, mixed $content, array $params): mixed
