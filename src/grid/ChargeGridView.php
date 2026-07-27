@@ -236,6 +236,17 @@ class ChargeGridView extends BoxedGridView
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => ['class' => 'text-right'],
             ],
+            'included_in_documents' => [
+                'label' => '',
+                'format' => 'raw',
+                'enableSorting' => false,
+                'filter' => false,
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width:1em'],
+                'contentOptions' => ['class' => 'text-center'],
+                'value' => static fn(Charge $model): string => !empty($model->included_in_documents)
+                    ? Html::tag('i', '', ['class' => 'fa fa-file-text-o text-info', 'title' => Yii::t('hipanel:finance', 'Included in document')])
+                    : '',
+            ],
         ], $this->amountColumns());
     }
 

@@ -46,4 +46,25 @@ class ChargeQuery extends ActiveQuery
 
         return $this;
     }
+
+    public function withIncludedInDocuments(): self
+    {
+        $this->andWhere(['with_included_in_documents' => true]);
+
+        return $this;
+    }
+
+    public function byDocument(int $documentId): self
+    {
+        $this->andWhere(['document_ids' => $documentId]);
+
+        return $this;
+    }
+
+    public function byDocuments(array $documentIds): self
+    {
+        $this->andWhere(['document_ids' => implode(',', $documentIds)]);
+
+        return $this;
+    }
 }

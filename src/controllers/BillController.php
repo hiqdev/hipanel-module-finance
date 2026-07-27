@@ -26,6 +26,7 @@ use hipanel\modules\finance\actions\BillImportFromFileAction;
 use hipanel\modules\finance\actions\BillManagementAction;
 use hipanel\modules\finance\actions\CreateFromPricesAction;
 use hipanel\modules\finance\actions\GenerateInvoiceAction;
+use hipanel\modules\finance\actions\GenerateOnDemandDocumentAction;
 use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillImportForm;
 use hipanel\modules\finance\forms\CurrencyExchangeForm;
@@ -78,6 +79,7 @@ class BillController extends CrudController
                     'create-transfer'                                    => 'bill.create',
                     'import'                                             => 'bill.import',
                     'import-from-file'                                   => 'bill.import',
+                    'generate-on-demand-document'                        => 'bill.charges.change_invoiced',
                     'delete'                                             => 'bill.delete',
                     '*'                                                  => 'bill.read',
                 ],
@@ -161,6 +163,9 @@ class BillController extends CrudController
             ],
             'generate-invoice' => [
                 'class' => GenerateInvoiceAction::class,
+            ],
+            'generate-on-demand-document' => [
+                'class' => GenerateOnDemandDocumentAction::class,
             ],
             'import-from-file' => [
                 'class' => BillImportFromFileAction::class,
