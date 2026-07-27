@@ -15,13 +15,14 @@ namespace hipanel\modules\finance\actions;
 use hipanel\helpers\ArrayHelper;
 use hipanel\models\Ref;
 use hipanel\modules\finance\models\InstallmentPlan;
+use hipanel\modules\finance\providers\BillPreloadStorage;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use Yii;
 use yii\base\Action;
 
 class InstallmentPlanCreateBillAction extends Action
 {
-    public function run()
+    public function run(BillPreloadStorage $preloadStorage)
     {
         $ids       = Yii::$app->request->post('selection', []);
         $confirmed = (bool) Yii::$app->request->post('confirmed', false);
@@ -118,8 +119,7 @@ class InstallmentPlanCreateBillAction extends Action
             ];
         }
 
-        $preloadKey = Yii::$app->security->generateRandomString(16);
-        Yii::$app->session->set('bill_preload_' . $preloadKey, $billsData);
+        $preloadKey = $preloadStorage->store($billsData);
 
         return $this->controller->redirect(['@bill/create', '_preload' => $preloadKey]);
     }

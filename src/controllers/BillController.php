@@ -34,6 +34,7 @@ use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\ExchangeRate;
 use hipanel\modules\finance\models\query\ChargeQuery;
 use hipanel\modules\finance\models\Resource;
+use hipanel\modules\finance\providers\BillPreloadStorage;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use hipanel\modules\finance\widgets\FinanceSummaryTable;
 use hipanel\widgets\DataProviderGridRenderer;
@@ -221,15 +222,16 @@ class BillController extends CrudController
         ]);
     }
 
-    public function actionImport()
+    public function actionImport(BillPreloadStorage $preloadStorage)
     {
+        $request = Yii::$app->request;
         $billTypes = $this->billTypesProvider->getTypes();
         $model = new BillImportForm([
             // Kick out items that are categories names, but not real types
             'billTypes' => array_filter($billTypes, static fn(Ref $type) => str_contains($type->name, ',')),
         ]);
 
-        if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post())) {
+        if ($request->isPost && $model->load($request->post())) {
             $models = $model->parse();
 
             if ($models !== null) {
@@ -242,6 +244,18 @@ class BillController extends CrudController
                     'allowedTypes' => [],
                 ]);
             }
+        }
+
+        $bill = $request->get('bill');
+        if (is_array($bill)) {
+            $charges = $request->get('charges');
+            $billsData = [[
+                'attributes' => $bill,
+                'charges' => is_array($charges) ? $charges : [],
+            ]];
+            $preloadKey = $preloadStorage->store($billsData);
+
+            return $this->redirect(['@bill/create', '_preload' => $preloadKey]);
         }
 
         return $this->render('import', ['model' => $model]);
