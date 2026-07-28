@@ -176,7 +176,6 @@ return [
         ],
         'singletons' => [
             hipanel\modules\finance\providers\BillTypesProvider::class => hipanel\modules\finance\providers\BillTypesProvider::class,
-            hipanel\modules\finance\providers\BillPreloadStorage::class => hipanel\modules\finance\providers\BillPreloadStorage::class,
             hiqdev\yii2\merchant\transactions\TransactionRepositoryInterface::class => hipanel\modules\finance\transaction\ApiTransactionRepository::class,
             hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface::class => hipanel\modules\finance\logic\bill\QuantityFormatterFactory::class,
             hipanel\modules\finance\models\ServerResourceTypesProviderInterface::class => hipanel\modules\finance\models\ServerResourceTypesProvider::class,

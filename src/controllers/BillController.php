@@ -57,16 +57,18 @@ use yii\web\User;
 class BillController extends CrudController
 {
     private BillTypesProvider $billTypesProvider;
+    private BillPreloadStorage $preloadStorage;
     private CacheInterface $cache;
     private User $user;
 
-    public function __construct($id, Module $module, BillTypesProvider $billTypesProvider, CacheInterface $cache, User $user, array $config = [])
+    public function __construct($id, Module $module, BillTypesProvider $billTypesProvider, BillPreloadStorage $preloadStorage, CacheInterface $cache, User $user, array $config = [])
     {
         parent::__construct($id, $module, $config);
 
         $this->billTypesProvider = $billTypesProvider;
         $this->cache = $cache;
         $this->user = $user;
+        $this->preloadStorage = $preloadStorage;
     }
 
     public function behaviors()
@@ -227,7 +229,7 @@ class BillController extends CrudController
         ]);
     }
 
-    public function actionImport(BillPreloadStorage $preloadStorage)
+    public function actionImport()
     {
         $request = Yii::$app->request;
         $billTypes = $this->billTypesProvider->getTypes();
@@ -258,7 +260,7 @@ class BillController extends CrudController
                 'attributes' => $bill,
                 'charges' => is_array($charges) ? $charges : [],
             ]];
-            $preloadKey = $preloadStorage->store($billsData);
+            $preloadKey = $this->preloadStorage->store($billsData);
 
             return $this->redirect(['@bill/create', '_preload' => $preloadKey]);
         }
