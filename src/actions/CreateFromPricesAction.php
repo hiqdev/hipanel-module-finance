@@ -11,6 +11,7 @@ use hipanel\modules\finance\helpers\LightPriceChargesEstimator;
 use hipanel\modules\finance\models\Plan;
 use hipanel\modules\finance\models\Price;
 use hipanel\modules\finance\models\Sale;
+use hipanel\modules\finance\providers\BillPreloadStorage;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use Yii;
 use yii\web\BadRequestHttpException;
@@ -25,9 +26,9 @@ class CreateFromPricesAction extends BillManagementAction
 
     private Session $session;
 
-    public function __construct($id, Controller $controller, BillTypesProvider $billTypesProvider, Session $session, array $config = [])
+    public function __construct($id, Controller $controller, BillTypesProvider $billTypesProvider, BillPreloadStorage $preloadStorage, Session $session, array $config = [])
     {
-        parent::__construct($id, $controller, $billTypesProvider, $config);
+        parent::__construct($id, $controller, $billTypesProvider, $preloadStorage, $config);
         $this->session = $session;
     }
 
