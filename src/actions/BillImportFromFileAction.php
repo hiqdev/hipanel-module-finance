@@ -9,6 +9,7 @@ use hipanel\modules\finance\forms\BillForm;
 use hipanel\modules\finance\forms\BillImportFromFileForm;
 use hipanel\modules\finance\helpers\parser\BillsImporter;
 use hipanel\modules\finance\helpers\parser\NoParserAppropriateType;
+use hipanel\modules\finance\providers\BillPreloadStorage;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use RuntimeException;
 use Yii;
@@ -22,9 +23,9 @@ class BillImportFromFileAction extends BillManagementAction
 {
     private Session $session;
 
-    public function __construct($id, Controller $controller, BillTypesProvider $billTypesProvider, Session $session, array $config = [])
+    public function __construct($id, Controller $controller, BillTypesProvider $billTypesProvider, BillPreloadStorage $preloadStorage, Session $session, array $config = [])
     {
-        parent::__construct($id, $controller, $billTypesProvider, $config);
+        parent::__construct($id, $controller, $billTypesProvider, $preloadStorage, $config);
         $this->session = $session;
     }
 

@@ -10,6 +10,7 @@ use hipanel\modules\document\models\Document;
 use hipanel\modules\finance\forms\GenerateInvoiceForm;
 use hipanel\modules\finance\forms\PrepareInvoiceForm;
 use hipanel\modules\finance\models\Bill;
+use hipanel\modules\finance\providers\BillPreloadStorage;
 use hipanel\modules\finance\providers\BillTypesProvider;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -22,9 +23,9 @@ class GenerateInvoiceAction extends BillManagementAction
 {
     private Session $session;
 
-    public function __construct($id, Controller $controller, BillTypesProvider $billTypesProvider, Session $session, array $config = [])
+    public function __construct($id, Controller $controller, BillTypesProvider $billTypesProvider, BillPreloadStorage $preloadStorage, Session $session, array $config = [])
     {
-        parent::__construct($id, $controller, $billTypesProvider, $config);
+        parent::__construct($id, $controller, $billTypesProvider, $preloadStorage, $config);
         $this->session = $session;
     }
 
