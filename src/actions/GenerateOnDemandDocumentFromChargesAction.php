@@ -58,7 +58,7 @@ class GenerateOnDemandDocumentFromChargesAction extends Action
             return $this->controller->redirect(['index']);
         }
 
-        $charges = Charge::find()->where(['ids' => $chargeIds])->withIncludedInDocuments()->all();
+        $charges = Charge::find()->where(['ids' => $chargeIds, 'limit' => 'ALL'])->withIncludedInDocuments()->all();
 
         $chargeGroups = [];
         foreach ($charges as $charge) {
