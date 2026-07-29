@@ -49,8 +49,8 @@ test(
 
     await expect(page).toHaveTitle("Generate on-demand document");
     await expect(page.locator("select[name=\"PrepareOnDemandDocumentForm[type]\"]")).toBeVisible();
-    await expect(page.locator("input[name=\"PrepareOnDemandDocumentForm[month]\"]")).toBeVisible();
-    await expect(page.locator("button[type=submit]")).toBeVisible();
+    await expect(page.getByRole("textbox", { name: "Date" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Prepare document" })).toBeVisible();
 
     if (billId) {
       await deleteBill(page, billId);
@@ -72,8 +72,8 @@ test(
 
     await expect(page).toHaveTitle("Generate on-demand document");
     await expect(page.locator("select[name=\"PrepareOnDemandDocumentForm[type]\"]")).toBeVisible();
-    await expect(page.locator("input[name=\"PrepareOnDemandDocumentForm[month]\"]")).toBeVisible();
-    await expect(page.locator("button[type=submit]")).toBeVisible();
+    await expect(page.getByRole("textbox", { name: "Date" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Prepare document" })).toBeVisible();
 
     if (billId) {
       await deleteBill(page, billId);

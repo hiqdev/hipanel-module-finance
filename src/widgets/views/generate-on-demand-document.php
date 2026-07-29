@@ -47,6 +47,7 @@ foreach ($chargeGroups as $group) {
         'enableAjaxValidation'   => false,
     ]) ?>
 
+    <?php /* Form controls */ ?>
     <div class="col-md-12">
         <div class="box box-widget">
             <div class="box-body">
@@ -57,7 +58,7 @@ foreach ($chargeGroups as $group) {
                     <div class="col-sm-3">
                         <?= $form->field($model, 'date')->widget(DatePicker::class, [
                             'clientOptions' => ['maxDate' => 'today'],
-                        ])->hint(Yii::t('hipanel:finance', 'Leave blank to use the last closed month')) ?>
+                        ])->hint(Yii::t('hipanel:finance', 'Leave blank to use today\'s date')) ?>
                     </div>
                     <div class="col-sm-5 text-right" style="padding-top: 25px">
                         <button type="button" class="btn btn-primary" @click="prepareDocument" :disabled="isLoading">
@@ -70,133 +71,157 @@ foreach ($chargeGroups as $group) {
         </div>
     </div>
 
-    <?php foreach ($chargeGroups as $group):
-        $available   = array_values(array_filter($group['charges'], static fn($c) => empty($c->included_in_documents)));
-        $inDocuments = array_values(array_filter($group['charges'], static fn($c) => !empty($c->included_in_documents)));
-    ?>
+    <?php /* Section: selected charges */ ?>
     <div class="col-md-12">
-        <div class="box box-widget">
+        <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title">
-                    <?= Html::encode($group['client']) ?> &mdash; <?= Html::encode($group['currency']) ?>
-                    <small class="text-muted">
-                        (<?= count($available) ?> <?= Yii::t('hipanel:finance', 'available') ?><?php if ($inDocuments): ?>,
-                        <?= count($inDocuments) ?> <?= Yii::t('hipanel:finance', 'already in documents') ?><?php endif ?>)
-                    </small>
-                </h3>
+                <h3 class="box-title"><?= Yii::t('hipanel:finance', 'Selected charges') ?></h3>
             </div>
-            <?php if (!empty($available)): ?>
-            <div class="box-body no-padding">
-                <table class="table table-condensed table-striped">
-                    <thead>
-                        <tr>
-                            <th><?= Yii::t('hipanel:finance', 'Type') ?></th>
-                            <th><?= Yii::t('hipanel:finance', 'Description') ?></th>
-                            <th><?= Yii::t('hipanel:finance', 'Qty') ?></th>
-                            <th><?= Yii::t('hipanel:finance', 'Unit') ?></th>
-                            <th><?= Yii::t('hipanel:finance', 'Date') ?></th>
-                            <th class="text-right"><?= Yii::t('hipanel:finance', 'Sum') ?></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($available as $charge): ?>
-                        <tr :class="{ warning: ineligibleChargeIds.includes(<?= (int) $charge->id ?>) }">
-                            <td><?= Html::encode($charge->type) ?></td>
-                            <td><?= Html::encode($charge->name ?? '') ?></td>
-                            <td><?= Html::encode($charge->quantity ?? '') ?></td>
-                            <td><?= Html::encode($charge->unit ?? '') ?></td>
-                            <td><?= Html::encode($charge->time ?? '') ?></td>
-                            <td class="text-right"><?= Html::encode($charge->sum ?? '') ?></td>
-                        </tr>
-                        <?php endforeach ?>
-                    </tbody>
-                </table>
+            <div class="box-body" style="padding: 10px 10px 0;">
+
+                <?php foreach ($chargeGroups as $group):
+                    $available   = array_values(array_filter($group['charges'], static fn($c) => empty($c->included_in_documents)));
+                    $inDocuments = array_values(array_filter($group['charges'], static fn($c) => !empty($c->included_in_documents)));
+                ?>
+                <div class="box box-widget">
+                    <div class="box-header with-border" style="background-color: #d2e8f5;">
+                        <h3 class="box-title">
+                            <?= Html::encode($group['client']) ?> &mdash; <?= Html::encode($group['currency']) ?>
+                            <small class="text-muted">
+                                (<?= count($available) ?> <?= Yii::t('hipanel:finance', 'available') ?><?php if ($inDocuments): ?>,
+                                <?= count($inDocuments) ?> <?= Yii::t('hipanel:finance', 'already in documents') ?><?php endif ?>)
+                            </small>
+                        </h3>
+                    </div>
+                    <?php if (!empty($available)): ?>
+                    <div class="box-body no-padding">
+                        <table class="table table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th><?= Yii::t('hipanel:finance', 'Type') ?></th>
+                                    <th><?= Yii::t('hipanel:finance', 'Description') ?></th>
+                                    <th><?= Yii::t('hipanel:finance', 'Qty') ?></th>
+                                    <th><?= Yii::t('hipanel:finance', 'Unit') ?></th>
+                                    <th><?= Yii::t('hipanel:finance', 'Date') ?></th>
+                                    <th class="text-right"><?= Yii::t('hipanel:finance', 'Sum') ?></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($available as $charge): ?>
+                                <tr data-charge-id="<?= (int) $charge->id ?>">
+                                    <td><?= Html::encode($charge->type) ?></td>
+                                    <td><?= Html::encode($charge->label ?? '') ?></td>
+                                    <td><?= Html::encode($charge->quantity ?? '') ?></td>
+                                    <td><?= Html::encode($charge->unit ?? '') ?></td>
+                                    <td><?= Html::encode($charge->time ?? '') ?></td>
+                                    <td class="text-right"><?= Html::encode($charge->sum ?? '') ?></td>
+                                </tr>
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php endif ?>
+                    <?php if (!empty($inDocuments)): ?>
+                    <div class="box-header" style="background:#fcfcfc; border-top:1px solid #f0f0f0">
+                        <h4 class="box-title text-muted" style="font-size:13px">
+                            <?= Yii::t('hipanel:finance', 'Already in documents') ?>
+                        </h4>
+                    </div>
+                    <div class="box-body no-padding">
+                        <table class="table table-condensed" style="opacity:.55">
+                            <tbody>
+                                <?php foreach ($inDocuments as $charge): ?>
+                                <tr>
+                                    <td><?= Html::encode($charge->type) ?></td>
+                                    <td><?= Html::encode($charge->label ?? '') ?></td>
+                                    <td><?= Html::encode($charge->quantity ?? '') ?></td>
+                                    <td><?= Html::encode($charge->unit ?? '') ?></td>
+                                    <td><?= Html::encode($charge->time ?? '') ?></td>
+                                    <td class="text-right"><?= Html::encode($charge->sum ?? '') ?></td>
+                                </tr>
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php endif ?>
+                </div>
+                <?php endforeach ?>
+
             </div>
-            <?php endif ?>
-            <?php if (!empty($inDocuments)): ?>
-            <div class="box-header" style="background:#fcfcfc; border-top:1px solid #f0f0f0">
-                <h4 class="box-title text-muted" style="font-size:13px">
-                    <?= Yii::t('hipanel:finance', 'Already in documents') ?>
-                </h4>
-            </div>
-            <div class="box-body no-padding">
-                <table class="table table-condensed" style="opacity:.55">
-                    <tbody>
-                        <?php foreach ($inDocuments as $charge): ?>
-                        <tr>
-                            <td><?= Html::encode($charge->type) ?></td>
-                            <td><?= Html::encode($charge->name ?? '') ?></td>
-                            <td><?= Html::encode($charge->quantity ?? '') ?></td>
-                            <td><?= Html::encode($charge->unit ?? '') ?></td>
-                            <td><?= Html::encode($charge->time ?? '') ?></td>
-                            <td class="text-right"><?= Html::encode($charge->sum ?? '') ?></td>
-                        </tr>
-                        <?php endforeach ?>
-                    </tbody>
-                </table>
-            </div>
-            <?php endif ?>
         </div>
     </div>
-    <?php endforeach ?>
 
     <?php ActiveForm::end() ?>
 
-    <div class="col-md-12" v-if="isPrepared">
-        <div v-for="group in groupsWithState" :key="group.groupKey" class="box box-widget">
-            <div class="box-header with-border">
-                <h3 class="box-title">
-                    {{ group.purse.client }}
-                    &mdash; {{ group.purse.currency }}
-                    <span v-if="group.location"> &mdash; {{ group.location }}</span>
-                    &mdash; {{ group.charges.length }} <?= Yii::t('hipanel:finance', 'charge(s)') ?>
-                    <small class="text-muted">#{{ group.purseId }}</small>
-                </h3>
-            </div>
-            <div class="box-body no-padding">
-                <table class="table table-condensed table-striped">
-                    <thead>
-                        <tr>
-                            <th><?= Yii::t('hipanel:finance', 'Type') ?></th>
-                            <th><?= Yii::t('hipanel:finance', 'Description') ?></th>
-                            <th><?= Yii::t('hipanel:finance', 'Qty') ?></th>
-                            <th><?= Yii::t('hipanel:finance', 'Unit') ?></th>
-                            <th><?= Yii::t('hipanel:finance', 'Date') ?></th>
-                            <th class="text-right"><?= Yii::t('hipanel:finance', 'Sum') ?></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="charge in group.charges" :key="charge.id">
-                            <td>{{ charge.type_label || charge.type }}</td>
-                            <td>{{ charge.description }}</td>
-                            <td>{{ charge.quantity }}</td>
-                            <td>{{ charge.unit }}</td>
-                            <td>{{ charge.time }}</td>
-                            <td class="text-right">{{ formatSum(charge.sum, group.purse.currency) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="box-footer clearfix">
-                <a v-if="group.documentUrl"
-                   :href="group.documentUrl"
-                   target="_blank"
-                   class="btn btn-default pull-left">
-                    <?= Yii::t('hipanel:finance', 'View document') ?>
-                </a>
-                <div class="pull-right">
-                    <button type="button"
-                            class="btn btn-default"
-                            :disabled="group.previewing || isSavingAll"
-                            @click="previewGroup(group)">
-                        <i v-if="group.previewing" class="fa fa-spin fa-spinner"></i>
-                        <?= Yii::t('hipanel:finance', 'Preview') ?>
-                    </button>
-                </div>
-            </div>
+    <?php /* Section: charges eligible for generation */ ?>
+    <div class="col-md-12" v-if="wasPrepared && !isPrepared">
+        <div class="alert alert-warning">
+            <i class="fa fa-exclamation-triangle"></i>
+            <?= Yii::t('hipanel:finance', 'None of the selected charges are eligible for the chosen document type and date.') ?>
         </div>
+    </div>
 
-        <div class="box box-widget">
+    <div class="col-md-12" v-if="isPrepared && groupsWithState.length > 0">
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title"><?= Yii::t('hipanel:finance', 'Charges for document generation') ?></h3>
+            </div>
+            <div class="box-body" style="padding: 10px 10px 0;">
+
+                <div v-for="group in groupsWithState" :key="group.groupKey" class="box box-widget">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            {{ group.purse.client }}
+                            &mdash; {{ group.purse.currency }}
+                            <span v-if="group.location"> &mdash; {{ group.location }}</span>
+                            &mdash; {{ group.charges.length }} <?= Yii::t('hipanel:finance', 'charge(s)') ?>
+                            <small class="text-muted">#{{ group.purseId }}</small>
+                        </h3>
+                    </div>
+                    <div class="box-body no-padding">
+                        <table class="table table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th><?= Yii::t('hipanel:finance', 'Type') ?></th>
+                                    <th><?= Yii::t('hipanel:finance', 'Description') ?></th>
+                                    <th><?= Yii::t('hipanel:finance', 'Qty') ?></th>
+                                    <th><?= Yii::t('hipanel:finance', 'Unit') ?></th>
+                                    <th><?= Yii::t('hipanel:finance', 'Date') ?></th>
+                                    <th class="text-right"><?= Yii::t('hipanel:finance', 'Sum') ?></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="charge in group.charges" :key="charge.id">
+                                    <td>{{ charge.type_label || charge.type }}</td>
+                                    <td>{{ stripTags(charge.description) }}</td>
+                                    <td>{{ charge.quantity }}</td>
+                                    <td>{{ charge.unit }}</td>
+                                    <td>{{ charge.time }}</td>
+                                    <td class="text-right">{{ formatSum(charge.sum, group.purse.currency) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-footer clearfix">
+                        <a v-if="group.documentUrl"
+                           :href="group.documentUrl"
+                           target="_blank"
+                           class="btn btn-default pull-left">
+                            <?= Yii::t('hipanel:finance', 'View document') ?>
+                        </a>
+                        <div class="pull-right">
+                            <button type="button"
+                                    class="btn btn-default"
+                                    :disabled="group.previewing || isSavingAll"
+                                    @click="previewGroup(group)">
+                                <i v-if="group.previewing" class="fa fa-spin fa-spinner"></i>
+                                <?= Yii::t('hipanel:finance', 'Preview') ?>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
             <div class="box-footer clearfix">
                 <div class="pull-right">
                     <button type="button"
