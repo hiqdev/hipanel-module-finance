@@ -15,7 +15,8 @@ Vue.createApp({
     ).forEach((el) => {
       el.addEventListener("change", () => {
         this.groupsWithState = [];
-        this.ineligibleChargeIds = [];
+        this.wasPrepared = false;
+        this._highlightIneligible([]);
       });
     });
   },
@@ -33,16 +34,38 @@ Vue.createApp({
   },
   data() {
     return {
-      groupsWithState:    [],
-      ineligibleChargeIds: [],
-      isLoading: false,
+      groupsWithState: [],
+      wasPrepared: false,
+      isLoading:   false,
       isSavingAll: false,
-      allSaved: false,
+      allSaved:    false,
       type: null,
       date: null,
     };
   },
   methods: {
+    _highlightIneligible(ineligibleIds) {
+      const ineligibleSet = new Set(ineligibleIds);
+
+      document.querySelectorAll("tr[data-charge-id]").forEach((row) => {
+        const id = Number(row.dataset.chargeId);
+        const isIneligible = ineligibleSet.has(id);
+        row.querySelectorAll("td").forEach((td) => {
+          td.style.backgroundColor = isIneligible ? "#ffaa44" : "";
+        });
+      });
+
+      document.querySelectorAll(".box.box-widget").forEach((box) => {
+        const rows = [...box.querySelectorAll("tr[data-charge-id]")];
+        if (rows.length === 0) return;
+        const allIneligible = rows.every((row) => ineligibleSet.has(Number(row.dataset.chargeId)));
+        const header = box.querySelector(".box-header");
+        if (header) {
+          header.style.backgroundColor = allIneligible ? "#ffaa44" : "#d2e8f5";
+        }
+      });
+    },
+
     prepareDocument() {
       this.type = document.querySelector('[name="PrepareOnDemandDocumentForm[type]"]')?.value || null;
       this.date = document.querySelector('[name="PrepareOnDemandDocumentForm[date]"]')?.value || null;
@@ -64,7 +87,8 @@ Vue.createApp({
       }
 
       this.groupsWithState = [];
-      this.ineligibleChargeIds = [];
+      this.wasPrepared = false;
+      this._highlightIneligible([]);
       this.allSaved = false;
       this.makeRequest(this.prepareUrl, postData.toString(), (data) => {
         const entries = Object.entries(data);
@@ -85,15 +109,13 @@ Vue.createApp({
             documentUrl: null,
           }));
 
-        if (this.groupsWithState.length === 0) {
-          hipanel.notify.info("No eligible charges found for the selected items.");
-        }
-
         const eligibleIds = new Set();
         entries.filter(([, g]) => !g._error).forEach(([, group]) => {
           (group.charges || []).forEach((c) => eligibleIds.add(Number(c.id)));
         });
-        this.ineligibleChargeIds = this.parsedChargeIds.filter((id) => !eligibleIds.has(id));
+        const ineligibleIds = this.parsedChargeIds.filter((id) => !eligibleIds.has(id));
+        this._highlightIneligible(ineligibleIds);
+        this.wasPrepared = true;
       });
     },
 
@@ -151,6 +173,10 @@ Vue.createApp({
           resolve();
         });
       });
+    },
+
+    stripTags(value) {
+      return value ? String(value).replace(/<[^>]*>/g, "") : "";
     },
 
     formatSum(sum, currency) {

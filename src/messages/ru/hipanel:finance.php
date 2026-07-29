@@ -356,4 +356,27 @@ return [
     'Manufacturer' => 'Производитель',
     'Company' => 'Компания',
     'Order' => 'Заказ',
+
+    'Leave blank to use today\'s date' => 'Оставьте пустым, чтобы использовать сегодняшнюю дату',
+
+    // On-demand document generation
+    'Generate on-demand document'       => 'Генерация документа по запросу',
+    'Document type'                     => 'Тип документа',
+    'Prepare document'                  => 'Подготовить документ',
+    'Selected charges'                  => 'Выбранные списания',
+    'Charges for document generation'   => 'Списания для генерации документа',
+    'Generate & Save'                   => 'Создать и сохранить',
+    'Saved'                             => 'Сохранено',
+    'View document'                     => 'Просмотреть документ',
+    'Preview'                           => 'Предпросмотр',
+    'available'                         => 'доступно',
+    'already in documents'              => 'уже в документах',
+    'Already in documents'              => 'Уже в документах',
+    'charge(s)'                         => 'списание(й)',
+    'None of the selected charges are eligible for the chosen document type and date.' => 'Ни одно из выбранных списаний не подходит для выбранного типа документа и даты.',
+    'Payment request'                   => 'Запрос на оплату',
+    'Service invoice'                   => 'Инвойс за услуги',
+    'Purchase invoice'                  => 'Инвойс за покупку',
+    'Installment invoice'               => 'Инвойс по рассрочке',
+    'Payment plan'                      => 'Платёжный план',
 ];

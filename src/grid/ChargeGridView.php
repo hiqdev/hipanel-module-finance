@@ -132,7 +132,12 @@ class ChargeGridView extends BoxedGridView
                             'labelAttribute' => 'name',
                         ]) . ($model->label ? " &ndash; $model->label" : '');
 
-                    if ($model->commonObject->id !== null && $model->commonObject->id !== $model->latestCommonObject->id) {
+                    if ($model->isRelationPopulated('commonObject')
+                        && $model->isRelationPopulated('latestCommonObject')
+                        && $model->commonObject !== null
+                        && $model->latestCommonObject !== null
+                        && $model->commonObject->id !== null
+                        && $model->commonObject->id !== $model->latestCommonObject->id) {
                         $result .= ' ' . Html::tag(
                                 'span',
                                 Yii::t('hipanel:finance', 'Now it is in {objectLink}', [
