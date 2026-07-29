@@ -86,7 +86,7 @@ foreach ($chargeGroups as $group) {
                 <div class="box box-widget">
                     <div class="box-header with-border" style="background-color: #d2e8f5;">
                         <h3 class="box-title">
-                            <?= Html::encode($group['client']) ?> &mdash; <?= Html::encode($group['currency']) ?>
+                            <strong><?= Html::encode($group['client']) ?></strong> &mdash; <?= Html::encode($group['currency']) ?>
                             <small class="text-muted">
                                 (<?= count($available) ?> <?= Yii::t('hipanel:finance', 'available') ?><?php if ($inDocuments): ?>,
                                 <?= count($inDocuments) ?> <?= Yii::t('hipanel:finance', 'already in documents') ?><?php endif ?>)
@@ -171,7 +171,7 @@ foreach ($chargeGroups as $group) {
                 <div v-for="group in groupsWithState" :key="group.groupKey" class="box box-widget">
                     <div class="box-header with-border">
                         <h3 class="box-title">
-                            {{ group.purse.client }}
+                            <strong>{{ group.purse.client }}</strong>
                             &mdash; {{ group.purse.currency }}
                             <span v-if="group.location"> &mdash; {{ group.location }}</span>
                             &mdash; {{ group.charges.length }} <?= Yii::t('hipanel:finance', 'charge(s)') ?>
