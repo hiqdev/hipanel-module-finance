@@ -1,6 +1,7 @@
 <?php
 
 use hipanel\modules\finance\forms\PrepareOnDemandDocumentForm;
+use hipanel\modules\finance\widgets\BillType;
 use hipanel\widgets\DatePicker;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
@@ -30,7 +31,23 @@ foreach ($chargeGroups as $group) {
     }
 }
 
+$colgroup = '<colgroup>'
+    . '<col style="width:28%">'   // Object
+    . '<col style="width:24%">'   // Type
+    . '<col style="width:8%">'    // Description
+    . '<col style="width:8%">'    // Qty
+    . '<col style="width:7%">'    // Unit
+    . '<col style="width:12%">'   // Date
+    . '<col style="width:13%">'   // Sum
+    . '</colgroup>';
+
 ?>
+
+<?php $this->registerCss(
+    '#generate-on-demand-document-app table[style*="table-layout"] td { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }' .
+    '.flex-space-beetween { display:flex; flex-wrap:nowrap; gap:1rem; justify-content:space-between; }' .
+    '.align-center { align-items:center; }'
+) ?>
 
 <div id="generate-on-demand-document-app"
      class="row"
@@ -95,9 +112,11 @@ foreach ($chargeGroups as $group) {
                     </div>
                     <?php if (!empty($available)): ?>
                     <div class="box-body no-padding">
-                        <table class="table table-condensed table-striped">
+                        <table class="table table-condensed table-striped" style="table-layout:fixed">
+                            <?= $colgroup ?>
                             <thead>
                                 <tr>
+                                    <th><?= Yii::t('hipanel', 'Object') ?></th>
                                     <th><?= Yii::t('hipanel:finance', 'Type') ?></th>
                                     <th><?= Yii::t('hipanel:finance', 'Description') ?></th>
                                     <th><?= Yii::t('hipanel:finance', 'Qty') ?></th>
@@ -109,7 +128,8 @@ foreach ($chargeGroups as $group) {
                             <tbody>
                                 <?php foreach ($available as $charge): ?>
                                 <tr data-charge-id="<?= (int) $charge->id ?>">
-                                    <td><?= Html::encode($charge->type) ?></td>
+                                    <td><?= Html::encode($charge->name ?? '') ?></td>
+                                    <td><?= BillType::widget(['model' => $charge, 'field' => 'ftype', 'labelField' => 'type_label']) ?></td>
                                     <td><?= Html::encode($charge->label ?? '') ?></td>
                                     <td><?= Html::encode($charge->quantity ?? '') ?></td>
                                     <td><?= Html::encode($charge->unit ?? '') ?></td>
@@ -128,11 +148,13 @@ foreach ($chargeGroups as $group) {
                         </h4>
                     </div>
                     <div class="box-body no-padding">
-                        <table class="table table-condensed" style="opacity:.55">
+                        <table class="table table-condensed" style="table-layout:fixed;opacity:.55">
+                            <?= $colgroup ?>
                             <tbody>
                                 <?php foreach ($inDocuments as $charge): ?>
                                 <tr>
-                                    <td><?= Html::encode($charge->type) ?></td>
+                                    <td><?= Html::encode($charge->name ?? '') ?></td>
+                                    <td><?= BillType::widget(['model' => $charge, 'field' => 'ftype', 'labelField' => 'type_label']) ?></td>
                                     <td><?= Html::encode($charge->label ?? '') ?></td>
                                     <td><?= Html::encode($charge->quantity ?? '') ?></td>
                                     <td><?= Html::encode($charge->unit ?? '') ?></td>
@@ -179,9 +201,11 @@ foreach ($chargeGroups as $group) {
                         </h3>
                     </div>
                     <div class="box-body no-padding">
-                        <table class="table table-condensed table-striped">
+                        <table class="table table-condensed table-striped" style="table-layout:fixed">
+                            <?= $colgroup ?>
                             <thead>
                                 <tr>
+                                    <th><?= Yii::t('hipanel', 'Object') ?></th>
                                     <th><?= Yii::t('hipanel:finance', 'Type') ?></th>
                                     <th><?= Yii::t('hipanel:finance', 'Description') ?></th>
                                     <th><?= Yii::t('hipanel:finance', 'Qty') ?></th>
@@ -192,7 +216,13 @@ foreach ($chargeGroups as $group) {
                             </thead>
                             <tbody>
                                 <tr v-for="charge in group.charges" :key="charge.id">
-                                    <td>{{ charge.type_label || charge.type }}</td>
+                                    <td>{{ charge.name }}</td>
+                                    <td>
+                                        <span class="flex-space-beetween align-center">
+                                            <span>{{ charge.type_label || charge.type }}</span>
+                                            <span :class="'label label-' + typeClass(charge.type)">{{ charge.gtype }}</span>
+                                        </span>
+                                    </td>
                                     <td>{{ stripTags(charge.description) }}</td>
                                     <td>{{ charge.quantity }}</td>
                                     <td>{{ charge.unit }}</td>

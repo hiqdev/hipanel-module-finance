@@ -175,6 +175,20 @@ Vue.createApp({
       });
     },
 
+    typeClass(type) {
+      if (!type) return "default";
+      const [top, sub] = type.split(",");
+      if (top === "deposit") return "success";
+      if (top === "overuse") return "info";
+      if (top === "exchange") return "warning";
+      if (top === "monthly" && sub === "monthly") return "warning";
+      if (top === "monthly" && (sub === "installment" || sub === "leasing")) return "primary";
+      if (top === "monthly" && sub === "hardware") return "default";
+      if (top === "monthly") return "success";
+      if (top === "correction") return "default";
+      return "default";
+    },
+
     stripTags(value) {
       return value ? String(value).replace(/<[^>]*>/g, "") : "";
     },
