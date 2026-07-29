@@ -87,6 +87,7 @@ Vue.createApp({
       }
 
       this.groupsWithState = [];
+      this.wasPrepared = false;
       this._highlightIneligible([]);
       this.allSaved = false;
       this.makeRequest(this.prepareUrl, postData.toString(), (data) => {

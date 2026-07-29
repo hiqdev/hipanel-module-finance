@@ -134,6 +134,8 @@ class ChargeGridView extends BoxedGridView
 
                     if ($model->isRelationPopulated('commonObject')
                         && $model->isRelationPopulated('latestCommonObject')
+                        && $model->commonObject !== null
+                        && $model->latestCommonObject !== null
                         && $model->commonObject->id !== null
                         && $model->commonObject->id !== $model->latestCommonObject->id) {
                         $result .= ' ' . Html::tag(
