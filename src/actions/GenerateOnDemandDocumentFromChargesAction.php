@@ -40,11 +40,13 @@ class GenerateOnDemandDocumentFromChargesAction extends Action
                 )));
                 $type = (string) $this->controller->request->post('type', '');
                 $date = $this->controller->request->post('date') ?: null;
+                $requisiteId = $this->controller->request->post('requisite_id') ?: null;
 
                 return Purse::perform('prepare-on-demand-document', [
-                    'charge_ids' => $chargeIds,
-                    'type'       => $type,
-                    'date'       => $date,
+                    'charge_ids'   => $chargeIds,
+                    'type'         => $type,
+                    'date'         => $date,
+                    'requisite_id' => $requisiteId,
                 ]);
             } catch (Exception $e) {
                 return ['errorMessage' => $e->getMessage()];

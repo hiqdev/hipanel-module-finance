@@ -155,7 +155,7 @@ $form = ActiveForm::begin([
                     </div>
                     <div class="row input-row margin-bottom">
                         <div class="col-md-3">
-                            <?php if (Yii::$app->user->can('requisites.read')) : ?>
+                            <?php if (Yii::$app->user->can('requisites.read') || Yii::$app->user->can('bill.create')) : ?>
                                 <?= $form->field($model, "[$i]requisite_id")->widget(BillRequisitesCombo::class) ?>
                             <?php endif ?>
                         </div>

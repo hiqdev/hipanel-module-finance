@@ -43,15 +43,17 @@ class GenerateOnDemandDocumentAction extends Action
                 )));
                 $type = (string) $this->controller->request->post('type', '');
                 $date = $this->controller->request->post('date') ?: null;
+                $requisiteId = $this->controller->request->post('requisite_id') ?: null;
 
                 if (empty($chargeIds) || $type === '') {
                     return ['errorMessage' => Yii::t('hipanel:finance', 'No charges or type selected')];
                 }
 
                 return Purse::perform('prepare-on-demand-document', [
-                    'charge_ids' => $chargeIds,
-                    'type'       => $type,
-                    'date'       => $date,
+                    'charge_ids'   => $chargeIds,
+                    'type'         => $type,
+                    'date'         => $date,
+                    'requisite_id' => $requisiteId,
                 ]);
             } catch (Exception $e) {
                 return ['errorMessage' => $e->getMessage()];

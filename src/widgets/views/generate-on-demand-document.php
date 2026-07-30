@@ -2,6 +2,7 @@
 
 use hipanel\modules\finance\forms\PrepareOnDemandDocumentForm;
 use hipanel\modules\finance\widgets\BillType;
+use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
 use hipanel\widgets\DatePicker;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
@@ -69,15 +70,18 @@ $colgroup = '<colgroup>'
         <div class="box box-widget">
             <div class="box-body">
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <?= $form->field($model, 'type')->dropDownList($documentTypes) ?>
+                    </div>
+                    <div class="col-sm-3">
+                        <?= $form->field($model, 'requisite_id')->widget(BillRequisitesCombo::class) ?>
                     </div>
                     <div class="col-sm-3">
                         <?= $form->field($model, 'date')->widget(DatePicker::class, [
                             'clientOptions' => ['maxDate' => 'today'],
                         ])->hint(Yii::t('hipanel:finance', 'Leave blank to use today\'s date')) ?>
                     </div>
-                    <div class="col-sm-5 text-right" style="padding-top: 25px">
+                    <div class="col-sm-3 text-right" style="padding-top: 25px">
                         <button type="button" class="btn btn-primary" @click="prepareDocument" :disabled="isLoading">
                             <i v-if="isLoading" class="fa fa-spin fa-spinner"></i>
                             <?= Yii::t('hipanel:finance', 'Prepare document') ?>
