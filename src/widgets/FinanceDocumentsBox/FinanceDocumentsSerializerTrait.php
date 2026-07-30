@@ -25,6 +25,7 @@ trait FinanceDocumentsSerializerTrait
         $raw['filename'] = $parsed['filename'] ?? '';
         $raw['location'] = $parsed['location'] ?? null;
         $raw['bill_id'] = $parsed['bill_id'] ?? null;
+        $raw['is_manual'] = !empty($parsed['is_manual']) || !empty($raw['is_manual']);
 
         return $raw;
     }
@@ -104,6 +105,7 @@ trait FinanceDocumentsSerializerTrait
         $data['number'] = $document->number ?: (string)$document->id;
         $data['location'] = $document->data_location;
         $data['bill_id'] = $document->data_bill_id;
+        $data['is_manual'] = !empty($document->is_manual);
 
         return $data;
     }

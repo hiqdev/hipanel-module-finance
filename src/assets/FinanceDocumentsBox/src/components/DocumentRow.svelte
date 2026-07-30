@@ -29,6 +29,7 @@
             {doc.number.length ? doc.number : '- not set -'}
         </a>
         {#if doc.isNew}<span class="label label-warning doc-new-badge">NEW</span>{/if}
+        {#if doc.is_manual}<span class="label label-info doc-new-badge" style="margin-left: 4px;">Manual</span>{/if}
         <span class="doc-sub">{doc.filename}</span>
     </div>
   </td>

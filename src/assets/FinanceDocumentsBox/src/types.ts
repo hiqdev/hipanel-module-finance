@@ -87,6 +87,7 @@ export interface Doc {
   isNew: boolean;
   location?: string;
   bill_id?: string;
+  is_manual?: boolean;
 }
 
 export interface SortState {
@@ -117,6 +118,7 @@ export interface DocParams {
   client_bank_account_no?: number;
   location?: string;
   bill_id?: string;
+  document_id?: string;
 }
 
 export interface ToastState {

@@ -372,6 +372,8 @@ return [
     'available'                         => 'доступно',
     'already in documents'              => 'уже в документах',
     'Already in documents'              => 'Уже в документах',
+    'not eligible'                      => 'недоступно',
+    'Not eligible for this document type' => 'Не подходит для этого типа документа',
     'charge(s)'                         => 'списание(й)',
     'None of the selected charges are eligible for the chosen document type and date.' => 'Ни одно из выбранных списаний не подходит для выбранного типа документа и даты.',
     'Payment request'                   => 'Запрос на оплату',
