@@ -33,7 +33,7 @@ async function deleteBill(page: Page, billId: number) {
 }
 
 test(
-  "Generate on-demand document form opens from bill index @hipanel-module-finance @manager",
+  "Generate on-demand document form opens from bill index @hipanel-module-finance @seller",
   { tag: "@missing-requisites" },
   async ({ page }) => {
     const billId = await createBill(page);
@@ -59,7 +59,7 @@ test(
 );
 
 test(
-  "Generate on-demand document form opens from charge index @hipanel-module-finance @manager",
+  "Generate on-demand document form opens from charge index @hipanel-module-finance @seller",
   { tag: "@missing-requisites" },
   async ({ page }) => {
     const billId = await createBill(page);
