@@ -69,7 +69,6 @@ Vue.createApp({
     prepareDocument() {
       this.type = document.querySelector('[name="PrepareOnDemandDocumentForm[type]"]')?.value || null;
       this.date = document.querySelector('[name="PrepareOnDemandDocumentForm[date]"]')?.value || null;
-      this.requisiteId = document.querySelector('[name="PrepareOnDemandDocumentForm[requisite_id]"]')?.value || null;
 
       if (!this.type) {
         hipanel.notify.warning("Please select a document type.");
@@ -85,9 +84,6 @@ Vue.createApp({
       postData.append("type", this.type);
       if (this.date) {
         postData.append("date", this.date);
-      }
-      if (this.requisiteId) {
-        postData.append("requisite_id", this.requisiteId);
       }
 
       this.groupsWithState = [];
