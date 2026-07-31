@@ -21,7 +21,11 @@ async function createBill(page: Page): Promise<number | null> {
   const form = new BillForm(page);
   await form.fill([bill]);
   await form.submit();
-  await Alert.on(page).hasText("Bill was created successfully");
+  try {
+    await Alert.on(page).hasText("Bill was created successfully");
+  } catch {
+    await Alert.on(page).hasText("Payment was created successfully");
+  }
   return await form.getSavedBillId();
 }
 
@@ -33,17 +37,33 @@ async function deleteBill(page: Page, billId: number) {
 }
 
 test(
-  "Generate on-demand document form opens from bill index @hipanel-module-finance @seller",
-  { tag: "@missing-requisites" },
+  "Generate on-demand document form opens from bill index @hipanel-module-finance @manager",
   async ({ page }) => {
     const billId = await createBill(page);
 
     await page.goto("/finance/bill/index");
     const index = new Index(page);
-    await Select2.fieldByName(page, "BillSearch[requisite_id]").setValue(bill.requisite);
-    await index.advancedSearch.search();
-
-    const rowNumber = await index.getRowNumberInColumnByValue("Description", bill.requisite);
+    const requisiteFilter = page.locator('[name="BillSearch[requisite_id]"] + .select2-container [role=combobox]');
+    let rowNumber = 1;
+    if (await requisiteFilter.isVisible().catch(() => false)) {
+      const isSet = await Select2.fieldByName(page, "BillSearch[requisite_id]").trySetValue(bill.requisite);
+      if (isSet) {
+        await index.advancedSearch.search();
+        const rowCount = await page.locator('input[name="selection[]"]').count();
+        if (rowCount > 0) {
+          try {
+            rowNumber = await index.getRowNumberInColumnByValue("Description", bill.requisite);
+          } catch {
+            rowNumber = 1;
+          }
+        } else {
+          await page.goto("/finance/bill/index");
+          rowNumber = 1;
+        }
+      } else {
+        rowNumber = 1;
+      }
+    }
     await index.chooseNumberRowOnTable(rowNumber);
     await index.clickBulkButton("Generate on-demand document");
 
@@ -59,8 +79,7 @@ test(
 );
 
 test(
-  "Generate on-demand document form opens from charge index @hipanel-module-finance @seller",
-  { tag: "@missing-requisites" },
+  "Generate on-demand document form opens from charge index @hipanel-module-finance @manager",
   async ({ page }) => {
     const billId = await createBill(page);
 

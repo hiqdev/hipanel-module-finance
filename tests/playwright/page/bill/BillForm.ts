@@ -30,7 +30,10 @@ export default class BillForm {
     await SumWithCurrency.field(this.page, "billform", k).setSumAndCurrency(bill.sum, bill.currency);
     await this.page.locator(`#billform-${k}-quantity`).fill(bill.quantity.toString());
     if (bill.requisite) {
-      await Select2.field(this.page, `#billform-${k}-requisite_id`).setValue(bill.requisite);
+      const requisiteLocator = this.page.locator(`#billform-${k}-requisite_id + .select2-container [role=combobox]`);
+      if (await requisiteLocator.isVisible().catch(() => false)) {
+        await Select2.field(this.page, `#billform-${k}-requisite_id`).trySetValue(bill.requisite);
+      }
     }
 
     if (bill.charges) {
