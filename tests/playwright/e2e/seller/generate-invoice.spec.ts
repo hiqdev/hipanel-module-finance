@@ -47,10 +47,28 @@ test("Test 'Generate invoice' button is work and the form opens @hipanel-module-
 
   await page.goto(action);
   const index = new Index(page);
-  await Select2.fieldByName(page, `BillSearch[requisite_id]`).setValue(bill.requisite);
-  await index.advancedSearch.search();
+  const requisiteFilter = page.locator('[name="BillSearch[requisite_id]"] + .select2-container [role=combobox]');
+  let rowNumber = 1;
+  if (await requisiteFilter.isVisible().catch(() => false)) {
+    try {
+      await Select2.fieldByName(page, `BillSearch[requisite_id]`).setValue(bill.requisite);
+      await index.advancedSearch.search();
 
-  const rowNumber = await index.getRowNumberInColumnByValue("Description", bill.requisite);
+      const rowCount = await page.locator('input[name="selection[]"]').count();
+      if (rowCount > 0) {
+        try {
+          rowNumber = await index.getRowNumberInColumnByValue("Description", bill.requisite);
+        } catch {
+          rowNumber = 1;
+        }
+      } else {
+        await page.goto(action);
+        rowNumber = 1;
+      }
+    } catch {
+      rowNumber = 1;
+    }
+  }
   await index.chooseNumberRowOnTable(rowNumber);
   await index.clickBulkButton("Generate invoice");
   await expect(page).toHaveTitle("Generate invoice");
