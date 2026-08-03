@@ -88,6 +88,16 @@ $colgroup = '<colgroup>'
         </div>
     </div>
 
+    <?php ActiveForm::end() ?>
+
+    <?php /* Section: charges eligible for generation alert */ ?>
+    <div class="col-md-12" v-if="wasPrepared && !isPrepared">
+        <div class="alert alert-warning">
+            <i class="fa fa-exclamation-triangle"></i>
+            <?= Yii::t('hipanel:finance', 'None of the selected charges are eligible for the chosen document type and date.') ?>
+        </div>
+    </div>
+
     <?php /* Section: selected charges */ ?>
     <div class="col-md-12">
         <div class="box box-default">
@@ -106,7 +116,7 @@ $colgroup = '<colgroup>'
                             <strong><?= Html::encode($group['client']) ?></strong> &mdash; <?= Html::encode($group['currency']) ?>
                             <small class="text-muted">
                                 (<?= count($available) ?> <?= Yii::t('hipanel:finance', 'available') ?><?php if ($inDocuments): ?>,
-                                <?= count($inDocuments) ?> <?= Yii::t('hipanel:finance', 'already in documents') ?><?php endif ?>)
+                                <?= count($inDocuments) ?> <?= Yii::t('hipanel:finance', 'not eligible') ?><?php endif ?>)
                             </small>
                         </h3>
                     </div>
@@ -142,17 +152,17 @@ $colgroup = '<colgroup>'
                     </div>
                     <?php endif ?>
                     <?php if (!empty($inDocuments)): ?>
-                    <div class="box-header" style="background:#fcfcfc; border-top:1px solid #f0f0f0">
+                    <div class="box-header" style="background:#f9f9f9; border-top:1px solid #f0f0f0">
                         <h4 class="box-title text-muted" style="font-size:13px">
-                            <?= Yii::t('hipanel:finance', 'Already in documents') ?>
+                            <?= Yii::t('hipanel:finance', 'Not eligible for this document type') ?>
                         </h4>
                     </div>
                     <div class="box-body no-padding">
-                        <table class="table table-condensed" style="table-layout:fixed;opacity:.55">
+                        <table class="table table-condensed" style="table-layout:fixed;opacity:.6">
                             <?= $colgroup ?>
                             <tbody>
                                 <?php foreach ($inDocuments as $charge): ?>
-                                <tr>
+                                <tr class="active">
                                     <td><?= Html::encode($charge->name ?? '') ?></td>
                                     <td><?= BillType::widget(['model' => $charge, 'field' => 'ftype', 'labelField' => 'type_label']) ?></td>
                                     <td><?= Html::encode($charge->label ?? '') ?></td>
@@ -170,16 +180,6 @@ $colgroup = '<colgroup>'
                 <?php endforeach ?>
 
             </div>
-        </div>
-    </div>
-
-    <?php ActiveForm::end() ?>
-
-    <?php /* Section: charges eligible for generation */ ?>
-    <div class="col-md-12" v-if="wasPrepared && !isPrepared">
-        <div class="alert alert-warning">
-            <i class="fa fa-exclamation-triangle"></i>
-            <?= Yii::t('hipanel:finance', 'None of the selected charges are eligible for the chosen document type and date.') ?>
         </div>
     </div>
 

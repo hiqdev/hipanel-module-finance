@@ -232,7 +232,7 @@ class ChargeGridView extends BoxedGridView
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => ['class' => 'text-right'],
                 'value' => fn($charge): string => Html::a($charge->bill_id,
-                    ['@bill/view', 'id' => $charge->bill_id],
+                    ['@bill/view', 'id' => $charge->bill_id, '#' => $charge->id],
                     ['target' => '_blank']),
             ],
             'id' => [

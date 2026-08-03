@@ -158,6 +158,7 @@ export function useDocumentGeneration(
       id,
       bill_id: doc.bill_id,
       location: doc.location,
+      document_id: doc.id,
     })
       .then(rsp => {
         busyRowIds = busyRowIds.filter(x => x !== doc.id);
@@ -184,6 +185,7 @@ export function useDocumentGeneration(
       id,
       bill_id: doc.bill_id,
       location: doc.location,
+      document_id: doc.id,
     })
       .then(() => {
         busyRowIds = busyRowIds.filter(x => x !== doc.id);
