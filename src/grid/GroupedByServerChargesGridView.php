@@ -81,7 +81,7 @@ class GroupedByServerChargesGridView extends BillGridView
                 'columns' => array_filter([
                     Yii::$app->user->can('bill.update') ? 'checkbox' : null,
                     'type_label', 'name',
-                    'quantity', 'sum', 'sum_with_children', 'time', 'is_payed',
+                    'quantity', 'sum', 'sum_with_children', 'time', 'is_payed', 'included_in_documents',
                     [
                         'class' => DataColumn::class,
                         'format' => 'raw',
