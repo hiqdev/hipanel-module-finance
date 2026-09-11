@@ -54,6 +54,24 @@ class InstallmentPlanDetailMenu extends AbstractDetailMenu
                 ],
             ],
             [
+                'label' => '<i class="fa fa-ban fa-fw pull-right"></i>' . Yii::t('hipanel', 'Cancel'),
+                'url' => ['@installment-plan/cancel', 'id' => $this->model->id],
+                'encode' => false,
+                'visible' => Yii::$app->user->can('installment-plan.update')
+                    && !$this->model->isDeleted()
+                    && !$this->model->isCancelled(),
+                'linkOptions' => [
+                    'data' => [
+                        'method' => 'post',
+                        'pjax' => '0',
+                        'confirm' => Yii::t('hipanel:finance', 'Are you sure you want to cancel this installment plan?'),
+                        'params' => [
+                            'InstallmentPlan[id]' => $this->model->id,
+                        ],
+                    ],
+                ],
+            ],
+            [
                 'label' => AuditButton::widget(['model' => $this->model, 'rightIcon' => true]),
                 'encode' => false,
             ],

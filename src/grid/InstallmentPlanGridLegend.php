@@ -77,6 +77,15 @@ class InstallmentPlanGridLegend extends BaseGridLegend implements GridLegendInte
                     'actions' => ['style' => 'border-left: 5px solid #CCCCCC !important'],
                 ],
             ],
+            'cancelled' => [
+                'label' => Html::tag('span', 'Cancelled', ['class' => 'label label-default']) . ' - ' . Yii::t('hipanel:finance', 'Installment plan is cancelled'),
+                'color' => '#e0e0e0',
+                'rule' => $this->model->state === InstallmentPlan::STATE_CANCELLED,
+                'columns' => [
+                    'view_link' => ['style' => 'border-left: 5px solid #e0e0e0 !important'],
+                    'actions' => ['style' => 'border-left: 5px solid #e0e0e0 !important'],
+                ],
+            ],
         ];
     }
 }

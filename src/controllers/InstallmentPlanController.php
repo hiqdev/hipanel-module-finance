@@ -11,6 +11,7 @@
 namespace hipanel\modules\finance\controllers;
 
 use hipanel\actions\IndexAction;
+use hipanel\actions\SmartCreateAction;
 use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\actions\VariantsAction;
@@ -33,8 +34,10 @@ class InstallmentPlanController extends \hipanel\base\CrudController
             [
                 'class' => EasyAccessControl::class,
                 'actions' => [
+                    'create'       => 'installment-plan.update',
                     'delete'       => 'installment-plan.delete',
                     'restore'      => 'installment-plan.restore',
+                    'cancel'       => 'installment-plan.update',
                     'process'      => 'installment-plan.process',
                     'create-bill'  => 'bill.create',
                     '*'            => 'sale.read',
@@ -62,6 +65,16 @@ class InstallmentPlanController extends \hipanel\base\CrudController
                     },
                 ],
             ],
+            'create' => [
+                'class' => SmartCreateAction::class,
+                'scenario' => 'create',
+                'success' => Yii::t('hipanel:finance', 'Installment plan has been created'),
+                'data' => function ($action) {
+                    return [
+                        'currencyTypes' => $action->controller->getCurrencyTypes(),
+                    ];
+                },
+            ],
             'delete' => [
                 'class' => SmartDeleteAction::class,
                 'success' => Yii::t('hipanel:finance', 'Installment plan has been deleted'),
@@ -70,6 +83,10 @@ class InstallmentPlanController extends \hipanel\base\CrudController
             'restore' => [
                 'class' => SmartPerformAction::class,
                 'success' => Yii::t('hipanel:finance', 'Installment plan has been restored'),
+            ],
+            'cancel' => [
+                'class' => SmartPerformAction::class,
+                'success' => Yii::t('hipanel:finance', 'Installment plan has been cancelled'),
             ],
             'view' => [
                 'class' => ViewAction::class,
