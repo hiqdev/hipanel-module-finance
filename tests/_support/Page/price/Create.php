@@ -151,7 +151,17 @@ class Create extends View
     {
         $I = $this->tester;
 
-        $I->needPage(Url::to('@plan/update?id=' . $planId));
+        // Navigate via the "Update" link (not a direct URL) so the browser sends a Referer
+        // header: SmartUpdateAction's redirect-to-previous policy relies on it to send us
+        // back to the plan view page after saving, same as it does for a real user.
+        //
+        // The link text is exactly matched by Codeception's click() strategies, but the
+        // rendered markup is "<i .../>&nbsp;Update" - the leading nbsp makes it miss the
+        // link and fall through to the disabled bulk "Update" button in the prices grid.
+        // Target the link by its href instead.
+        $I->needPage(Url::to('@plan/view?id=' . $planId));
+        $I->click("//a[contains(@href, '/plan/update?id={$planId}')]");
+        $I->waitForPageUpdate();
         (new Select2($I, '#plan-currency'))
             ->setValue($currency);
         $I->click('Save');
