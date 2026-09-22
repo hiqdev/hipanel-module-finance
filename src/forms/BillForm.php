@@ -10,13 +10,12 @@
 
 namespace hipanel\modules\finance\forms;
 
-use hipanel\helpers\ArrayHelper;
 use hipanel\modules\finance\behaviors\BillQuantity;
 use hipanel\modules\finance\logic\bill\QuantityTrait;
 use hipanel\modules\finance\models\Bill;
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\models\HasTimeAttributeInterface;
-use hipanel\modules\finance\models\Purse;
+use hipanel\modules\finance\providers\ClientCurrenciesProvider;
 use hipanel\modules\finance\validation\BillChargesSumValidator;
 use Yii;
 use yii\base\Model;
@@ -270,12 +269,7 @@ class BillForm extends Model implements HasTimeAttributeInterface
         if (empty($this->client_id)) {
             return;
         }
-        $clientCurrencies = Yii::$app->cache->getOrSet('clientCurrencies' . $this->client_id, function (): array {
-            $purses = Purse::find()
-                        ->where(['client_id' => $this->client_id])
-                        ->all();
-            return ArrayHelper::getColumn($purses, 'currency');
-        }, 3600);
+        $clientCurrencies = Yii::createObject(ClientCurrenciesProvider::class)->get($this->client_id);
         if (!in_array($this->currency, $clientCurrencies, true)) {
             $this->addError($attribute, Yii::t('hipanel:finance', 'Client hasn\'t purse with this currency'));
         }
