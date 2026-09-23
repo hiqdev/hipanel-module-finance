@@ -10,7 +10,6 @@
 
 namespace hipanel\modules\finance\helpers;
 
-use hipanel\modules\finance\widgets\PriceChargesEstimationTable;
 use Money\Currency;
 use Money\Money;
 
@@ -67,12 +66,5 @@ class LightPriceChargesEstimator extends PriceChargesEstimator
         }
 
         return $result;
-    }
-
-    private function decorateAction(&$action): void
-    {
-        $action['sum'] = array_sum(array_column($action['charges'], 'price'));
-        $action['sumFormatted'] = $this->yiiFormatter->asCurrency($action['sum'], $action['currency']);
-        $action['detailsTable'] = PriceChargesEstimationTable::widget(['charges' => $action['charges']]);
     }
 }
