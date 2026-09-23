@@ -172,7 +172,8 @@ export function useDocumentGeneration(
   }
 
   // Row "update": called after ConfirmReplaceModal is confirmed.
-  // API response data is not used — the existing doc is marked isNew in place.
+  // Updates the local doc entry from the API response so the download link
+  // points to the newly generated file immediately.
   function applyUpdate() {
     const doc = pendingUpdate!;
     pendingUpdate = null;
@@ -188,9 +189,16 @@ export function useDocumentGeneration(
       location: doc.location,
       document_id: doc.id,
     })
-      .then(() => {
+      .then((rsp) => {
         busyRowIds = busyRowIds.filter(x => x !== doc.id);
-        setDocs(markAsNew(getDocs(), [doc.id]));
+        const rawData = Array.isArray(rsp?.data) ? rsp.data : [];
+        const updatedDoc = rawData
+          .filter((d): d is Doc => d != null && "file_id" in d)
+          .find(d => d.id === doc.id);
+        setDocs(getDocs().map(d => {
+          if (d.id !== doc.id) return d;
+          return updatedDoc ? { ...updatedDoc, isNew: true } : { ...d, isNew: true };
+        }));
         showToast(`${doc.type_label} replaced`);
         onGenerated?.();
       })

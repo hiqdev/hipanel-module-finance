@@ -134,8 +134,12 @@ class Create extends View
     public function lookForHelpTip(string $currentCurrency, array $sharedPriceData): void
     {
         $I = $this->tester;
+        $planId = $this->getId();
 
-        $this->updatePlanWithNewCurrency($currentCurrency, $this->getId());
+        $this->updatePlanWithNewCurrency($currentCurrency, $planId);
+        $I->closeNotification('Plan was successfully updated');
+        $I->needPage(Url::to('@plan/view?id=' . $planId));
+
         $I->waitForText('Create prices', 10);
         $this->createSharedPrice($sharedPriceData);
         $I->waitForElement("div[class*='0'] button[class*='formula-help']");

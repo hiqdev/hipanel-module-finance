@@ -31,6 +31,7 @@ test("the currency exchange operation works and creates a bill @hipanel-module-f
   await advancedSearch.search();
 
   await page.locator("div[role=grid] a:has-text(\"-$200.00\")").first().click();
+  await page.waitForURL("**/finance/bill/view**");
 
   await expect(page).toHaveTitle(/^hipanel_test_user: -200.00 usd Exchanging 200.00 USD.*/);
 });

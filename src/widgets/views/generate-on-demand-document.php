@@ -25,9 +25,7 @@ $documentTypes = [
 $allChargeIds = [];
 foreach ($chargeGroups as $group) {
     foreach ($group['charges'] as $charge) {
-        if (empty($charge->included_in_documents)) {
-            $allChargeIds[] = (int) $charge->id;
-        }
+        $allChargeIds[] = (int) $charge->id;
     }
 }
 
@@ -106,21 +104,16 @@ $colgroup = '<colgroup>'
             </div>
             <div class="box-body" style="padding: 10px 10px 0;">
 
-                <?php foreach ($chargeGroups as $group):
-                    $available   = array_values(array_filter($group['charges'], static fn($c) => empty($c->included_in_documents)));
-                    $inDocuments = array_values(array_filter($group['charges'], static fn($c) => !empty($c->included_in_documents)));
-                ?>
+                <?php foreach ($chargeGroups as $group): ?>
                 <div class="box box-widget">
                     <div class="box-header with-border" style="background-color: #d2e8f5;">
                         <h3 class="box-title">
                             <strong><?= Html::encode($group['client']) ?></strong> &mdash; <?= Html::encode($group['currency']) ?>
                             <small class="text-muted">
-                                (<?= count($available) ?> <?= Yii::t('hipanel:finance', 'available') ?><?php if ($inDocuments): ?>,
-                                <?= count($inDocuments) ?> <?= Yii::t('hipanel:finance', 'not eligible') ?><?php endif ?>)
+                                (<?= count($group['charges']) ?> <?= Yii::t('hipanel:finance', 'available') ?>)
                             </small>
                         </h3>
                     </div>
-                    <?php if (!empty($available)): ?>
                     <div class="box-body no-padding">
                         <table class="table table-condensed table-striped" style="table-layout:fixed">
                             <?= $colgroup ?>
@@ -136,7 +129,7 @@ $colgroup = '<colgroup>'
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($available as $charge): ?>
+                                <?php foreach ($group['charges'] as $charge): ?>
                                 <tr data-charge-id="<?= (int) $charge->id ?>">
                                     <td><?= Html::encode($charge->name ?? '') ?></td>
                                     <td><?= BillType::widget(['model' => $charge, 'field' => 'ftype', 'labelField' => 'type_label']) ?></td>
@@ -150,32 +143,6 @@ $colgroup = '<colgroup>'
                             </tbody>
                         </table>
                     </div>
-                    <?php endif ?>
-                    <?php if (!empty($inDocuments)): ?>
-                    <div class="box-header" style="background:#f9f9f9; border-top:1px solid #f0f0f0">
-                        <h4 class="box-title text-muted" style="font-size:13px">
-                            <?= Yii::t('hipanel:finance', 'Not eligible for this document type') ?>
-                        </h4>
-                    </div>
-                    <div class="box-body no-padding">
-                        <table class="table table-condensed" style="table-layout:fixed;opacity:.6">
-                            <?= $colgroup ?>
-                            <tbody>
-                                <?php foreach ($inDocuments as $charge): ?>
-                                <tr class="active">
-                                    <td><?= Html::encode($charge->name ?? '') ?></td>
-                                    <td><?= BillType::widget(['model' => $charge, 'field' => 'ftype', 'labelField' => 'type_label']) ?></td>
-                                    <td><?= Html::encode($charge->label ?? '') ?></td>
-                                    <td><?= Html::encode($charge->quantity ?? '') ?></td>
-                                    <td><?= Html::encode($charge->unit ?? '') ?></td>
-                                    <td><?= Html::encode($charge->time ?? '') ?></td>
-                                    <td class="text-right"><?= Html::encode($charge->sum ?? '') ?></td>
-                                </tr>
-                                <?php endforeach ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <?php endif ?>
                 </div>
                 <?php endforeach ?>
 

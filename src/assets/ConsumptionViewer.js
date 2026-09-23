@@ -344,7 +344,7 @@ const app = new Vue({
       return charts;
     },
     tableData() {
-      return _.groupBy(this.resources, (entry) => entry.date);
+      return _.groupBy(_.sortBy(this.resources, "date"), (entry) => entry.date);
     },
     requestData() {
       const params = {
