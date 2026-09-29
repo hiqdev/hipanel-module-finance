@@ -15,6 +15,7 @@ use hipanel\modules\client\models\Client;
 use hipanel\modules\client\models\Contact;
 use hipanel\modules\document\models\Document;
 use hipanel\models\Ref;
+use hipanel\modules\finance\providers\ClientCurrenciesProvider;
 use Yii;
 
 /**
@@ -264,5 +265,14 @@ class Purse extends \hipanel\base\Model
     public static function getCurrencyOptions(): array
     {
         return Ref::getList('type,currency');
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if ($this->client_id) {
+            Yii::createObject(ClientCurrenciesProvider::class)->invalidate($this->client_id);
+        }
     }
 }
