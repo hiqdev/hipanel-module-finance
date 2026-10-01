@@ -33,6 +33,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $page->endContent() ?>
 
     <?php $page->beginContent('main-actions') ?>
+        <?php if (Yii::$app->user->can('installment-plan.update')): ?>
+            <?= Html::a('<i class="fa fa-plus"></i>&nbsp;' . Yii::t('hipanel:finance', 'Create'), ['create'], [
+                'class' => 'btn btn-sm btn-success',
+            ]) ?>
+        <?php endif ?>
         <?php if (Yii::$app->user->can('installment-plan.process')): ?>
             <?= Html::a('<i class="fa fa-refresh"></i>&nbsp;' . Yii::t('hipanel:finance', 'Process'), ['process'], [
                 'class' => 'btn btn-sm btn-info',

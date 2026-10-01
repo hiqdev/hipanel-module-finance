@@ -39,6 +39,8 @@ use Yii;
  * @property int         $quantity
  * @property string      $reason
  * @property string      $expected_monthly_sum
+ * @property string      $monthly_sum
+ * @property int         $months
  * @property string      $expected_sum
  * @property string      $charged_sum
  * @property string      $left_sum
@@ -60,6 +62,7 @@ class InstallmentPlan extends \hipanel\base\Model
     const string STATE_ADJOURNED = 'adjourned';
     const string STATE_PAID_EARLY = 'paid_early';
     const string STATE_DELETED = 'deleted';
+    const string STATE_CANCELLED = 'cancelled';
 
     use \hipanel\base\ModelTrait;
 
@@ -73,11 +76,16 @@ class InstallmentPlan extends \hipanel\base\Model
         return array_merge(parent::rules(), [
             [['id', 'state_id', 'seller_id', 'client_id', 'part_id', 'model_id', 'brand_id', 'part_type_id', 'device_id', 'currency_id'], 'integer'],
             [['state', 'state_name', 'seller', 'client', 'serialno', 'model', 'partno', 'brand', 'part_type', 'device', 'currency', 'reason', 'order_name', 'company', 'tariff', 'note'], 'string'],
-            [['since', 'till', 'warranty_till'], 'datetime', 'format' => 'php:Y-m-d H:i:s'],
+            [['since', 'till', 'warranty_till'], 'datetime', 'format' => 'php:Y-m-d H:i:s', 'except' => 'create'],
+            // 'since' is always the 1st of a month for a new plan — a date, not a datetime.
+            [['since'], 'date', 'format' => 'php:Y-m-d', 'on' => 'create'],
             [['quantity', 'order_id', 'company_id', 'tariff_id', 'parent_id', 'child_id'], 'integer'],
             [['expected_monthly_sum', 'expected_sum', 'charged_sum', 'left_sum'], 'number'],
+            [['monthly_sum'], 'number', 'min' => 0],
+            [['months'], 'integer', 'min' => 1],
             [['items'], 'safe'],
-            [['id'], 'required', 'on' => ['delete', 'restore', 'update']],
+            [['id'], 'required', 'on' => ['delete', 'restore', 'update', 'cancel']],
+            [['part_id', 'client_id', 'currency', 'monthly_sum', 'since', 'months'], 'required', 'on' => 'create'],
         ]);
     }
 
@@ -106,6 +114,8 @@ class InstallmentPlan extends \hipanel\base\Model
             'quantity'              => Yii::t('hipanel:finance', 'Periods'),
             'reason'                => Yii::t('hipanel', 'Reason'),
             'expected_monthly_sum'  => Yii::t('hipanel:finance', 'Monthly sum'),
+            'monthly_sum'           => Yii::t('hipanel:finance', 'Monthly sum'),
+            'months'                => Yii::t('hipanel:finance', 'Number of months'),
             'expected_sum'          => Yii::t('hipanel:finance', 'Total sum'),
             'charged_sum'           => Yii::t('hipanel:finance', 'Charged sum'),
             'left_sum'              => Yii::t('hipanel:finance', 'Left sum'),
@@ -123,6 +133,11 @@ class InstallmentPlan extends \hipanel\base\Model
     public function isDeleted(): bool
     {
         return $this->state === self::STATE_DELETED;
+    }
+
+    public function isCancelled(): bool
+    {
+        return $this->state === self::STATE_CANCELLED;
     }
 
     public function isPaidEarly(): bool
