@@ -16,5 +16,7 @@ export default class ServerHelper {
     async gotoServerView(rowNumber: number) {
         await this.page.locator('tr td button').nth(rowNumber).click();
         await this.page.locator('div[role="tooltip"] >> text=View').click();
+        // Wait for "load": the view page's AJAX modals bind their content loaders on document ready
+        await this.page.waitForURL(/\/server\/server\/view\?id=/);
     }
 }
