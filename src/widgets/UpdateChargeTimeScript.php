@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\finance\widgets;
 
+use hipanel\assets\MomentAsset;
 use hipanel\modules\finance\forms\BillForm;
 use yii\base\Widget;
 use yii\web\JsExpression;
@@ -12,6 +13,7 @@ class UpdateChargeTimeScript extends Widget
 
     public function run()
     {
+        MomentAsset::register($this->view);
         $onNewRecordBehavior = new JsExpression(<<<JS
           $(".bills_dynamicform_wrapper").on("afterInsert", (e, el) => {
             $(el).find(".charges_dynamicform_wrapper").on("afterInsert", (e) => updateChargeTime(e));
