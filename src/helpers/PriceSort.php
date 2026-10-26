@@ -89,6 +89,7 @@ class PriceSort
             'vps_traf_max',
             'server_traf95_max',
             'cdn_traf95_max',
+            'cdn_rps95_max',
             'server_du',
             'storage_du95',
             'cdn_cache95',
