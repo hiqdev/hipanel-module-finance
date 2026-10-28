@@ -49,6 +49,7 @@ class ChargeSearch extends Charge
             'requisite_id',
             'client_tags',
             'document_ids',
+            'region',
         ]);
     }
 
@@ -69,6 +70,7 @@ class ChargeSearch extends Charge
             'hide_child_charges' => Yii::t('hipanel:finance', 'Hide child charges'),
             'requisite_id' => Yii::t('hipanel:finance', 'Requisite'),
             'client_tags' => Yii::t('hipanel:finance', 'Client tags'),
+            'region' => Yii::t('hipanel:finance', 'Region'),
         ]);
     }
 }

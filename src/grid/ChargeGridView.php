@@ -15,6 +15,7 @@ use hipanel\grid\CurrencyColumn;
 use hipanel\helpers\ArrayHelper;
 use hipanel\helpers\Url;
 use hipanel\modules\client\grid\ClientColumn;
+use hipanel\modules\finance\helpers\AcdnRegion;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\models\Charge;
 use hipanel\modules\finance\models\ChargeSearch;
@@ -92,6 +93,19 @@ class ChargeGridView extends BoxedGridView
                     'model' => $filterModel,
                 ]),
                 'exportedColumns' => ['export_type', 'export_top_type'],
+            ],
+            'region' => [
+                'attribute' => 'region',
+                'enableSorting' => false,
+                'label' => Yii::t('hipanel:finance', 'Region'),
+                'filterOptions' => ['class' => 'narrow-filter'],
+                'filter' => static fn($column, $filterModel): string => Html::activeDropDownList(
+                    $filterModel,
+                    'region',
+                    AcdnRegion::labels(),
+                    ['class' => 'form-control', 'prompt' => '--']
+                ),
+                'value' => static fn(Charge $model): string => AcdnRegion::label($model->region),
             ],
             'export_type' => [
                 'label' => Yii::t('hipanel', 'Type'),

@@ -3,6 +3,7 @@
 use hipanel\modules\client\models\ClientSearch;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\client\widgets\combo\SellerCombo;
+use hipanel\modules\finance\helpers\AcdnRegion;
 use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\widgets\BillTypeVueTreeSelect;
 use hipanel\modules\finance\widgets\combo\BillRequisitesCombo;
@@ -51,6 +52,14 @@ use yii\web\View;
         'multiple' => true,
         'deprecatedTypes' => Yii::$app->params['module.finance.bill.types']['deprecated.types'],
         'behavior' => TreeSelectBehavior::Deprecated,
+    ]) ?>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('region')->widget(StaticCombo::class, [
+        'data' => AcdnRegion::labels(),
+        'hasId' => true,
+        'multiple' => false,
     ]) ?>
 </div>
 

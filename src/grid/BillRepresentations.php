@@ -28,6 +28,7 @@ class BillRepresentations extends RepresentationCollection
                     'sum_editable',
                     'index_page_balance',
                     'type_label',
+                    'region',
                     'rate',
                     'eur_amount',
                     'description',

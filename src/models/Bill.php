@@ -71,7 +71,7 @@ class Bill extends \hipanel\base\Model implements HasSumAndCurrencyAttributesInt
             [['sum', 'balance', 'quantity', 'positive', 'negative', 'opening_balance', 'closing_balance'], 'number'],
             [['currency', 'label', 'descr'], 'safe'],
             [['object', 'domains', 'tariff', 'tariff_type'], 'safe'],
-            [['type', 'gtype', 'class', 'ftype'], 'safe'],
+            [['type', 'gtype', 'class', 'ftype', 'region'], 'safe'],
             [['class_label'], 'safe'],
             [['is_payed'], 'boolean'],
             [['type_label', 'gtype_label'], 'safe'],
