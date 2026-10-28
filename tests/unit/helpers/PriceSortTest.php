@@ -42,6 +42,31 @@ class PriceSortTest extends TestCase
         $this->assertSame(INF, $rank($unknown));
     }
 
+    public function testRegionsOfSameMetricStayTogetherInRegionOrder(): void
+    {
+        $rank = $this->byServerMainPricesRank();
+        $subtypes = [
+            'cdn_traf95_usa_max', 'cdn_traf_usa_max', 'cdn_rps95_max', 'cdn_traf95_asia_max',
+            'cdn_traf_asia_max', 'cdn_traf95_europe_max', 'cdn_traf_europe_max',
+        ];
+
+        usort($subtypes, fn(string $a, string $b) => $rank($this->priceWithSubtype($a)) <=> $rank($this->priceWithSubtype($b)));
+
+        $this->assertSame([
+            'cdn_traf_asia_max', 'cdn_traf_europe_max', 'cdn_traf_usa_max',
+            'cdn_traf95_asia_max', 'cdn_traf95_europe_max', 'cdn_traf95_usa_max',
+            'cdn_rps95_max',
+        ], $subtypes);
+    }
+
+    public function testRegionalPricesSortBetweenTotalAndNextMetric(): void
+    {
+        $rank = $this->byServerMainPricesRank();
+
+        $this->assertLessThan($rank($this->priceWithSubtype('cdn_traf_asia_max')), $rank($this->priceWithSubtype('cdn_traf_max')));
+        $this->assertLessThan($rank($this->priceWithSubtype('cdn_traf95_asia_max')), $rank($this->priceWithSubtype('cdn_traf95_max')));
+    }
+
     private function byServerMainPricesRank(): \Closure
     {
         $method = new ReflectionMethod(PriceSort::class, 'byServerMainPrices');
