@@ -31,6 +31,12 @@ use yii\data\ArrayDataProvider;
  */
 class PriceGridView extends BoxedGridView
 {
+    /**
+     * Collapses the regional prices of one metric into one row.
+     * Enable it only for a grid whose models are a flat list of prices.
+     */
+    public bool $groupRegionalPrices = false;
+
     public function __construct(
         readonly private PricePresenterFactory $presenterFactory,
         array $config = []
@@ -41,7 +47,7 @@ class PriceGridView extends BoxedGridView
 
     public function init()
     {
-        if ($this->dataProvider instanceof ArrayDataProvider) {
+        if ($this->groupRegionalPrices && $this->dataProvider instanceof ArrayDataProvider) {
             $this->dataProvider->allModels = RegionalPriceGrouper::group($this->dataProvider->allModels);
         }
         parent::init();

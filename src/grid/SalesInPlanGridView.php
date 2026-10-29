@@ -110,6 +110,7 @@ class SalesInPlanGridView extends SaleGridView
 
             return PriceGridView::widget([
                 'boxed' => false,
+                'groupRegionalPrices' => true,
                 'showHeader' => true,
                 'showFooter' => false,
                 'options' => [
