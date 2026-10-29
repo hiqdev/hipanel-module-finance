@@ -251,6 +251,7 @@ const app = new Vue({
       const chartColors = {
         1: "rgb(240, 173, 78)",
         2: "rgb(40, 96, 144)",
+        3: "rgb(60, 141, 188)",
       };
       _.forEach(this.groups, (group) => {
         const chartId = Object.keys(group).join(".");
