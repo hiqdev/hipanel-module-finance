@@ -3,7 +3,7 @@ import { expect } from "@playwright/test";
 import PriceHelper from "@hipanel-module-finance/Helper/PriceHelper";
 import { faker } from "@faker-js/faker";
 
-test("Anycast CDN plan lists regional prices of each metric together @hipanel-module-finance @manager", async ({ page }) => {
+test("Anycast CDN plan lists regional prices of each metric together @hipanel-module-finance @manager @anycast-cdn", async ({ page }) => {
   const planName = "TEST-ACDN-REGIONAL-" + faker.string.nanoid(10).toUpperCase();
   const priceHelper = new PriceHelper(page);
 
