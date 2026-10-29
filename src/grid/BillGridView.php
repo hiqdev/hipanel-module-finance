@@ -15,6 +15,7 @@ use hipanel\grid\CurrencyColumn;
 use hipanel\grid\MainColumn;
 use hipanel\helpers\Url;
 use hipanel\modules\client\grid\ClientColumn;
+use hipanel\modules\finance\helpers\AcdnRegion;
 use hipanel\modules\finance\helpers\CurrencyFilter;
 use hipanel\modules\finance\logic\bill\QuantityFormatterFactoryInterface;
 use hipanel\modules\finance\menus\BillActionsMenu;
@@ -281,6 +282,19 @@ class BillGridView extends BoxedGridView
                     'labelField' => 'type_label',
                 ]),
                 'exportedColumns' => ['export_type_type', 'export_payment_type'],
+            ],
+            'region' => [
+                'attribute' => 'region',
+                'enableSorting' => false,
+                'label' => Yii::t('hipanel:finance', 'Region'),
+                'filterOptions' => ['class' => 'narrow-filter'],
+                'filter' => static fn($column, $filterModel): string => Html::activeDropDownList(
+                    $filterModel,
+                    'region',
+                    AcdnRegion::labels(),
+                    ['class' => 'form-control', 'prompt' => '--']
+                ),
+                'value' => static fn(Bill $model): string => AcdnRegion::label($model->region),
             ],
             'export_type_type' => [
                 'label' => Yii::t('hipanel', 'Type'),
