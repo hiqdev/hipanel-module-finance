@@ -1,7 +1,7 @@
 import { test } from "@hipanel-core/fixtures";
 import { expect } from "@playwright/test";
 
-test("Anycast CDN consumption lists regional traffic columns in a group @hipanel-module-finance @manager", async ({ page }) => {
+test("Anycast CDN consumption lists regional traffic columns in a group @hipanel-module-finance @manager @anycast-cdn", async ({ page }) => {
   await page.goto("/finance/consumption/index?ConsumptionSearch[class]=anycastcdn");
 
   const headers = await page.locator("table thead th").allInnerTexts();
