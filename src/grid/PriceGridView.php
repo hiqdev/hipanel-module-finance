@@ -14,12 +14,15 @@ use hipanel\grid\BoxedGridView;
 use hipanel\grid\RefColumn;
 use hipanel\modules\finance\grid\presenters\price\PricePresenterFactory;
 use hipanel\modules\finance\menus\PriceActionsMenu;
+use hipanel\modules\finance\helpers\RegionalPriceGrouper;
 use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\RegionalPrice;
 use hipanel\modules\finance\widgets\BillType;
 use hipanel\modules\finance\widgets\LinkToObjectResolver;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\bootstrap\Html;
+use yii\data\ArrayDataProvider;
 
 /**
  * Class PriceGridView.
@@ -36,9 +39,20 @@ class PriceGridView extends BoxedGridView
         parent::__construct($config);
     }
 
+    public function init()
+    {
+        if ($this->dataProvider instanceof ArrayDataProvider) {
+            $this->dataProvider->allModels = RegionalPriceGrouper::group($this->dataProvider->allModels);
+        }
+        parent::init();
+    }
+
     public function columns()
     {
         return array_merge(parent::columns(), [
+            'checkbox' => [
+                'class' => RegionalCheckboxColumn::class,
+            ],
             'plan' => [
                 'format' => 'raw',
                 'filterAttribute' => 'plan_name_ilike',
@@ -48,7 +62,9 @@ class PriceGridView extends BoxedGridView
             'price' => [
                 'label' => Yii::t('hipanel.finance.price', 'Price'),
                 'format' => 'raw',
-                'value' => fn(Price $model) => $this->presenterFactory->build($model::class)->renderPrice($model),
+                'value' => fn(Price $model) => $model instanceof RegionalPrice
+                    ? $this->renderRegionalPrices($model)
+                    : $this->presenterFactory->build($model::class)->renderPrice($model),
             ],
             'old_price' => [
                 'label' => Yii::t('hipanel.finance.price', 'Old price'),
@@ -135,7 +151,9 @@ class PriceGridView extends BoxedGridView
             'info' => [
                 'format' => 'raw',
                 'label' => Yii::t('hipanel', 'Details'),
-                'value' => fn(Price $model) => $this->presenterFactory->build($model::class)->renderInfo($model),
+                'value' => fn(Price $model) => $model instanceof RegionalPrice
+                    ? ''
+                    : $this->presenterFactory->build($model::class)->renderInfo($model),
             ],
             'old_quantity' => [
                 'format' => 'raw',
@@ -152,5 +170,19 @@ class PriceGridView extends BoxedGridView
                 'filter' => false,
             ],
         ]);
+    }
+
+    private function renderRegionalPrices(RegionalPrice $group): string
+    {
+        $rows = [];
+        foreach ($group->members as $region => $price) {
+            $rows[] = Html::tag(
+                'div',
+                Html::tag('strong', Html::encode(strtoupper($region))) . ' '
+                . $this->presenterFactory->build($price::class)->renderPrice($price),
+            );
+        }
+
+        return implode('', $rows);
     }
 }

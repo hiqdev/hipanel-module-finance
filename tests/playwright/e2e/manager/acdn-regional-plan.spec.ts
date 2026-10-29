@@ -17,22 +17,19 @@ test("Anycast CDN plan lists regional prices of each metric together @hipanel-mo
   await page.getByRole("button", { name: "Save" }).click();
 
   await expect(page.locator("h1")).toContainText(planName);
+
+  const regionalRows = page.locator("table tbody tr").filter({ hasText: "ASIA" });
+  await expect(regionalRows, "monthly and overuse of traffic and of 95th, one row each").toHaveCount(4);
+  for (const row of await regionalRows.all()) {
+    await expect(row).toContainText("EUROPE");
+    await expect(row).toContainText("USA");
+  }
+  await expect(page.locator("table tbody tr").filter({ hasText: "CDN traffic overuse" }).filter({ hasText: "ASIA" })).toHaveCount(1);
+  await expect(page.locator("table tbody tr").filter({ hasText: "CDN bandwidth overuse" }).filter({ hasText: "ASIA" })).toHaveCount(1);
+
   const types = (await page.locator("table tbody tr td:nth-child(4)").allInnerTexts())
     .map(text => text.replace(/\s*(monthly|overuse|feature)\s*$/, "").trim());
-
-  const expectedOrder = [
-    "CDN traffic overuse",
-    "CDN traffic overuse (Asia)",
-    "CDN traffic overuse (Europe)",
-    "CDN traffic overuse (USA)",
-    "CDN bandwidth overuse",
-    "CDN bandwidth overuse (Asia)",
-    "CDN bandwidth overuse (Europe)",
-    "CDN bandwidth overuse (USA)",
-    "RPS overuse",
-  ];
-  const positions = expectedOrder.map(name => types.indexOf(name));
-
-  expect(positions, `types found: ${types.join(" | ")}`).not.toContain(-1);
-  expect(positions).toEqual([...positions].sort((a, b) => a - b));
+  expect(types, "Total prices and RPS keep their own rows").toEqual(expect.arrayContaining([
+    "CDN traffic overuse", "CDN bandwidth overuse", "RPS overuse",
+  ]));
 });
