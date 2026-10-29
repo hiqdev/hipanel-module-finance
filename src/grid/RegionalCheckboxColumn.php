@@ -18,13 +18,15 @@ class RegionalCheckboxColumn extends CheckboxColumn
         }
 
         $ids = $model->memberIds();
-        $options = is_array($this->checkboxOptions) ? $this->checkboxOptions : [];
+        $options = $this->checkboxOptions instanceof \Closure
+            ? ($this->checkboxOptions)($model, $key, $index, $this)
+            : $this->checkboxOptions;
         $visible = Html::checkbox($this->name, false, $options + [
             'value' => array_shift($ids),
             'onclick' => "$(this).closest('td').find('.regional-member').prop('checked', this.checked)",
         ]);
         $hidden = array_map(
-            fn($id) => Html::checkbox($this->name, false, ['value' => $id, 'class' => 'regional-member', 'style' => 'display:none']),
+            fn($id) => Html::checkbox($this->name, false, ['value' => $id, 'class' => 'regional-member grid-checkbox option-input', 'style' => 'display:none']),
             $ids,
         );
 

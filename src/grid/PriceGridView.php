@@ -121,7 +121,8 @@ class PriceGridView extends BoxedGridView
                     'pnames' => 'monthly,overuse',
                     'with_recursive' => 1,
                 ],
-                'value' => static fn($model) => BillType::widget(['model' => $model]),
+                'value' => static fn($model) => BillType::widget(['model' => $model])
+                    . ($model instanceof RegionalPrice ? ' ' . Html::tag('span', Yii::t('hipanel.finance.price', '(by region)'), ['class' => 'text-muted']) : ''),
             ],
             'unit' => [
                 'class' => RefColumn::class,

@@ -22,6 +22,7 @@ return [
     'Error occurred during prices update' => 'Произошла ошибка при изменении цен',
     'For all sold objects' => 'На каждый проданный объект',
     'Any' => 'Любой',
+    '(by region)' => '(по регионам)',
     'Price/unit' => 'Цена/ед. изм.',
     'Main prices' => 'Основные цены',
     'Additional services' => 'Доп. услуги',
