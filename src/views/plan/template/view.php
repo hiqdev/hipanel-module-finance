@@ -34,6 +34,7 @@ use yii\data\ArrayDataProvider;
 <?php $page->beginBulkForm() ?>
     <?= PriceGridView::widget([
         'boxed' => false,
+        'groupRegionalPrices' => true,
         'emptyText' => Yii::t('hipanel.finance.price', 'No prices found'),
         'dataProvider' => new ArrayDataProvider([
             'allModels' => PriceSort::anyPrices()->values($model->prices, true),
