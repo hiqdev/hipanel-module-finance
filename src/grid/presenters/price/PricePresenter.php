@@ -58,9 +58,19 @@ class PricePresenter
      */
     public function renderPrice(RepresentablePrice $price): string
     {
+        [$sum, $unit, $formula] = $this->renderPriceParts($price);
+
+        return $sum . ($unit !== '' ? ' ' . $unit : '') . $formula;
+    }
+
+    /**
+     * @return array{0: string, 1: string, 2: string} the sum, the "per unit" text and the formula spoiler
+     */
+    public function renderPriceParts(RepresentablePrice $price): array
+    {
         $unit = $formula = '';
         if ($price->getUnitLabel()) {
-            $unit = ' ' . Yii::t('hipanel:finance', 'per {unit}', ['unit' => Html::encode($price->getUnitLabel())]);
+            $unit = Yii::t('hipanel:finance', 'per {unit}', ['unit' => Html::encode($price->getUnitLabel())]);
         }
 
         $activeFormulas = array_filter($price->getFormulaLines(), fn($el) => $el['is_actual']);
@@ -86,7 +96,7 @@ class PricePresenter
             [NumberFormatter::MAX_FRACTION_DIGITS => 20]
         );
 
-        return Html::tag('strong', $sum) . $unit . $formula;
+        return [Html::tag('strong', $sum), $unit, $formula];
     }
 
     /**

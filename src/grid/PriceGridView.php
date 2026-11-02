@@ -12,6 +12,7 @@ namespace hipanel\modules\finance\grid;
 
 use hipanel\grid\BoxedGridView;
 use hipanel\grid\RefColumn;
+use hipanel\modules\finance\grid\presenters\price\PricePresenter;
 use hipanel\modules\finance\grid\presenters\price\PricePresenterFactory;
 use hipanel\modules\finance\menus\PriceActionsMenu;
 use hipanel\modules\finance\helpers\RegionalPriceGrouper;
@@ -159,7 +160,7 @@ class PriceGridView extends BoxedGridView
                 'format' => 'raw',
                 'label' => Yii::t('hipanel', 'Details'),
                 'value' => fn(Price $model) => $model instanceof RegionalPrice
-                    ? ''
+                    ? $this->renderRegionalInfo($model)
                     : $this->presenterFactory->build($model::class)->renderInfo($model),
             ],
             'old_quantity' => [
@@ -181,15 +182,55 @@ class PriceGridView extends BoxedGridView
 
     private function renderRegionalPrices(RegionalPrice $group): string
     {
+        return $this->renderRegionalTable($group, function (Price $price): array {
+            $presenter = $this->presenterFactory->build($price::class);
+            if (!$presenter instanceof PricePresenter) {
+                return [$presenter->renderPrice($price)];
+            }
+            [$sum, $unit, $formula] = $presenter->renderPriceParts($price);
+
+            return [$sum, $unit . $formula];
+        });
+    }
+
+    private function renderRegionalInfo(RegionalPrice $group): string
+    {
+        return $this->renderRegionalTable($group, function (Price $price): ?array {
+            if (!$price->isOveruse()) {
+                return null; // the dynamic quantity placeholder of a monthly price is not filled in grouped rows
+            }
+
+            return [
+                Html::tag('span', Yii::t('hipanel:finance', '{amount,number}', ['amount' => $price->quantity]), [
+                    'title' => Yii::t('hipanel.finance.price', 'Prepaid amount'),
+                ]),
+                Html::encode($price->getUnitLabel()),
+            ];
+        });
+    }
+
+    /**
+     * Renders one table row per region: the region name and the cells made by $cells, so the columns line up.
+     * The second column is right-aligned because it holds numbers.
+     *
+     * @param callable(Price): ?array $cells returns null to skip the region
+     */
+    private function renderRegionalTable(RegionalPrice $group, callable $cells): string
+    {
         $rows = [];
         foreach ($group->members as $region => $price) {
-            $rows[] = Html::tag(
-                'div',
-                Html::tag('strong', Html::encode(strtoupper($region))) . ' '
-                . $this->presenterFactory->build($price::class)->renderPrice($price),
-            );
+            $regionCells = $cells($price);
+            if ($regionCells === null) {
+                continue;
+            }
+            array_unshift($regionCells, Html::tag('strong', Html::encode(strtoupper($region))));
+            $tds = [];
+            foreach ($regionCells as $column => $cell) {
+                $tds[] = Html::tag('td', $cell, ['style' => 'padding: 0 .6em 0 0;' . ($column === 1 ? ' text-align: right;' : '')]);
+            }
+            $rows[] = Html::tag('tr', implode('', $tds));
         }
 
-        return implode('', $rows);
+        return $rows === [] ? '' : Html::tag('table', implode('', $rows), ['style' => 'border-collapse: collapse; width: 100%;']);
     }
 }
