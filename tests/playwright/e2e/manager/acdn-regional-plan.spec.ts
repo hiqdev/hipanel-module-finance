@@ -18,16 +18,18 @@ test("Anycast CDN plan lists regional prices of each metric together @hipanel-mo
 
   await expect(page.locator("h1")).toContainText(planName);
 
-  const regionalRows = page.locator("table tbody tr").filter({ hasText: "ASIA" });
+  // Grouped rows hold a table of their own, one row per region: count the grid's rows only.
+  const gridRows = page.locator("div[role=grid] tbody > tr[data-key]");
+  const regionalRows = gridRows.filter({ hasText: "ASIA" });
   await expect(regionalRows, "monthly and overuse of traffic and of 95th, one row each").toHaveCount(4);
   for (const row of await regionalRows.all()) {
     await expect(row).toContainText("EUROPE");
     await expect(row).toContainText("USA");
   }
-  await expect(page.locator("table tbody tr").filter({ hasText: "CDN traffic overuse" }).filter({ hasText: "ASIA" })).toHaveCount(1);
-  await expect(page.locator("table tbody tr").filter({ hasText: "CDN bandwidth overuse" }).filter({ hasText: "ASIA" })).toHaveCount(1);
+  await expect(regionalRows.filter({ hasText: "CDN traffic overuse" })).toHaveCount(1);
+  await expect(regionalRows.filter({ hasText: "CDN bandwidth overuse" })).toHaveCount(1);
 
-  const types = (await page.locator("table tbody tr td:nth-child(4)").allInnerTexts())
+  const types = (await gridRows.locator(":scope > td:nth-child(4)").allInnerTexts())
     .map(text => text.replace(/\s*(monthly|overuse|feature)\s*$/, "").trim());
   expect(types, "Total prices and RPS keep their own rows").toEqual(expect.arrayContaining([
     "CDN traffic overuse", "CDN bandwidth overuse", "RPS overuse",
