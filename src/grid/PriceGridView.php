@@ -14,6 +14,7 @@ use hipanel\grid\BoxedGridView;
 use hipanel\grid\RefColumn;
 use hipanel\modules\finance\grid\presenters\price\PricePresenter;
 use hipanel\modules\finance\grid\presenters\price\PricePresenterFactory;
+use hipanel\modules\finance\grid\presenters\price\ProgressivePricePresenter;
 use hipanel\modules\finance\menus\PriceActionsMenu;
 use hipanel\modules\finance\helpers\RegionalPriceGrouper;
 use hipanel\modules\finance\models\Price;
@@ -32,6 +33,8 @@ use yii\data\ArrayDataProvider;
  */
 class PriceGridView extends BoxedGridView
 {
+    private const REGION_BLOCK_STYLE = 'padding: .5em 0; border-top: 1px solid rgba(128, 128, 128, .3);';
+
     /**
      * Collapses the regional prices of one metric into one row.
      * Enable it only for a grid whose models are a flat list of prices.
@@ -182,15 +185,37 @@ class PriceGridView extends BoxedGridView
 
     private function renderRegionalPrices(RegionalPrice $group): string
     {
-        return $this->renderRegionalTable($group, function (Price $price): array {
+        $blocks = [];
+        foreach ($group->members as $region => $price) {
             $presenter = $this->presenterFactory->build($price::class);
-            if (!$presenter instanceof PricePresenter) {
-                return [$presenter->renderPrice($price)];
+            $badge = Html::tag('span', Html::encode(strtoupper($region)), [
+                'class' => 'label label-primary',
+                'style' => 'padding: .3em .6em .2em;', // bootstrap pads the bottom more, which lifts capital letters
+            ]);
+            $tiers = $presenter instanceof ProgressivePricePresenter ? $presenter->renderTierLines($price) : null;
+            if ($tiers !== null) { // one card per tier, the cards fill the cell's width
+                $cards = array_map(
+                    static fn(string $line): string => Html::tag('div', $line, ['style' => 'padding: .35em .6em; border-radius: 3px; background: rgba(128, 128, 128, .15);']),
+                    $tiers
+                );
+                $body = Html::tag('div', implode('', $cards), [
+                    'style' => 'display: grid; grid-template-columns: repeat(auto-fill, minmax(11em, 1fr)); gap: .4em; margin-top: .4em;',
+                ]);
+                $blocks[] = Html::tag('div', $badge . $body, ['style' => self::REGION_BLOCK_STYLE]);
+                continue;
             }
-            [$sum, $unit, $formula] = $presenter->renderPriceParts($price);
+            if ($presenter instanceof PricePresenter) {
+                [$sum, $unit, $formula] = $presenter->renderPriceParts($price);
+                $body = $sum . ' ' . $unit . $formula;
+            } else {
+                $body = $presenter->renderPrice($price);
+            }
+            $blocks[] = Html::tag('div', $badge . Html::tag('span', $body), [
+                'style' => self::REGION_BLOCK_STYLE . ' display: flex; justify-content: space-between; align-items: center; gap: .6em;',
+            ]);
+        }
 
-            return [$sum, $unit . $formula];
-        });
+        return implode('', $blocks);
     }
 
     private function renderRegionalInfo(RegionalPrice $group): string

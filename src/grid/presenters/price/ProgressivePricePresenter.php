@@ -11,13 +11,22 @@ class ProgressivePricePresenter extends PricePresenter
 {
     public function renderPrice(RepresentablePrice $price): string
     {
+        $lines = $this->renderTierLines($price);
+
+        return $lines === null ? parent::renderPrice($price) : nl2br(implode("\n", $lines));
+    }
+
+    /**
+     * @return string[]|null the tier lines, null when the price is a plain one
+     */
+    public function renderTierLines(RepresentablePrice $price): ?array
+    {
         $thresholds = $price->getThresholds();
         if ($this->shouldRenderAsStandardPrice($thresholds)) {
-            return parent::renderPrice($price);
+            return null;
         }
-        $result = $this->buildProgressivePriceLines($price, $thresholds);
 
-        return nl2br(implode("\n", $result));
+        return $this->buildProgressivePriceLines($price, $thresholds);
     }
 
     private function shouldRenderAsStandardPrice(array $thresholds): bool
