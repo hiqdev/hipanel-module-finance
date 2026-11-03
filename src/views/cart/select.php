@@ -32,12 +32,14 @@ $this->title = Yii::t('hipanel:finance', 'Select payment option');
 <?php
 
 $this->registerJs(<<<'JS'
-$('.lock-on-click').one('click', function (e) {
-    if ($(this).hasClass('disabled')) {
+$('.lock-on-click').on('click', function (e) {
+    // Block repeated clicks: each one would send the cart to purchase again
+    if ($(this).hasClass('disabled') || $('.lock-on-click').data('locked')) {
         e.preventDefault();
         return;
     }
 
+    $('.lock-on-click').data('locked', true);
     $(this).button('loading');
     $('.lock-on-click').not(this).fadeOut();
 });
