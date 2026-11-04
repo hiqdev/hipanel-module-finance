@@ -11,6 +11,8 @@
 namespace hipanel\modules\finance\grid;
 
 use hipanel\modules\finance\assets\PriceEstimator;
+use hipanel\modules\finance\models\Price;
+use hipanel\modules\finance\models\RegionalPrice;
 use Yii;
 use yii\grid\Column;
 use yii\helpers\Html;
@@ -34,6 +36,23 @@ class ValueColumn extends Column
     }
 
     protected function renderDataCellContent($model, $key, $index)
+    {
+        if (!$model instanceof RegionalPrice) {
+            return $this->renderEstimateBox($model);
+        }
+
+        // the estimator matches a row by the price's own type, so every region gets its own box
+        $rows = [];
+        foreach ($model->members as $region => $price) {
+            $rows[] = Html::tag('div', $this->grid->renderRegionBadge($region) . $this->renderEstimateBox($price), [
+                'style' => $this->grid->regionBlockStyle($rows === []) . PriceGridView::REGION_ROW_STYLE,
+            ]);
+        }
+
+        return implode('', $rows);
+    }
+
+    private function renderEstimateBox(Price $model): string
     {
         $fields = Html::hiddenInput("[{$model->id}]object_id", $model->object_id, ['ref' => 'object_id']);
         $fields .= Html::hiddenInput("[{$model->id}]type", $model->type, ['ref' => 'type']);
