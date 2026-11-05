@@ -33,7 +33,9 @@ use yii\data\ArrayDataProvider;
  */
 class PriceGridView extends BoxedGridView
 {
-    private const REGION_BLOCK_STYLE = 'padding: .5em 0; border-top: 1px solid rgba(128, 128, 128, .3);';
+    private const REGION_BLOCK_STYLE = 'padding: .5em 0;';
+    private const REGION_BLOCK_BORDER = ' border-top: 1px solid rgba(128, 128, 128, .3);';
+    public const REGION_ROW_STYLE = ' display: flex; justify-content: space-between; align-items: center; gap: .6em;';
 
     /**
      * Collapses the regional prices of one metric into one row.
@@ -188,10 +190,7 @@ class PriceGridView extends BoxedGridView
         $blocks = [];
         foreach ($group->members as $region => $price) {
             $presenter = $this->presenterFactory->build($price::class);
-            $badge = Html::tag('span', Html::encode(strtoupper($region)), [
-                'class' => 'label label-primary',
-                'style' => 'padding: .3em .6em .2em;', // bootstrap pads the bottom more, which lifts capital letters
-            ]);
+            $badge = $this->renderRegionBadge($region);
             $tiers = $presenter instanceof ProgressivePricePresenter ? $presenter->renderTierLines($price) : null;
             if ($tiers !== null) { // one card per tier, the cards fill the cell's width
                 $cards = array_map(
@@ -201,7 +200,7 @@ class PriceGridView extends BoxedGridView
                 $body = Html::tag('div', implode('', $cards), [
                     'style' => 'display: grid; grid-template-columns: repeat(auto-fill, minmax(11em, 1fr)); gap: .4em; margin-top: .4em;',
                 ]);
-                $blocks[] = Html::tag('div', $badge . $body, ['style' => self::REGION_BLOCK_STYLE]);
+                $blocks[] = Html::tag('div', $badge . $body, ['style' => $this->regionBlockStyle($blocks === [])]);
                 continue;
             }
             if ($presenter instanceof PricePresenter) {
@@ -211,11 +210,25 @@ class PriceGridView extends BoxedGridView
                 $body = $presenter->renderPrice($price);
             }
             $blocks[] = Html::tag('div', $badge . Html::tag('span', $body), [
-                'style' => self::REGION_BLOCK_STYLE . ' display: flex; justify-content: space-between; align-items: center; gap: .6em;',
+                'style' => $this->regionBlockStyle($blocks === []) . self::REGION_ROW_STYLE,
             ]);
         }
 
         return implode('', $blocks);
+    }
+
+    public function renderRegionBadge(string $region): string
+    {
+        return Html::tag('span', Html::encode(strtoupper($region)), [
+            'class' => 'label label-primary',
+            'style' => 'padding: .3em .6em .2em;', // bootstrap pads the bottom more, which lifts capital letters
+        ]);
+    }
+
+    /** Blocks are separated by a line, so the first one has no top border. */
+    public function regionBlockStyle(bool $isFirst): string
+    {
+        return self::REGION_BLOCK_STYLE . ($isFirst ? '' : self::REGION_BLOCK_BORDER);
     }
 
     private function renderRegionalInfo(RegionalPrice $group): string
