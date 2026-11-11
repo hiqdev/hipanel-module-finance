@@ -14,7 +14,11 @@ class Consumption extends Model
 {
     use ModelTrait;
 
-    public ?ConsumptionConfigurator $consumptionConfigurator = null;
+    /**
+     * Not public: yii\base\Model::attributes() would list it, and the search
+     * would send the object as a filter condition.
+     */
+    protected ?ConsumptionConfigurator $consumptionConfigurator = null;
 
     public function init()
     {
