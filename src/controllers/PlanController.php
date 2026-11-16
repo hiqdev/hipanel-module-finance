@@ -47,6 +47,12 @@ use yii\web\UnprocessableEntityHttpException;
 
 class PlanController extends CrudController
 {
+    /** Flash key of the fork error, shown as a block on the plan update page. */
+    public const FORK_ERROR_FLASH = 'plan-fork-error';
+
+    /** The class hiapi reports in `_error_ops.class`: `hiapi\legacy\lib\billing\plan\Exception\PlanCustomAttributesInvalid`. */
+    private const CUSTOM_ATTRIBUTES_INVALID_ERROR_CLASS = 'hiapi\\legacy\\lib\\billing\\plan\\Exception\\PlanCustomAttributesInvalid';
+
     private PriceModelFactory $priceModelFactory;
 
     /**
@@ -395,6 +401,14 @@ class PlanController extends CrudController
         try {
             $fork = Plan::perform('fork', ['id' => $id]);
             return $this->redirect(['@plan/view', 'id' => $fork['id']]);
+        } catch (ResponseErrorException $e) {
+            if (($e->getResponse()->getData()['_error_ops']['class'] ?? null) !== self::CUSTOM_ATTRIBUTES_INVALID_ERROR_CLASS) {
+                throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
+            }
+            // The fork was not created: the user fixes the source plan and forks again.
+            Yii::$app->session->addFlash(self::FORK_ERROR_FLASH, $e->getMessage());
+
+            return $this->redirect(['@plan/update', 'id' => $id]);
         } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage(), 0, $e);
         }
