@@ -16,6 +16,7 @@ use hipanel\modules\client\models\Client;
 use hipanel\modules\finance\cart\CartFinisher;
 use hipanel\modules\finance\widgets\CartCurrencyNegotiator;
 use hipanel\modules\finance\Module;
+use hiqdev\yii2\cart\Module as CartModule;
 use hiqdev\yii2\merchant\models\DepositForm;
 use Yii;
 
@@ -40,6 +41,32 @@ class CartController extends \yii\web\Controller
                 ],
             ],
         ];
+    }
+
+    /**
+     * Actions that order the cart: they need the cart agreements to be accepted.
+     */
+    private const ORDER_ACTIONS = ['select', 'full', 'partial', 'finish'];
+
+    public function beforeAction($action)
+    {
+        if (!parent::beforeAction($action)) {
+            return false;
+        }
+        $cartModule = $this->getCartModule();
+        if (in_array($action->id, self::ORDER_ACTIONS, true) && !$cartModule->hasAcceptedAgreements()) {
+            Yii::$app->getSession()->setFlash('error', Yii::t('cart', 'Please accept all the agreements to make the order'));
+            $this->redirect($cartModule->createUrl());
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private function getCartModule(): CartModule
+    {
+        return Yii::$app->getModule('cart');
     }
 
     /**
@@ -118,6 +145,8 @@ class CartController extends \yii\web\Controller
             'user' => Yii::$app->user,
         ]);
         $finisher->run();
+        // The next order has to accept the agreements again
+        $this->getCartModule()->forgetAcceptedAgreements();
 
         $client = $this->getClient();
 
