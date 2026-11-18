@@ -23,6 +23,7 @@ use hipanel\modules\finance\widgets\InstallmentPlanSummaryTable;
 use hipanel\widgets\DataProviderGridRenderer;
 use hiqdev\hiart\ActiveDataProvider;
 use Yii;
+use yii\base\Event;
 use yii\data\ArrayDataProvider;
 
 class InstallmentPlanController extends \hipanel\base\CrudController
@@ -48,6 +49,11 @@ class InstallmentPlanController extends \hipanel\base\CrudController
         return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
+                'on beforePerform' => function (Event $event) {
+                    /** @var IndexAction $action */
+                    $action = $event->sender;
+                    $action->getDataProvider()->query->andWhere(['with_serial_history' => 1]);
+                },
                 'responseVariants' => [
                     IndexAction::VARIANT_SUMMARY_RESPONSE => function (VariantsAction $action): string {
                         /** @var ActiveDataProvider $dataProvider */

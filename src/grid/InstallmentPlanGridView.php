@@ -21,6 +21,7 @@ use hipanel\modules\stock\grid\CompanyColumn;
 use hipanel\modules\stock\grid\WarrantyColumn;
 use hipanel\modules\server\widgets\combo\DeviceCombo;
 use hipanel\modules\stock\widgets\combo\OrderCombo;
+use hipanel\modules\stock\widgets\OldSerials;
 use Yii;
 use yii\helpers\Html;
 
@@ -59,7 +60,12 @@ class InstallmentPlanGridView extends BoxedGridView
                 'filterOptions' => ['class' => 'narrow-filter'],
                 'filterAttribute' => 'serialno_inilike',
                 'format' => 'raw',
-                'value' => fn(InstallmentPlan $model) => Html::a(Html::encode($model->serialno), ['@part/view', 'id' => $model->part_id], ['class' => 'text-bold']),
+                'value' => static function (InstallmentPlan $model): string {
+                    $link = Html::a(Html::encode($model->serialno), ['@part/view', 'id' => $model->part_id], ['class' => 'text-bold']);
+                    $oldSerials = OldSerials::widget(['history' => $model->serial_history ?? []]);
+
+                    return $oldSerials === '' ? $link : $link . Html::tag('div', $oldSerials, ['class' => 'text-muted small']);
+                },
             ],
             'model' => [
                 'filterAttribute' => 'partno_inilike',

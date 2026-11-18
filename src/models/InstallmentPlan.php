@@ -25,6 +25,7 @@ use Yii;
  * @property string      $client
  * @property int         $part_id
  * @property string      $serialno
+ * @property array|null  $serial_history
  * @property int         $model_id
  * @property string      $model
  * @property string      $partno
@@ -76,7 +77,7 @@ class InstallmentPlan extends \hipanel\base\Model
             [['since', 'till', 'warranty_till'], 'datetime', 'format' => 'php:Y-m-d H:i:s'],
             [['quantity', 'order_id', 'company_id', 'tariff_id', 'parent_id', 'child_id'], 'integer'],
             [['expected_monthly_sum', 'expected_sum', 'charged_sum', 'left_sum'], 'number'],
-            [['items'], 'safe'],
+            [['items', 'serial_history'], 'safe'],
             [['id'], 'required', 'on' => ['delete', 'restore', 'update']],
         ]);
     }
